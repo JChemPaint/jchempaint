@@ -42,11 +42,11 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import org.openscience.cdk.applications.jchempaint.JCPConstants;
-import org.openscience.cdk.applications.jchempaint.JCPLocalizationHandler;
-import org.openscience.cdk.applications.jchempaint.StringHelper;
-import org.openscience.cdk.renderer.progz.JCPAction2D;
-import org.openscience.cdk.renderer.progz.JCPPropertyHandler;
+//import org.openscience.cdk.applications.jchempaint.JCPConstants;
+//import org.openscience.cdk.applications.jchempaint.JCPLocalizationHandler;
+//import org.openscience.cdk.applications.jchempaint.StringHelper;
+import org.openscience.cdk.renderer.JCPAction2D;
+import org.openscience.cdk.renderer.JCPPropertyHandler;
 import org.openscience.cdk.tools.LoggingTool;
 
 /**
@@ -92,9 +92,12 @@ public class SomeToolBar
 		String str;
 		try
 		{
+			System.out.println("instance: "+ JCPPropertyHandler.getInstance().getGUIDefinition());
 			str = JCPPropertyHandler.getInstance().getGUIDefinition().getString(key);
 		} catch (MissingResourceException mre)
 		{
+			System.out.println("Missing resource:");
+			mre.printStackTrace();
 			str = null;
 		}
 		return str;

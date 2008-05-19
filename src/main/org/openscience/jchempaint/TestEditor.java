@@ -51,8 +51,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.Renderer2DModel;
-import org.openscience.cdk.renderer.progz.IJava2DRenderer;
-import org.openscience.cdk.renderer.progz.Java2DRenderer;
+import org.openscience.cdk.renderer.IJava2DRenderer;
+import org.openscience.cdk.renderer.Java2DRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 /**
