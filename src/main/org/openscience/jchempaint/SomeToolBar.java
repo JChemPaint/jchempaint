@@ -42,11 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-//import org.openscience.cdk.applications.jchempaint.JCPConstants;
-//import org.openscience.cdk.applications.jchempaint.JCPLocalizationHandler;
-//import org.openscience.cdk.applications.jchempaint.StringHelper;
 import org.openscience.cdk.renderer.JCPAction2D;
-import org.openscience.cdk.renderer.JCPPropertyHandler;
 import org.openscience.cdk.tools.LoggingTool;
 
 /**

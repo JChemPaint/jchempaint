@@ -25,7 +25,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.cdk.renderer;
+package org.openscience.jchempaint;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -260,7 +260,7 @@ public class JCPPropertyHandler
 
     public ResourceBundle getGUIDefinition(String guiString) {
         try {
-            String resource = "org.openscience.cdk.applications.jchempaint.resources.text.JCPGUI_" + guiString;
+            String resource = "org.openscience.jchempaint.resources.JCPGUI_" + guiString;
             guiDefinition = ResourceBundle.getBundle(resource, Locale.getDefault());
         } catch (Exception exc) {
             logger.error("Could not read a GUI definition: " + exc.getMessage());
@@ -293,7 +293,7 @@ public class JCPPropertyHandler
 		{
 			try
 			{
-				String resource = "org.openscience.cdk.applications.jchempaint.resources.text.JChemPaintResources";
+				String resource = "org.openscience.jchempaint.resources.JChemPaintResources";
 				resources = ResourceBundle.getBundle(resource);
 			} catch (Exception exc)
 			{
