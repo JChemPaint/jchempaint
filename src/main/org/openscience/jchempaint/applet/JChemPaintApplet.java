@@ -1,4 +1,4 @@
-package org.openscience.jchempaint;
+package org.openscience.jchempaint.applet;
 
 import javax.swing.JFrame;
 
@@ -7,8 +7,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.jchempaint.RenderPanel;
 
-public class Main {
+public class JChemPaintApplet {
 	
 	public static IAtomContainer makeMolecule(String smiles) {
 		SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
@@ -28,7 +29,7 @@ public class Main {
 	public static void main(String[] args) {
 		JFrame f = new JFrame("TestApp");
 		
-		IAtomContainer ac = Main.makeMolecule("C1=CC=CC=C1");
+		IAtomContainer ac = JChemPaintApplet.makeMolecule("C1=CC=CC=C1");
 		if (ac == null) {
 			System.exit(0);
 		} 

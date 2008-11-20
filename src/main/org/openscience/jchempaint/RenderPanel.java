@@ -14,6 +14,7 @@ import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.IntermediateRenderer;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
@@ -34,8 +35,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	public RenderPanel(IAtomContainer ac) {
-		this();
 		this.ac = ac;
+		this.setupMachinery();
+		this.setupPanel();
 	}
 	
 	private void setupMachinery() {
@@ -44,8 +46,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.controllerModel = new Controller2DModel();
 		
 		// connect the Renderer to the Hub
-		this.hub = new Controller2DHub(this.controllerModel, this.renderer, this);
-		this.hub.addAtomContainer(ac);
+		this.hub = new Controller2DHub(this.controllerModel, this.renderer, ChemModelManipulator.newChemModel(ac),this);
 		
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
