@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.RenderPanel;
 
 public class JChemPaint {
@@ -35,7 +36,7 @@ public class JChemPaint {
 		if (ac == null) {
 			System.exit(0);
 		} 
-		RenderPanel p = new RenderPanel(ac);
+		JChemPaintPanel p = new JChemPaintPanel(ac);
 		f.add(p);
 		f.pack();
 		f.setVisible(true);
