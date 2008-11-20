@@ -28,8 +28,10 @@ public class JChemPaint {
 	
 	public static void main(String[] args) {
 		JFrame f = new JFrame("TestApp");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		
-		IAtomContainer ac = JChemPaint.makeMolecule("C1=CC=CC=C1");
+		IAtomContainer ac = JChemPaint.makeMolecule("C1=CC=NC=C1");
 		if (ac == null) {
 			System.exit(0);
 		} 
