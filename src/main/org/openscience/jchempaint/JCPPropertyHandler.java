@@ -272,7 +272,7 @@ public class JCPPropertyHandler
 	public Properties getJCPShort_Cuts() {
 		if (shortCutProps == null) {
 			try {
-				String propertiesFile = "org/openscience/cdk/applications/jchempaint/resources/text/JCPShort_Cuts.properties";
+				String propertiesFile = "org/openscience/jchempaint/resources/JCPShort_Cuts.properties";
 				shortCutProps = new Properties();
 				InputStream appStream = this.getClass().getClassLoader().getResourceAsStream(propertiesFile);
 				shortCutProps.load(appStream);

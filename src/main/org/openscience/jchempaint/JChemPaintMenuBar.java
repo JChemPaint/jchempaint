@@ -34,13 +34,13 @@ import java.util.Properties;
 
 import javax.swing.Box;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.action.JCPAction;
 
 /**
  *  JChemPaint menu bar
@@ -55,6 +55,8 @@ public class JChemPaintMenuBar extends JMenuBar {
 	private LoggingTool logger;
 
     private String guiString = "stable";
+
+	private JCPAction jcpaction;
 
 	/**
 	 *  The default constructor method.
@@ -278,12 +280,12 @@ public class JChemPaintMenuBar extends JMenuBar {
 			mi = new JMenuItem(translation);
 		}
 		logger.debug("Created new menu item...");
-		/* TODO String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
+		String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
         if (astr == null) {
 			astr = cmd;
 		}
 		mi.setActionCommand(astr);
-		JCPAction action = jcpPanel.getJCPAction().getAction(jcpPanel, astr);
+		JCPAction action = getJCPAction().getAction(jcpPanel, astr);
 		if (action != null) {
 			// sync some action properties with menu
 			mi.setEnabled(action.isEnabled());
@@ -294,8 +296,20 @@ public class JChemPaintMenuBar extends JMenuBar {
 			logger.error("Could not find JCPAction class for:" + astr);
 			mi.setEnabled(false);
 		}
-		addShortCuts(cmd, mi, jcpPanel);*/
+		addShortCuts(cmd, mi, jcpPanel);
 		return mi;
+	}
+	
+	/**
+	 *  Return the JCPAction instance associated with this JCPPanel
+	 *
+	 *@return    The jCPAction value
+	 */
+	public JCPAction getJCPAction() {
+		if (jcpaction == null) {
+			jcpaction = new JCPAction();
+		}
+		return jcpaction;
 	}
 
 }
