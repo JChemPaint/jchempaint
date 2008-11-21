@@ -3,6 +3,7 @@ package org.openscience.jchempaint;
 import java.awt.BorderLayout;
 
 import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
@@ -24,10 +25,15 @@ public class JChemPaintPanel extends JPanel {
 	
 	public JChemPaintPanel(IAtomContainer ac){
 		this.setLayout(new BorderLayout());
+		JMenuBar menu = new JChemPaintMenuBar(this, "stable");
+		JPanel topContainer = new JPanel(new BorderLayout());
+		topContainer.setLayout(new BorderLayout());
+		this.add(topContainer,BorderLayout.NORTH);
+		topContainer.add(menu,BorderLayout.NORTH);
 		p = new RenderPanel(ac);
 		this.add(p,BorderLayout.CENTER);
-		JToolBar toolbar = SomeToolBar.getToolbar(this, 1);
-		this.add(toolbar,BorderLayout.NORTH);
+		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
+		topContainer.add(toolbar,BorderLayout.CENTER);
 	}
 
 	public Controller2DHub get2DHub() {

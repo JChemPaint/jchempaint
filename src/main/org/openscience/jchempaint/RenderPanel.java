@@ -31,8 +31,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private Controller2DModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	
-	public static final int W = 500;
-	public static final int H = 500;
+	//public static final int W = 500;
+	//public static final int H = 500;
 	
 	public RenderPanel() {
 		this.ac = null;
@@ -57,10 +57,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
 		this.addMouseListener(mouseEventRelay);
+		this.addMouseMotionListener(mouseEventRelay);
 	}
 	
 	private void setupPanel() {
-		this.setPreferredSize(new Dimension(W, H));
+		//this.setPreferredSize(new Dimension(W, H));
 		this.setBackground(Color.WHITE);
 	}
 	

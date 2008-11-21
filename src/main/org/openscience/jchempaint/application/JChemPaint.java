@@ -1,5 +1,7 @@
 package org.openscience.jchempaint.application;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -8,7 +10,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.RenderPanel;
 
 public class JChemPaint {
 	
@@ -37,6 +38,7 @@ public class JChemPaint {
 			System.exit(0);
 		} 
 		JChemPaintPanel p = new JChemPaintPanel(ac);
+		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
 		f.pack();
 		f.setVisible(true);

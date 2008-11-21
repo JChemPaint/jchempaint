@@ -53,7 +53,7 @@ import org.openscience.cdk.tools.LoggingTool;
  * @cdk.module   jchempaint
  * @cdk.svnrev   $Revision: 9162 $
  */
-public class SomeToolBar
+public class JCPToolBar
 {
 
 	private static LoggingTool logger;
@@ -67,7 +67,7 @@ public class SomeToolBar
 		//Controller2DHub hub
 		if (logger == null)
 		{
-			logger = new LoggingTool(SomeToolBar.class);
+			logger = new LoggingTool(JCPToolBar.class);
 		}
 		
 		JToolBar maintoolbar=(JToolBar)createToolbar(SwingConstants.HORIZONTAL, "toolbar", chemPaintPanel, lines, false);
@@ -253,6 +253,7 @@ public class SomeToolBar
 					if (toolKeys[i].equals("bond") && !elementtype)
 					{
 						button.setBackground(Color.GRAY);
+						chemPaintPanel.setActionButton(button);
 					} else
 					{
 						button.setBackground(Color.LIGHT_GRAY);
