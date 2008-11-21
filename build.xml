@@ -2,6 +2,10 @@
 	
 	<property file="build.props"/>
 
+    <property name="debug" value="on" />
+    <property name="deprecation" value="on" />
+    <property name="optimization" value="off" />
+
     <property name="cdk.dist" value="${cdk.dir}/dist" />
     <property name="cdk.lib" value="${cdk.dir}/jar" />
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />
@@ -32,67 +36,6 @@
                 <include name="**/*" />
             </fileset>
         </jar>
-    </target>
-
-    <target id="jcp-only" name="jcp-only"
-            description="Builds the JChemPaint application">
-        <antcall target="compile-module">
-            <param name="module" value="jchempaint"/>
-        </antcall>
-        <antcall target="compile-module">
-            <param name="module" value="jchempaint.application"/>
-        </antcall>
-        <antcall target="compile-module">
-            <param name="module" value="jchempaint.applet"/>
-        </antcall>
-        <unjar dest="${appjars.dir}">
-            <fileset dir="${dist}/jar">
-                <include name="cdk-jchempaint.jar"/>
-                <include name="cdk-jchempaint.application.jar"/>
-                <include name="cdk-jchempaint.applet.jar"/>
-            </fileset>
-        </unjar>
-            
-            <!-- then zip up things -->
-        <jar jarfile="${dist}/jar/jchempaint-${jcp.version}.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.openscience.cdk.applications.jchempaint.application.JChemPaint"/>
-                <section name="org/openscience/cdk/applications/jchempaint/">
-                    <attribute name="Specification-Title" value="JChemPaint"/>
-                    <attribute name="Specification-Version" value="1.0"/>
-                    <attribute name="Specification-Vendor" value="The CDK Project"/>
-                    <attribute name="Implementation-Title" value="org.openscience.cdk"/>
-                    <attribute name="Implementation-Version" value="${jcp.version}"/>
-                    <attribute name="Implementation-Vendor" value="The CDK Project"/>
-                </section>
-            </manifest>
-            <fileset dir="${appjars.dir}">
-                <include name="**/*" />
-            </fileset>
-            <fileset dir="${src}">
-                <includesfile name="${metainf}/jchempaint.application.datafiles"/>
-            </fileset>
-        </jar>
-    </target>
-	
-    <target id="unjar" name="unjar" description="unjars a lot">
-        <unjar dest="${appjars.dir}">
-            <fileset dir="${lib}">
-                <includesfile name="${metainf}/core.libdepends"/>
-                <includesfile name="${metainf}/data.libdepends"/>
-                <includesfile name="${metainf}/experimental.libdepends"/>
-                <includesfile name="${metainf}/extra.libdepends"/>
-                <includesfile name="${metainf}/io.libdepends"/>
-                <includesfile name="${metainf}/libio-cml.libdepends"/>
-                <includesfile name="${metainf}/qsar.libdepends"/>
-                <includesfile name="${metainf}/render.libdepends"/>
-                <includesfile name="${metainf}/standard.libdepends"/>
-                <includesfile name="${metainf}/svg.libdepends"/>
-                <includesfile name="${metainf}/sdg.libdepends"/>
-                <includesfile name="${metainf}/control.libdepends"/>
-                <includesfile name="${metainf}/jchempaint.libdepends"/>
-            </fileset>
-        </unjar>
     </target>
 
     <target id="unjar-libjars" name="unjar-libjars">
@@ -154,6 +97,7 @@
             </classpath>
 
          </javac>
+    	<copydir dest="${appjars.dir}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
    </target>
 </project>
 
