@@ -1,8 +1,8 @@
-<project name="JCPAppletCDK" default="jcp-only-applet" basedir=".">
-	<import file="build-jchempaint.xml" />
+<project name="JCPAppletCDK" default="dist-applet" basedir=".">
+	<import file="build.xml" />
 	<property name="growing_list_file" value="${build}/applet-classes-list.files"/>
 	<property name="growing_classpath" value="${build}/applet-jars-list.files"/>
-	<target id="jcp-only-applet" name="jcp-only-applet" depends="jcp-only, build-applet" description="Builds the JChemPaint applet jar files with jarindex" />
+	<!--target id="jcp-only-applet" name="jcp-only-applet" depends="jcp-only, build-applet" description="Builds the JChemPaint applet jar files with jarindex" /-->
 	<target id="dist-applet" name="dist-applet" depends="dist-jcp, build-applet" description="Builds the JChemPaint applet jar files with jarindex" />
 	<target id="build-applet" name="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
 		<!-- At first jars are packed from file lists -->

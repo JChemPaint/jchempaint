@@ -15,7 +15,7 @@
     <property name="appjars.dir" value="${dist}/appjars" />
 	        
     <target id="clean" name="clean" description="Removes compiled stuff.">
-            <delete dir="${appjars.dir}" />
+            <delete dir="${dist}" />
     </target>
 
 	<target id="dist-jcp" name="dist-jcp" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
