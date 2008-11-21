@@ -42,8 +42,8 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import org.openscience.cdk.renderer.JCPAction2D;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.action.JCPAction2D;
 
 /**
  *  This class makes the JCPToolBar

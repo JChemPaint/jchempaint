@@ -36,9 +36,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.openscience.cdk.controller.CDKPopupMenu;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.CDKPopupMenu;
 import org.openscience.jchempaint.JChemPaintMenuBar;
 import org.openscience.jchempaint.JChemPaintPanel;
 

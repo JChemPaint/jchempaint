@@ -5,14 +5,18 @@
     <property name="cdk.dist" value="${cdk.dir}/dist" />
     <property name="cdk.lib" value="${cdk.dir}/jar" />
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />
+	<property name="cdk.metainf" value="${cdk.dir}/src/META-INF" />
     <property name="src" value="src" />
 	<property name="dist" value="dist" />
     <property name="appjars.dir" value="${dist}/appjars" />
 	        
-    <target id="dist-jcp" name="dist-jcp" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
+    <target id="clean" name="clean" description="Removes compiled stuff.">
+            <delete dir="${appjars.dir}" />
+    </target>
+
+	<target id="dist-jcp" name="dist-jcp" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
             description="Builds the JChemPaint application">
-    	<!-- TODO check if dist-all in cdk has been done-->
-        <jar jarfile="${dist}/jar/jchempaint-${jcp.version}.jar">
+        <jar jarfile="${dist}/jchempaint-${jcp.version}.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.openscience.jchempaint.application.JChemPaint"/>
                 <section name="org/openscience/jchempaint/">
@@ -26,9 +30,6 @@
             </manifest>
             <fileset dir="${appjars.dir}">
                 <include name="**/*" />
-            </fileset>
-            <fileset dir="${src}">
-                <includesfile name="${metainf}/jchempaint.application.datafiles"/>
             </fileset>
         </jar>
     </target>
@@ -77,7 +78,6 @@
     <target id="unjar" name="unjar" description="unjars a lot">
         <unjar dest="${appjars.dir}">
             <fileset dir="${lib}">
-                <includesfile name="${metainf}/applications.libdepends"/>
                 <includesfile name="${metainf}/core.libdepends"/>
                 <includesfile name="${metainf}/data.libdepends"/>
                 <includesfile name="${metainf}/experimental.libdepends"/>
@@ -97,31 +97,21 @@
 
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${appjars.dir}">
-            <fileset dir="${lib}">
-                <includesfile name="${metainf}/applications.libdepends"/>
-                <includesfile name="${metainf}/core.libdepends"/>
-                <includesfile name="${metainf}/data.libdepends"/>
-                <includesfile name="${metainf}/experimental.libdepends"/>
-                <includesfile name="${metainf}/extra.libdepends"/>
-                <includesfile name="${metainf}/io.libdepends"/>
-                <includesfile name="${metainf}/libio-cml.libdepends"/>
-                <includesfile name="${metainf}/qsar.libdepends"/>
-                <includesfile name="${metainf}/render.libdepends"/>
-                <includesfile name="${metainf}/standard.libdepends"/>
-                <includesfile name="${metainf}/svg.libdepends"/>
-                <includesfile name="${metainf}/jchempaint.libdepends"/>
+            <fileset dir="${cdk.lib}">
+                <includesfile name="${cdk.metainf}/core.libdepends"/>
+                <includesfile name="${cdk.metainf}/data.libdepends"/>
+                <includesfile name="${cdk.metainf}/extra.libdepends"/>
+                <includesfile name="${cdk.metainf}/io.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsar.libdepends"/>
+                <includesfile name="${cdk.metainf}/render.libdepends"/>
+                <includesfile name="${cdk.metainf}/standard.libdepends"/>
             </fileset>
 	 </unjar>
 	 </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
 	 <unjar dest="${appjars.dir}">
-            <fileset dir="${plugin.dir}">
-                <include name="dirbrowser.jar"/>
-                <include name="dadmlbrowser.jar"/>
-                <include name="aminoacidtemplates.jar"/>
-            </fileset>
-            <fileset dir="${dist}/jar">
+            <fileset dir="${cdk.dist}/jar">
                 <include name="cdk-applications.jar"/>
                 <include name="cdk-core.jar"/>
                 <include name="cdk-data.jar"/>
@@ -139,8 +129,8 @@
                 <include name="cdk-jchempaint.application.jar"/>
                 <include name="cdk-jchempaint.applet.jar"/>
                 <include name="cdk-nonotify.jar"/>
-		<include name="cdk-valencycheck.jar"/>
-		<include name="cdk-smiles.jar"/>
+            	<include name="cdk-valencycheck.jar"/>
+            	<include name="cdk-smiles.jar"/>
                 <include name="cdk-sdg.jar"/>
                 <include name="cdk-control.jar"/>
             </fileset>
@@ -148,6 +138,7 @@
     </target>
 
     <target id="compile-jcp" name="compile-jcp">
+        <!-- TODO check if dist-all in cdk has been done-->
         <echo message="Compiling JChemPaint classes." />
         <mkdir dir="${appjars.dir}" />
         <javac srcdir="${src}" destdir="${appjars.dir}" optimize="${optimization}"
@@ -155,16 +146,10 @@
                 debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
             <classpath>
                 <fileset dir="${cdk.lib}" >
-                    <exclude name="**/*" unless="module.libdepends.present" />
-                    <includesfile name="${metainf}/${module}.libdepends" if="module.libdepends.present" />
                 </fileset>
                 <fileset dir="${cdk.devellib}">
-                    <exclude name="**/*" unless="module.devellibdepends.present" />
-                    <includesfile name="${metainf}/${module}.devellibdepends" if="module.devellibdepends.present" />
                 </fileset>
                 <fileset dir="${cdk.dist}/jar">
-                    <exclude name="**/*" unless="module.cdkdepends.present" />
-                    <includesfile name="${metainf}/${module}.cdkdepends" if="module.cdkdepends.present" />
                 </fileset>
             </classpath>
 
