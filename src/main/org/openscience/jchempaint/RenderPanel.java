@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.Controller2DHub;
@@ -22,6 +23,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private IAtomContainer ac;
 	
 	private Controller2DHub hub;
+	public Controller2DHub getHub() {
+		return hub;
+	}
+	
+
 	private Controller2DModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	

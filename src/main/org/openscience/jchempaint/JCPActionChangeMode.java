@@ -59,7 +59,7 @@ public class JCPActionChangeMode extends AbstractAction
 	protected IController2DModule module;
 	private String key;
 	private Controller2DHub hub;
-	private TestEditor editor;
+	private JChemPaintPanel editor;
 	private Controller2DModel.DrawMode drawMode;
 	private String drawElement = "";
 	/**
@@ -73,10 +73,10 @@ public class JCPActionChangeMode extends AbstractAction
 	 */
 	private boolean isPopupAction;
 
-	public JCPActionChangeMode(TestEditor editor, String key)
+	public JCPActionChangeMode(JChemPaintPanel chemPaintPanel, String key)
 	{
-		this.editor = editor;
-		this.hub = editor.get2DHub();
+		this.editor = chemPaintPanel;
+		this.hub = chemPaintPanel.get2DHub();
 		this.key = key;
 		
 		System.out.println("the key: " + key);
@@ -102,7 +102,8 @@ public class JCPActionChangeMode extends AbstractAction
 			drawElement = key;
 		}
 	}
-	 public void actionPerformed(ActionEvent e) {
+	
+	public void actionPerformed(ActionEvent e) {
 	       // logger.info("  module  ", module);
 	       // logger.debug("  source ", e.getSource());
 	    //    System.out.println("  type  " + module.toString());

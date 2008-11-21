@@ -121,7 +121,7 @@ public class TestEditor extends JPanel {
 		painter.addMouseListener(relay);
 		painter.addMouseMotionListener(relay);
 
-		JToolBar toolbar = SomeToolBar.getToolbar(this, 1);
+		JToolBar toolbar=null;//changed shk3 = SomeToolBar.getToolbar(this, 1);
 	//	frame.add(toolbar);
 		
 		frame.add(toolbar, BorderLayout.NORTH);
