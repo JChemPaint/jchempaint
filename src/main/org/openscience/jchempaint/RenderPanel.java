@@ -1,12 +1,10 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.Controller2DHub;
@@ -14,13 +12,14 @@ import org.openscience.cdk.controller.Controller2DModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
-	private IAtomContainer ac;
+	private IChemModel chemModel;
 	
 	private Controller2DHub hub;
 	public Controller2DHub getHub() {
@@ -31,17 +30,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private Controller2DModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	
-	//public static final int W = 500;
-	//public static final int H = 500;
 	
-	public RenderPanel() {
-		this.ac = null;
-		this.setupMachinery();
-		this.setupPanel();
-	}
-	
-	public RenderPanel(IAtomContainer ac) {
-		this.ac = ac;
+	public RenderPanel(IChemModel chemModel) {
+		this.chemModel = chemModel;
 		this.setupMachinery();
 		this.setupPanel();
 	}
@@ -52,7 +43,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.controllerModel = new Controller2DModel();
 		
 		// connect the Renderer to the Hub
-		this.hub = new Controller2DHub(this.controllerModel, this.renderer, ChemModelManipulator.newChemModel(ac),this);
+		this.hub = new Controller2DHub(this.controllerModel, this.renderer, chemModel,this);
 		
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -61,17 +52,18 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	private void setupPanel() {
-		//this.setPreferredSize(new Dimension(W, H));
 		this.setBackground(Color.WHITE);
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (this.ac != null) {
+		if (this.chemModel != null) {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			this.renderer.paintMolecule(this.ac, g2, this.getBounds());
+			//TODO render the chemodel, not atomcontainer
+			if(this.chemModel.getMoleculeSet()!=null && this.chemModel.getMoleculeSet().getAtomContainerCount()>0)
+				this.renderer.paintMolecule(this.chemModel.getMoleculeSet().getAtomContainer(0), g2, this.getBounds());
 		}
 	}
 

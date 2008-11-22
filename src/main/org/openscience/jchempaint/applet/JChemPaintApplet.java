@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.RenderPanel;
 
@@ -32,7 +33,7 @@ public class JChemPaintApplet extends JApplet{
 		if (ac == null) {
 			System.exit(0);
 		} 
-		JChemPaintPanel p = new JChemPaintPanel(ac);
+		JChemPaintPanel p = new JChemPaintPanel(ChemModelManipulator.newChemModel(ac));
 		this.add(p);
 	}
 

@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import org.openscience.cdk.controller.Controller2DHub;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
 
 public class JChemPaintPanel extends JPanel {
 
@@ -23,7 +23,7 @@ public class JChemPaintPanel extends JPanel {
 	}
 
 	
-	public JChemPaintPanel(IAtomContainer ac){
+	public JChemPaintPanel(IChemModel ac){
 		this.setLayout(new BorderLayout());
 		JMenuBar menu = new JChemPaintMenuBar(this, "stable");
 		JPanel topContainer = new JPanel(new BorderLayout());

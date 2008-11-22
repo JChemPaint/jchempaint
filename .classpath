@@ -3,5 +3,6 @@
 	<classpathentry excluding="org/openscience/jchempaint/TestEditor.java|org/openscience/jchempaint/TestRenderer.java" kind="src" path="src/main"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
