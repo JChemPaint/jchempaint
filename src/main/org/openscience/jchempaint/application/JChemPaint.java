@@ -1,10 +1,15 @@
 package org.openscience.jchempaint.application;
 
 import java.awt.Dimension;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -14,16 +19,24 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.io.IChemObjectReader;
+import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.INChIReader;
+import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.JCPLocalizationHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
 	
@@ -109,11 +122,9 @@ public class JChemPaint {
 				System.exit(0);
 			}
 
-			IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
 			// Process command line arguments
 			String modelFilename = "";
 			args = line.getArgs();
-			FileReader contentToOpen;
 			if (args.length > 0)
 			{
 				modelFilename = args[0];
@@ -123,18 +134,11 @@ public class JChemPaint {
 					System.err.println("File does not exist: " + modelFilename);
 					System.exit(-1);
 				}
-				// ok, file exists
-				contentToOpen = new FileReader(file);
-				IChemObjectReader cor = new MDLV2000Reader(contentToOpen);
-				//TODO read the file
-				//chemModel = (ChemModel) cor.read((ChemObject) new ChemModel());
-				IMoleculeSet setOfMolecules = DefaultChemObjectBuilder.getInstance().newMoleculeSet();
-				setOfMolecules.addAtomContainer(makeMolecule("CCCCCC"));
-				chemModel.setMoleculeSet(setOfMolecules);
-				chemModel.setID(file.getName());
+				showInstance(file,null,null);
+			}else{
+				IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
+				showInstance(chemModel, JCPLocalizationHandler.getInstance().getString("Untitled-"));
 			}
-
-			showInstance(chemModel);
 
 		} catch (Throwable t)
 		{
@@ -143,14 +147,164 @@ public class JChemPaint {
 		}
 	}
 	
-	public static void showInstance(IChemModel chemModel){
-		JFrame f = new JFrame("JChemPaint");
+	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
+		if(!inFile.exists()){
+			JOptionPane.showMessageDialog(jcpPanel, "File "+inFile.getPath()+" does not exist.");
+			return;
+		}
+		if(type==null) {
+			type = "unknown";
+		}
+		ISimpleChemObjectReader cor = null;
+		/*
+		 *  Have the ReaderFactory determine the file format
+		 */
+		try {
+			ReaderFactory factory = new ReaderFactory();
+			cor = factory.createReader(new FileReader(inFile));
+		} catch (IOException ioExc) {
+			//we do nothing right now and hoe it still works
+		} catch (Exception exc) {
+			//we do nothing right now and hoe it still works
+		}
+		if (cor == null) {
+			// try to determine from user's guess
+			try {
+				FileInputStream reader = new FileInputStream(inFile);
+				if (type.equals(JCPFileFilter.cml) || type.equals(JCPFileFilter.xml)) {
+					cor = new CMLReader(reader);
+				}
+				else if (type.equals(JCPFileFilter.sdf)) {
+					cor = new MDLV2000Reader(reader);
+				}
+				else if (type.equals(JCPFileFilter.mol)) {
+					cor = new MDLV2000Reader(reader);
+				}
+				else if (type.equals(JCPFileFilter.inchi)) {
+					cor = new INChIReader(reader);
+				}
+			} catch (FileNotFoundException exception) {
+				//we do nothing right now and hoe it still works
+			}
+		}
+		if (cor == null) {
+			JOptionPane.showMessageDialog(jcpPanel, "Could not determine file format.");
+			return;
+		}
+		//this takes care of files called .mol, but having several, sdf-stylish entried
+		if(cor instanceof MDLV2000Reader){
+			try{
+				FileInputStream reader = new FileInputStream(inFile);
+				DataInputStream in = new DataInputStream(reader);
+                while (in.available() !=0)
+				{
+                	if(in.readLine().equals("$$$$")){
+                		JOptionPane.showMessageDialog(jcpPanel, "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown","sdf-like file", JOptionPane.INFORMATION_MESSAGE);
+                		break;
+                	}
+				}
+			}catch(IOException ex){
+				//we do nothing - firstly if IO does not work, we should not get here, secondly, if only this does not work, don't worry
+			}
+		}
+		String error = null;
+		ChemModel chemModel = null;
+		IChemFile chemFile=null;
+		if (cor.accepts(IChemFile.class)) {
+			// try to read a ChemFile
+			try {
+				chemFile = (IChemFile) cor.read((IChemObject) new org.openscience.cdk.ChemFile());
+				if (chemFile == null) {
+					System.out.println("The object chemFile was empty unexpectedly!");
+				}
+			} catch (Exception exception) {
+				error = "Error while reading file: " + exception.getMessage();
+				exception.printStackTrace();
+			}
+		}
+		if (error != null) {
+			JOptionPane.showMessageDialog(jcpPanel, error);
+			return;
+		}
+		if (cor.accepts(ChemModel.class)) {
+			// try to read a ChemModel
+			try {
+				chemModel = (ChemModel) cor.read((IChemObject) new ChemModel());
+				if (chemModel == null) {
+					System.out.println("The object chemModel was empty unexpectedly!");
+				}
+				error = null;
+				// overwrite previous problems, it worked now
+			} catch (Exception exception) {
+				error = "Error while reading file: " + exception.getMessage();
+				exception.printStackTrace();
+			}
+		}
+		if (error != null) {
+			JOptionPane.showMessageDialog(jcpPanel, error);
+		}
+		// check for bonds
+		if (ChemModelManipulator.getBondCount(chemModel) == 0) {
+			error = "Model does not have bonds. Cannot depict contents.";
+		}
+		// check for coordinates
+		/* TODO if ((GeometryTools.has2DCoordinates(chemModel)==0)) {
+			String error = "Model does not have 2D coordinates. Cannot open file.";
+			logger.warn(error);
+			JOptionPane.showMessageDialog(this, error);
+			CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
+			frame.pack();
+			frame.show();
+			return;
+		} else if ((GeometryTools.has2DCoordinatesNew(chemModel)==1)) {
+			int result=JOptionPane.showConfirmDialog(this,"Model has some 2d coordinates. Do you want to show only the atoms with 2d coordiantes?","Only some 2d cooridantes",JOptionPane.YES_NO_OPTION);
+			if(result>1){
+				CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
+				frame.pack();
+				frame.show();
+				return;
+			}else{
+				for(int i=0;i<chemModel.getMoleculeSet().getAtomContainerCount();i++){
+					for(int k=0;i<chemModel.getMoleculeSet().getAtomContainer(i).getAtomCount();k++){
+						if(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k).getPoint2d()==null)
+							chemModel.getMoleculeSet().getAtomContainer(i).removeAtomAndConnectedElectronContainers(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k));
+					}						
+				}
+			}
+		}*/
+		/*if(jcpPanel.getJChemPaintModel().getControllerModel().getAutoUpdateImplicitHydrogens()){
+			HydrogenAdder hydrogenAdder = new HydrogenAdder("org.openscience.cdk.tools.ValencyChecker");
+        	java.util.Iterator mols = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().molecules();
+			while (mols.hasNext())
+			{
+				org.openscience.cdk.interfaces.IMolecule molecule = (IMolecule)mols.next();
+			    if (molecule != null)
+				{
+					try{
+							hydrogenAdder.addImplicitHydrogensToSatisfyValency(molecule);
+					}catch(Exception ex){
+						//do nothing
+					}
+				}
+			}
+		}*/
+		chemModel.setID(inFile.getName());
+		JChemPaintPanel p=showInstance(chemModel,inFile.getName());
+		p.setLastOpenedFile(inFile);
+		p.setIsAlreadyAFile(inFile);
+	}
+	
+	
+	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
+		JFrame f = new JFrame(title);
+		//TODO warn, close only frame
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JChemPaintPanel p = new JChemPaintPanel(chemModel);
 		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
 		f.pack();
 		f.setVisible(true);
+		return p;
 	}
 
 }
