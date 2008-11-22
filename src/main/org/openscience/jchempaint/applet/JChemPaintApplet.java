@@ -33,7 +33,7 @@ public class JChemPaintApplet extends JApplet{
 		if (ac == null) {
 			System.exit(0);
 		} 
-		JChemPaintPanel p = new JChemPaintPanel(ChemModelManipulator.newChemModel(ac));
+		JChemPaintPanel p = new JChemPaintPanel(ChemModelManipulator.newChemModel(ac),"stable");
 		this.add(p);
 	}
 

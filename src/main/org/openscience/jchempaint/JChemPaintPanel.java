@@ -109,9 +109,9 @@ public class JChemPaintPanel extends JPanel {
 		return isAlreadyAFile;
 	}
 
-	public JChemPaintPanel(IChemModel ac){
+	public JChemPaintPanel(IChemModel ac, String gui){
 		this.setLayout(new BorderLayout());
-		JMenuBar menu = new JChemPaintMenuBar(this, "stable");
+		JMenuBar menu = new JChemPaintMenuBar(this, gui);
 		JPanel topContainer = new JPanel(new BorderLayout());
 		topContainer.setLayout(new BorderLayout());
 		this.add(topContainer,BorderLayout.NORTH);

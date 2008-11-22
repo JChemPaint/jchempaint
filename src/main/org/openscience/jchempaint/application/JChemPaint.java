@@ -215,7 +215,7 @@ public class JChemPaint {
 			try {
 				chemFile = (IChemFile) cor.read((IChemObject) new org.openscience.cdk.ChemFile());
 				if (chemFile == null) {
-					System.out.println("The object chemFile was empty unexpectedly!");
+					error="The object chemFile was empty unexpectedly!";
 				}
 			} catch (Exception exception) {
 				error = "Error while reading file: " + exception.getMessage();
@@ -231,10 +231,8 @@ public class JChemPaint {
 			try {
 				chemModel = (ChemModel) cor.read((IChemObject) new ChemModel());
 				if (chemModel == null) {
-					System.out.println("The object chemModel was empty unexpectedly!");
+					error="The object chemModel was empty unexpectedly!";
 				}
-				error = null;
-				// overwrite previous problems, it worked now
 			} catch (Exception exception) {
 				error = "Error while reading file: " + exception.getMessage();
 				exception.printStackTrace();
@@ -299,7 +297,7 @@ public class JChemPaint {
 		JFrame f = new JFrame(title);
 		//TODO warn, close only frame
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JChemPaintPanel p = new JChemPaintPanel(chemModel);
+		JChemPaintPanel p = new JChemPaintPanel(chemModel,"stable");
 		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
 		f.pack();
