@@ -71,8 +71,7 @@ public class JCPActionChangeMode extends JCPAction
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
 			//	module = new Controller2DModuleAddAtom(key);
-			//FIXME: is ENTERELEMENT the correct name? :]
-			drawMode = Controller2DModel.DrawMode.ENTERELEMENT;
+			drawMode = Controller2DModel.DrawMode.ELEMENT;
 			drawElement = type;
 		}
 	 	if (this.jcpPanel.getActionButton() != null)

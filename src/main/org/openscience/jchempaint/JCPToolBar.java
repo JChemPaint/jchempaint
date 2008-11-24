@@ -174,7 +174,6 @@ public class JCPToolBar
 				}
 		}else{
 			//FIXME: make the correct actionlistener for the atom types? or whatever these are....
-
 			b=new JButton(key);
 			JCPActionChangeMode a = new JCPActionChangeMode ();
 			a.setJChemPaintPanel(chemPaintPanel);
@@ -183,7 +182,6 @@ public class JCPToolBar
 			b.setEnabled(a.isEnabled());
 			if(JCPLocalizationHandler.getInstance().getString("singleelementTooltip")!=null)
 				b.setToolTipText(JCPLocalizationHandler.getInstance().getString("singleelementTooltip")+" "+key);
-		 
 			b.setSize(30,15);
 			b.setPreferredSize(new Dimension(30,15));
 			b.setMaximumSize(new Dimension(30,15));
