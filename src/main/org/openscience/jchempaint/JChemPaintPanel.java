@@ -46,9 +46,11 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.controller.Controller2DHub;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
+import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.jchempaint.action.SaveAction;
 
-public class JChemPaintPanel extends JPanel {
+public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 
 	RenderPanel p;
 	
@@ -181,6 +183,7 @@ public class JChemPaintPanel extends JPanel {
 		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
 		topContainer.add(toolbar,BorderLayout.CENTER);
 		instances.add(this);
+		ac.addListener(this);
 	}
 
 	public Controller2DHub get2DHub() {
@@ -249,5 +252,10 @@ public class JChemPaintPanel extends JPanel {
 	
 	public IChemModel getChemModel(){
 		return p.getChemModel();
+	}
+	
+	public void stateChanged(IChemObjectChangeEvent event) {
+		isModified=true;
+		((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
 	}
 }

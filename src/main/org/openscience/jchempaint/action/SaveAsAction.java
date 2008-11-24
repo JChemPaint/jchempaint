@@ -249,6 +249,7 @@ public class SaveAsAction extends JCPAction
 		org.openscience.cdk.interfaces.IMoleculeSet som = model.getMoleculeSet();
 		cow.write(som);
 		cow.close();
+		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}
 
@@ -296,6 +297,7 @@ public class SaveAsAction extends JCPAction
 		cow.write(object);
 		cow.close();
 		sw.close();
+		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}
 
@@ -315,6 +317,7 @@ public class SaveAsAction extends JCPAction
 		org.openscience.cdk.interfaces.IMoleculeSet som = model.getMoleculeSet();
 		cow.write(som);
 		cow.close();
+		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}
 
@@ -341,6 +344,7 @@ public class SaveAsAction extends JCPAction
 			}
 		}
 		cow.close();
+		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}
 
@@ -372,6 +376,7 @@ public class SaveAsAction extends JCPAction
 			}
 		}
 		cow.close();*/
+		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}
 }
