@@ -1,12 +1,12 @@
 /*
  *  $RCSfile$
  *  $Author: egonw $
- *  $Date: 2007-01-04 18:26:00 +0100 (Thu, 04 Jan 2007) $
+ *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
  *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2007  The JChemPaint project
+ *  Copyright (C) 1997-2008 Stefan Kuhn
  *
- *  Contact: jchempaint-devel@lists.sourceforge.net
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
@@ -31,20 +31,15 @@ package org.openscience.jchempaint;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-//import org.openscience.cdk.tools.LoggingTool;
-
 /**
  *  A property manager for JChemPaint.
  *
- * @cdk.module jchempaint
- * @author     steinbeck
  */
 public class JCPLocalizationHandler
 {
 
 	private static JCPLocalizationHandler instance;
 
-	//private LoggingTool logger;
 	private ResourceBundle translations;
 
 
@@ -55,7 +50,6 @@ public class JCPLocalizationHandler
 	 */
 	private JCPLocalizationHandler(Locale locale)
 	{
-		//logger = new LoggingTool(this);
 		translations = ResourceBundle.getBundle("org/openscience/jchempaint/resources/JCPBundle", locale);
 	}
 

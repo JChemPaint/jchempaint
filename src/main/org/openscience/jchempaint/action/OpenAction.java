@@ -1,12 +1,12 @@
 /*
  *  $RCSfile$
- *  $Author: shk3 $
- *  $Date: 2008-09-29 15:12:09 +0100 (Mon, 29 Sep 2008) $
- *  $Revision: 12493 $
+ *  $Author: egonw $
+ *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
+ *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2007  The JChemPaint project
+ *  Copyright (C) 1997-2008 Stefan Kuhn
  *
- *  Contact: jchempaint-devel@lists.sf.net
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
@@ -40,8 +40,6 @@ import org.openscience.jchempaint.io.JCPFileView;
 /**
  * Shows the open dialog
  *
- * @author        steinbeck
- * @cdk.module    jchempaint
  */
 public class OpenAction extends JCPAction {
 
