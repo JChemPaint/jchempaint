@@ -31,11 +31,8 @@ package org.openscience.jchempaint.action;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
-import org.openscience.cdk.controller.Controller2DHub;
 import org.openscience.cdk.controller.Controller2DModel;
 import org.openscience.cdk.controller.IController2DModule;
 import org.openscience.cdk.tools.LoggingTool;
@@ -52,44 +49,11 @@ public class JCPActionChangeMode extends JCPAction
 {
 
 	private static final long serialVersionUID = -4056416630614934238L;
-	
-	
-	protected static LoggingTool logger = null;
 
-	/**
-	 *  Description of the Field
-	 */
-	protected IController2DModule module;
-	//private Controller2DHub hub;
-	//private JChemPaintPanel editor;
-	private String drawElement = "";
-	/**
-	 *  Description of the Field
-	 */
-	//protected JChemPaintPanel jcpPanel = null;
-	//protected JFrame jcpPanel = null;
-
-	/**
-	 *  Is this popup action assiociated with a PopupMenu or not.
-	 */
-	private boolean isPopupAction;
-
-	public JCPActionChangeMode(){
-	}
-	
-	public JCPActionChangeMode(JChemPaintPanel chemPaintPanel, String key)
-	{
-		this.jcpPanel = chemPaintPanel;
-		this.type = key;
-		
-	}
-	
 	public void actionPerformed(ActionEvent e) {
-	       // logger.info("  module  ", module);
-	       // logger.debug("  source ", e.getSource());
-	    //    System.out.println("  type  " + module.toString());
 		System.out.println("the key: " + type);
 		Controller2DModel.DrawMode drawMode = null;
+		String drawElement="";
 		if (type.equals("move")) {
 			drawMode = Controller2DModel.DrawMode.MOVE;
 		}
@@ -106,28 +70,24 @@ public class JCPActionChangeMode extends JCPAction
 		}
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
-		//	module = new Controller2DModuleAddAtom(key);
+			//	module = new Controller2DModuleAddAtom(key);
 			//FIXME: is ENTERELEMENT the correct name? :]
 			drawMode = Controller2DModel.DrawMode.ENTERELEMENT;
 			drawElement = type;
 		}
-
-		
-		 	if (this.jcpPanel.getActionButton() != null)
-		 		this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
-		 	
-		 	this.jcpPanel.setActionButton((JComponent) e.getSource());
-			((JComponent) e.getSource()).setBackground(Color.GRAY);
-		
-			jcpPanel.get2DHub().getController2DModel().setDrawMode(drawMode);
-			if (drawMode != null) {
-				System.out.println("Drawmode activated: " + drawMode);
-			}
-			else {
-				System.out.println("This drawmode is unavailable atm :/ ");
-			}
-			if (drawElement != "")
-				jcpPanel.get2DHub().getController2DModel().setDrawElement(drawElement);
-	    }
+	 	if (this.jcpPanel.getActionButton() != null)
+	 		this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
+	 	this.jcpPanel.setActionButton((JComponent) e.getSource());
+		((JComponent) e.getSource()).setBackground(Color.GRAY);
+		jcpPanel.get2DHub().getController2DModel().setDrawMode(drawMode);
+		if (drawMode != null) {
+			System.out.println("Drawmode activated: " + drawMode);
+		}
+		else {
+			System.out.println("This drawmode is unavailable atm :/ ");
+		}
+		if (drawElement != "")
+			jcpPanel.get2DHub().getController2DModel().setDrawElement(drawElement);
+    }
 }
 

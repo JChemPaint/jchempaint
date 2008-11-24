@@ -176,7 +176,9 @@ public class JCPToolBar
 			//FIXME: make the correct actionlistener for the atom types? or whatever these are....
 
 			b=new JButton(key);
-			JCPActionChangeMode a = new JCPActionChangeMode(chemPaintPanel, key);
+			JCPActionChangeMode a = new JCPActionChangeMode ();
+			a.setJChemPaintPanel(chemPaintPanel);
+			a.setType(key);
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
 			if(JCPLocalizationHandler.getInstance().getString("singleelementTooltip")!=null)
