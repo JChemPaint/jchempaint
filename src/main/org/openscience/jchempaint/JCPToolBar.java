@@ -43,7 +43,9 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.JCPAction2D;
+import org.openscience.jchempaint.action.JCPActionChangeMode;
 
 /**
  *  This class makes the JCPToolBar
@@ -145,7 +147,8 @@ public class JCPToolBar
 				}
 				//FIXME: make it choose the correct controller?
 				System.out.println("astr: " + astr + " key: " + key);
-				JCPActionChangeMode a = new JCPActionChangeMode(chemPaintPanel, key);
+				JCPAction a = new JCPAction().getAction(chemPaintPanel, astr);
+				//JCPActionChangeMode a = new JCPActionChangeMode(chemPaintPanel, key);
 				if (a != null)
 				{
 					b.setActionCommand(astr);

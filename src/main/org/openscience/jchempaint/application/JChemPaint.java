@@ -40,6 +40,9 @@ import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
 	
+	public static int instancecounter=1;
+
+
 	public static IAtomContainer makeMolecule(String smiles) {
 		SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
 		try {
@@ -136,8 +139,7 @@ public class JChemPaint {
 				}
 				showInstance(file,null,null);
 			}else{
-				IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
-				showInstance(chemModel, JCPLocalizationHandler.getInstance().getString("Untitled-"));
+				showEmptyInstance();
 			}
 
 		} catch (Throwable t)
@@ -147,6 +149,11 @@ public class JChemPaint {
 		}
 	}
 	
+	public static void showEmptyInstance() {
+		IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
+		showInstance(chemModel, JCPLocalizationHandler.getInstance().getString("Untitled-")+(instancecounter++));
+	}
+
 	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
 		if(!inFile.exists()){
 			JOptionPane.showMessageDialog(jcpPanel, "File "+inFile.getPath()+" does not exist.");
@@ -295,6 +302,7 @@ public class JChemPaint {
 	
 	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
 		JFrame f = new JFrame(title);
+		chemModel.setID(title);
 		f.addWindowListener(new JChemPaintPanel.AppCloser());
 		f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		JChemPaintPanel p = new JChemPaintPanel(chemModel,"stable");
