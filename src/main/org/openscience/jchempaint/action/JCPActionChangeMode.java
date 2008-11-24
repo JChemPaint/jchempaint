@@ -68,6 +68,64 @@ public class JCPActionChangeMode extends JCPAction
 			drawMode = Controller2DModel.DrawMode.DECCHARGE;
 			//module = new Controller2DModuleChangeFormalC(-1);
 		}
+		else if (type.equals("bond")) {
+			drawMode = Controller2DModel.DrawMode.DRAWBOND;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("symbol")) {
+			drawMode = Controller2DModel.DrawMode.SYMBOL;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("element")) {
+			drawMode = Controller2DModel.DrawMode.ELEMENT;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("enterelement")) {
+			drawMode = Controller2DModel.DrawMode.ENTERELEMENT;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("up_bond")) {
+			drawMode = Controller2DModel.DrawMode.UP_BOND;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("down_bond")) {
+			drawMode = Controller2DModel.DrawMode.DOWN_BOND;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("triangle")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(3);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("square")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(4);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("pentagon")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(5);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("hexagon")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(6);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("octagon")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("heptagon")) {
+			drawMode = Controller2DModel.DrawMode.RING;
+			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
+		else if (type.equals("benzene")) {
+			drawMode = Controller2DModel.DrawMode.BENZENERING;
+			//module = new Controller2DModuleChangeFormalC(-1);
+		}
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
 			//	module = new Controller2DModuleAddAtom(key);
