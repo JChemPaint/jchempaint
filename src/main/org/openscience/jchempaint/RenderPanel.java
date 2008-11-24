@@ -21,6 +21,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private IntermediateRenderer renderer;
 	private IChemModel chemModel;
 	
+	public IChemModel getChemModel() {
+		return chemModel;
+	}
+
+
 	private Controller2DHub hub;
 	public Controller2DHub getHub() {
 		return hub;

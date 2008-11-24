@@ -295,8 +295,8 @@ public class JChemPaint {
 	
 	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
 		JFrame f = new JFrame(title);
-		//TODO warn, close only frame
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.addWindowListener(new JChemPaintPanel.AppCloser());
+		f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		JChemPaintPanel p = new JChemPaintPanel(chemModel,"stable");
 		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
