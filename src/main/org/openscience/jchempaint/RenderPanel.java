@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -40,6 +41,7 @@ import org.openscience.cdk.controller.Controller2DModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
@@ -74,7 +76,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.controllerModel = new Controller2DModel();
 		
 		// connect the Renderer to the Hub
-		this.hub = new Controller2DHub(this.controllerModel, this.renderer, chemModel,this);
+		this.hub = new Controller2DHub(this.controllerModel, this.renderer, chemModel, this);
 		
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -84,6 +86,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private void setupPanel() {
 		this.setBackground(Color.WHITE);
+		this.setPreferredSize(new Dimension(1000, 600));
 	}
 	
 	public void paint(Graphics g) {
@@ -92,9 +95,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			//TODO render the chemodel, not atomcontainer
-			if(this.chemModel.getMoleculeSet()!=null && this.chemModel.getMoleculeSet().getAtomContainerCount()>0)
-				this.renderer.paintMolecule(this.chemModel.getMoleculeSet().getAtomContainer(0), g2, this.getBounds());
+			//TODO render the chem model, not atom container
+			IMoleculeSet moleculeSet = this.chemModel.getMoleculeSet(); 
+			if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0) {
+				this.renderer.paintMolecule(moleculeSet.getAtomContainer(0), g2, this.getVisibleRect());
+			}
 		}
 	}
 

@@ -218,6 +218,12 @@ public class JChemPaint {
 				else if (type.equals(JCPFileFilter.inchi)) {
 					cor = new INChIReader(reader);
 				}
+				
+				// XXX TMP FIXME hack to ensure that testing with a file 
+				// as a command-line arg in eclipse will work (for a mol file)
+				else {
+					cor = new MDLV2000Reader(reader);
+				}
 			} catch (FileNotFoundException exception) {
 				//we do nothing right now and hoe it still works
 			}
