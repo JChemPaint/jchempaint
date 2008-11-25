@@ -654,7 +654,7 @@ public class PeriodicTablePanel extends JPanel
 			label.setBackground(color);
 			pan.add(label,BorderLayout.EAST);
 			URL url = this.getClass().getResource(
-				"/org/openscience/cdk/applications/swing/periodicTable_Mendeleev.jpg");
+				"/org/openscience/jchempaint/resources/large-bin/periodicTable_Mendeleev.jpg");
 			if(url!=null)
 			{
 				ImageIcon image = new ImageIcon(url);
