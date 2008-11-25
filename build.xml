@@ -1,4 +1,4 @@
-<project name="JCPCDK" default="dist-jcp" basedir=".">
+<project name="JCPCDK" default="dist" basedir=".">
 	
 	<property file="ant.properties"/>
 
@@ -11,6 +11,7 @@
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />
 	<property name="cdk.metainf" value="${cdk.dir}/src/META-INF" />
     <property name="src" value="src" />
+    <property name="lib" value="lib" />
 	<property name="dist" value="dist" />
     <property name="appjars.dir" value="${dist}/appjars" />
 	        
@@ -18,7 +19,7 @@
             <delete dir="${dist}" />
     </target>
 
-	<target id="dist-jcp" name="dist-jcp" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
+	<target id="dist" name="dist" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
             description="Builds the JChemPaint application">
         <jar jarfile="${dist}/jchempaint-${jcp.version}.jar">
             <manifest>
@@ -49,7 +50,12 @@
                 <includesfile name="${cdk.metainf}/render.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
             </fileset>
-	 </unjar>
+        </unjar>
+        <unjar dest="${appjars.dir}">
+            <fileset dir="${lib}">
+            	<include name="**/*" />
+            </fileset>
+        </unjar>
 	 </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
@@ -93,6 +99,8 @@
                 <fileset dir="${cdk.devellib}">
                 </fileset>
                 <fileset dir="${cdk.dist}/jar">
+                </fileset>
+                <fileset dir="${lib}">
                 </fileset>
             </classpath>
 
