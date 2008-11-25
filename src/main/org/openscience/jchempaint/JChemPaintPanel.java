@@ -66,6 +66,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	private boolean isModified=false;
 
 	private FileFilter currentSaveFileFilter;
+	private JCPStatusBar statusBar;
 
 	public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
 	public JComponent getActionButton() {
@@ -182,6 +183,8 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		this.add(p,BorderLayout.CENTER);
 		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
 		topContainer.add(toolbar,BorderLayout.CENTER);
+		statusBar=new JCPStatusBar();
+		this.add(statusBar,BorderLayout.SOUTH);
 		instances.add(this);
 		ac.addListener(this);
 	}
@@ -257,5 +260,15 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	public void stateChanged(IChemObjectChangeEvent event) {
 		isModified=true;
 		((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
-	}
+        if (this.getChemModel() != null) {
+            for (int i = 0; i < 3; i++) {
+              String status = p.getStatus(i);
+              statusBar.setStatus(i + 1, status);
+            }
+        } else {
+            if (statusBar != null) {
+              statusBar.setStatus(1, "no model");
+            }
+        }
+    }
 }

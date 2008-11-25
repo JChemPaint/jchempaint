@@ -33,6 +33,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -40,9 +41,12 @@ import org.openscience.cdk.controller.Controller2DHub;
 import org.openscience.cdk.controller.Controller2DModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.renderer.IntermediateRenderer;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
@@ -105,6 +109,46 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 
 	public void updateView() {
 		this.repaint();
+	}
+	
+	/**
+	 *  Returns one of the status strings at the given position
+	 *
+	 * @param  position
+	 * @return the current status
+	 */
+	public String getStatus(int position) {
+		// return this.status[position];
+		String status = "";
+		// logger.debug("Getting status");
+		if (position == 0) {
+			// depict editing mode
+			status = controllerModel.getDrawModeString();
+		}
+		else if (position == 1) {
+			// depict bruto formula
+			IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
+        	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+        	while (containers.hasNext()) {
+        		wholeModel.add(containers.next());
+        	}
+        	String formula = MolecularFormulaManipulator.getHTML(MolecularFormulaManipulator.getMolecularFormula(wholeModel),true,false);
+			int impliciths=0;
+			/*TODO for some reason this causes odd stuff to happen for(int i=0;i<wholeModel.getAtomCount();i++){
+				if(wholeModel.getAtom(i).getHydrogenCount()!=null);
+					impliciths+=wholeModel.getAtom(i).getHydrogenCount();
+			}*/
+			status = "<html>" + formula + (impliciths==0 ? "" : " (of these "+impliciths+" Hs implicit)")+"</html>";
+		}
+		else if (position == 2) {
+			// depict brutto formula of the selected molecule or part of molecule
+			if (renderer.getRenderer2DModel().getSelectedPart() != null) {
+				IAtomContainer selectedPart = renderer.getRenderer2DModel().getSelectedPart();
+				String formula = MolecularFormulaManipulator.getHTML(MolecularFormulaManipulator.getMolecularFormula(selectedPart),true,true);
+				status = "<html>" + formula + "</html>";
+			}
+		}
+		return status;
 	}
 
 }
