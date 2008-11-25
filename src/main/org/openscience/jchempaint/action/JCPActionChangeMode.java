@@ -78,7 +78,7 @@ public class JCPActionChangeMode extends JCPAction
 			//module = new Controller2DModuleChangeFormalC(-1);
 		}
 		else if (type.equals("periodictable")) {
-			drawMode = Controller2DModel.DrawMode.ELEMENT;
+			drawMode = Controller2DModel.DrawMode.ADDATOMORCHANGEELEMENT;
 			if (dialog == null)
 			{
 				// open PeriodicTable panel
@@ -148,7 +148,7 @@ public class JCPActionChangeMode extends JCPAction
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
 			//	module = new Controller2DModuleAddAtom(key);
-			drawMode = Controller2DModel.DrawMode.ELEMENT;
+			drawMode = Controller2DModel.DrawMode.ADDATOMORCHANGEELEMENT;
 			drawElement = type;
 		}
 	 	if (this.jcpPanel.getActionButton() != null)
