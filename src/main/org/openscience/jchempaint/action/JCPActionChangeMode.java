@@ -30,10 +30,15 @@ package org.openscience.jchempaint.action;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
 import javax.swing.JComponent;
 
 import org.openscience.cdk.controller.Controller2DModel;
+import org.openscience.cdk.controller.IController2DModel;
+import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.jchempaint.dialog.PTDialog;
+import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 /**
  * JChemPaint menu actions
@@ -43,6 +48,7 @@ public class JCPActionChangeMode extends JCPAction
 {
 
 	private static final long serialVersionUID = -4056416630614934238L;
+	private PTDialog dialog;
 
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("the key: " + type);
@@ -64,14 +70,24 @@ public class JCPActionChangeMode extends JCPAction
 		}
 		else if (type.equals("bond")) {
 			drawMode = Controller2DModel.DrawMode.DRAWBOND;
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 			//module = new Controller2DModuleChangeFormalC(-1);
 		}
-		else if (type.equals("symbol")) {
-			drawMode = Controller2DModel.DrawMode.SYMBOL;
+		else if (type.equals("cyclesymbol")) {
+			drawMode = Controller2DModel.DrawMode.CYCLESYMBOL;
 			//module = new Controller2DModuleChangeFormalC(-1);
 		}
-		else if (type.equals("element")) {
+		else if (type.equals("periodictable")) {
 			drawMode = Controller2DModel.DrawMode.ELEMENT;
+			if (dialog == null)
+			{
+				// open PeriodicTable panel
+				dialog = new PTDialog(
+						new PTDialogChangeListener(jcpPanel.get2DHub().getController2DModel())
+						);
+			}
+			dialog.pack();
+			dialog.setVisible(true);
 			//module = new Controller2DModuleChangeFormalC(-1);
 		}
 		else if (type.equals("enterelement")) {
@@ -81,44 +97,53 @@ public class JCPActionChangeMode extends JCPAction
 		else if (type.equals("up_bond")) {
 			drawMode = Controller2DModel.DrawMode.UP_BOND;
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("down_bond")) {
 			drawMode = Controller2DModel.DrawMode.DOWN_BOND;
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("triangle")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(3);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("square")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(4);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("pentagon")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(5);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("hexagon")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(6);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("octagon")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("heptagon")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("benzene")) {
 			drawMode = Controller2DModel.DrawMode.BENZENERING;
 			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
@@ -140,5 +165,39 @@ public class JCPActionChangeMode extends JCPAction
 		if (drawElement != "")
 			jcpPanel.get2DHub().getController2DModel().setDrawElement(drawElement);
     }
+
+	class PTDialogChangeListener implements ICDKChangeListener
+	{
+
+		IController2DModel model;
+
+
+		/**
+		 *  Constructor for the PTDialogChangeListener object
+		 *
+		 *@param  model  Description of the Parameter
+		 */
+		public PTDialogChangeListener(IController2DModel model)
+		{
+			this.model = model;
+		}
+
+		public void stateChanged(EventObject event)
+		{
+			logger.debug("Element change signaled...");
+			if (event.getSource() instanceof PeriodicTablePanel)
+			{
+				PeriodicTablePanel source = (PeriodicTablePanel) event.getSource();
+				String symbol = source.getSelectedElement().getSymbol();
+				logger.debug("Setting drawing element to: ", symbol);
+				model.setDrawElement(symbol);
+				dialog.setVisible(false);
+				dialog = null;
+			} else
+			{
+				logger.warn("Unkown source for event: ", event.getSource().getClass().getName());
+			}
+		}
+	}
 }
 

@@ -260,7 +260,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	public void stateChanged(IChemObjectChangeEvent event) {
 		isModified=true;
 		((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
-        if (this.getChemModel() != null) {
+        /*if (this.getChemModel() != null) {
             for (int i = 0; i < 3; i++) {
               String status = p.getStatus(i);
               statusBar.setStatus(i + 1, status);
@@ -269,6 +269,6 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
             if (statusBar != null) {
               statusBar.setStatus(1, "no model");
             }
-        }
+        }*/
     }
 }
