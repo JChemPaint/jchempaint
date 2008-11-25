@@ -128,17 +128,17 @@ public class JCPActionChangeMode extends JCPAction
 			//module = new Controller2DModuleChangeFormalC(-1);
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
-		else if (type.equals("octagon")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
-			//module = new Controller2DModuleChangeFormalC(-1);
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
 		else if (type.equals("heptagon")) {
 			drawMode = Controller2DModel.DrawMode.RING;
 			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
 			//module = new Controller2DModuleChangeFormalC(-1);
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
+		}
+		else if (type.equals("octagon")) {
+		    drawMode = Controller2DModel.DrawMode.RING;
+		    jcpPanel.get2DHub().getController2DModel().setRingSize(8);
+		    //module = new Controller2DModuleChangeFormalC(-1);
+		    jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("benzene")) {
 			drawMode = Controller2DModel.DrawMode.BENZENERING;
