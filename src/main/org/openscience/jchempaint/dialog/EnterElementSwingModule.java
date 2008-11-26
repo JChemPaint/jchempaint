@@ -41,7 +41,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerModuleAdapter;
 import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.IController2DModel;
+import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -149,6 +149,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 	}
 
 	public String getDrawModeString() {
-		return IController2DModel.DrawMode.ADDATOMORCHANGEELEMENT.getName();
+		return IControllerModel.DrawMode.ADDATOMORCHANGEELEMENT.getName();
 	}
 }

@@ -45,7 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 
-import org.openscience.cdk.controller.Controller2DHub;
+import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
@@ -190,7 +190,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		ac.addListener(this);
 	}
 
-	public Controller2DHub get2DHub() {
+	public ControllerHub get2DHub() {
 		return p.getHub();
 	}
 

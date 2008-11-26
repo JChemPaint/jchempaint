@@ -37,8 +37,8 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 
-import org.openscience.cdk.controller.Controller2DHub;
-import org.openscience.cdk.controller.Controller2DModel;
+import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -58,13 +58,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 
 
-	private Controller2DHub hub;
-	public Controller2DHub getHub() {
+	private ControllerHub hub;
+	public ControllerHub getHub() {
 		return hub;
 	}
 	
 
-	private Controller2DModel controllerModel;
+	private ControllerModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	
 	
@@ -77,10 +77,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private void setupMachinery() {
 		// setup the Renderer and the controller 'model'
 		this.renderer = new IntermediateRenderer();
-		this.controllerModel = new Controller2DModel();
+		this.controllerModel = new ControllerModel();
 		
 		// connect the Renderer to the Hub
-		this.hub = new Controller2DHub(this.controllerModel, this.renderer, chemModel, this);
+		this.hub = new ControllerHub(this.controllerModel, this.renderer, chemModel, this);
 		
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);

@@ -38,10 +38,10 @@ import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.controller.AddRingModule;
 import org.openscience.cdk.controller.ChangeFormalChargeModule;
-import org.openscience.cdk.controller.Controller2DHub;
-import org.openscience.cdk.controller.Controller2DModel;
+import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.CycleSymbolModule;
-import org.openscience.cdk.controller.IController2DModel;
+import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
@@ -60,7 +60,7 @@ public class JCPChangeModeAction extends JCPAction {
 
     public void actionPerformed(ActionEvent e) {
         System.out.println("the key: " + type);
-        Controller2DHub hub = jcpPanel.get2DHub();
+        ControllerHub hub = jcpPanel.get2DHub();
         if (type.equals("move")) {
             hub.setActiveDrawModule(new MoveModule(hub));
         } else if (type.equals("eraser")) {
@@ -126,7 +126,7 @@ public class JCPChangeModeAction extends JCPAction {
 
     class PTDialogChangeListener implements ICDKChangeListener {
 
-        IController2DModel model;
+        IControllerModel model;
 
         /**
          * Constructor for the PTDialogChangeListener object
@@ -134,7 +134,7 @@ public class JCPChangeModeAction extends JCPAction {
          *@param model
          *            Description of the Parameter
          */
-        public PTDialogChangeListener(IController2DModel model) {
+        public PTDialogChangeListener(IControllerModel model) {
             this.model = model;
         }
 

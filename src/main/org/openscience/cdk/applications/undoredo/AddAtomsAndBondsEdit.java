@@ -30,7 +30,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
-import org.openscience.cdk.controller.IController2DModel;
+import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -58,7 +58,7 @@ public class AddAtomsAndBondsEdit extends AbstractUndoableEdit {
 
 	private String type;
 	
-	private IController2DModel c2dm=null;
+	private IControllerModel c2dm=null;
 
 	/**
 	 * @param chemModel
@@ -66,7 +66,7 @@ public class AddAtomsAndBondsEdit extends AbstractUndoableEdit {
 	 * @param c2dm The controller model; if none, set to null
 	 */
 	public AddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IController2DModel c2dm) {
+			IAtomContainer undoRedoContainer, String type, IControllerModel c2dm) {
 		this.chemModel = chemModel;
 		this.undoRedoContainer = undoRedoContainer;
 		this.type = type;
