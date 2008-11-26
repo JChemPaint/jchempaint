@@ -45,7 +45,6 @@ import javax.swing.SwingConstants;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
-import org.openscience.jchempaint.action.JCPAction2D;
 import org.openscience.jchempaint.action.JCPChangeModeAction;
 
 /**
@@ -114,11 +113,11 @@ public class JCPToolBar
 		JButton b = null;
 		if(!elementtype){
 			logger.debug("Trying to find resource for key: ", key);
-			URL url = jcpph.getResource(key + JCPAction2D.imageSuffix);
+			URL url = jcpph.getResource(key + JCPAction.imageSuffix);
 			logger.debug("Trying to find resource: ", url);
 			if (url == null)
 			{
-				logger.error("Cannot find resource: ", key, JCPAction2D.imageSuffix);
+				logger.error("Cannot find resource: ", key, JCPAction.imageSuffix);
 				return null;
 			}
 			ImageIcon image = new ImageIcon(url);
@@ -137,7 +136,7 @@ public class JCPToolBar
 						return 0.5f;
 					}
 				};
-				String astr = jcpph.getResourceString(key + JCPAction2D.actionSuffix);
+				String astr = jcpph.getResourceString(key + JCPAction.actionSuffix);
 				if (astr == null)
 				{
 					astr = key;
@@ -159,7 +158,7 @@ public class JCPToolBar
 				}
 				try
 				{
-					String tip = JCPLocalizationHandler.getInstance().getString(key + JCPAction2D.TIPSUFFIX);
+					String tip = JCPLocalizationHandler.getInstance().getString(key + JCPAction.TIPSUFFIX);
 					if (tip != null)
 					{
 						b.setToolTipText(tip);
