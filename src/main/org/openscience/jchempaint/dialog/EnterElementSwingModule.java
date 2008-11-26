@@ -45,15 +45,21 @@ import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.layout.AtomPlacer;
+import org.openscience.cdk.layout.RingPlacer;
+import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
 
 	private HashMap<String,IMolecule> funcgroupsmap=new HashMap<String,IMolecule>();
+	private final static RingPlacer ringPlacer = new RingPlacer();
 	
 	public EnterElementSwingModule(IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
@@ -115,9 +121,18 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				lastplaced=ac.getAtom(0);
 				counter=1;
 				container.add(ac);
+				List<IBond> connbonds=container.getConnectedBondsList(closestAtom);
+				for(int i=0;i<connbonds.size();i++){
+					IBond bond=connbonds.get(i);
+					if(bond.getAtom(0)==closestAtom){
+						bond.setAtom(ac.getAtom(0), 0);
+					}else{
+						bond.setAtom(ac.getAtom(0), 1);
+					}
+				}
 				container.removeAtomAndConnectedElectronContainers(closestAtom);
 				AtomPlacer ap=new AtomPlacer();
-				//TODO the bond length is wrong
+				//TODO the bond length is wrong and rings are not properly layed out
 				while(lastplaced!=null){
 					IAtomContainer placedNeighbours=container.getBuilder().newAtomContainer();
 					IAtomContainer unplacedNeighbours=container.getBuilder().newAtomContainer();
@@ -128,7 +143,11 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 						else
 							unplacedNeighbours.addAtom((IAtom)l.get(i));
 					}
-					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, chemModelRelay.getIJava2DRenderer().getRenderer2DModel().getBondLength());
+					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 2.5);
+					IRingSet ringset=new SSSRFinder(ac).findSSSR();
+					for(IAtomContainer ring:ringset.atomContainers()){
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), 2.5);
+					}
 					lastplaced=ac.getAtom(counter);
 					counter++;
 					if(counter==ac.getAtomCount())
