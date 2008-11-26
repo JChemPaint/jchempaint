@@ -39,7 +39,6 @@ import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.controller.AddRingModule;
 import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.MoveModule;
@@ -53,7 +52,7 @@ import org.openscience.jchempaint.dialog.PeriodicTablePanel;
  * JChemPaint menu actions
  * 
  */
-public class JCPChangeModeAction extends JCPAction {
+public class ChangeModeAction extends JCPAction {
 
     private static final long serialVersionUID = -4056416630614934238L;
     private PeriodicTableDialog dialog;

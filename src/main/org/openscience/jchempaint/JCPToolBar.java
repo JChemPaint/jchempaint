@@ -45,7 +45,7 @@ import javax.swing.SwingConstants;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
-import org.openscience.jchempaint.action.JCPChangeModeAction;
+import org.openscience.jchempaint.action.ChangeModeAction;
 
 /**
  *  This class makes the JCPToolBar
@@ -171,7 +171,7 @@ public class JCPToolBar
 		}else{
 			//FIXME: make the correct actionlistener for the atom types? or whatever these are....
 			b=new JButton(key);
-			JCPChangeModeAction a = new JCPChangeModeAction ();
+			ChangeModeAction a = new ChangeModeAction ();
 			a.setJChemPaintPanel(chemPaintPanel);
 			a.setType(key);
 			b.addActionListener(a);
