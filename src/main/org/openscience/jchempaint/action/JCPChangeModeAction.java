@@ -103,31 +103,32 @@ public class JCPChangeModeAction extends JCPAction
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("triangle")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),3));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),3,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("square")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),4));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),4,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("pentagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),5));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),5,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("hexagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("heptagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),7));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),7,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("octagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),8));
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),8,false));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("benzene")) {
-			//TODO not yet a module
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6,true));
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.length() == 1 || type.length() == 2) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
