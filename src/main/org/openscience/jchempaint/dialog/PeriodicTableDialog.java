@@ -36,18 +36,16 @@ import javax.swing.JFrame;
 import org.openscience.cdk.event.ICDKChangeListener;
 
 /**
- * Simple Dialog that shows the JCP logo and a textfield that allows
- * the user to copy&amp;paste the URL of JChemPaints main site.
- *
+ * Dialog that shows a periodic table
  */
-public class PTDialog extends JFrame {
+public class PeriodicTableDialog extends JFrame {
 
 	private static final long serialVersionUID = -1136319713943259980L;
 	
 	//private static LoggingTool logger = null;
     private PeriodicTablePanel ptp;
     
-    public PTDialog(ICDKChangeListener listener) {
+    public PeriodicTableDialog(ICDKChangeListener listener) {
         super("Choose an element");
         //logger = new LoggingTool(this);
         doInit();

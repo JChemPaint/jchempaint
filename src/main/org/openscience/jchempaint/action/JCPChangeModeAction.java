@@ -46,7 +46,7 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
-import org.openscience.jchempaint.dialog.PTDialog;
+import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 /**
@@ -56,7 +56,7 @@ import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 public class JCPChangeModeAction extends JCPAction {
 
     private static final long serialVersionUID = -4056416630614934238L;
-    private PTDialog dialog;
+    private PeriodicTableDialog dialog;
 
     public void actionPerformed(ActionEvent e) {
         System.out.println("the key: " + type);
@@ -78,7 +78,7 @@ public class JCPChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new AddAtomModule(hub));
             if (dialog == null) {
                 // open PeriodicTable panel
-                dialog = new PTDialog(
+                dialog = new PeriodicTableDialog(
                         new PTDialogChangeListener(hub.getController2DModel()));
             }
             dialog.pack();
