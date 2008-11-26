@@ -128,7 +128,7 @@ public class JCPActionChangeMode extends JCPAction
 		else if (type.equals("benzene")) {
 			//TODO not yet a module
 		}
-		else if (type.length() == 1) {
+		else if (type.length() == 1 || type.length() == 2) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
 			jcpPanel.get2DHub().setActiveDrawModule(new AddAtomModule(jcpPanel.get2DHub()));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement(type);
