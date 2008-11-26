@@ -123,7 +123,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		// logger.debug("Getting status");
 		if (position == 0) {
 			// depict editing mode
-			status = controllerModel.getDrawModeString();
+			status = hub.getActiveDrawModule().getDrawModeString();
 		}
 		else if (position == 1) {
 			// depict bruto formula
@@ -134,10 +134,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         	}
         	String formula = MolecularFormulaManipulator.getHTML(MolecularFormulaManipulator.getMolecularFormula(wholeModel),true,false);
 			int impliciths=0;
-			/*TODO for some reason this causes odd stuff to happen for(int i=0;i<wholeModel.getAtomCount();i++){
+			for(int i=0;i<wholeModel.getAtomCount();i++){
 				if(wholeModel.getAtom(i).getHydrogenCount()!=null);
 					impliciths+=wholeModel.getAtom(i).getHydrogenCount();
-			}*/
+			}
 			status = "<html>" + formula + (impliciths==0 ? "" : " (of these "+impliciths+" Hs implicit)")+"</html>";
 		}
 		else if (position == 2) {

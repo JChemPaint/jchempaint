@@ -34,8 +34,15 @@ import java.util.EventObject;
 
 import javax.swing.JComponent;
 
+import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.AddBondModule;
+import org.openscience.cdk.controller.AddRingModule;
+import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.Controller2DModel;
+import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IController2DModel;
+import org.openscience.cdk.controller.MoveModule;
+import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.PTDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
@@ -52,33 +59,27 @@ public class JCPActionChangeMode extends JCPAction
 
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("the key: " + type);
-		Controller2DModel.DrawMode drawMode = null;
-		String drawElement="";
 		if (type.equals("move")) {
-			drawMode = Controller2DModel.DrawMode.MOVE;
+			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
 		}
 		else if (type.equals("eraser")) {
-			drawMode = Controller2DModel.DrawMode.ERASER;
+			jcpPanel.get2DHub().setActiveDrawModule(new RemoveModule(jcpPanel.get2DHub()));
 		}
 		else if (type.equals("plus")) {
-			//module = new Controller2DModuleChangeFormalC(1);
-			drawMode = Controller2DModel.DrawMode.INCCHARGE;
+			jcpPanel.get2DHub().setActiveDrawModule(new ChangeFormalChargeModule(jcpPanel.get2DHub(),1));
 		}
 		else if (type.equals("minus")) {
-			drawMode = Controller2DModel.DrawMode.DECCHARGE;
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new ChangeFormalChargeModule(jcpPanel.get2DHub(),-1));
 		}
 		else if (type.equals("bond")) {
-			drawMode = Controller2DModel.DrawMode.DRAWBOND;
+			jcpPanel.get2DHub().setActiveDrawModule(new AddBondModule(jcpPanel.get2DHub()));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-			//module = new Controller2DModuleChangeFormalC(-1);
 		}
 		else if (type.equals("cyclesymbol")) {
-			drawMode = Controller2DModel.DrawMode.CYCLESYMBOL;
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new CycleSymbolModule(jcpPanel.get2DHub()));
 		}
 		else if (type.equals("periodictable")) {
-			drawMode = Controller2DModel.DrawMode.ADDATOMORCHANGEELEMENT;
+			jcpPanel.get2DHub().setActiveDrawModule(new AddAtomModule(jcpPanel.get2DHub()));
 			if (dialog == null)
 			{
 				// open PeriodicTable panel
@@ -88,82 +89,54 @@ public class JCPActionChangeMode extends JCPAction
 			}
 			dialog.pack();
 			dialog.setVisible(true);
-			//module = new Controller2DModuleChangeFormalC(-1);
 		}
 		else if (type.equals("enterelement")) {
-			drawMode = Controller2DModel.DrawMode.ENTERELEMENT;
-			//module = new Controller2DModuleChangeFormalC(-1);
+			//TODO not yet a module
 		}
 		else if (type.equals("up_bond")) {
-			drawMode = Controller2DModel.DrawMode.UP_BOND;
-			//module = new Controller2DModuleChangeFormalC(-1);
+			//TODO not yet a module
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("down_bond")) {
-			drawMode = Controller2DModel.DrawMode.DOWN_BOND;
-			//module = new Controller2DModuleChangeFormalC(-1);
+			//TODO not yet a module
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("triangle")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(3);
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),3));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("square")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(4);
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),4));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("pentagon")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(5);
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),5));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("hexagon")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(6);
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("heptagon")) {
-			drawMode = Controller2DModel.DrawMode.RING;
-			jcpPanel.get2DHub().getController2DModel().setRingSize(7);
-			//module = new Controller2DModuleChangeFormalC(-1);
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),7));
 			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("octagon")) {
-		    drawMode = Controller2DModel.DrawMode.RING;
-		    jcpPanel.get2DHub().getController2DModel().setRingSize(8);
-		    //module = new Controller2DModuleChangeFormalC(-1);
-		    jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
+			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),8));
+			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
 		}
 		else if (type.equals("benzene")) {
-			drawMode = Controller2DModel.DrawMode.BENZENERING;
-			//module = new Controller2DModuleChangeFormalC(-1);
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
+			//TODO not yet a module
 		}
 		else if (type.length() == 1) {
 			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
-			//	module = new Controller2DModuleAddAtom(key);
-			drawMode = Controller2DModel.DrawMode.ADDATOMORCHANGEELEMENT;
-			drawElement = type;
+			jcpPanel.get2DHub().setActiveDrawModule(new AddAtomModule(jcpPanel.get2DHub()));
+			jcpPanel.get2DHub().getController2DModel().setDrawElement(type);
 		}
 	 	if (this.jcpPanel.getActionButton() != null)
 	 		this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
 	 	this.jcpPanel.setActionButton((JComponent) e.getSource());
 		((JComponent) e.getSource()).setBackground(Color.GRAY);
-		jcpPanel.get2DHub().getController2DModel().setDrawMode(drawMode);
-		if (drawMode != null) {
-			System.out.println("Drawmode activated: " + drawMode);
-		}
-		else {
-			System.out.println("This drawmode is unavailable atm :/ ");
-		}
-		if (drawElement != "")
-			jcpPanel.get2DHub().getController2DModel().setDrawElement(drawElement);
     }
 
 	class PTDialogChangeListener implements ICDKChangeListener

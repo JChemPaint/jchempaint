@@ -42,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
+import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.JCPAction2D;
@@ -253,6 +254,7 @@ public class JCPToolBar
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setActionButton(button);
+						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondModule(chemPaintPanel.get2DHub()));
 					} else
 					{
 						button.setBackground(Color.LIGHT_GRAY);
