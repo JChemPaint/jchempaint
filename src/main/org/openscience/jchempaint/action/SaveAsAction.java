@@ -253,20 +253,6 @@ public class SaveAsAction extends JCPAction
 		return outFile;
 	}
 
-	public static void updateMoleculeCoordinates(IMoleculeSet som, Renderer2DModel r2dm){
-		Iterable<IAtomContainer> atomCons = som.molecules();
-		for(IAtomContainer atomCon : atomCons) {
-			for (int i = 0; i < atomCon.getAtomCount(); i++)
-			{
-				IAtom currentAtom = atomCon.getAtom(i);
-				if(r2dm.getRenderingCoordinate(currentAtom)!=null){
-					currentAtom.setPoint2d(new Point2d((Point2d)r2dm.getRenderingCoordinate(currentAtom)));
-					currentAtom.setPoint2d(new Point2d(currentAtom.getPoint2d().x*0.0422,currentAtom.getPoint2d().y*0.0422));
-				}
-			}
-		}
-	 }
-	
 	protected File saveAsCML2(IChemObject object, File outFile) throws Exception
 	{
 		if(Float.parseFloat(System.getProperty("java.specification.version"))<1.5){

@@ -44,6 +44,7 @@ import org.openscience.cdk.controller.IController2DModel;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PTDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
@@ -91,7 +92,7 @@ public class JCPActionChangeMode extends JCPAction
 			dialog.setVisible(true);
 		}
 		else if (type.equals("enterelement")) {
-			//TODO not yet a module
+			jcpPanel.get2DHub().setActiveDrawModule(new EnterElementSwingModule(jcpPanel.get2DHub()));
 		}
 		else if (type.equals("up_bond")) {
 			//TODO not yet a module
