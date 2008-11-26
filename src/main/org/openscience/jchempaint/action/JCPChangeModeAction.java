@@ -52,7 +52,7 @@ import org.openscience.jchempaint.dialog.PeriodicTablePanel;
  * JChemPaint menu actions
  *
  */
-public class JCPActionChangeMode extends JCPAction
+public class JCPChangeModeAction extends JCPAction
 {
 
 	private static final long serialVersionUID = -4056416630614934238L;
