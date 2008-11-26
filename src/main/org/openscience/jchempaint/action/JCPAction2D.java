@@ -62,7 +62,7 @@ public class JCPAction2D extends AbstractAction
 	 *  Description of the Field
 	 */
 	public final static String labelSuffix = "Label";
-
+	public final static String TIPSUFFIX = "Tooltip";
 	/**
 	 *  Description of the Field
 	 */

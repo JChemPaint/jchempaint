@@ -159,7 +159,7 @@ public class JCPToolBar
 				}
 				try
 				{
-					String tip = JCPLocalizationHandler.getInstance().getString(key + JCPConstants.TIPSUFFIX);
+					String tip = JCPLocalizationHandler.getInstance().getString(key + JCPAction2D.TIPSUFFIX);
 					if (tip != null)
 					{
 						b.setToolTipText(tip);
