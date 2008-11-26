@@ -38,6 +38,7 @@ import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.controller.AddRingModule;
 import org.openscience.cdk.controller.ChangeFormalChargeModule;
+import org.openscience.cdk.controller.Controller2DHub;
 import org.openscience.cdk.controller.Controller2DModel;
 import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IController2DModel;
@@ -50,129 +51,107 @@ import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 /**
  * JChemPaint menu actions
- *
+ * 
  */
-public class JCPChangeModeAction extends JCPAction
-{
+public class JCPChangeModeAction extends JCPAction {
 
-	private static final long serialVersionUID = -4056416630614934238L;
-	private PTDialog dialog;
+    private static final long serialVersionUID = -4056416630614934238L;
+    private PTDialog dialog;
 
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("the key: " + type);
-		if (type.equals("move")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
-		}
-		else if (type.equals("eraser")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new RemoveModule(jcpPanel.get2DHub()));
-		}
-		else if (type.equals("plus")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new ChangeFormalChargeModule(jcpPanel.get2DHub(),1));
-		}
-		else if (type.equals("minus")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new ChangeFormalChargeModule(jcpPanel.get2DHub(),-1));
-		}
-		else if (type.equals("bond")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddBondModule(jcpPanel.get2DHub()));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("cyclesymbol")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new CycleSymbolModule(jcpPanel.get2DHub()));
-		}
-		else if (type.equals("periodictable")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddAtomModule(jcpPanel.get2DHub()));
-			if (dialog == null)
-			{
-				// open PeriodicTable panel
-				dialog = new PTDialog(
-						new PTDialogChangeListener(jcpPanel.get2DHub().getController2DModel())
-						);
-			}
-			dialog.pack();
-			dialog.setVisible(true);
-		}
-		else if (type.equals("enterelement")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new EnterElementSwingModule(jcpPanel.get2DHub()));
-		}
-		else if (type.equals("up_bond")) {
-			//TODO not yet a module
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("down_bond")) {
-			//TODO not yet a module
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("triangle")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),3,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("square")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),4,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("pentagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),5,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("hexagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("heptagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),7,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("octagon")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),8,false));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.equals("benzene")) {
-			jcpPanel.get2DHub().setActiveDrawModule(new AddRingModule(jcpPanel.get2DHub(),6,true));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement("C");
-		}
-		else if (type.length() == 1 || type.length() == 2) {
-			//I assume something with length of 1 is an atom name (C/H/O/N/etc.)
-			jcpPanel.get2DHub().setActiveDrawModule(new AddAtomModule(jcpPanel.get2DHub()));
-			jcpPanel.get2DHub().getController2DModel().setDrawElement(type);
-		}
-	 	if (this.jcpPanel.getActionButton() != null)
-	 		this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
-	 	this.jcpPanel.setActionButton((JComponent) e.getSource());
-		((JComponent) e.getSource()).setBackground(Color.GRAY);
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("the key: " + type);
+        Controller2DHub hub = jcpPanel.get2DHub();
+        if (type.equals("move")) {
+            hub.setActiveDrawModule(new MoveModule(hub));
+        } else if (type.equals("eraser")) {
+            hub.setActiveDrawModule(new RemoveModule(hub));
+        } else if (type.equals("plus")) {
+            hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, 1));
+        } else if (type.equals("minus")) {
+            hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, -1));
+        } else if (type.equals("bond")) {
+            hub.setActiveDrawModule(new AddBondModule(hub));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("cyclesymbol")) {
+            hub.setActiveDrawModule(new CycleSymbolModule(hub));
+        } else if (type.equals("periodictable")) {
+            hub.setActiveDrawModule(new AddAtomModule(hub));
+            if (dialog == null) {
+                // open PeriodicTable panel
+                dialog = new PTDialog(
+                        new PTDialogChangeListener(hub.getController2DModel()));
+            }
+            dialog.pack();
+            dialog.setVisible(true);
+        } else if (type.equals("enterelement")) {
+            hub.setActiveDrawModule(new EnterElementSwingModule(hub));
+        } else if (type.equals("up_bond")) {
+            // TODO not yet a module
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("down_bond")) {
+            // TODO not yet a module
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("triangle")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 3, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("square")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 4, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("pentagon")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 5, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("hexagon")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 6, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("heptagon")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 7, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("octagon")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 8, false));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("benzene")) {
+            hub.setActiveDrawModule(new AddRingModule(hub, 6, true));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.length() == 1 || type.length() == 2) {
+            // I assume something with length of 1 is an atom name
+            // (C/H/O/N/etc.)
+            hub.setActiveDrawModule(new AddAtomModule(hub));
+            hub.getController2DModel().setDrawElement(type);
+        }
+        if (this.jcpPanel.getActionButton() != null)
+            this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
+        this.jcpPanel.setActionButton((JComponent) e.getSource());
+        ((JComponent) e.getSource()).setBackground(Color.GRAY);
     }
 
-	class PTDialogChangeListener implements ICDKChangeListener
-	{
+    class PTDialogChangeListener implements ICDKChangeListener {
 
-		IController2DModel model;
+        IController2DModel model;
 
+        /**
+         * Constructor for the PTDialogChangeListener object
+         * 
+         *@param model
+         *            Description of the Parameter
+         */
+        public PTDialogChangeListener(IController2DModel model) {
+            this.model = model;
+        }
 
-		/**
-		 *  Constructor for the PTDialogChangeListener object
-		 *
-		 *@param  model  Description of the Parameter
-		 */
-		public PTDialogChangeListener(IController2DModel model)
-		{
-			this.model = model;
-		}
-
-		public void stateChanged(EventObject event)
-		{
-			logger.debug("Element change signaled...");
-			if (event.getSource() instanceof PeriodicTablePanel)
-			{
-				PeriodicTablePanel source = (PeriodicTablePanel) event.getSource();
-				String symbol = source.getSelectedElement().getSymbol();
-				logger.debug("Setting drawing element to: ", symbol);
-				model.setDrawElement(symbol);
-				dialog.setVisible(false);
-				dialog = null;
-			} else
-			{
-				logger.warn("Unkown source for event: ", event.getSource().getClass().getName());
-			}
-		}
-	}
+        public void stateChanged(EventObject event) {
+            logger.debug("Element change signaled...");
+            if (event.getSource() instanceof PeriodicTablePanel) {
+                PeriodicTablePanel source = (PeriodicTablePanel) event
+                        .getSource();
+                String symbol = source.getSelectedElement().getSymbol();
+                logger.debug("Setting drawing element to: ", symbol);
+                model.setDrawElement(symbol);
+                dialog.setVisible(false);
+                dialog = null;
+            } else {
+                logger.warn("Unkown source for event: ", event.getSource()
+                        .getClass().getName());
+            }
+        }
+    }
 }
-
