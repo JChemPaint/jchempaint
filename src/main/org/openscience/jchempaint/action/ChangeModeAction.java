@@ -84,6 +84,9 @@ public class ChangeModeAction extends JCPAction {
             dialog.setVisible(true);
         } else if (type.equals("enterelement")) {
             hub.setActiveDrawModule(new EnterElementSwingModule(hub));
+        } else if (type.equals("lasso")) {
+            // TODO not yet a module
+            hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
             // TODO not yet a module
             hub.getController2DModel().setDrawElement("C");
