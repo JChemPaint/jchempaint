@@ -36,6 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JApplet;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -259,7 +260,8 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	
 	public void stateChanged(IChemObjectChangeEvent event) {
 		isModified=true;
-		((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
+		if(this.getParent().getParent().getParent().getParent() instanceof JFrame)
+			((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
         /* TODO gives concurrent access problems if (this.getChemModel() != null) {
             for (int i = 0; i < 3; i++) {
               String status = p.getStatus(i);
