@@ -120,9 +120,9 @@ public class ChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new AddAtomModule(hub));
             hub.getController2DModel().setDrawElement(type);
         }
-        if (this.jcpPanel.getActionButton() != null)
-            this.jcpPanel.getActionButton().setBackground(Color.LIGHT_GRAY);
-        this.jcpPanel.setActionButton((JComponent) e.getSource());
+        if (this.jcpPanel.getLastActionButton() != null)
+            this.jcpPanel.getLastActionButton().setBackground(Color.LIGHT_GRAY);
+        this.jcpPanel.setLastActionButton((JComponent) e.getSource());
         ((JComponent) e.getSource()).setBackground(Color.GRAY);
     }
 

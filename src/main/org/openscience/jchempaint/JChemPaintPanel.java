@@ -32,11 +32,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JApplet;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -53,27 +54,33 @@ import org.openscience.jchempaint.action.SaveAction;
 
 public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 
-	RenderPanel p;
-	
+	private RenderPanel renderPanel;
 	private JComponent lastActionButton;
-
 	private File currentWorkDirectory;
-
 	private File lastOpenedFile;
-
 	private FileFilter currentOpenFileFilter;
-
 	private File isAlreadyAFile;
 	private boolean isModified=false;
-
 	private FileFilter currentSaveFileFilter;
 	private JCPStatusBar statusBar;
-
 	public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
-	public JComponent getActionButton() {
+
+	/**
+	 * Helps in keeping the current action button highlighted
+	 * 
+	 * @return The last action button used
+	 */
+	public JComponent getLastActionButton() {
 		return lastActionButton;
 	}
-	public void setActionButton(JComponent actionButton) {
+	
+	/**
+	 * Helps in keeping the current action button highlighted - needs to be set
+	 * if a new action button is choosen
+	 * 
+	 * @param actionButton The new action button
+	 */
+	public void setLastActionButton(JComponent actionButton) {
 		lastActionButton = actionButton;
 	}
 	
@@ -173,30 +180,46 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		return isAlreadyAFile;
 	}
 
-	public JChemPaintPanel(IChemModel ac, String gui){
+	/**
+	 * Builds a JCPPanel with a certain model and a certain gui
+	 * 
+	 * @param chemModel The model
+	 * @param gui The gui string
+	 */
+	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this.setLayout(new BorderLayout());
 		JMenuBar menu = new JChemPaintMenuBar(this, gui);
 		JPanel topContainer = new JPanel(new BorderLayout());
 		topContainer.setLayout(new BorderLayout());
 		this.add(topContainer,BorderLayout.NORTH);
 		topContainer.add(menu,BorderLayout.NORTH);
-		p = new RenderPanel(ac);
-		this.add(p,BorderLayout.CENTER);
+		renderPanel = new RenderPanel(chemModel);
+		this.add(renderPanel,BorderLayout.CENTER);
 		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
 		topContainer.add(toolbar,BorderLayout.CENTER);
 		statusBar=new JCPStatusBar();
 		this.add(statusBar,BorderLayout.SOUTH);
 		instances.add(this);
-		ac.addListener(this);
+		chemModel.addListener(this);
 	}
 
+	/**
+	 * Return the ControllerHub of this JCPPanel
+	 * 
+	 * @return The ControllerHub
+	 */
 	public ControllerHub get2DHub() {
-		return p.getHub();
+		return renderPanel.getHub();
 	}
 
+	/**
+	 * Shows a warning if the JCPPanel has unsaved content and does save, if the user wants to do it.
+	 * 
+	 * @return OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
+	 */
 	public int showWarning() {
 		if (isModified){ //TODO && !getIsOpenedByViewer() && !guiString.equals("applet")) {
-			int answer = JOptionPane.showConfirmDialog(this, p.getChemModel().getID() + " " + JCPLocalizationHandler.getInstance().getString("warning"), JCPLocalizationHandler.getInstance().getString("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + JCPLocalizationHandler.getInstance().getString("warning"), JCPLocalizationHandler.getInstance().getString("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (answer == JOptionPane.YES_OPTION) {
 				new SaveAction(this, false).actionPerformed(new ActionEvent(this, 12, ""));
 			}
@@ -229,7 +252,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		 *  closing Event. Shows a warning if this window has unsaved data and
 		 *  terminates jvm, if last window.
 		 *
-		 *@param  e  Description of the Parameter
+		 *	@param  e  Description of the Parameter
 		 */
 		public void windowClosing(WindowEvent e) {
 			JFrame rootFrame = (JFrame) e.getSource();
@@ -240,7 +263,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 			int clear = ((JChemPaintPanel) ((JFrame) e.getSource()).getContentPane().getComponents()[0]).showWarning();
 			if (JOptionPane.CANCEL_OPTION != clear) {
 				for (int i = 0; i < instances.size(); i++) {
-					if (((JPanel)instances.get(i)).getParent().getParent().getParent().getParent() == (JFrame)e.getSource()) {
+					if (instances.get(i).getParent().getParent().getParent().getParent() == (JFrame)e.getSource()) {
 						instances.remove(i);
 						break;
 					}
@@ -254,14 +277,22 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		}
 	}
 	
+	/**
+	 * Return the chemmodel of this JCPPanel
+	 * 
+	 * @return
+	 */
 	public IChemModel getChemModel(){
-		return p.getChemModel();
+		return renderPanel.getChemModel();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
+	 */
 	public void stateChanged(IChemObjectChangeEvent event) {
 		isModified=true;
 		if(this.getParent().getParent().getParent().getParent() instanceof JFrame)
-			((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(p.getChemModel().getID()+"*");
+			((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID()+"*");
         /* TODO gives concurrent access problems if (this.getChemModel() != null) {
             for (int i = 0; i < 3; i++) {
               String status = p.getStatus(i);
@@ -273,4 +304,19 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
             }
         }*/
     }
+	
+	
+	/**
+	 *  Closes all currently opened JCP instances.
+	 */
+	public static void closeAllInstances() {
+		Iterator<JChemPaintPanel> it = ((List<JChemPaintPanel>)((ArrayList<JChemPaintPanel>)instances).clone()).iterator();
+		while (it.hasNext()) {
+			JFrame frame = (JFrame) it.next().getParent().getParent().getParent().getParent();
+			WindowListener[] wls = (WindowListener[]) (frame.getListeners(WindowListener.class));
+			wls[0].windowClosing(new WindowEvent(frame, 12));
+			frame.setVisible(false);
+			frame.dispose();
+		}
+	}
 }

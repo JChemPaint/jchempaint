@@ -252,7 +252,7 @@ public class JCPToolBar
 					if (toolKeys[i].equals("bond") && !elementtype)
 					{
 						button.setBackground(Color.GRAY);
-						chemPaintPanel.setActionButton(button);
+						chemPaintPanel.setLastActionButton(button);
 						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondModule(chemPaintPanel.get2DHub()));
 					} else
 					{
