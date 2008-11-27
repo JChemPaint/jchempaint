@@ -67,7 +67,33 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	private boolean showInsertTextField = true;
 	private InsertTextPanel insertTextPanel = null;
 	private JPanel topContainer = null;
+	private boolean showToolBar=true;
+	private boolean showStatusBar=true;
+	private boolean showMenuBar=true;
+	private JMenuBar menu;
+	private String guistring;
+	private JToolBar toolbar;
+	private int lines=1;
 	
+	/**
+	 * Builds a JCPPanel with a certain model and a certain gui
+	 * 
+	 * @param chemModel The model
+	 * @param gui The gui string
+	 */
+	public JChemPaintPanel(IChemModel chemModel, String gui){
+		this.guistring=gui;
+		this.setLayout(new BorderLayout());
+		topContainer = new JPanel(new BorderLayout());
+		topContainer.setLayout(new BorderLayout());
+		this.add(topContainer,BorderLayout.NORTH);
+		renderPanel = new RenderPanel(chemModel);
+		this.add(renderPanel,BorderLayout.CENTER);
+		customizeView();
+		instances.add(this);
+		chemModel.addListener(this);
+	}
+
 	/**
 	 * Helps in keeping the current action button highlighted
 	 * 
@@ -164,6 +190,112 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	}
 	
 	/**
+	 *  Tells if a menu is shown
+	 *
+	 *@return    The showMenu value
+	 */
+	public boolean getShowMenuBar() {
+		return showMenuBar;
+	}
+
+
+	/**
+	 *  Sets if a menu is shown
+	 *
+	 *@param  showMenuBar  The new showMenuBar value
+	 */
+	public void setShowMenuBar(boolean showMenuBar) {
+		this.showMenuBar = showMenuBar;
+		customizeView();
+	}
+
+
+	public void customizeView() {
+		if (showMenuBar) {
+			if (menu == null) {
+				menu = new JChemPaintMenuBar(this, this.guistring);
+			}
+			topContainer.add(menu, BorderLayout.NORTH);
+		} else {
+			topContainer.remove(menu);
+		}
+		if (showStatusBar) {
+			if (statusBar == null) {
+				statusBar = new JCPStatusBar();
+			}
+			add(statusBar, BorderLayout.SOUTH);
+		} else {
+			remove(statusBar);
+		}
+        if (showToolBar) {
+            if (toolbar == null) {
+                toolbar = JCPToolBar.getToolbar(this, lines);
+            }
+            topContainer.add(toolbar, BorderLayout.CENTER);
+        } else {
+            topContainer.remove(toolbar);
+        }
+        if (showInsertTextField) {
+            if (insertTextPanel == null) 
+            	insertTextPanel = new InsertTextPanel(this,null);
+            topContainer.add(insertTextPanel, BorderLayout.SOUTH);
+        } else {
+            topContainer.remove(insertTextPanel);
+        }
+        revalidate();
+	}
+
+	/**
+	 *  Tells if a status bar is shown
+	 *
+	 *@return    The showStatusBar value
+	 */
+	public boolean getShowStatusBar() {
+		return showStatusBar;
+	}
+
+	/**
+	 *  Sets the value of showToolbar.
+	 *
+	 *@param  showToolBar  The value to assign showToolbar.
+	 */
+	public void setShowToolBar(boolean showToolBar)
+	{
+		setShowToolBar(showToolBar, 1);
+	}
+
+    /**
+	 *  Sets the value of showToolbar.
+	 *
+	 *@param  showToolBar  The value to assign showToolbar.
+	 */
+    public void setShowToolBar(boolean showToolBar, int lines) {
+        this.showToolBar = showToolBar;
+        this.lines=lines;
+        customizeView();
+    }
+    
+	/**
+	 *  Returns the value of showToolbar.
+	 *
+	 *@return    The showToolbar value
+	 */
+	public boolean getShowToolBar()
+	{
+		return showToolBar;
+	}
+	
+	/**
+	 *  Sets if statusbar should be shown
+	 *
+	 *@param  showStatusBar  The value to assign showStatusBar.
+	 */
+	public void setShowStatusBar(boolean showStatusBar) {
+		this.showStatusBar = showStatusBar;
+		customizeView();
+	}
+	
+	/**
 	 *  Sets the file currently used for saving this Panel.
 	 *
 	 *@param  value  The new isAlreadyAFile value
@@ -182,30 +314,6 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	public File isAlreadyAFile() {
 		return isAlreadyAFile;
 	}
-
-	/**
-	 * Builds a JCPPanel with a certain model and a certain gui
-	 * 
-	 * @param chemModel The model
-	 * @param gui The gui string
-	 */
-	public JChemPaintPanel(IChemModel chemModel, String gui){
-		this.setLayout(new BorderLayout());
-		JMenuBar menu = new JChemPaintMenuBar(this, gui);
-		topContainer = new JPanel(new BorderLayout());
-		topContainer.setLayout(new BorderLayout());
-		this.add(topContainer,BorderLayout.NORTH);
-		topContainer.add(menu,BorderLayout.NORTH);
-		setShowInsertTextField(true);
-		renderPanel = new RenderPanel(chemModel);
-		this.add(renderPanel,BorderLayout.CENTER);
-		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
-		topContainer.add(toolbar,BorderLayout.CENTER);
-		statusBar=new JCPStatusBar();
-		this.add(statusBar,BorderLayout.SOUTH);
-		instances.add(this);
-		chemModel.addListener(this);
-	}
 	
     /**
      * Set to indicate whether the insert text field should be used.
@@ -214,13 +322,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
      */
     public void setShowInsertTextField(boolean showInsertTextField) {
         this.showInsertTextField = showInsertTextField;
-        if (showInsertTextField) {
-            if (insertTextPanel == null) insertTextPanel = new InsertTextPanel(this,null);
-            topContainer.add(insertTextPanel, BorderLayout.SOUTH);
-        } else {
-            topContainer.remove(insertTextPanel);
-        }
-        this.revalidate();
+        customizeView();
     }
     
 	/**
