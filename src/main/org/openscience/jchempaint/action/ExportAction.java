@@ -136,6 +136,8 @@ public class ExportAction extends SaveAsAction {
                       }
                   }
               }
+          }else if(returnVal == JFileChooser.CANCEL_OPTION){
+        	  break;
           }
       }
       
