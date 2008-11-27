@@ -125,6 +125,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	public void paint(Graphics g) {
 		super.paint(g);
+		this.setBackground(renderer.getRenderer2DModel().getBackColor());
 		this.paintChemModel(g, this.getVisibleRect());
 	}
 

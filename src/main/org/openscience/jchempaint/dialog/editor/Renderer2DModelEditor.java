@@ -28,12 +28,14 @@
  */
 package org.openscience.jchempaint.dialog.editor;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -63,10 +65,15 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
     private JLabel fontName;
     private JButton chooseFontButton;
     private Font currentFont;
+	private JLabel color;
+	private JButton chooseColorButton;
+    private Color currentColor;
     
     private JFrame frame;
     
     private Renderer2DModel model;
+
+
     
 	public Renderer2DModelEditor(JFrame frame) {
         super();
@@ -104,6 +111,12 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
         chooseFontButton.addActionListener(this);
         chooseFontButton.setActionCommand("chooseFont");
         addField("", chooseFontButton);
+        color = new JLabel("BACKCOLOR");
+        addField("Background color", color);
+        chooseColorButton = new JButton("Choose Color...");
+        chooseColorButton.addActionListener(this);
+        chooseColorButton.setActionCommand("chooseColor");
+        addField("", chooseColorButton);
     }
     
     public void setModel(Renderer2DModel model) {
@@ -123,6 +136,10 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
         if (currentFont != null) {
             fontName.setText(currentFont.getFontName());
         }
+        currentColor = model.getBackColor();
+        if (currentColor != null) {
+            color.setForeground(currentColor);
+        }
         validate();
     }
 	
@@ -139,6 +156,7 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
         model.setShowTooltip(showToolTip.isSelected());
         model.setShowReactionBoxes(showReactionBoxes.isSelected());
         model.setFont(currentFont);
+        model.setBackColor(currentColor);
     }
     
     /**
@@ -150,6 +168,13 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
             if (newFont != null) {
                 currentFont = newFont;
                 fontName.setText(currentFont.getFontName());
+            }
+        }
+        if ("chooseColor".equals(e.getActionCommand())) {
+            Color newColor = JColorChooser.showDialog(this, "Choose Background Color", model.getBackColor());
+            if (newColor != null) {
+                currentColor = newColor;
+                color.setForeground(currentColor);
             }
         }
     }     
