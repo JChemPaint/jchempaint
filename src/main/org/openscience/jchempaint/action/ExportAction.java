@@ -59,7 +59,7 @@ public class ExportAction extends SaveAsAction {
      * Constructor for the ExportAction object
      * 
      *@param jcpPanel
-     *            the parent Panel 
+     *            the parent Panel
      *@param isPopupAction
      *            true if this is a popup action
      */
@@ -74,72 +74,72 @@ public class ExportAction extends SaveAsAction {
      *            the action event that triggered this action.
      */
     public void actionPerformed(ActionEvent event) {
-      JFileChooser chooser = new JFileChooser();
-      chooser.setCurrentDirectory(this.jcpPanel.getCurrentWorkDirectory());
-      JCPExportFileFilter.addChoosableFileFilters(chooser);
-      if (currentFilter != null) {
-          chooser.setFileFilter(currentFilter);
-      }
-      chooser.setFileView(new JCPFileView());
-      
-      while (true) {
-          int returnVal = chooser.showSaveDialog(jcpPanel);
-          currentFilter = chooser.getFileFilter();
-          if (returnVal == JFileChooser.APPROVE_OPTION) {
-              type = ((JCPExportFileFilter)currentFilter).getType();
-              File outFile = new File(
-                      chooser.getSelectedFile().getAbsolutePath() + "." + type);
-              boolean doWrite = true;
-              if (outFile.exists()) {
-                  String message = "File already exists. Do you want to overwrite it?";
-                  String title = "File already exists";
-                  int value = JOptionPane.showConfirmDialog(
-                          jcpPanel, message, title, JOptionPane.YES_NO_OPTION);
-                  if (value == JOptionPane.NO_OPTION) {
-                      doWrite = false;
-                  }
-              }
-              
-              if (doWrite) {
-                  if (type.equals(JCPExportFileFilter.svg)) {
-                      try {
-                          // TODO : convert to svg
-                      } catch (Exception e) {
-                          String error = "Problem exporting to svg";
-                          JOptionPane.showMessageDialog(jcpPanel, error);
-                      }
-                  } else {
-                      RenderedImage image = (RenderedImage)this.jcpPanel.takeSnapshot();
-                      try {
-                          String imageIOType;
-                          if (type.equals(JCPExportFileFilter.bmp)) {
-                              imageIOType = "BMP";
-                          } else if (type.equals(JCPExportFileFilter.tiff)) {
-                              imageIOType = "TIFF";
-                          } else if (type.equals(JCPExportFileFilter.jpg)) {
-                              imageIOType = "JPEG";
-                          } else {
-                              imageIOType = "PNG";
-                          }
-                          boolean succeeded = ImageIO.write(image, imageIOType, outFile);
-                          if (succeeded) {
-                              JOptionPane.showMessageDialog(jcpPanel,
-                                      "Exported image to " + outFile);
-                              return;
-                          } else {
-                              // no writer of type imageIOType found
-                              ImageIO.write(image, "PNG", outFile);
-                          }
-                      } catch (IOException ioe) {
-                          ioe.printStackTrace();
-                          JOptionPane.showMessageDialog(jcpPanel, "Problem exporting image");
-                      }
-                  }
-              }
-          }else if(returnVal == JFileChooser.CANCEL_OPTION){
-        	  break;
-          }
-      }
-      
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(this.jcpPanel.getCurrentWorkDirectory());
+        JCPExportFileFilter.addChoosableFileFilters(chooser);
+        if (currentFilter != null) {
+            chooser.setFileFilter(currentFilter);
+        }
+        chooser.setFileView(new JCPFileView());
+
+        int returnVal = chooser.showSaveDialog(jcpPanel);
+        currentFilter = chooser.getFileFilter();
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            type = ((JCPExportFileFilter) currentFilter).getType();
+            File outFile = new File(
+                    chooser.getSelectedFile().getAbsolutePath() + "." + type);
+            if (outFile.exists()) {
+                String message = "File already exists. Do you want to overwrite it?";
+                String title = "File already exists";
+                int value = JOptionPane.showConfirmDialog(jcpPanel, message,
+                        title, JOptionPane.YES_NO_OPTION);
+                if (value == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+
+            if (type.equals(JCPExportFileFilter.svg)) {
+                try {
+                    // TODO : convert to svg
+                } catch (Exception e) {
+                    String error = "Problem exporting to svg";
+                    JOptionPane.showMessageDialog(jcpPanel, error);
+                    return;
+                }
+            } else {
+                RenderedImage image = (RenderedImage) this.jcpPanel
+                        .takeSnapshot();
+                try {
+                    String imageIOType;
+                    if (type.equals(JCPExportFileFilter.bmp)) {
+                        imageIOType = "BMP";
+                    } else if (type.equals(JCPExportFileFilter.tiff)) {
+                        imageIOType = "TIFF";
+                    } else if (type.equals(JCPExportFileFilter.jpg)) {
+                        imageIOType = "JPEG";
+                    } else {
+                        imageIOType = "PNG";
+                    }
+
+                    boolean succeeded = ImageIO.write(image, imageIOType,
+                            outFile);
+                    if (succeeded) {
+                        JOptionPane.showMessageDialog(jcpPanel,
+                                "Exported image to " + outFile);
+                        return;
+                    } else {
+                        // no writer of type imageIOType found
+                        ImageIO.write(image, "PNG", outFile);
+                    }
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    JOptionPane.showMessageDialog(jcpPanel,
+                            "Problem exporting image");
+                }
+            }
+        } else if (returnVal == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
     }
+
 }
