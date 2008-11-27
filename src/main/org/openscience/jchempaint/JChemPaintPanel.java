@@ -106,6 +106,22 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	}
 	
 	/**
+	 * Allows setting of the is modified stage (e. g. after save)
+	 * 
+	 * @param isModified is modified
+	 */
+	public void setModified(boolean isModified) {
+		this.isModified = isModified;
+		if(this.getParent().getParent().getParent().getParent() instanceof JFrame){
+			if(isModified)
+				((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID()+"*");
+			else
+				((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID());
+		}
+	}
+
+
+	/**
 	 * Helps in keeping the current action button highlighted - needs to be set
 	 * if a new action button is choosen
 	 * 
@@ -431,9 +447,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
 	 */
 	public void stateChanged(IChemObjectChangeEvent event) {
-		isModified=true;
-		if(this.getParent().getParent().getParent().getParent() instanceof JFrame)
-			((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID()+"*");
+		setModified(true);
         /* TODO gives concurrent access problems if (this.getChemModel() != null) {
             for (int i = 0; i < 3; i++) {
               String status = p.getStatus(i);

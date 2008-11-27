@@ -41,20 +41,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
-import javax.vecmath.Point2d;
 
 import org.openscience.cdk.Reaction;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
-import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -125,15 +121,8 @@ public class SaveAsAction extends JCPAction
 			JCPSaveFileFilter.addChoosableFileFilters(chooser);
 			if (jcpPanel.getCurrentSaveFileFilter() != null)
 			{
-				// XXX needs fixing
-				// chooser.setFileFilter(jcpPanel.getCurrentSaveFileFilter());
+				chooser.setFileFilter(jcpPanel.getCurrentSaveFileFilter());
 			}
-			//shk3: this makes the choosen file type show up twice if save as is done a second
-			//time - no idea what it is good for
-			/*if (currentFilter != null)
-			{
-				chooser.setFileFilter(currentFilter);
-			}*/
 			chooser.setFileView(new JCPFileView());
 	
 			int returnVal = chooser.showSaveDialog(jcpPanel);
@@ -174,9 +163,6 @@ public class SaveAsAction extends JCPAction
 							} else if (type.equals(JCPSaveFileFilter.smiles))
 							{
 								outFile = saveAsSMILES(model, outFile);
-							} else if (type.equals(JCPSaveFileFilter.svg))
-							{
-								outFile = saveAsSVG(model, outFile);
 							} else if (type.equals(JCPSaveFileFilter.cdk))
 							{
 								outFile = saveAsCDKSourceCode(model, outFile);
@@ -187,7 +173,7 @@ public class SaveAsAction extends JCPAction
 								JOptionPane.showMessageDialog(jcpPanel, error);
 								return;
 							}
-							//TODO	model.resetIsModified();
+							jcpPanel.setModified(false);
 						} catch (Exception exc)
 						{
 							String error = "Error while writing file: " + exc.getMessage();
@@ -209,6 +195,7 @@ public class SaveAsAction extends JCPAction
 								logger.error(error);
 								JOptionPane.showMessageDialog(jcpPanel, error);
 							}
+							jcpPanel.setModified(false);
 						} catch (Exception exc)
 						{
 							String error = "Error while writing file: " + exc.getMessage();
@@ -330,38 +317,6 @@ public class SaveAsAction extends JCPAction
 			}
 		}
 		cow.close();
-		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
-		return outFile;
-	}
-
-	protected File saveAsSVG(IChemModel model, File outFile) throws Exception
-	{
-		logger.info("Saving the contents as a SVG file...");
-        /*TODO String fileName = outFile.toString();
-        if (!fileName.endsWith(".svg")) {
-            fileName += ".svg";
-            outFile = new File(fileName);
-        }
-		cow = new SVGWriter(new FileWriter(outFile));
-		if (cow != null && askIOSettings())
-		{
-			cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
-		}
-		Iterator containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-		while (containers.hasNext()) {
-			IAtomContainer ac = (IAtomContainer)containers.next();
-			if (ac != null)
-			{
-				for(int i=0;i<ac.getAtomCount();i++){
-					ac.getAtom(i).setPoint2d((Point2d)jcpPanel.getJChemPaintModel().getRendererModel().getRenderingCoordinates().get(ac.getAtom(i)));
-				}
-				cow.write((IAtomContainer) ac.clone());
-			} else
-			{
-				System.err.println("AC == null!");
-			}
-		}
-		cow.close();*/
 		((JFrame)jcpPanel.getParent().getParent().getParent().getParent()).setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
 	}

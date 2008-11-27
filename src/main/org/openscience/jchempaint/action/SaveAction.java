@@ -86,9 +86,6 @@ public SaveAction(){
 		        } else if (type.equals(JCPSaveFileFilter.smiles))
 		        {
 		          saveAsSMILES(model, outFile);
-		        } else if (type.equals(JCPSaveFileFilter.svg))
-		        {
-		          saveAsSVG(model, outFile);
 		        } else if (type.equals(JCPSaveFileFilter.cdk))
 		        {
 		          saveAsCDKSourceCode(model, outFile);
@@ -99,7 +96,7 @@ public SaveAction(){
 		          JOptionPane.showMessageDialog(jcpPanel, error);
 		          return;
 		        }
-		        //TODO jcpPanel.getJChemPaintModel().resetIsModified();
+		        jcpPanel.setModified(false);
 		      }catch(Exception ex){
 				String error = "Error while writing file: " + ex.getMessage();
 				logger.error(error);
