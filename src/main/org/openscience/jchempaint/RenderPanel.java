@@ -32,10 +32,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -102,8 +102,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	public Image takeSnapshot(Rectangle bounds) {
 	    // XXX is this the right image type?
-        Image image = 
-            new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR);
+        
+//            new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_ARGB);
+        Image image = GraphicsEnvironment
+                        .getLocalGraphicsEnvironment()
+                        .getScreenDevices()[0]
+                        .getDefaultConfiguration()
+                        .createCompatibleImage(bounds.width, bounds.height);
         Graphics g = image.getGraphics();
         super.paint(g);
         this.paintChemModel(g, bounds);
