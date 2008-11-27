@@ -101,9 +101,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	public Image takeSnapshot(Rectangle bounds) {
-	    // XXX is this the right image type?
-        
-//            new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_ARGB);
         Image image = GraphicsEnvironment
                         .getLocalGraphicsEnvironment()
                         .getScreenDevices()[0]
@@ -121,10 +118,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                     RenderingHints.VALUE_ANTIALIAS_ON);
             //TODO render the chem model, not atom container
-            IMoleculeSet moleculeSet = this.chemModel.getMoleculeSet(); 
-            if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0) {
-                this.renderer.paintMolecule(moleculeSet.getAtomContainer(0), g2, bounds);
-            }
+            this.renderer.paintChemModel(chemModel, g2, bounds);
+//            IMoleculeSet moleculeSet = this.chemModel.getMoleculeSet(); 
+//            if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0) {
+//                this.renderer.paintMolecule(moleculeSet.getAtomContainer(0), g2, bounds);
+//            }
         }    
 	}
 	
