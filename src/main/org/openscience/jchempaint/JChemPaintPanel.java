@@ -29,6 +29,8 @@
 package org.openscience.jchempaint;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -314,7 +316,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	public File isAlreadyAFile() {
 		return isAlreadyAFile;
 	}
-	
+
     /**
      * Set to indicate whether the insert text field should be used.
      *
@@ -332,6 +334,14 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	 */
 	public boolean getShowInsertTextField() {
 		return showInsertTextField;
+	}
+	
+	public Image takeSnapshot() {
+	    return this.renderPanel.takeSnapshot();
+	}
+	
+	public Image takeSnapshot(Rectangle bounds) {
+	    return this.renderPanel.takeSnapshot(bounds); 
 	}
 
 	/**
@@ -386,7 +396,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		 *	@param  e  Description of the Parameter
 		 */
 		public void windowClosing(WindowEvent e) {
-			JFrame rootFrame = (JFrame) e.getSource();
+//			JFrame rootFrame = (JFrame) e.getSource();
 			/*TODO if (rootFrame.getContentPane().getComponent(0) instanceof JChemPaintEditorPanel) {
 				JChemPaintEditorPanel panel = (JChemPaintEditorPanel) rootFrame.getContentPane().getComponent(0);
 				panel.fireChange(JChemPaintEditorPanel.JCP_CLOSING);
