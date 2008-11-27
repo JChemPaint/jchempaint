@@ -34,6 +34,7 @@ import java.util.Properties;
 
 import javax.swing.Box;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -233,14 +234,14 @@ public class JChemPaintMenuBar extends JMenuBar {
 					Field field = Class.forName("java.awt.event.InputEvent").getField(altKey);
 					int i = field.getInt(Class.forName("java.awt.event.InputEvent"));
 					mi.setAccelerator(KeyStroke.getKeyStroke(charString.charAt(0), i));
-					//TODOjcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(charString.charAt(0), i), JComponent.WHEN_IN_FOCUSED_WINDOW);
+					jcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(charString.charAt(0), i), JComponent.WHEN_IN_FOCUSED_WINDOW);
 				}
 				else {
 					charString = "VK_" + scStrings[0];
 					Field field = Class.forName("java.awt.event.KeyEvent").getField(charString);
 					int i = field.getInt(Class.forName("java.awt.event.KeyEvent"));
 					mi.setAccelerator(KeyStroke.getKeyStroke(i, 0));
-					//TODO jcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(i, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+					jcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(i, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 				}
 			} catch (ClassNotFoundException cnfe) {
 				cnfe.printStackTrace();
