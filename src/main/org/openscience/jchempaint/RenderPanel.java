@@ -117,12 +117,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            //TODO render the chem model, not atom container
             this.renderer.paintChemModel(chemModel, g2, bounds);
-//            IMoleculeSet moleculeSet = this.chemModel.getMoleculeSet(); 
-//            if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0) {
-//                this.renderer.paintMolecule(moleculeSet.getAtomContainer(0), g2, bounds);
-//            }
         }    
 	}
 	

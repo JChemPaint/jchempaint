@@ -37,6 +37,7 @@ import javax.swing.JComponent;
 import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.controller.AddRingModule;
+import org.openscience.cdk.controller.AlterBondStereoModule;
 import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.CycleSymbolModule;
@@ -88,10 +89,12 @@ public class ChangeModeAction extends JCPAction {
             // TODO not yet a module
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
-            // TODO not yet a module
+            hub.setActiveDrawModule(new AlterBondStereoModule(
+                    hub, AlterBondStereoModule.Direction.UP));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("down_bond")) {
-            // TODO not yet a module
+            hub.setActiveDrawModule(new AlterBondStereoModule(
+                    hub, AlterBondStereoModule.Direction.DOWN));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("triangle")) {
             hub.setActiveDrawModule(new AddRingModule(hub, 3, false));
