@@ -64,7 +64,10 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	private FileFilter currentSaveFileFilter;
 	private JCPStatusBar statusBar;
 	public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
-
+	private boolean showInsertTextField = true;
+	private InsertTextPanel insertTextPanel = null;
+	private JPanel topContainer = null;
+	
 	/**
 	 * Helps in keeping the current action button highlighted
 	 * 
@@ -189,10 +192,11 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this.setLayout(new BorderLayout());
 		JMenuBar menu = new JChemPaintMenuBar(this, gui);
-		JPanel topContainer = new JPanel(new BorderLayout());
+		topContainer = new JPanel(new BorderLayout());
 		topContainer.setLayout(new BorderLayout());
 		this.add(topContainer,BorderLayout.NORTH);
 		topContainer.add(menu,BorderLayout.NORTH);
+		setShowInsertTextField(true);
 		renderPanel = new RenderPanel(chemModel);
 		this.add(renderPanel,BorderLayout.CENTER);
 		JToolBar toolbar = JCPToolBar.getToolbar(this, 1);
@@ -201,6 +205,31 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		this.add(statusBar,BorderLayout.SOUTH);
 		instances.add(this);
 		chemModel.addListener(this);
+	}
+	
+    /**
+     * Set to indicate whether the insert text field should be used.
+     *
+     * @param showInsertTextField true is the text entry widget is to be shown
+     */
+    public void setShowInsertTextField(boolean showInsertTextField) {
+        this.showInsertTextField = showInsertTextField;
+        if (showInsertTextField) {
+            if (insertTextPanel == null) insertTextPanel = new InsertTextPanel(this,null);
+            topContainer.add(insertTextPanel, BorderLayout.SOUTH);
+        } else {
+            topContainer.remove(insertTextPanel);
+        }
+        this.revalidate();
+    }
+    
+	/**
+	 * Tells if the enter text field is currently shown or not.
+	 * 
+	 * @return text field shown or not
+	 */
+	public boolean getShowInsertTextField() {
+		return showInsertTextField;
 	}
 
 	/**
