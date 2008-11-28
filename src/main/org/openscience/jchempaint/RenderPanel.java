@@ -119,8 +119,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         }    
 	}
 	
-	public void setNewChemModel() {
-	    this.isNewChemModel = true;
+	public void setIsNewChemModel(boolean isNewChemModel) {
+	    this.isNewChemModel = isNewChemModel;
 	}
 	
 	public void paint(Graphics g) {

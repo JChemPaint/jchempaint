@@ -34,143 +34,130 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.renderer.Renderer2DModel;
-
 
 /**
  * Triggers the invocation of the structure diagram generator
- *
+ * 
  */
-public class CleanupAction extends JCPAction
-{
+public class CleanupAction extends JCPAction {
 
-	private static final long serialVersionUID = -1048878006430754582L;
-	private StructureDiagramGenerator diagramGenerator;
-    
+    private static final long serialVersionUID = -1048878006430754582L;
+    private StructureDiagramGenerator diagramGenerator;
 
-	/**
-	 *  Constructor for the CleanupAction object
-	 */
-	public CleanupAction()
-	{
-		super();
-	}
+    /**
+     * Constructor for the CleanupAction object
+     */
+    public CleanupAction() {
+        super();
+    }
 
-
-	/**
-	 *  Relayouts a molecule
-	 *
-	 *@param  e  Description of the Parameter
-	 */
-	public void actionPerformed(ActionEvent e)
-	{	
-        logger.info("Going to performe a clean up...");
-		if (diagramGenerator == null) {
+    /**
+     * Re-lays out a molecule
+     * 
+     *@param e
+     *            Description of the Parameter
+     */
+    public void actionPerformed(ActionEvent e) {
+        logger.info("Going to perform a clean up...");
+        if (diagramGenerator == null) {
             diagramGenerator = new StructureDiagramGenerator();
             diagramGenerator.setTemplateHandler(
-                new TemplateHandler(jcpPanel.getChemModel().getBuilder())
-            );
+                    new TemplateHandler(jcpPanel.getChemModel().getBuilder()));
         }
-		Renderer2DModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
-		double bondLength = renderModel.getBondLength();
-		diagramGenerator.setBondLength(bondLength * 2.0);
-		// FIXME this extra factor should not be necessary
-		logger.debug("getting ChemModel");
-		org.openscience.cdk.interfaces.IChemModel model = jcpPanel.getChemModel();
-		logger.debug("got ChemModel");
-		org.openscience.cdk.interfaces.IMoleculeSet som = model.getMoleculeSet();
-		if (som != null)
-		{
-            
-			logger.debug("no mols in som: ", som.getMoleculeCount());
-			for(IAtomContainer molecule : som.molecules())
-			{
+        
+        logger.debug("getting ChemModel");
+        
+        IChemModel model = jcpPanel.getChemModel();
+        logger.debug("got ChemModel");
+        IMoleculeSet som = model.getMoleculeSet();
+        
+        if (som != null) {
+            logger.debug("no mols in som: ", som.getMoleculeCount());
+            for (IAtomContainer molecule : som.molecules()) {
                 if (molecule != null && molecule.getAtomCount() > 0) {
-                	IAtomContainer cleanedMol = relayoutMolecule(molecule);
-                	for (int j=0; j<molecule.getAtomCount(); j++) {
-                		IAtom atom = molecule.getAtom(j);
-                		IAtom newAtom = cleanedMol.getAtom(j);
-                		Point2d newCoord = newAtom.getPoint2d();
-                		atom.setPoint2d(newCoord);
-                	}
+                    IAtomContainer cleanedMol = relayoutMolecule(molecule);
+                    for (int j = 0; j < molecule.getAtomCount(); j++) {
+                        IAtom atom = molecule.getAtom(j);
+                        IAtom newAtom = cleanedMol.getAtom(j);
+                        Point2d newCoord = newAtom.getPoint2d();
+                        atom.setPoint2d(newCoord);
+                    }
                 }
-			}
-		}
-		org.openscience.cdk.interfaces.IReactionSet reactionSet = model.getReactionSet();
-		if (reactionSet != null)
-		{
-			for(IReaction reaction : reactionSet.reactions())
-			{
-				for(IAtomContainer molecule : reaction.getReactants().atomContainers())
-				{
-					IAtomContainer cleanedMol = relayoutMolecule(molecule);
-                	for (int j=0; j<molecule.getAtomCount(); j++) {
-                		IAtom atom = molecule.getAtom(j);
-                		IAtom newAtom = cleanedMol.getAtom(j);
-                		Point2d newCoord = newAtom.getPoint2d();
-                		atom.setPoint2d(newCoord);
-                	}
-				}
-				for(IAtomContainer molecule : reaction.getProducts().atomContainers())
-				{
-                	IAtomContainer cleanedMol = relayoutMolecule(molecule);
-                	for (int j=0; j<molecule.getAtomCount(); j++) {
-                		IAtom atom = molecule.getAtom(j);
-                		IAtom newAtom = cleanedMol.getAtom(j);
-                		Point2d newCoord = newAtom.getPoint2d();
-                		atom.setPoint2d(newCoord);
-                	}
-				}
-			}
-		}
-		jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel().setSelectedPart(new AtomContainer());
-		jcpPanel.get2DHub().updateView();
-	}
+            }
+        }
+        
+        IReactionSet reactionSet = model.getReactionSet();
+        if (reactionSet != null) {
+            for (IReaction reaction : reactionSet.reactions()) {
+                for (IAtomContainer molecule : reaction.getReactants()
+                        .atomContainers()) {
+                    IAtomContainer cleanedMol = relayoutMolecule(molecule);
+                    for (int j = 0; j < molecule.getAtomCount(); j++) {
+                        IAtom atom = molecule.getAtom(j);
+                        IAtom newAtom = cleanedMol.getAtom(j);
+                        Point2d newCoord = newAtom.getPoint2d();
+                        atom.setPoint2d(newCoord);
+                    }
+                }
+                for (IAtomContainer molecule : reaction.getProducts()
+                        .atomContainers()) {
+                    IAtomContainer cleanedMol = relayoutMolecule(molecule);
+                    for (int j = 0; j < molecule.getAtomCount(); j++) {
+                        IAtom atom = molecule.getAtom(j);
+                        IAtom newAtom = cleanedMol.getAtom(j);
+                        Point2d newCoord = newAtom.getPoint2d();
+                        atom.setPoint2d(newCoord);
+                    }
+                }
+            }
+        }
+        
+        IChemModelRelay hub = jcpPanel.get2DHub(); 
+        hub.getIJava2DRenderer().getRenderer2DModel().setSelectedPart(new AtomContainer());
+        jcpPanel.setIsNewChemModel(true);
+        hub.updateView();
+    }
 
-	private IAtomContainer relayoutMolecule(IAtomContainer molecule)
-	{
-		if (molecule != null) {
-			if (molecule.getAtomCount() > 2) {
-				try {
-			    	Point2d centre = GeometryTools.get2DCentreOfMass(molecule);
-					// since we will copy the coordinates later anyway, let's use
-					// a NonNotifying data class
-					diagramGenerator.setMolecule(
-						NoNotificationChemObjectBuilder.getInstance().
-							newMolecule(molecule)
-					);
-					diagramGenerator.generateExperimentalCoordinates(new Vector2d(0, 1));
-					molecule = diagramGenerator.getMolecule();
-                    /*
-					 *  make the molecule end up somewhere reasonable
-					 *  See constructor of JCPPanel
-					 */
-					// Thread.sleep(5000);
-					GeometryTools.translateAllPositive(molecule);
-					double scaleFactor = GeometryTools.getScaleFactor(molecule, 2.5);
-					GeometryTools.scaleMolecule(molecule, scaleFactor);
-					GeometryTools.translate2DCentreOfMassTo(molecule, centre);
-				} catch (Exception exc)
-				{
-					logger.error("Could not generate coordinates for molecule");
-					logger.debug(exc);
-				}
-			} else
-			{
-				logger.info("Molecule with less than 2 atoms are not cleaned up");
-			}
-		} else
-		{
-			logger.error("Molecule is null! Cannot do layout!");
-		}
-		return molecule;
-	}
+    private IAtomContainer relayoutMolecule(IAtomContainer molecule) {
+        if (molecule != null) {
+            if (molecule.getAtomCount() > 2) {
+                try {
+                    double bondLength = GeometryTools.getBondLengthAverage(molecule);
+                    diagramGenerator.setBondLength(bondLength);
+    
+                    // since we will copy the coordinates later anyway, let's
+                    // use a NonNotifying data class
+                    // XXX this is no longer true?
+                    IChemObjectBuilder builder 
+                        = NoNotificationChemObjectBuilder.getInstance();
+                    
+                    diagramGenerator.setMolecule(builder.newMolecule(molecule));
+                    diagramGenerator
+                            .generateExperimentalCoordinates(new Vector2d(0, 1));
+                    molecule = diagramGenerator.getMolecule();
+    
+                } catch (Exception exc) {
+                    logger.error("Could not generate coordinates for molecule");
+                    logger.debug(exc);
+                }
+            } else {
+                logger.info("Molecule with less than 2 atoms are not cleaned up");
+            }
+        } else {
+            logger.error("Molecule is null! Cannot do layout!");
+        }
+        return molecule;
+    }
 }
-

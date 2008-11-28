@@ -95,6 +95,16 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		instances.add(this);
 		chemModel.addListener(this);
 	}
+	
+	/**
+	 * Called to force a re-centring of the displayed structure. 
+	 * 
+	 * @param isNewChemModel
+	 */
+	public void setIsNewChemModel(boolean isNewChemModel) {
+	    this.renderPanel.setIsNewChemModel(isNewChemModel);
+	}
+	
 
 	/**
 	 * Helps in keeping the current action button highlighted
