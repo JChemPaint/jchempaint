@@ -90,7 +90,7 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		topContainer.setLayout(new BorderLayout());
 		this.add(topContainer,BorderLayout.NORTH);
 		renderPanel = new RenderPanel(chemModel);
-		this.add(renderPanel,BorderLayout.CENTER);
+		this.add(new javax.swing.JScrollPane(renderPanel),BorderLayout.CENTER);
 		customizeView();
 		instances.add(this);
 		chemModel.addListener(this);

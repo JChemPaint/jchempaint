@@ -79,7 +79,7 @@ public class CleanupAction extends JCPAction
             );
         }
 		Renderer2DModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
-		double bondLength = renderModel.getBondLength() / renderModel.getScaleFactor();
+		double bondLength = renderModel.getBondLength();
 		diagramGenerator.setBondLength(bondLength * 2.0);
 		// FIXME this extra factor should not be necessary
 		logger.debug("getting ChemModel");
