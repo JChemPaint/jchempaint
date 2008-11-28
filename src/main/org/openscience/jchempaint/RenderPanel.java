@@ -46,7 +46,6 @@ import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -55,26 +54,25 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
 	private IChemModel chemModel;
-	
-	public IChemModel getChemModel() {
-		return chemModel;
-	}
-
-
+	private boolean isNewChemModel;
 	private ControllerHub hub;
-	public ControllerHub getHub() {
-		return hub;
-	}
-	
-
 	private ControllerModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
-	
 	
 	public RenderPanel(IChemModel chemModel) {
 		this.chemModel = chemModel;
 		this.setupMachinery();
 		this.setupPanel();
+		this.isNewChemModel = true;
+	}
+	
+	public IChemModel getChemModel() {
+	    return chemModel;
+	}
+
+
+	public ControllerHub getHub() {
+	    return hub;
 	}
 	
 	private void setupMachinery() {
@@ -117,8 +115,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            this.renderer.paintChemModel(chemModel, g2, bounds);
+            this.renderer.paintChemModel(chemModel, g2, bounds, isNewChemModel);
+            isNewChemModel = false;
         }    
+	}
+	
+	public void setNewChemModel() {
+	    this.isNewChemModel = true;
 	}
 	
 	public void paint(Graphics g) {
