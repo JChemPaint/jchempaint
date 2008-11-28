@@ -70,7 +70,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	    return chemModel;
 	}
 
-
 	public ControllerHub getHub() {
 	    return hub;
 	}
@@ -111,7 +110,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
     }
 	
 	public void paintChemModel(Graphics g, Rectangle bounds) {
-	    if (this.chemModel != null) {
+	    if (this.chemModel != null && this.chemModel.getMoleculeSet() != null) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                     RenderingHints.VALUE_ANTIALIAS_ON);
