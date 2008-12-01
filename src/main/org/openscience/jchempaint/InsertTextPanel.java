@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,16 +56,15 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's
@@ -77,12 +75,11 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     private JChemPaintPanel jChemPaintPanel;
     private JComboBox textCombo;
     private JTextComponent editor;
-    private JFrame closeafter=null;
-
+    private JFrame closeafter = null;
 
     public InsertTextPanel(JChemPaintPanel jChemPaintPanel, JFrame closeafter) {
         super();
-        this.closeafter=closeafter;
+        this.closeafter = closeafter;
         setLayout(new GridBagLayout());
 
         List<String> oldText = new ArrayList<String>();
@@ -95,12 +92,10 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         textCombo.addActionListener(this);
         editor = (JTextComponent) textCombo.getEditor().getEditorComponent();
 
-
         JButton button = new JButton("Insert");
         button.addActionListener(this);
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -118,18 +113,19 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         gridBagConstraints.gridx = 1;
         add(button, gridBagConstraints);
 
-
         this.jChemPaintPanel = jChemPaintPanel;
     }
 
     public void actionPerformed(ActionEvent actionEvent) {
         String actionCommand = actionEvent.getActionCommand();
-        if (actionCommand.equals("comboBoxEdited") || actionCommand.equals("Insert")) {
+        if (actionCommand.equals("comboBoxEdited")
+                || actionCommand.equals("Insert")) {
             IMolecule molecule = getMolecule();
-            if (molecule == null) return;
+            if (molecule == null)
+                return;
             generateModel(molecule);
-            if(closeafter!=null)
-            	closeafter.setVisible(false);
+            if (closeafter != null)
+                closeafter.setVisible(false);
         }
     }
 
@@ -199,11 +195,8 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     }
 
     private IMolecule getMoleculeFromCAS(String cas) throws IOException {
-        String data;
-
         String firstURL = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pccompound&term=" + cas;
-
-        data = getDataFromURL(firstURL);
+        String data = getDataFromURL(firstURL);
 
         Pattern pattern = Pattern.compile("http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi\\?cid=(\\d*)");
         Matcher matcher = pattern.matcher(data);
@@ -227,11 +220,11 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         pattern = Pattern.compile("<Item Name=\"CanonicalSmile\" Type=\"String\">([^\\s]*?)</Item>");
         matcher = pattern.matcher(data);
-        String smiles = null;
+        String smiles = "";
         found = false;
         while (matcher.find()) {
             smiles = matcher.group(1);
-            if (smiles != null || !smiles.equals("")) {
+            if (!smiles.equals("")) {
                 found = true;
                 break;
             }
@@ -240,14 +233,12 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         // got the canonical SMILES, lets get the molecule
         SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        IMolecule molecule;
         try {
-            molecule = smilesParser.parseSmiles(smiles);
+            return smilesParser.parseSmiles(smiles);
         } catch (InvalidSmilesException e1) {
             JOptionPane.showMessageDialog(jChemPaintPanel, "Couldn't process data from PubChem");
             return null;
         }
-        return molecule;
     }
 
     private String getDataFromURL(String url) throws IOException {
@@ -263,35 +254,20 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     public void generateModel(IMolecule molecule) {
         if (molecule == null) return;
 
-        // ok, get relevent bits from active model
-        Renderer2DModel renderModel = jChemPaintPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
-        org.openscience.cdk.interfaces.IChemModel chemModel = jChemPaintPanel.getChemModel();
-        org.openscience.cdk.interfaces.IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        // get relevant bits from active model
+        IChemModel chemModel = jChemPaintPanel.getChemModel();
+        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet == null) {
             moleculeSet = new MoleculeSet();
         }
 
-        // ok, now generate 2D coordinates
+        // now generate 2D coordinates
         StructureDiagramGenerator sdg = new StructureDiagramGenerator();
         sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
         try {
             sdg.setMolecule(molecule);
             sdg.generateCoordinates(new Vector2d(0, 1));
             molecule = sdg.getMolecule();
-            double bondLength = renderModel.getBondLength();
-            double scaleFactor = GeometryTools.getScaleFactor(molecule, bondLength);
-            GeometryTools.scaleMolecule(molecule, scaleFactor);
-            //if there are no atoms in the actual chemModel all 2D-coordinates would be set to NaN
-            if (ChemModelManipulator.getAtomCount(chemModel) != 0) {
-            	IAtomContainer container = chemModel.getBuilder().newAtomContainer();
-            	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
-            	while (containers.hasNext()) {
-            		container.add((IAtomContainer)containers.next());
-            	}
-                GeometryTools.translate2DCenterTo((IAtomContainer)molecule,
-                		GeometryTools.get2DCenter(container));
-            }
-            GeometryTools.translate2D(molecule, 5 * bondLength, 0); // in pixels
         } catch (Exception exc) {
             exc.printStackTrace();
         }

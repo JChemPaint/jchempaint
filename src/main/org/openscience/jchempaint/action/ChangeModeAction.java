@@ -44,6 +44,7 @@ import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
+import org.openscience.cdk.controller.SelectModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
@@ -86,7 +87,7 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("enterelement")) {
             hub.setActiveDrawModule(new EnterElementSwingModule(hub));
         } else if (type.equals("lasso")) {
-            // TODO not yet a module
+            hub.setActiveDrawModule(new SelectModule(hub));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
             hub.setActiveDrawModule(new AlterBondStereoModule(
