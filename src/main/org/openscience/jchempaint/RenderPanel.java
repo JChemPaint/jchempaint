@@ -62,24 +62,24 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
 		this.chemModel = chemModel;
-		this.setupMachinery(fitToScreen);
+		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.isNewChemModel = true;
 	}
 	
 	public IChemModel getChemModel() {
-	    return chemModel;
+	    return this.hub.getIChemModel();
 	}
 
 	public void setChemModel(IChemModel model) {
-	    this.chemModel = model;
+	    this.setupMachinery(model, false); // XXX
 	}
 	
 	public ControllerHub getHub() {
 	    return hub;
 	}
 	
-	private void setupMachinery(boolean fitToScreen) {
+	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
 		this.renderer = new IntermediateRenderer();
 		this.renderer.setFitToScreen(fitToScreen);

@@ -52,7 +52,6 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.InsertTextPanel;
-import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 
 /**
@@ -62,7 +61,7 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
 public abstract class JChemPaintAbstractApplet extends JApplet {
 	private AbstractJChemPaintPanel theJcpp = null;
 	//JExternalFrame jexf = null;
-	private boolean detacheable=false;
+    private boolean detachable = false;
 
 	private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
 			+ "for more information";
