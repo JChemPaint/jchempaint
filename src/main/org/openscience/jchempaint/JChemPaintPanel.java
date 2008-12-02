@@ -89,7 +89,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		topContainer = new JPanel(new BorderLayout());
 		topContainer.setLayout(new BorderLayout());
 		this.add(topContainer,BorderLayout.NORTH);
-		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight());
+		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), false);
 		this.add(new JScrollPane(renderPanel),BorderLayout.CENTER);
 		customizeView();
 		instances.add(this);

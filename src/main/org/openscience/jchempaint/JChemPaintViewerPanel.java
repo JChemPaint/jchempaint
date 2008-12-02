@@ -43,7 +43,7 @@ public class JChemPaintViewerPanel extends AbstractJChemPaintPanel{
 	 */
 	public JChemPaintViewerPanel(IChemModel chemModel){
 		this.setLayout(new BorderLayout());
-		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight());
+		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), false);
 		this.add(new JScrollPane(renderPanel),BorderLayout.CENTER);
 	}
 }

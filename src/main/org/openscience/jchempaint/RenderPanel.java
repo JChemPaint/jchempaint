@@ -58,9 +58,10 @@ public class RenderPanel extends Component implements IViewEventRelay {
 	private ControllerModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	
-	public RenderPanel(IChemModel chemModel, int width, int height) {
+	public RenderPanel(IChemModel chemModel, int width, int height,
+            boolean fitToScreen) {
 		this.chemModel = chemModel;
-		this.setupMachinery();
+		this.setupMachinery(fitToScreen);
 		this.setupPanel(width, height);
 		this.isNewChemModel = true;
 	}
@@ -77,9 +78,10 @@ public class RenderPanel extends Component implements IViewEventRelay {
 	    return hub;
 	}
 	
-	private void setupMachinery() {
+	private void setupMachinery(boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
 		this.renderer = new IntermediateRenderer();
+		this.renderer.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
 		
 		// connect the Renderer to the Hub
