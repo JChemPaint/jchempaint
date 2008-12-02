@@ -29,17 +29,12 @@
 package org.openscience.jchempaint.applet;
 
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.JChemPaintPanel;
 
 public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
-	
+	public static final String GUI_APPLET="applet";
 	public void init() {
-		JChemPaintPanel p = new JChemPaintPanel(new ChemModel(),"applet");
+		JChemPaintPanel p = new JChemPaintPanel(new ChemModel(),GUI_APPLET,2);
 		p.setShowInsertTextField(false);
 		p.setShowStatusBar(false);
 		setTheJcpp(p);

@@ -30,6 +30,9 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 
 /**
@@ -46,18 +49,18 @@ public class NewAction extends JCPAction {
      *@param  e  Description of the Parameter
      */
     public void actionPerformed(ActionEvent e) {
-      /*TODO if(jcpPanel.isEmbedded()){
+      if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
         int clear=jcpPanel.showWarning();
         if(clear==JOptionPane.YES_OPTION){
-        	if(jcpPanel.getJChemPaintModel().getChemModel().getMoleculeSet()!=null)
-        		jcpPanel.getJChemPaintModel().getChemModel().getMoleculeSet().removeAllAtomContainers();
-        	if(jcpPanel.getJChemPaintModel().getChemModel().getReactionSet()!=null)
-        		jcpPanel.getJChemPaintModel().getChemModel().getReactionSet().removeAllReactions();
-        	jcpPanel.repaint();
+        	if(jcpPanel.getChemModel().getMoleculeSet()!=null)
+        		jcpPanel.getChemModel().getMoleculeSet().removeAllAtomContainers();
+        	if(jcpPanel.getChemModel().getReactionSet()!=null)
+        		jcpPanel.getChemModel().getReactionSet().removeAllReactions();
+        	jcpPanel.get2DHub().updateView();
         }
-      }else{*/
+      }else{
 		JChemPaint.showEmptyInstance();
-      //}
+      }
     }
 }
 

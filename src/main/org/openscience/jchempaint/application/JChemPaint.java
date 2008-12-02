@@ -49,18 +49,14 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.JCPLocalizationHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -69,22 +65,6 @@ import org.openscience.jchempaint.io.JCPFileFilter;
 public class JChemPaint {
 	
 	public static int instancecounter=1;
-
-
-	public static IAtomContainer makeMolecule(String smiles) {
-		SmilesParser parser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-		try {
-			IMolecule mol = parser.parseSmiles(smiles);
-			
-			StructureDiagramGenerator generator = new StructureDiagramGenerator();
-			generator.setMolecule(mol);
-			generator.generateCoordinates();
-			
-			return (IAtomContainer) generator.getMolecule();
-		} catch (Exception e) {
-			return null;
-		}
-	}
 	
 	@SuppressWarnings("static-access")
     public static void main(String[] args) {

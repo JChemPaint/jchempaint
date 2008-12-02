@@ -49,11 +49,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 
-import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.cdk.applications.undoredo.ClearAllEdit;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.jchempaint.action.SaveAction;
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObjectListener {
 
@@ -77,13 +78,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	private JToolBar toolbar;
 	private int lines=1;
 	
+	public JChemPaintPanel(IChemModel chemModel, String gui){
+		this(chemModel,gui,1);
+	}
 	/**
 	 * Builds a JCPPanel with a certain model and a certain gui
 	 * 
 	 * @param chemModel The model
 	 * @param gui The gui string
 	 */
-	public JChemPaintPanel(IChemModel chemModel, String gui){
+	public JChemPaintPanel(IChemModel chemModel, String gui, int lines){
+		this.lines=lines;
 		this.guistring=gui;
 		this.setLayout(new BorderLayout());
 		topContainer = new JPanel(new BorderLayout());
@@ -343,7 +348,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		return isAlreadyAFile;
 	}
 
-    /**
+	public String getGuistring() {
+		return guistring;
+	}
+
+	/**
      * Set to indicate whether the insert text field should be used.
      *
      * @param showInsertTextField true is the text entry widget is to be shown
@@ -377,23 +386,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 * @return OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
 	 */
 	public int showWarning() {
-		if (isModified){ //TODO && !getIsOpenedByViewer() && !guiString.equals("applet")) {
+		if (isModified  && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)){ //TODO && !getIsOpenedByViewer()) {
 			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + JCPLocalizationHandler.getInstance().getString("warning"), JCPLocalizationHandler.getInstance().getString("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (answer == JOptionPane.YES_OPTION) {
 				new SaveAction(this, false).actionPerformed(new ActionEvent(this, 12, ""));
 			}
 			return answer;
-		/* TODO } else if(guiString.equals("applet")){
+		} else if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET)){
 			//In case of the applet we do not ask for save but put the clear into the undo stack
 			ClearAllEdit coa = null;
-			try {
-				coa = new ClearAllEdit(this.getChemModel(),(IMoleculeSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
-				this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
-			} catch (Exception e) {
-				logger.error("Clone of IMoleculeSet failed: ", e.getMessage());
-            	logger.debug(e);
-			}
-			return JOptionPane.YES_OPTION;*/
+			//TODO undo redo missing coa = new ClearAllEdit(this.getChemModel(),(IMoleculeSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
+			//this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
+			return JOptionPane.YES_OPTION;
 		} else {
 			return JOptionPane.YES_OPTION;
 		}
