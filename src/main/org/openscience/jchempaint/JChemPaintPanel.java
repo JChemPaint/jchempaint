@@ -29,8 +29,10 @@
 package org.openscience.jchempaint;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -45,7 +47,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 
@@ -59,24 +60,24 @@ import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObjectListener {
 
 	private JComponent lastActionButton;
-	private File currentWorkDirectory;
-	private File lastOpenedFile;
-	private FileFilter currentOpenFileFilter;
-	private File isAlreadyAFile;
-	private boolean isModified=false;
-	private FileFilter currentSaveFileFilter;
-	private JCPStatusBar statusBar;
-	public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
-	private boolean showInsertTextField = true;
-	private InsertTextPanel insertTextPanel = null;
-	private JPanel topContainer = null;
-	private boolean showToolBar=true;
-	private boolean showStatusBar=true;
-	private boolean showMenuBar=true;
-	private JMenuBar menu;
-	private String guistring;
-	private JToolBar toolbar;
-	private int lines=1;
+    private File currentWorkDirectory;
+    private File lastOpenedFile;
+    private FileFilter currentOpenFileFilter;
+    private File isAlreadyAFile;
+    private boolean isModified = false;
+    private FileFilter currentSaveFileFilter;
+    private JCPStatusBar statusBar;
+    public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
+    private boolean showInsertTextField = true;
+    private InsertTextPanel insertTextPanel = null;
+    private JPanel topContainer = null;
+    private boolean showToolBar = true;
+    private boolean showStatusBar = true;
+    private boolean showMenuBar = true;
+    private JMenuBar menu;
+    private String guistring;
+    private JToolBar toolbar;
+    private int lines = 1;
 	
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
@@ -89,17 +90,19 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public JChemPaintPanel(IChemModel chemModel, String gui, int lines){
 		this.lines=lines;
-		this.guistring=gui;
-		this.setLayout(new BorderLayout());
-		topContainer = new JPanel(new BorderLayout());
-		topContainer.setLayout(new BorderLayout());
-		this.add(topContainer,BorderLayout.NORTH);
-		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), false);
-		this.add(new JScrollPane(renderPanel),BorderLayout.CENTER);
-		customizeView();
-		instances.add(this);
-		chemModel.addListener(this);
-	}
+		this.guistring = gui;
+        this.setLayout(new BorderLayout());
+        topContainer = new JPanel(new BorderLayout());
+        topContainer.setLayout(new BorderLayout());
+        this.add(topContainer, BorderLayout.NORTH);
+        renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false);
+        ScrollPane scroller = new ScrollPane();
+        scroller.add(renderPanel);
+        this.add(scroller, BorderLayout.CENTER);
+        customizeView();
+        instances.add(this);
+        chemModel.addListener(this);
+    }
 	
 	/**
 	 * Called to force a re-centring of the displayed structure. 
@@ -127,11 +130,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public void setModified(boolean isModified) {
 		this.isModified = isModified;
-		if(this.getParent().getParent().getParent().getParent() instanceof JFrame){
-			if(isModified)
-				((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID()+"*");
-			else
-				((JFrame)this.getParent().getParent().getParent().getParent()).setTitle(renderPanel.getChemModel().getID());
+		Container c = this.getParent().getParent().getParent().getParent();
+		if (c instanceof JFrame){
+		    String id = renderPanel.getChemModel().getID();
+			if (isModified)
+                ((JFrame) c).setTitle(id + "*");
+            else
+                ((JFrame) c).setTitle(id);
 		}
 	}
 
@@ -462,7 +467,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 *  Closes all currently opened JCP instances.
 	 */
 	public static void closeAllInstances() {
-		Iterator<JChemPaintPanel> it = ((List<JChemPaintPanel>)((ArrayList<JChemPaintPanel>)instances).clone()).iterator();
+		Iterator<JChemPaintPanel> it =((List<JChemPaintPanel>)((ArrayList<JChemPaintPanel>)instances).clone()).iterator();
 		while (it.hasNext()) {
 			JFrame frame = (JFrame) it.next().getParent().getParent().getParent().getParent();
 			WindowListener[] wls = (WindowListener[]) (frame.getListeners(WindowListener.class));

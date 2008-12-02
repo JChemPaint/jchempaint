@@ -29,7 +29,6 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,6 +37,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.Iterator;
+
+import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
@@ -49,7 +50,7 @@ import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
-public class RenderPanel extends Component implements IViewEventRelay {
+public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
 	private IChemModel chemModel;
@@ -85,7 +86,7 @@ public class RenderPanel extends Component implements IViewEventRelay {
 		this.controllerModel = new ControllerModel();
 		
 		// connect the Renderer to the Hub
-		this.hub = new ControllerHub(this.controllerModel, this.renderer, chemModel, this);
+		this.hub = new ControllerHub(controllerModel, renderer, chemModel, this);
 		
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -99,7 +100,6 @@ public class RenderPanel extends Component implements IViewEventRelay {
 	}
 	
 	public Image takeSnapshot() {
-//	    return this.takeSnapshot(this.getVisibleRect());
 	    return this.takeSnapshot(this.getBounds());
 	}
 	
@@ -116,14 +116,34 @@ public class RenderPanel extends Component implements IViewEventRelay {
 	
 	public void paintChemModel(Graphics g, Rectangle bounds) {
 	    if (this.chemModel != null && this.chemModel.getMoleculeSet() != null) {
-	        g.setColor(getBackground());
-	        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-            Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-            this.renderer.paintChemModel(chemModel, g2, bounds, isNewChemModel);
-            isNewChemModel = false;
+	        // determine the size the canvas needs to be in order to fit the model
+	        Rectangle screenBounds = renderer.calculateScreenBounds(chemModel);
+	        
+	        if (bounds.contains(screenBounds)) {
+                this.paintChemModelWithoutChecking(g, bounds);
+            } else {
+                Dimension d = 
+                    new Dimension(screenBounds.width, screenBounds.height);
+                this.setPreferredSize(d);
+                this.revalidate();
+                this.paintChemModelWithoutChecking(g, bounds);
+            }
         }    
+	}
+	
+	private void paintChemModelWithoutChecking(Graphics g, Rectangle bounds) {
+	     // paint a background of the right color
+	    g.setColor(getBackground());
+        g.fillRect(0, 0, bounds.width, bounds.height);
+        
+        // set the graphics to antialias
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // paint the chem model, and record that it is no longer new
+        renderer.paintChemModel(chemModel, g2, bounds, isNewChemModel);
+        isNewChemModel = false;
 	}
 	
 	public void setIsNewChemModel(boolean isNewChemModel) {
@@ -132,7 +152,6 @@ public class RenderPanel extends Component implements IViewEventRelay {
 	
 	public void paint(Graphics g) {
 		this.setBackground(renderer.getRenderer2DModel().getBackColor());
-//		this.paintChemModel(g, this.getVisibleRect());
 		this.paintChemModel(g, this.getBounds());
 	}
 
