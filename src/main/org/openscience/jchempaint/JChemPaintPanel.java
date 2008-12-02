@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -78,6 +79,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
     private String guistring;
     private JToolBar toolbar;
     private int lines = 1;
+    //we remember the moveButton since this is special
+    protected JButton moveButton=null;
 	
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
@@ -443,6 +446,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 				}
 			}
 		}
+	}
+	
+	public JButton getMoveButton() {
+		return moveButton;
+	}
+
+
+	public void setMoveButton(JButton moveButton) {
+		this.moveButton = moveButton;
 	}
 	
 	/* (non-Javadoc)

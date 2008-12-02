@@ -184,10 +184,8 @@ public class JCPToolBar
 		}
 		b.setRequestFocusEnabled(false);
 		b.setMargin(new Insets(1, 1, 1, 1));
-	/*a	if(key.equals("bond"))
-			jcpp.lastAction.add(b);
 		if(key.equals("move"))
-			jcpp.moveButton=b;*/
+			chemPaintPanel.moveButton=b;
 		return b;
 	}
 
