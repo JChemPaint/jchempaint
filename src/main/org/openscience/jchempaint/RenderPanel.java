@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -37,8 +38,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.Iterator;
-
-import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
@@ -50,7 +49,7 @@ import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
-public class RenderPanel extends JPanel implements IViewEventRelay {
+public class RenderPanel extends Component implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
 	private IChemModel chemModel;
@@ -59,10 +58,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	private ControllerModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
 	
-	public RenderPanel(IChemModel chemModel) {
+	public RenderPanel(IChemModel chemModel, int width, int height) {
 		this.chemModel = chemModel;
 		this.setupMachinery();
-		this.setupPanel();
+		this.setupPanel(width, height);
 		this.isNewChemModel = true;
 	}
 	
@@ -71,7 +70,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 
 	public void setChemModel(IChemModel model) {
-	    this.chemModel=model;
+	    this.chemModel = model;
 	}
 	
 	public ControllerHub getHub() {
@@ -92,13 +91,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.addMouseMotionListener(mouseEventRelay);
 	}
 	
-	private void setupPanel() {
+	private void setupPanel(int width, int height) {
 		this.setBackground(Color.WHITE);
-		this.setPreferredSize(new Dimension(1000, 600));
+		this.setPreferredSize(new Dimension(width, height));
 	}
 	
 	public Image takeSnapshot() {
-	    return this.takeSnapshot(this.getVisibleRect());
+//	    return this.takeSnapshot(this.getVisibleRect());
+	    return this.takeSnapshot(this.getBounds());
 	}
 	
 	public Image takeSnapshot(Rectangle bounds) {
@@ -108,13 +108,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .getDefaultConfiguration()
                         .createCompatibleImage(bounds.width, bounds.height);
         Graphics g = image.getGraphics();
-        super.paint(g);
         this.paintChemModel(g, bounds);
         return image;
     }
 	
 	public void paintChemModel(Graphics g, Rectangle bounds) {
 	    if (this.chemModel != null && this.chemModel.getMoleculeSet() != null) {
+	        g.setColor(getBackground());
+	        g.fillRect(0, 0, this.getWidth(), this.getHeight());
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                     RenderingHints.VALUE_ANTIALIAS_ON);
@@ -128,9 +129,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	public void paint(Graphics g) {
-		super.paint(g);
 		this.setBackground(renderer.getRenderer2DModel().getBackColor());
-		this.paintChemModel(g, this.getVisibleRect());
+//		this.paintChemModel(g, this.getVisibleRect());
+		this.paintChemModel(g, this.getBounds());
 	}
 
 	public void updateView() {
