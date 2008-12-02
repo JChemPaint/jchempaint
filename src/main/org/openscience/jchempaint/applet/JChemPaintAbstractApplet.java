@@ -29,7 +29,6 @@
 
 package org.openscience.jchempaint.applet;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,6 +50,7 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.action.CreateSmilesAction;
@@ -60,7 +60,7 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
  * 
  */
 public abstract class JChemPaintAbstractApplet extends JApplet {
-	private JChemPaintPanel theJcpp = null;
+	private AbstractJChemPaintPanel theJcpp = null;
 	//JExternalFrame jexf = null;
 	private boolean detacheable=false;
 
@@ -92,7 +92,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	}
 
 
-	public void initPanelAndModel(JChemPaintPanel jcpp) {
+	public void initPanelAndModel(AbstractJChemPaintPanel jcpp) {
 //		getContentPane().removeAll();
 //		getContentPane().setLayout(new BorderLayout());
 //TODO		try{
@@ -313,13 +313,13 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	/**
 	 * @return Returns the theJcpp.
 	 */
-	public JChemPaintPanel getTheJcpp() {
+	public AbstractJChemPaintPanel getTheJcpp() {
 		return theJcpp;
 	}
 	/**
 	 * @param theJcpp The theJcpp to set.
 	 */
-	public void setTheJcpp(JChemPaintPanel theJcpp) {
+	public void setTheJcpp(AbstractJChemPaintPanel theJcpp) {
 		this.theJcpp = theJcpp;
 	}
   

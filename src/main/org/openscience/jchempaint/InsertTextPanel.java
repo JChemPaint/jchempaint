@@ -72,12 +72,12 @@ import org.openscience.cdk.smiles.SmilesParser;
  */
 public class InsertTextPanel extends JPanel implements ActionListener {
 
-    private JChemPaintPanel jChemPaintPanel;
+    private AbstractJChemPaintPanel jChemPaintPanel;
     private JComboBox textCombo;
     private JTextComponent editor;
     private JFrame closeafter = null;
 
-    public InsertTextPanel(JChemPaintPanel jChemPaintPanel, JFrame closeafter) {
+    public InsertTextPanel(AbstractJChemPaintPanel jChemPaintPanel, JFrame closeafter) {
         super();
         this.closeafter = closeafter;
         setLayout(new GridBagLayout());
