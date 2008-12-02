@@ -70,6 +70,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	    return chemModel;
 	}
 
+	public void setChemModel(IChemModel model) {
+	    this.chemModel=model;
+	}
+	
 	public ControllerHub getHub() {
 	    return hub;
 	}

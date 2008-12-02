@@ -453,6 +453,15 @@ public class JChemPaintPanel extends JPanel implements IChemObjectListener {
 		return renderPanel.getChemModel();
 	}
 	
+	/**
+	 * Return the chemmodel of this JCPPanel
+	 * 
+	 * @return
+	 */
+	public void setChemModel(IChemModel model){
+		renderPanel.setChemModel(model);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
 	 */
