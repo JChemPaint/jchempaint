@@ -34,7 +34,7 @@ import org.openscience.jchempaint.JChemPaintViewerPanel;
 public class JChemPaintViewerApplet extends JChemPaintAbstractApplet{
 	
 	public void init() {
-		JChemPaintViewerPanel p=new JChemPaintViewerPanel(new ChemModel(),"applet");
+		JChemPaintViewerPanel p=new JChemPaintViewerPanel(new ChemModel());	
 		setTheJcpp(p);
 		this.add(p);
 	}
