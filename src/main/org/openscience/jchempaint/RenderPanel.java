@@ -53,18 +53,23 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
-	private IChemModel chemModel;
+//	private IChemModel chemModel;
 	private boolean isNewChemModel;
 	private ControllerHub hub;
 	private ControllerModel controllerModel;
 	private SwingMouseEventRelay mouseEventRelay;
+	private boolean fitToScreen;
 	
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
-		this.chemModel = chemModel;
+//		this.chemModel = chemModel;
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
-		this.isNewChemModel = true;
+		this.fitToScreen = fitToScreen;
+	}
+	
+	public void setFitToScreen(boolean fitToScreen) {
+	    this.renderer.setFitToScreen(fitToScreen);
 	}
 	
 	public IChemModel getChemModel() {
@@ -72,7 +77,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 
 	public void setChemModel(IChemModel model) {
-	    this.setupMachinery(model, false); // XXX
+	    this.setupMachinery(model, this.fitToScreen); 
 	}
 	
 	public ControllerHub getHub() {
@@ -92,6 +97,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
 		this.addMouseListener(mouseEventRelay);
 		this.addMouseMotionListener(mouseEventRelay);
+		this.isNewChemModel = true;
 	}
 	
 	private void setupPanel(int width, int height) {
@@ -115,27 +121,25 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
     }
 	
 	public void paintChemModel(Graphics g, Rectangle bounds) {
-	    if (this.chemModel != null && this.chemModel.getMoleculeSet() != null) {
+	    IChemModel chemModel = this.hub.getIChemModel();
+	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
+	        super.paint(g);
 	        // determine the size the canvas needs to be in order to fit the model
 	        Rectangle screenBounds = renderer.calculateScreenBounds(chemModel);
 	        
 	        if (bounds.contains(screenBounds)) {
-                this.paintChemModelWithoutChecking(g, bounds);
+                this.paintChemModel(chemModel, g, bounds);
             } else {
                 Dimension d = 
                     new Dimension(screenBounds.width, screenBounds.height);
                 this.setPreferredSize(d);
                 this.revalidate();
-                this.paintChemModelWithoutChecking(g, bounds);
+                this.paintChemModel(chemModel, g, bounds);
             }
         }    
 	}
 	
-	private void paintChemModelWithoutChecking(Graphics g, Rectangle bounds) {
-	     // paint a background of the right color
-	    g.setColor(getBackground());
-        g.fillRect(0, 0, bounds.width, bounds.height);
-        
+	private void paintChemModel(IChemModel chemModel, Graphics g, Rectangle bounds) {
         // set the graphics to antialias
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
@@ -175,6 +179,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		}
 		else if (position == 1) {
 			// depict bruto formula
+		    IChemModel chemModel = hub.getIChemModel();
 			IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
         	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         	while (containers.hasNext()) {
