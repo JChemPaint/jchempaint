@@ -35,10 +35,9 @@ import org.openscience.cdk.interfaces.IChemModel;
 public class JChemPaintViewerPanel extends AbstractJChemPaintPanel{
 
 	/**
-	 * Builds a JCPPanel with a certain model and a certain gui
-	 * 
+	 * Builds a JCPViewerPanel with a certain model
+	 *  
 	 * @param chemModel The model
-	 * @param gui The gui string
 	 */
 	public JChemPaintViewerPanel(IChemModel chemModel){
 		this.setLayout(new BorderLayout());
