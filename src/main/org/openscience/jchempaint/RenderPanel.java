@@ -44,16 +44,17 @@ import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.IntermediateRenderer;
+import org.openscience.cdk.renderer.ShapeSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
-//	private IChemModel chemModel;
 	private boolean isNewChemModel;
 	private ControllerHub hub;
 	private ControllerModel controllerModel;
@@ -62,7 +63,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
-//		this.chemModel = chemModel;
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
@@ -121,9 +121,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
     }
 	
 	public void paintChemModel(Graphics g, Rectangle bounds) {
+	    super.paint(g);
 	    IChemModel chemModel = this.hub.getIChemModel();
 	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
-	        super.paint(g);
 	        // determine the size the canvas needs to be in order to fit the model
 	        Rectangle screenBounds = renderer.calculateScreenBounds(chemModel);
 	        
@@ -181,23 +181,42 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
 			IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
-        	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+        	Iterator<IAtomContainer> containers 
+        	    = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         	while (containers.hasNext()) {
         		wholeModel.add(containers.next());
         	}
-        	String formula = MolecularFormulaManipulator.getHTML(MolecularFormulaManipulator.getMolecularFormula(wholeModel),true,false);
-			int impliciths=0;
-			for(int i=0;i<wholeModel.getAtomCount();i++){
-				if(wholeModel.getAtom(i).getHydrogenCount()!=null);
-					impliciths+=wholeModel.getAtom(i).getHydrogenCount();
-			}
-			status = "<html>" + formula + (impliciths==0 ? "" : " (of these "+impliciths+" Hs implicit)")+"</html>";
+        	String formula 
+        	        = MolecularFormulaManipulator.getHTML(
+        	                MolecularFormulaManipulator.getMolecularFormula(wholeModel),
+        	                true,
+        	                false);
+			int implicitHs = 0;
+			for (int i = 0; i < wholeModel.getAtomCount(); i++) {
+			    IAtom a = wholeModel.getAtom(i);  
+                if (a.getHydrogenCount() != null) {
+                    implicitHs += a.getHydrogenCount();
+                }
+            }
+			status = "<html>"
+                    + formula
+                    + (implicitHs == 0 ? "" : " (of these "
+                    + implicitHs + " Hs implicit)") + "</html>";
 		}
 		else if (position == 2) {
 			// depict brutto formula of the selected molecule or part of molecule
-			if (renderer.getRenderer2DModel().getSelectedPart() != null) {
-				IAtomContainer selectedPart = renderer.getRenderer2DModel().getSelectedPart();
-				String formula = MolecularFormulaManipulator.getHTML(MolecularFormulaManipulator.getMolecularFormula(selectedPart),true,true);
+		    ShapeSelection selection
+		        = renderer.getRenderer2DModel().getShapeSelection(); 
+			if (selection != null) {
+			    IChemModel chemModel = hub.getIChemModel();
+	            IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
+	            for (IAtom atom : selection.atoms) {
+	                wholeModel.addAtom(atom);
+	            }
+				String formula = MolecularFormulaManipulator.getHTML(
+				        MolecularFormulaManipulator.getMolecularFormula(wholeModel),
+				        true,
+				        true);
 				status = "<html>" + formula + "</html>";
 			}
 		}
