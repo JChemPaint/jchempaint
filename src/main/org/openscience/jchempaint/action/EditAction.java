@@ -1,12 +1,12 @@
 /*
  *  $RCSfile$
  *  $Author: egonw $
- *  $Date: 2007-05-01 20:15:34 +0100 (Tue, 01 May 2007) $
- *  $Revision: 8292 $
+ *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
+ *  $Revision: 7634 $
  *
- *  Copyright (C) 2003-2007  The JChemPaint project
+ *  Copyright (C) 1997-2008 Tobias Helmus, Stefan Kuhn
  *
- *  Contact: jchempaint-devel@lists.sourceforge.net
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
@@ -51,10 +51,6 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
  *   <li>selectFromChemObject,selects all atoms and electron containers in
  *       the IChemObject set in the event source
  * </ul>
- *
- * @author        hel
- * @cdk.created       27. April 2005
- * @cdk.module    jchempaint
  */
 public class EditAction extends JCPAction {
 
