@@ -47,8 +47,8 @@ import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.IntermediateRenderer;
-import org.openscience.cdk.renderer.ShapeSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
@@ -205,16 +205,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		}
 		else if (position == 2) {
 			// depict brutto formula of the selected molecule or part of molecule
-		    ShapeSelection selection
-		        = renderer.getRenderer2DModel().getShapeSelection(); 
+		    ISelection selection = renderer.getRenderer2DModel().getSelection(); 
 			if (selection != null) {
-			    IChemModel chemModel = hub.getIChemModel();
-	            IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
-	            for (IAtom atom : selection.atoms) {
-	                wholeModel.addAtom(atom);
-	            }
+			    IAtomContainer ac = selection.getConnectedAtomContainer();
 				String formula = MolecularFormulaManipulator.getHTML(
-				        MolecularFormulaManipulator.getMolecularFormula(wholeModel),
+				        MolecularFormulaManipulator.getMolecularFormula(ac),
 				        true,
 				        true);
 				status = "<html>" + formula + "</html>";

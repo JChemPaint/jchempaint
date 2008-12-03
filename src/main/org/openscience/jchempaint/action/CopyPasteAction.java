@@ -62,7 +62,9 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.renderer.Renderer2DModel;
+import org.openscience.cdk.renderer.ISelection;
+import org.openscience.cdk.renderer.LogicalSelection;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
@@ -88,25 +90,13 @@ public class CopyPasteAction extends JCPAction{
     		handleSystemClipboard();
 	        logger.info("  type  ", type);
 	        logger.debug("  source ", e.getSource());
-	        Renderer2DModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+	        RendererModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
 	        if ("copy".equals(type)) {
-	            IAtomContainer tocopy = jcpPanel.getChemModel().getBuilder().newAtomContainer();
-	            for(int i=0;i<renderModel.getShapeSelection().atoms.size();i++){
-	            	tocopy.addAtom(renderModel.getShapeSelection().atoms.get(i));
-	            }
-	            for(int i=0;i<renderModel.getShapeSelection().bonds.size();i++){
-	            	tocopy.addBond(renderModel.getShapeSelection().bonds.get(i));
-	            	//TODO this is a workaround, bug report filed #2383366
-	            	if(!tocopy.contains(renderModel.getShapeSelection().bonds.get(i).getAtom(0)))
-	            		tocopy.addAtom((renderModel.getShapeSelection().bonds.get(i).getAtom(0)));
-	            	if(!tocopy.contains(renderModel.getShapeSelection().bonds.get(i).getAtom(1)))
-	            		tocopy.addAtom((renderModel.getShapeSelection().bonds.get(i).getAtom(1)));	            		
-	            }
-	            if (tocopy == null) {
-	            	return;
-	            }
+	            IAtomContainer copy 
+	                = renderModel.getSelection().getConnectedAtomContainer();
+	            
 	            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-	            JcpSelection jcpselection=new JcpSelection(tocopy);
+	            JcpSelection jcpselection=new JcpSelection(copy);
 	            sysClip.setContents(jcpselection,null);
 	        } else if ("paste".equals(type)) {
 	        	Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -127,54 +117,50 @@ public class CopyPasteAction extends JCPAction{
 	        			logger.warn("Pastes string is not recognized.");
 	        		}
 	        	}
-    			IAtomContainer topaste = null;
+    			IAtomContainer toPaste = null;
         		if (reader != null) {
         			if (reader.accepts(Molecule.class)) { 
-        				topaste = (IAtomContainer) reader.read(new Molecule());
+        				toPaste = (IAtomContainer) reader.read(new Molecule());
         			} else if (reader.accepts(ChemFile.class)) {
-        				topaste = new Molecule();
+        				toPaste = new Molecule();
         				IChemFile file = (IChemFile)reader.read(new ChemFile());
                     	Iterator containers = ChemFileManipulator.getAllAtomContainers(file).iterator();
                     	while (containers.hasNext()) {
-                    		topaste.add((IAtomContainer)containers.next());
+                    		toPaste.add((IAtomContainer)containers.next());
                     	}
         			}
         		}
-        		if(topaste==null && transfer!=null && (transfer.isDataFlavorSupported (DataFlavor.stringFlavor))) {
+        		if (toPaste == null
+                        && transfer != null
+                        && (transfer.isDataFlavorSupported(DataFlavor.stringFlavor))) {
         			try{
         				SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        				topaste = sp.parseSmiles((String) transfer.getTransferData (DataFlavor.stringFlavor));
-        				StructureDiagramGenerator sdg = new StructureDiagramGenerator((Molecule)topaste);
+        				toPaste = sp.parseSmiles((String) transfer.getTransferData (DataFlavor.stringFlavor));
+        				StructureDiagramGenerator sdg = new StructureDiagramGenerator((Molecule)toPaste);
                         sdg.setTemplateHandler(
-                            new TemplateHandler(topaste.getBuilder())
+                            new TemplateHandler(toPaste.getBuilder())
                         );
                         sdg.generateCoordinates();
         			}catch(Exception ex){
         				//we just try smiles
         			}
         		}
-	            if (topaste != null) {
+	            if (toPaste != null) {
 	                //translate the new structure a bit
-	                GeometryTools.translate2D(topaste, renderModel.getHighlightRadiusModel(), renderModel.getHighlightRadiusModel()); //in pixels
+	                GeometryTools.translate2D(toPaste, renderModel.getHighlightRadiusModel(), renderModel.getHighlightRadiusModel()); //in pixels
 	                IChemModel chemModel = jcpPanel.getChemModel();
 	                IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
 	                if (moleculeSet == null) {
 	                    moleculeSet = new MoleculeSet();
 	                }
-	                moleculeSet.addAtomContainer(topaste);
+	                moleculeSet.addAtomContainer(toPaste);
 	                jcpPanel.getChemModel().setMoleculeSet(moleculeSet);
+	                
 	                //We select the inserted structure
-	            	renderModel.getShapeSelection().clear();
-	            	List<IAtom> atoms=new ArrayList<IAtom>();
-	            	for(IAtom atom:topaste.atoms()){
-	            		atoms.add(atom);
-	            	}
-	    			renderModel.getShapeSelection().atoms.addAll(atoms);
-	            	List<IBond> bonds=new ArrayList<IBond>();
-	            	for(IBond bond:topaste.bonds()){
-	            		bonds.add(bond);
-	            	}
-	            	renderModel.getShapeSelection().bonds.addAll(bonds);
+	                ISelection selection 
+	                    = new LogicalSelection(LogicalSelection.Type.ALL);
+	                selection.select(toPaste);
+	                renderModel.setSelection(selection);
 	            	jcpPanel.setMoveAction();
 	    			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
 	                jcpPanel.get2DHub().updateView();

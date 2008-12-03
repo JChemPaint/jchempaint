@@ -31,7 +31,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
@@ -53,7 +52,7 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.applications.swing.FieldTablePanel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.renderer.Renderer2DModel;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidationTest;
@@ -70,7 +69,7 @@ public class ValidateFrame extends JFrame  {
     
 	private static final long serialVersionUID = -8073655554072154298L;
 	
-	private Renderer2DModel rendererModel;
+	private RendererModel rendererModel;
     private JPanel errorTreePanel;
     private JPanel warningTreePanel;
     private JPanel cdkErrorTreePanel;

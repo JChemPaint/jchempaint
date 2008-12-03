@@ -40,14 +40,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.openscience.cdk.applications.swing.FieldTablePanel;
-import org.openscience.cdk.renderer.Renderer2DModel;
+import org.openscience.cdk.renderer.RendererModel;
 
 import com.ozten.font.JFontChooser;
 
 /**
  * @cdk.bug          1525961
  */
-public class Renderer2DModelEditor extends FieldTablePanel implements ActionListener {
+public class RendererModelEditor extends FieldTablePanel implements ActionListener {
     
     private static final long serialVersionUID = 8694652992068950179L;
     
@@ -71,11 +71,11 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
     
     private JFrame frame;
     
-    private Renderer2DModel model;
+    private RendererModel model;
 
 
     
-	public Renderer2DModelEditor(JFrame frame) {
+	public RendererModelEditor(JFrame frame) {
         super();
         this.frame = frame;
         constructPanel();
@@ -119,7 +119,7 @@ public class Renderer2DModelEditor extends FieldTablePanel implements ActionList
         addField("", chooseColorButton);
     }
     
-    public void setModel(Renderer2DModel model) {
+    public void setModel(RendererModel model) {
         this.model = model;
         drawNumbers.setSelected(model.getDrawNumbers());
         showAtomAtomMapping.setSelected(model.getShowAtomAtomMapping());

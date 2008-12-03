@@ -39,9 +39,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.openscience.cdk.renderer.Renderer2DModel;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.dialog.editor.Renderer2DModelEditor;
+import org.openscience.jchempaint.dialog.editor.RendererModelEditor;
 
 /**
   * Simple Dialog that shows the loaded dictionaries..
@@ -51,18 +51,18 @@ public class ModifyRenderOptionsDialog extends JFrame {
 
 	private static final long serialVersionUID = -7228371698429720333L;
 	
-	private Renderer2DModelEditor editor;
-    private Renderer2DModel model;
+	private RendererModelEditor editor;
+    private RendererModel model;
     private JChemPaintPanel jcpPanel;
     
 	/**
 	 * Displays the Info Dialog for JChemPaint. 
 	 */
-    public ModifyRenderOptionsDialog(JChemPaintPanel jcpPanel, Renderer2DModel model) {
+    public ModifyRenderOptionsDialog(JChemPaintPanel jcpPanel, RendererModel model) {
         super("Modify Renderer2D Options Dialog");
         this.model = model;
         this.jcpPanel=jcpPanel;
-        editor = new Renderer2DModelEditor(this);
+        editor = new RendererModelEditor(this);
         createDialog();
         pack();
         setVisible(true);
