@@ -96,6 +96,7 @@ public class CopyPasteAction extends JCPAction{
 	            }
 	            for(int i=0;i<renderModel.getShapeSelection().bonds.size();i++){
 	            	tocopy.addBond(renderModel.getShapeSelection().bonds.get(i));
+	            	//TODO this is a workaround, bug report filed #2383366
 	            	if(!tocopy.contains(renderModel.getShapeSelection().bonds.get(i).getAtom(0)))
 	            		tocopy.addAtom((renderModel.getShapeSelection().bonds.get(i).getAtom(0)));
 	            	if(!tocopy.contains(renderModel.getShapeSelection().bonds.get(i).getAtom(1)))
