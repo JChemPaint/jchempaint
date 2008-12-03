@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -448,15 +449,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		}
 	}
 	
-	public JButton getMoveButton() {
-		return moveButton;
-	}
-
-
-	public void setMoveButton(JButton moveButton) {
-		this.moveButton = moveButton;
-	}
-	
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
 	 */
@@ -487,5 +479,14 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 			frame.setVisible(false);
 			frame.dispose();
 		}
+	}
+	
+	/**
+	 * Selects the move button and action as the current action. 
+	 */
+	public void setMoveAction() {
+		getLastActionButton().setBackground(Color.LIGHT_GRAY);
+		setLastActionButton(moveButton);
+		moveButton.setBackground(Color.GRAY);
 	}
 }

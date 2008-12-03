@@ -145,9 +145,7 @@ public class EditAction extends JCPAction {
         		bonds.add(bond);
         	}
 			renderModel.getShapeSelection().bonds.addAll(bonds);
-			jcpPanel.getLastActionButton().setBackground(Color.LIGHT_GRAY);
-			jcpPanel.setLastActionButton(jcpPanel.getMoveButton());
-			jcpPanel.getMoveButton().setBackground(Color.GRAY);
+			jcpPanel.setMoveAction();
 			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
 		} /*else if (type.equals("selectMolecule")) {
 			IChemObject object = getSource(event);
