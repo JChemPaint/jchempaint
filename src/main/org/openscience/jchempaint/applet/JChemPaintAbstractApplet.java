@@ -57,7 +57,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.renderer.Renderer2DModel;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -183,7 +183,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	
 	@Override
 	public void start() {
-		Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
 		IChemModel chemModel = theJcpp.getChemModel();
 		IControllerModel controllerModel = theJcpp.get2DHub().getController2DModel();
 		//Parameter parsing goes here
@@ -374,7 +374,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 * @param atom The atom number (starting with 0)
 	 */
 	public void selectAtom(int atom){
-		Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
 		IChemModel chemModel = theJcpp.getChemModel();
 	    rendererModel.setExternalHighlightColor(Color.RED);
 	    IAtomContainer ac=chemModel.getMoleculeSet().getBuilder().newAtomContainer();

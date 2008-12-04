@@ -120,23 +120,38 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         return image;
     }
 	
-	public void paintChemModel(Graphics g, Rectangle bounds) {
+	public void paintChemModel(Graphics g, Rectangle screenBounds) {
 	    super.paint(g);
 	    IChemModel chemModel = this.hub.getIChemModel();
 	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
-	        // determine the size the canvas needs to be in order to fit the model
-	        Rectangle screenBounds = renderer.calculateScreenBounds(chemModel);
 	        
-	        if (bounds.contains(screenBounds)) {
-                this.paintChemModel(chemModel, g, bounds);
-            } else {
-                Dimension d = 
-                    new Dimension(screenBounds.width, screenBounds.height);
-                this.setPreferredSize(d);
-                this.revalidate();
-                this.paintChemModel(chemModel, g, bounds);
+	        // determine the size the canvas needs to be in order to fit the model
+	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
+//	        ((Graphics2D)g).draw(diagramBounds);
+//	        System.err.println("sb = " + diagramBounds + " b=" + screenBounds);
+	        
+	        if (this.overlaps(screenBounds, diagramBounds)) {
+//	            System.err.println("overlap");
+	            Rectangle union = screenBounds.union(diagramBounds); 
+	            this.setPreferredSize(union.getSize());
+	            this.revalidate();
             }
+	        this.paintChemModel(chemModel, g, screenBounds);
         }    
+	}
+	
+	/**
+	 * Check to see if the molecule bounding box has overlapped a screen edge. 
+	 * 
+	 * @param screenBounds the bounding box of the screen
+	 * @param diagramBounds the bounding box of the molecule on the screen
+	 * @return
+	 */
+	private boolean overlaps(Rectangle screenBounds, Rectangle diagramBounds) {
+	    return screenBounds.getMinX() > diagramBounds.getMinX()
+	        || screenBounds.getMinY() > diagramBounds.getMinY()
+	        || screenBounds.getMaxX() < diagramBounds.getMaxX()
+	        || screenBounds.getMaxY() < diagramBounds.getMaxY();
 	}
 	
 	private void paintChemModel(IChemModel chemModel, Graphics g, Rectangle bounds) {
