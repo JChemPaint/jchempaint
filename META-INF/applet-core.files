@@ -260,3 +260,4 @@ org/openscience/cdk/tools/manipulator/MoleculeSetManipulator.class
 org/openscience/cdk/tools/manipulator/RingSetManipulator.class
 org/openscience/cdk/tools/ValencyChecker.class
 org/openscience/cdk/validate/ProblemMarker.class
+io-formats.set
