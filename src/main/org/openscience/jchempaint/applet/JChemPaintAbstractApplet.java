@@ -72,9 +72,6 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
  */
 public abstract class JChemPaintAbstractApplet extends JApplet {
 	private AbstractJChemPaintPanel theJcpp = null;
-	//JExternalFrame jexf = null;
-    private boolean detachable = false;
-	private boolean detacheable;
 	private JExternalFrame jexf;
 
 	private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
@@ -151,9 +148,15 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		}else{
 			theJcpp.setChemModel(new ChemModel());
 		}
-		theJcpp.repaint();
 	}
 
+
+	public void setSmiles(String smiles){
+		loadModelFromSmiles(smiles);
+		theJcpp.get2DHub().updateView();
+	    repaint();
+	}
+	
 	/**
 	 * Loads a molecule from a url into jcp
 	 * 
@@ -323,6 +326,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     MDLV2000Reader reader=new MDLV2000Reader(new StringReader(newmol.toString()));
     IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
     new InsertTextPanel(theJcpp,null).generateModel(cdkmol);
+    theJcpp.get2DHub().updateView();
     repaint();
   }
 
@@ -349,6 +353,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
     theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
     theJcpp.get2DHub().updateView();
+    repaint();
   }
   
   	/**
@@ -362,6 +367,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	    IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
 	    theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
 	    theJcpp.get2DHub().updateView();
+	    repaint();
 	}
 
   
@@ -370,6 +376,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 */
 	public void clear(){
 	  theJcpp.setChemModel(new ChemModel());
+	  theJcpp.get2DHub().updateView();
 	  repaint();
 	}
 
@@ -405,7 +412,6 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		if (this.getParameter("name") != null)
 			getJexf().setTitle(this.getParameter("name"));
 		if(getParameter("detachable")!=null && getParameter("detachable").equals("true")){
-			detacheable=true;
 			getTheJcpp().getRenderPanel().addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					if (e.getButton() == 1 && e.getClickCount() == 2)
