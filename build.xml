@@ -13,21 +13,14 @@
     <property name="src" value="src" />
     <property name="lib" value="lib" />
 	<property name="dist" value="dist" />
-    <property name="appjars.dir" value="${dist}/appjars" />
+    <property name="dist-classes" value="${dist}/classes" />
 	<property name="metainf" value="META-INF" />
 
-    <property name="build" value="build" />
-	<property name="growing_list_file" value="${build}/applet-classes-list.files"/>
-	<property name="growing_classpath" value="${build}/applet-jars-list.files"/>
+	<property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
+	<property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
 
     <target id="clean" name="clean" description="Removes compiled stuff.">
         <delete dir="${dist}" />
-        <delete>
-            <fileset dir="${dist}/jar/" includes="jchempaint-applet-*.jar" />
-            <fileset file="${growing_list_file}"/>
-            <fileset file="${growing_classpath}"/>
-        </delete>
-        <delete dir="${appjars.dir}"/>
     </target>
 
 	<target id="dist" name="dist" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
@@ -44,14 +37,14 @@
                     <attribute name="Implementation-Vendor" value="The CDK Project"/>
                 </section>
             </manifest>
-            <fileset dir="${appjars.dir}">
+            <fileset dir="${dist-classes}">
                 <include name="**/*" />
             </fileset>
         </jar>
     </target>
 
     <target id="unjar-libjars" name="unjar-libjars">
-        <unjar dest="${appjars.dir}">
+        <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
                 <includesfile name="${cdk.metainf}/core.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
@@ -62,7 +55,7 @@
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
             </fileset>
         </unjar>
-        <unjar dest="${appjars.dir}">
+        <unjar dest="${dist-classes}">
             <fileset dir="${lib}">
             	<include name="**/*" />
             </fileset>
@@ -70,7 +63,7 @@
 	 </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
-	 <unjar dest="${appjars.dir}">
+	 <unjar dest="${dist-classes}">
             <fileset dir="${cdk.dist}/jar">
                 <include name="cdk-applications.jar"/>
                 <include name="cdk-core.jar"/>
@@ -100,8 +93,8 @@
     <target id="compile-jcp" name="compile-jcp">
         <!-- TODO check if dist-all in cdk has been done-->
         <echo message="Compiling JChemPaint classes." />
-        <mkdir dir="${appjars.dir}" />
-        <javac srcdir="${src}" destdir="${appjars.dir}" optimize="${optimization}"
+        <mkdir dir="${dist-classes}" />
+        <javac srcdir="${src}" destdir="${dist-classes}" optimize="${optimization}"
                 nowarn="${nowarn}"
                 debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
             <classpath>
@@ -116,7 +109,7 @@
             </classpath>
 
          </javac>
-    	<copydir dest="${appjars.dir}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+    	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
    </target>
 
     <target id="dist-applet" name="dist-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars, build-applet" description="Builds the JChemPaint applet jar files with jarindex" />
@@ -136,7 +129,7 @@
             <attribute name="includesfile"/>
             <sequential>
                 <jar destfile="@{destfile}">
-                    <fileset dir="${appjars.dir}">
+                    <fileset dir="${dist-classes}">
                         <includesfile name="@{includesfile}"/>
                         <excludesfile name="${growing_list_file}"/>
                     </fileset>
@@ -152,7 +145,7 @@
             <attribute name="includepattern"/>
             <sequential>
                 <jar destfile="@{destfile}">
-                    <fileset dir="${appjars.dir}">
+                    <fileset dir="${dist-classes}">
                         <include name="@{includepattern}"/>
                         <excludesfile name="${growing_list_file}"/>
                     </fileset>
@@ -162,9 +155,9 @@
             </sequential>
         </macrodef>
 
-                <!--<echo message="Compiling applet logging tool org/openscience/cdk/tools/LoggingTool.java to ${appjars.dir}"/>
-                    <delete file="${appjars.dir}/org/openscience/cdk/tools/LoggingTool.class"/>
-                    <javac srcdir="applet" destdir="${appjars.dir}" optimize="${optimization}" debug="${debug}" deprecation="${deprecation}" target="1.3" source="1.3">
+                <!--<echo message="Compiling applet logging tool org/openscience/cdk/tools/LoggingTool.java to ${dist-classes}"/>
+                    <delete file="${dist-classes}/org/openscience/cdk/tools/LoggingTool.class"/>
+                    <javac srcdir="applet" destdir="${dist-classes}" optimize="${optimization}" debug="${debug}" deprecation="${deprecation}" target="1.3" source="1.3">
                 </javac>-->
 
         <mkdir dir="${dist}/jar" />
@@ -175,24 +168,15 @@
         <!-- the following jar files are packed from directory patterns -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_applications_jchempaint.jar" includepattern="org/openscience/cdk/applications/jchempaint/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_applications.jar" includepattern="org/openscience/cdk/applications/**"/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" includepattern="org/openscience/cdk/io/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_qsar.jar" includepattern="org/openscience/cdk/qsar/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_iupac.jar" includepattern="org/openscience/cdk/iupac/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_math.jar" includepattern="org/openscience/cdk/math/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_tools.jar" includepattern="org/openscience/cdk/tools/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_structgen.jar" includepattern="org/openscience/cdk/structgen/**"
-/>
-                <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar" includepattern="org/openscience/cdk/nonotify/**"
-/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" includepattern="org/openscience/cdk/io/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_qsar.jar" includepattern="org/openscience/cdk/qsar/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_iupac.jar" includepattern="org/openscience/cdk/iupac/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_math.jar" includepattern="org/openscience/cdk/math/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_tools.jar" includepattern="org/openscience/cdk/tools/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_structgen.jar" includepattern="org/openscience/cdk/structgen/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar" includepattern="org/openscience/cdk/nonotify/**"/>
 
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience.jar" includepattern="org/openscience/**"/>
@@ -222,7 +206,7 @@
                             <attribute name="Implementation-Vendor" value="The CDK Project"/>
                         </section>
                 </manifest>
-            <fileset dir="${appjars.dir}">
+            <fileset dir="${dist-classes}">
                 <includesfile name="${metainf}/applet-core.files"/>
                 <exclude name="org/apache/log4j/**"/>
             </fileset>
