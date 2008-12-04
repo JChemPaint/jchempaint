@@ -99,33 +99,6 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		return paramInfo;
 	}
 
-
-	public void initPanelAndModel(AbstractJChemPaintPanel jcpp) {
-//		getContentPane().removeAll();
-//		getContentPane().setLayout(new BorderLayout());
-//TODO		try{
-//	    	theModel.setTitle("JCP Applet" /* getNewFrameName() */);
-//    		theModel.setAuthor(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UserName"));
-//    	}catch(NullPointerException ex){
-//    		//It seems we get an npe here sometimes. the line is not necessary
-//    	}
-//		// Package self = Package.getPackage("org.openscience.cdk.applications.jchempaint");
-//		// String version = self.getImplementationVersion();
-//		// model.setSoftware("JChemPaint " + version);
-//		theModel.setSoftware("JChemPaint " /*+  version */);
-//		theModel.setGendate((Calendar.getInstance()).getTime().toString());
-//		jcpp.setJChemPaintModel(theModel,new Dimension((int)this.getWidth()-100,(int)this.getHeight()-100));
-//		jcpp.registerModel(theModel);
-//		if(detacheable)
-//			jcpp.addFilePopUpMenu();	
-//		}
-//	    }
-//		//embedded means that additional instances can't be created, which is
-//		// needed for applet as well
-//		jcpp.setEmbedded();
-//		getContentPane().add(jcpp, BorderLayout.CENTER);
-	}
-
 	/**
 	 * loads a molecule from url or smiles
 	 */
@@ -173,7 +146,6 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		}else{
 			theJcpp.setChemModel(new ChemModel());
 		}
-		initPanelAndModel(theJcpp);
 		theJcpp.repaint();
 	}
 
@@ -202,7 +174,6 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			System.out.println("Cannot parse model: " + exception.toString());
 			exception.printStackTrace();
 		}
-		initPanelAndModel(theJcpp);
 	}
 	
 	@Override
@@ -230,9 +201,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		if(getParameter("tooltips")!=null){
 			StringTokenizer st=new StringTokenizer(getParameter("tooltips"),"|");
 			IAtomContainer container = theJcpp.getChemModel().getBuilder().newAtomContainer();
-	    	Iterator containers = ChemModelManipulator.getAllAtomContainers(theJcpp.getChemModel()).iterator();
+	    	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(theJcpp.getChemModel()).iterator();
 	    	while (containers.hasNext()) {
-	    		container.add((IAtomContainer)containers.next());
+	    		container.add(containers.next());
 	    	}
 			while(st.hasMoreTokens()){
 				IAtom atom = container.getAtom(Integer.parseInt(st.nextToken())-1);
@@ -392,13 +363,15 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	  repaint();
 	}
 
-//  TODO public void selectAtom(int atom){
-//    theJcpp.getJChemPaintModel().getRendererModel().setExternalHighlightColor(Color.RED);
-//    IAtomContainer ac=theJcpp.getJChemPaintModel().getChemModel().getMoleculeSet().getBuilder().newAtomContainer();
-//    ac.addAtom(theJcpp.getJChemPaintModel().getChemModel().getMoleculeSet().getMolecule(0).getAtom(atom));
-//    theJcpp.getJChemPaintModel().getRendererModel().setExternalSelectedPart(ac);
-//    getTheJcpp().repaint();
-//  }
+  public void selectAtom(int atom){
+	Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+	IChemModel chemModel = theJcpp.getChemModel();
+    rendererModel.setExternalHighlightColor(Color.RED);
+    IAtomContainer ac=chemModel.getMoleculeSet().getBuilder().newAtomContainer();
+    ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
+    rendererModel.setExternalSelectedPart(ac);
+    getTheJcpp().repaint();
+  }
 
 	/**
 	 * @return Returns the jexf.
