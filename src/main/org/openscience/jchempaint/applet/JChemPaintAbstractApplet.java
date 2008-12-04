@@ -35,13 +35,19 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -49,7 +55,10 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.renderer.Renderer2DModel;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.action.CreateSmilesAction;
@@ -71,13 +80,13 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			{ "atomNumbersVisible", "true or false", "should atom numbers be shown"},
 			{ "load", "url", "URL of the chemical data" },
 			{ "compact", "true or false", "compact means elements shown as dots, no figures etc. (default false)"},
-			{ "tooltips", "string like 'atomumber|test|atomnumber|text", "the texts will be used as tooltips for the respective atoms (leave out if none required"},
+			{ "tooltips", "string like 'atomumber|test|atomnumber|text'", "the texts will be used as tooltips for the respective atoms (leave out if none required"},
 			{ "impliciths", "true or false", "the implicit hs will be added from start (default false)"},
-			{ "spectrumRenderer", "string", "name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom"},
-			{ "hightlightTable", "true or false", "if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableid$atomnumber (default false)"},
+			{ "spectrumRenderer", "string", "TODO name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom"},
+			{ "hightlightTable", "true or false", "TODO if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableid$atomnumber (default false)"},
 			{ "smiles", "string", "a structure to load as smiles"},
 			{ "scrollbars", "true or false", "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet"},
-			{ "detachable", "true or false", "should the applet be detacheable by a double click (default false)"}
+			{ "detachable", "true or false", "TODO should the applet be detacheable by a double click (default false)"}
 	};
 
 	@Override
@@ -109,94 +118,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 //		jcpp.registerModel(theModel);
 //		if(detacheable)
 //			jcpp.addFilePopUpMenu();	
-//		if(getParameter("compact")!=null && getParameter("compact").equals("true")){
-//			theModel.getRendererModel().setIsCompact(true);
 //		}
-//		if(getParameter("impliciths")!=null && getParameter("impliciths").equals("false")){
-//			 theModel.getControllerModel().setAutoUpdateImplicitHydrogens(false);
-//			 theModel.getRendererModel().setShowImplicitHydrogens(false);
-//			 theModel.getRendererModel().setShowEndCarbons(false);
-//		}else{
-//			 theModel.getControllerModel().setAutoUpdateImplicitHydrogens(true);
-//			 theModel.getRendererModel().setShowImplicitHydrogens(true);
-//			 theModel.getRendererModel().setShowEndCarbons(true);
-//			 
-//			 HydrogenAdder hydrogenAdder = new HydrogenAdder("org.openscience.cdk.tools.ValencyChecker");
-//			 if(theModel.getChemModel()!=null && theModel.getChemModel().getMoleculeSet()!=null){
-//	        	java.util.Iterator mols = theModel.getChemModel().getMoleculeSet().molecules();
-//				while (mols.hasNext())
-//				{
-//					org.openscience.cdk.interfaces.IMolecule molecule = (IMolecule)mols.next();
-//					if (molecule != null)
-//						
-//					{
-//						try{
-//								hydrogenAdder.addImplicitHydrogensToSatisfyValency(molecule);
-//						}catch(Exception ex){
-//							//do nothing
-//						}
-//					}
-//				}
-//			 }
-//			 
-//		}
-//		if(getParameter("tooltips")!=null){
-//			StringTokenizer st=new StringTokenizer(getParameter("tooltips"),"|");
-//			IAtomContainer container = theModel.getChemModel().getBuilder().newAtomContainer();
-//        	Iterator containers = ChemModelManipulator.getAllAtomContainers(theModel.getChemModel()).iterator();
-//        	while (containers.hasNext()) {
-//        		container.add((IAtomContainer)containers.next());
-//        	}
-//			while(st.hasMoreTokens()){
-//				IAtom atom = container.getAtom(Integer.parseInt(st.nextToken())-1);
-//				theModel.getRendererModel().getToolTipTextMap().put(atom,st.nextToken());
-//			}
-//			theModel.getRendererModel().setShowTooltip(true);
-//		}
-//		if(theJcpp.getJChemPaintModel()!=null){
-//			jcpp.scaleAndCenterMolecule(theModel.getChemModel(),new Dimension((int)this.getSize().getWidth()-100,(int)this.getSize().getHeight()-100));
-//		if(theModel.getChemModel().getMoleculeSet()!=null){
-//	        int smallestX=Integer.MAX_VALUE;
-//	        int largestX=Integer.MIN_VALUE;
-//	        int smallestY=Integer.MAX_VALUE;
-//	        int largestY=Integer.MIN_VALUE;
-//	        for(int i=0;i<theModel.getChemModel().getMoleculeSet().getMoleculeCount();i++){
-//	          for(int k=0;k<theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtomCount();k++){
-//	            if(((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).x<smallestX)
-//	              smallestX=(int)((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).x;
-//	            if(((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).x>largestX)
-//	              largestX=(int)((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).x;
-//	            if(((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).y<smallestY)
-//	              smallestY=(int)((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).y;
-//	            if(((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).y>largestY)
-//	              largestY=(int)((Point2d)theModel.getRendererModel().getRenderingCoordinate(theModel.getChemModel().getMoleculeSet().getMolecule(i).getAtom(k))).y;
-//	          }
-//	        }
-//	        if(!theModel.getRendererModel().getIsCompact()){
-//	        	if(jcpp.isShowscrollbars()){
-//			        int x=largestX-smallestX+30;
-//			        int y=largestY - smallestY+30;
-//			        if(x<300)
-//			          x=300;
-//			        if(y<300)
-//			          y=300;
-//			        //the -60 is to prevent the vertical scrollbar to display even if not needed
-//			        theModel.getRendererModel().setBackgroundDimension(new Dimension(x,y-60));
-//	        	}
-//		        jcpp.scaleAndCenterMolecule(theModel.getChemModel(),theModel.getRendererModel().getBackgroundDimension());
-//	        }else{
-//	        	theModel.getRendererModel().setBackgroundDimension(new Dimension((int)(.9*this.getSize().getWidth()),(int)(.9*this.getSize().getHeight())));
-//	        	IAtomContainer atomContainer = theModel.getChemModel().getBuilder().newAtomContainer();
-//            	Iterator containers = ChemModelManipulator.getAllAtomContainers(theModel.getChemModel()).iterator();
-//            	while (containers.hasNext()) {
-//            		atomContainer.add((IAtomContainer)containers.next());
-//            	}
-//	    		GeometryTools.translateAllPositive(atomContainer,theModel.getRendererModel().getRenderingCoordinates());
-//	    		GeometryTools.scaleMolecule(atomContainer, theModel.getRendererModel().getBackgroundDimension(), 0.8,theModel.getRendererModel().getRenderingCoordinates());			
-//	    		GeometryTools.center(atomContainer, theModel.getRendererModel().getBackgroundDimension(),theModel.getRendererModel().getRenderingCoordinates());
-//
-//	        }
-//	      }
 //	    }
 //		//embedded means that additional instances can't be created, which is
 //		// needed for applet as well
@@ -285,6 +207,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	
 	@Override
 	public void start() {
+		Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		IChemModel chemModel = theJcpp.getChemModel();
+		IControllerModel controllerModel = theJcpp.get2DHub().getController2DModel();
 		//Parameter parsing goes here
 		loadModelFromParam();
 		String atomNumbers=getParameter("atomNumbersVisible");
@@ -298,6 +223,42 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setBackColor(Color.decode(background));
 			else
 				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setBackColor(new Color(Integer.parseInt(background)));
+		}
+		if(getParameter("compact")!=null && getParameter("compact").equals("true")){
+			theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setIsCompact(true);
+		}
+		if(getParameter("tooltips")!=null){
+			StringTokenizer st=new StringTokenizer(getParameter("tooltips"),"|");
+			IAtomContainer container = theJcpp.getChemModel().getBuilder().newAtomContainer();
+	    	Iterator containers = ChemModelManipulator.getAllAtomContainers(theJcpp.getChemModel()).iterator();
+	    	while (containers.hasNext()) {
+	    		container.add((IAtomContainer)containers.next());
+	    	}
+			while(st.hasMoreTokens()){
+				IAtom atom = container.getAtom(Integer.parseInt(st.nextToken())-1);
+				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().getToolTipTextMap().put(atom,st.nextToken());
+			}
+			theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setShowTooltip(true);
+		}
+		if(getParameter("impliciths")!=null && getParameter("impliciths").equals("false")){
+			controllerModel.setAutoUpdateImplicitHydrogens(false);
+			rendererModel.setShowImplicitHydrogens(false);
+			rendererModel.setShowEndCarbons(false);
+		}else{
+			 controllerModel.setAutoUpdateImplicitHydrogens(true);
+			 rendererModel.setShowImplicitHydrogens(true);
+			 rendererModel.setShowEndCarbons(true);			 
+			 if(chemModel!=null){
+				 List<IAtomContainer> atomContainers = ChemModelManipulator.getAllAtomContainers(chemModel);
+				 for(int i=0;i<atomContainers.size();i++)
+				 {
+					 try {
+						CDKHydrogenAdder.getInstance(atomContainers.get(i).getBuilder()).addImplicitHydrogens(atomContainers.get(i));
+					} catch (CDKException e) {
+						//do nothing
+					}
+				 }
+			 }			 
 		}
 	}
 	
