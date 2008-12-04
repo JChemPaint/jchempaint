@@ -39,6 +39,7 @@ public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
 		p.setShowStatusBar(false);
 		setTheJcpp(p);
 		this.add(p);
+		super.init();
 	}
 
 }

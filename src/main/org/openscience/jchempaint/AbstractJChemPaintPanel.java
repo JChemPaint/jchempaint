@@ -42,6 +42,15 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	protected RenderPanel renderPanel;
 
 	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	public RenderPanel getRenderPanel() {
+		return renderPanel;
+	}
+
+	/**
 	 * Return the ControllerHub of this JCPPanel
 	 * 
 	 * @return The ControllerHub

@@ -30,6 +30,8 @@
 package org.openscience.jchempaint.applet;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -61,6 +63,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.InsertTextPanel;
+import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 
 /**
@@ -71,6 +74,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	private AbstractJChemPaintPanel theJcpp = null;
 	//JExternalFrame jexf = null;
     private boolean detachable = false;
+	private boolean detacheable;
+	private JExternalFrame jexf;
 
 	private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
 			+ "for more information";
@@ -86,7 +91,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			{ "hightlightTable", "true or false", "TODO if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableid$atomnumber (default false)"},
 			{ "smiles", "string", "a structure to load as smiles"},
 			{ "scrollbars", "true or false", "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet"},
-			{ "detachable", "true or false", "TODO should the applet be detacheable by a double click (default false)"}
+			{ "detachable", "true or false", "should the applet be detacheable by a double click (default false)"}
 	};
 
 	@Override
@@ -235,7 +240,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	
 	@Override
 	public void init(){
-		//TODO prepareExternalFrame();
+		prepareExternalFrame();
 	}
 
 	@Override
@@ -363,42 +368,47 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	  repaint();
 	}
 
-  public void selectAtom(int atom){
-	Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
-	IChemModel chemModel = theJcpp.getChemModel();
-    rendererModel.setExternalHighlightColor(Color.RED);
-    IAtomContainer ac=chemModel.getMoleculeSet().getBuilder().newAtomContainer();
-    ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
-    rendererModel.setExternalSelectedPart(ac);
-    getTheJcpp().repaint();
-  }
+	/**
+	 * A method for highlighting atoms from JavaScript
+	 * 
+	 * @param atom The atom number (starting with 0)
+	 */
+	public void selectAtom(int atom){
+		Renderer2DModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		IChemModel chemModel = theJcpp.getChemModel();
+	    rendererModel.setExternalHighlightColor(Color.RED);
+	    IAtomContainer ac=chemModel.getMoleculeSet().getBuilder().newAtomContainer();
+	    ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
+	    rendererModel.setExternalSelectedPart(ac);
+	    getTheJcpp().repaint();
+  	}
 
 	/**
 	 * @return Returns the jexf.
 	 */
-//	TODO private JExternalFrame getJexf() {
-//		if (jexf == null)
-//			jexf = new JExternalFrame();
-//		return jexf;
-//	}
+	private JExternalFrame getJexf() {
+		if (jexf == null)
+			jexf = new JExternalFrame();
+		return jexf;
+	}
 
 	/**
 	 * sets title for external frame
 	 * adds listener for double clicks in order to open external frame
 	 */
-//	TODO private void prepareExternalFrame() { 
-//		if (this.getParameter("name") != null)
-//			getJexf().setTitle(this.getParameter("name"));
-//		if(getParameter("detachable")!=null && getParameter("detachable").equals("true")){
-//			detacheable=true;
-//			getTheJcpp().getDrawingPanel().addMouseListener(new MouseAdapter() {
-//				public void mousePressed(MouseEvent e) {
-//					if (e.getButton() == 1 && e.getClickCount() == 2)
-//						if (!getJexf().isShowing()) {
-//							getJexf().show(getTheJcpp());
-//					}	
-//				}
-//			});
-//		}
-//	}
+	private void prepareExternalFrame() { 
+		if (this.getParameter("name") != null)
+			getJexf().setTitle(this.getParameter("name"));
+		if(getParameter("detachable")!=null && getParameter("detachable").equals("true")){
+			detacheable=true;
+			getTheJcpp().getRenderPanel().addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					if (e.getButton() == 1 && e.getClickCount() == 2)
+						if (!getJexf().isShowing()) {
+							getJexf().show(getTheJcpp());
+					}	
+				}
+			});
+		}
+	}
 }
