@@ -333,8 +333,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
    * without knowing which platform the applet is running on.
    * 
    * @param mol The mol file to set
+ * @throws CDKException 
    */
-  public void setMolFileWithReplace(String mol){
+  public void setMolFileWithReplace(String mol) throws CDKException{
 	StringBuffer newmol=new StringBuffer();
     int s = 0;
     int e = 0;
@@ -344,8 +345,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
       s = e + 1;
     }
     newmol.append(mol.substring(s));
-    //TODO theJcpp.showChemFile(new StringReader(newmol.toString()));
-    repaint();
+    MDLV2000Reader reader=new MDLV2000Reader(new StringReader(mol));
+    IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+    theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
+    theJcpp.get2DHub().updateView();
   }
   
   	/**
@@ -354,9 +357,11 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 * @param mol
 	 * @throws Exception
 	 */
-	public void setMolFile(String mol) throws Exception{
-		//TODO theJcpp.showChemFile(new StringReader(mol));
-		repaint();
+	public void setMolFile(String mol) throws CDKException{
+	    MDLV2000Reader reader=new MDLV2000Reader(new StringReader(mol));
+	    IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+	    theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
+	    theJcpp.get2DHub().updateView();
 	}
 
   
