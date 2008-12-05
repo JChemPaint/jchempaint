@@ -55,11 +55,18 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
+	
 	private boolean isNewChemModel;
+	
 	private ControllerHub hub;
+	
 	private ControllerModel controllerModel;
+	
 	private SwingMouseEventRelay mouseEventRelay;
+	
 	private boolean fitToScreen;
+	
+	private boolean shouldPaintFromCache = false;
 	
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
@@ -115,23 +122,20 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .getScreenDevices()[0]
                         .getDefaultConfiguration()
                         .createCompatibleImage(bounds.width, bounds.height);
-        Graphics g = image.getGraphics();
+        Graphics2D g = (Graphics2D)image.getGraphics();
         this.paintChemModel(g, bounds);
         return image;
     }
 	
-	public void paintChemModel(Graphics g, Rectangle screenBounds) {
-	    super.paint(g);
+	public void paintChemModel(Graphics2D g, Rectangle screenBounds) {
+	    
 	    IChemModel chemModel = this.hub.getIChemModel();
 	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
 	        
 	        // determine the size the canvas needs to be in order to fit the model
 	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
-//	        ((Graphics2D)g).draw(diagramBounds);
-//	        System.err.println("sb = " + diagramBounds + " b=" + screenBounds);
 	        
 	        if (this.overlaps(screenBounds, diagramBounds)) {
-//	            System.err.println("overlap");
 	            Rectangle union = screenBounds.union(diagramBounds); 
 	            this.setPreferredSize(union.getSize());
 	            this.revalidate();
@@ -154,15 +158,17 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	        || screenBounds.getMaxY() < diagramBounds.getMaxY();
 	}
 	
-	private void paintChemModel(IChemModel chemModel, Graphics g, Rectangle bounds) {
-        // set the graphics to antialias
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        
+	private void paintChemModel(IChemModel chemModel, Graphics2D g, Rectangle bounds) {
+      
         // paint the chem model, and record that it is no longer new
-        renderer.paintChemModel(chemModel, g2, bounds, isNewChemModel);
+        renderer.paintChemModel(chemModel, g, bounds, isNewChemModel);
         isNewChemModel = false;
+        
+        /*
+         * This is dangerous, but necessary to allow fast 
+         * repainting when scrolling the canvas 
+         */
+        this.shouldPaintFromCache = true;
 	}
 	
 	public void setIsNewChemModel(boolean isNewChemModel) {
@@ -170,11 +176,31 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	public void paint(Graphics g) {
-		this.setBackground(renderer.getRenderer2DModel().getBackColor());
-		this.paintChemModel(g, this.getBounds());
+	    this.setBackground(renderer.getRenderer2DModel().getBackColor());
+	    super.paint(g);
+		  // set the graphics to antialias
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        
+		if (this.shouldPaintFromCache) {
+		    this.paintFromCache(g2);
+		} else {
+		    this.paintChemModel(g2, this.getBounds());
+		}
+	}
+	
+	private void paintFromCache(Graphics2D g) {
+	    renderer.repaint(g);
 	}
 
 	public void updateView() {
+	    /*
+         * updateView should only be called in a ControllerModule where 
+         * we assume that things have changed so we can't use the cache
+         */ 
+	    this.shouldPaintFromCache = false;
+	    
 		this.repaint();
 	}
 	
