@@ -1,4 +1,2 @@
-org/openscience/cdk/config/data/isotopes.xml
-org/openscience/cdk/config/data/chemicalElements.xml
-org/openscience/cdk/config/data/structgen_atomtypes.xml
+org/openscience/cdk/exception/InvalidSmilesException.class
 

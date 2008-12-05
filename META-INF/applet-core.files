@@ -302,4 +302,3 @@ org/openscience/jchempaint/JChemPaintViewerPanel.class
 org/openscience/jchempaint/JExternalFrame.class
 io-formats.set
 org/openscience/jchempaint/RenderPanel.class
-org/openscience/cdk/exception/InvalidSmilesException.class
