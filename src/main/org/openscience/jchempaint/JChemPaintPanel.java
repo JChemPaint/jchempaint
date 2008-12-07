@@ -33,7 +33,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -49,6 +48,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 
@@ -100,9 +100,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
         renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false);
-        ScrollPane scroller = new ScrollPane();
-        scroller.add(renderPanel);
-        this.add(scroller, BorderLayout.CENTER);
+        this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
+        
         customizeView();
         instances.add(this);
         chemModel.addListener(this);
