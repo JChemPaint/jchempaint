@@ -123,6 +123,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .getDefaultConfiguration()
                         .createCompatibleImage(bounds.width, bounds.height);
         Graphics2D g = (Graphics2D)image.getGraphics();
+        super.paint(g);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
         this.paintChemModel(g, bounds);
         return image;
     }
