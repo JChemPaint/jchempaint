@@ -42,6 +42,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.LogicalSelection;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -128,7 +129,9 @@ public class EditAction extends JCPAction {
 			renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 		}
 		else if (type.equals("selectAll")) {
-		    renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.ALL));
+		    ISelection allSelection = new LogicalSelection(LogicalSelection.Type.ALL);
+		    allSelection.select(jcpPanel.getChemModel());
+		    renderModel.setSelection(allSelection);
 			jcpPanel.setMoveAction();
 			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
 		} /*else if (type.equals("selectMolecule")) {
