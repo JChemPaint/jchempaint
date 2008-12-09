@@ -28,20 +28,24 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.applications.undoredo.RemoveAtomsAndBondsEdit;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.LogicalSelection;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.action.CopyPasteAction.JcpSelection;
 
 /**
  * This class implements editing options from the 'Edit' menu.
@@ -65,7 +69,7 @@ public class EditAction extends JCPAction {
 
 		RendererModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
 		IChemModel chemModel = jcpPanel.getChemModel();
-		/*if (type.equals("cut")) {
+		if (type.equals("cut")) {
 			org.openscience.cdk.interfaces.IAtom atomInRange = null;
 			IChemObject object = getSource(event);
 			logger.debug("Source of call: ", object);
@@ -80,7 +84,6 @@ public class EditAction extends JCPAction {
 		            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		            IAtomContainer tocopyclone=atomInRange.getBuilder().newAtomContainer();
 		            tocopyclone.addAtom((IAtom)atomInRange.clone());
-		            tocopyclone.getAtom(0).setPoint2d(renderModel.getRenderingCoordinate(atomInRange));
 		            JcpSelection jcpselection=new CopyPasteAction().new JcpSelection(tocopyclone);
 		            sysClip.setContents(jcpselection,null);
 				}catch(Exception ex){
@@ -95,22 +98,18 @@ public class EditAction extends JCPAction {
 					ChemModelManipulator.removeElectronContainer(chemModel, bond);
 				}
 			}
-			jcpModel.fireChange();
 		}
 		else if (type.equals("cutSelected")) {
 			IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
 			logger.debug("Deleting all selected atoms...");
-			if (renderModel.getSelectedPart() == null || renderModel.getSelectedPart().getAtomCount() == 0) {
+			if (renderModel.getSelection().getConnectedAtomContainer() == null || renderModel.getSelection().getConnectedAtomContainer().getAtomCount() == 0) {
 				JOptionPane.showMessageDialog(jcpPanel, "No selection made. Please select some atoms first!", "Error warning", JOptionPane.WARNING_MESSAGE);
 			}
 			else {
-				IAtomContainer selected = renderModel.getSelectedPart();
+				IAtomContainer selected = renderModel.getSelection().getConnectedAtomContainer();
 				try{
 		            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		            IAtomContainer tocopyclone=(IAtomContainer)selected.clone();
-		            for(int i=0;i<tocopyclone.getAtomCount();i++){
-		            	tocopyclone.getAtom(i).setPoint2d(renderModel.getRenderingCoordinate(selected.getAtom(i)));
-		            }
 		            JcpSelection jcpselection=new CopyPasteAction().new JcpSelection(tocopyclone);
 		            sysClip.setContents(jcpselection,null);
 				}catch(Exception ex){
@@ -126,12 +125,9 @@ public class EditAction extends JCPAction {
 					ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, selected.getAtom(i));
 				}
 			}
-			renderModel.setSelectedPart(new org.openscience.cdk.AtomContainer());
-			RemoveAtomsAndBondsEdit  edit = new RemoveAtomsAndBondsEdit(chemModel,undoRedoContainer,"Cut selected");
-            jcpPanel.getUndoSupport().postEdit(edit);
-			jcpModel.fireChange();
+			renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 		}
-		else */if (type.equals("selectAll")) {
+		else if (type.equals("selectAll")) {
 		    renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.ALL));
 			jcpPanel.setMoveAction();
 			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
