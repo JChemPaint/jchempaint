@@ -1,9 +1,7 @@
 package org.openscience.jchempaint;
 
-import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 
-import javax.swing.JPanel;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.controller.ControllerModuleAdapter;
@@ -12,6 +10,12 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
 
 public class SwingPopupModule extends ControllerModuleAdapter {
+
+	private LoggingTool logger = new LoggingTool(this);
+
+	private static Hashtable<String, CDKPopupMenu> popupMenus = new Hashtable<String, CDKPopupMenu>();
+
+	private RenderPanel renderer;
 
 	public SwingPopupModule(RenderPanel renderer,IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
@@ -24,15 +28,9 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	}
 
 
-	public void mouseClickedUp(Point2d worldCoord) {
+	public void mouseClickedDownRight(Point2d worldCoord) {
 		popupMenuForNearestChemObject(renderer.getRenderer().toScreenCoordinates(worldCoord.x, worldCoord.y));
 	}
-
-	private LoggingTool logger = new LoggingTool(this);
-
-	private static Hashtable<String, CDKPopupMenu> popupMenus = new Hashtable<String, CDKPopupMenu>();
-
-	private RenderPanel renderer;
 		
 	/**
 	 *  Sets the popupMenu attribute of the Controller2D object
