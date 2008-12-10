@@ -46,6 +46,9 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
+import org.openscience.cdk.renderer.LogicalSelection;
+import org.openscience.cdk.renderer.selection.RectangleSelection;
+import org.openscience.cdk.renderer.selection.ShapeSelection;
 
 /**
  * Triggers the invocation of the structure diagram generator
@@ -125,7 +128,7 @@ public class CleanupAction extends JCPAction {
         }
         
         IChemModelRelay hub = jcpPanel.get2DHub(); 
-        hub.getIJava2DRenderer().getRenderer2DModel().setSelectedPart(new AtomContainer());
+        hub.getIJava2DRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
         jcpPanel.setIsNewChemModel(true);
         hub.updateView();
     }

@@ -38,9 +38,9 @@ import javax.swing.JPopupMenu;
 
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.jchempaint.CDKPopupMenu;
 import org.openscience.jchempaint.JChemPaintMenuBar;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.JChemPaintPopupMenu;
 
 /**
  * Superclass of all JChemPaint GUI actions
@@ -229,14 +229,14 @@ public class JCPAction extends AbstractAction
 		{
 			Container parent = ((JMenuItem) source).getComponent().getParent();
 			// logger.debug("event source parent: " + parent);
-			if (parent instanceof CDKPopupMenu)
+			if (parent instanceof JChemPaintPopupMenu)
 			{
-				return ((CDKPopupMenu) parent).getSource();
+				return ((JChemPaintPopupMenu) parent).getSource();
 			} else if (parent instanceof JPopupMenu)
 			{
 				// assume that the top menu is indeed a CDKPopupMenu
 				logger.debug("Submenu... need to recurse into CDKPopupMenu...");
-				while (!(parent instanceof CDKPopupMenu))
+				while (!(parent instanceof JChemPaintPopupMenu))
 				{
 					logger.debug("  Parent instanceof ", parent.getClass().getName());
 					if (parent instanceof JPopupMenu)
@@ -252,7 +252,7 @@ public class JCPAction extends AbstractAction
 						return null;
 					}
 				}
-				return ((CDKPopupMenu) parent).getSource();
+				return ((JChemPaintPopupMenu) parent).getSource();
 			}
 		}
 		return null;

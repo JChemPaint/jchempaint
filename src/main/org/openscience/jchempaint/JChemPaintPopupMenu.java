@@ -1,12 +1,12 @@
 /*
  *  $RCSfile$
- *  $Author: shk3 $
- *  $Date: 2008-07-02 12:33:38 +0100 (Wed, 02 Jul 2008) $
- *  $Revision: 11482 $
+ *  $Author: egonw $
+ *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
+ *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2007  The JChemPaint project
+ *  Copyright (C) 1997-2008 Christoph Steinbeck
  *
- *  Contact: jchempaint-devel@lists.sourceforge.net
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
@@ -20,7 +20,9 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
+ *  GNU Lesser Gener * @cdk.module jchempaint
+ * @author     steinbeck
+al Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -33,23 +35,31 @@ import java.util.MissingResourceException;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
 
 /**
  *  A pop-up menu for JChemPaint
  *
- * @cdk.module jchempaint
- * @author     steinbeck
  */
-public class JChemPaintPopupMenu extends CDKPopupMenu
+public class JChemPaintPopupMenu extends JPopupMenu
 {
 
 	private static final long serialVersionUID = -1172105004348414589L;
 	private LoggingTool logger;
 	private JCPAction jcpaction;
-
+    private IChemObject source;
+    
+    public void setSource(IChemObject object) {
+        this.source = object;
+    }
+   
+    public IChemObject getSource() {
+        return this.source;
+    }
 
 	/**
 	 *  Constructor for the JChemPaintPopupMenu object

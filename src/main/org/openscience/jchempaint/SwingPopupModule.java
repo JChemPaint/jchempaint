@@ -1,3 +1,31 @@
+/*
+ *  $RCSfile$
+ *  $Author: egonw $
+ *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
+ *  $Revision: 7634 $
+ *
+ *  Copyright (C) 2008 Stefan Kuhn
+ *
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public License
+ *  as published by the Free Software Foundation; either version 2.1
+ *  of the License, or (at your option) any later version.
+ *  All we ask is that proper credit is given for our work, which includes
+ *  - but is not limited to - adding the above copyright notice to the beginning
+ *  of your source code files, and to any copyright notice that you may distribute
+ *  with programs based on this work.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 package org.openscience.jchempaint;
 
 import java.util.Hashtable;
@@ -13,7 +41,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
 	private LoggingTool logger = new LoggingTool(this);
 
-	private static Hashtable<String, CDKPopupMenu> popupMenus = new Hashtable<String, CDKPopupMenu>();
+	private static Hashtable<String, JChemPaintPopupMenu> popupMenus = new Hashtable<String, JChemPaintPopupMenu>();
 
 	private RenderPanel renderer;
 
@@ -36,10 +64,10 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *  Sets the popupMenu attribute of the Controller2D object
 	 *
 	 *@param  someClass  The new popupMenu value
-	 *@param  menu        The new popupMenu value
+	 *@param  jchemPaintPopupMenu        The new popupMenu value
 	 */
-	public void setPopupMenu(Class someClass, CDKPopupMenu menu) {
-		SwingPopupModule.popupMenus.put(someClass.getName(), menu);
+	public void setPopupMenu(Class someClass, JChemPaintPopupMenu jchemPaintPopupMenu) {
+		SwingPopupModule.popupMenus.put(someClass.getName(), jchemPaintPopupMenu);
 	}
 
 
@@ -50,12 +78,12 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@param  someClass  Description of the Parameter
 	 *@return             The popupMenu value
 	 */
-	public CDKPopupMenu getPopupMenu(Class classSearched) {
+	public JChemPaintPopupMenu getPopupMenu(Class classSearched) {
         logger.debug("Searching popup for: ", classSearched.getName());
         while (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());
             if (SwingPopupModule.popupMenus.containsKey(classSearched.getName())) {
-                return (CDKPopupMenu) SwingPopupModule.popupMenus.get(classSearched.getName());
+                return (JChemPaintPopupMenu) SwingPopupModule.popupMenus.get(classSearched.getName());
             } else {
                 logger.debug("  recursing into super class");
                 classSearched = classSearched.getSuperclass();
@@ -71,7 +99,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 			objectInRange = renderer.getRenderer().getRenderer2DModel().getHighlightedBond();
 		if(objectInRange==null)
 			objectInRange = chemModelRelay.getIChemModel();
-		CDKPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
+		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
 		if (popupMenu != null)
 		{
 			popupMenu.setSource(objectInRange);

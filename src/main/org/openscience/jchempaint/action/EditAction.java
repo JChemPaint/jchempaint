@@ -31,11 +31,13 @@ package org.openscience.jchempaint.action;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.Atom;
-import org.openscience.cdk.applications.undoredo.RemoveAtomsAndBondsEdit;
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,7 +47,10 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.LogicalSelection;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.selection.RectangleSelection;
+import org.openscience.cdk.renderer.selection.ShapeSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.action.CopyPasteAction.JcpSelection;
 
 /**
@@ -134,44 +139,58 @@ public class EditAction extends JCPAction {
 		    renderModel.setSelection(allSelection);
 			jcpPanel.setMoveAction();
 			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
-		} /*else if (type.equals("selectMolecule")) {
+		} else if (type.equals("selectMolecule")) {
 			IChemObject object = getSource(event);
+			IAtomContainer relevantAtomContainer=null;
 			if (object instanceof Atom) {
-				renderModel.setSelectedPart(ChemModelManipulator.getRelevantAtomContainer(jcpModel.getChemModel(),(Atom)object));
+				relevantAtomContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Atom)object);
 			} else if (object instanceof org.openscience.cdk.interfaces.IBond) {
-				renderModel.setSelectedPart(ChemModelManipulator.getRelevantAtomContainer(jcpModel.getChemModel(),(Bond)object));
+				relevantAtomContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Bond)object);
 			} else {
 				logger.warn("selectMolecule not defined for the calling object ", object);
 			}
-			jcpModel.fireChange();
+			if(relevantAtomContainer!=null){
+	        	ShapeSelection container = new RectangleSelection();
+	        	for(IAtom atom:relevantAtomContainer.atoms()){
+	        		container.atoms.add(atom);
+	        	}
+	        	for(IBond bond:relevantAtomContainer.bonds()){
+	        		container.bonds.add(bond);
+	        	}
+				renderModel.setSelection(container);
+			}
 		} else if (type.equals("selectFromChemObject")) {
 			// FIXME: implement for others than Reaction, Atom, Bond
 			IChemObject object = getSource(event);
 			if (object instanceof Atom) {
-				IAtomContainer container = new org.openscience.cdk.AtomContainer();
-				container.addAtom((Atom) object);
-				renderModel.setSelectedPart(container);
-				jcpModel.fireChange();
+				ShapeSelection container = new RectangleSelection();
+				container.atoms.add((Atom) object);
+				renderModel.setSelection(container);
 			}
 			else if (object instanceof org.openscience.cdk.interfaces.IBond) {
-				IAtomContainer container = new org.openscience.cdk.AtomContainer();
-				container.addBond((Bond) object);
-				renderModel.setSelectedPart(container);
-				jcpModel.fireChange();
+				ShapeSelection container = new RectangleSelection();
+				container.bonds.add((Bond) object);
+				renderModel.setSelection(container);
 			}
 			else if (object instanceof Reaction) {
-				IAtomContainer wholeModel = jcpModel.getChemModel().getBuilder().newAtomContainer();
+				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
 	        	Iterator containers = ReactionManipulator.getAllAtomContainers((Reaction)object).iterator();
 	        	while (containers.hasNext()) {
 	        		wholeModel.add((IAtomContainer)containers.next());
 	        	}
-				renderModel.setSelectedPart(wholeModel);
-				jcpModel.fireChange();
+	        	ShapeSelection container = new RectangleSelection();
+	        	for(IAtom atom:wholeModel.atoms()){
+	        		container.atoms.add(atom);
+	        	}
+	        	for(IBond bond:wholeModel.bonds()){
+	        		container.bonds.add(bond);
+	        	}
+				renderModel.setSelection(container);
 			}
 			else {
 				logger.warn("Cannot select everything in : ", object);
 			}
-		}
+		}/*
 		else if (type.equals("selectReactionReactants")) {
 			IChemObject object = getSource(event);
 			if (object instanceof Reaction) {

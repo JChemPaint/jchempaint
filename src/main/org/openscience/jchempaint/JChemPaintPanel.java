@@ -117,13 +117,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	
 	public void setupPopupMenus(SwingPopupModule inputAdapter)
 	{
-		if (inputAdapter.getPopupMenu(Atom.class) == null)
-		{
-			inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this, "atom"));
-		}
 		if (inputAdapter.getPopupMenu(PseudoAtom.class) == null)
 		{
 			inputAdapter.setPopupMenu(PseudoAtom.class, new JChemPaintPopupMenu(this, "pseudo"));
+		}
+		if (inputAdapter.getPopupMenu(Atom.class) == null)
+		{
+			inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this, "atom"));
 		}
 		if (inputAdapter.getPopupMenu(Bond.class) == null)
 		{
