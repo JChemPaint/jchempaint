@@ -52,6 +52,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.ChemModel;
+import org.openscience.cdk.PseudoAtom;
+import org.openscience.cdk.Reaction;
 import org.openscience.cdk.applications.undoredo.ClearAllEdit;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
@@ -103,9 +108,36 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
         
         customizeView();
+        SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel, renderPanel.getHub());
+		setupPopupMenus(inputAdapter);
+		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
         instances.add(this);
         chemModel.addListener(this);
     }
+	
+	public void setupPopupMenus(SwingPopupModule inputAdapter)
+	{
+		if (inputAdapter.getPopupMenu(Atom.class) == null)
+		{
+			inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this, "atom"));
+		}
+		if (inputAdapter.getPopupMenu(PseudoAtom.class) == null)
+		{
+			inputAdapter.setPopupMenu(PseudoAtom.class, new JChemPaintPopupMenu(this, "pseudo"));
+		}
+		if (inputAdapter.getPopupMenu(Bond.class) == null)
+		{
+			inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this, "bond"));
+		}
+		if (inputAdapter.getPopupMenu(ChemModel.class) == null)
+		{
+			inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(this, "chemmodel"));
+		}
+		if (inputAdapter.getPopupMenu(Reaction.class) == null)
+		{
+			inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(this, "reaction"));
+		}
+	}	
 	
 	/**
 	 * Called to force a re-centring of the displayed structure. 

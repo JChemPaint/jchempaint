@@ -55,7 +55,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 public class RenderPanel extends JPanel implements IViewEventRelay {
 	
 	private IntermediateRenderer renderer;
-	
+
 	private boolean isNewChemModel;
 	
 	private ControllerHub hub;
@@ -262,4 +262,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		return status;
 	}
 
+	
+	public IntermediateRenderer getRenderer() {
+		return renderer;
+	}
 }
