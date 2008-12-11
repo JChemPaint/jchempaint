@@ -4,7 +4,7 @@
  *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
  *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2008 Egon Willighagen, Stefan Kuhn
+ *  Copyright (C) 1997-2008 Stefan Kuhn
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *

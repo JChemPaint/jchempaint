@@ -174,14 +174,17 @@ public class JChemPaintPopupMenu extends JPopupMenu
 				JMenu me = createMenu(jcpPanel, menuTitle);
 				menu.add(me);
 			} else if (itemKeys[i].endsWith("+")) {
-				JMenuItem mi = createMenuItem(jcpPanel,
-						itemKeys[i].substring(0, itemKeys[i].length() - 1),true,false
+				JMenuItem mi;
+				if(itemKeys[i].endsWith("++"))
+					mi = createMenuItem(jcpPanel,
+						itemKeys[i].substring(0, itemKeys[i].length() - 2),
+						true, true
 						);
-				if(itemKeys[i].substring(0, itemKeys[i].length() - 1).equals("addImplHydrogen"))
-					((JCheckBoxMenuItem)mi).setSelected(true);
-				if(itemKeys[i].substring(0, itemKeys[i].length() - 1).equals("insertstructure") && !jcpPanel.getGuistring().equals("applet"))
-					((JCheckBoxMenuItem)mi).setSelected(true);
-				// default off, because we cannot turn it on anywhere (yet)
+				else
+					mi = createMenuItem(jcpPanel,
+						itemKeys[i].substring(0, itemKeys[i].length() - 1),
+						true, false
+						);
 				menu.add(mi);
 			} else
 			{
