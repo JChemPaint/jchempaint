@@ -38,6 +38,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LonePairElectronChecker;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 /**
@@ -55,10 +56,17 @@ public class ConvertToRadicalAction extends JCPAction {
                 Atom atom = (Atom)object;
                 
                 IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(model, atom);
+                try {
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
+				} catch (CDKException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
                 double number=0;
 				try {
 					number = new LonePairElectronChecker().getFreeLonePairs(atom, relevantContainer);
 				} catch (CDKException e) {
+					e.printStackTrace();
 					e.getMessage();
 					logger.error(e.getMessage());
 					logger.debug(e);				}

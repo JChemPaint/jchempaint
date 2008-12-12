@@ -485,16 +485,16 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public void stateChanged(IChemObjectChangeEvent event) {
 		setModified(true);
-        /* TODO gives concurrent access problems if (this.getChemModel() != null) {
+        if (this.getChemModel() != null) {
             for (int i = 0; i < 3; i++) {
-              String status = p.getStatus(i);
+              String status = renderPanel.getStatus(i);
               statusBar.setStatus(i + 1, status);
             }
         } else {
             if (statusBar != null) {
               statusBar.setStatus(1, "no model");
             }
-        }*/
+        }
     }
 	
 	

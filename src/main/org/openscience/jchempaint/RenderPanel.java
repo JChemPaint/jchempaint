@@ -47,6 +47,8 @@ import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -224,24 +226,27 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
-			IAtomContainer wholeModel = chemModel.getBuilder().newAtomContainer();
+		    //TODO should be for all atomcontainers
+			/*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
         	Iterator<IAtomContainer> containers 
         	    = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         	while (containers.hasNext()) {
-        		wholeModel.add(containers.next());
-        	}
+        		for(IAtom atom : containers.next().atoms()){
+        			wholeModel.addIsotope(atom);
+        		}
+        	}*/
         	String formula 
         	        = MolecularFormulaManipulator.getHTML(
-        	                MolecularFormulaManipulator.getMolecularFormula(wholeModel),
+        	                MolecularFormulaManipulator.getMolecularFormula(chemModel.getMoleculeSet().getAtomContainer(0)),
         	                true,
         	                false);
 			int implicitHs = 0;
-			for (int i = 0; i < wholeModel.getAtomCount(); i++) {
+			/*for (int i = 0; i < wholeModel.getAtomCount(); i++) {
 			    IAtom a = wholeModel.getAtom(i);  
                 if (a.getHydrogenCount() != null) {
                     implicitHs += a.getHydrogenCount();
                 }
-            }
+            }*/
 			status = "<html>"
                     + formula
                     + (implicitHs == 0 ? "" : " (of these "
@@ -252,11 +257,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		    ISelection selection = renderer.getRenderer2DModel().getSelection(); 
 			if (selection != null) {
 			    IAtomContainer ac = selection.getConnectedAtomContainer();
-				String formula = MolecularFormulaManipulator.getHTML(
-				        MolecularFormulaManipulator.getMolecularFormula(ac),
-				        true,
-				        true);
-				status = "<html>" + formula + "</html>";
+			    if(ac!=null){
+					String formula = MolecularFormulaManipulator.getHTML(
+					        MolecularFormulaManipulator.getMolecularFormula(ac),
+					        true,
+					        false);
+					status = "<html>" + formula + "</html>";
+			    }
 			}
 		}
 		return status;
