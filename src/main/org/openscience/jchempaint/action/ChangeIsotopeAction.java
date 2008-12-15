@@ -35,67 +35,50 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
 
-
 /**
  * Changes the isotope for a selected atom
- *
+ * 
  */
-public class ChangeIsotopeAction extends JCPAction
-{
+public class ChangeIsotopeAction extends JCPAction {
 
-	private static final long serialVersionUID = -4692219842740123315L;
+    private static final long serialVersionUID = -4692219842740123315L;
 
-	public void actionPerformed(ActionEvent event)
-	{
-		logger.debug("About to change atom type of relevant atom!");
-		IChemObject object = getSource(event);
-		logger.debug("Source of call: ", object);
-		if (object instanceof Atom)
-		{
-			Atom atom = (Atom) object;
-			int isotopeNumber = 0;
-			try
-			{
-				IIsotope isotope = IsotopeFactory.getInstance(atom.getBuilder()).
-						getMajorIsotope(atom.getSymbol());
-				isotopeNumber = isotope.getMassNumber();
-			} catch (Exception exception)
-			{
-				logger.error("Error while configuring atom");
-				logger.debug(exception);
-			}
-			// adapt for menu chosen
-			if (type.equals("major"))
-			{
-				// that's the default
-			} else if (type.equals("majorPlusOne"))
-			{
-				isotopeNumber++;
-			} else if (type.equals("majorPlusTwo"))
-			{
-				isotopeNumber++;
-				isotopeNumber++;
-			} else if (type.equals("majorPlusThree"))
-			{
-				isotopeNumber++;
-				isotopeNumber++;
-				isotopeNumber++;
-			} else if (type.equals("majorMinusOne"))
-			{
-				isotopeNumber--;
-			} else if (type.equals("majorMinusTwo"))
-			{
-				isotopeNumber--;
-				isotopeNumber--;
-			} else if (type.equals("majorMinusThree"))
-			{
-				isotopeNumber--;
-				isotopeNumber--;
-				isotopeNumber--;
-			}
-			atom.setMassNumber(isotopeNumber);
-			jcpPanel.get2DHub().updateView();
-		}
-	}
+    public void actionPerformed(ActionEvent event) {
+        logger.debug("About to change atom type of relevant atom!");
+        IChemObject object = getSource(event);
+        logger.debug("Source of call: ", object);
+        if (object instanceof Atom) {
+            Atom atom = (Atom) object;
+            int isotopeNumber = 0;
+            try {
+                IIsotope isotope = 
+                    IsotopeFactory
+                        .getInstance(
+                                atom.getBuilder()).getMajorIsotope(
+                                atom.getSymbol());
+                isotopeNumber = isotope.getMassNumber();
+            } catch (Exception exception) {
+                logger.error("Error while configuring atom");
+                logger.debug(exception);
+            }
+            // adapt for menu chosen
+            if (type.equals("major")) {
+                // that's the default
+            } else if (type.equals("majorPlusOne")) {
+                isotopeNumber += 1;
+            } else if (type.equals("majorPlusTwo")) {
+                isotopeNumber += 2;
+            } else if (type.equals("majorPlusThree")) {
+                isotopeNumber += 3;
+            } else if (type.equals("majorMinusOne")) {
+                isotopeNumber -= 1;
+            } else if (type.equals("majorMinusTwo")) {
+                isotopeNumber -= 2;
+            } else if (type.equals("majorMinusThree")) {
+                isotopeNumber -= 3;
+            }
+            atom.setMassNumber(isotopeNumber);
+            jcpPanel.get2DHub().updateView();
+        }
+    }
 }
-
