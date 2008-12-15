@@ -115,6 +115,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         chemModel.addListener(this);
     }
 	
+	public Container getTopLevelContainer() {
+	    return this.getParent().getParent().getParent().getParent();
+	}
+	
+	public void setTitle(String title) {
+	    Container topLevelContainer = this.getTopLevelContainer();
+	    if (topLevelContainer instanceof JFrame) {
+	        ((JFrame) topLevelContainer).setTitle(title);
+	    }
+	}
+	
 	public void setupPopupMenus(SwingPopupModule inputAdapter)
 	{
 		if (inputAdapter.getPopupMenu(PseudoAtom.class) == null)
@@ -165,7 +176,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public void setModified(boolean isModified) {
 		this.isModified = isModified;
-		Container c = this.getParent().getParent().getParent().getParent();
+		Container c = this.getTopLevelContainer();
 		if (c instanceof JFrame){
 		    String id = renderPanel.getChemModel().getID();
 			if (isModified)
@@ -466,7 +477,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 			int clear = ((JChemPaintPanel) ((JFrame) e.getSource()).getContentPane().getComponents()[0]).showWarning();
 			if (JOptionPane.CANCEL_OPTION != clear) {
 				for (int i = 0; i < instances.size(); i++) {
-					if (instances.get(i).getParent().getParent().getParent().getParent() == (JFrame)e.getSource()) {
+					if (instances.get(i).getTopLevelContainer() == (JFrame)e.getSource()) {
 						instances.remove(i);
 						break;
 					}
@@ -502,11 +513,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 *  Closes all currently opened JCP instances.
 	 */
 	public static void closeAllInstances() {
-		Iterator<JChemPaintPanel> it =((List<JChemPaintPanel>)((ArrayList<JChemPaintPanel>)instances).clone()).iterator();
-		while (it.hasNext()) {
-			JFrame frame = (JFrame) it.next().getParent().getParent().getParent().getParent();
+		for (JChemPaintPanel panel : instances) {    
+			JFrame frame = (JFrame) panel.getTopLevelContainer();
 			WindowListener[] wls = (WindowListener[]) (frame.getListeners(WindowListener.class));
-			wls[0].windowClosing(new WindowEvent(frame, 12));
+			wls[0].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			frame.setVisible(false);
 			frame.dispose();
 		}

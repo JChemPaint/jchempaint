@@ -216,19 +216,19 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	 * @return the current status
 	 */
 	public String getStatus(int position) {
-		// return this.status[position];
 		String status = "";
-		// logger.debug("Getting status");
 		if (position == 0) {
 			// depict editing mode
 			status = hub.getActiveDrawModule().getDrawModeString();
-		}
-		else if (position == 1) {
+		} else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
-		    if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()>0){
-		    //TODO should be for all atomcontainers
-			/*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
+
+		    if (chemModel.getMoleculeSet() != null
+                    && chemModel.getMoleculeSet().getAtomContainerCount() > 0) {
+		        //TODO should be for all atomcontainers
+
+		        /*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
         	Iterator<IAtomContainer> containers 
         	    = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         	while (containers.hasNext()) {
@@ -236,41 +236,39 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         			wholeModel.addIsotope(atom);
         		}
         	}*/
-        	String formula 
-        	        = MolecularFormulaManipulator.getHTML(        	        		
-        	                MolecularFormulaManipulator.getMolecularFormula(chemModel.getMoleculeSet().getAtomContainer(0)),
-        	                true,
-        	                false);
-			int implicitHs = 0;
-			/*for (int i = 0; i < wholeModel.getAtomCount(); i++) {
+		        String formula 
+		        = MolecularFormulaManipulator.getHTML(        	        		
+		                MolecularFormulaManipulator.getMolecularFormula(
+		                        chemModel.getMoleculeSet().getAtomContainer(0)),
+		                        true,
+		                        false);
+		        int implicitHs = 0;
+		        /*for (int i = 0; i < wholeModel.getAtomCount(); i++) {
 			    IAtom a = wholeModel.getAtom(i);  
                 if (a.getHydrogenCount() != null) {
                     implicitHs += a.getHydrogenCount();
                 }
             }*/
-			status = "<html>"
-                    + formula
-                    + (implicitHs == 0 ? "" : " (of these "
-                    + implicitHs + " Hs implicit)") + "</html>";
+		        status = "<html>"
+		            + formula
+		            + (implicitHs == 0 ? "" : " (of these "
+		                + implicitHs + " Hs implicit)") + "</html>";
+		    } else if (position == 2) {
+		        // depict brutto formula of the selected molecule or part of molecule
+		        ISelection selection = renderer.getRenderer2DModel().getSelection();
+		        if (selection != null) {
+		            IAtomContainer ac = selection.getConnectedAtomContainer();
+		            if (ac != null) {
+		                String formula = MolecularFormulaManipulator
+		                .getHTML(MolecularFormulaManipulator
+		                        .getMolecularFormula(ac), true, false);
+		                status = "<html>" + formula + "</html>";
+		            }
+		        }
 		    }
-		}
-		else if (position == 2) {
-			// depict brutto formula of the selected molecule or part of molecule
-		    ISelection selection = renderer.getRenderer2DModel().getSelection(); 
-			if (selection != null) {
-			    IAtomContainer ac = selection.getConnectedAtomContainer();
-			    if(ac!=null){
-					String formula = MolecularFormulaManipulator.getHTML(
-					        MolecularFormulaManipulator.getMolecularFormula(ac),
-					        true,
-					        false);
-					status = "<html>" + formula + "</html>";
-			    }
-			}
 		}
 		return status;
 	}
-
 	
 	public IntermediateRenderer getRenderer() {
 		return renderer;

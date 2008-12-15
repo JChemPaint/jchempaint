@@ -34,25 +34,20 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
-
 /**
  * Triggers an exit of the current frame
  *
  */
-public class CloseAction extends JCPAction
-{
+public class CloseAction extends JCPAction {
 
 	private static final long serialVersionUID = 5877928616913182728L;
 
 	/**
 	 *  Closes the current frame
-	 *
-	 *@param  e  Description of the Parameter
 	 */
-	public void actionPerformed(ActionEvent e)
-	{
-      JFrame jframe=(JFrame)jcpPanel.getParent().getParent().getParent().getParent();
-      WindowListener[] wls = (WindowListener[])(jframe.getListeners(WindowListener.class));
-      wls[0].windowClosing(new WindowEvent(jframe,12));
+	public void actionPerformed(ActionEvent e) {
+      JFrame jFrame = (JFrame) jcpPanel.getTopLevelContainer();
+      WindowListener[] wls = jFrame.getWindowListeners();
+      wls[0].windowClosing(new WindowEvent(jFrame, WindowEvent.WINDOW_CLOSING));
 	}
 }
