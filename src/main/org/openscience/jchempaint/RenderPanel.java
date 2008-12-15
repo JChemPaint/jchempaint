@@ -226,6 +226,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
+		    if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()>0){
 		    //TODO should be for all atomcontainers
 			/*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
         	Iterator<IAtomContainer> containers 
@@ -236,7 +237,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         		}
         	}*/
         	String formula 
-        	        = MolecularFormulaManipulator.getHTML(
+        	        = MolecularFormulaManipulator.getHTML(        	        		
         	                MolecularFormulaManipulator.getMolecularFormula(chemModel.getMoleculeSet().getAtomContainer(0)),
         	                true,
         	                false);
@@ -251,6 +252,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                     + formula
                     + (implicitHs == 0 ? "" : " (of these "
                     + implicitHs + " Hs implicit)") + "</html>";
+		    }
 		}
 		else if (position == 2) {
 			// depict brutto formula of the selected molecule or part of molecule
