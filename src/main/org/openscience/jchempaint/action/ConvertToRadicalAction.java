@@ -64,7 +64,7 @@ public class ConvertToRadicalAction extends JCPAction {
 				}
                 double number=0;
 				try {
-					number = new LonePairElectronChecker().getFreeLonePairs(atom, relevantContainer);
+					number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
 				} catch (CDKException e) {
 					e.printStackTrace();
 					e.getMessage();
