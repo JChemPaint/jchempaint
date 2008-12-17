@@ -36,7 +36,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -44,80 +43,88 @@ import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.IntermediateRenderer;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
-	
+
 	private IntermediateRenderer renderer;
 
 	private boolean isNewChemModel;
-	
+
 	private ControllerHub hub;
-	
+
 	private ControllerModel controllerModel;
-	
+
 	private SwingMouseEventRelay mouseEventRelay;
-	
+
 	private boolean fitToScreen;
-	
+
 	private boolean shouldPaintFromCache = false;
-	
+
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
 	}
-	
+
 	public void setFitToScreen(boolean fitToScreen) {
 	    this.renderer.setFitToScreen(fitToScreen);
 	}
-	
+
 	public IChemModel getChemModel() {
 	    return this.hub.getIChemModel();
 	}
 
 	public void setChemModel(IChemModel model) {
-	    this.setupMachinery(model, this.fitToScreen); 
+	    this.setupMachinery(model, this.fitToScreen);
 	}
-	
+
 	public ControllerHub getHub() {
 	    return hub;
 	}
-	
+
 	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
 		this.renderer = new IntermediateRenderer();
 		this.renderer.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
-		
+
 		// connect the Renderer to the Hub
 		this.hub = new ControllerHub(controllerModel, renderer, chemModel, this);
-		
+
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
 		this.addMouseListener(mouseEventRelay);
 		this.addMouseMotionListener(mouseEventRelay);
 		this.isNewChemModel = true;
 	}
-	
+
 	private void setupPanel(int width, int height) {
 		this.setBackground(Color.WHITE);
 		this.setPreferredSize(new Dimension(width, height));
 	}
-	
+
+	public String toSVG() {
+	    IChemModel chemModel = this.hub.getIChemModel();
+	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
+	    	SVGGenerator svgGenerator = new SVGGenerator();
+	    	this.renderer.paint(svgGenerator, chemModel);
+	    	return svgGenerator.getResult();
+	    } else {
+	    	return "<svg></svg>";
+	    }
+	}
+
 	public Image takeSnapshot() {
 	    return this.takeSnapshot(this.getBounds());
 	}
-	
+
 	public Image takeSnapshot(Rectangle bounds) {
         Image image = GraphicsEnvironment
                         .getLocalGraphicsEnvironment()
@@ -126,32 +133,32 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .createCompatibleImage(bounds.width, bounds.height);
         Graphics2D g = (Graphics2D)image.getGraphics();
         super.paint(g);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         this.paintChemModel(g, bounds);
         return image;
     }
-	
+
 	public void paintChemModel(Graphics2D g, Rectangle screenBounds) {
-	    
+
 	    IChemModel chemModel = this.hub.getIChemModel();
 	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
-	        
+
 	        // determine the size the canvas needs to be in order to fit the model
 	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
-	        
+
 	        if (this.overlaps(screenBounds, diagramBounds)) {
-	            Rectangle union = screenBounds.union(diagramBounds); 
+	            Rectangle union = screenBounds.union(diagramBounds);
 	            this.setPreferredSize(union.getSize());
 	            this.revalidate();
             }
 	        this.paintChemModel(chemModel, g, screenBounds);
-        }    
+        }
 	}
-	
+
 	/**
-	 * Check to see if the molecule bounding box has overlapped a screen edge. 
-	 * 
+	 * Check to see if the molecule bounding box has overlapped a screen edge.
+	 *
 	 * @param screenBounds the bounding box of the screen
 	 * @param diagramBounds the bounding box of the molecule on the screen
 	 * @return
@@ -162,53 +169,53 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	        || screenBounds.getMaxX() < diagramBounds.getMaxX()
 	        || screenBounds.getMaxY() < diagramBounds.getMaxY();
 	}
-	
+
 	private void paintChemModel(IChemModel chemModel, Graphics2D g, Rectangle bounds) {
-      
+
         // paint the chem model, and record that it is no longer new
         renderer.paintChemModel(chemModel, g, bounds, isNewChemModel);
         isNewChemModel = false;
-        
+
         /*
-         * This is dangerous, but necessary to allow fast 
-         * repainting when scrolling the canvas 
+         * This is dangerous, but necessary to allow fast
+         * repainting when scrolling the canvas
          */
         this.shouldPaintFromCache = true;
 	}
-	
+
 	public void setIsNewChemModel(boolean isNewChemModel) {
 	    this.isNewChemModel = isNewChemModel;
 	}
-	
+
 	public void paint(Graphics g) {
 	    this.setBackground(renderer.getRenderer2DModel().getBackColor());
 	    super.paint(g);
 		  // set the graphics to antialias
         Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        
+
 		if (this.shouldPaintFromCache) {
 		    this.paintFromCache(g2);
 		} else {
 		    this.paintChemModel(g2, this.getBounds());
 		}
 	}
-	
+
 	private void paintFromCache(Graphics2D g) {
 	    renderer.repaint(g);
 	}
 
 	public void updateView() {
 	    /*
-         * updateView should only be called in a ControllerModule where 
+         * updateView should only be called in a ControllerModule where
          * we assume that things have changed so we can't use the cache
-         */ 
+         */
 	    this.shouldPaintFromCache = false;
-	    
+
 		this.repaint();
 	}
-	
+
 	/**
 	 *  Returns one of the status strings at the given position
 	 *
@@ -229,22 +236,22 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		        //TODO should be for all atomcontainers
 
 		        /*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
-        	Iterator<IAtomContainer> containers 
+        	Iterator<IAtomContainer> containers
         	    = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         	while (containers.hasNext()) {
         		for(IAtom atom : containers.next().atoms()){
         			wholeModel.addIsotope(atom);
         		}
         	}*/
-		        String formula 
-		        = MolecularFormulaManipulator.getHTML(        	        		
+		        String formula
+		        = MolecularFormulaManipulator.getHTML(
 		                MolecularFormulaManipulator.getMolecularFormula(
 		                        chemModel.getMoleculeSet().getAtomContainer(0)),
 		                        true,
 		                        false);
 		        int implicitHs = 0;
 		        /*for (int i = 0; i < wholeModel.getAtomCount(); i++) {
-			    IAtom a = wholeModel.getAtom(i);  
+			    IAtom a = wholeModel.getAtom(i);
                 if (a.getHydrogenCount() != null) {
                     implicitHs += a.getHydrogenCount();
                 }
@@ -269,7 +276,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		}
 		return status;
 	}
-	
+
 	public IntermediateRenderer getRenderer() {
 		return renderer;
 	}

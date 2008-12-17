@@ -39,7 +39,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -57,7 +56,6 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
-import org.openscience.cdk.applications.undoredo.ClearAllEdit;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
@@ -87,13 +85,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
     private int lines = 1;
     //we remember the moveButton since this is special
     protected JButton moveButton=null;
-	
+
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
 	}
 	/**
 	 * Builds a JCPPanel with a certain model and a certain gui
-	 * 
+	 *
 	 * @param chemModel The model
 	 * @param gui The gui string
 	 */
@@ -106,7 +104,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         this.add(topContainer, BorderLayout.NORTH);
         renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false);
         this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
-        
+
         customizeView();
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel, renderPanel.getHub());
 		setupPopupMenus(inputAdapter);
@@ -114,18 +112,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         instances.add(this);
         chemModel.addListener(this);
     }
-	
+
 	public Container getTopLevelContainer() {
 	    return this.getParent().getParent().getParent().getParent();
 	}
-	
+
 	public void setTitle(String title) {
 	    Container topLevelContainer = this.getTopLevelContainer();
 	    if (topLevelContainer instanceof JFrame) {
 	        ((JFrame) topLevelContainer).setTitle(title);
 	    }
 	}
-	
+
 	public void setupPopupMenus(SwingPopupModule inputAdapter)
 	{
 		if (inputAdapter.getPopupMenu(PseudoAtom.class) == null)
@@ -148,30 +146,30 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		{
 			inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(this, "reaction"));
 		}
-	}	
-	
+	}
+
 	/**
-	 * Called to force a re-centring of the displayed structure. 
-	 * 
+	 * Called to force a re-centring of the displayed structure.
+	 *
 	 * @param isNewChemModel
 	 */
 	public void setIsNewChemModel(boolean isNewChemModel) {
 	    this.renderPanel.setIsNewChemModel(isNewChemModel);
 	}
-	
+
 
 	/**
 	 * Helps in keeping the current action button highlighted
-	 * 
+	 *
 	 * @return The last action button used
 	 */
 	public JComponent getLastActionButton() {
 		return lastActionButton;
 	}
-	
+
 	/**
 	 * Allows setting of the is modified stage (e. g. after save)
-	 * 
+	 *
 	 * @param isModified is modified
 	 */
 	public void setModified(boolean isModified) {
@@ -190,13 +188,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	/**
 	 * Helps in keeping the current action button highlighted - needs to be set
 	 * if a new action button is choosen
-	 * 
+	 *
 	 * @param actionButton The new action button
 	 */
 	public void setLastActionButton(JComponent actionButton) {
 		lastActionButton = actionButton;
 	}
-	
+
 	/**
 	 *  Gets the currentWorkDirectory attribute of the JChemPaintPanel object
 	 *
@@ -253,7 +251,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	public void setCurrentOpenFileFilter(FileFilter ff) {
 		this.currentOpenFileFilter = ff;
 	}
-	
+
 	/**
 	 *  Gets the currentSaveFileFilter attribute of the JChemPaintPanel object
 	 *
@@ -272,7 +270,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	public void setCurrentSaveFileFilter(FileFilter ff) {
 		this.currentSaveFileFilter = ff;
 	}
-	
+
 	/**
 	 *  Tells if a menu is shown
 	 *
@@ -320,7 +318,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
             topContainer.remove(toolbar);
         }
         if (showInsertTextField) {
-            if (insertTextPanel == null) 
+            if (insertTextPanel == null)
             	insertTextPanel = new InsertTextPanel(this,null);
             topContainer.add(insertTextPanel, BorderLayout.SOUTH);
         } else {
@@ -358,7 +356,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         this.lines=lines;
         customizeView();
     }
-    
+
 	/**
 	 *  Returns the value of showToolbar.
 	 *
@@ -368,7 +366,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	{
 		return showToolBar;
 	}
-	
+
 	/**
 	 *  Sets if statusbar should be shown
 	 *
@@ -378,7 +376,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		this.showStatusBar = showStatusBar;
 		customizeView();
 	}
-	
+
 	/**
 	 *  Sets the file currently used for saving this Panel.
 	 *
@@ -412,28 +410,31 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         this.showInsertTextField = showInsertTextField;
         customizeView();
     }
-    
+
 	/**
 	 * Tells if the enter text field is currently shown or not.
-	 * 
+	 *
 	 * @return text field shown or not
 	 */
 	public boolean getShowInsertTextField() {
 		return showInsertTextField;
 	}
-	
+
+	public String getSVGString() {
+		return this.renderPanel.toSVG();
+	}
+
 	public Image takeSnapshot() {
 	    return this.renderPanel.takeSnapshot();
 	}
-	
-	public Image takeSnapshot(Rectangle bounds) {
-	    return this.renderPanel.takeSnapshot(bounds); 
-	}
 
+	public Image takeSnapshot(Rectangle bounds) {
+	    return this.renderPanel.takeSnapshot(bounds);
+	}
 
 	/**
 	 * Shows a warning if the JCPPanel has unsaved content and does save, if the user wants to do it.
-	 * 
+	 *
 	 * @return OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
 	 */
 	public int showWarning() {
@@ -445,7 +446,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 			return answer;
 		} else if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET)){
 			//In case of the applet we do not ask for save but put the clear into the undo stack
-			ClearAllEdit coa = null;
+//			ClearAllEdit coa = null;
 			//TODO undo redo missing coa = new ClearAllEdit(this.getChemModel(),(IMoleculeSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
 			//this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
 			return JOptionPane.YES_OPTION;
@@ -490,7 +491,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 			}
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
 	 */
@@ -507,13 +508,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
             }
         }
     }
-	
-	
+
+
 	/**
 	 *  Closes all currently opened JCP instances.
 	 */
 	public static void closeAllInstances() {
-		for (JChemPaintPanel panel : instances) {    
+		for (JChemPaintPanel panel : instances) {
 			JFrame frame = (JFrame) panel.getTopLevelContainer();
 			WindowListener[] wls = (WindowListener[]) (frame.getListeners(WindowListener.class));
 			wls[0].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -521,9 +522,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 			frame.dispose();
 		}
 	}
-	
+
 	/**
-	 * Selects the move button and action as the current action. 
+	 * Selects the move button and action as the current action.
 	 */
 	public void setMoveAction() {
 		getLastActionButton().setBackground(Color.LIGHT_GRAY);

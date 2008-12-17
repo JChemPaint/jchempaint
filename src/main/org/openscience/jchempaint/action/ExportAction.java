@@ -31,6 +31,7 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -44,7 +45,7 @@ import org.openscience.jchempaint.io.JCPFileView;
 
 /**
  * Opens a save dialog
- * 
+ *
  */
 public class ExportAction extends SaveAsAction {
 
@@ -57,7 +58,7 @@ public class ExportAction extends SaveAsAction {
 
     /**
      * Constructor for the ExportAction object
-     * 
+     *
      *@param jcpPanel
      *            the parent Panel
      *@param isPopupAction
@@ -69,7 +70,7 @@ public class ExportAction extends SaveAsAction {
 
     /**
      * Exports the canvas as an image.
-     * 
+     *
      *@param event
      *            the action event that triggered this action.
      */
@@ -100,8 +101,11 @@ public class ExportAction extends SaveAsAction {
 
             if (type.equals(JCPExportFileFilter.svg)) {
                 try {
-                    // TODO : convert to svg
-                } catch (Exception e) {
+                	String svg = this.jcpPanel.getSVGString();
+                	FileWriter writer = new FileWriter(outFile);
+                	writer.append(svg);
+                	writer.flush();
+                } catch (IOException e) {
                     String error = "Problem exporting to svg";
                     JOptionPane.showMessageDialog(jcpPanel, error);
                     return;
