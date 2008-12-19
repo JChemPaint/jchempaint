@@ -260,20 +260,20 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		            + formula
 		            + (implicitHs == 0 ? "" : " (of these "
 		                + implicitHs + " Hs implicit)") + "</html>";
-		    } else if (position == 2) {
-		        // depict brutto formula of the selected molecule or part of molecule
-		        ISelection selection = renderer.getRenderer2DModel().getSelection();
-		        if (selection != null) {
-		            IAtomContainer ac = selection.getConnectedAtomContainer();
-		            if (ac != null) {
-		                String formula = MolecularFormulaManipulator
-		                .getHTML(MolecularFormulaManipulator
-		                        .getMolecularFormula(ac), true, false);
-		                status = "<html>" + formula + "</html>";
-		            }
-		        }
 		    }
-		}
+	    } else if (position == 2) {
+	        // depict brutto formula of the selected molecule or part of molecule
+	        ISelection selection = renderer.getRenderer2DModel().getSelection();
+	        if (selection != null) {
+	            IAtomContainer ac = selection.getConnectedAtomContainer();
+	            if (ac != null) {
+	                String formula = MolecularFormulaManipulator
+	                .getHTML(MolecularFormulaManipulator
+	                        .getMolecularFormula(ac), true, false);
+	                status = "<html>" + formula + "</html>";
+	            }
+	        }
+	    }
 		return status;
 	}
 
