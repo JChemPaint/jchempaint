@@ -29,17 +29,11 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IBond.Order;
-import org.openscience.cdk.tools.SaturationChecker;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.exception.CDKException;
 
 
 /**
@@ -53,23 +47,11 @@ public class AdjustBondOrdersAction extends JCPAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-        ChemModel model = (ChemModel) jcpPanel.getChemModel();
 		logger.debug("Adjusting bondorders: ", type);
 		if (type.equals("clear"))
 		{
-			try
-			{
-				SaturationChecker satChecker = new SaturationChecker();
-				List containersList = ChemModelManipulator.getAllAtomContainers(model);
-				Iterator iterator = containersList.iterator();
-				while(iterator.hasNext())
-				{
-					IAtomContainer ac = (IAtomContainer)iterator.next();
-                    for(IBond bond : ac.bonds()) {
-                        bond.setOrder(Order.SINGLE);
-                    }
-				}
-				jcpPanel.get2DHub().updateView();
+			try{
+				jcpPanel.get2DHub().resetBondOrders();
 			} catch (Exception exc)
 			{
 				String error = "Could not adjust bondorders.";
@@ -81,15 +63,7 @@ public class AdjustBondOrdersAction extends JCPAction
 		{
 			try
 			{
-				SaturationChecker satChecker = new SaturationChecker();
-				List containersList = ChemModelManipulator.getAllAtomContainers(model);
-				Iterator iterator = containersList.iterator();
-				while(iterator.hasNext())
-				{
-					IAtomContainer ac = (IAtomContainer)iterator.next();
-					satChecker.saturate(ac);
-				}
-				jcpPanel.get2DHub().updateView();
+				jcpPanel.get2DHub().adjustBondOrders();
 			} catch (Exception exc)
 			{
 				String error = "Could not adjust bondorders.";
@@ -98,6 +72,7 @@ public class AdjustBondOrdersAction extends JCPAction
 				JOptionPane.showMessageDialog(jcpPanel, error);
 			}
 		}
+		jcpPanel.get2DHub().updateView();
 	}
 }
 

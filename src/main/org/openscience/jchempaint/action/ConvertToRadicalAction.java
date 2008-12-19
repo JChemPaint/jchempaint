@@ -54,16 +54,10 @@ public class ConvertToRadicalAction extends JCPAction {
         if (object != null) {
             if (object instanceof Atom) {
                 Atom atom = (Atom)object;
-                
-                IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(model, atom);
-                try {
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
-				} catch (CDKException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
                 double number=0;
 				try {
+			        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
+					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
 					number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
 				} catch (CDKException e) {
 					e.printStackTrace();
@@ -73,16 +67,13 @@ public class ConvertToRadicalAction extends JCPAction {
                 
                 if(number > 0.0)
                 {
-                	SingleElectron singleElectron = new SingleElectron(atom);
-                    relevantContainer.addSingleElectron(singleElectron);
+                    jcpPanel.get2DHub().addSingleElectron(atom);
                     logger.info("Added single electron to atom");
-                    logger.debug("new AC: ", relevantContainer);
                     
                 }
-                else JOptionPane.showMessageDialog(jcpPanel,"A radical cannot be added to this atom." +
-        		" Re-try with less hydrogens.");
-
-            
+                else 
+                	JOptionPane.showMessageDialog(jcpPanel,"A radical cannot be added to this atom." +
+                	" Re-try with less hydrogens.");
             } else {
                 logger.error("Object not an Atom! Cannot convert into a radical!");
             }

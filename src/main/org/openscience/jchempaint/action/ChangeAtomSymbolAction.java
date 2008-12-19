@@ -66,17 +66,15 @@ public class ChangeAtomSymbolAction extends JCPAction
 		String symbol = s.substring(s.indexOf("@") + 1);
 		//if the atom is a pseudoatom, we must convert it back to a normal atom
 		if(atomInRange instanceof IPseudoAtom){
-            IPseudoAtom atom = (IPseudoAtom)atomInRange;
-            IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
-            IAtom newAtom = atom.getBuilder().newAtom(symbol, atom.getPoint2d());
-            AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-                atom, newAtom);
+	        IPseudoAtom atom = (IPseudoAtom)atomInRange;
+	        IAtom newAtom = atom.getBuilder().newAtom(symbol, atom.getPoint2d());
+	        jcpPanel.get2DHub().replaceAtom(newAtom, atom);
 		}else{
-            String formerSymbol = atomInRange.getSymbol();
-            atomInRange.setSymbol(symbol);
+            jcpPanel.get2DHub().setSymbol(atomInRange,symbol);
 			// modify the current atom symbol
 			c2dm.setDrawElement(symbol);
 		}
+		//TODO still needed? should this go in hub?
 		// configure the atom, so that the atomic number matches the symbol
 		try
 		{

@@ -207,11 +207,7 @@ public class CopyPasteAction extends JCPAction{
     	  SmilesGenerator sg=new SmilesGenerator();
     	  smiles = sg.createSMILES(tocopy);
     	  // SVG output
-    	  /*TODO sw=new StringWriter();
-    	  IChemObjectWriter cow = new SVGWriter(sw);
-    	  cow.write(tocopy);
-    	  cow.close();
-    	  svg=sw.toString();*/
+    	  svg=jcpPanel.getSVGString();
     	  // CML output
     	  sw = new StringWriter();
     	  Class cmlWriterClass = null;

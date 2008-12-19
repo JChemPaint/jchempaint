@@ -54,18 +54,14 @@ public class ConvertToPseudoAtomAction extends JCPAction {
             if (object instanceof Atom) {
             	if(type.equals("normal")){
                     PseudoAtom pseudo = (PseudoAtom)object;
-                    IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(model, pseudo);
-                    IAtom normal = relevantContainer.getBuilder().newAtom(pseudo);
+                    IAtom normal = pseudo.getBuilder().newAtom(pseudo);
                     normal.setSymbol("C");
-                    AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-                        pseudo,normal);
+                    jcpPanel.get2DHub().replaceAtom(normal,pseudo);
             	}else{
                     Atom atom = (Atom)object;
-                    IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(model, atom);
                     PseudoAtom pseudo = new PseudoAtom(atom);
                     pseudo.setLabel(type);
-                    AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-                        atom, pseudo);
+                    jcpPanel.get2DHub().replaceAtom(pseudo,atom);
             	}
             } else {
                 logger.error("Object not an Atom! Cannot convert into a PseudoAtom!");

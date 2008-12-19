@@ -140,16 +140,7 @@ public class ValidateAction extends JCPAction
 
 	private void clearValidate()
 	{
-		org.openscience.cdk.interfaces.IChemModel model = jcpPanel.getChemModel();
-		Iterator containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-		while (containers.hasNext()) {
-			IAtomContainer atoms = (IAtomContainer)containers.next();
-			logger.info("Clearing errors on atoms: " + atoms.getAtomCount());
-			for (int i = 0; i < atoms.getAtomCount(); i++)
-			{
-				ProblemMarker.unmark(atoms.getAtom(i));
-			}
-		}
+		jcpPanel.get2DHub().clearValidation();
 		jcpPanel.get2DHub().updateView();
 	}
 
