@@ -70,6 +70,7 @@
                 <include name="cdk-data.jar"/>
                 <include name="cdk-experimental.jar"/>
                 <include name="cdk-extra.jar"/>
+                <include name="cdk-formula.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-inchi.jar"/>
                 <include name="cdk-io.jar"/>
