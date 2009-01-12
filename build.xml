@@ -116,7 +116,12 @@
     	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
    </target>
 
-    <target id="dist-applet" name="dist-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars, build-applet" description="Builds the JChemPaint applet jar files with jarindex" />
+    <target id="dist-applet" name="dist-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars, build-applet" description="Builds the JChemPaint applet jar files with jarindex">
+        <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
+            <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
+        	<zipfileset dir="." includes="LICENCE.txt"/>
+        </zip>
+    </target>
 
 	<target id="build-applet" name="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
         <!-- At first jars are packed from file lists -->
