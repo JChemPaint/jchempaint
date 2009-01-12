@@ -40,8 +40,8 @@
             <fileset dir="${dist-classes}">
                 <include name="**/*" />
             </fileset>
-            <fileset dir=".">
-                <include name="LICENCE.txt" />
+            <fileset dir="${cdk.dir}/doc">
+                <include name="lgpl.license" />
             </fileset>        	
         </jar>
     </target>
@@ -119,7 +119,7 @@
     <target id="dist-applet" name="dist-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars, build-applet" description="Builds the JChemPaint applet jar files with jarindex">
         <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
-        	<zipfileset dir="." includes="LICENCE.txt"/>
+        	<zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
         </zip>
     </target>
 
