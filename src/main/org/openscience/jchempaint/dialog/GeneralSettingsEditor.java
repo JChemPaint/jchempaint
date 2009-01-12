@@ -35,7 +35,6 @@ import java.util.Properties;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
-import org.openscience.cdk.applications.swing.FieldTablePanel;
 import org.openscience.jchempaint.JCPPropertyHandler;
 
 /**

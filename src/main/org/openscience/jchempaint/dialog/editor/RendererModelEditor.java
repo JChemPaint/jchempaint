@@ -39,8 +39,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.openscience.cdk.applications.swing.FieldTablePanel;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.jchempaint.dialog.FieldTablePanel;
 
 import com.ozten.font.JFontChooser;
 

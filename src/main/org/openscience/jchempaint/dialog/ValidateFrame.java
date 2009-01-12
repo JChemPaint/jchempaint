@@ -50,7 +50,6 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.Reaction;
-import org.openscience.cdk.applications.swing.FieldTablePanel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.validate.ProblemMarker;

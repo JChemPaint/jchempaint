@@ -29,7 +29,7 @@
 package org.openscience.jchempaint.dialog.editor;
 
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.applications.swing.FieldTablePanel;
+import org.openscience.jchempaint.dialog.FieldTablePanel;
 
 /**
  */
