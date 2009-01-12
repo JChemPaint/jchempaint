@@ -40,6 +40,9 @@
             <fileset dir="${dist-classes}">
                 <include name="**/*" />
             </fileset>
+            <fileset dir=".">
+                <include name="LICENCE.txt" />
+            </fileset>        	
         </jar>
     </target>
 
