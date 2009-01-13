@@ -27,51 +27,59 @@
  <p>Recovers the state of the frame before the last operation that you did.</p>
 
 <h3>Undo</h3>
- <p>Redos the last undo.</p>
+ <p>Re-does the last undo.</p>
 
 <h3>New (applet only)</h3>
- <p>Cleans the document (in the standalone up, there is a New item in the File menu).</p>
+ <p>Cleans the document (in the standalone up, there is a New item in the File
+  menu).</p>
 
 <h3>Cut Selected</h3>
  <p>Removes the selected part from the model.</p>
 
 <h3>Select all</h3>
- <p>Selects and marks all atoms in the molecule, so that it can be rotated, 
- moved, deleted, etc. This is the only chance to recover parts of the molecule 
- that are outside the display area - select all, go into move mode and 
+ <p>Selects and marks all atoms in the molecule, so that it can be rotated,
+ moved, deleted, etc. This is a useful way to recover parts of the molecule
+ that are outside the display area - select all, go into move mode and
  move the molecule using a visible part of it.</p>
 
 <h3>Hydrogens</h3>
 <h4>Add Implicit Hydrogens</h4>
- <p>If switched on, implicit hydrogens will be calculated for all atoms and added. As long as the mode is 
- switched on, the implict hydrogen count will be adjusted. Note that:
+ <p>If switched on, implicit hydrogens will be calculated for all atoms and
+ added. As long as the mode is switched on, the implicit hydrogen count will be
+ adjusted. Note that:
  <li>
- <listitem>The implict hydrogens will be only visible when the option "Show implicit hydrogens when the atom symbol is shown"
- is selected in View -> Options (default: on). For which atoms the symbols are visible is controlled by other settings here.</listitem>
- <listitem>If the hydrogens will be contained in an exported file, depends on the file format.(e. g. CML has got implicit Hs, mol has not).</listitem>
+ <listitem>The implicit hydrogens will be only visible when the option "Show
+ implicit hydrogens when the atom symbol is shown" is selected in View ->
+ Options (default: on). For which atoms the symbols are visible is controlled by
+  other settings here.</listitem>
+ <listitem>Whether or not the hydrogens will be contained in an exported file.
+ Depends on the file format.(e.g. CML has got implicit Hs, mol has not).
+ </listitem>
  </li>
  </p>
 <h4>Make Hydrogens Explicit</h4>
  <p>This will transform implicit hydrogens to
- separate atoms connected by a single bond. This will only have an effect if you are in implicit mode (see "Add implicit Hydrogens")</p>
+ separate atoms connected by a single bond. This will only have an effect if you
+  are in implicit mode (see "Add Implicit Hydrogens")</p>
 <h4>Make Hydrogens Implicit</h4>
- <p>This will delete bonds to hydrogens and add hydrogens directly to their 
+ <p>This will delete bonds to hydrogens and add hydrogens directly to their
  parent atoms as implicit hydrogens.</p>
 
 <p>
 <h3>Adjust Bond Orders</h3>
  <p>Sets the order of all bonds so that every atom is saturated.</p>
- 
+
 <h3>Reset Bond Orders</h3>
  <p>Sets the order of all bonds to single.</p>
- 
+
 <h3>Clean Up</h3>
- <p>This changes coordinates of atoms a length of bonds to standard representation.</p>
- 
+ <p>This changes coordinates of atoms and length of bonds to standard
+ representation.</p>
+
 <h3>Model Properties</h3>
- <p>Changes properties for this frame. Current properties are: author 
- (who generated this model), generation date and software. Additionally, 
- a cas number and checksum can be given.</p>
+ <p>Changes properties for this frame. Current properties are: author
+ (who generated this model), generation date and software. Additionally,
+ a CAS number and checksum can be given.</p>
 <p>
 <p>
 
