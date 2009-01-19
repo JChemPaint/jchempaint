@@ -40,8 +40,6 @@ import javax.swing.JPopupMenu;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 /**
  *  A pop-up menu for JChemPaint

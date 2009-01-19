@@ -65,8 +65,6 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's
@@ -78,7 +76,6 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     private JComboBox textCombo;
     private JTextComponent editor;
     private JFrame closeafter = null;
-    private I18n i18n = I18nFactory.getI18n(JChemPaintPanel.class, "app.i18n.Messages");
 
     public InsertTextPanel(AbstractJChemPaintPanel jChemPaintPanel, JFrame closeafter) {
         super();
@@ -90,12 +87,12 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         textCombo = new JComboBox(oldText.toArray());
         textCombo.setEditable(true);
-        textCombo.setToolTipText(i18n.tr("insertcasinchismiles"));
+        textCombo.setToolTipText(GT._("Enter a CAS, SMILES or InChI string"));
 
         textCombo.addActionListener(this);
         editor = (JTextComponent) textCombo.getEditor().getEditorComponent();
 
-        JButton button = new JButton(i18n.tr("insert"));
+        JButton button = new JButton(GT._("Insert"));
         button.addActionListener(this);
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -122,7 +119,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         String actionCommand = actionEvent.getActionCommand();
         if (actionCommand.equals("comboBoxEdited")
-                || actionCommand.equals(i18n.tr("insert"))) {
+                || actionCommand.equals(GT._("Insert"))) {
             IMolecule molecule = getMolecule();
             if (molecule == null)
                 return;
@@ -146,20 +143,20 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 InChIToStructure inchiToStructure = inchiFactory.getInChIToStructure(text,jChemPaintPanel.getChemModel().getBuilder());
                 INCHI_RET status = inchiToStructure.getReturnStatus();
                 if (status != INCHI_RET.OKAY) {
-                  JOptionPane.showMessageDialog(jChemPaintPanel, i18n.tr("couldnotprocessinchi"));
+                  JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Could not process InChI"));
                   return null;
                 }
                 IAtomContainer atomContainer = inchiToStructure.getAtomContainer();
                 molecule = atomContainer.getBuilder().newMolecule(atomContainer);
             } catch (CDKException e2) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, i18n.tr("couldnotloadinchisystem"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Could not load InChI subsystem"));
                 return null;
             }
         } else if (isCASNumber(text)) { // is it a CAS number?
             try {
                 molecule = getMoleculeFromCAS(text);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, i18n.tr("errorreadinpubchem"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Error in reading data from PubChem"));
                 return null;
             }
         } else { // OK, it must be a SMILES
@@ -167,7 +164,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             try {
                 molecule = smilesParser.parseSmiles(text);
             } catch (InvalidSmilesException e1) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, i18n.tr("invalidsmiles"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Invalid SMILES specified"));
                 return null;
             }
         }

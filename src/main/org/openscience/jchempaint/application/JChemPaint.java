@@ -58,15 +58,13 @@ import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.io.JCPFileFilter;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.I18nFactory;
 
 public class JChemPaint {
 	
 	public static int instancecounter=1;
-	private static I18n i18n = I18nFactory.getI18n(JChemPaintPanel.class, "app.i18n.Messages");
 	
 	@SuppressWarnings("static-access")
     public static void main(String[] args) {
@@ -162,7 +160,7 @@ public class JChemPaint {
 	
 	public static void showEmptyInstance() {
 		IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
-		showInstance(chemModel, i18n.tr("Untitled-")+(instancecounter++));
+		showInstance(chemModel, GT._("Untitled-")+(instancecounter++));
 	}
 
 	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
