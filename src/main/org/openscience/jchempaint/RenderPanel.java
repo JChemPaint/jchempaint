@@ -198,7 +198,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		if (this.shouldPaintFromCache) {
 		    this.paintFromCache(g2);
 		} else {
-		    this.paintChemModel(g2, this.getBounds());
+
+			/*
+			 * It is more correct to use a rectangle starting at (0,0)
+			 * than to use getBounds() as the RenderPanel may be a child
+			 * of some container window, and its Graphics will be
+			 * translated relative to its parent.
+			 */
+			this.paintChemModel(g2,
+					new Rectangle(0, 0, this.getWidth(), this.getHeight()));
 		}
 	}
 
