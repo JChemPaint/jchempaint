@@ -165,7 +165,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 	protected JMenu createMenu(JChemPaintPanel jcpPanel, String key) {
 		logger.debug("Creating menu: ", key);
 		String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key));
-		JMenu menu = new JMenu(JCPLocalizationHandler.getInstance().getString(key));
+		JMenu menu = new JMenu(JCPMenuTextMaker.getInstance().getText(key));
 		for (int i = 0; i < itemKeys.length; i++) {
 			if (itemKeys[i].equals("-")) {
 				menu.addSeparator();
@@ -267,7 +267,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 		logger.debug("Creating menu item: ", cmd);
 		String translation = "***" + cmd + "***";
 		try {
-			translation = JCPLocalizationHandler.getInstance().getString(cmd);
+			translation = JCPMenuTextMaker.getInstance().getText(cmd);
 			logger.debug("Found translation: ", translation);
 		} catch (MissingResourceException mre) {
 			logger.error("Could not find translation for: " + cmd);

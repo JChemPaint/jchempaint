@@ -46,6 +46,8 @@ import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.ChangeModeAction;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 /**
  *  This class makes the JCPToolBar
@@ -55,6 +57,7 @@ public class JCPToolBar
 {
 
 	private static LoggingTool logger;
+    private static I18n i18n = I18nFactory.getI18n(JChemPaintPanel.class, "app.i18n.Messages");
 	/**
 	 *  Gets the toolbar attribute of the MainContainerPanel object
 	 *
@@ -158,7 +161,7 @@ public class JCPToolBar
 				}
 				try
 				{
-					String tip = JCPLocalizationHandler.getInstance().getString(key + JCPAction.TIPSUFFIX);
+					String tip = JCPMenuTextMaker.getInstance().getText(key + JCPAction.TIPSUFFIX);
 					if (tip != null)
 					{
 						b.setToolTipText(tip);
@@ -176,8 +179,7 @@ public class JCPToolBar
 			a.setType(key);
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
-			if(JCPLocalizationHandler.getInstance().getString("singleelementTooltip")!=null)
-				b.setToolTipText(JCPLocalizationHandler.getInstance().getString("singleelementTooltip")+" "+key);
+			b.setToolTipText(i18n.tr("singleelementTooltip")+" "+key);
 			b.setSize(30,15);
 			b.setPreferredSize(new Dimension(30,15));
 			b.setMaximumSize(new Dimension(30,15));

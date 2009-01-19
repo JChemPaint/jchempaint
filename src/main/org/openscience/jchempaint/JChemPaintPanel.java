@@ -61,6 +61,8 @@ import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObjectListener {
 
@@ -85,6 +87,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
     private int lines = 1;
     //we remember the moveButton since this is special
     protected JButton moveButton=null;
+    private I18n i18n = I18nFactory.getI18n(JChemPaintPanel.class, "app.i18n.Messages");
 
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
@@ -439,7 +442,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public int showWarning() {
 		if (isModified  && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)){ //TODO && !getIsOpenedByViewer()) {
-			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + JCPLocalizationHandler.getInstance().getString("warning"), JCPLocalizationHandler.getInstance().getString("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + i18n.tr("warning"), i18n.tr("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (answer == JOptionPane.YES_OPTION) {
 				new SaveAction(this, false).actionPerformed(new ActionEvent(this, 12, ""));
 			}

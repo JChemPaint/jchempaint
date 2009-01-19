@@ -40,6 +40,8 @@ import javax.swing.JPopupMenu;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18nFactory;
 
 /**
  *  A pop-up menu for JChemPaint
@@ -76,7 +78,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 	protected void createPopupMenu(JChemPaintPanel jcpPanel, String type)
 	{
 		String[] menuKeys = StringHelper.tokenize(getMenuResourceString(type + "popup"));
-		String menuTitle = JCPLocalizationHandler.getInstance().getString(type + "MenuTitle");
+		String menuTitle = JCPMenuTextMaker.getInstance().getText(type + "MenuTitle");
 		JMenuItem titleMenuItem = new JMenuItem(menuTitle);
 		titleMenuItem.setEnabled(false);
 		titleMenuItem.setArmed(false);
@@ -118,7 +120,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 		String translation = "***" + cmd + "***";
 		try
 		{
-			translation = JCPLocalizationHandler.getInstance().getString(cmd);
+			translation = JCPMenuTextMaker.getInstance().getText(cmd);
 		} catch (MissingResourceException mre)
 		{
 			logger.error("Could not find translation for: " + cmd);
@@ -157,7 +159,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 		String translation = "***" + key + "***";
 		try
 		{
-			translation = JCPLocalizationHandler.getInstance().getString(key);
+			translation = (key);
 		} catch (MissingResourceException mre)
 		{
 			logger.error("Could not find translation for: " + key);

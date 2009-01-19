@@ -15,6 +15,7 @@
 	<property name="dist" value="dist" />
     <property name="dist-classes" value="${dist}/classes" />
 	<property name="metainf" value="META-INF" />
+	<property name="po-classes" value="po/classes" />
 
 	<property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
 	<property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
@@ -114,16 +115,19 @@
 
          </javac>
     	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+    	<copy todir="${dist-classes}">
+    	    <fileset dir="${po-classes}"/>
+    	</copy>
    </target>
 
-    <target id="dist-applet" name="dist-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars, build-applet" description="Builds the JChemPaint applet jar files with jarindex">
+    <target id="dist-applet" name="dist-applet" depends="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
         <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
         	<zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
         </zip>
     </target>
 
-	<target id="build-applet" name="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
+	<target id="build-applet" name="build-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars" description="Builds the JChemPaint applet jar files with jarindex">
         <!-- At first jars are packed from file lists -->
         <!-- The file lists are generated from tomcat access log files with unpacked class files (and without jar files) -->
         <!-- cat apache/jakarta-tomcat-5.0.28/logs/localhost_access_log.2005-04-27.txt | awk -v classdir="/jcpapplet/classes/" '$9 != 404 && substr($7,0,length(classdir)) == classdir { print substr($7,length(classdir)+1) }' | sort -->
