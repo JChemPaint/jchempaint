@@ -176,7 +176,7 @@ public class JCPToolBar
 			a.setType(key);
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
-			b.setToolTipText(GT._("singleelementTooltip")+" "+key);
+			b.setToolTipText(GT._("Change drawing symbol to")+" "+key);
 			b.setSize(30,15);
 			b.setPreferredSize(new Dimension(30,15));
 			b.setMaximumSize(new Dimension(30,15));

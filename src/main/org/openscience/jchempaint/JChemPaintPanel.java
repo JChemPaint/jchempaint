@@ -439,7 +439,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public int showWarning() {
 		if (isModified  && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)){ //TODO && !getIsOpenedByViewer()) {
-			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + GT._("warning"), GT._("warningheader"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			int answer = JOptionPane.showConfirmDialog(this, renderPanel.getChemModel().getID() + " " + GT._("has unsaved data. Do you want to save it?"), GT._("Unsaved data"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (answer == JOptionPane.YES_OPTION) {
 				new SaveAction(this, false).actionPerformed(new ActionEvent(this, 12, ""));
 			}
