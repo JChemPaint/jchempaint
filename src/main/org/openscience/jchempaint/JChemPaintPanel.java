@@ -497,6 +497,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 	 */
 	public void stateChanged(IChemObjectChangeEvent event) {
 		setModified(true);
+		updateStatusBar();
+	}
+	
+	public void updateStatusBar(){
 		if(showStatusBar){
 	        if (this.getChemModel() != null) {
 	            for (int i = 0; i < 3; i++) {

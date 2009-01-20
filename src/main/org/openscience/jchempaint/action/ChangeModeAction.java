@@ -128,6 +128,7 @@ public class ChangeModeAction extends JCPAction {
             this.jcpPanel.getLastActionButton().setBackground(Color.LIGHT_GRAY);
         this.jcpPanel.setLastActionButton((JComponent) e.getSource());
         ((JComponent) e.getSource()).setBackground(Color.GRAY);
+        this.jcpPanel.updateStatusBar();
     }
 
     class PTDialogChangeListener implements ICDKChangeListener {

@@ -251,6 +251,7 @@ public class JCPToolBar
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);
 						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondModule(chemPaintPanel.get2DHub()));
+						chemPaintPanel.updateStatusBar();
 					} else
 					{
 						button.setBackground(Color.LIGHT_GRAY);
