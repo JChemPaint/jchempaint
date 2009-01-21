@@ -255,7 +255,7 @@ public class GT {
   
   private void addBundles(String type, String la_co_va, String la_co, String la) {
     try {
-        String className = "org.jmol.translation." + type + ".";
+        String className = "app.i18n";
         if (la_co_va != null)
           addBundle(className, la_co_va);
         if (la_co != null)
@@ -271,7 +271,7 @@ public class GT {
 
   private void addBundle(String className, String name) {
     Class bundleClass = null;
-    className += name + ".Messages_" + name;
+    className += ".Messages_" + name;
     //    if (languagePath != null
     //      && !ZipUtil.isZipFile(languagePath + "_i18n_" + name + ".jar"))
     //  return;
