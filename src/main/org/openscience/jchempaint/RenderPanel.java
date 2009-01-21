@@ -36,6 +36,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -43,11 +44,15 @@ import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 public class RenderPanel extends JPanel implements IViewEventRelay {
@@ -241,29 +246,21 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 
 		    if (chemModel.getMoleculeSet() != null
                     && chemModel.getMoleculeSet().getAtomContainerCount() > 0) {
-		        //TODO should be for all atomcontainers
-
-		        /*IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
-        	Iterator<IAtomContainer> containers
-        	    = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
-        	while (containers.hasNext()) {
-        		for(IAtom atom : containers.next().atoms()){
-        			wholeModel.addIsotope(atom);
-        		}
-        	}*/
+		        IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
+		        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+		        int implicitHs = 0;
+	        	while (containers.hasNext()) {
+	        		for(IAtom atom : containers.next().atoms()){
+	        			wholeModel.addIsotope(atom);
+	                   	if (atom.getHydrogenCount() != null) {
+	                    	implicitHs += atom.getHydrogenCount();
+	                	}	        		}
+	        	}
 		        String formula
 		        = MolecularFormulaManipulator.getHTML(
-		                MolecularFormulaManipulator.getMolecularFormula(
-		                        chemModel.getMoleculeSet().getAtomContainer(0)),
+		                        wholeModel,
 		                        true,
 		                        false);
-		        int implicitHs = 0;
-		        /*for (int i = 0; i < wholeModel.getAtomCount(); i++) {
-			    IAtom a = wholeModel.getAtom(i);
-                if (a.getHydrogenCount() != null) {
-                    implicitHs += a.getHydrogenCount();
-                }
-            }*/
 		        status = "<html>"
 		            + formula
 		            + (implicitHs == 0 ? "" : " (of these "
