@@ -56,13 +56,13 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
+import org.openscience.cdk.controller.IChemModelEventRelayHandler;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
-import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
-public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObjectListener {
+public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler {
 
 	private JComponent lastActionButton;
     private File currentWorkDirectory;
@@ -109,8 +109,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel, renderPanel.getHub());
 		setupPopupMenus(inputAdapter);
 		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
+		renderPanel.getHub().setEventHandler(this);
         instances.add(this);
-        chemModel.addListener(this);
     }
 
 	public Container getTopLevelContainer() {
@@ -492,14 +492,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.interfaces.IChemObjectListener#stateChanged(org.openscience.cdk.interfaces.IChemObjectChangeEvent)
-	 */
-	public void stateChanged(IChemObjectChangeEvent event) {
-		setModified(true);
-		updateStatusBar();
-	}
-	
 	public void updateStatusBar(){
 		if(showStatusBar){
 	        if (this.getChemModel() != null) {
@@ -536,5 +528,21 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemObj
 		getLastActionButton().setBackground(Color.LIGHT_GRAY);
 		setLastActionButton(moveButton);
 		moveButton.setBackground(Color.GRAY);
+	}
+	public void coordinatesChanged() {
+		setModified(true);
+		updateStatusBar();
+	}
+	public void selectionChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void structureChanged() {
+		setModified(true);
+		updateStatusBar();
+	}
+	public void structurePropertiesChanged() {
+		setModified(true);
+		updateStatusBar();
 	}
 }
