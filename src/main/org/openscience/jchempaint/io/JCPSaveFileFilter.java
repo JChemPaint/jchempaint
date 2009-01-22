@@ -30,6 +30,8 @@ package org.openscience.jchempaint.io;
 
 import javax.swing.JFileChooser;
 
+import org.openscience.jchempaint.GT;
+
 /**
  * It intentionally extends JCPFileFilter to remove redundant
  * data.
@@ -69,7 +71,7 @@ public class JCPSaveFileFilter extends JCPFileFilter {
             } else if (type.equals(smiles)) {
                 result = "SMILES";
             } else if (type.equals(cdk)) {
-                result = "CDK source code fragment";
+                result = GT._("CDK source code fragment");
             }
         }
         return result;

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-22 14:49+0000\n"
+"POT-Creation-Date: 2009-01-22 15:39+0000\n"
 "PO-Revision-Date: 2009-01-20 13:59+0100\n"
 "Last-Translator: Stefan Kuhn <stefan.kuhn@ebi.ac.uk>\n"
 "Language-Team: \n"
@@ -762,6 +762,10 @@ msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:124
 msgid "Spanish"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:74
+msgid "CDK source code fragment"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:179

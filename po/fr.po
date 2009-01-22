@@ -752,6 +752,10 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
+#: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:74
+msgid "CDK source code fragment"
+msgstr ""
+
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:179
 msgid "Change drawing symbol to"
 msgstr ""
