@@ -724,6 +724,76 @@ msgstr ""
 msgid "Reaction Popup Menu"
 msgstr ""
 
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:184
+msgid "Enter Element or Group"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:185
+msgid "Add Atom Or Change Element"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:186
+msgid "Draw Bond"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:187
+msgid "Ring 3"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:188
+msgid "Ring 4"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:189
+msgid "Ring 5"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:190
+msgid "Ring 6"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:191
+msgid "Ring 7"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:192
+msgid "Ring 8"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:193
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:195
+msgid "Add or convert to bond up"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:194
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:196
+msgid "Add or convert to bond down"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:197
+msgid "Decrease Charge"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:198
+msgid "Increase Charge"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:199
+msgid "Cycle Symbol"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:200
+msgid "Delete"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:201
+msgid "Select"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:202
+msgid "Benzene"
+msgstr ""
+
 #: src/main/org/openscience/jchempaint/GT.java:118
 msgid "Dutch"
 msgstr ""

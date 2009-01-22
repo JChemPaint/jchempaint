@@ -170,11 +170,10 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	}
 
 
-	// The description of this filter
 	/**
-	 *  Gets the description attribute of the JCPFileFilter object
+	 *  Gets a descriptive string for the currently choosen file type
 	 *
-	 *@return    The description value
+	 *@return    The description
 	 */
 	public String getDescription()
 	{

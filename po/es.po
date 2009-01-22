@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-22 15:39+0000\n"
+"POT-Creation-Date: 2009-01-22 17:16+0000\n"
 "PO-Revision-Date: 2009-01-20 21:40+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
@@ -739,6 +739,81 @@ msgstr "Menú contextual de modelo"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:183
 msgid "Reaction Popup Menu"
 msgstr "Menú contextual de reacción"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:184
+msgid "Enter Element or Group"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:185
+#, fuzzy
+msgid "Add Atom Or Change Element"
+msgstr "Cambiar elemento..."
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:186
+#, fuzzy
+msgid "Draw Bond"
+msgstr "Dibujar enlaces y átomos"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:187
+msgid "Ring 3"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:188
+msgid "Ring 4"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:189
+msgid "Ring 5"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:190
+msgid "Ring 6"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:191
+msgid "Ring 7"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:192
+msgid "Ring 8"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:193
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:195
+msgid "Add or convert to bond up"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:194
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:196
+msgid "Add or convert to bond down"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:197
+#, fuzzy
+msgid "Decrease Charge"
+msgstr "Disminuir la carga del átomo"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:198
+#, fuzzy
+msgid "Increase Charge"
+msgstr "Aumentar la carga del átomo"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:199
+msgid "Cycle Symbol"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:200
+msgid "Delete"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:201
+#, fuzzy
+msgid "Select"
+msgstr "Seleccionar todo"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:202
+msgid "Benzene"
+msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:118
 msgid "Dutch"

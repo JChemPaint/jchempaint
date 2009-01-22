@@ -181,6 +181,25 @@ public class JCPMenuTextMaker {
 		entries.put("bondMenuTitle", GT._("Bond Popup Menu"));
 		entries.put("chemmodelMenuTitle", GT._("ChemModel Popup Menu"));
 		entries.put("reactionMenuTitle", GT._("Reaction Popup Menu"));
+		entries.put("Enter Element or Group", GT._("Enter Element or Group"));
+		entries.put("Add Atom Or Change Element", GT._("Add Atom Or Change Element"));
+		entries.put("Draw Bond", GT._("Draw Bond"));
+		entries.put("Ring 3", GT._("Ring 3"));
+		entries.put("Ring 4", GT._("Ring 4"));
+		entries.put("Ring 5", GT._("Ring 5"));
+		entries.put("Ring 6", GT._("Ring 6"));
+		entries.put("Ring 7", GT._("Ring 7"));
+		entries.put("Ring 8", GT._("Ring 8"));
+		entries.put("Add or convert to bond up", GT._("Add or convert to bond up"));
+		entries.put("Add or convert to bond down", GT._("Add or convert to bond down"));
+		entries.put("Add or convert to bond up", GT._("Add or convert to bond up"));
+		entries.put("Add or convert to bond down", GT._("Add or convert to bond down"));
+		entries.put("Decrease Charge", GT._("Decrease Charge"));
+		entries.put("Increase Charge", GT._("Increase Charge"));
+		entries.put("Cycle Symbol", GT._("Cycle Symbol"));
+		entries.put("Delete", GT._("Delete"));
+		entries.put("Select", GT._("Select"));
+		entries.put("Benzene", GT._("Benzene"));
 	}
 	
 	/**
