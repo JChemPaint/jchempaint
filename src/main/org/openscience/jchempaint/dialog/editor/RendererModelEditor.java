@@ -40,6 +40,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 
 import com.ozten.font.JFontChooser;
@@ -84,38 +85,38 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private void constructPanel() {
         currentFont = null;
         drawNumbers = new JCheckBox();
-        addField("Draw atom numbers", drawNumbers);
+        addField(GT._("Draw atom numbers"), drawNumbers);
         showAtomAtomMapping = new JCheckBox();
-        addField("Show atom-atom mappings", showAtomAtomMapping);
+        addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
         useKekuleStructure = new JCheckBox();
-        addField("Explicit carbons", useKekuleStructure);
+        addField(GT._("Explicit carbons"), useKekuleStructure);
         showEndCarbons = new JCheckBox();
-        addField("Show explicit methyl groups", showEndCarbons);
+        addField(GT._("Show explicit methyl groups"), showEndCarbons);
         showImplicitHydrogens = new JCheckBox();
-        addField("Show implicit hydrogens if atom symbol is shown", showImplicitHydrogens);
+        addField(GT._("Show implicit hydrogens if atom symbol is shown"), showImplicitHydrogens);
         showAromaticity = new JCheckBox();
-        addField("Use aromatic ring circles", showAromaticity);
+        addField(GT._("Use aromatic ring circles"), showAromaticity);
         showAromaticityInCDKStyle = new JCheckBox();
-        addField("Use CDK style aromaticity indicators", showAromaticityInCDKStyle);
+        addField(GT._("Use CDK style aromaticity indicators"), showAromaticityInCDKStyle);
         colorAtomsByType = new JCheckBox();
-        addField("Color atoms by element", colorAtomsByType);
+        addField(GT._("Color atoms by element"), colorAtomsByType);
         useAA = new JCheckBox();
-        addField("Use Anti-Aliasing", useAA);
+        addField(GT._("Use Anti-Aliasing"), useAA);
         showToolTip = new JCheckBox();
-        addField("Show tooltips", showToolTip);        
+        addField(GT._("Show tooltips"), showToolTip);        
         showReactionBoxes = new JCheckBox();
-        addField("Show boxes around reactions", showReactionBoxes);        
+        addField(GT._("Show boxes around reactions"), showReactionBoxes);        
         fontName = new JLabel();
-        addField("Font name", fontName);
-        chooseFontButton = new JButton("Choose Font...");
+        addField(GT._("Font name"), fontName);
+        chooseFontButton = new JButton(GT._("Choose Font..."));
         chooseFontButton.addActionListener(this);
         chooseFontButton.setActionCommand("chooseFont");
         addField("", chooseFontButton);
-        color = new JLabel("BACKCOLOR");
-        addField("Background color", color);
-        chooseColorButton = new JButton("Choose Color...");
+        color = new JLabel(GT._("BACKCOLOR"));
+        addField(GT._("Background color"), color);
+        chooseColorButton = new JButton(GT._("Choose Color..."));
         chooseColorButton.addActionListener(this);
-        chooseColorButton.setActionCommand("chooseColor");
+        chooseColorButton.setActionCommand(GT._("chooseColor"));
         addField("", chooseColorButton);
     }
     
@@ -164,14 +165,14 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
      */
     public void actionPerformed(ActionEvent e) {
         if ("chooseFont".equals(e.getActionCommand())) {
-            Font newFont = JFontChooser.showDialog(this.frame, "Choose a Font", "Carbon Dioxide", currentFont);
+            Font newFont = JFontChooser.showDialog(this.frame, GT._("Choose a Font"), GT._("Carbon Dioxide"), currentFont);
             if (newFont != null) {
                 currentFont = newFont;
                 fontName.setText(currentFont.getFontName());
             }
         }
         if ("chooseColor".equals(e.getActionCommand())) {
-            Color newColor = JColorChooser.showDialog(this, "Choose Background Color", model.getBackColor());
+            Color newColor = JColorChooser.showDialog(this, GT._("Choose Background Color"), model.getBackColor());
             if (newColor != null) {
                 currentColor = newColor;
                 color.setForeground(currentColor);

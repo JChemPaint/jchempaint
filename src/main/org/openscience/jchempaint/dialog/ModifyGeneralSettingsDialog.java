@@ -38,6 +38,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.openscience.jchempaint.GT;
+
 /**
  */
 public class ModifyGeneralSettingsDialog extends JFrame {
@@ -50,7 +52,7 @@ public class ModifyGeneralSettingsDialog extends JFrame {
 	 * Displays the Info Dialog for JChemPaint.
 	 */
     public ModifyGeneralSettingsDialog() {
-        super("Modify General Settings Dialog");
+        super(GT._("Modify General Settings Dialog"));
         editor = new GeneralSettingsEditor(this);
         createDialog();
         pack();
@@ -66,7 +68,7 @@ public class ModifyGeneralSettingsDialog extends JFrame {
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
-        JButton ok = new JButton("OK");
+        JButton ok = new JButton(GT._("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
@@ -74,14 +76,14 @@ public class ModifyGeneralSettingsDialog extends JFrame {
         );
         buttonPanel.add( ok );
         getRootPane().setDefaultButton(ok);
-        JButton apply = new JButton("Apply");
+        JButton apply = new JButton(GT._("Apply"));
         apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ApplyPressed();
             }}
         );
         buttonPanel.add( apply );
-        JButton cancel = new JButton("Cancel");
+        JButton cancel = new JButton(GT._("Cancel"));
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeFrame();

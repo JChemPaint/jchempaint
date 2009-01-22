@@ -39,6 +39,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
 
 /**
@@ -68,16 +69,16 @@ public class CreateInChIAction extends JCPAction
         try {
             factory = new InChIGeneratorFactory();
         } catch (CDKException cdke) {
-            String message = "Error loading InChI library: " + cdke.getMessage();
+            String message = GT._("Error loading InChI library:")+" " + cdke.getMessage();
             logger.error(message);
             logger.debug(cdke);
-            dialog.setMessage("Error", message);
+            dialog.setMessage(GT._("Error"), message);
         }
         
         if (factory != null) {
             ChemModel model = (ChemModel) jcpPanel.getChemModel();
             if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
-            	dialog.setMessage("Problem", "You have reactions in JCP. Reactions cannot be shown as InChI!");
+            	dialog.setMessage(GT._("Problem"), GT._("You have reactions in JCP. Reactions cannot be shown as InChI!"));
             }else{
             	StringBuffer dialogText=new StringBuffer();
             	int i=0;
@@ -85,7 +86,7 @@ public class CreateInChIAction extends JCPAction
 				for(IAtomContainer container : model.getMoleculeSet().molecules())
 				{
 	                if (model.getMoleculeSet().getAtomContainerCount() > 1) {
-	                    dialogText.append("Structure #" + (i+1) + eol);
+	                    dialogText.append(GT._("Structure")+" #" + (i+1) + eol);
 	                }
 	                try {
 	                    InChIGenerator inchiGen = factory.getInChIGenerator(container);
@@ -98,14 +99,14 @@ public class CreateInChIAction extends JCPAction
 	                    } else if (ret == INCHI_RET.WARNING) {
 	                        dialogText.append(inchi + eol + auxinfo + eol + "Warning: " + message + eol + eol);
 	                    } else {
-	                        dialogText.append("InChI generation failed (" + ret.toString() + ")" + eol + message + eol + eol);
+	                        dialogText.append(GT._("InChI generation failed")+" (" + ret.toString() + ")" + eol + message + eol + eol);
 	                    }
 	                } catch (CDKException cdke) {
-	                    dialogText.append("InChI generation failed: " + cdke.getMessage() + eol + eol);
+	                    dialogText.append(GT._("InChI generation failed")+": " + cdke.getMessage() + eol + eol);
 	                }
 	                i++;
 	            }
-	            dialog.setMessage("Generated InChI:", dialogText.toString());
+	            dialog.setMessage(GT._("Generated InChI")+":", dialogText.toString());
             }
 	            
         }

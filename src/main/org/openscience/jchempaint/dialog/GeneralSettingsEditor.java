@@ -35,6 +35,7 @@ import java.util.Properties;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 
 /**
@@ -57,7 +58,7 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
     
     private void constructPanel() {
         askForIOSettings = new JCheckBox();
-        addField("Ask for IO settings", askForIOSettings);
+        addField(GT._("Ask for IO settings"), askForIOSettings);
     }
     
     public void setSettings() {

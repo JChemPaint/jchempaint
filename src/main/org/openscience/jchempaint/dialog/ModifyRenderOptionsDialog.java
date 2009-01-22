@@ -40,6 +40,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.dialog.editor.RendererModelEditor;
 
@@ -59,7 +60,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
 	 * Displays the Info Dialog for JChemPaint. 
 	 */
     public ModifyRenderOptionsDialog(JChemPaintPanel jcpPanel, RendererModel model) {
-        super("Modify Renderer2D Options Dialog");
+        super(GT._("Modify Renderer2D Options Dialog"));
         this.model = model;
         this.jcpPanel=jcpPanel;
         editor = new RendererModelEditor(this);
@@ -71,13 +72,13 @@ public class ModifyRenderOptionsDialog extends JFrame {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle("Rendering Options");
+        setTitle(GT._("Rendering Options"));
         editor.setModel(model);
         getContentPane().add("Center",editor);
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
-        JButton ok = new JButton("OK");
+        JButton ok = new JButton(GT._("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
@@ -85,14 +86,14 @@ public class ModifyRenderOptionsDialog extends JFrame {
         );
         buttonPanel.add( ok );
         getRootPane().setDefaultButton(ok);
-        JButton apply = new JButton("Apply");
+        JButton apply = new JButton(GT._("Apply"));
         apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ApplyPressed();
             }}
         );
         buttonPanel.add( apply );
-        JButton cancel = new JButton("Cancel");
+        JButton cancel = new JButton(GT._("Cancel"));
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeFrame();

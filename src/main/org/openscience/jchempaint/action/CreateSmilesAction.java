@@ -44,6 +44,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
 
 
@@ -72,13 +73,13 @@ public class CreateSmilesAction extends JCPAction
 		{
 			smiles=getSmiles(jcpPanel.getChemModel());
 			chiralsmiles=getChiralSmiles(jcpPanel.getChemModel());
-			dialog.setMessage("Generated SMILES:", "SMILES: "+smiles+System.getProperty("line.separator")+"chiral SMILES: "+chiralsmiles);
+			dialog.setMessage(GT._("Generated SMILES:"), "SMILES: "+smiles+System.getProperty("line.separator")+"chiral SMILES: "+chiralsmiles);
 		} catch (Exception exception)
 		{
-			String message = "Error while creating SMILES: " + exception.getMessage();
+			String message = GT._("Error while creating SMILES:") + " " + exception.getMessage();
 			logger.error(message);
 			logger.debug(exception);
-			dialog.setMessage("Error", message);
+			dialog.setMessage(GT._("Error"), message);
 		}
 		dialog.setVisible(true);
 	}

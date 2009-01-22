@@ -42,6 +42,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.openscience.jchempaint.GT;
+
 /**
  * A simple text viewing dialog for general use.
  *
@@ -108,7 +110,7 @@ public class TextViewDialog extends JDialog {
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        JButton ok = new JButton("OK");
+        JButton ok = new JButton(GT._("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
