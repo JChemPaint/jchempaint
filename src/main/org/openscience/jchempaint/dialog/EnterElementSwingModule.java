@@ -168,6 +168,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 	}
 
 	public String getDrawModeString() {
-		return IControllerModel.DrawMode.ADDATOMORCHANGEELEMENT.getName();
+		return "Enter Element or Group";
 	}
 }
