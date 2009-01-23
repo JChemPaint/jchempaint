@@ -157,7 +157,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 		String translation = "***" + key + "***";
 		try
 		{
-			translation = (key);
+			translation = JCPMenuTextMaker.getInstance().getText(key);
 		} catch (MissingResourceException mre)
 		{
 			logger.error("Could not find translation for: " + key);

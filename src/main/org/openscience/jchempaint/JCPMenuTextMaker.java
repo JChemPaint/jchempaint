@@ -65,6 +65,7 @@ public class JCPMenuTextMaker {
 		entries.put("copy", GT._("Copy"));
 		entries.put("paste", GT._("Paste"));
 		entries.put("cutSelected", GT._("Cut"));
+		entries.put("cut", GT._("Cut"));
 		entries.put("hydrogen", GT._("Hydrogens..."));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
 		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
@@ -96,17 +97,17 @@ public class JCPMenuTextMaker {
 		entries.put("clearValidate", GT._("Clear Validate Results"));
 		entries.put("flipHorizontal", GT._("Horizontal"));
 		entries.put("flipVertical", GT._("Vertical"));
-		entries.put("selectFromChemObject", GT._("flip"));
+		entries.put("selectFromChemObject", GT._("Select"));
 		entries.put("selectMolecule", GT._("Select Molecule"));
 		entries.put("symbolChange", GT._("Change Element..."));
 		entries.put("isotopeChange", GT._("Change Isotope..."));
-		entries.put("convertToRadical", GT._("convertToRadical"));
+		entries.put("convertToRadical", GT._("Convert to Radical"));
 		entries.put("reaction", GT._("Reaction..."));
 		entries.put("showChemObjectProperties", GT._("Properties"));
 		entries.put("showACProperties", GT._("Molecule Properties"));
 		entries.put("makeNormal", GT._("Convert to Regular Atom"));
 		entries.put("addReactantToNewReaction", GT._("Make Reactant in new Reaction"));
-		entries.put("addReactantToExistingReaction", GT._("addReactantToNewReaction"));
+		entries.put("addReactantToExistingReaction", GT._("Make Reactant in existing Reaction"));
 		entries.put("addProductToNewReaction", GT._("Make Product in new Reaction"));
 		entries.put("addProductToExistingReaction", GT._("Make Product in existing Reaction"));
 		entries.put("commonSymbols", GT._("Common Elements..."));
