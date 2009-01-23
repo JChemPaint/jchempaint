@@ -30,16 +30,11 @@ al Public License for more details.
  */
 package org.openscience.jchempaint;
 
-import java.util.MissingResourceException;
-
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.jchempaint.action.JCPAction;
 
 /**
  *  A pop-up menu for JChemPaint
@@ -49,9 +44,9 @@ public class JChemPaintPopupMenu extends JPopupMenu
 {
 
 	private static final long serialVersionUID = -1172105004348414589L;
-	private LoggingTool logger;
-	private JCPAction jcpaction;
     private IChemObject source;
+    private JChemPaintMenuHelper menuHelper=new JChemPaintMenuHelper();
+    private String guiString = "stable";
     
     public void setSource(IChemObject object) {
         this.source = object;
@@ -67,15 +62,15 @@ public class JChemPaintPopupMenu extends JPopupMenu
 	 *@param  jcpPanel  Description of the Parameter
 	 *@param  type      Description of the Parameter
 	 */
-	JChemPaintPopupMenu(JChemPaintPanel jcpPanel, String type)
+	JChemPaintPopupMenu(JChemPaintPanel jcpPanel, String type, String guiString)
 	{
-		logger = new LoggingTool(this);
+		this.guiString = guiString;
 		createPopupMenu(jcpPanel, type);
 	}
 
 	protected void createPopupMenu(JChemPaintPanel jcpPanel, String type)
 	{
-		String[] menuKeys = StringHelper.tokenize(getMenuResourceString(type + "popup"));
+		String[] menuKeys = StringHelper.tokenize(menuHelper.getMenuResourceString(type + "popup", guiString));
 		String menuTitle = JCPMenuTextMaker.getInstance().getText(type + "MenuTitle");
 		JMenuItem titleMenuItem = new JMenuItem(menuTitle);
 		titleMenuItem.setEnabled(false);
@@ -90,141 +85,17 @@ public class JChemPaintPopupMenu extends JPopupMenu
 				this.addSeparator();
 			} else if (menuKey.startsWith("@"))
 			{
-				JMenu me = createMenu(jcpPanel, menuKey.substring(1));
+				JMenu me = menuHelper.createMenu(jcpPanel, menuKey.substring(1),true, guiString);
 				this.add(me);
 			} else
 			{
-				JMenuItem item = createMenuItem(jcpPanel, menuKey,false,false);
+				JMenuItem item = menuHelper.createMenuItem(jcpPanel, menuKey,false,false,true);
 				if (item != null)
 				{
 					this.add(item);
 				}
 			}
 		}
-	}
-
-
-	/**
-	 *  Craetes a JMenuItem given by a String and adds the right ActionListener to
-	 *  it.
-	 *
-	 *@param  cmd       String The Strin to identify the MenuItem
-	 *@param  jcpPanel  Description of the Parameter
-	 *@return           JMenuItem The created JMenuItem
-	 */
-	protected JMenuItem createMenuItem(JChemPaintPanel jcpPanel, String cmd, boolean isCheckBox, boolean isChecked)
-	{
-		logger.debug("Creating menu item: ", cmd);
-		String translation = "***" + cmd + "***";
-		try
-		{
-			translation = JCPMenuTextMaker.getInstance().getText(cmd);
-		} catch (MissingResourceException mre)
-		{
-			logger.error("Could not find translation for: " + cmd);
-		}
-		JMenuItem mi = null;
-		if (isCheckBox) {
-			mi = new JCheckBoxMenuItem(translation);
-			mi.setSelected(isChecked);
-		}
-		else {
-			mi = new JMenuItem(translation);
-		}
-		String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
-		if (astr == null)
-		{
-			astr = cmd;
-		}
-		mi.setActionCommand(astr);
-		JCPAction a = getJCPAction().getAction(jcpPanel, astr, true);
-		if (a != null)
-		{
-			mi.addActionListener(a);
-			mi.setEnabled(a.isEnabled());
-		} else
-		{
-			logger.warn("Could not find JCPAction class for:" + astr);
-			mi.setEnabled(false);
-		}
-		return mi;
-	}
-
-	protected JMenu createMenu(JChemPaintPanel jcpPanel, String key)
-	{
-		logger.debug("Creating menu: ", key);
-		String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key));
-		String translation = "***" + key + "***";
-		try
-		{
-			translation = JCPMenuTextMaker.getInstance().getText(key);
-		} catch (MissingResourceException mre)
-		{
-			logger.error("Could not find translation for: " + key);
-		}
-		JMenu menu = new JMenu(translation);
-		for (int i = 0; i < itemKeys.length; i++)
-		{
-			if (itemKeys[i].equals("-"))
-			{
-				menu.addSeparator();
-			} else if (itemKeys[i].startsWith("@"))
-			{
-				String menuTitle = itemKeys[i].substring(1);
-				JMenu me = createMenu(jcpPanel, menuTitle);
-				menu.add(me);
-			} else if (itemKeys[i].endsWith("+")) {
-				JMenuItem mi;
-				if(itemKeys[i].endsWith("++"))
-					mi = createMenuItem(jcpPanel,
-						itemKeys[i].substring(0, itemKeys[i].length() - 2),
-						true, true
-						);
-				else
-					mi = createMenuItem(jcpPanel,
-						itemKeys[i].substring(0, itemKeys[i].length() - 1),
-						true, false
-						);
-				menu.add(mi);
-			} else
-			{
-				JMenuItem mi = createMenuItem(jcpPanel, itemKeys[i],false,false);
-				menu.add(mi);
-			}
-		}
-		return menu;
-	}
-
-
-	/**
-	 *  Gets the menuResourceString attribute of the JChemPaint object
-	 *
-	 *@param  key  Description of the Parameter
-	 *@return      The menuResourceString value
-	 */
-	public String getMenuResourceString(String key)
-	{
-		String str;
-		try
-		{
-			str = JCPPropertyHandler.getInstance().getGUIDefinition().getString(key);
-		} catch (MissingResourceException mre)
-		{
-			str = null;
-		}
-		return str;
-	}
-	
-	/**
-	 *  Return the JCPAction instance associated with this JCPPanel
-	 *
-	 *@return    The jCPAction value
-	 */
-	public JCPAction getJCPAction() {
-		if (jcpaction == null) {
-			jcpaction = new JCPAction();
-		}
-		return jcpaction;
 	}
 }
 

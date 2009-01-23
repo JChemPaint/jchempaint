@@ -195,13 +195,10 @@ public class JCPMenuTextMaker {
 		entries.put("Ring 8", GT._("Ring 8"));
 		entries.put("Add or convert to bond up", GT._("Add or convert to bond up"));
 		entries.put("Add or convert to bond down", GT._("Add or convert to bond down"));
-		entries.put("Add or convert to bond up", GT._("Add or convert to bond up"));
-		entries.put("Add or convert to bond down", GT._("Add or convert to bond down"));
 		entries.put("Decrease Charge", GT._("Decrease Charge"));
 		entries.put("Increase Charge", GT._("Increase Charge"));
 		entries.put("Cycle Symbol", GT._("Cycle Symbol"));
 		entries.put("Delete", GT._("Delete"));
-		entries.put("Select", GT._("Select"));
 		entries.put("Benzene", GT._("Benzene"));
 	}
 	
