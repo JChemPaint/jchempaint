@@ -34,7 +34,9 @@ import java.util.Map;
 /**
  * This class held text entries for menu items, tool tips etc., which are
  * configured in the JCPGUI_*.properties files. They all need an entry
- * in the entries map to be recognized by the localizatin system.
+ * in the entries map to be recognized by the localization system. The same
+ * is true about the DrawModeString for the status bar, which come from 
+ * controller modules in cdk and are only in English there.
  *
  */
 public class JCPMenuTextMaker {

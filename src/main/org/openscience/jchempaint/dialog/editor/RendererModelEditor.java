@@ -116,7 +116,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         addField(GT._("Background color"), color);
         chooseColorButton = new JButton(GT._("Choose Color..."));
         chooseColorButton.addActionListener(this);
-        chooseColorButton.setActionCommand(GT._("chooseColor"));
+        chooseColorButton.setActionCommand("chooseColor");
         addField("", chooseColorButton);
     }
     
