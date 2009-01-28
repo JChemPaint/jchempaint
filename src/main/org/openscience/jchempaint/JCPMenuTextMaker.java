@@ -51,9 +51,10 @@ public class JCPMenuTextMaker {
 		entries.put("new", GT._("New"));
 		entries.put("atomMenuTitle", GT._("Atom Popup Menu"));
 		entries.put("open", GT._("Open"));
-		entries.put("saveAs", GT._("Save As"));
+		entries.put("saveAs", GT._("Save As..."));
 		entries.put("view", GT._("View"));
 		entries.put("print", GT._("Print..."));
+		entries.put("export", GT._("Export..."));
 		entries.put("save", GT._("Save"));
 		entries.put("edit", GT._("Edit"));
 		entries.put("report", GT._("Report"));

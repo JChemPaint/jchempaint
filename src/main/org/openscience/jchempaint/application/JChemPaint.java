@@ -35,6 +35,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -236,16 +238,23 @@ public class JChemPaint {
             }
         }
         String error = null;
-        ChemModel chemModel = null;
-        IChemFile chemFile = null;
+        List<IChemModel> chemModels=new ArrayList<IChemModel>();
         if (cor.accepts(IChemFile.class)) {
             // try to read a ChemFile
             try {
-                chemFile = (IChemFile) cor
+                IChemFile chemFile = (IChemFile) cor
                         .read((IChemObject) new org.openscience.cdk.ChemFile());
                 if (chemFile == null) {
                     error = "The object chemFile was empty unexpectedly!";
                 }
+        		for (int i = 0; i < chemFile.getChemSequenceCount(); i++) {
+        			org.openscience.cdk.interfaces.IChemSequence chemSequence = chemFile.getChemSequence(i);
+        			int chemModelCount = chemSequence.getChemModelCount();
+        			for (int j = 0; j < chemModelCount; j++) {
+        				org.openscience.cdk.interfaces.IChemModel chemModel = chemSequence.getChemModel(j);
+        				chemModels.add(chemModel);
+        			}
+        		}
             } catch (Exception exception) {
                 error = "Error while reading file: " + exception.getMessage();
                 exception.printStackTrace();
@@ -255,13 +264,10 @@ public class JChemPaint {
             JOptionPane.showMessageDialog(jcpPanel, error);
             return;
         }
-        if (cor.accepts(ChemModel.class)) {
+        if (cor.accepts(IChemModel.class)) {
             // try to read a ChemModel
             try {
-                chemModel = (ChemModel) cor.read((IChemObject) new ChemModel());
-                if (chemModel == null) {
-                    error = "The object chemModel was empty unexpectedly!";
-                }
+                chemModels.add((IChemModel)cor.read((IChemObject) new ChemModel()));
             } catch (Exception exception) {
                 error = "Error while reading file: " + exception.getMessage();
                 exception.printStackTrace();
@@ -270,18 +276,22 @@ public class JChemPaint {
         if (error != null) {
             JOptionPane.showMessageDialog(jcpPanel, error);
         }
-        // check for bonds
-        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
-            error = "Model does not have bonds. Cannot depict contents.";
+        for (IChemModel chemModel : chemModels) {
+        	if(chemModel==null)
+        		error = "Model is null. Cannot display anything.";
+	        // check for bonds
+	        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
+	            error = "Model does not have bonds. Cannot depict contents.";
+	        }
+	        // check for coordinates
+	        JChemPaint.checkCoordinates(chemModel);
+	
+	        chemModel.setID(inFile.getName());
+	        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
+	        p.setCurrentWorkDirectory(inFile.getParentFile());
+	        p.setLastOpenedFile(inFile);
+	        p.setIsAlreadyAFile(inFile);
         }
-        // check for coordinates
-        JChemPaint.checkCoordinates(chemModel);
-
-        chemModel.setID(inFile.getName());
-        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
-        p.setCurrentWorkDirectory(inFile.getParentFile());
-        p.setLastOpenedFile(inFile);
-        p.setIsAlreadyAFile(inFile);
 	}
 	
 	// TODO
