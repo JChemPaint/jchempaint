@@ -137,11 +137,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .getDefaultConfiguration()
                         .createCompatibleImage(bounds.width, bounds.height);
         Graphics2D g = (Graphics2D)image.getGraphics();
+        takeSnapshot(g,bounds);
+        return image;
+	}
+	
+	public void takeSnapshot(Graphics2D g, Rectangle bounds){
         super.paint(g);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         this.paintChemModel(g, bounds);
-        return image;
     }
 
 	public void paintChemModel(Graphics2D g, Rectangle screenBounds) {
