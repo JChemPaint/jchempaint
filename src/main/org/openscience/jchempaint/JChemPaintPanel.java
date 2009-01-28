@@ -512,12 +512,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 	 *  Closes all currently opened JCP instances.
 	 */
 	public static void closeAllInstances() {
-		for (JChemPaintPanel panel : instances) {
-			JFrame frame = (JFrame) panel.getTopLevelContainer();
+		int instancesNumber=instances.size();
+		for (int i=instancesNumber-1;i>=0;i--) {
+			JFrame frame = (JFrame) instances.get(i).getTopLevelContainer();
 			WindowListener[] wls = (WindowListener[]) (frame.getListeners(WindowListener.class));
 			wls[0].windowClosing(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-			frame.setVisible(false);
-			frame.dispose();
 		}
 	}
 
