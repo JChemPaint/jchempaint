@@ -38,7 +38,6 @@ import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
@@ -47,6 +46,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
+import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.SMILESWriter;
@@ -253,16 +253,7 @@ public class SaveAsAction extends JCPAction
             outFile = new File(fileName);
         }
         FileWriter sw = new FileWriter(outFile);
-        Class cmlWriterClass = this.getClass().getClassLoader().loadClass("org.openscience.cdk.io.CMLWriter");
-
-        if (cmlWriterClass != null) {
-        	cow = (IChemObjectWriter)cmlWriterClass.newInstance();
-        	Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
-        	cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
-        } else {
-        	// provide a fail save for JChemPaint builds for Java 1.4
-        	cow = new MDLWriter(sw);
-        }
+        cow = new CMLWriter(sw);
 		if (cow != null && askIOSettings())
 		{
 			cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
