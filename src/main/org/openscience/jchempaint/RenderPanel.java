@@ -52,6 +52,7 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.ISelection;
 import org.openscience.cdk.renderer.IntermediateRenderer;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
@@ -243,7 +244,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		String status = "";
 		if (position == 0) {
 			// depict editing mode
-			status = JCPMenuTextMaker.getInstance().getText(hub.getActiveDrawModule().getDrawModeString());
+			status = JCPMenuTextMaker.getInstance().getText(JCPMenuTextMaker.getInstance().getText(hub.getActiveDrawModule().getDrawModeString()));
 		} else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
@@ -258,17 +259,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	        			wholeModel.addIsotope(atom);
 	                   	if (atom.getHydrogenCount() != null) {
 	                    	implicitHs += atom.getHydrogenCount();
-	                	}	        		}
+	                	}	        		
+	                }
 	        	}
 		        String formula
 		        = MolecularFormulaManipulator.getHTML(
 		                        wholeModel,
 		                        true,
 		                        false);
-		        status = "<html>"
-		            + formula
-		            + (implicitHs == 0 ? "" : " (of these "
-		                + implicitHs + " Hs implicit)") + "</html>";
+		        status = makeStatusBarString(formula, implicitHs, MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
 		    }
 	    } else if (position == 2) {
 	        // depict brutto formula of the selected molecule or part of molecule
@@ -276,14 +275,27 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	        if (selection != null) {
 	            IAtomContainer ac = selection.getConnectedAtomContainer();
 	            if (ac != null) {
+			        int implicitHs = 0;
+	        		for(IAtom atom : ac.atoms()){
+	        			if (atom.getHydrogenCount() != null) {
+	                    	implicitHs += atom.getHydrogenCount();
+	                	}	        		
+	                }
 	                String formula = MolecularFormulaManipulator
 	                .getHTML(MolecularFormulaManipulator
 	                        .getMolecularFormula(ac), true, false);
-	                status = "<html>" + formula + "</html>";
+	                status = makeStatusBarString(formula, implicitHs, AtomContainerManipulator.getNaturalExactMass(ac));
 	            }
 	        }
 	    }
 		return status;
+	}
+	
+	private String makeStatusBarString(String formula, int implicitHs, double mass){
+        return "<html>"
+            + formula
+            + (implicitHs == 0 ? "" : " ("+GT._("of these")+ " "
+                + implicitHs + " "+GT._("Hs implicit")+")")+" (mass "+mass+")</html>";
 	}
 
 	public IntermediateRenderer getRenderer() {

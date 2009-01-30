@@ -70,7 +70,7 @@ public class JCPMenuTextMaker {
 		entries.put("hydrogen", GT._("Hydrogens..."));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
 		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
-		entries.put("flip", GT._("Flip..."));
+		entries.put("flip", GT._("Flip"));
 		entries.put("cleanup", GT._("Clean Up"));
 		entries.put("preferences", GT._("Preferences"));
 		entries.put("toolbar", GT._("Toolbar"));
@@ -203,6 +203,7 @@ public class JCPMenuTextMaker {
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
 		entries.put("Select Square", GT._("Select Square"));
+		entries.put("Move", GT._("Move"));
 	}
 	
 	/**
