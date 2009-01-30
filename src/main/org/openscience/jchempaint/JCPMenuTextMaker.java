@@ -201,6 +201,8 @@ public class JCPMenuTextMaker {
 		entries.put("Cycle Symbol", GT._("Cycle Symbol"));
 		entries.put("Delete", GT._("Delete"));
 		entries.put("Benzene", GT._("Benzene"));
+		entries.put("Select in Free Form", GT._("Select in Free Form"));
+		entries.put("Select Square", GT._("Select Square"));
 	}
 	
 	/**
