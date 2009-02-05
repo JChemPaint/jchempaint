@@ -28,40 +28,35 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.renderer.RendererModel;
-
+import org.openscience.cdk.renderer.Renderer;
 
 /**
  * @cdk.module jchempaint
- * @author     steinbeck
+ * @author steinbeck
  */
-public class ZoomAction extends JCPAction
-{
+public class ZoomAction extends JCPAction {
 
     private static final long serialVersionUID = -2459332630141921895L;
 
-	public void actionPerformed(ActionEvent e)
-	{
-		logger.debug("Zooming in/out in mode: ", type);
-		if (type.equals("in") && jcpPanel.getRenderPanel().getRenderer().getZoom()<10)
-		{
-			jcpPanel.getRenderPanel().getRenderer().setZoom(jcpPanel.getRenderPanel().getRenderer().getZoom() * 1.5);
-		} else if (type.equals("out")&& jcpPanel.getRenderPanel().getRenderer().getZoom()>.1)
-		{
-			jcpPanel.getRenderPanel().getRenderer().setZoom(jcpPanel.getRenderPanel().getRenderer().getZoom() / 1.5);
-		} else if (type.equals("original"))
-		{
-			jcpPanel.getRenderPanel().getRenderer().setZoom(1);
-		} else
-		{
-			logger.error("Unkown zoom command: " + type);
-		}
-		jcpPanel.get2DHub().updateView();
-		jcpPanel.updateStatusBar();
-	}
+    public void actionPerformed(ActionEvent e) {
+
+        Renderer renderer = jcpPanel.getRenderPanel().getRenderer();
+        double zoom = renderer.getZoom();
+        logger.debug("Zooming in/out in mode: ", type);
+        
+        if (type.equals("in") && zoom < 10) {
+            renderer.setZoom(zoom * 1.5);
+        } else if (type.equals("out") && zoom > .1) {
+            renderer.setZoom(zoom / 1.5);
+        } else if (type.equals("original")) {
+            renderer.setZoom(1);
+        } else {
+            logger.error("Unkown zoom command: " + type);
+        }
+        jcpPanel.get2DHub().updateView();
+        jcpPanel.updateStatusBar();
+    }
 
 }
-
