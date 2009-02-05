@@ -36,6 +36,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.text.NumberFormat;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
@@ -52,8 +53,8 @@ import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.selection.ISelection;
-import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -302,6 +303,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	                status = makeStatusBarString(formula, implicitHs, AtomContainerManipulator.getNaturalExactMass(ac));
 	            }
 	        }
+	    } else if (position == 3) {
+	    	status= GT._("Zoomfactor")+": "+NumberFormat.getPercentInstance().format(renderer.getZoom());
 	    }
 		return status;
 	}

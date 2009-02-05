@@ -43,7 +43,7 @@ public class JCPStatusBar extends JPanel
 {
 
 	private static final long serialVersionUID = 7075275608248231843L;
-	JLabel[] status = new JLabel[3];
+	JLabel[] status = new JLabel[4];
 
 
 	/**
@@ -53,9 +53,9 @@ public class JCPStatusBar extends JPanel
 	{
 		super();
 
-		setLayout(new GridLayout(1, 3));
+		setLayout(new GridLayout(1, 4));
 		setPreferredSize(new Dimension(660, 30));
-		for (int i = 0; i <= 2; i++)
+		for (int i = 0; i <= 3; i++)
 		{
 			status[i] = new JLabel();
 			status[i].setPreferredSize(new Dimension(220, 30));

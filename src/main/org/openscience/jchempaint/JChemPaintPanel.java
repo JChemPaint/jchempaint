@@ -495,7 +495,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 	public void updateStatusBar(){
 		if(showStatusBar){
 	        if (this.getChemModel() != null) {
-	            for (int i = 0; i < 3; i++) {
+	            for (int i = 0; i < 4; i++) {
 	              String status = renderPanel.getStatus(i);
 	              statusBar.setStatus(i + 1, status);
 	            }
