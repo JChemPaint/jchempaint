@@ -46,7 +46,7 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
-import org.openscience.cdk.renderer.LogicalSelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
 

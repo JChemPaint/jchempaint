@@ -186,53 +186,73 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	
 	@Override
 	public void start() {
-		RendererModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel rendererModel = 
+		    theJcpp.get2DHub().getRenderer().getRenderer2DModel();
 		IChemModel chemModel = theJcpp.getChemModel();
-		IControllerModel controllerModel = theJcpp.get2DHub().getController2DModel();
+		IControllerModel controllerModel = 
+		    theJcpp.get2DHub().getController2DModel();
+		
 		//Parameter parsing goes here
 		loadModelFromParam();
 		String atomNumbers=getParameter("atomNumbersVisible");
-		if(atomNumbers!=null){
-			if(atomNumbers.equals("true"))
-				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setDrawNumbers(true);
-		}
+		if (atomNumbers != null) {
+            if (atomNumbers.equals("true"))
+                rendererModel.setDrawNumbers(true);
+        }
+		
 		String background = getParameter("background");
-		if(background!=null){
-			if(background.indexOf("#")==0)
-				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setBackColor(Color.decode(background));
-			else
-				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setBackColor(new Color(Integer.parseInt(background)));
+		if (background != null) {
+            if (background.indexOf("#") == 0)
+                rendererModel.setBackColor(Color.decode(background));
+            else
+                rendererModel.setBackColor(new Color(Integer
+                        .parseInt(background)));
+        }
+		
+		if (getParameter("compact") != null
+                && getParameter("compact").equals("true")) {
+			rendererModel.setIsCompact(true);
 		}
-		if(getParameter("compact")!=null && getParameter("compact").equals("true")){
-			theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setIsCompact(true);
-		}
-		if(getParameter("tooltips")!=null){
-			StringTokenizer st=new StringTokenizer(getParameter("tooltips"),"|");
-			IAtomContainer container = theJcpp.getChemModel().getBuilder().newAtomContainer();
-	    	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(theJcpp.getChemModel()).iterator();
+		
+		if (getParameter("tooltips") != null) {
+			StringTokenizer st = 
+			    new StringTokenizer(getParameter("tooltips"), "|");
+			IAtomContainer container = 
+			    theJcpp.getChemModel().getBuilder().newAtomContainer();
+	    	Iterator<IAtomContainer> containers = 
+	    	    ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+	    	
 	    	while (containers.hasNext()) {
 	    		container.add(containers.next());
 	    	}
-			while(st.hasMoreTokens()){
-				IAtom atom = container.getAtom(Integer.parseInt(st.nextToken())-1);
-				theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().getToolTipTextMap().put(atom,st.nextToken());
+	    	
+			while (st.hasMoreTokens()) {
+				IAtom atom = 
+				    container.getAtom(Integer.parseInt(st.nextToken()) - 1);
+				rendererModel.getToolTipTextMap().put(atom, st.nextToken());
 			}
-			theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel().setShowTooltip(true);
+			rendererModel.setShowTooltip(true);
 		}
-		if(getParameter("impliciths")!=null && getParameter("impliciths").equals("false")){
+		
+		if (getParameter("impliciths") != null 
+		        && getParameter("impliciths").equals("false")) {
 			controllerModel.setAutoUpdateImplicitHydrogens(false);
 			rendererModel.setShowImplicitHydrogens(false);
 			rendererModel.setShowEndCarbons(false);
-		}else{
+		} else {
 			 controllerModel.setAutoUpdateImplicitHydrogens(true);
 			 rendererModel.setShowImplicitHydrogens(true);
-			 rendererModel.setShowEndCarbons(true);			 
-			 if(chemModel!=null){
-				 List<IAtomContainer> atomContainers = ChemModelManipulator.getAllAtomContainers(chemModel);
+			 rendererModel.setShowEndCarbons(true);	
+			 
+			 if (chemModel != null) {
+				 List<IAtomContainer> atomContainers = 
+				     ChemModelManipulator.getAllAtomContainers(chemModel);
 				 for(int i=0;i<atomContainers.size();i++)
 				 {
 					 try {
-						CDKHydrogenAdder.getInstance(atomContainers.get(i).getBuilder()).addImplicitHydrogens(atomContainers.get(i));
+						CDKHydrogenAdder.getInstance(
+						        atomContainers.get(i).getBuilder())
+						        .addImplicitHydrogens(atomContainers.get(i));
 					} catch (CDKException e) {
 						//do nothing
 					}
@@ -386,10 +406,12 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 * @param atom The atom number (starting with 0)
 	 */
 	public void selectAtom(int atom){
-		RendererModel rendererModel = theJcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel rendererModel = 
+		    theJcpp.get2DHub().getRenderer().getRenderer2DModel();
 		IChemModel chemModel = theJcpp.getChemModel();
 	    rendererModel.setExternalHighlightColor(Color.RED);
-	    IAtomContainer ac=chemModel.getMoleculeSet().getBuilder().newAtomContainer();
+	    IAtomContainer ac =
+	        chemModel.getMoleculeSet().getBuilder().newAtomContainer();
 	    ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
 	    rendererModel.setExternalSelectedPart(ac);
 	    getTheJcpp().repaint();

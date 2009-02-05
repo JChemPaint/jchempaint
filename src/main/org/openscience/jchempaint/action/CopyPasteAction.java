@@ -62,9 +62,9 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.renderer.ISelection;
-import org.openscience.cdk.renderer.LogicalSelection;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.selection.ISelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
@@ -90,7 +90,8 @@ public class CopyPasteAction extends JCPAction{
     		handleSystemClipboard();
 	        logger.info("  type  ", type);
 	        logger.debug("  source ", e.getSource());
-	        RendererModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+	        RendererModel renderModel = 
+	            jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 	        if ("copy".equals(type)) {
 	            IAtomContainer copy 
 	                = renderModel.getSelection().getConnectedAtomContainer();

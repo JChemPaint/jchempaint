@@ -77,7 +77,7 @@ public class ValidateFrame extends JFrame  {
     public ValidateFrame(JChemPaintPanel jcpp) {
         super("Validation Results");
    
-        rendererModel = jcpp.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+        rendererModel = jcpp.get2DHub().getRenderer().getRenderer2DModel();
         getContentPane().setLayout(new BorderLayout());
         
         JPanel southPanel = new JPanel();

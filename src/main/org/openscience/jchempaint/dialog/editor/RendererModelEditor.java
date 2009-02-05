@@ -65,7 +65,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private JCheckBox useAA;
     private JLabel fontName;
     private JButton chooseFontButton;
-    private Font currentFont;
+    private String currentFontName;
 	private JLabel color;
 	private JButton chooseColorButton;
     private Color currentColor;
@@ -83,7 +83,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
 	}
     
     private void constructPanel() {
-        currentFont = null;
+        currentFontName = "";
         drawNumbers = new JCheckBox();
         addField(GT._("Draw atom numbers"), drawNumbers);
         showAtomAtomMapping = new JCheckBox();
@@ -133,9 +133,9 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         useAA.setSelected(model.getUseAntiAliasing());
         showToolTip.setSelected(model.getShowTooltip());
         showReactionBoxes.setSelected(model.getShowReactionBoxes());
-        currentFont = model.getFont();
-        if (currentFont != null) {
-            fontName.setText(currentFont.getFontName());
+        currentFontName = model.getFontName();
+        if (!currentFontName.equals("")) {
+            fontName.setText(currentFontName);
         }
         currentColor = model.getBackColor();
         if (currentColor != null) {
@@ -156,7 +156,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setUseAntiAliasing(useAA.isSelected());
         model.setShowTooltip(showToolTip.isSelected());
         model.setShowReactionBoxes(showReactionBoxes.isSelected());
-        model.setFont(currentFont);
+        model.setFontName(currentFontName);
         model.setBackColor(currentColor);
     }
     
@@ -165,10 +165,14 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
      */
     public void actionPerformed(ActionEvent e) {
         if ("chooseFont".equals(e.getActionCommand())) {
-            Font newFont = JFontChooser.showDialog(this.frame, GT._("Choose a Font"), GT._("Carbon Dioxide"), currentFont);
+            Font newFont = JFontChooser.showDialog(
+                    this.frame,
+                    GT._("Choose a Font"),
+                    GT._("Carbon Dioxide"),
+                    new Font(currentFontName, Font.PLAIN, 12));
             if (newFont != null) {
-                currentFont = newFont;
-                fontName.setText(currentFont.getFontName());
+                currentFontName = newFont.getFontName();
+                fontName.setText(currentFontName);
             }
         }
         if ("chooseColor".equals(e.getActionCommand())) {

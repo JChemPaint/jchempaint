@@ -46,7 +46,8 @@ public class ModifyDisplaySettingsAction extends JCPAction
 	{
 		//TODO test if renderer uses settings
 		logger.debug("Modify display settings in mode");
-		RendererModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel renderModel = 
+		    jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 		ModifyRenderOptionsDialog frame =
 				new ModifyRenderOptionsDialog(jcpPanel,renderModel);
 		frame.setVisible(true);

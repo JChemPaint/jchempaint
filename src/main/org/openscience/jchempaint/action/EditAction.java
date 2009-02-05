@@ -44,9 +44,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.renderer.ISelection;
-import org.openscience.cdk.renderer.LogicalSelection;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.selection.ISelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -73,7 +73,8 @@ public class EditAction extends JCPAction {
 		logger.debug("Event source: ", event.getSource().getClass().getName());
 		logger.debug("  IChemObject: ", getSource(event));
 
-		RendererModel renderModel = jcpPanel.get2DHub().getIJava2DRenderer().getRenderer2DModel();
+		RendererModel renderModel 
+		    = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 		IChemModel chemModel = jcpPanel.getChemModel();
 		if (type.equals("cut")) {
 			org.openscience.cdk.interfaces.IAtom atomInRange = null;
