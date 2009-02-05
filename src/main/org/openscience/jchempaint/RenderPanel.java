@@ -313,7 +313,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         return "<html>"
             + formula
             + (implicitHs == 0 ? "" : " ("+GT._("of these")+ " "
-                + implicitHs + " "+GT._("Hs implicit")+")")+" (mass "+mass+")</html>";
+                + implicitHs + " "+GT._("Hs implicit")+")")+" ("+GT._("mass")+" "+mass+")</html>";
 	}
 
 	public Renderer getRenderer() {
