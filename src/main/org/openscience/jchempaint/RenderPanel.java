@@ -260,7 +260,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		String status = "";
 		if (position == 0) {
 			// depict editing mode
-			status = JCPMenuTextMaker.getInstance().getText(JCPMenuTextMaker.getInstance().getText(hub.getActiveDrawModule().getDrawModeString()));
+			status = JCPMenuTextMaker.getInstance().getText(hub.getActiveDrawModule().getDrawModeString());
 		} else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
