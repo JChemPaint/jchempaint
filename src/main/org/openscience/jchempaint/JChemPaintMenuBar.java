@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
@@ -56,7 +57,11 @@ public class JChemPaintMenuBar extends JMenuBar {
 
 
 	/**
-	 *  Constructor for the JChemPaintMenuBar object
+	 *  Constructor for the JChemPaintMenuBar object. Creates a JMenuBar with all the menues that are specified in the properties
+	 *  file. <p>
+	 *
+	 *  The menu items in the bar are defined by the property 'menubar' in
+	 *  org.openscience.cdk.applications.jchempaint.resources.JChemPaint.properties.
 	 *
 	 * @param  jcpPanel        Description of the Parameter
 	 * @param  guiString       Description of the Parameter
@@ -64,22 +69,6 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 */
 	public JChemPaintMenuBar(JChemPaintPanel jcpPanel, String menuDefinition, String guiString) {
 		this.guiString = guiString;
-    	createMenubar(jcpPanel, menuDefinition);
-	}
-
-
-	/**
-	 *  Creates a JMenuBar with all the menues that are specified in the properties
-	 *  file. <p>
-	 *
-	 *  The menu items in the bar are defined by the property 'menubar' in
-	 *  org.openscience.cdk.applications.jchempaint.resources.JChemPaint.properties.
-	 *
-	 * @param  jcpPanel        Description of the Parameter
-	 * @param  menuDefinition  Description of the Parameter
-	 */
-	protected void createMenubar(JChemPaintPanel jcpPanel, 
-        String menuDefinition) {
 		addNormalMenuBar(jcpPanel, menuDefinition);
 		this.add(Box.createHorizontalGlue());
 		this.add(menuHelper.createMenu(jcpPanel, "help", false, guiString));
@@ -102,7 +91,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 		}
 		String[] menuKeys = StringHelper.tokenize(definition);
 		for (int i = 0; i < menuKeys.length; i++) {
-			JMenu m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString);
+			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString);
 			if (m != null) {
 				this.add(m);
 			}
@@ -121,7 +110,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 		String[] menuKeys = StringHelper.tokenize(definition);
 		JMenu superMenu = new JMenu("JChemPaint");
 		for (int i = 0; i < menuKeys.length; i++) {
-			JMenu m = menuHelper.createMenu(jcpPanel, menuKeys[i], false,guiString);
+			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false,guiString);
 			if (m != null) {
 				superMenu.add(m);
 			}

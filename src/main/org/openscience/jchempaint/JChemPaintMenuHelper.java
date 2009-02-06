@@ -8,6 +8,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
 import org.openscience.jchempaint.action.JCPAction;
@@ -25,9 +26,9 @@ public class JChemPaintMenuHelper {
 
 	
 	/**
-	 *  Return the JCPAction instance associated with this JCPPanel
+	 *  Return the JCPAction instance associated with this JCPPanel.
 	 *
-	 *@return    The jCPAction value
+	 *  @return    The jCPAction value
 	 */
 	public JCPAction getJCPAction() {
 		if (jcpaction == null) {
@@ -37,10 +38,11 @@ public class JChemPaintMenuHelper {
 	}
 
 	/**
-	 *  Gets the menuResourceString attribute of the JChemPaint object
+	 *  Returns the definition of the subitems of a menu as in the properties files.
 	 *
-	 * @param  key  Description of the Parameter
-	 * @return      The menuResourceString value
+	 * @param  key       The key for which subitems to return
+	 * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
+	 * @return      	 The resource string
 	 */
 	public String getMenuResourceString(String key, String guiString) {
 		String str;
@@ -58,36 +60,43 @@ public class JChemPaintMenuHelper {
 	 *
 	 * @param  key       The String used to identify the Menu
 	 * @param  jcpPanel  Description of the Parameter
+	 * @param  isPopup   Tells if this menu will be a popup one or not
+	 * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
 	 * @return           The created JMenu
 	 */
-	protected JMenu createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
+	protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
 		logger.debug("Creating menu: ", key);
-		String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
 		JMenu menu = new JMenu(JCPMenuTextMaker.getInstance().getText(key));
+		return createMenu(jcpPanel, key, isPopup, guiString, menu);
+	}
+
+	
+	/**
+	 *  Creates a JMenu given by a String with all the MenuItems specified in the
+	 *  properties file.
+	 *
+	 * @param  key       The String used to identify the Menu
+	 * @param  jcpPanel  Description of the Parameter
+	 * @param  isPopup   Tells if this menu will be a popup one or not
+	 * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
+	 * @param  menu		 The menu to add the new menu to (must either be JMenu or JPopupMenu)
+	 * @return           The created JMenu
+	 */
+	protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, JComponent menu) {
+		String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
 		for (int i = 0; i < itemKeys.length; i++) {
 			if (itemKeys[i].equals("-")) {
-				menu.addSeparator();
+				if(menu instanceof JMenu)
+					((JMenu)menu).addSeparator();
+				else
+					((JPopupMenu)menu).addSeparator();
 			}
 			else if (itemKeys[i].startsWith("@")) {
-				JMenu me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString);
+				JComponent me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString);
 				menu.add(me);
 			}
-			else if (itemKeys[i].endsWith("+")) {
-				JMenuItem mi;
-				if(itemKeys[i].endsWith("++"))
-					mi = createMenuItem(jcpPanel,
-						itemKeys[i].substring(0, itemKeys[i].length() - 2),
-						true, true, isPopup
-						);
-				else
-					mi = createMenuItem(jcpPanel,
-						itemKeys[i].substring(0, itemKeys[i].length() - 1),
-						true, false, isPopup
-						);
-				menu.add(mi);
-			}
 			else {
-				JMenuItem mi = createMenuItem(jcpPanel, itemKeys[i], false, false, isPopup);
+				JMenuItem mi = createMenuItem(jcpPanel, itemKeys[i], isPopup);
 				menu.add(mi);
 			}
 		}
@@ -96,17 +105,26 @@ public class JChemPaintMenuHelper {
 
 	
 	/**
-	 *  Craetes a JMenuItem given by a String and adds the right ActionListener to
+	 *  Creates a JMenuItem given by a String and adds the right ActionListener to
 	 *  it.
 	 *
-	 * @param  cmd         String The Strin to identify the MenuItem
+	 * @param  cmd         String The String to identify the MenuItem
 	 * @param  jcpPanel    Description of the Parameter
-	 * @param  isCheckBox  Description of the Parameter
-	 * @param  isChecked   Description of the Parameter
+	 * @param  isPopup     Tells if this menu will be a popup one or not
 	 * @return             JMenuItem The created JMenuItem
 	 */
-	protected JMenuItem createMenuItem(JChemPaintPanel jcpPanel, String cmd, boolean isCheckBox, boolean isChecked, boolean isPopupMenu) {
+	protected JMenuItem createMenuItem(JChemPaintPanel jcpPanel, String cmd, boolean isPopupMenu) {
 		logger.debug("Creating menu item: ", cmd);
+		boolean isCheckBox=false;
+		if (cmd.endsWith("+")){
+			isCheckBox=true;
+			cmd=cmd.substring(0, cmd.length() - 1);
+		}
+		boolean isChecked=false;
+		if (cmd.endsWith("+")){
+			isChecked=true;
+			cmd=cmd.substring(0, cmd.length() - 1);
+		}
 		String translation = "***" + cmd + "***";
 		try {
 			translation = JCPMenuTextMaker.getInstance().getText(cmd);
@@ -145,11 +163,11 @@ public class JChemPaintMenuHelper {
 	}
 	
 	/**
-	 *  Adds ShortCuts to the JChemPaintMenuBar object
+	 *  Adds ShortCuts to the JChemPaintMenuBar object.
 	 *
-	 * @param  cmd  String The Strin to identify the MenuItem
-	 * @param  mi   the regarding MenuItem
-	 * @param  jcp  The feature to be added to the ShortCuts attribute
+	 * @param  cmd  String The Strin to identify the MenuItem.
+	 * @param  mi   the regarding MenuItem.
+	 * @param  jcp  The JChemPaintPanel this menu is used for.
 	 */
 	private void addShortCuts(String cmd, JMenuItem mi, JChemPaintPanel jcp) {
 		Properties shortCutProps = JCPPropertyHandler.getInstance().getJCPShort_Cuts();
