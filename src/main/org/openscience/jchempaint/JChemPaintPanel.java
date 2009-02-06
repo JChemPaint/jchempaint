@@ -533,8 +533,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 		updateStatusBar();
 	}
 	public void selectionChanged() {
-		// TODO Auto-generated method stub
-		
+		updateStatusBar();		
 	}
 	public void structureChanged() {
 		setModified(true);

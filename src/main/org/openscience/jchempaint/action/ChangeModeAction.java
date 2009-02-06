@@ -88,10 +88,10 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("enterelement")) {
             hub.setActiveDrawModule(new EnterElementSwingModule(hub));
         } else if (type.equals("lasso")) {
-            hub.setActiveDrawModule(new SelectModule(hub));
+            hub.setActiveDrawModule(new SelectModule(hub,jcpPanel));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("select")) {
-            hub.setActiveDrawModule(new SelectSquareModule(hub));
+            hub.setActiveDrawModule(new SelectSquareModule(hub,jcpPanel));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
             hub.setActiveDrawModule(new AlterBondStereoModule(

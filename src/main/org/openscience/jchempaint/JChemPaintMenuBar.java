@@ -34,7 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
 /**
- *  JChemPaint menu bar
+ *  An extension of JMenuBar for JCP purposes
  *
  */
 public class JChemPaintMenuBar extends JMenuBar {

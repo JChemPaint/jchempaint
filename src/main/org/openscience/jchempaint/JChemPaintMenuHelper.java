@@ -14,12 +14,19 @@ import javax.swing.KeyStroke;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.cdk.tools.LoggingTool;
 
+/**
+ * A class containing various helper methods used in JChemPaintMenuBar and JChemPaintPopupMenu.
+ *
+ */
 public class JChemPaintMenuHelper {
 	
 	private LoggingTool logger;
 	private JCPAction jcpaction;
 
 	
+	/**
+	 * Constructor for JChemPaintMenuHelper
+	 */
 	public JChemPaintMenuHelper(){
 		this.logger=new LoggingTool();
 	}
@@ -30,7 +37,7 @@ public class JChemPaintMenuHelper {
 	 *
 	 *  @return    The jCPAction value
 	 */
-	public JCPAction getJCPAction() {
+	private JCPAction getJCPAction() {
 		if (jcpaction == null) {
 			jcpaction = new JCPAction();
 		}
@@ -44,7 +51,7 @@ public class JChemPaintMenuHelper {
 	 * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
 	 * @return      	 The resource string
 	 */
-	public String getMenuResourceString(String key, String guiString) {
+	protected String getMenuResourceString(String key, String guiString) {
 		String str;
 		try {
 			str = JCPPropertyHandler.getInstance().getGUIDefinition(guiString).getString(key);
