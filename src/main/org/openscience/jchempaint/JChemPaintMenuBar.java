@@ -45,17 +45,6 @@ public class JChemPaintMenuBar extends JMenuBar {
     
     private JChemPaintMenuHelper menuHelper=new JChemPaintMenuHelper();
     
-    /**
-	 *  The more flexible constructor method.
-	 *
-	 * @param  jcpPanel       Description of the Parameter
-	 * @param  guiString      Description of the Parameter
-	 */
-	public JChemPaintMenuBar(JChemPaintPanel jcpPanel, String guiString) {
-		this(jcpPanel, null, guiString);
-	}
-
-
 	/**
 	 *  Constructor for the JChemPaintMenuBar object. Creates a JMenuBar with all the menues that are specified in the properties
 	 *  file. <p>
@@ -67,9 +56,9 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 * @param  guiString       Description of the Parameter
 	 * @param  menuDefinition  Description of the Parameter
 	 */
-	public JChemPaintMenuBar(JChemPaintPanel jcpPanel, String menuDefinition, String guiString) {
+	public JChemPaintMenuBar(JChemPaintPanel jcpPanel, String guiString) {
 		this.guiString = guiString;
-		addNormalMenuBar(jcpPanel, menuDefinition);
+		addNormalMenuBar(jcpPanel, menuHelper.getMenuResourceString("menubar", guiString));
 		this.add(Box.createHorizontalGlue());
 		this.add(menuHelper.createMenu(jcpPanel, "help", false, guiString));
 	}
@@ -86,9 +75,6 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 */
 	private void addNormalMenuBar(JChemPaintPanel jcpPanel, String menuDefinition) {
 		String definition = menuDefinition;
-		if (definition == null) {
-			definition = menuHelper.getMenuResourceString("menubar", guiString);
-		}
 		String[] menuKeys = StringHelper.tokenize(definition);
 		for (int i = 0; i < menuKeys.length; i++) {
 			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString);
