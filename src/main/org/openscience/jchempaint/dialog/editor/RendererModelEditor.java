@@ -65,8 +65,6 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     
     private JCheckBox showAromaticity;
     
-    private JCheckBox showAromaticityInCDKStyle;
-    
     private JCheckBox colorAtomsByType;
     
     private JCheckBox showToolTip;
@@ -84,6 +82,8 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private JSlider highlightDistance;
     
     private JSlider atomRadius;
+    
+    private JSlider wedgeWidth;
 
     private JLabel fontName;
     
@@ -122,15 +122,10 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         addField(GT._("Show explicit methyl groups"), showEndCarbons);
         
         showImplicitHydrogens = new JCheckBox();
-        addField(GT._("Show implicit hydrogens if atom symbol is shown"), 
-                showImplicitHydrogens);
+        addField(GT._("Show implicit hydrogens"), showImplicitHydrogens);
         
         showAromaticity = new JCheckBox();
         addField(GT._("Use aromatic ring circles"), showAromaticity);
-        
-        showAromaticityInCDKStyle = new JCheckBox();
-        addField(GT._("Use CDK style aromaticity indicators"), 
-                showAromaticityInCDKStyle);
         
         colorAtomsByType = new JCheckBox();
         addField(GT._("Color atoms by element"), colorAtomsByType);
@@ -152,7 +147,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         atomRadius.setPaintLabels(true);
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
-        atomRadius.setMajorTickSpacing(1);
+        atomRadius.setMinorTickSpacing(1);
         addField(GT._("Atom size"), atomRadius);
         
         bondWidth = new JSlider(1, 5);
@@ -177,6 +172,13 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
         addField(GT._("Highlight Distance"), highlightDistance);
+        
+        wedgeWidth = new JSlider(1, 5);
+        wedgeWidth.setSnapToTicks(true);
+        wedgeWidth.setPaintLabels(true);
+        wedgeWidth.setPaintTicks(true);
+        wedgeWidth.setMajorTickSpacing(1);
+        addField(GT._("Wedge width"), wedgeWidth);
         
         currentFontName = "";
         fontName = new JLabel();
@@ -204,7 +206,6 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showEndCarbons.setSelected(model.getShowEndCarbons());
         showImplicitHydrogens.setSelected(model.getShowImplicitHydrogens());
         showAromaticity.setSelected(model.getShowAromaticity());
-        showAromaticityInCDKStyle.setSelected(model.getShowAromaticityInCDKStyle());
         colorAtomsByType.setSelected(model.getColorAtomsByType());
         useAntiAliasing.setSelected(model.getUseAntiAliasing());
         showToolTip.setSelected(model.getShowTooltip());
@@ -215,6 +216,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         bondWidth.setValue((int)model.getBondWidth());
         bondLength.setValue((int)model.getBondLength());
         highlightDistance.setValue((int)model.getHighlightDistance());
+        wedgeWidth.setValue((int)model.getWedgeWidth());
         
         currentFontName = model.getFontName();
         if (!currentFontName.equals("")) {
@@ -234,7 +236,6 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setShowEndCarbons(showEndCarbons.isSelected());
         model.setShowImplicitHydrogens(showImplicitHydrogens.isSelected());
         model.setShowAromaticity(showAromaticity.isSelected());
-        model.setShowAromaticityInCDKStyle(showAromaticityInCDKStyle.isSelected());
         model.setColorAtomsByType(colorAtomsByType.isSelected());
         model.setUseAntiAliasing(useAntiAliasing.isSelected());
         model.setShowTooltip(showToolTip.isSelected());
@@ -245,6 +246,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setBondLength(bondLength.getValue());
         model.setBondWidth(bondWidth.getValue());
         model.setHighlightDistance(highlightDistance.getValue());
+        model.setWedgeWidth(wedgeWidth.getValue());
         
         model.setFontName(currentFontName);
         model.setBackColor(currentColor);
