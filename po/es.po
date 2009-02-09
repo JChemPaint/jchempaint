@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-05 17:50+0000\n"
-"PO-Revision-Date: 2009-01-23 21:45+0100\n"
+"PO-Revision-Date: 2009-02-07 18:26+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -199,19 +199,19 @@ msgstr "Código InChI generado"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:307
 msgid "Zoomfactor"
-msgstr ""
+msgstr "Escala"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:315
 msgid "of these"
-msgstr ""
+msgstr "de estos"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:316
 msgid "Hs implicit"
-msgstr ""
+msgstr "H implícitos"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:316
 msgid "mass"
-msgstr ""
+msgstr "masa"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:50
 msgid "File"
@@ -230,9 +230,8 @@ msgid "Open"
 msgstr "Abrir"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:54
-#, fuzzy
 msgid "Save As..."
-msgstr "Guardar como"
+msgstr "Guardar como..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:55
 msgid "View"
@@ -243,9 +242,8 @@ msgid "Print..."
 msgstr "Imprimir..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
-#, fuzzy
 msgid "Export..."
-msgstr "Modificar preferencias..."
+msgstr "Exportar..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:58
 msgid "Save"
@@ -305,9 +303,8 @@ msgid "Reset Bond Orders"
 msgstr "Restaurar el orden de los enlaces"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:73
-#, fuzzy
 msgid "Flip"
-msgstr "Voltear..."
+msgstr "Voltear"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:74
 msgid "Clean Up"
@@ -824,16 +821,15 @@ msgstr "Benceno"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:204
 msgid "Select in Free Form"
-msgstr ""
+msgstr "Seleccionar libremente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:205
-#, fuzzy
 msgid "Select Square"
-msgstr "Seleccionar molécula"
+msgstr "Seleccionar cuadrado"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:206
 msgid "Move"
-msgstr ""
+msgstr "Mover"
 
 #: src/main/org/openscience/jchempaint/GT.java:118
 msgid "Dutch"
@@ -870,3 +866,4 @@ msgstr "fragmento de código fuente de CDK"
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:179
 msgid "Change drawing symbol to"
 msgstr "Cambiar el símbolo de dibujo a"
+
