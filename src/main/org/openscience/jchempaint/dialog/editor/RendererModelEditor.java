@@ -38,6 +38,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
 
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.GT;
@@ -53,28 +54,50 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private static final long serialVersionUID = 8694652992068950179L;
     
     private JCheckBox drawNumbers;
+    
     private JCheckBox showAtomAtomMapping;
+    
     private JCheckBox useKekuleStructure;
+    
     private JCheckBox showEndCarbons;
+    
     private JCheckBox showImplicitHydrogens;
+    
     private JCheckBox showAromaticity;
+    
     private JCheckBox showAromaticityInCDKStyle;
+    
     private JCheckBox colorAtomsByType;
+    
     private JCheckBox showToolTip;
+    
     private JCheckBox showReactionBoxes;
-    private JCheckBox useAA;
+    
+    private JCheckBox useAntiAliasing;
+    
+    private JCheckBox isCompact;
+    
+    private JSlider bondLength;
+    
+    private JSlider highlightDistance;
+    
+    private JSlider atomRadius;
+
     private JLabel fontName;
+    
     private JButton chooseFontButton;
+    
     private String currentFontName;
-	private JLabel color;
-	private JButton chooseColorButton;
+    
+    private JLabel color;
+    
+    private JButton chooseColorButton;
+    
     private Color currentColor;
     
     private JFrame frame;
     
     private RendererModel model;
-
-
     
 	public RendererModelEditor(JFrame frame) {
         super();
@@ -83,37 +106,81 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
 	}
     
     private void constructPanel() {
-        currentFontName = "";
+        
         drawNumbers = new JCheckBox();
         addField(GT._("Draw atom numbers"), drawNumbers);
+        
         showAtomAtomMapping = new JCheckBox();
         addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
+        
         useKekuleStructure = new JCheckBox();
         addField(GT._("Explicit carbons"), useKekuleStructure);
+        
         showEndCarbons = new JCheckBox();
         addField(GT._("Show explicit methyl groups"), showEndCarbons);
+        
         showImplicitHydrogens = new JCheckBox();
-        addField(GT._("Show implicit hydrogens if atom symbol is shown"), showImplicitHydrogens);
+        addField(GT._("Show implicit hydrogens if atom symbol is shown"), 
+                showImplicitHydrogens);
+        
         showAromaticity = new JCheckBox();
         addField(GT._("Use aromatic ring circles"), showAromaticity);
+        
         showAromaticityInCDKStyle = new JCheckBox();
-        addField(GT._("Use CDK style aromaticity indicators"), showAromaticityInCDKStyle);
+        addField(GT._("Use CDK style aromaticity indicators"), 
+                showAromaticityInCDKStyle);
+        
         colorAtomsByType = new JCheckBox();
         addField(GT._("Color atoms by element"), colorAtomsByType);
-        useAA = new JCheckBox();
-        addField(GT._("Use Anti-Aliasing"), useAA);
+        
+        useAntiAliasing = new JCheckBox();
+        addField(GT._("Use Anti-Aliasing"), useAntiAliasing);
+        
         showToolTip = new JCheckBox();
-        addField(GT._("Show tooltips"), showToolTip);        
+        addField(GT._("Show tooltips"), showToolTip);
+        
         showReactionBoxes = new JCheckBox();
-        addField(GT._("Show boxes around reactions"), showReactionBoxes);        
+        addField(GT._("Show boxes around reactions"), showReactionBoxes);
+        
+        isCompact = new JCheckBox();
+        addField(GT._("Show atoms in compact form"), isCompact);
+        
+        atomRadius = new JSlider(0, 20);
+        atomRadius.setSnapToTicks(true);
+        atomRadius.setPaintLabels(true);
+        atomRadius.setPaintTicks(true);
+        atomRadius.setMajorTickSpacing(5);
+        atomRadius.setMinorTickSpacing(1);
+        addField(GT._("Atom size"), atomRadius);
+        
+        bondLength = new JSlider(20, 60);
+        bondLength.setSnapToTicks(true);
+        bondLength.setPaintLabels(true);
+        bondLength.setPaintTicks(true);
+        bondLength.setMajorTickSpacing(5);
+        bondLength.setMinorTickSpacing(1);
+        addField(GT._("Bond length"), bondLength);
+        
+        highlightDistance = new JSlider(0, 25);
+        highlightDistance.setSnapToTicks(true);
+        highlightDistance.setPaintLabels(true);
+        highlightDistance.setPaintTicks(true);
+        highlightDistance.setMajorTickSpacing(5);
+        highlightDistance.setMinorTickSpacing(1);
+        addField(GT._("Highlight Distance"), highlightDistance);
+        
+        currentFontName = "";
         fontName = new JLabel();
         addField(GT._("Font name"), fontName);
+        
         chooseFontButton = new JButton(GT._("Choose Font..."));
         chooseFontButton.addActionListener(this);
         chooseFontButton.setActionCommand("chooseFont");
         addField("", chooseFontButton);
+        
         color = new JLabel(GT._("BACKCOLOR"));
         addField(GT._("Background color"), color);
+        
         chooseColorButton = new JButton(GT._("Choose Color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
@@ -130,9 +197,15 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showAromaticity.setSelected(model.getShowAromaticity());
         showAromaticityInCDKStyle.setSelected(model.getShowAromaticityInCDKStyle());
         colorAtomsByType.setSelected(model.getColorAtomsByType());
-        useAA.setSelected(model.getUseAntiAliasing());
+        useAntiAliasing.setSelected(model.getUseAntiAliasing());
         showToolTip.setSelected(model.getShowTooltip());
         showReactionBoxes.setSelected(model.getShowReactionBoxes());
+        isCompact.setSelected(model.getIsCompact());
+        
+        atomRadius.setValue((int)model.getAtomRadius());
+        bondLength.setValue((int)model.getBondLength());
+        highlightDistance.setValue((int)model.getHighlightDistance());
+        
         currentFontName = model.getFontName();
         if (!currentFontName.equals("")) {
             fontName.setText(currentFontName);
@@ -153,9 +226,15 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setShowAromaticity(showAromaticity.isSelected());
         model.setShowAromaticityInCDKStyle(showAromaticityInCDKStyle.isSelected());
         model.setColorAtomsByType(colorAtomsByType.isSelected());
-        model.setUseAntiAliasing(useAA.isSelected());
+        model.setUseAntiAliasing(useAntiAliasing.isSelected());
         model.setShowTooltip(showToolTip.isSelected());
         model.setShowReactionBoxes(showReactionBoxes.isSelected());
+        model.setIsCompact(isCompact.isSelected());
+        
+        model.setAtomRadius(atomRadius.getValue());
+        model.setBondLength(bondLength.getValue());
+        model.setHighlightDistance(highlightDistance.getValue());
+        
         model.setFontName(currentFontName);
         model.setBackColor(currentColor);
     }
