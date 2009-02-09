@@ -35,7 +35,6 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.text.NumberFormat;
 import java.util.Iterator;
 
@@ -143,14 +142,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
                         .getDefaultConfiguration()
                         .createCompatibleImage(bounds.width, bounds.height);
         Graphics2D g = (Graphics2D)image.getGraphics();
-        takeSnapshot(g,bounds);
+        takeSnapshot(g, bounds);
         return image;
 	}
 	
 	public void takeSnapshot(Graphics2D g, Rectangle bounds){
         super.paint(g);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
         this.paintChemModel(g, bounds);
     }
 	
@@ -165,15 +162,16 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	    IChemModel chemModel = this.hub.getIChemModel();
 	    if (isValidChemModel(chemModel)) {
 
-	        // determine the size the canvas needs to be in order to fit the model
+	        // paint first, so that the transform is set correctly
+	        this.paintChemModel(chemModel, g, screenBounds);
+	        
+	        // determine the size the canvas needs to be to fit the model
 	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
-
 	        if (this.overlaps(screenBounds, diagramBounds)) {
 	            Rectangle union = screenBounds.union(diagramBounds);
 	            this.setPreferredSize(union.getSize());
 	            this.revalidate();
             }
-	        this.paintChemModel(chemModel, g, screenBounds);
         }
 	}
 
