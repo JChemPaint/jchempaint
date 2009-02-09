@@ -216,11 +216,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	public void paint(Graphics g) {
 	    this.setBackground(renderer.getRenderer2DModel().getBackColor());
 	    super.paint(g);
-		  // set the graphics to antialias
+	    
         Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-
+       
 		if (this.shouldPaintFromCache) {
 		    this.paintFromCache(g2);
 		} else {
