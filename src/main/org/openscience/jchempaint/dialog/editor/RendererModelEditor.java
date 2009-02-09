@@ -77,6 +77,8 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     
     private JCheckBox isCompact;
     
+    private JSlider bondWidth;
+    
     private JSlider bondLength;
     
     private JSlider highlightDistance;
@@ -150,8 +152,15 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         atomRadius.setPaintLabels(true);
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
-        atomRadius.setMinorTickSpacing(1);
+        atomRadius.setMajorTickSpacing(1);
         addField(GT._("Atom size"), atomRadius);
+        
+        bondWidth = new JSlider(1, 5);
+        bondWidth.setSnapToTicks(true);
+        bondWidth.setPaintLabels(true);
+        bondWidth.setPaintTicks(true);
+        bondWidth.setMajorTickSpacing(1);
+        addField(GT._("Bond width"), bondWidth);
         
         bondLength = new JSlider(20, 60);
         bondLength.setSnapToTicks(true);
@@ -203,6 +212,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         isCompact.setSelected(model.getIsCompact());
         
         atomRadius.setValue((int)model.getAtomRadius());
+        bondWidth.setValue((int)model.getBondWidth());
         bondLength.setValue((int)model.getBondLength());
         highlightDistance.setValue((int)model.getHighlightDistance());
         
@@ -233,6 +243,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         
         model.setAtomRadius(atomRadius.getValue());
         model.setBondLength(bondLength.getValue());
+        model.setBondWidth(bondWidth.getValue());
         model.setHighlightDistance(highlightDistance.getValue());
         
         model.setFontName(currentFontName);
