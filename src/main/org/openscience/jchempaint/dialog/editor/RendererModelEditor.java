@@ -65,6 +65,8 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     
     private JCheckBox showAromaticity;
     
+    private JCheckBox showAromaticityCDKStyle;
+    
     private JCheckBox colorAtomsByType;
     
     private JCheckBox showToolTip;
@@ -126,6 +128,9 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         
         showAromaticity = new JCheckBox();
         addField(GT._("Use aromatic ring circles"), showAromaticity);
+        
+        showAromaticityCDKStyle = new JCheckBox();
+        addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
         
         colorAtomsByType = new JCheckBox();
         addField(GT._("Color atoms by element"), colorAtomsByType);
@@ -206,6 +211,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showEndCarbons.setSelected(model.getShowEndCarbons());
         showImplicitHydrogens.setSelected(model.getShowImplicitHydrogens());
         showAromaticity.setSelected(model.getShowAromaticity());
+        showAromaticityCDKStyle.setSelected(model.getShowAromaticityCDKStyle());
         colorAtomsByType.setSelected(model.getColorAtomsByType());
         useAntiAliasing.setSelected(model.getUseAntiAliasing());
         showToolTip.setSelected(model.getShowTooltip());
@@ -236,6 +242,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setShowEndCarbons(showEndCarbons.isSelected());
         model.setShowImplicitHydrogens(showImplicitHydrogens.isSelected());
         model.setShowAromaticity(showAromaticity.isSelected());
+        model.setShowAromaticityCDKStyle(showAromaticityCDKStyle.isSelected());
         model.setColorAtomsByType(colorAtomsByType.isSelected());
         model.setUseAntiAliasing(useAntiAliasing.isSelected());
         model.setShowTooltip(showToolTip.isSelected());
