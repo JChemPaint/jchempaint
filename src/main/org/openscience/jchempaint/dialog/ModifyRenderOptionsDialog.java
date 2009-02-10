@@ -60,7 +60,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
 	 * Displays the Info Dialog for JChemPaint. 
 	 */
     public ModifyRenderOptionsDialog(JChemPaintPanel jcpPanel, RendererModel model) {
-        super(GT._("Modify Renderer2D Options Dialog"));
+        super();
         this.model = model;
         this.jcpPanel=jcpPanel;
         editor = new RendererModelEditor(this);

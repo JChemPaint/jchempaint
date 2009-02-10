@@ -40,6 +40,8 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.JCPMenuTextMaker;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.action.JCPAction;
 
@@ -58,7 +60,7 @@ public class AboutDialog extends JFrame {
 
 	/** Displays the About Dialog for JChemPaint.  */
 	public AboutDialog() {
-		super("About JChemPaint");
+		super(JCPMenuTextMaker.getInstance().getText("about"));
 		logger = new LoggingTool(this);
 		doInit();
 	}
@@ -67,9 +69,9 @@ public class AboutDialog extends JFrame {
 		Package self = Package.getPackage("org.openscience.jchempaint");
 		String version = self.getImplementationVersion();
 		String s1 = "JChemPaint " + version + "\n";
-		s1 += "An open-source editor for 2D chemical structures.";
-		String s2 = "An OpenScience project by Christoph Steinbeck, Egon Willighagen and others.\n";
-		s2 += "See 'http://jchempaint.sourceforge.net' for more information.";
+		s1 += GT._("An open-source editor for 2D chemical structures.");
+		String s2 = GT._("An OpenScience project by Christoph Steinbeck, Egon Willighagen and others.")+"\n";
+		s2 += GT._("See 'http://jchempaint.sourceforge.net' for more information.");
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().setBackground(Color.white);
@@ -95,7 +97,6 @@ public class AboutDialog extends JFrame {
 		JTextArea jtf2 = new JTextArea(s2);
 		jtf2.setEditable(false);
 		jtf2.setBorder(lb);
-		setTitle("About JChemPaint");
 		getContentPane().add("Center", label1);
 		getContentPane().add("North", jtf1);
 		getContentPane().add("South", jtf2);

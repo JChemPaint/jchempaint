@@ -57,6 +57,7 @@ import org.openscience.cdk.PeriodicTableElement;
 import org.openscience.cdk.config.ElementPTFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.GT;
 /**
  * JPanel version of the periodic system.
  *
@@ -107,15 +108,15 @@ public class PeriodicTablePanel extends JPanel
 		layeredPane = new JLayeredPane();
 		layeredPane.setPreferredSize(new Dimension(611, 575));
 		layeredPane.setBorder(BorderFactory.createTitledBorder(
-                                    "Periodic Table for CDK"));
+                                    GT._("Periodic Table for JChemPaint")));
 		JPanel tp = PTPanel();
 		tp.setBounds(8,85,600, 480);
 		
-		JButton button = new JButton("Reload");
+		JButton button = new JButton(GT._("Reload"));
 		button.setVerticalTextPosition(AbstractButton.BOTTOM);
 		button.setHorizontalTextPosition(AbstractButton.CENTER);
 		button.setMnemonic(KeyEvent.VK_R);
-		button.setToolTipText("Click this button to back to PeriodicTable.");
+		button.setToolTipText(GT._("Click this button to go back to PeriodicTable."));
 		button.setFont(new Font("Times-Roman",Font.BOLD, 10));
 		button.setBounds(510, 20, 90, 20);
 		button.addActionListener( new BackAction() );
@@ -179,26 +180,26 @@ public class PeriodicTablePanel extends JPanel
 		panel.add(butt);
 		//
 		
-		panel.add(createButton("He"));
+		panel.add(createButton(GT._("He")));
 		
-		panel.add(createButton("Li"));
+		panel.add(createButton(GT._("Li")));
 		
-		panel.add(createButton("Be"));
+		panel.add(createButton(GT._("Be")));
 		for (int i = 0; i < 10; i++)
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
 		//no metall
-		panel.add(createButton("B"));
-		panel.add(createButton("C"));
-		panel.add(createButton("N"));
-		panel.add(createButton("O"));
-		panel.add(createButton("F"));
+		panel.add(createButton(GT._("B")));
+		panel.add(createButton(GT._("C")));
+		panel.add(createButton(GT._("N")));
+		panel.add(createButton(GT._("O")));
+		panel.add(createButton(GT._("F")));
 		//
-		panel.add(createButton("Ne"));
+		panel.add(createButton(GT._("Ne")));
 		
-		panel.add(createButton("Na"));
-		panel.add(createButton("Mg"));
+		panel.add(createButton(GT._("Na")));
+		panel.add(createButton(GT._("Mg")));
 		
 		butt = new JButton("IIIB");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
@@ -231,130 +232,130 @@ public class PeriodicTablePanel extends JPanel
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		//no metall
-		panel.add(createButton("Al"));
-		panel.add(createButton("Si"));
-		panel.add(createButton("P"));
-		panel.add(createButton("S"));
-		panel.add(createButton("Cl"));
+		panel.add(createButton(GT._("Al")));
+		panel.add(createButton(GT._("Si")));
+		panel.add(createButton(GT._("P")));
+		panel.add(createButton(GT._("S")));
+		panel.add(createButton(GT._("Cl")));
 		//
-		panel.add(createButton("Ar"));
+		panel.add(createButton(GT._("Ar")));
 		
-		panel.add(createButton("K"));
-		panel.add(createButton("Ca"));
+		panel.add(createButton(GT._("K")));
+		panel.add(createButton(GT._("Ca")));
 		//transition
-		panel.add(createButton("Sc"));
-		panel.add(createButton("Ti"));
-		panel.add(createButton("V"));
-		panel.add(createButton("Cr"));
-		panel.add(createButton("Mn"));
-		panel.add(createButton("Fe"));
-		panel.add(createButton("Co"));
-		panel.add(createButton("Ni"));
-		panel.add(createButton("Cu"));
-		panel.add(createButton("Zn"));
+		panel.add(createButton(GT._("Sc")));
+		panel.add(createButton(GT._("Ti")));
+		panel.add(createButton(GT._("V")));
+		panel.add(createButton(GT._("Cr")));
+		panel.add(createButton(GT._("Mn")));
+		panel.add(createButton(GT._("Fe")));
+		panel.add(createButton(GT._("Co")));
+		panel.add(createButton(GT._("Ni")));
+		panel.add(createButton(GT._("Cu")));
+		panel.add(createButton(GT._("Zn")));
 		//no metall
-		panel.add(createButton("Ga"));
-		panel.add(createButton("Ge"));
-		panel.add(createButton("As"));
-		panel.add(createButton("Se"));
-		panel.add(createButton("Br"));
+		panel.add(createButton(GT._("Ga")));
+		panel.add(createButton(GT._("Ge")));
+		panel.add(createButton(GT._("As")));
+		panel.add(createButton(GT._("Se")));
+		panel.add(createButton(GT._("Br")));
 		//
-		panel.add(createButton("Kr"));
+		panel.add(createButton(GT._("Kr")));
 		
-		panel.add(createButton("Rb"));
-		panel.add(createButton("Sr"));
+		panel.add(createButton(GT._("Rb")));
+		panel.add(createButton(GT._("Sr")));
 		//transition
-		panel.add(createButton("Y"));
-		panel.add(createButton("Zr"));
-		panel.add(createButton("Nb"));
-		panel.add(createButton("Mo"));
-		panel.add(createButton("Tc"));
-		panel.add(createButton("Ru"));
-		panel.add( createButton("Rh"));
-		panel.add(createButton("Pd"));
-		panel.add(createButton("Ag"));
-		panel.add(createButton("Cd"));
+		panel.add(createButton(GT._("Y")));
+		panel.add(createButton(GT._("Zr")));
+		panel.add(createButton(GT._("Nb")));
+		panel.add(createButton(GT._("Mo")));
+		panel.add(createButton(GT._("Tc")));
+		panel.add(createButton(GT._("Ru")));
+		panel.add( createButton(GT._("Rh")));
+		panel.add(createButton(GT._("Pd")));
+		panel.add(createButton(GT._("Ag")));
+		panel.add(createButton(GT._("Cd")));
 		//no metall
-		panel.add(createButton("In"));
-		panel.add(createButton("Sn"));
-		panel.add(createButton("Sb"));
-		panel.add(createButton("Te"));
-		panel.add(createButton("I"));
+		panel.add(createButton(GT._("In")));
+		panel.add(createButton(GT._("Sn")));
+		panel.add(createButton(GT._("Sb")));
+		panel.add(createButton(GT._("Te")));
+		panel.add(createButton(GT._("I")));
 		//
-		panel.add(createButton("Xe"));
+		panel.add(createButton(GT._("Xe")));
 		
-		panel.add(createButton("Cs"));
-		panel.add(createButton("Ba"));
+		panel.add(createButton(GT._("Cs")));
+		panel.add(createButton(GT._("Ba")));
 		//transition
-		panel.add(createButton("La"));
-		panel.add(createButton("Hf"));
-		panel.add(createButton("Ta"));
-		panel.add(createButton("W"));
-		panel.add(createButton("Re"));
-		panel.add(createButton("Os"));
-		panel.add(createButton("Ir"));
-		panel.add(createButton("Pt"));
-		panel.add(createButton("Au"));
-		panel.add(createButton("Hg"));
+		panel.add(createButton(GT._("La")));
+		panel.add(createButton(GT._("Hf")));
+		panel.add(createButton(GT._("Ta")));
+		panel.add(createButton(GT._("W")));
+		panel.add(createButton(GT._("Re")));
+		panel.add(createButton(GT._("Os")));
+		panel.add(createButton(GT._("Ir")));
+		panel.add(createButton(GT._("Pt")));
+		panel.add(createButton(GT._("Au")));
+		panel.add(createButton(GT._("Hg")));
 		//no metall
-		panel.add(createButton("Tl"));
-		panel.add(createButton("Pb"));
-		panel.add(createButton("Bi"));
-		panel.add(createButton("Po"));
-		panel.add(createButton("At"));
+		panel.add(createButton(GT._("Tl")));
+		panel.add(createButton(GT._("Pb")));
+		panel.add(createButton(GT._("Bi")));
+		panel.add(createButton(GT._("Po")));
+		panel.add(createButton(GT._("At")));
 		//
-		panel.add(createButton("Rn"));
+		panel.add(createButton(GT._("Rn")));
 		
-		panel.add(createButton("Fr"));
-		panel.add(createButton("Ra"));
+		panel.add(createButton(GT._("Fr")));
+		panel.add(createButton(GT._("Ra")));
 		//transition
-		panel.add(createButton("Ac"));
-		panel.add(createButton("Rf"));
-		panel.add(createButton("Db"));
-		panel.add(createButton("Sg"));
-		panel.add(createButton("Bh"));
-		panel.add(createButton("Hs"));
-		panel.add(createButton("Mt"));
-		panel.add(createButton("Ds"));
-		panel.add(createButton("Rg"));
+		panel.add(createButton(GT._("Ac")));
+		panel.add(createButton(GT._("Rf")));
+		panel.add(createButton(GT._("Db")));
+		panel.add(createButton(GT._("Sg")));
+		panel.add(createButton(GT._("Bh")));
+		panel.add(createButton(GT._("Hs")));
+		panel.add(createButton(GT._("Mt")));
+		panel.add(createButton(GT._("Ds")));
+		panel.add(createButton(GT._("Rg")));
 		for (int i = 0; i < 9; i++)
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
 		//Acti
-		panel.add(createButton("Ce"));
-		panel.add(createButton("Pr"));
-		panel.add(createButton("Nd"));
-		panel.add(createButton("Pm"));
-		panel.add(createButton("Sm"));
-		panel.add(createButton("Eu"));
-		panel.add(createButton("Gd"));
-		panel.add(createButton("Tb"));
-		panel.add(createButton("Dy"));
-		panel.add(createButton("Ho"));
-		panel.add(createButton("Er"));
-		panel.add(createButton("Tm"));
-		panel.add(createButton("Yb"));
-		panel.add(createButton("Lu"));
+		panel.add(createButton(GT._("Ce")));
+		panel.add(createButton(GT._("Pr")));
+		panel.add(createButton(GT._("Nd")));
+		panel.add(createButton(GT._("Pm")));
+		panel.add(createButton(GT._("Sm")));
+		panel.add(createButton(GT._("Eu")));
+		panel.add(createButton(GT._("Gd")));
+		panel.add(createButton(GT._("Tb")));
+		panel.add(createButton(GT._("Dy")));
+		panel.add(createButton(GT._("Ho")));
+		panel.add(createButton(GT._("Er")));
+		panel.add(createButton(GT._("Tm")));
+		panel.add(createButton(GT._("Yb")));
+		panel.add(createButton(GT._("Lu")));
 		for (int i = 0; i < 4; i++)
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
 		//Lacti
-		panel.add( createButton("Th"));
-		panel.add(createButton("Pa"));
-		panel.add(createButton("U"));
-		panel.add(createButton("Np"));
-		panel.add(createButton("Pu"));
-		panel.add(createButton("Am"));
-		panel.add(createButton("Cm"));
-		panel.add(createButton("Bk"));
-		panel.add(createButton("Cf"));
-		panel.add(createButton("Es"));
-		panel.add(createButton("Fm"));
-		panel.add(createButton("Md"));
-		panel.add(createButton("No"));
-		panel.add(createButton("Lr"));
+		panel.add( createButton(GT._("Th")));
+		panel.add(createButton(GT._("Pa")));
+		panel.add(createButton(GT._("U")));
+		panel.add(createButton(GT._("Np")));
+		panel.add(createButton(GT._("Pu")));
+		panel.add(createButton(GT._("Am")));
+		panel.add(createButton(GT._("Cm")));
+		panel.add(createButton(GT._("Bk")));
+		panel.add(createButton(GT._("Cf")));
+		panel.add(createButton(GT._("Es")));
+		panel.add(createButton(GT._("Fm")));
+		panel.add(createButton(GT._("Md")));
+		panel.add(createButton(GT._("No")));
+		panel.add(createButton(GT._("Lr")));
 		//End
 		panel.setVisible(true);
 		return panel;
