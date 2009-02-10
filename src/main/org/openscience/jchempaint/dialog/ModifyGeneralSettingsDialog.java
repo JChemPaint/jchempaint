@@ -52,7 +52,7 @@ public class ModifyGeneralSettingsDialog extends JFrame {
 	 * Displays the Info Dialog for JChemPaint.
 	 */
     public ModifyGeneralSettingsDialog() {
-        super(GT._("Modify General Settings Dialog"));
+        super(GT._("General Settings"));
         editor = new GeneralSettingsEditor(this);
         createDialog();
         pack();
@@ -62,7 +62,6 @@ public class ModifyGeneralSettingsDialog extends JFrame {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle("General Setting");
         editor.setSettings();
         getContentPane().add("Center",editor);
         
