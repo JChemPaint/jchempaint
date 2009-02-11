@@ -50,6 +50,7 @@ import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.action.CopyPasteAction.JcpSelection;
 
@@ -191,18 +192,24 @@ public class EditAction extends JCPAction {
 			else {
 				logger.warn("Cannot select everything in : ", object);
 			}
-		}/*
+		}
 		else if (type.equals("selectReactionReactants")) {
 			IChemObject object = getSource(event);
 			if (object instanceof Reaction) {
 				Reaction reaction = (Reaction) object;
-				IAtomContainer wholeModel = jcpModel.getChemModel().getBuilder().newAtomContainer();
+				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
 	        	Iterator containers = MoleculeSetManipulator.getAllAtomContainers(reaction.getReactants()).iterator();
 	        	while (containers.hasNext()) {
 	        		wholeModel.add((IAtomContainer)containers.next());
 	        	}
-				renderModel.setSelectedPart(wholeModel);
-				jcpModel.fireChange();
+	        	ShapeSelection container = new RectangleSelection();
+	        	for(IAtom atom:wholeModel.atoms()){
+	        		container.atoms.add(atom);
+	        	}
+	        	for(IBond bond:wholeModel.bonds()){
+	        		container.bonds.add(bond);
+	        	}
+				renderModel.setSelection(container);
 			}
 			else {
 				logger.warn("Cannot select reactants from : ", object);
@@ -212,18 +219,24 @@ public class EditAction extends JCPAction {
 			IChemObject object = getSource(event);
 			if (object instanceof Reaction) {
 				Reaction reaction = (Reaction) object;
-				IAtomContainer wholeModel = jcpModel.getChemModel().getBuilder().newAtomContainer();
+				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
 	        	Iterator containers = MoleculeSetManipulator.getAllAtomContainers(reaction.getProducts()).iterator();
 	        	while (containers.hasNext()) {
 	        		wholeModel.add((IAtomContainer)containers.next());
 	        	}
-				renderModel.setSelectedPart(wholeModel);
-				jcpModel.fireChange();
+	        	ShapeSelection container = new RectangleSelection();
+	        	for(IAtom atom:wholeModel.atoms()){
+	        		container.atoms.add(atom);
+	        	}
+	        	for(IBond bond:wholeModel.bonds()){
+	        		container.bonds.add(bond);
+	        	}
+				renderModel.setSelection(container);
 			}
 			else {
 				logger.warn("Cannot select reactants from : ", object);
 			}
-		}*/
+		}
 		else {
 			logger.warn("Unsupported EditAction: " + type);
 		}

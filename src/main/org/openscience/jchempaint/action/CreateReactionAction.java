@@ -175,7 +175,7 @@ public class CreateReactionAction extends JCPAction
 		model.getMoleculeSet().removeAtomContainer(container);
 		logger.debug("Deleted atom from old container...");
 		model.setReactionSet(reactionSet);
-		
+		jcpPanel.get2DHub().updateView();
 	}
 
 

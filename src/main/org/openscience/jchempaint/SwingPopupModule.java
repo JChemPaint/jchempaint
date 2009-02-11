@@ -28,6 +28,7 @@
  */
 package org.openscience.jchempaint;
 
+import java.awt.Rectangle;
 import java.util.Hashtable;
 
 import javax.vecmath.Point2d;
@@ -79,7 +80,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@return             The popupMenu value
 	 */
 	public JChemPaintPopupMenu getPopupMenu(Class classSearched) {
-        logger.debug("Searching popup for: ", classSearched.getName());
+		logger.debug("Searching popup for: ", classSearched.getName());
         while (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());
             if (SwingPopupModule.popupMenus.containsKey(classSearched.getName())) {
@@ -97,6 +98,12 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		IChemObject objectInRange = renderer.getRenderer().getRenderer2DModel().getHighlightedAtom();
 		if(objectInRange==null)
 			objectInRange = renderer.getRenderer().getRenderer2DModel().getHighlightedBond();
+		//look if we are in a reaction box
+		if(objectInRange==null && renderer.getChemModel().getReactionSet()!=null && renderer.getChemModel().getReactionSet().getReactionCount()>0){
+			Rectangle reactionbounds = renderer.getRenderer().calculateScreenBounds(renderer.getChemModel().getReactionSet());
+			if(reactionbounds.contains(mouseCoords.x, mouseCoords.y))
+				objectInRange = renderer.getChemModel().getReactionSet().getReaction(0);
+		}
 		if(objectInRange==null)
 			objectInRange = chemModelRelay.getIChemModel();
 		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
