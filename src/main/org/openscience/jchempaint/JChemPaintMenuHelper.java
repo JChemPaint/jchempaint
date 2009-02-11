@@ -1,5 +1,6 @@
 package org.openscience.jchempaint;
 
+import java.awt.Toolkit;
 import java.lang.reflect.Field;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -177,34 +178,62 @@ public class JChemPaintMenuHelper {
 	 * @param  jcp  The JChemPaintPanel this menu is used for.
 	 */
 	private void addShortCuts(String cmd, JMenuItem mi, JChemPaintPanel jcp) {
-		Properties shortCutProps = JCPPropertyHandler.getInstance().getJCPShort_Cuts();
+		Properties shortCutProps = 
+		    JCPPropertyHandler.getInstance().getJCPShort_Cuts();
+		
 		String shortCuts = shortCutProps.getProperty(cmd);
 		String charString = null;
 		if (shortCuts != null) {
-			try {
-				String[] scStrings = shortCuts.trim().split(",");
-				if (scStrings.length > 1) {
-					charString = scStrings[1];
-					String altKey = scStrings[0] + "_MASK";
-					Field field = Class.forName("java.awt.event.InputEvent").getField(altKey);
-					int i = field.getInt(Class.forName("java.awt.event.InputEvent"));
-					mi.setAccelerator(KeyStroke.getKeyStroke(charString.charAt(0), i));
-					jcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(charString.charAt(0), i), JComponent.WHEN_IN_FOCUSED_WINDOW);
-				}
-				else {
-					charString = "VK_" + scStrings[0];
-					Field field = Class.forName("java.awt.event.KeyEvent").getField(charString);
-					int i = field.getInt(Class.forName("java.awt.event.KeyEvent"));
-					mi.setAccelerator(KeyStroke.getKeyStroke(i, 0));
-					jcp.registerKeyboardAction(mi.getActionListeners()[0], charString, KeyStroke.getKeyStroke(i, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-				}
-			} catch (ClassNotFoundException cnfe) {
-				cnfe.printStackTrace();
-			} catch (NoSuchFieldException nsfe) {
-				nsfe.printStackTrace();
-			} catch (IllegalAccessException iae) {
-				iae.printStackTrace();
-			}
+		    String[] scStrings = shortCuts.trim().split(",");
+		    
+		    int keyCode;
+		    int modifier;
+		    if (scStrings.length > 1) {
+		        charString = "VK_" + scStrings[1];
+		        String altKey = scStrings[0] + "_MASK";
+		        if (scStrings[0].equals("CTRL")) {
+		            modifier = 
+		                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		        } else {
+		            modifier = getCode(altKey, "java.awt.event.InputEvent");
+		        }
+		        keyCode = getCode(charString, "java.awt.event.KeyEvent");
+		    } else {
+		        charString = "VK_" + scStrings[0];
+
+		        keyCode = getCode(charString, "java.awt.event.KeyEvent");
+		        modifier = 0;
+		    }
+		    
+		    KeyStroke keyStroke = 
+		        KeyStroke.getKeyStroke(keyCode, modifier, false);
+
+		    mi.setAccelerator(keyStroke);
+		    jcp.getInputMap().put(keyStroke, mi);
+		    jcp.getActionMap().put(mi, mi.getAction());
+			
 		}
+	}
+	
+	/**
+	 * Look up the int constant for a particular VK_KEY.
+	 * @param codeString VK_something
+	 * @param className the name of the class to use
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+    private int getCode(String codeString, String className) {
+	    try {
+	        Class klass = Class.forName(className);
+	        Field field = klass.getField(codeString);
+	        return field.getInt(klass);
+	    } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        } catch (NoSuchFieldException nsfe) {
+            nsfe.printStackTrace();
+        } catch (IllegalAccessException iae) {
+            iae.printStackTrace();
+        }
+        return -1;
 	}
 }
