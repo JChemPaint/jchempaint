@@ -165,6 +165,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	        // paint first, so that the transform is set correctly
 	        this.paintChemModel(chemModel, g, screenBounds);
 	        
+	        // don't calculate screen size as it is equal to screen size!
+	        if (renderer.getRenderer2DModel().isFitToScreen()) {
+	            return;
+	        }
+	        
 	        // determine the size the canvas needs to be to fit the model
 	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
 	        if (this.overlaps(screenBounds, diagramBounds)) {
