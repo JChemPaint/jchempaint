@@ -36,7 +36,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -51,6 +53,14 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
+import org.openscience.cdk.renderer.generators.HighlightGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.LonePairGenerator;
+import org.openscience.cdk.renderer.generators.RadicalGenerator;
+import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.selection.ISelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
@@ -99,7 +109,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 
 	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
-		this.renderer = new Renderer(new AWTFontManager());
+	    
+		this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
 
@@ -112,6 +123,18 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.addMouseListener(mouseEventRelay);
 		this.addMouseMotionListener(mouseEventRelay);
 		this.isNewChemModel = true;
+	}
+	
+	private List<IGenerator> makeGenerators() {
+	    List<IGenerator> generators = new ArrayList<IGenerator>();
+        generators.add(new BasicBondGenerator());
+        generators.add(new BasicAtomGenerator());
+        generators.add(new RingGenerator());
+        generators.add(new LonePairGenerator());
+        generators.add(new RadicalGenerator());
+        generators.add(new ExternalHighlightGenerator());
+        generators.add(new HighlightGenerator());
+        return generators;
 	}
 
 	private void setupPanel(int width, int height) {
