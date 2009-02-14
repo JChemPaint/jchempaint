@@ -148,7 +148,8 @@ public class CopyPasteAction extends JCPAction{
         		}
 	            if (toPaste != null) {
 	                //translate the new structure a bit
-	                GeometryTools.translate2D(toPaste, renderModel.getHighlightRadiusModel(), renderModel.getHighlightRadiusModel()); //in pixels
+	                double hDistance = renderModel.getHighlightDistance();
+	                GeometryTools.translate2D(toPaste, hDistance, hDistance); 
 	                IChemModel chemModel = jcpPanel.getChemModel();
 	                IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
 	                if (moleculeSet == null) {
