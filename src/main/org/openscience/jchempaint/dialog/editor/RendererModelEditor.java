@@ -61,6 +61,8 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     
     private JCheckBox showEndCarbons;
     
+    private JCheckBox showExplicitHydrogens;
+    
     private JCheckBox showImplicitHydrogens;
     
     private JCheckBox showAromaticity;
@@ -76,6 +78,8 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private JCheckBox useAntiAliasing;
     
     private JCheckBox isCompact;
+    
+    private JCheckBox isFitToScreen;
     
     private JSlider bondWidth;
     
@@ -123,6 +127,9 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showEndCarbons = new JCheckBox();
         addField(GT._("Show explicit methyl groups"), showEndCarbons);
         
+        showExplicitHydrogens = new JCheckBox();
+        addField(GT._("Show explicit hydrogens"), showExplicitHydrogens);
+        
         showImplicitHydrogens = new JCheckBox();
         addField(GT._("Show implicit hydrogens"), showImplicitHydrogens);
         
@@ -146,6 +153,9 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         
         isCompact = new JCheckBox();
         addField(GT._("Show atoms in compact form"), isCompact);
+        
+        isFitToScreen = new JCheckBox();
+        addField(GT._("Set fit to screen"), isFitToScreen);
         
         atomRadius = new JSlider(0, 20);
         atomRadius.setSnapToTicks(true);
@@ -209,6 +219,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showAtomAtomMapping.setSelected(model.getShowAtomAtomMapping());
         useKekuleStructure.setSelected(model.getKekuleStructure());
         showEndCarbons.setSelected(model.getShowEndCarbons());
+        showExplicitHydrogens.setSelected(model.getShowExplicitHydrogens());
         showImplicitHydrogens.setSelected(model.getShowImplicitHydrogens());
         showAromaticity.setSelected(model.getShowAromaticity());
         showAromaticityCDKStyle.setSelected(model.getShowAromaticityCDKStyle());
@@ -217,6 +228,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         showToolTip.setSelected(model.getShowTooltip());
         showReactionBoxes.setSelected(model.getShowReactionBoxes());
         isCompact.setSelected(model.getIsCompact());
+        isFitToScreen.setSelected(model.isFitToScreen());
         
         atomRadius.setValue((int)model.getAtomRadius());
         bondWidth.setValue((int)model.getBondWidth());
@@ -240,6 +252,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setShowAtomAtomMapping(showAtomAtomMapping.isSelected());
         model.setKekuleStructure(useKekuleStructure.isSelected());
         model.setShowEndCarbons(showEndCarbons.isSelected());
+        model.setShowExplicitHydrogens(showExplicitHydrogens.isSelected());
         model.setShowImplicitHydrogens(showImplicitHydrogens.isSelected());
         model.setShowAromaticity(showAromaticity.isSelected());
         model.setShowAromaticityCDKStyle(showAromaticityCDKStyle.isSelected());
@@ -248,6 +261,7 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setShowTooltip(showToolTip.isSelected());
         model.setShowReactionBoxes(showReactionBoxes.isSelected());
         model.setIsCompact(isCompact.isSelected());
+        model.setFitToScreen(isFitToScreen.isSelected());
         
         model.setAtomRadius(atomRadius.getValue());
         model.setBondLength(bondLength.getValue());
