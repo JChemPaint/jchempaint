@@ -55,7 +55,8 @@ import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
-import org.openscience.cdk.renderer.generators.HighlightGenerator;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator;
+import org.openscience.cdk.renderer.generators.HighlightBondGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.LonePairGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
@@ -131,7 +132,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
         generators.add(new ExternalHighlightGenerator());
-        generators.add(new HighlightGenerator());
+        generators.add(new HighlightAtomGenerator());
+        generators.add(new HighlightBondGenerator());
         return generators;
 	}
 
