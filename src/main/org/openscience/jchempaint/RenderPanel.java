@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -334,10 +335,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 	}
 	
 	private String makeStatusBarString(String formula, int implicitHs, double mass){
+		DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
             + formula
             + (implicitHs == 0 ? "" : " ("+GT._("of these")+ " "
-                + implicitHs + " "+GT._("Hs implicit")+")")+" ("+GT._("mass")+" "+mass+")</html>";
+                + implicitHs + " "+GT._("Hs implicit")+")")+" ("+GT._("mass")+" "+df1.format(mass)+")</html>";
 	}
 
 	public Renderer getRenderer() {

@@ -43,9 +43,11 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
 import org.openscience.cdk.controller.AddBondModule;
+import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.ChangeModeAction;
 import org.openscience.jchempaint.action.JCPAction;
+import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
 /**
  *  This class makes the JCPToolBar
@@ -250,7 +252,9 @@ public class JCPToolBar
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);
-						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondModule(chemPaintPanel.get2DHub()));
+						UndoRedoHandler undoredohandler = new UndoRedoHandler();
+						undoredohandler.addIUndoListener(chemPaintPanel);
+						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondModule(chemPaintPanel.get2DHub(), new SwingUndoRedoFactory(), undoredohandler));
 						chemPaintPanel.updateStatusBar();
 					} else
 					{

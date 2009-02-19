@@ -46,10 +46,12 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectModule;
 import org.openscience.cdk.controller.SelectSquareModule;
+import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
+import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
 /**
  * JChemPaint menu actions
@@ -72,7 +74,7 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("minus")) {
             hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, -1));
         } else if (type.equals("bond")) {
-            hub.setActiveDrawModule(new AddBondModule(hub));
+            hub.setActiveDrawModule(new AddBondModule(hub, new SwingUndoRedoFactory(), this.getUndoredohandler()));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("cyclesymbol")) {
             hub.setActiveDrawModule(new CycleSymbolModule(hub));
