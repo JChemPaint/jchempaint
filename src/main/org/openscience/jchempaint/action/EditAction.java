@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.Reaction;
+import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,7 +46,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.selection.ISelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
@@ -136,11 +137,13 @@ public class EditAction extends JCPAction {
 			renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 		}
 		else if (type.equals("selectAll")) {
-		    ISelection allSelection = new LogicalSelection(LogicalSelection.Type.ALL);
+		    IChemObjectSelection allSelection = 
+		        new LogicalSelection(LogicalSelection.Type.ALL);
 		    allSelection.select(jcpPanel.getChemModel());
 		    renderModel.setSelection(allSelection);
 			jcpPanel.setMoveAction();
-			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
+			ControllerHub hub = jcpPanel.get2DHub(); 
+			hub.setActiveDrawModule(new MoveModule(hub));
 		} else if (type.equals("selectMolecule")) {
 			IChemObject object = getSource(event);
 			IAtomContainer relevantAtomContainer=null;

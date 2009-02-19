@@ -62,7 +62,8 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.LonePairGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
-import org.openscience.cdk.renderer.selection.ISelection;
+import org.openscience.cdk.renderer.generators.SelectionGenerator;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -135,6 +136,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
         generators.add(new ExternalHighlightGenerator());
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
+        generators.add(new SelectionGenerator());
         return generators;
 	}
 
@@ -312,7 +314,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		    }
 	    } else if (position == 2) {
 	        // depict brutto formula of the selected molecule or part of molecule
-	        ISelection selection = renderer.getRenderer2DModel().getSelection();
+	        IChemObjectSelection selection =
+	            renderer.getRenderer2DModel().getSelection();
+	        
 	        if (selection != null) {
 	            IAtomContainer ac = selection.getConnectedAtomContainer();
 	            if (ac != null) {

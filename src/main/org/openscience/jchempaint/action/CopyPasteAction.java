@@ -47,6 +47,7 @@ import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
@@ -63,7 +64,7 @@ import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.selection.ISelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -159,13 +160,15 @@ public class CopyPasteAction extends JCPAction{
 	                jcpPanel.getChemModel().setMoleculeSet(moleculeSet);
 	                
 	                //We select the inserted structure
-	                ISelection selection 
+	                IChemObjectSelection selection 
 	                    = new LogicalSelection(LogicalSelection.Type.ALL);
 	                selection.select(toPaste);
 	                renderModel.setSelection(selection);
 	            	jcpPanel.setMoveAction();
-	    			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
-	                jcpPanel.get2DHub().updateView();
+	            	
+	            	ControllerHub hub = jcpPanel.get2DHub(); 
+	    			hub.setActiveDrawModule(new MoveModule(hub));
+	                hub.updateView();
 	            }
         	}
     	} catch(Exception ex){

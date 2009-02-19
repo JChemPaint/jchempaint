@@ -44,7 +44,7 @@ import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
-import org.openscience.cdk.controller.SelectModule;
+import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.event.ICDKChangeListener;
@@ -90,10 +90,10 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("enterelement")) {
             hub.setActiveDrawModule(new EnterElementSwingModule(hub));
         } else if (type.equals("lasso")) {
-            hub.setActiveDrawModule(new SelectModule(hub,jcpPanel));
+            hub.setActiveDrawModule(new SelectLassoModule(hub));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("select")) {
-            hub.setActiveDrawModule(new SelectSquareModule(hub,jcpPanel));
+            hub.setActiveDrawModule(new SelectSquareModule(hub));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
             hub.setActiveDrawModule(new AlterBondStereoModule(
