@@ -115,7 +115,7 @@ public class JCPPropertyHandler
 		InputStream defaultStream;
 		try
 		{
-			defaultStream = JCPPropertyHandler.class.getResourceAsStream("resources/text/JChemPaintResources.properties");
+			defaultStream = this.getClass().getClassLoader().getResourceAsStream("org/openscience/jchempaint/resources/JChemPaintResources.properties");
 			defaultProps = new Properties();
 			defaultProps.load(defaultStream);
 			defaultStream.close();

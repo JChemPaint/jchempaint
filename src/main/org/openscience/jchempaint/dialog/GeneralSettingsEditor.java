@@ -32,8 +32,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
 
+import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
@@ -47,6 +50,7 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
 	private static final long serialVersionUID = -6796422949531937872L;
 
 	private JCheckBox askForIOSettings;
+	private JTextField undoStackSize;
     
     private JFrame frame;
     
@@ -59,11 +63,14 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
     private void constructPanel() {
         askForIOSettings = new JCheckBox();
         addField(GT._("Ask for IO settings"), askForIOSettings);
+        undoStackSize = new JTextField();
+        addField(GT._("Undo/redo stack size"), undoStackSize);
     }
     
     public void setSettings() {
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
+        undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
 
@@ -72,6 +79,17 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
         props.setProperty("askForIOSettings",
             askForIOSettings.isSelected() ? "true" : "false"
         );
+        try{
+        	int size=Integer.parseInt(undoStackSize.getText());
+        	if(size<1 || size>100)
+        		throw new Exception("wrong number");
+            props.setProperty("General.UndoStackSize",
+                    undoStackSize.getText()
+            );        	
+        }
+        catch(Exception ex){
+        	JOptionPane.showInternalMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     /**

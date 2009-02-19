@@ -66,7 +66,7 @@ public class SwingAddAtomsAndBondsEdit extends AddAtomsAndBondsEdit implements U
 	}
 
 	public boolean replaceEdit(UndoableEdit arg0) {
-		return true;
+		return false;
 	}
 
 }
