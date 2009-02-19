@@ -115,6 +115,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
 		renderPanel.getHub().setEventHandler(this);
         instances.add(this);
+        //TODO this should be configurable
+        undoManager.setLimit(100);
     }
 
 	public Container getTopLevelContainer() {
