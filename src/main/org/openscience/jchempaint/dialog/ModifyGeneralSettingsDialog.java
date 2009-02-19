@@ -95,13 +95,13 @@ public class ModifyGeneralSettingsDialog extends JFrame {
         validate();
     }
     
-    private  void ApplyPressed() {
+    private  boolean ApplyPressed() {
         // apply new settings
-        editor.applyChanges();
+        return editor.applyChanges();
     }
     private  void OKPressed() {
-        ApplyPressed();
-        closeFrame();
+        if(ApplyPressed())
+        	closeFrame();
     }
 
     public void closeFrame() {

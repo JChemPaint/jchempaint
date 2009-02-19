@@ -74,7 +74,7 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
         validate();
     }
 
-    public void applyChanges() {
+    public boolean applyChanges() {
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         props.setProperty("askForIOSettings",
             askForIOSettings.isSelected() ? "true" : "false"
@@ -88,8 +88,10 @@ public class GeneralSettingsEditor extends FieldTablePanel implements ActionList
             );        	
         }
         catch(Exception ex){
-        	JOptionPane.showInternalMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        	JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        	return false;
         }
+        return true;
     }
     
     /**
