@@ -26,13 +26,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.dialog;
+package org.openscience.jchempaint.dialog.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
 
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,6 +39,7 @@ import javax.swing.JTextField;
 
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
+import org.openscience.jchempaint.dialog.FieldTablePanel;
 
 /**
  * JFrame that allows setting of a number of general application options.

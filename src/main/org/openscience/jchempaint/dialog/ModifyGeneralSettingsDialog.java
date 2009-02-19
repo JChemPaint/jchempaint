@@ -39,6 +39,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.dialog.editor.GeneralSettingsEditor;
 
 /**
  */
