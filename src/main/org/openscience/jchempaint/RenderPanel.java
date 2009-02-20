@@ -42,11 +42,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
+import org.openscience.cdk.controller.undoredo.IUndoListener;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
+import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -69,8 +74,9 @@ import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
-public class RenderPanel extends JPanel implements IViewEventRelay {
+public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListener {
 
 	private Renderer renderer;
 
@@ -86,11 +92,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 
 	private boolean shouldPaintFromCache = false;
 
+	private UndoManager undoManager=new UndoManager();
+
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
+		undoManager.setLimit(Integer.parseInt(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UndoStackSize")));
 	}
 
 	public void setFitToScreen(boolean fitToScreen) {
@@ -116,9 +125,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
 
+		UndoRedoHandler undoredohandler = new UndoRedoHandler();
+		undoredohandler.addIUndoListener(this);
 		// connect the Renderer to the Hub
 		this.hub = 
-		    new ControllerHub(controllerModel, renderer, chemModel, this);
+		    new ControllerHub(controllerModel, renderer, chemModel, this, undoredohandler, new SwingUndoRedoFactory());
 
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -348,5 +359,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay {
 
 	public Renderer getRenderer() {
 		return renderer;
+	}
+
+	public UndoManager getUndoManager() {
+		return undoManager;
+	}
+
+	public void doUndo(IUndoRedoable undoredo) {
+		undoManager.addEdit((UndoableEdit)undoredo);
 	}
 }

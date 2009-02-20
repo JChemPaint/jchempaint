@@ -36,7 +36,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.JChemPaintMenuBar;
@@ -88,7 +87,6 @@ public class JCPAction extends AbstractAction
 	 *  Is this popup action assiociated with a PopupMenu or not.
 	 */
 	private boolean isPopupAction;
-	private UndoRedoHandler undoredohandler = new UndoRedoHandler();
 
 
 	/**
@@ -117,12 +115,6 @@ public class JCPAction extends AbstractAction
 		this.type = "";
 		this.isPopupAction = isPopupAction;
 		this.jcpPanel = jcpPanel;
-		undoredohandler.addIUndoListener(jcpPanel);
-	}
-
-
-	public UndoRedoHandler getUndoredohandler() {
-		return undoredohandler;
 	}
 
 

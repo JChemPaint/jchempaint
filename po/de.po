@@ -881,7 +881,7 @@ msgstr "Aufräumen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:75
 msgid "Preferences"
-msgstr "Präferenzen"
+msgstr "Einstellungen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:76
 msgid "Toolbar"

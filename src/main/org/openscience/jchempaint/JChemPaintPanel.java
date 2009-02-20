@@ -50,8 +50,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -59,13 +57,11 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
-import org.openscience.cdk.controller.undoredo.IUndoListener;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
-public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler, IUndoListener {
+public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler {
 
 	private JComponent lastActionButton;
     private File currentWorkDirectory;
@@ -88,7 +84,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
     private int lines = 1;
     //we remember the moveButton since this is special
     protected JButton moveButton=null;
-	private UndoManager undoManager=new UndoManager();
 
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
@@ -115,7 +110,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
 		renderPanel.getHub().setEventHandler(this);
         instances.add(this);
-        undoManager.setLimit(Integer.parseInt(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UndoStackSize")));
     }
 
 	public Container getTopLevelContainer() {
@@ -547,11 +541,5 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 	public void structurePropertiesChanged() {
 		setModified(true);
 		updateStatusBar();
-	}
-	public UndoManager getUndoManager() {
-		return undoManager;
-	}
-	public void doUndo(IUndoRedoable undoredo) {
-		undoManager.addEdit((UndoableEdit)undoredo);
 	}
 }

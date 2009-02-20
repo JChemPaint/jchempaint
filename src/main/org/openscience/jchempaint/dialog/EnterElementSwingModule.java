@@ -132,7 +132,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				}
 				container.removeAtomAndConnectedElectronContainers(closestAtom);
 				AtomPlacer ap=new AtomPlacer();
-				//TODO the bond length is wrong and rings are not properly layed out
 				while(lastplaced!=null){
 					IAtomContainer placedNeighbours=container.getBuilder().newAtomContainer();
 					IAtomContainer unplacedNeighbours=container.getBuilder().newAtomContainer();
@@ -143,11 +142,12 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 						else
 							unplacedNeighbours.addAtom((IAtom)l.get(i));
 					}
-					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 2.5);
+					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
 					IRingSet ringset=new SSSRFinder(ac).findSSSR();
 					for(IAtomContainer ring:ringset.atomContainers()){
-						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), 2.5);
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
 					}
+					System.err.println(chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
 					lastplaced=ac.getAtom(counter);
 					counter++;
 					if(counter==ac.getAtomCount())
