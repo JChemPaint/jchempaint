@@ -367,5 +367,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public void doUndo(IUndoRedoable undoredo) {
 		undoManager.addEdit((UndoableEdit)undoredo);
+		if(this.getParent().getParent().getParent() instanceof JChemPaintPanel)
+			((JChemPaintPanel)this.getParent().getParent().getParent()).updateUndoRedoControls();
 	}
 }

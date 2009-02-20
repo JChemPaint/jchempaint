@@ -167,6 +167,10 @@ public class JChemPaintMenuHelper {
 		}
 		if(!isPopupMenu)
 			addShortCuts(cmd, mi, jcpPanel);
+		if(cmd.equals("undo"))
+			jcpPanel.undoMenu=mi;
+		if(cmd.equals("redo"))
+			jcpPanel.redoMenu=mi;
 		return mi;
 	}
 	

@@ -185,6 +185,10 @@ public class JCPToolBar
 		b.setMargin(new Insets(1, 1, 1, 1));
 		if(key.equals("move"))
 			chemPaintPanel.moveButton=b;
+		if(key.equals("redo"))
+			chemPaintPanel.redoButton=b;
+		if(key.equals("undo"))
+			chemPaintPanel.undoButton=b;
 		return b;
 	}
 

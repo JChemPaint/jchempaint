@@ -45,6 +45,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -82,9 +83,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
     private String guistring;
     private JToolBar toolbar;
     private int lines = 1;
-    //we remember the moveButton since this is special
+    //we remember some buttons and menus since these are special
     protected JButton moveButton=null;
-
+    protected JButton undoButton;
+    protected JButton redoButton;
+    protected JMenuItem undoMenu;
+    protected JMenuItem redoMenu;
+	
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
 	}
@@ -105,6 +110,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
         this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
 
         customizeView();
+        updateUndoRedoControls();
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel, renderPanel.getHub());
 		setupPopupMenus(inputAdapter);
 		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
@@ -541,5 +547,25 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 	public void structurePropertiesChanged() {
 		setModified(true);
 		updateStatusBar();
+	}
+	public void updateUndoRedoControls() {
+		if(renderPanel.getUndoManager().canRedo()){
+			redoButton.setEnabled(true);
+			redoMenu.setEnabled(true);
+			redoButton.setToolTipText(renderPanel.getUndoManager().getRedoPresentationName());
+		}else{
+			redoButton.setEnabled(false);
+			redoMenu.setEnabled(false);			
+			redoButton.setToolTipText(GT._("No redo possible"));
+		}
+		if(renderPanel.getUndoManager().canUndo()){
+			undoButton.setEnabled(true);
+			undoMenu.setEnabled(true);
+			undoButton.setToolTipText(renderPanel.getUndoManager().getUndoPresentationName());
+		}else{
+			undoButton.setEnabled(false);
+			undoMenu.setEnabled(false);
+			undoButton.setToolTipText(GT._("No undo possible"));
+		}	
 	}
 }
