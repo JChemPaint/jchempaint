@@ -42,6 +42,7 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerModuleAdapter;
 import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -55,6 +56,7 @@ import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.GT;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
 
@@ -99,6 +101,9 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 	public void mouseClickedDown(Point2d worldCoord) {
 
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
+        double dA = super.distanceToAtom(closestAtom, worldCoord);
+		if(dA>getHighlightDistance())
+			closestAtom=null;
 		String[] funcGroupsKeys=new String[funcgroupsmap.keySet().size()+1];
         Iterator<String> it=funcgroupsmap.keySet().iterator();
         int h=1;
@@ -117,49 +122,75 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				IAtom lastplaced=null;
 				int counter=0;
 				//this is the starting point for placing
-				ac.getAtom(0).setPoint2d(closestAtom.getPoint2d());
+				if(closestAtom!=null)
+					ac.getAtom(0).setPoint2d(closestAtom.getPoint2d());
+				else
+					ac.getAtom(0).setPoint2d(worldCoord);
 				lastplaced=ac.getAtom(0);
 				counter=1;
-				container.add(ac);
-				List<IBond> connbonds=container.getConnectedBondsList(closestAtom);
-				for(int i=0;i<connbonds.size();i++){
-					IBond bond=connbonds.get(i);
-					if(bond.getAtom(0)==closestAtom){
-						bond.setAtom(ac.getAtom(0), 0);
-					}else{
-						bond.setAtom(ac.getAtom(0), 1);
+				if(container==null){
+					if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
+						chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newMoleculeSet());
+					chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
+				}else{
+					container.add(ac);
+					List<IBond> connbonds=container.getConnectedBondsList(closestAtom);
+					for(int i=0;i<connbonds.size();i++){
+						IBond bond=connbonds.get(i);
+						if(bond.getAtom(0)==closestAtom){
+							bond.setAtom(ac.getAtom(0), 0);
+						}else{
+							bond.setAtom(ac.getAtom(0), 1);
+						}
 					}
+					container.removeAtomAndConnectedElectronContainers(closestAtom);
 				}
-				container.removeAtomAndConnectedElectronContainers(closestAtom);
 				AtomPlacer ap=new AtomPlacer();
 				while(lastplaced!=null){
-					IAtomContainer placedNeighbours=container.getBuilder().newAtomContainer();
-					IAtomContainer unplacedNeighbours=container.getBuilder().newAtomContainer();
-					List<IAtom> l=container.getConnectedAtomsList(lastplaced);
+					IAtomContainer placedNeighbours=ac.getBuilder().newAtomContainer();
+					IAtomContainer unplacedNeighbours=ac.getBuilder().newAtomContainer();
+					List<IAtom> l=ac.getConnectedAtomsList(lastplaced);
 					for(int i=0;i<l.size();i++){
 						if(l.get(i).getPoint2d()!=null)
 							placedNeighbours.addAtom((IAtom)l.get(i));
 						else
 							unplacedNeighbours.addAtom((IAtom)l.get(i));
 					}
-					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
+					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
 					IRingSet ringset=new SSSRFinder(ac).findSSSR();
 					for(IAtomContainer ring:ringset.atomContainers()){
-						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), 1.4);
 					}
-					System.err.println(chemModelRelay.getRenderer().getRenderer2DModel().getBondLength());
 					lastplaced=ac.getAtom(counter);
 					counter++;
 					if(counter==ac.getAtomCount())
 						lastplaced=null;
 				}
+			    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
+				    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newAtomContainer(ac), GT._("Add Functional Group"), chemModelRelay.getController2DModel());
+				    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
+			    }
 			}else if(x!=null && x.length()>0){
-				if(Character.isLowerCase(x.toCharArray()[0]))
-					x=Character.toUpperCase(x.charAt(0))+x.substring(1);
-				IsotopeFactory ifa=IsotopeFactory.getInstance(closestAtom.getBuilder());
-				IIsotope iso=ifa.getMajorIsotope(x);
-				if(iso!=null)
-					closestAtom.setSymbol(x);
+				if(closestAtom==null){
+					IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
+					addatom.addAtom(chemModelRelay.addAtom(x, worldCoord));
+				    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
+					    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay.getController2DModel());
+					    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
+				    }
+				}else{
+					if(Character.isLowerCase(x.toCharArray()[0]))
+						x=Character.toUpperCase(x.charAt(0))+x.substring(1);
+					IsotopeFactory ifa=IsotopeFactory.getInstance(closestAtom.getBuilder());
+					IIsotope iso=ifa.getMajorIsotope(x);
+					if(iso!=null){
+					    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
+						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getChangeAtomSymbol(closestAtom,closestAtom.getSymbol(),x,GT._("Change Atom Symbol"));
+						    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
+					    }
+						closestAtom.setSymbol(x);
+					}
+				}
 			}
 			chemModelRelay.updateView();				
 		}catch(Exception ex){

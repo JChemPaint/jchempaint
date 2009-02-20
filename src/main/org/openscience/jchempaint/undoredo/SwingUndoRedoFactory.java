@@ -33,6 +33,7 @@ import java.util.Map;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -50,6 +51,11 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, String type){
 		return new SwingAdjustBondOrdersEdit(changedBonds,type);
+	}
+
+	public IUndoRedoable getChangeAtomSymbol(IAtom atom, String formerSymbol,
+			String symbol, String type) {
+		return new SwingChangeAtomSymbolEdit(atom, formerSymbol, symbol, type);
 	}
 
 }
