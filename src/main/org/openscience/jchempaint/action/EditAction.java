@@ -144,6 +144,7 @@ public class EditAction extends JCPAction {
 			jcpPanel.setMoveAction();
 			ControllerHub hub = jcpPanel.get2DHub(); 
 			hub.setActiveDrawModule(new MoveModule(hub));
+			jcpPanel.updateStatusBar();
 		} else if (type.equals("selectMolecule")) {
 			IChemObject object = getSource(event);
 			IAtomContainer relevantAtomContainer=null;
