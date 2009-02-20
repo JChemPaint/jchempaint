@@ -30,26 +30,42 @@ package org.openscience.jchempaint.undoredo;
 
 import java.util.Map;
 
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
-import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import javax.swing.undo.UndoableEdit;
+
+import org.openscience.cdk.controller.undoredo.AdjustBondOrdersEdit;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemModel;
 
 /**
- * A class returning Swing-Implementations of all the undo-redo edits
+ * A swing undo-redo implementation for adding Atoms and Bonds
  *
  */
-public class SwingUndoRedoFactory implements IUndoRedoFactory {
+public class SwingAdjustBondOrdersEdit extends AdjustBondOrdersEdit implements UndoableEdit{
 
-	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IControllerModel c2dm) {
-		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, type, c2dm);
+	public SwingAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, String type) {
+		super(changedBonds, type);
 	}
-	
-	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, String type){
-		return new SwingAdjustBondOrdersEdit(changedBonds,type);
+
+	public boolean addEdit(UndoableEdit arg0) {
+		return false;
+	}
+
+	public void die() {
+	}
+
+	public String getRedoPresentationName() {
+		return getPresentationName();
+	}
+
+	public String getUndoPresentationName() {
+		return getPresentationName();
+	}
+
+	public boolean isSignificant() {
+		return true;
+	}
+
+	public boolean replaceEdit(UndoableEdit arg0) {
+		return false;
 	}
 
 }
