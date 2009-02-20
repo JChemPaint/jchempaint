@@ -33,14 +33,17 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.RenderingParameters;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 
@@ -90,6 +93,12 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     private JSlider atomRadius;
     
     private JSlider wedgeWidth;
+    
+    private ButtonGroup group = new ButtonGroup();
+    
+    private JRadioButton compactShapeOval;
+    
+    private JRadioButton compactShapeSquare;
 
     private JLabel fontName;
     
@@ -194,6 +203,14 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
         addField(GT._("Wedge width"), wedgeWidth);
+
+        compactShapeOval = new JRadioButton();
+        group.add(compactShapeOval);
+        addField(GT._("Oval Compact Atoms"), compactShapeOval);
+        
+        compactShapeSquare = new JRadioButton();
+        group.add(compactShapeSquare);
+        addField(GT._("Square Compact Atoms"), compactShapeSquare);
         
         currentFontName = "";
         fontName = new JLabel();
@@ -236,6 +253,12 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         highlightDistance.setValue((int)model.getHighlightDistance());
         wedgeWidth.setValue((int)model.getWedgeWidth());
         
+        if (model.getCompactShape() == RenderingParameters.AtomShape.OVAL) {
+            group.setSelected(compactShapeOval.getModel(), true);
+        } else {
+            group.setSelected(compactShapeSquare.getModel(), true);
+        }
+        
         currentFontName = model.getFontName();
         if (!currentFontName.equals("")) {
             fontName.setText(currentFontName);
@@ -268,6 +291,12 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         model.setBondWidth(bondWidth.getValue());
         model.setHighlightDistance(highlightDistance.getValue());
         model.setWedgeWidth(wedgeWidth.getValue());
+        
+        if (compactShapeOval.isSelected()) {
+            model.setCompactShape(RenderingParameters.AtomShape.OVAL);
+        } else {
+            model.setCompactShape(RenderingParameters.AtomShape.SQUARE);
+        }
         
         model.setFontName(currentFontName);
         model.setBackColor(currentColor);
