@@ -59,6 +59,7 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.AtomContainerBoundsGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
 import org.openscience.cdk.renderer.generators.HighlightAtomGenerator;
@@ -140,6 +141,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	
 	private List<IGenerator> makeGenerators() {
 	    List<IGenerator> generators = new ArrayList<IGenerator>();
+	    generators.add(new AtomContainerBoundsGenerator());
 	    generators.add(new RingGenerator());
         generators.add(new BasicAtomGenerator());
         generators.add(new LonePairGenerator());
@@ -185,7 +187,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	
 	public void takeSnapshot(Graphics2D g, Rectangle bounds){
         super.paint(g);
-        this.paintChemModel(g, bounds);
+        
+        IChemModel chemModel = hub.getIChemModel();
+        if (isValidChemModel(chemModel)) {
+            this.paintChemModel(chemModel, g, bounds);
+        }
     }
 	
 	private boolean isValidChemModel(IChemModel chemModel) {
@@ -194,52 +200,118 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                    || chemModel.getReactionSet() != null);
 	}
 
-	public void paintChemModel(Graphics2D g, Rectangle screenBounds) {
-
-	    IChemModel chemModel = this.hub.getIChemModel();
-	    if (isValidChemModel(chemModel)) {
-
-	        // paint first, so that the transform is set correctly
-	        this.paintChemModel(chemModel, g, screenBounds);
-	        
-	        // don't calculate screen size as it is equal to screen size!
-	        if (renderer.getRenderer2DModel().isFitToScreen()) {
-	            return;
-	        }
-	        
-	        // determine the size the canvas needs to be to fit the model
-	        Rectangle diagramBounds = renderer.calculateScreenBounds(chemModel);
-	        if (this.overlaps(screenBounds, diagramBounds)) {
-	            Rectangle union = screenBounds.union(diagramBounds);
-	            this.setPreferredSize(union.getSize());
-	            this.revalidate();
-            }
-        }
-	}
-
 	/**
-	 * Check to see if the molecule bounding box has overlapped a screen edge.
-	 *
-	 * @param screenBounds the bounding box of the screen
-	 * @param diagramBounds the bounding box of the molecule on the screen
-	 * @return
-	 */
-	private boolean overlaps(Rectangle screenBounds, Rectangle diagramBounds) {
-	    return screenBounds.getMinX() > diagramBounds.getMinX()
-	        || screenBounds.getMinY() > diagramBounds.getMinY()
-	        || screenBounds.getMaxX() < diagramBounds.getMaxX()
-	        || screenBounds.getMaxY() < diagramBounds.getMaxY();
-	}
+     * Check to see if the molecule bounding box has overlapped a screen edge.
+     *
+     * @param screenBounds the bounding box of the screen
+     * @param diagramBounds the bounding box of the molecule on the screen
+     * @return
+     */
+    private boolean overlaps(Rectangle screenBounds, Rectangle diagramBounds) {
+        return screenBounds.getMinX() > diagramBounds.getMinX()
+            || screenBounds.getMinY() > diagramBounds.getMinY()
+            || screenBounds.getMaxX() < diagramBounds.getMaxX()
+            || screenBounds.getMaxY() < diagramBounds.getMaxY();
+    }
+    
+    private void shift(
+            Graphics2D g, Rectangle screenBounds, Rectangle diagramBounds) {
+        int screenMaxX  = screenBounds.x + screenBounds.width;
+        int screenMaxY  = screenBounds.y + screenBounds.height;
+        int diagramMaxX = diagramBounds.x + diagramBounds.width;
+        int diagramMaxY = diagramBounds.y + diagramBounds.height;
 
-	private void paintChemModel(
-	        IChemModel chemModel, Graphics2D g, Rectangle bounds) {
+        int leftOverlap   = screenBounds.x - diagramBounds.x;
+        int rightOverlap  = diagramMaxX - screenMaxX;
+        int topOverlap    = screenBounds.y - diagramBounds.y;
+        int bottomOverlap = diagramMaxY - screenMaxY;
+        
+        boolean overlapsLeft   = leftOverlap   > 0;
+        boolean overlapsRight  = rightOverlap  > 0;
+        boolean overlapsTop    = topOverlap    > 0;
+        boolean overlapsBottom = bottomOverlap > 0;
+        
+        int dx = 0;
+        int dy = 0;
+        int w = screenBounds.width;
+        int h = screenBounds.height;
+        
+        if (overlapsLeft) {
+            dx = leftOverlap;
+        }
+        
+        if (overlapsRight) {
+            w += rightOverlap;
+        }
+        
+        if (overlapsTop) {
+            dy = topOverlap;
+        }
+        
+        if (overlapsBottom) {
+            h += bottomOverlap;
+        }
+        
+        System.err.println(
+                String.format("%s %s %s %s", 
+                        leftOverlap, rightOverlap, topOverlap, rightOverlap));
+        
+        if (dx != 0 || dy != 0) {
+            renderer.shiftDrawCenter(dx, dy);
+            this.setPreferredSize(new Dimension(w, h));
+            this.revalidate();
+            super.paint(g);
+            this.renderer.paintChemModel(
+                    this.hub.getIChemModel(),new AWTDrawVisitor(g));
+        }
+    }
+    
+    public void paint(Graphics g) {
+        this.setBackground(renderer.getRenderer2DModel().getBackColor());
+        super.paint(g);
+        
+        Graphics2D g2 = (Graphics2D)g;
+    
+    	if (this.shouldPaintFromCache) {
+    	    renderer.repaint(new AWTDrawVisitor(g2));
+    	} else {
+    	    IChemModel chemModel = this.hub.getIChemModel();
+    	    
+    	    if (!isValidChemModel(chemModel)) return;
+    
+    		/*
+    		 * It is more correct to use a rectangle starting at (0,0)
+    		 * than to use getBounds() as the RenderPanel may be a child
+    		 * of some container window, and its Graphics will be
+    		 * translated relative to its parent.
+    		 */
+    	    Rectangle screen = new Rectangle(0, 0, getWidth(), getHeight());
+    	    
+    	    if (renderer.getRenderer2DModel().isFitToScreen()) {
+    	        this.paintChemModelFitToScreen(chemModel, g2, screen);
+    	    } else {
+    	        this.paintChemModel(chemModel, g2, screen);
+    	    }
+    	}
+    }
 
-        // paint the chem model, and record that it is no longer new
-	    
-        renderer.paintChemModel(chemModel, 
-                                new AWTDrawVisitor(g),
-                                bounds,
-                                isNewChemModel);
+    /**
+     * Paint the chem model not fit-to-screen
+     * 
+     * @param chemModel
+     * @param g
+     * @param screen
+     */
+    private void paintChemModel(
+            IChemModel chemModel,Graphics2D g, Rectangle screen) {
+
+        if (isNewChemModel) {
+            renderer.setScale(chemModel);
+        }
+
+        Rectangle diagram = renderer.paintChemModel(
+                chemModel, new AWTDrawVisitor(g));
+        
         isNewChemModel = false;
 
         /*
@@ -247,35 +319,27 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
          * repainting when scrolling the canvas
          */
         this.shouldPaintFromCache = true;
-	}
 
-	public void setIsNewChemModel(boolean isNewChemModel) {
+        // determine the size the canvas needs to be to fit the model
+        System.out.println(screen + " " + diagram);
+        shift(g, screen, diagram);
+//        if (this.overlaps(screen, diagram)) {
+//            System.err.println("overlaps");
+//            Rectangle union = screen.union(diagram);
+//            this.setPreferredSize(union.getSize());
+//            this.revalidate();
+//        }
+    }
+    
+    private void paintChemModelFitToScreen(
+            IChemModel chemModel, Graphics2D g, Rectangle screen) {
+        
+        renderer.paintChemModel(chemModel, new AWTDrawVisitor(g), screen, true);
+
+    }
+
+    public void setIsNewChemModel(boolean isNewChemModel) {
 	    this.isNewChemModel = isNewChemModel;
-	}
-
-	public void paint(Graphics g) {
-	    this.setBackground(renderer.getRenderer2DModel().getBackColor());
-	    super.paint(g);
-	    
-        Graphics2D g2 = (Graphics2D)g;
-       
-		if (this.shouldPaintFromCache) {
-		    this.paintFromCache(g2);
-		} else {
-
-			/*
-			 * It is more correct to use a rectangle starting at (0,0)
-			 * than to use getBounds() as the RenderPanel may be a child
-			 * of some container window, and its Graphics will be
-			 * translated relative to its parent.
-			 */
-			this.paintChemModel(g2,
-					new Rectangle(0, 0, this.getWidth(), this.getHeight()));
-		}
-	}
-
-	private void paintFromCache(Graphics2D g) {
-	    renderer.repaint(new AWTDrawVisitor(g));
 	}
 
 	public void updateView() {
@@ -344,7 +408,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	            }
 	        }
 	    } else if (position == 3) {
-	    	status= GT._("Zoomfactor")+": "+NumberFormat.getPercentInstance().format(renderer.getZoom());
+	    	status = GT._("Zoomfactor")
+                    + ": "
+                    + NumberFormat.getPercentInstance().format(
+                            renderer.getRenderer2DModel().getZoomFactor());
 	    }
 		return status;
 	}

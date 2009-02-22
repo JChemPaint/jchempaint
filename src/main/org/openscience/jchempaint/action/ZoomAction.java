@@ -30,7 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.RendererModel;
 
 /**
  * @cdk.module jchempaint
@@ -42,16 +42,17 @@ public class ZoomAction extends JCPAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Renderer renderer = jcpPanel.getRenderPanel().getRenderer();
-        double zoom = renderer.getZoom();
+        RendererModel rendererModel = 
+            jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel();
+        double zoom = rendererModel.getZoomFactor();
         logger.debug("Zooming in/out in mode: ", type);
         
         if (type.equals("in") && zoom < 10) {
-            renderer.setZoom(zoom * 1.5);
+            rendererModel.setZoomFactor(zoom * 1.5);
         } else if (type.equals("out") && zoom > .1) {
-            renderer.setZoom(zoom / 1.5);
+            rendererModel.setZoomFactor(zoom / 1.5);
         } else if (type.equals("original")) {
-            renderer.setZoom(1);
+            rendererModel.setZoomFactor(1);
         } else {
             logger.error("Unkown zoom command: " + type);
         }

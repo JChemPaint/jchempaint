@@ -36,6 +36,9 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.controller.ControllerModuleAdapter;
 import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.LoggingTool;
 
 public class SwingPopupModule extends ControllerModuleAdapter {
@@ -44,11 +47,11 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
 	private static Hashtable<String, JChemPaintPopupMenu> popupMenus = new Hashtable<String, JChemPaintPopupMenu>();
 
-	private RenderPanel renderer;
+	private RenderPanel rendererPanel;
 
 	public SwingPopupModule(RenderPanel renderer,IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
-		this.renderer=renderer;
+		this.rendererPanel=renderer;
 	}
 
 
@@ -58,7 +61,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
 
 	public void mouseClickedDownRight(Point2d worldCoord) {
-		popupMenuForNearestChemObject(renderer.getRenderer().toScreenCoordinates(worldCoord.x, worldCoord.y));
+		popupMenuForNearestChemObject(rendererPanel.getRenderer().toScreenCoordinates(worldCoord.x, worldCoord.y));
 	}
 		
 	/**
@@ -93,27 +96,36 @@ public class SwingPopupModule extends ControllerModuleAdapter {
         return null;
 	}
 
-	private void popupMenuForNearestChemObject(Point2d mouseCoords)
-	{
-		IChemObject objectInRange = renderer.getRenderer().getRenderer2DModel().getHighlightedAtom();
-		if(objectInRange==null)
-			objectInRange = renderer.getRenderer().getRenderer2DModel().getHighlightedBond();
+	private void popupMenuForNearestChemObject(Point2d mouseCoords) {
+	    Renderer renderer = rendererPanel.getRenderer();
+	    RendererModel rendererModel = renderer.getRenderer2DModel();
+		IChemObject objectInRange = rendererModel.getHighlightedAtom();
+		
+		if (objectInRange == null)
+			objectInRange = rendererModel.getHighlightedBond();
+		
 		//look if we are in a reaction box
-		if(objectInRange==null && renderer.getChemModel().getReactionSet()!=null && renderer.getChemModel().getReactionSet().getReactionCount()>0){
-			Rectangle reactionbounds = renderer.getRenderer().calculateScreenBounds(renderer.getChemModel().getReactionSet());
-			if(reactionbounds.contains(mouseCoords.x, mouseCoords.y))
-				objectInRange = renderer.getChemModel().getReactionSet().getReaction(0);
+		IReactionSet reactionSet = 
+		    rendererPanel.getChemModel().getReactionSet();
+		
+		if (objectInRange == null && reactionSet != null
+                && reactionSet.getReactionCount() > 0) {
+			Rectangle reactionbounds = 
+			    renderer.calculateDiagramBounds(reactionSet);
+			
+			if (reactionbounds.contains(mouseCoords.x, mouseCoords.y))
+				objectInRange = reactionSet.getReaction(0);
 		}
-		if(objectInRange==null)
+		
+		if (objectInRange == null)
 			objectInRange = chemModelRelay.getIChemModel();
+		
 		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
-		if (popupMenu != null)
-		{
+		if (popupMenu != null) {
 			popupMenu.setSource(objectInRange);
 			logger.debug("Set popup menu source to: ", objectInRange);
-			popupMenu.show(renderer, (int)mouseCoords.x, (int)mouseCoords.y);
-		} else
-		{
+			popupMenu.show(rendererPanel, (int)mouseCoords.x, (int)mouseCoords.y);
+		} else {
 			logger.warn("Popup menu is null! Could not set source!");
 		}
 	}
