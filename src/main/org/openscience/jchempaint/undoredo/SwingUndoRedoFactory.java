@@ -30,6 +30,7 @@ package org.openscience.jchempaint.undoredo;
 
 import java.util.Map;
 
+import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.controller.IControllerModel;
@@ -73,6 +74,11 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel,
 			IAtomContainer undoRedoContainer, String type) {
 		return new SwingRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, type);
+	}
+
+	public IUndoRedoable getCleanUpEdit(
+			Map<IAtom, Point2d[]> atomCoordsMap, String type) {
+		return new SwingCleanUpEdit(atomCoordsMap, type);
 	}
 
 }
