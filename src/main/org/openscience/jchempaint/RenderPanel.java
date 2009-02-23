@@ -136,6 +136,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
 		this.addMouseListener(mouseEventRelay);
 		this.addMouseMotionListener(mouseEventRelay);
+		this.addMouseWheelListener(mouseEventRelay);
 		this.isNewChemModel = true;
 	}
 	
