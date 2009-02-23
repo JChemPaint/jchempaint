@@ -70,4 +70,9 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingMoveAtomEdit(undoRedoContainer, offset, type);
 	}
 
+	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel,
+			IAtomContainer undoRedoContainer, String type) {
+		return new SwingRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, type);
+	}
+
 }
