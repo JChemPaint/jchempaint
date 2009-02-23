@@ -122,11 +122,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				IAtom lastplaced=null;
 				int counter=0;
 				//this is the starting point for placing
-				if(closestAtom!=null)
-					ac.getAtom(0).setPoint2d(closestAtom.getPoint2d());
-				else
-					ac.getAtom(0).setPoint2d(worldCoord);
-				lastplaced=ac.getAtom(0);
+				lastplaced=closestAtom;
 				counter=1;
 				if(container==null){
 					if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
@@ -134,22 +130,23 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
 				}else{
 					container.add(ac);
-					List<IBond> connbonds=container.getConnectedBondsList(closestAtom);
+					List<IBond> connbonds=container.getConnectedBondsList(ac.getAtom(0));
 					for(int i=0;i<connbonds.size();i++){
 						IBond bond=connbonds.get(i);
-						if(bond.getAtom(0)==closestAtom){
-							bond.setAtom(ac.getAtom(0), 0);
+						if(bond.getAtom(0)==ac.getAtom(0)){
+							bond.setAtom(closestAtom, 0);
 						}else{
-							bond.setAtom(ac.getAtom(0), 1);
+							bond.setAtom(closestAtom, 1);
 						}
 					}
-					container.removeAtomAndConnectedElectronContainers(closestAtom);
+					container.removeAtomAndConnectedElectronContainers(ac.getAtom(0));
+					ac.removeAtom(ac.getAtom(0));
 				}
 				AtomPlacer ap=new AtomPlacer();
 				while(lastplaced!=null){
 					IAtomContainer placedNeighbours=ac.getBuilder().newAtomContainer();
 					IAtomContainer unplacedNeighbours=ac.getBuilder().newAtomContainer();
-					List<IAtom> l=ac.getConnectedAtomsList(lastplaced);
+					List<IAtom> l=container.getConnectedAtomsList(lastplaced);
 					for(int i=0;i<l.size();i++){
 						if(l.get(i).getPoint2d()!=null)
 							placedNeighbours.addAtom((IAtom)l.get(i));
@@ -157,13 +154,13 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 							unplacedNeighbours.addAtom((IAtom)l.get(i));
 					}
 					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
-					IRingSet ringset=new SSSRFinder(ac).findSSSR();
+					IRingSet ringset=new SSSRFinder(container).findSSSR();
 					for(IAtomContainer ring:ringset.atomContainers()){
-						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(ac), 1.4);
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), 1.4);
 					}
-					lastplaced=ac.getAtom(counter);
+					lastplaced=container.getAtom(counter);
 					counter++;
-					if(counter==ac.getAtomCount())
+					if(counter==container.getAtomCount())
 						lastplaced=null;
 				}
 			    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
@@ -185,10 +182,17 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					IIsotope iso=ifa.getMajorIsotope(x);
 					if(iso!=null){
 					    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getChangeAtomSymbol(closestAtom,closestAtom.getSymbol(),x,GT._("Change Atom Symbol"));
+						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getChangeAtomSymbolEdit(closestAtom,closestAtom.getSymbol(),x,GT._("Change Atom Symbol to ")+closestAtom.getSymbol());
 						    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
 					    }
 						closestAtom.setSymbol(x);
+			            // configure the atom, so that the atomic number matches the symbol
+			            try {
+			                IsotopeFactory.getInstance(
+			                        closestAtom.getBuilder()).configure(closestAtom);
+			            } catch (Exception exception) {
+			                exception.printStackTrace();
+			            }
 					}
 				}
 			}

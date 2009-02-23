@@ -30,9 +30,11 @@ package org.openscience.jchempaint.undoredo;
 
 import java.util.Map;
 
+import javax.vecmath.Vector2d;
+
 import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -49,13 +51,23 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, type, c2dm);
 	}
 	
-	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, String type){
-		return new SwingAdjustBondOrdersEdit(changedBonds,type);
+	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, Integer[]> changedBondsStereo, String type){
+		return new SwingAdjustBondOrdersEdit(changedBonds, changedBondsStereo, type);
 	}
 
-	public IUndoRedoable getChangeAtomSymbol(IAtom atom, String formerSymbol,
+	public IUndoRedoable getChangeAtomSymbolEdit(IAtom atom, String formerSymbol,
 			String symbol, String type) {
 		return new SwingChangeAtomSymbolEdit(atom, formerSymbol, symbol, type);
+	}
+
+	public IUndoRedoable getChangeChargeEdit(IAtom atomInRange,
+			int formerCharge, int newCharge, String type) {
+		return new SwingChangeChargeEdit(atomInRange, formerCharge, newCharge, type);
+	}
+
+	public IUndoRedoable getMoveAtomEdit(IAtomContainer undoRedoContainer,
+			Vector2d offset, String type) {
+		return new SwingMoveAtomEdit(undoRedoContainer, offset, type);
 	}
 
 }
