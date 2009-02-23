@@ -252,10 +252,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             h += bottomOverlap;
         }
         
-        System.err.println(
-                String.format("%s %s %s %s", 
-                        leftOverlap, rightOverlap, topOverlap, rightOverlap));
-        
         if (dx != 0 || dy != 0) {
             renderer.shiftDrawCenter(dx, dy);
             this.setPreferredSize(new Dimension(w, h));
@@ -321,14 +317,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         this.shouldPaintFromCache = true;
 
         // determine the size the canvas needs to be to fit the model
-        System.out.println(screen + " " + diagram);
         shift(g, screen, diagram);
-//        if (this.overlaps(screen, diagram)) {
-//            System.err.println("overlaps");
-//            Rectangle union = screen.union(diagram);
-//            this.setPreferredSize(union.getSize());
-//            this.revalidate();
-//        }
     }
     
     private void paintChemModelFitToScreen(
