@@ -52,6 +52,7 @@ public class NewAction extends JCPAction {
       if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
         int clear=jcpPanel.showWarning();
         if(clear==JOptionPane.YES_OPTION){
+        	//TODO use zap here
         	if(jcpPanel.getChemModel().getMoleculeSet()!=null)
         		jcpPanel.getChemModel().getMoleculeSet().removeAllAtomContainers();
         	if(jcpPanel.getChemModel().getReactionSet()!=null)
