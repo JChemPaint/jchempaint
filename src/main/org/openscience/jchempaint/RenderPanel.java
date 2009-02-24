@@ -121,7 +121,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
-	    
+
 		this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
@@ -129,7 +129,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		UndoRedoHandler undoredohandler = new UndoRedoHandler();
 		undoredohandler.addIUndoListener(this);
 		// connect the Renderer to the Hub
-		this.hub = 
+		this.hub =
 		    new ControllerHub(controllerModel, renderer, chemModel, this, undoredohandler, new SwingUndoRedoFactory());
 
 		// connect mouse events from Panel to the Hub
@@ -139,7 +139,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		this.addMouseWheelListener(mouseEventRelay);
 		this.isNewChemModel = true;
 	}
-	
+
 	private List<IGenerator> makeGenerators() {
 	    List<IGenerator> generators = new ArrayList<IGenerator>();
 	    generators.add(new AtomContainerBoundsGenerator());
@@ -185,36 +185,22 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         takeSnapshot(g, bounds);
         return image;
 	}
-	
+
 	public void takeSnapshot(Graphics2D g, Rectangle bounds){
         super.paint(g);
-        
+
         IChemModel chemModel = hub.getIChemModel();
         if (isValidChemModel(chemModel)) {
             this.paintChemModel(chemModel, g, bounds);
         }
     }
-	
+
 	private boolean isValidChemModel(IChemModel chemModel) {
-	    return chemModel != null 
+	    return chemModel != null
 	            && (chemModel.getMoleculeSet() != null
 	                    || chemModel.getReactionSet() != null);
 	}
 
-	/**
-     * Check to see if the molecule bounding box has overlapped a screen edge.
-     *
-     * @param screenBounds the bounding box of the screen
-     * @param diagramBounds the bounding box of the molecule on the screen
-     * @return
-     */
-    private boolean overlaps(Rectangle screenBounds, Rectangle diagramBounds) {
-        return screenBounds.getMinX() > diagramBounds.getMinX()
-            || screenBounds.getMinY() > diagramBounds.getMinY()
-            || screenBounds.getMaxX() < diagramBounds.getMaxX()
-            || screenBounds.getMaxY() < diagramBounds.getMaxY();
-    }
-    
     private void shift(
             Graphics2D g, Rectangle screenBounds, Rectangle diagramBounds) {
         int screenMaxX  = screenBounds.x + screenBounds.width;
@@ -226,33 +212,33 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         int rightOverlap  = diagramMaxX - screenMaxX;
         int topOverlap    = screenBounds.y - diagramBounds.y;
         int bottomOverlap = diagramMaxY - screenMaxY;
-        
+
         boolean overlapsLeft   = leftOverlap   > 0;
         boolean overlapsRight  = rightOverlap  > 0;
         boolean overlapsTop    = topOverlap    > 0;
         boolean overlapsBottom = bottomOverlap > 0;
-        
+
         int dx = 0;
         int dy = 0;
         int w = screenBounds.width;
         int h = screenBounds.height;
-        
+
         if (overlapsLeft) {
             dx = leftOverlap;
         }
-        
+
         if (overlapsRight) {
             w += rightOverlap;
         }
-        
+
         if (overlapsTop) {
             dy = topOverlap;
         }
-        
+
         if (overlapsBottom) {
             h += bottomOverlap;
         }
-        
+
         if (dx != 0 || dy != 0) {
             renderer.shiftDrawCenter(dx, dy);
             this.setPreferredSize(new Dimension(w, h));
@@ -262,20 +248,20 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
                     this.hub.getIChemModel(),new AWTDrawVisitor(g));
         }
     }
-    
+
     public void paint(Graphics g) {
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
-        
+
         Graphics2D g2 = (Graphics2D)g;
-    
+
     	if (this.shouldPaintFromCache) {
     	    renderer.repaint(new AWTDrawVisitor(g2));
     	} else {
     	    IChemModel chemModel = this.hub.getIChemModel();
-    	    
+
     	    if (!isValidChemModel(chemModel)) return;
-    
+
     		/*
     		 * It is more correct to use a rectangle starting at (0,0)
     		 * than to use getBounds() as the RenderPanel may be a child
@@ -283,7 +269,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
     		 * translated relative to its parent.
     		 */
     	    Rectangle screen = new Rectangle(0, 0, getWidth(), getHeight());
-    	    
+
     	    if (renderer.getRenderer2DModel().isFitToScreen()) {
     	        this.paintChemModelFitToScreen(chemModel, g2, screen);
     	    } else {
@@ -294,7 +280,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
     /**
      * Paint the chem model not fit-to-screen
-     * 
+     *
      * @param chemModel
      * @param g
      * @param screen
@@ -308,7 +294,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
         Rectangle diagram = renderer.paintChemModel(
                 chemModel, new AWTDrawVisitor(g));
-        
+
         isNewChemModel = false;
 
         /*
@@ -320,10 +306,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         // determine the size the canvas needs to be to fit the model
         shift(g, screen, diagram);
     }
-    
+
     private void paintChemModelFitToScreen(
             IChemModel chemModel, Graphics2D g, Rectangle screen) {
-        
+
         renderer.paintChemModel(chemModel, new AWTDrawVisitor(g), screen, true);
 
     }
@@ -367,7 +353,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	        			wholeModel.addIsotope(atom);
 	                   	if (atom.getHydrogenCount() != null) {
 	                    	implicitHs += atom.getHydrogenCount();
-	                	}	        		
+	                	}
 	                }
 	        	}
 		        String formula
@@ -381,7 +367,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	        // depict brutto formula of the selected molecule or part of molecule
 	        IChemObjectSelection selection =
 	            renderer.getRenderer2DModel().getSelection();
-	        
+
 	        if (selection != null) {
 	            IAtomContainer ac = selection.getConnectedAtomContainer();
 	            if (ac != null) {
@@ -389,7 +375,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	        		for(IAtom atom : ac.atoms()){
 	        			if (atom.getHydrogenCount() != null) {
 	                    	implicitHs += atom.getHydrogenCount();
-	                	}	        		
+	                	}
 	                }
 	                String formula = MolecularFormulaManipulator
 	                .getHTML(MolecularFormulaManipulator
@@ -405,7 +391,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	    }
 		return status;
 	}
-	
+
 	private String makeStatusBarString(String formula, int implicitHs, double mass){
 		DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
