@@ -40,6 +40,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LonePairElectronChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.GT;
 
 /**
  */
@@ -72,8 +73,8 @@ public class ConvertToRadicalAction extends JCPAction {
                     
                 }
                 else 
-                	JOptionPane.showMessageDialog(jcpPanel,"A radical cannot be added to this atom." +
-                	" Re-try with less hydrogens.");
+                	JOptionPane.showMessageDialog(jcpPanel,GT._("A radical cannot be added to this atom." +
+                	" Re-try with less hydrogens."));
             } else {
                 logger.error("Object not an Atom! Cannot convert into a radical!");
             }

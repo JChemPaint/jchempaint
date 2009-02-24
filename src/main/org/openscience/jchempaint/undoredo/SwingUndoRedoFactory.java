@@ -40,6 +40,9 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IElectronContainer;
+import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IReactionSet;
 
 /**
  * A class returning Swing-Implementations of all the undo-redo edits
@@ -79,6 +82,28 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	public IUndoRedoable getCleanUpEdit(
 			Map<IAtom, Point2d[]> atomCoordsMap, String type) {
 		return new SwingCleanUpEdit(atomCoordsMap, type);
+	}
+
+	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel,
+			IAtom oldAtom, IAtom newAtom, String type) {
+		return new SwingReplaceAtomEdit(chemModel, oldAtom, newAtom, type);
+	}
+
+	public IUndoRedoable getConvertToRadicalEdit(
+			IAtomContainer relevantContainer,
+			IElectronContainer electronContainer, String type) {
+		return new SwingConvertToRadicalEdit(relevantContainer, electronContainer, type);
+	}
+
+	public IUndoRedoable getChangeIsotopeEdit(IAtom atom,
+			Integer formerIsotopeNumber, Integer newIstopeNumber, String type) {
+		return new SwingChangeIsotopeEdit(atom, formerIsotopeNumber, newIstopeNumber, type);
+	}
+
+	public IUndoRedoable getClearAllEdit(IChemModel chemModel,
+			IMoleculeSet som, IReactionSet sor, String type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -181,11 +181,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					IsotopeFactory ifa=IsotopeFactory.getInstance(closestAtom.getBuilder());
 					IIsotope iso=ifa.getMajorIsotope(x);
 					if(iso!=null){
-					    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getChangeAtomSymbolEdit(closestAtom,closestAtom.getSymbol(),x,GT._("Change Atom Symbol to ")+closestAtom.getSymbol());
-						    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
-					    }
-						closestAtom.setSymbol(x);
+					    chemModelRelay.setSymbol(closestAtom, x);
 			            // configure the atom, so that the atomic number matches the symbol
 			            try {
 			                IsotopeFactory.getInstance(

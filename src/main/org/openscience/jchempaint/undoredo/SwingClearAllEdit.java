@@ -4,7 +4,7 @@
  *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
  *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2008 Stefan Kuhn
+ *  Copyright (C) 2008 Stefan Kuhn
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -26,37 +26,46 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.action;
+package org.openscience.jchempaint.undoredo;
 
-import java.awt.event.ActionEvent;
+import javax.swing.undo.UndoableEdit;
 
-import javax.swing.JOptionPane;
-
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.cdk.controller.undoredo.ClearAllEdit;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IReactionSet;
 
 /**
- * Opens a new empty JChemPaintFrame.
+ * A swing undo-redo implementation for clearing the panel.
  *
  */
-public class NewAction extends JCPAction {
+public class SwingClearAllEdit extends ClearAllEdit implements UndoableEdit{
 
-    private static final long serialVersionUID = -6710948755122145479L;
+	public SwingClearAllEdit(IChemModel chemModel, IMoleculeSet som, IReactionSet sor, String type) {
+		super(chemModel, som, sor, type);
+	}
 
-    /**
-     *  Opens an empty JChemPaint frame.
-     *
-     *@param  e  Description of the Parameter
-     */
-    public void actionPerformed(ActionEvent e) {
-      if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
-        int clear=jcpPanel.showWarning();
-        if(clear==JOptionPane.YES_OPTION){
-        	jcpPanel.get2DHub().zap();
-        }
-      }else{
-		JChemPaint.showEmptyInstance();
-      }
-    }
+	public boolean addEdit(UndoableEdit arg0) {
+		return false;
+	}
+
+	public void die() {
+	}
+
+	public String getRedoPresentationName() {
+		return getPresentationName();
+	}
+
+	public String getUndoPresentationName() {
+		return getPresentationName();
+	}
+
+	public boolean isSignificant() {
+		return true;
+	}
+
+	public boolean replaceEdit(UndoableEdit arg0) {
+		return false;
+	}
+
 }
-
