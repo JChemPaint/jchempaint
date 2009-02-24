@@ -39,6 +39,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -58,11 +59,12 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
+import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
-public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler {
+public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler, ICDKChangeListener {
 
 	private JComponent lastActionButton;
     private File currentWorkDirectory;
@@ -115,6 +117,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 		setupPopupMenus(inputAdapter);
 		renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
 		renderPanel.getHub().setEventHandler(this);
+		renderPanel.getRenderer().getRenderer2DModel().addCDKChangeListener(this);
         instances.add(this);
     }
 
@@ -567,5 +570,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 			undoMenu.setEnabled(false);
 			undoButton.setToolTipText(GT._("No undo possible"));
 		}	
+	}
+	public void stateChanged(EventObject event) {
+	}
+	public void zoomFactorChanged(EventObject event) {
+		this.updateStatusBar();
 	}
 }

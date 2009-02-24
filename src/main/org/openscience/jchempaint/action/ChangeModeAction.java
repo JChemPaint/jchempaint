@@ -164,5 +164,8 @@ public class ChangeModeAction extends JCPAction {
                         .getClass().getName());
             }
         }
+
+		public void zoomFactorChanged(EventObject event) {
+		}
     }
 }
