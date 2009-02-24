@@ -79,11 +79,6 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, type);
 	}
 
-	public IUndoRedoable getCleanUpEdit(
-			Map<IAtom, Point2d[]> atomCoordsMap, String type) {
-		return new SwingCleanUpEdit(atomCoordsMap, type);
-	}
-
 	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel,
 			IAtom oldAtom, IAtom newAtom, String type) {
 		return new SwingReplaceAtomEdit(chemModel, oldAtom, newAtom, type);
@@ -102,8 +97,12 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 
 	public IUndoRedoable getClearAllEdit(IChemModel chemModel,
 			IMoleculeSet som, IReactionSet sor, String type) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SwingClearAllEdit(chemModel, som, sor, type);
+	}
+
+	public IUndoRedoable getChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap,
+			String type) {
+		return new SwingChangeCoordsEdit(atomCoordsMap, type);
 	}
 
 }

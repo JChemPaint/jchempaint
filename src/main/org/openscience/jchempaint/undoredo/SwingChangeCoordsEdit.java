@@ -33,16 +33,16 @@ import java.util.Map;
 import javax.swing.undo.UndoableEdit;
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.controller.undoredo.CleanUpEdit;
+import org.openscience.cdk.controller.undoredo.ChangeCoordsEdit;
 import org.openscience.cdk.interfaces.IAtom;
 
 /**
  * A swing undo-redo implementation for clean up
  *
  */
-public class SwingCleanUpEdit extends CleanUpEdit implements UndoableEdit{
+public class SwingChangeCoordsEdit extends ChangeCoordsEdit implements UndoableEdit{
 
-	public SwingCleanUpEdit(Map<IAtom, Point2d[]> atomCoordsMap, String type) {
+	public SwingChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, String type) {
 		super(atomCoordsMap, type);
 	}
 
