@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jchempaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-10 17:17+0000\n"
-"PO-Revision-Date: 2009-02-08 09:14+0000\n"
+"POT-Creation-Date: 2009-02-25 13:45+0000\n"
+"PO-Revision-Date: 2009-02-25 13:45+0000\n"
 "Last-Translator: عبد الله شلي (Abdellah Chelli) <sneetsher@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgid "Invalid SMILES specified"
 msgstr "سلسلة (SMILES) المقدّمة غير صالحة"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:111
-msgid "Periodic Table for CDK"
+msgid "Periodic Table for JChemPaint"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:115
@@ -56,7 +56,7 @@ msgid "Reload"
 msgstr "كَرِّر"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:119
-msgid "Click this button to back to PeriodicTable."
+msgid "Click this button to go back to PeriodicTable."
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:183
@@ -573,105 +573,144 @@ msgstr "N"
 msgid "Lr"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:113
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:167
+msgid "Add Functional Group"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:175
+#, fuzzy
+msgid "Add Atom"
+msgstr "ذرّات كاذِبة"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:128
 msgid "Draw atom numbers"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:116
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:131
 msgid "Show atom-atom mappings"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:119
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:134
 msgid "Explicit carbons"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:122
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:137
 msgid "Show explicit methyl groups"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:125
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:140
+#, fuzzy
+msgid "Show explicit hydrogens"
+msgstr "تَشغيل/تَعطيل تَتَبُّع مُوَلِّدات الماء المُضَمَّنَة"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:143
 #, fuzzy
 msgid "Show implicit hydrogens"
 msgstr "تَشغيل/تَعطيل تَتَبُّع مُوَلِّدات الماء المُضَمَّنَة"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:128
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:146
 msgid "Use aromatic ring circles"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:131
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:149
+msgid "CDK style aromatics"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:152
 msgid "Color atoms by element"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:134
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:155
 msgid "Use Anti-Aliasing"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:137
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:158
 msgid "Show tooltips"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:140
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:161
 msgid "Show boxes around reactions"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:143
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:164
 msgid "Show atoms in compact form"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:151
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:167
+msgid "Set fit to screen"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:175
 msgid "Atom size"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:158
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:182
 msgid "Bond width"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:166
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:190
 msgid "Bond length"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:174
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:198
 msgid "Highlight Distance"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:181
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:205
 msgid "Wedge width"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:185
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:209
+msgid "Oval Compact Atoms"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:213
+msgid "Square Compact Atoms"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:217
 msgid "Font name"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:187
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:219
 msgid "Choose Font..."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:192
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:224
 msgid "BACKCOLOR"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:193
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:225
 msgid "Background color"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:195
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:227
 msgid "Choose Color..."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:262
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:312
 msgid "Choose a Font"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:263
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:313
 msgid "Carbon Dioxide"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:271
+#: src/main/org/openscience/jchempaint/dialog/editor/RendererModelEditor.java:321
 msgid "Choose Background Color"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:63
-msgid "Modify Renderer2D Options Dialog"
+#: src/main/org/openscience/jchempaint/dialog/editor/GeneralSettingsEditor.java:65
+msgid "Ask for IO settings"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/GeneralSettingsEditor.java:67
+#: src/main/org/openscience/jchempaint/dialog/editor/GeneralSettingsEditor.java:91
+msgid "Undo/redo stack size"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/editor/GeneralSettingsEditor.java:91
+msgid "must be a number from 1 to 100"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:75
@@ -681,22 +720,22 @@ msgstr "خِيَّارات الإيحَاء بالوَاقِعِيَّة (Render
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:81
 #: src/main/org/openscience/jchempaint/dialog/TextViewDialog.java:113
-#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:70
+#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:71
 #, fuzzy
 msgid "OK"
 msgstr "O"
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:89
-#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:78
+#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:79
 msgid "Apply"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:96
-#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:85
+#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:86
 msgid "Cancel"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:55
+#: src/main/org/openscience/jchempaint/dialog/ModifyGeneralSettingsDialog.java:56
 msgid "General Settings"
 msgstr ""
 
@@ -713,17 +752,30 @@ msgstr ""
 msgid "See 'http://jchempaint.sourceforge.net' for more information."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/GeneralSettingsEditor.java:61
-msgid "Ask for IO settings"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:442
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:450
 msgid "has unsaved data. Do you want to save it?"
 msgstr "تملك بيانات غير محفوظة. هل تريد حفظها؟"
 
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:442
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:450
 msgid "Unsaved data"
 msgstr "بيانات غير محفوظة"
+
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:562
+msgid "No redo possible"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:571
+msgid "No undo possible"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/ConvertToRadicalAction.java:76
+msgid "A radical cannot be added to this atom. Re-try with less hydrogens."
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:203
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:214
+msgid "Cut Bond"
+msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:76
 #, fuzzy
@@ -765,19 +817,30 @@ msgstr ""
 msgid "Generated InChI"
 msgstr "أنشِئ InChI"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:303
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:99
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:139
+msgid "No reaction existing. Cannot add therefore to something!"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:99
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:139
+#, fuzzy
+msgid "No existing reactions"
+msgstr "إجعَل النّاتِج في تفاعل موجود"
+
+#: src/main/org/openscience/jchempaint/RenderPanel.java:401
 msgid "Zoomfactor"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:311
+#: src/main/org/openscience/jchempaint/RenderPanel.java:413
 msgid "of these"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:312
+#: src/main/org/openscience/jchempaint/RenderPanel.java:414
 msgid "Hs implicit"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:312
+#: src/main/org/openscience/jchempaint/RenderPanel.java:414
 msgid "mass"
 msgstr ""
 
@@ -1101,195 +1164,199 @@ msgid "R"
 msgstr "R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:160
+msgid "Select Reactants Only"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:161
 msgid "Draw Bonds and Atoms"
 msgstr "أرسُم الرّوابط و الذرّات"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:161
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:162
 msgid "Change the Atom's Symbol"
 msgstr "غَيّر رمز الذرّة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:162
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:163
 msgid "Select new drawing symbol from periodic table"
 msgstr "إنتقِ رمز رسم جديد من الجدول الدّوري"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:163
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:164
 msgid "Enter an element symbol via keyboard"
 msgstr "أدخِل رمز عنصر عن طريق لوحة المفاتيح"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:164
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:165
 msgid "Make the Bonds Stereo Up"
 msgstr "إجعَل الرّوابط أمامية"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:165
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:166
 msgid "Make the Bonds Stereo Down"
 msgstr "إجعَل الرّوابط خلفية"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:166
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:167
 msgid "Increase the charge on an Atom"
 msgstr "زِد الشّحنة لذرّة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:167
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:168
 msgid "Decrease the charge on an Atom"
 msgstr "أنقِص الشّحنة لذرّة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:168
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:169
 msgid "Move Atoms and Bonds"
 msgstr "حَرّك الذرّات و الرّوابط"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:169
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:170
 msgid "Delete Atoms and Bonds"
 msgstr "إحذِف الذّرات و الرّوابط"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:170
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:171
 msgid "Select Atoms and Bonds"
 msgstr "إنتقِ الذرّات و الرّوابط"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:171
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:172
 msgid "Select Atoms and Bonds in a square region"
 msgstr "إنتقِ الذرّات و الرّوابط في حيّز مربّع"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:172
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:173
 msgid "Add a propane ring"
 msgstr "أضِف حلقة برُوبان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:173
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:174
 msgid "Add a butane ring"
 msgstr "أضِف حلقة بُوتان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:174
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:175
 msgid "Add a pentane ring"
 msgstr "أضِف حلقة بُنتان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:175
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:176
 msgid "Add a hexane ring"
 msgstr "أضِف حلقة هِكسان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:176
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:177
 msgid "Add a heptane ring"
 msgstr "أضِف حلقة هِبتان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:177
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:178
 msgid "Add a octane ring"
 msgstr "أضِف حلقة أُكتان"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:178
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:179
 msgid "Add a benzene ring"
 msgstr "أضِف حلقة بنزين"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:179
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:180
 msgid "Relayout the structures"
 msgstr "أعِد تصميم البُنى"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:180
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:181
 msgid "Create a new file"
 msgstr "أنشئ ملفًا جديدًا"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:181
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:182
 msgid "Open a file"
 msgstr "إفتَح ملفًا"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:182
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:183
 msgid "Redo Action"
 msgstr "كرِّر الإجراء"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:183
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:184
 msgid "Save to a file"
 msgstr "إحفَظ في ملف"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:184
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:185
 msgid "Undo Action"
 msgstr "تراجَع عن إجراء"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:185
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:186
 msgid "Bond Popup Menu"
 msgstr "قائمة مُنبَثِقة للرّابطة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:186
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:187
 msgid "ChemModel Popup Menu"
 msgstr "قائمة مُنبَثِقة لـ ChemModel"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:187
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:188
 msgid "Reaction Popup Menu"
 msgstr "قائمة مُنبَثِقة للتّفاعل"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:188
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:189
 msgid "Enter Element or Group"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:189
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:190
 #, fuzzy
 msgid "Add Atom Or Change Element"
 msgstr "غَيِّر العُنصر..."
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:190
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:191
 #, fuzzy
 msgid "Draw Bond"
 msgstr "أرسُم الرّوابط و الذرّات"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:191
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:192
 msgid "Ring 3"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:192
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:193
 msgid "Ring 4"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:193
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:194
 msgid "Ring 5"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:194
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:195
 msgid "Ring 6"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:195
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:196
 msgid "Ring 7"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:196
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:197
 msgid "Ring 8"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:197
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:198
 msgid "Add or convert to bond up"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:198
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:199
 msgid "Add or convert to bond down"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:199
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:200
 #, fuzzy
 msgid "Decrease Charge"
 msgstr "أنقِص الشّحنة لذرّة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:200
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:201
 #, fuzzy
 msgid "Increase Charge"
 msgstr "زِد الشّحنة لذرّة"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:201
-msgid "Cycle Symbol"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:202
-msgid "Delete"
+msgid "Cyclic change of symbol"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:203
-msgid "Benzene"
+msgid "Delete"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:204
-msgid "Select in Free Form"
+msgid "Benzene"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:205
+msgid "Select in Free Form"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:206
 #, fuzzy
 msgid "Select Square"
 msgstr "إنتقِ جُزيءًا"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:206
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:207
 msgid "Move"
 msgstr ""
 

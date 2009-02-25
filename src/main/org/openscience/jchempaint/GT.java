@@ -122,6 +122,7 @@ public class GT {
       new Language("pl",    GT._("Polish"),                   false),
       new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
       new Language("es",    GT._("Spanish"),                  true),
+      new Language("ar",    GT._("Arabic"),                   true),
     };
     doTranslate = wasTranslating;
     return languageList;
