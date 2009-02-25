@@ -53,7 +53,8 @@ public class NewAction extends JCPAction {
         int clear=jcpPanel.showWarning();
         if(clear==JOptionPane.YES_OPTION){
         	jcpPanel.get2DHub().zap();
-        }
+        	jcpPanel.get2DHub().updateView();
+         }
       }else{
 		JChemPaint.showEmptyInstance();
       }
