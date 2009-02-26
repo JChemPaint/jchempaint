@@ -34,6 +34,8 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -51,6 +53,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.Atom;
@@ -60,11 +63,13 @@ import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
-public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler, ICDKChangeListener {
+public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemModelEventRelayHandler, ICDKChangeListener, KeyListener {
 
 	private JComponent lastActionButton;
     private File currentWorkDirectory;
@@ -119,6 +124,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 		renderPanel.getHub().setEventHandler(this);
 		renderPanel.getRenderer().getRenderer2DModel().addCDKChangeListener(this);
         instances.add(this);
+        this.addKeyListener(this);
     }
 
 	public Container getTopLevelContainer() {
@@ -575,5 +581,19 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 	}
 	public void zoomFactorChanged(EventObject event) {
 		this.updateStatusBar();
+	}
+	public void keyPressed(KeyEvent arg0) {
+	}
+	public void keyReleased(KeyEvent arg0) {
+		if(arg0.getKeyCode()==KeyEvent.VK_DELETE){
+			if(renderPanel.getRenderer().getRenderer2DModel().getSelection().isFilled()){
+				IAtomContainer selected = renderPanel.getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer();
+				renderPanel.getHub().deleteFragment(selected);
+				renderPanel.getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
+				renderPanel.getHub().updateView();
+			}
+		}
+	}
+	public void keyTyped(KeyEvent arg0) {
 	}
 }
