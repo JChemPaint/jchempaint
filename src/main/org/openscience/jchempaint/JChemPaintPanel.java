@@ -40,6 +40,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -53,7 +54,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.Atom;
@@ -61,11 +61,15 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
@@ -96,6 +100,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
     protected JButton redoButton;
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
+    private LoggingTool logger = new LoggingTool(this);
 	
 	public JChemPaintPanel(IChemModel chemModel, String gui){
 		this(chemModel,gui,1);
@@ -591,6 +596,25 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 				renderPanel.getHub().deleteFragment(selected);
 				renderPanel.getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 				renderPanel.getHub().updateView();
+			}
+		}else if(renderPanel.getRenderer().getRenderer2DModel().getHighlightedAtom()!=null){
+			try {
+				IAtom closestAtom = renderPanel.getRenderer().getRenderer2DModel().getHighlightedAtom();
+				char x = arg0.getKeyChar();
+				if(Character.isLowerCase(x))
+					x=Character.toUpperCase(x);
+				IsotopeFactory ifa;
+				ifa = IsotopeFactory.getInstance(closestAtom.getBuilder());
+				IIsotope iso=ifa.getMajorIsotope(x);
+				if(iso!=null){
+				    renderPanel.getHub().setSymbol(closestAtom, Character.toString(x));
+		            // configure the atom, so that the atomic number matches the symbol
+	                IsotopeFactory.getInstance(
+	                        closestAtom.getBuilder()).configure(closestAtom);
+	                renderPanel.getHub().updateView();
+				}
+			} catch (IOException e) {
+				logger.debug(e);
 			}
 		}
 	}
