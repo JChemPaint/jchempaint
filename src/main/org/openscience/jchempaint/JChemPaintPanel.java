@@ -605,7 +605,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements IChemMod
 					x=Character.toUpperCase(x);
 				IsotopeFactory ifa;
 				ifa = IsotopeFactory.getInstance(closestAtom.getBuilder());
-				IIsotope iso=ifa.getMajorIsotope(x);
+				IIsotope iso=ifa.getMajorIsotope(Character.toString(x));
 				if(iso!=null){
 				    renderPanel.getHub().setSymbol(closestAtom, Character.toString(x));
 		            // configure the atom, so that the atomic number matches the symbol
