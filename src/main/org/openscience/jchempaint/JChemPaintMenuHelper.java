@@ -74,7 +74,7 @@ public class JChemPaintMenuHelper {
 	 */
 	protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
 		logger.debug("Creating menu: ", key);
-		JMenu menu = new JMenu(JCPMenuTextMaker.getInstance().getText(key));
+		JMenu menu = new JMenu(JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(key));
 		return createMenu(jcpPanel, key, isPopup, guiString, menu);
 	}
 
@@ -135,7 +135,7 @@ public class JChemPaintMenuHelper {
 		}
 		String translation = "***" + cmd + "***";
 		try {
-			translation = JCPMenuTextMaker.getInstance().getText(cmd);
+			translation = JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(cmd);
 			logger.debug("Found translation: ", translation);
 		} catch (MissingResourceException mre) {
 			logger.error("Could not find translation for: " + cmd);

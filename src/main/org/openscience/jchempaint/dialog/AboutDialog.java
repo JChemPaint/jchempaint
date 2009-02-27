@@ -43,6 +43,7 @@ import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPMenuTextMaker;
 import org.openscience.jchempaint.JCPPropertyHandler;
+import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.action.JCPAction;
 
 
@@ -59,8 +60,8 @@ public class AboutDialog extends JFrame {
 	protected static LoggingTool logger = null;
 
 	/** Displays the About Dialog for JChemPaint.  */
-	public AboutDialog() {
-		super(JCPMenuTextMaker.getInstance().getText("about"));
+	public AboutDialog(String guistring) {
+		super(JCPMenuTextMaker.getInstance(guistring).getText("about"));
 		logger = new LoggingTool(this);
 		doInit();
 	}

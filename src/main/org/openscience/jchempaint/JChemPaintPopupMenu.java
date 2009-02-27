@@ -61,7 +61,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 	 */
 	JChemPaintPopupMenu(JChemPaintPanel jcpPanel, String type, String guiString)
 	{
-		String menuTitle = JCPMenuTextMaker.getInstance().getText(type + "MenuTitle");
+		String menuTitle = JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(type + "MenuTitle");
 		JMenuItem titleMenuItem = new JMenuItem(menuTitle);
 		titleMenuItem.setEnabled(false);
 		titleMenuItem.setArmed(false);

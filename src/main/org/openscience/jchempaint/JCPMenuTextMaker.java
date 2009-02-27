@@ -31,6 +31,8 @@ package org.openscience.jchempaint;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+
 /**
  * This class held text entries for menu items, tool tips etc., which are
  * configured in the JCPGUI_*.properties files. They all need an entry
@@ -46,7 +48,7 @@ public class JCPMenuTextMaker {
 	/**
 	 * The constructor. Private since class is a singleton.
 	 */
-	private JCPMenuTextMaker(){
+	private JCPMenuTextMaker(String guistring){
 		entries.put("file", GT._("File"));
 		entries.put("new", GT._("New"));
 		entries.put("atomMenuTitle", GT._("Atom Popup Menu"));
@@ -178,7 +180,10 @@ public class JCPMenuTextMaker {
 		entries.put("octagonTooltip", GT._("Add a octane ring"));
 		entries.put("benzeneTooltip", GT._("Add a benzene ring"));
 		entries.put("cleanupTooltip", GT._("Relayout the structures"));
-		entries.put("newTooltip", GT._("Create a new file"));
+		if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET))
+			entries.put("newTooltip", GT._("Clear"));
+		else
+			entries.put("newTooltip", GT._("Create a new file"));
 		entries.put("openTooltip", GT._("Open a file"));
 		entries.put("redoTooltip", GT._("Redo Action"));
 		entries.put("saveAsTooltip", GT._("Save to a file"));
@@ -222,9 +227,10 @@ public class JCPMenuTextMaker {
 	 * 
 	 * @return The instance
 	 */
-	public static JCPMenuTextMaker getInstance(){
-		if(instance==null)
-			instance=new JCPMenuTextMaker();
+	public static JCPMenuTextMaker getInstance(String guistring){
+		if(instance==null){
+			instance=new JCPMenuTextMaker(guistring);
+		}
 		return instance;
 	}
 }

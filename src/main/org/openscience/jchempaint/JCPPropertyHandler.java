@@ -230,32 +230,6 @@ public class JCPPropertyHandler
 	}
 
 
-	/**
-	 * Gets the gUIDefinition attribute of the JCPPropertyHandler object
-	 *
-	 * @return    The gUIDefinition value
-	 */
-	public ResourceBundle getGUIDefinition()
-	{
-        if (guiDefinition == null)
-        {
-            String guiString = null;
-            try
-            {
-                guiString = System.getProperty("gui");
-            } catch (Exception exc)
-            {
-                logger.error("Could not read a system property. I might be in a sandbox.");
-            }
-            if (guiString == null)
-            {
-                guiString = "stable";
-            }
-            guiDefinition = getGUIDefinition(guiString);
-        }
-        return guiDefinition;
-    }
-
     public ResourceBundle getGUIDefinition(String guiString) {
         try {
             String resource = "org.openscience.jchempaint.resources.JCPGUI_" + guiString;

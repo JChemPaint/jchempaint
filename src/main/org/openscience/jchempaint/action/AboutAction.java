@@ -43,7 +43,7 @@ public class AboutAction extends JCPAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		AboutDialog ad = new AboutDialog();
+		AboutDialog ad = new AboutDialog(jcpPanel.getGuistring());
 		ad.pack();
 		ad.setVisible(true);
 	}

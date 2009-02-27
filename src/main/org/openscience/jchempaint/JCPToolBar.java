@@ -81,13 +81,13 @@ public class JCPToolBar
 	 *@param  key  Description of the Parameter
 	 *@return      The menuResourceString value
 	 */
-	static String getToolbarResourceString(String key)
+	static String getToolbarResourceString(String key, String guistring)
 	{
 		String str;
 		try
 		{
-			System.out.println("instance: "+ JCPPropertyHandler.getInstance().getGUIDefinition());
-			str = JCPPropertyHandler.getInstance().getGUIDefinition().getString(key);
+			System.out.println("instance: "+ JCPPropertyHandler.getInstance().getGUIDefinition(guistring));
+			str = JCPPropertyHandler.getInstance().getGUIDefinition(guistring).getString(key);
 		} catch (MissingResourceException mre)
 		{
 			System.out.println("Missing resource:");
@@ -158,7 +158,7 @@ public class JCPToolBar
 				}
 				try
 				{
-					String tip = JCPMenuTextMaker.getInstance().getText(key + JCPAction.TIPSUFFIX);
+					String tip = JCPMenuTextMaker.getInstance("applet").getText(key + JCPAction.TIPSUFFIX);
 					if (tip != null)
 					{
 						b.setToolTipText(tip);
@@ -205,7 +205,7 @@ public class JCPToolBar
 	public static Component createToolbar(int orientation, String kind, JChemPaintPanel chemPaintPanel, int lines, boolean elementtype)
 	{
 		JToolBar toolbar2 = new JToolBar(orientation);
-		String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind));
+		String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind, chemPaintPanel.getGuistring()));
 		JButton button = null;
 
 		if (toolKeys.length != 0)
