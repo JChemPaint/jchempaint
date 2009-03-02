@@ -156,7 +156,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
 					IRingSet ringset=new SSSRFinder(container).findSSSR();
 					for(IAtomContainer ring:ringset.atomContainers()){
-						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), 1.4);
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength() / chemModelRelay.getRenderer().getRenderer2DModel().getScale());
 					}
 					lastplaced=container.getAtom(counter);
 					counter++;
