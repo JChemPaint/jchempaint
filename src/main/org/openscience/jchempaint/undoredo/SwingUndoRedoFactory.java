@@ -105,4 +105,16 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingChangeCoordsEdit(atomCoordsMap, type);
 	}
 
+	public IUndoRedoable getMakeReactantOrProductInNewReactionEdit(IChemModel chemModel,
+			IAtomContainer ac, IAtomContainer oldcontainer, boolean reactantOrProduct, String type) {
+		return new SwingMakeReactantOrProductInNewReactionEdit(chemModel, ac, oldcontainer, reactantOrProduct, type);
+	}
+
+	public IUndoRedoable getMakeReactantOrProductInExistingReactionEdit(
+			IChemModel chemModel, IAtomContainer newContainer,
+			IAtomContainer oldcontainer, String s, boolean reactantOrProduct,
+			String type) {
+		return new SwingMakeReactantInExistingReactionEdit(chemModel, newContainer, oldcontainer, s, reactantOrProduct, type);
+	}
+
 }

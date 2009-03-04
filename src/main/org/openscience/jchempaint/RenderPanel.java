@@ -304,7 +304,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         this.shouldPaintFromCache = true;
 
         // determine the size the canvas needs to be to fit the model
-        shift(g, screen, diagram);
+        if(diagram!=null)
+        	shift(g, screen, diagram);
     }
 
     private void paintChemModelFitToScreen(
