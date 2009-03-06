@@ -46,6 +46,7 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
+import org.openscience.cdk.controller.ControllerHub.Direction;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
@@ -95,11 +96,11 @@ public class ChangeModeAction extends JCPAction {
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
             hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, AlterBondStereoModule.Direction.UP));
+                    hub, Direction.UP));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("down_bond")) {
             hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, AlterBondStereoModule.Direction.DOWN));
+                    hub, Direction.DOWN));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("triangle")) {
             hub.setActiveDrawModule(new AddRingModule(hub, 3, false));

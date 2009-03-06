@@ -170,7 +170,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 			}else if(x!=null && x.length()>0){
 				if(closestAtom==null){
 					IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
-					addatom.addAtom(chemModelRelay.addAtom(x, worldCoord));
+					addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord));
 				    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
 					    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay.getController2DModel());
 					    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
@@ -182,13 +182,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					IIsotope iso=ifa.getMajorIsotope(x);
 					if(iso!=null){
 					    chemModelRelay.setSymbol(closestAtom, x);
-			            // configure the atom, so that the atomic number matches the symbol
-			            try {
-			                IsotopeFactory.getInstance(
-			                        closestAtom.getBuilder()).configure(closestAtom);
-			            } catch (Exception exception) {
-			                exception.printStackTrace();
-			            }
 					}
 				}
 			}

@@ -51,7 +51,6 @@ import org.openscience.cdk.Molecule;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -77,7 +76,6 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
-import org.openscience.jchempaint.GT;
 
 /**
  * Action to copy/paste structures.
@@ -198,27 +196,16 @@ public class CopyPasteAction extends JCPAction{
     					//shouldn't happen
     					ex.printStackTrace();
     				}
-    				IAtomContainer removedpart = jcpPanel.get2DHub().removeAtom(atomInRange);
-    			    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
-    				    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getRemoveAtomsAndBondsEdit(chemModel, removedpart, GT._("Cut Bond"));
-    				    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
-    			    }
+    				jcpPanel.get2DHub().removeAtom(atomInRange);
     			}
     			else {
     				org.openscience.cdk.interfaces.IBond bond = renderModel.getHighlightedBond();
     				if (bond != null) {
     					jcpPanel.get2DHub().removeBond(bond);
-        			    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
-        			    	IAtomContainer removedpart=bond.getBuilder().newAtomContainer();
-        			    	removedpart.addBond(bond);
-        				    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getRemoveAtomsAndBondsEdit(chemModel, removedpart, GT._("Cut Bond"));
-        				    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
-        			    }
     				}
     			}
     		}
     		else if (type.equals("cutSelected")) {
-    			IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
     			logger.debug("Deleting all selected atoms...");
     			if (renderModel.getSelection().getConnectedAtomContainer() == null || renderModel.getSelection().getConnectedAtomContainer().getAtomCount() == 0) {
     				JOptionPane.showMessageDialog(jcpPanel, "No selection made. Please select some atoms first!", "Error warning", JOptionPane.WARNING_MESSAGE);
