@@ -35,6 +35,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -46,6 +47,7 @@ import javax.swing.JOptionPane;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -105,7 +107,6 @@ public class CopyPasteAction extends JCPAction{
 	}
     
 	public void actionPerformed(ActionEvent e) {
-    	try {
     	    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
     		handleSystemClipboard(sysClip);
 	        logger.info("  type  ", type);
@@ -122,40 +123,45 @@ public class CopyPasteAction extends JCPAction{
 	        	Transferable transfer = sysClip.getContents( null );
 	        	ISimpleChemObjectReader reader = null;
 	        	// if a MIME type is given ...
-	        	if (supported(transfer, molFlavor)) {
-	        	    
-	        		String mol = (String) transfer.getTransferData (molFlavor);
-	        		logger.debug("Dataflavor molFlavor found");
-		        	reader = new MDLV2000Reader(new StringReader(mol));
-	        	} else if (supported(transfer, DataFlavor.stringFlavor)) {
-	        		// otherwise, try to use the ReaderFactory...
-	        		logger.debug("Dataflavor stringFlavor found");
-	        		String content = 
-	        		    (String) transfer.getTransferData(
-	        		            DataFlavor.stringFlavor);
-	        		try {
-	        			reader = new ReaderFactory().createReader(
-	        			        new StringReader(content));
-	        		} catch (Exception exception) {
-	        			logger.warn("Pastes string is not recognized.");
-	        		}
+	        	try {
+	        	    if (supported(transfer, molFlavor)) {
+
+	        	        String mol = 
+	        	            (String) transfer.getTransferData(molFlavor);
+	        	        reader = new MDLV2000Reader(new StringReader(mol));
+	        	    } else if (supported(transfer, DataFlavor.stringFlavor)) {
+	        	        // otherwise, try to use the ReaderFactory...
+	        	        String content;
+	        	        content = (String) transfer.getTransferData(
+	        	                DataFlavor.stringFlavor);
+	        	        reader = new ReaderFactory().createReader(
+	        	                new StringReader(content));
+	        	    }
+	        	} catch (UnsupportedFlavorException e1) {
+	        	    e1.printStackTrace();
+	        	} catch (IOException e1) {
+	        	    e1.printStackTrace();
 	        	}
 	        	
     			IAtomContainer toPaste = null;
         		if (reader != null) {
         		    IMolecule readMolecule = 
         		        chemModel.getBuilder().newMolecule();
-        			if (reader.accepts(IMolecule.class)) { 
-        				toPaste = (IAtomContainer) reader.read(readMolecule);
-        			} else if (reader.accepts(IChemFile.class)) {
-        				toPaste = readMolecule;
-        				IChemFile file = (IChemFile)
-        				    reader.read(chemModel.getBuilder().newChemModel());
-                    	for (IAtomContainer ac : 
-                    	    ChemFileManipulator.getAllAtomContainers(file)) {
-                    	    toPaste.add(ac);
-                    	}
-        			}
+        			try {
+                        if (reader.accepts(IMolecule.class)) { 
+                        	toPaste = (IAtomContainer) reader.read(readMolecule);
+                        } else if (reader.accepts(IChemFile.class)) {
+                        	toPaste = readMolecule;
+                        	IChemFile file = (IChemFile) reader.read(
+                        	            chemModel.getBuilder().newChemModel());
+                        	for (IAtomContainer ac : 
+                        	    ChemFileManipulator.getAllAtomContainers(file)) {
+                        	    toPaste.add(ac);
+                        	}
+                        }
+                    } catch (CDKException e1) {
+                        e1.printStackTrace();
+                    }
         		}
         		if (toPaste == null &&
         		        supported(transfer, DataFlavor.stringFlavor)) {
@@ -205,8 +211,12 @@ public class CopyPasteAction extends JCPAction{
     			if (atomInRange != null) {
     			    IAtomContainer tocopyclone = 
     			        atomInRange.getBuilder().newAtomContainer();
-    			    tocopyclone.addAtom((IAtom) atomInRange.clone());
-    			    addToClipboard(sysClip, tocopyclone);
+    			    try {
+                        tocopyclone.addAtom((IAtom) atomInRange.clone());
+                        addToClipboard(sysClip, tocopyclone);
+    			    } catch (CloneNotSupportedException e1) {
+    			        e1.printStackTrace();
+    			    }
     				jcpPanel.get2DHub().removeAtom(atomInRange);
     			}
     			else {
@@ -226,9 +236,13 @@ public class CopyPasteAction extends JCPAction{
     				        		"atoms first!", 
     				        "Error warning", JOptionPane.WARNING_MESSAGE);
     			} else {
-    				IAtomContainer tocopyclone = 
-    				    (IAtomContainer) selected.clone();
+    				IAtomContainer tocopyclone;
+                    try {
+                        tocopyclone = (IAtomContainer) selected.clone();
     				addToClipboard(sysClip, tocopyclone);
+                    } catch (CloneNotSupportedException e1) {
+                        e1.printStackTrace();
+                    }
     				logger.debug("Found # atoms to delete: ", 
     				        selected.getAtomCount());
     				jcpPanel.get2DHub().deleteFragment(selected);
@@ -353,9 +367,7 @@ public class CopyPasteAction extends JCPAction{
     		}
             jcpPanel.get2DHub().updateView();
             jcpPanel.updateStatusBar();
-    	} catch(Exception ex){
-    		ex.printStackTrace();
-    	}
+    	
     }
     
     private void handleSystemClipboard(Clipboard clipboard) {
