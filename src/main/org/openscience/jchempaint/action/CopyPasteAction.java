@@ -43,12 +43,7 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
-import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.Reaction;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -58,6 +53,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
@@ -93,69 +90,90 @@ public class CopyPasteAction extends JCPAction{
 	private DataFlavor cmlFlavor = new DataFlavor(
 		  "image/cml",          "chemical markup language");
 	
-	/*public CopyPasteAction(JChemPaintPanel jcppanel){
-		this.jcpPanel=jcppanel;
-	}*/
+	
+	private void addToClipboard(Clipboard clipboard, IAtomContainer container) {
+	    try {
+    	    JcpSelection jcpselection = new JcpSelection(container);
+            clipboard.setContents(jcpselection,null);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	private boolean supported(Transferable transfer, DataFlavor flavor) {
+	    return transfer != null && transfer.isDataFlavorSupported(flavor);
+	}
     
 	public void actionPerformed(ActionEvent e) {
     	try {
-    		handleSystemClipboard();
+    	    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+    		handleSystemClipboard(sysClip);
 	        logger.info("  type  ", type);
 	        logger.debug("  source ", e.getSource());
+	        
 	        RendererModel renderModel = 
 	            jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 	        IChemModel chemModel = jcpPanel.getChemModel();
+	        
 	        if ("copy".equals(type)) {
-	            IAtomContainer copy 
-	                = renderModel.getSelection().getConnectedAtomContainer();
-	            
-	            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-	            JcpSelection jcpselection=new JcpSelection(copy);
-	            sysClip.setContents(jcpselection,null);
+	            addToClipboard(sysClip, 
+	                    renderModel.getSelection().getConnectedAtomContainer());
 	        } else if ("paste".equals(type)) {
-	        	Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
 	        	Transferable transfer = sysClip.getContents( null );
 	        	ISimpleChemObjectReader reader = null;
 	        	// if a MIME type is given ...
-	        	if (transfer!=null && (transfer.isDataFlavorSupported (molFlavor))) {
+	        	if (supported(transfer, molFlavor)) {
+	        	    
 	        		String mol = (String) transfer.getTransferData (molFlavor);
 	        		logger.debug("Dataflavor molFlavor found");
 		        	reader = new MDLV2000Reader(new StringReader(mol));
-	        	} else if(transfer!=null && (transfer.isDataFlavorSupported (DataFlavor.stringFlavor))) {
+	        	} else if (supported(transfer, DataFlavor.stringFlavor)) {
 	        		// otherwise, try to use the ReaderFactory...
 	        		logger.debug("Dataflavor stringFlavor found");
-	        		String content = (String) transfer.getTransferData (DataFlavor.stringFlavor);
+	        		String content = 
+	        		    (String) transfer.getTransferData(
+	        		            DataFlavor.stringFlavor);
 	        		try {
-	        			reader = new ReaderFactory().createReader(new StringReader(content));
+	        			reader = new ReaderFactory().createReader(
+	        			        new StringReader(content));
 	        		} catch (Exception exception) {
 	        			logger.warn("Pastes string is not recognized.");
 	        		}
 	        	}
+	        	
     			IAtomContainer toPaste = null;
         		if (reader != null) {
-        			if (reader.accepts(Molecule.class)) { 
-        				toPaste = (IAtomContainer) reader.read(new Molecule());
-        			} else if (reader.accepts(ChemFile.class)) {
-        				toPaste = new Molecule();
-        				IChemFile file = (IChemFile)reader.read(new ChemFile());
-                    	Iterator containers = ChemFileManipulator.getAllAtomContainers(file).iterator();
-                    	while (containers.hasNext()) {
-                    		toPaste.add((IAtomContainer)containers.next());
+        		    IMolecule readMolecule = 
+        		        chemModel.getBuilder().newMolecule();
+        			if (reader.accepts(IMolecule.class)) { 
+        				toPaste = (IAtomContainer) reader.read(readMolecule);
+        			} else if (reader.accepts(IChemFile.class)) {
+        				toPaste = readMolecule;
+        				IChemFile file = (IChemFile)
+        				    reader.read(chemModel.getBuilder().newChemModel());
+                    	for (IAtomContainer ac : 
+                    	    ChemFileManipulator.getAllAtomContainers(file)) {
+                    	    toPaste.add(ac);
                     	}
         			}
         		}
-        		if (toPaste == null
-                        && transfer != null
-                        && (transfer.isDataFlavorSupported(DataFlavor.stringFlavor))) {
+        		if (toPaste == null &&
+        		        supported(transfer, DataFlavor.stringFlavor)) {
         			try{
-        				SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        				toPaste = sp.parseSmiles((String) transfer.getTransferData (DataFlavor.stringFlavor));
-        				StructureDiagramGenerator sdg = new StructureDiagramGenerator((Molecule)toPaste);
+        				SmilesParser sp = new SmilesParser(
+        				        DefaultChemObjectBuilder.getInstance());
+        				toPaste = sp.parseSmiles(
+        				        (String) transfer.getTransferData(
+        				                DataFlavor.stringFlavor));
+        				
+        				StructureDiagramGenerator sdg = 
+        				    new StructureDiagramGenerator((IMolecule)toPaste);
+        				
                         sdg.setTemplateHandler(
                             new TemplateHandler(toPaste.getBuilder())
                         );
                         sdg.generateCoordinates();
-        			}catch(Exception ex){
+        			} catch (Exception ex) {
         				//we just try smiles
         			}
         		}
@@ -176,30 +194,23 @@ public class CopyPasteAction extends JCPAction{
 	    			hub.setActiveDrawModule(new MoveModule(hub));
 	            }
         	} else if (type.equals("cut")) {
-    			org.openscience.cdk.interfaces.IAtom atomInRange = null;
+    			IAtom atomInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);
-    			if (object instanceof Atom) {
-    				atomInRange = (Atom) object;
-    			}
-    			else {
+    			if (object instanceof IAtom) {
+    				atomInRange = (IAtom) object;
+    			} else {
     				atomInRange = renderModel.getHighlightedAtom();
     			}
     			if (atomInRange != null) {
-    				try{
-    		            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-    		            IAtomContainer tocopyclone=atomInRange.getBuilder().newAtomContainer();
-    		            tocopyclone.addAtom((IAtom)atomInRange.clone());
-    		            JcpSelection jcpselection=new JcpSelection(tocopyclone);
-    		            sysClip.setContents(jcpselection,null);
-    				}catch(Exception ex){
-    					//shouldn't happen
-    					ex.printStackTrace();
-    				}
+    			    IAtomContainer tocopyclone = 
+    			        atomInRange.getBuilder().newAtomContainer();
+    			    tocopyclone.addAtom((IAtom) atomInRange.clone());
+    			    addToClipboard(sysClip, tocopyclone);
     				jcpPanel.get2DHub().removeAtom(atomInRange);
     			}
     			else {
-    				org.openscience.cdk.interfaces.IBond bond = renderModel.getHighlightedBond();
+    				IBond bond = renderModel.getHighlightedBond();
     				if (bond != null) {
     					jcpPanel.get2DHub().removeBond(bond);
     				}
@@ -207,24 +218,23 @@ public class CopyPasteAction extends JCPAction{
     		}
     		else if (type.equals("cutSelected")) {
     			logger.debug("Deleting all selected atoms...");
-    			if (renderModel.getSelection().getConnectedAtomContainer() == null || renderModel.getSelection().getConnectedAtomContainer().getAtomCount() == 0) {
-    				JOptionPane.showMessageDialog(jcpPanel, "No selection made. Please select some atoms first!", "Error warning", JOptionPane.WARNING_MESSAGE);
-    			}
-    			else {
-    				IAtomContainer selected = renderModel.getSelection().getConnectedAtomContainer();
-    				try{
-    		            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-    		            IAtomContainer tocopyclone=(IAtomContainer)selected.clone();
-    		            JcpSelection jcpselection=new JcpSelection(tocopyclone);
-    		            sysClip.setContents(jcpselection,null);
-    				}catch(Exception ex){
-    					//shouldn't happen
-    					ex.printStackTrace();
-    				}
-    				logger.debug("Found # atoms to delete: ", selected.getAtomCount());
+    			IAtomContainer selected =
+    			    renderModel.getSelection().getConnectedAtomContainer();
+    			if (selected == null || selected.getAtomCount() == 0) {
+    				JOptionPane.showMessageDialog(jcpPanel, 
+    				        "No selection made. Please select some " +
+    				        		"atoms first!", 
+    				        "Error warning", JOptionPane.WARNING_MESSAGE);
+    			} else {
+    				IAtomContainer tocopyclone = 
+    				    (IAtomContainer) selected.clone();
+    				addToClipboard(sysClip, tocopyclone);
+    				logger.debug("Found # atoms to delete: ", 
+    				        selected.getAtomCount());
     				jcpPanel.get2DHub().deleteFragment(selected);
     			}
-    			renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
+    			renderModel.setSelection(
+    			        new LogicalSelection(LogicalSelection.Type.NONE));
     			
     		}
     		else if (type.equals("selectAll")) {
@@ -237,20 +247,25 @@ public class CopyPasteAction extends JCPAction{
     			hub.setActiveDrawModule(new MoveModule(hub));
     		} else if (type.equals("selectMolecule")) {
     			IChemObject object = getSource(e);
-    			IAtomContainer relevantAtomContainer=null;
-    			if (object instanceof Atom) {
-    				relevantAtomContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Atom)object);
-    			} else if (object instanceof org.openscience.cdk.interfaces.IBond) {
-    				relevantAtomContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Bond)object);
+    			IAtomContainer relevantAtomContainer = null;
+    			if (object instanceof IAtom) {
+    				relevantAtomContainer = 
+    				    ChemModelManipulator.getRelevantAtomContainer(
+    				            chemModel,(IAtom)object);
+    			} else if (object instanceof IBond) {
+    				relevantAtomContainer = 
+    				    ChemModelManipulator.getRelevantAtomContainer(
+    				            chemModel,(IBond)object);
     			} else {
-    				logger.warn("selectMolecule not defined for the calling object ", object);
+    				logger.warn("selectMolecule not defined for the calling " +
+    						"object ", object);
     			}
-    			if(relevantAtomContainer!=null){
+    			if (relevantAtomContainer != null) {
     	        	ShapeSelection container = new RectangleSelection();
-    	        	for(IAtom atom:relevantAtomContainer.atoms()){
+    	        	for (IAtom atom : relevantAtomContainer.atoms()) {
     	        		container.atoms.add(atom);
     	        	}
-    	        	for(IBond bond:relevantAtomContainer.bonds()){
+    	        	for (IBond bond : relevantAtomContainer.bonds()) {
     	        		container.bonds.add(bond);
     	        	}
     				renderModel.setSelection(container);
@@ -258,30 +273,32 @@ public class CopyPasteAction extends JCPAction{
     		} else if (type.equals("selectFromChemObject")) {
     			// FIXME: implement for others than Reaction, Atom, Bond
     			IChemObject object = getSource(e);
-    			if (object instanceof Atom) {
+    			if (object instanceof IAtom) {
     				ShapeSelection container = new RectangleSelection();
-    				container.atoms.add((Atom) object);
+    				container.atoms.add((IAtom) object);
     				renderModel.setSelection(container);
     			}
-    			else if (object instanceof org.openscience.cdk.interfaces.IBond) {
+    			else if (object instanceof IBond) {
     				ShapeSelection container = new RectangleSelection();
-    				container.bonds.add((Bond) object);
+    				container.bonds.add((IBond) object);
     				renderModel.setSelection(container);
     			}
-    			else if (object instanceof Reaction) {
-    				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
-    	        	Iterator containers = ReactionManipulator.getAllAtomContainers((Reaction)object).iterator();
-    	        	while (containers.hasNext()) {
-    	        		wholeModel.add((IAtomContainer)containers.next());
+    			else if (object instanceof IReaction) {
+    				IAtomContainer wholeModel = 
+    				    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+    	        	for (IAtomContainer container : 
+    	        	    ReactionManipulator.getAllAtomContainers(
+    	        	            (IReaction)object)) {
+    	        	    wholeModel.add(container);
     	        	}
     	        	ShapeSelection container = new RectangleSelection();
-    	        	for(IAtom atom:wholeModel.atoms()){
-    	        		container.atoms.add(atom);
-    	        	}
-    	        	for(IBond bond:wholeModel.bonds()){
-    	        		container.bonds.add(bond);
-    	        	}
-    				renderModel.setSelection(container);
+    	        	for (IAtom atom : wholeModel.atoms()) {
+                        container.atoms.add(atom);
+                    }
+                    for (IBond bond : wholeModel.bonds()) {
+                        container.bonds.add(bond);
+                    }
+                    renderModel.setSelection(container);
     			}
     			else {
     				logger.warn("Cannot select everything in : ", object);
@@ -289,42 +306,45 @@ public class CopyPasteAction extends JCPAction{
     		}
     		else if (type.equals("selectReactionReactants")) {
     			IChemObject object = getSource(e);
-    			if (object instanceof Reaction) {
-    				Reaction reaction = (Reaction) object;
-    				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
-    	        	Iterator containers = MoleculeSetManipulator.getAllAtomContainers(reaction.getReactants()).iterator();
-    	        	while (containers.hasNext()) {
-    	        		wholeModel.add((IAtomContainer)containers.next());
+    			if (object instanceof IReaction) {
+    				IReaction reaction = (IReaction) object;
+    				IAtomContainer wholeModel = 
+    				    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+    	        	for (IAtomContainer container : 
+    	        	    MoleculeSetManipulator.getAllAtomContainers(
+    	        	            reaction.getReactants())) {
+    	        		wholeModel.add(container);
     	        	}
     	        	ShapeSelection container = new RectangleSelection();
-    	        	for(IAtom atom:wholeModel.atoms()){
-    	        		container.atoms.add(atom);
-    	        	}
-    	        	for(IBond bond:wholeModel.bonds()){
-    	        		container.bonds.add(bond);
-    	        	}
+    	        	for (IAtom atom : wholeModel.atoms()) {
+                        container.atoms.add(atom);
+                    }
+                    for (IBond bond : wholeModel.bonds()) {
+                        container.bonds.add(bond);
+                    }
     				renderModel.setSelection(container);
     			}
     			else {
     				logger.warn("Cannot select reactants from : ", object);
     			}
-    		}
-    		else if (type.equals("selectReactionProducts")) {
+    		} else if (type.equals("selectReactionProducts")) {
     			IChemObject object = getSource(e);
-    			if (object instanceof Reaction) {
-    				Reaction reaction = (Reaction) object;
-    				IAtomContainer wholeModel = jcpPanel.getChemModel().getBuilder().newAtomContainer();
-    	        	Iterator containers = MoleculeSetManipulator.getAllAtomContainers(reaction.getProducts()).iterator();
-    	        	while (containers.hasNext()) {
-    	        		wholeModel.add((IAtomContainer)containers.next());
+    			if (object instanceof IReaction) {
+    				IReaction reaction = (IReaction) object;
+    				IAtomContainer wholeModel = 
+    				    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+    	        	for (IAtomContainer container : 
+    	        	    MoleculeSetManipulator.getAllAtomContainers(
+    	        	            reaction.getProducts())) {   
+    	        		wholeModel.add(container);
     	        	}
     	        	ShapeSelection container = new RectangleSelection();
-    	        	for(IAtom atom:wholeModel.atoms()){
-    	        		container.atoms.add(atom);
-    	        	}
-    	        	for(IBond bond:wholeModel.bonds()){
-    	        		container.bonds.add(bond);
-    	        	}
+    	        	for (IAtom atom : wholeModel.atoms()) {
+                        container.atoms.add(atom);
+                    }
+                    for (IBond bond : wholeModel.bonds()) {
+                        container.bonds.add(bond);
+                    }
     				renderModel.setSelection(container);
     			}
     			else {
@@ -338,9 +358,7 @@ public class CopyPasteAction extends JCPAction{
     	}
     }
     
-    void handleSystemClipboard()
-    {
-		Clipboard clipboard = jcpPanel.getToolkit().getSystemClipboard();
+    private void handleSystemClipboard(Clipboard clipboard) {
 		Transferable clipboardContent = clipboard.getContents(this);
 		DataFlavor flavors[]=clipboardContent.getTransferDataFlavors();
 		String text = "System.clipoard content";
@@ -365,8 +383,8 @@ public class CopyPasteAction extends JCPAction{
       String svg;
       String cml;
 
-      public JcpSelection (IAtomContainer tocopy1) throws Exception{
-    	  Molecule tocopy=new Molecule(tocopy1);
+      public JcpSelection(IAtomContainer tocopy1) throws Exception {
+    	  IMolecule tocopy= tocopy1.getBuilder().newMolecule(tocopy1);
     	  // MDL mol output
           StringWriter sw = new StringWriter();
           new MDLWriter(sw).writeMolecule(tocopy);
@@ -379,7 +397,8 @@ public class CopyPasteAction extends JCPAction{
     	  sw = new StringWriter();
     	  Class cmlWriterClass = null;
     	  try {
-    		  cmlWriterClass = this.getClass().getClassLoader().loadClass("org.openscience.cdk.io.CMLWriter");
+    		  cmlWriterClass = this.getClass().getClassLoader().loadClass(
+    		          "org.openscience.cdk.io.CMLWriter");
     	  } catch (Exception exception) {
     		  logger.error("Could not load CMLWriter: ", exception.getMessage());
     		  logger.debug(exception);
