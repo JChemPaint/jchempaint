@@ -93,6 +93,7 @@ public class JCPMenuTextMaker {
 		entries.put("addImplHydrogen", GT._("Switch on/off Tracking of Implicit Hydrogens"));
 		entries.put("makeHydrogenExplicit", GT._("Make Existing Implicit Hydrogens Explicit"));
 		entries.put("makeHydrogenImplicit", GT._("Make Existing Explicit Hydrogens Implicit"));
+		entries.put("updateHydrogenImplicit", GT._("Update Implicit Hydrogen Count"));
 		entries.put("editPreferences", GT._("Edit..."));
 		entries.put("reloadPreferences", GT._("Reload Preferences"));
 		entries.put("savePreferences", GT._("Save Preferences"));
@@ -219,7 +220,10 @@ public class JCPMenuTextMaker {
 	 * @return The text in current language
 	 */
 	public String getText(String key){
-		return entries.get(key);
+		if(entries.get(key)==null)
+			return key;
+		else
+			return entries.get(key);
 	}
 	
 	/**

@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
@@ -357,11 +359,18 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                	}
 	                }
 	        	}
+	        	try {
+	        		if(implicitHs>0)
+	        			wholeModel.addIsotope(IsotopeFactory.getInstance(wholeModel.getBuilder()).getMajorIsotope(1), implicitHs);
+				} catch (IOException e) {
+					// do nothing
+				}
 		        String formula
 		        = MolecularFormulaManipulator.getHTML(
 		                        wholeModel,
 		                        true,
 		                        false);
+		        
 		        status = makeStatusBarString(formula, implicitHs, MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
 		    }
 	    } else if (position == 2) {
@@ -397,8 +406,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
             + formula
-            + (implicitHs == 0 ? "" : " ("+GT._("of these")+ " "
-                + implicitHs + " "+GT._("Hs implicit")+")")+" ("+GT._("mass")+" "+df1.format(mass)+")</html>";
+            + (implicitHs == 0 ? "" : " ( "
+                + implicitHs + " "+GT._("Hs implicit")+")")+(mass>.1 ? " ("+GT._("mass")+" "+df1.format(mass)+")" : "")+"</html>";
 	}
 
 	public Renderer getRenderer() {

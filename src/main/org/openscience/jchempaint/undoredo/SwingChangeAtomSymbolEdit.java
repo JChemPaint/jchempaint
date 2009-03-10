@@ -30,6 +30,7 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.controller.undoredo.ChangeAtomSymbolEdit;
 import org.openscience.cdk.interfaces.IAtom;
 
@@ -42,8 +43,8 @@ import org.openscience.cdk.interfaces.IAtom;
 public class SwingChangeAtomSymbolEdit extends ChangeAtomSymbolEdit implements UndoableEdit {
 
 	public SwingChangeAtomSymbolEdit(IAtom atomInRange, String formerSymbol,
-			String symbol, String type) {
-		super(atomInRange, formerSymbol, symbol, type);
+			String symbol, String type, IChemModelRelay chemModelRelay) {
+		super(atomInRange, formerSymbol, symbol, type, chemModelRelay);
 	}
 
 	public boolean addEdit(UndoableEdit arg0) {

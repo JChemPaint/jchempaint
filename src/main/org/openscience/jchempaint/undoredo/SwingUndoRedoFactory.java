@@ -33,7 +33,7 @@ import java.util.Map;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.interfaces.IAtom;
@@ -51,22 +51,22 @@ import org.openscience.cdk.interfaces.IReactionSet;
 public class SwingUndoRedoFactory implements IUndoRedoFactory {
 
 	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IControllerModel c2dm) {
+			IAtomContainer undoRedoContainer, String type, IChemModelRelay c2dm) {
 		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, type, c2dm);
 	}
 	
-	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, Integer[]> changedBondsStereo, String type){
-		return new SwingAdjustBondOrdersEdit(changedBonds, changedBondsStereo, type);
+	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, Integer[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay){
+		return new SwingAdjustBondOrdersEdit(changedBonds, changedBondsStereo, type, chemModelRelay);
 	}
 
 	public IUndoRedoable getChangeAtomSymbolEdit(IAtom atom, String formerSymbol,
-			String symbol, String type) {
-		return new SwingChangeAtomSymbolEdit(atom, formerSymbol, symbol, type);
+			String symbol, String type, IChemModelRelay chemModelRelay) {
+		return new SwingChangeAtomSymbolEdit(atom, formerSymbol, symbol, type, chemModelRelay);
 	}
 
 	public IUndoRedoable getChangeChargeEdit(IAtom atomInRange,
-			int formerCharge, int newCharge, String type) {
-		return new SwingChangeChargeEdit(atomInRange, formerCharge, newCharge, type);
+			int formerCharge, int newCharge, String type, IChemModelRelay chemModelRelay) {
+		return new SwingChangeChargeEdit(atomInRange, formerCharge, newCharge, type, chemModelRelay);
 	}
 
 	public IUndoRedoable getMoveAtomEdit(IAtomContainer undoRedoContainer,
@@ -75,8 +75,8 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type) {
-		return new SwingRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, type);
+			IAtomContainer undoRedoContainer, String type, IChemModelRelay chemModelRelay) {
+		return new SwingRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, type, chemModelRelay);
 	}
 
 	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel,

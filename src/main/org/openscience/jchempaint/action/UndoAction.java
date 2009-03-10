@@ -54,6 +54,7 @@ public class UndoAction extends JCPAction
             jcpPanel.getRenderPanel().getUndoManager().undo();
         }
         jcpPanel.updateUndoRedoControls();
+        jcpPanel.updateStatusBar();
         jcpPanel.get2DHub().updateView();
 	}
 

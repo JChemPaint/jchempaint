@@ -164,7 +164,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 						lastplaced=null;
 				}
 			    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-				    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newAtomContainer(ac), GT._("Add Functional Group"), chemModelRelay.getController2DModel());
+				    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newAtomContainer(ac), GT._("Add Functional Group"), chemModelRelay);
 				    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
 			    }
 			}else if(x!=null && x.length()>0){
@@ -172,7 +172,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
 					addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord));
 				    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-					    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay.getController2DModel());
+					    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay);
 					    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
 				    }
 				}else{

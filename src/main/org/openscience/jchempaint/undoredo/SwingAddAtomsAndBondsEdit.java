@@ -30,7 +30,7 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -42,7 +42,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 public class SwingAddAtomsAndBondsEdit extends AddAtomsAndBondsEdit implements UndoableEdit{
 
 	public SwingAddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IControllerModel c2dm) {
+			IAtomContainer undoRedoContainer, String type, IChemModelRelay c2dm) {
 		super(chemModel, undoRedoContainer, type, c2dm);
 	}
 
