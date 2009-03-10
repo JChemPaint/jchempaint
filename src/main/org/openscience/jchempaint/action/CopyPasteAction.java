@@ -192,7 +192,8 @@ public class CopyPasteAction extends JCPAction{
 	                //We select the inserted structure
 	                IChemObjectSelection selection 
 	                    = new LogicalSelection(LogicalSelection.Type.ALL);
-	                selection.select(toPaste);
+	                
+	                selection.select(ChemModelManipulator.newChemModel(toPaste));
 	                renderModel.setSelection(selection);
 	            	jcpPanel.setMoveAction();
 	            	
