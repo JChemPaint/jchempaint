@@ -28,6 +28,7 @@
  */
 package org.openscience.jchempaint.undoredo;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.vecmath.Point2d;
@@ -115,6 +116,10 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 			IAtomContainer oldcontainer, String s, boolean reactantOrProduct,
 			String type) {
 		return new SwingMakeReactantInExistingReactionEdit(chemModel, newContainer, oldcontainer, s, reactantOrProduct, type);
+	}
+
+	public IUndoRedoable getMergeMoleculesEdit(IAtom deletedAtom, IAtomContainer containerWhereAtomWasIn, List<IBond> deletedBonds, Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset, IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
+		return new SwingMergeMoleculesEdit( deletedAtom, containerWhereAtomWasIn, deletedBonds, bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
 	}
 
 }
