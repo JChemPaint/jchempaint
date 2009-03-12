@@ -44,18 +44,31 @@
 
 <h3>Hydrogens</h3>
 <h4>Add Implicit Hydrogens</h4>
- <p>If switched on, implicit hydrogens will be calculated for all atoms and
- added. As long as the mode is switched on, the implicit hydrogen count will be
- adjusted. Note that:
- <li>
- <listitem>The implicit hydrogens will be only visible when the option "Show
+<p>JCP can run in two different modes with respect to implicit hydrogens. You can 
+switch between them here. The two modes are:
+ <ul>
+<li>Tracking of Implicit Hydrogens on: JCP will update atoms on which anything (e. g. charge, symbol) 
+gets changed, for their 
+implicit H count, so that atoms will always be fully saturated.</li>
+<li>Tracking of Implicit Hydrogens off: No implicit hydrogens will get added. 
+You need to take care of hydrogens yourself, if you want any.</li></ul>
+Note that:
+ <ul>
+ <li>Switching between modes will not change hydrogen count, i. e. if switching off 
+ implicit hydrogens will stay and future changes will lead to wrong counts, whereas 
+ switching on will not add hydrogens on existing atoms, only new/changed atoms 
+ will get the correct count.</li>
+ <li>The implicit hydrogens will be only visible when the option "Show
  implicit hydrogens when the atom symbol is shown" is selected in View ->
  Options (default: on). For which atoms the symbols are visible is controlled by
-  other settings here.</listitem>
- <listitem>Whether or not the hydrogens will be contained in an exported file.
+  other settings here.</li>
+ <li>You can set hydrogen count of individual atoms via the context menu of the 
+ atom (item Properties). This can be used on difficult configurations.</li>
+ <li>Whether or not the hydrogens will be contained in an exported file.
  Depends on the file format.(e.g. CML has got implicit Hs, mol has not).
- </listitem>
  </li>
+ </ul>
+ The following menu options allow manipulations of the implicit Hs.
  </p>
 <h4>Make Hydrogens Explicit</h4>
  <p>This will transform implicit hydrogens to
@@ -64,6 +77,10 @@
 <h4>Make Hydrogens Implicit</h4>
  <p>This will delete bonds to hydrogens and add hydrogens directly to their
  parent atoms as implicit hydrogens.</p>
+<h4>Update Implicit Hydrogen Count</h4>
+ <p>This will set the implicit hydrogens on all atoms to satisfy valency. This can be
+ called in both modes. If tracking of implicit Hs is off, this will only have a one-off 
+ effect.</p>
 
 <p>
 <h3>Adjust Bond Orders</h3>
