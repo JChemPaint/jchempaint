@@ -122,4 +122,9 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingMergeMoleculesEdit( deletedAtom, containerWhereAtomWasIn, deletedBonds, bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
 	}
 
+	public IUndoRedoable getChangeHydrogenCountEdit(
+			Map<IAtom, int[]> atomHydrogenCountsMap, String type) {
+		return new SwingChangeHydrogenCountEdit(atomHydrogenCountsMap, type);
+	}
+
 }

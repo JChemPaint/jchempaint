@@ -29,28 +29,6 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.swing.undo.UndoableEdit;
-import javax.vecmath.Point2d;
-
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.applications.undoredo.AddHydrogenEdit;
-import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
-import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.layout.HydrogenPlacer;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 
 
 /**
