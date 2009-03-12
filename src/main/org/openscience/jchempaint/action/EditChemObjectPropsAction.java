@@ -63,7 +63,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			editor = new ReactionEditor();
 		}
 		else if (object instanceof org.openscience.cdk.interfaces.IBond) {
-			editor = new BondEditor();
+			editor = new BondEditor(jcpPanel.get2DHub());
 		}
 		
 		if (editor != null) {

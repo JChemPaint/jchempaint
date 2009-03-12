@@ -30,6 +30,7 @@ package org.openscience.jchempaint.dialog.editor;
 
 import javax.swing.JComboBox;
 
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IBond.Order;
@@ -41,10 +42,12 @@ public class BondEditor extends ChemObjectEditor {
     private static final long serialVersionUID = -5262566515479485581L;
     
     JComboBox orderField;
+    IChemModelRelay hub;
     
-    public BondEditor() {
+    public BondEditor(IChemModelRelay hub) {
         super();
         constructPanel();
+        this.hub = hub;
     }
     
     private void constructPanel() {
@@ -67,14 +70,16 @@ public class BondEditor extends ChemObjectEditor {
     public void applyChanges() {
         IBond bond = (IBond)source;
         int newOrder = orderField.getSelectedIndex();
+        Order order=null;
         if(newOrder==0)
-        	bond.setOrder(Order.SINGLE);
+        	order=Order.SINGLE;
         else if(newOrder==1)
-        	bond.setOrder(Order.DOUBLE);
+        	order=Order.DOUBLE;
         else if(newOrder==2)
-        	bond.setOrder(Order.TRIPLE);
+        	order=Order.TRIPLE;
         else if(newOrder==3)
-        	bond.setOrder(Order.QUADRUPLE);
+        	order=Order.QUADRUPLE;
+        hub.setOrder(bond, order);
     }
 }
 
