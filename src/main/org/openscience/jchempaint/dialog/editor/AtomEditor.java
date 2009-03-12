@@ -39,6 +39,7 @@ import javax.swing.text.Document;
 
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -56,12 +57,12 @@ public class AtomEditor extends ChemObjectEditor {
     JTextField symbolField;
     JSpinner   hCountField;
     JSpinner   formalChargeField;
-    IChemModel chemModel;
+    IChemModelRelay hub;
     
-	public AtomEditor(IChemModel chemModel) {
+	public AtomEditor(IChemModelRelay hub) {
         super();
         constructPanel();
-        this.chemModel=chemModel;
+        this.hub=hub;
         super.mayclose=false;
 	}
     
@@ -92,20 +93,26 @@ public class AtomEditor extends ChemObjectEditor {
         IAtom atom = (IAtom)source;
         try{
 	        if(IsotopeFactory.getInstance(atom.getBuilder()).getElement(symbolField.getText())!=null){
-	        	atom.setSymbol(symbolField.getText());
-	        	atom.setHydrogenCount(((Integer)hCountField.getValue()).intValue());
-	        	atom.setFormalCharge(((Integer)formalChargeField.getValue()).intValue());
+	        	if(atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
+	        		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
+	        	if(atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
+	        		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
+	        	if(!atom.getSymbol().equals(symbolField.getText()))
+	        		hub.setSymbol(atom, symbolField.getText());
 	        }else{
-	            IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 	            PseudoAtom pseudo = new PseudoAtom(atom);
 	            pseudo.setLabel(symbolField.getText());
-	            AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-	                atom, pseudo);
+	            pseudo.setHydrogenCount(((Integer)hCountField.getValue()).intValue());
+	            pseudo.setFormalCharge(((Integer)formalChargeField.getValue()).intValue());
+	            hub.replaceAtom(pseudo, atom);
 	        }
         }catch(IOException ex){
-        	atom.setSymbol(symbolField.getText());
-        	atom.setHydrogenCount(((Integer)hCountField.getValue()).intValue());
-        	atom.setFormalCharge(((Integer)formalChargeField.getValue()).intValue());
+        	if(atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
+        		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
+        	if(atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
+        		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
+        	if(!atom.getSymbol().equals(symbolField.getText()))
+        		hub.setSymbol(atom, symbolField.getText());
         	new LoggingTool(this).error("IOException when trying to test element symbol");
         }
     }

@@ -57,7 +57,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			editor = new PseudoAtomEditor();
 		}
 		else if (object instanceof Atom) {
-			editor = new AtomEditor(jcpPanel.getChemModel());
+			editor = new AtomEditor(jcpPanel.get2DHub());
 		}
 		else if (object instanceof Reaction) {
 			editor = new ReactionEditor();
