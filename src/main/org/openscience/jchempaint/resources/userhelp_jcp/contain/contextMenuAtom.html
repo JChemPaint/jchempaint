@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+<title>The Edit Menu</title>
+<link rel="stylesheet" type="text/css" href="../jcp.css" title="Style">
+</head>
+<body bgcolor="#ffffff">
+
+<div class="navheader">
+  <table width="100%">
+   <tr>
+    <th align="center" colspan="3">The Edit Menu</th>
+   </tr>
+   <tr>
+    <td align="left" width="20%"><a href="menuHelp.html">Prev</a>&nbsp;</td>
+     <th align="center" width="60%">&nbsp;</th>
+     <td align="right" width="20%">&nbsp;<a href="contextMenuPseudoatom.html">Next</a></td>
+     </tr>
+  </table>
+  <hr>
+</div>
+
+<h2>The Atom Context Menu</h2>
+
+<h3>Select</h3>
+ <p>Makes this atom the current selection.</p>
+
+<h3>Select Molecule</h3>
+ <p>Makes the molecule the atom is in the current selection.</p>
+
+<h3>Cut</h3>
+ <p>Removes the atom and all of its bonds from the molecule and puts it into the 
+ clipboard for later paste actions.</p>
+
+<h3>Cut Selected</h3>
+ <p>Removes the selected part from the model.</p>
+
+<h3>Change Element...</h3>
+ <p>Changes the element symbol of the atom to the selected symbol.</p>
+
+<h3>Change Isotope...</h3>
+ <p>Changes the isotope of the atom to the selected option.</p>
+
+<h3>Convert to radical...</h3>
+ <p>TODO when does this work?.</p>
+
+<h3>Hydrogens</h3>
+<h4>Add Implicit Hydrogens</h4>
+<p>JCP can run in two different modes with respect to implicit hydrogens. You can 
+switch between them here. The two modes are:
+ <ul>
+<li>Tracking of Implicit Hydrogens on: JCP will update atoms on which anything (e. g. charge, symbol) 
+gets changed, for their 
+implicit H count, so that atoms will always be fully saturated.</li>
+<li>Tracking of Implicit Hydrogens off: No implicit hydrogens will get added. 
+You need to take care of hydrogens yourself, if you want any.</li></ul>
+Note that:
+ <ul>
+ <li>Switching between modes will not change hydrogen count, i. e. if switching off 
+ implicit hydrogens will stay and future changes will lead to wrong counts, whereas 
+ switching on will not add hydrogens on existing atoms, only new/changed atoms 
+ will get the correct count.</li>
+ <li>The implicit hydrogens will be only visible when the option "Show
+ implicit hydrogens when the atom symbol is shown" is selected in View ->
+ Options (default: on). For which atoms the symbols are visible is controlled by
+  other settings here.</li>
+ <li>You can set hydrogen count of individual atoms via the context menu of the 
+ atom (item Properties). This can be used on difficult configurations.</li>
+ <li>Whether or not the hydrogens will be contained in an exported file.
+ Depends on the file format.(e.g. CML has got implicit Hs, mol has not).
+ </li>
+ </ul>
+ The following menu options allow manipulations of the implicit Hs.
+ </p>
+<h4>Make Hydrogens Explicit</h4>
+ <p>This will transform implicit hydrogens to
+ separate atoms connected by a single bond. This will only have an effect if you
+  are in implicit mode (see "Add Implicit Hydrogens")</p>
+<h4>Make Hydrogens Implicit</h4>
+ <p>This will delete bonds to hydrogens and add hydrogens directly to their
+ parent atoms as implicit hydrogens.</p>
+<h4>Update Implicit Hydrogen Count</h4>
+ <p>This will set the implicit hydrogens on all atoms to satisfy valency. This can be
+ called in both modes. If tracking of implicit Hs is off, this will only have a one-off 
+ effect.</p>
+
+<h3>Reaction</h3>
+ <p>Here you can make the molecule in which the atom is part of either a new reaction 
+ or an existing one as either reactant or product.</p>
+
+<h3>Reset Bond Orders</h3>
+ <p>Sets the order of all bonds to single.</p>
+
+<h3>Run validate</h3>
+ <p>Runs a validation on this atom. See <a href="menuReport.html#validate">Report menu help</a> for details.</p>
+
+<h3>Properties</h3>
+ <p>Here you can directly set symbol, charge and hydrogen count.</p>
+
+<h3>Molecule Properties</h3>
+ <p>Here you can directly set properties (title) of the molecule the atom is in.</p>
+<p>
+<p>
+
+<div class="navfooter"><hr>
+ <table width="100%">
+  <tr>
+   <td align="left" width="40%"><a href="menuHelp.html">Prev</a>&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Home</a></td>
+   <td align="right" width="40%"><a href="contextMenuPseudoatom.html">Next</a></td>
+  </tr>
+  <tr>
+   <td align="left" width="40%">&nbsp;</td>
+   <td align="center" width="20%"><a href="menu.html">Up</a></td>
+   <td align="right" width="40%">&nbsp;</td>
+  </tr>
+ </table>
+</div>
+
+
+</body>
+</html>

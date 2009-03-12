@@ -62,6 +62,7 @@ import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
@@ -83,11 +84,12 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			{ "load", "url", "URL of the chemical data" },
 			{ "compact", "true or false", "compact means elements shown as dots, no figures etc. (default false)"},
 			{ "tooltips", "string like 'atomumber|test|atomnumber|text'", "the texts will be used as tooltips for the respective atoms (leave out if none required"},
-			{ "impliciths", "true or false", "the implicit hs will be added from start (default false)"},
+			{ "impliciths", "true or false", "the implicit hs will be added from start (default true)"},
 			{ "spectrumRenderer", "string", "TODO name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom"},
 			{ "hightlightTable", "true or false", "TODO if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableid$atomnumber (default false)"},
 			{ "smiles", "string", "a structure to load as smiles"},
 			{ "scrollbars", "true or false", "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet"},
+			{ "dotranslate", "true or false", "should user interface be translated (default) or not (e. g. if you want an English-only webpage)"},
 			{ "detachable", "true or false", "should the applet be detacheable by a double click (default false)"}
 	};
 
@@ -232,6 +234,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 				rendererModel.getToolTipTextMap().put(atom, st.nextToken());
 			}
 			rendererModel.setShowTooltip(true);
+		}
+		
+		if(getParameter("dotranslate") != null && getParameter("dotranslate").equals("false")){
+			GT.setDoTranslate(false);
 		}
 		
 		if (getParameter("impliciths") != null 

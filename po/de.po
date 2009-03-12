@@ -981,7 +981,7 @@ msgstr "Validierung starten"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:98
 msgid "Clear Validate Results"
-msgstr "Validierungsresultate starten"
+msgstr "Validierungsresultate zurücksetzen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:99
 msgid "Horizontal"
