@@ -52,11 +52,14 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
+import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
+import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -192,17 +195,17 @@ public class JChemPaint {
                         || type.equals(JCPFileFilter.xml)) {
                     cor = new CMLReader(reader);
                 } else if (type.equals(JCPFileFilter.sdf)) {
-                    cor = new MDLV2000Reader(reader);
+                    cor = new MDLV2000Reader(reader);//TODO once merged, egons new reader needs to be used here
                 } else if (type.equals(JCPFileFilter.mol)) {
                     cor = new MDLV2000Reader(reader);
                 } else if (type.equals(JCPFileFilter.inchi)) {
                     cor = new INChIReader(reader);
-                }
-
-                // XXX TMP FIXME hack to ensure that testing with a file
-                // as a command-line arg in eclipse will work (for a mol file)
-                else {
-                    cor = new MDLV2000Reader(reader);
+                } else if (type.equals(JCPFileFilter.rxn)) {
+                    cor = new MDLRXNV2000Reader(reader);
+                } else if (type.equals(JCPFileFilter.smi)) {
+                    cor = new SMILESReader(reader);
+                } else if (type.equals(JCPFileFilter.rdf)) {
+                    cor = null;//TODO which reader is this?
                 }
             } catch (FileNotFoundException exception) {
                 // we do nothing right now and hoe it still works
@@ -282,6 +285,16 @@ public class JChemPaint {
         }
         // check for coordinates
         JChemPaint.checkCoordinates(chemModel);
+        
+        //we give all reactions an ID, in case they have none
+        //IDs are needed for handling in JCP
+        if(chemModel.getReactionSet()!=null){
+        	int i=0;
+        	for(IReaction reaction : chemModel.getReactionSet().reactions()){
+        		if(reaction.getID()==null)
+        			reaction.setID("Reaction "+(++i));
+        	}
+        }
 
         JChemPaintPanel p = showInstance(chemModel, inFile.getName());
         p.setCurrentWorkDirectory(inFile.getParentFile());
