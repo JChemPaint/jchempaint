@@ -48,10 +48,6 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	/**
 	 *  Description of the Field
 	 */
-	public final static String rdf = "rdf";
-	/**
-	 *  Description of the Field
-	 */
 	public final static String sdf = "sdf";
 	/**
 	 *  Description of the Field
@@ -117,7 +113,6 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.inchi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.sdf));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rxn));
-		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rdf));
 		JCPFileFilter cmlFilter = new JCPFileFilter(JCPFileFilter.cml);
 		cmlFilter.addType(JCPFileFilter.xml);
 		chooser.addChoosableFileFilter(cmlFilter);
@@ -189,10 +184,6 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		if (type.equals(rxn))
 		{
 			return "MDL RXN Molfile";
-		}
-		if (type.equals(rdf))
-		{
-			return "MDL RDF Molfile";
 		}
 		if (type.equals(inchi))
 		{

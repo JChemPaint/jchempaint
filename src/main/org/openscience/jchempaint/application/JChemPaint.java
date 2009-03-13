@@ -204,8 +204,6 @@ public class JChemPaint {
                     cor = new MDLRXNV2000Reader(reader);
                 } else if (type.equals(JCPFileFilter.smi)) {
                     cor = new SMILESReader(reader);
-                } else if (type.equals(JCPFileFilter.rdf)) {
-                    cor = null;//TODO which reader is this?
                 }
             } catch (FileNotFoundException exception) {
                 // we do nothing right now and hoe it still works
