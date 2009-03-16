@@ -258,9 +258,7 @@ public class CopyPasteAction extends JCPAction{
     		    IChemObjectSelection allSelection =
     		        new LogicalSelection(LogicalSelection.Type.ALL);
 
-    		    // FIXME : selection design needs improvement!
-    		    hub.select((IncrementalSelection) allSelection);
-
+    		    allSelection.select(hub.getIChemModel());
     		    renderModel.setSelection(allSelection);
     			jcpPanel.setMoveAction();
     			hub.setActiveDrawModule(new MoveModule(hub));
