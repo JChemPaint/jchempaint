@@ -71,7 +71,8 @@ import org.openscience.cdk.renderer.generators.LonePairGenerator;
 import org.openscience.cdk.renderer.generators.MergeAtomsGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
-import org.openscience.cdk.renderer.generators.SelectionGenerator;
+import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
+import org.openscience.cdk.renderer.generators.SelectBondGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
@@ -153,7 +154,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         generators.add(new ExternalHighlightGenerator());
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
-        generators.add(new SelectionGenerator());
+        generators.add(new SelectAtomGenerator());
+        generators.add(new SelectBondGenerator());
         generators.add(new MergeAtomsGenerator());
         return generators;
 	}
@@ -372,7 +374,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		                        wholeModel,
 		                        true,
 		                        false);
-		        
+
 		        status = makeStatusBarString(formula, implicitHs, MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
 		    }
 	    } else if (position == 2) {
