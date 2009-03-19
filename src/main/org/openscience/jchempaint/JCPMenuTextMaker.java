@@ -161,6 +161,7 @@ public class JCPMenuTextMaker {
 		entries.put("pseudoStar", GT._("*"));
 		entries.put("pseudoR", GT._("R"));	
 		entries.put("selectReactants", GT._("Select Reactants Only"));
+		entries.put("selectProducts", GT._("Select Products Only"));
 		entries.put("bondTooltip", GT._("Draw Bonds and Atoms"));
 		entries.put("cyclesymbolTooltip", GT._("Change the Atom's Symbol"));
 		entries.put("periodictableTooltip", GT._("Select new drawing symbol from periodic table"));

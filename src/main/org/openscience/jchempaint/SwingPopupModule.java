@@ -110,11 +110,13 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		
 		if (objectInRange == null && reactionSet != null
                 && reactionSet.getReactionCount() > 0) {
-			Rectangle reactionbounds = 
-			    renderer.calculateDiagramBounds(reactionSet);
 			
-			if (reactionbounds.contains(mouseCoords.x, mouseCoords.y))
-				objectInRange = reactionSet.getReaction(0);
+			for(int i=0;i<reactionSet.getReactionCount();i++){
+				Rectangle reactionbounds = 
+				    renderer.calculateDiagramBounds(reactionSet.getReaction(i));
+				if (reactionbounds.contains(mouseCoords.x, mouseCoords.y))
+					objectInRange = reactionSet.getReaction(i);
+			}
 		}
 		
 		if (objectInRange == null)
