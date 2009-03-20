@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -45,6 +46,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
+import javax.vecmath.Point2d;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerHub;
@@ -54,6 +56,7 @@ import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.controller.undoredo.IUndoListener;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -101,12 +104,26 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
+		//we avoid overlaps
+		Rectangle2D usedBounds = null;
+        for (IAtomContainer container :
+            ChemModelManipulator.getAllAtomContainers(chemModel)) {
+            // now move it so that they don't overlap
+            Rectangle2D bounds = Renderer.calculateBounds(container);
+            if (usedBounds != null) {
+                Rectangle2D shiftedBounds =
+                    GeometryTools.shiftContainer(container, bounds, usedBounds, GeometryTools.getBondLengthAverage(container));
+                usedBounds = usedBounds.createUnion(shiftedBounds);
+            } else {
+                usedBounds = bounds;
+            }
+        } 
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
 		undoManager.setLimit(Integer.parseInt(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UndoStackSize")));
 	}
-
+	
 	public void setFitToScreen(boolean fitToScreen) {
 	    this.renderer.getRenderer2DModel().setFitToScreen(fitToScreen);
 	}

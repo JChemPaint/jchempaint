@@ -29,15 +29,18 @@
 package org.openscience.jchempaint.application;
 
 import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -49,6 +52,8 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -60,7 +65,10 @@ import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
+import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.io.JCPFileFilter;
@@ -276,6 +284,16 @@ public class JChemPaint {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
         
+        //we remove molecules which are in MoleculeSet as well as in a reaction
+    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
+        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
+        	for(int k=0;k<aclist.size();k++){
+        		if(aclist.get(k)==chemModel.getMoleculeSet().getAtomContainer(i)){
+        			chemModel.getMoleculeSet().removeAtomContainer(i);
+        			break;
+        		}
+        	}
+        }        
         
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {
@@ -344,7 +362,7 @@ public class JChemPaint {
 //    }
 	}
 	
-	
+
 	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
 		JFrame f = new JFrame(title);
 		chemModel.setID(title);
