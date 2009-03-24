@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -60,6 +61,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
@@ -110,8 +112,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             // now move it so that they don't overlap
             Rectangle2D bounds = Renderer.calculateBounds(container);
             if (usedBounds != null) {
+                double bondLength = GeometryTools.getBondLengthAverage(container);
                 Rectangle2D shiftedBounds =
-                    GeometryTools.shiftContainer(container, bounds, usedBounds, GeometryTools.getBondLengthAverage(container));
+                    GeometryTools.shiftContainer(
+                            container, bounds, usedBounds, bondLength);
                 usedBounds = usedBounds.createUnion(shiftedBounds);
             } else {
                 usedBounds = bounds;
@@ -120,7 +124,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
-		undoManager.setLimit(Integer.parseInt(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.UndoStackSize")));
+		int limit = Integer.parseInt(JCPPropertyHandler
+		                               .getInstance()
+		                               .getJCPProperties()
+		                               .getProperty("General.UndoStackSize"));
+		undoManager.setLimit(limit);
 	}
 	
 	public void setFitToScreen(boolean fitToScreen) {
@@ -149,8 +157,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		UndoRedoHandler undoredohandler = new UndoRedoHandler();
 		undoredohandler.addIUndoListener(this);
 		// connect the Renderer to the Hub
-		this.hub =
-		    new ControllerHub(controllerModel, renderer, chemModel, this, undoredohandler, new SwingUndoRedoFactory());
+		this.hub = new ControllerHub(controllerModel, 
+		                             renderer,
+		                             chemModel,
+		                             this,
+		                             undoredohandler,
+		                             new SwingUndoRedoFactory());
 
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -326,8 +338,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         this.shouldPaintFromCache = true;
 
         // determine the size the canvas needs to be to fit the model
-        if(diagram!=null)
+        if (diagram != null) {
         	shift(g, screen, diagram);
+        }
     }
 
     private void paintChemModelFitToScreen(
@@ -361,15 +374,17 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		String status = "";
 		if (position == 0) {
 			// depict editing mode
-			status = JCPMenuTextMaker.getInstance("applet").getText(hub.getActiveDrawModule().getDrawModeString());
+		    String mode = hub.getActiveDrawModule().getDrawModeString();
+			status = JCPMenuTextMaker.getInstance("applet").getText(mode);
 		} else if (position == 1) {
 			// depict bruto formula
 		    IChemModel chemModel = hub.getIChemModel();
-
-		    if (chemModel.getMoleculeSet() != null
-                    && chemModel.getMoleculeSet().getAtomContainerCount() > 0) {
-		        IMolecularFormula wholeModel = NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
-		        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+		    IMoleculeSet molecules = chemModel.getMoleculeSet();
+		    if (molecules != null && molecules.getAtomContainerCount() > 0) {
+		        IMolecularFormula wholeModel = 
+		            NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
+		        Iterator<IAtomContainer> containers = 
+		            ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
 		        int implicitHs = 0;
 	        	while (containers.hasNext()) {
 	        		for(IAtom atom : containers.next().atoms()){
@@ -380,18 +395,23 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                }
 	        	}
 	        	try {
-	        		if(implicitHs>0)
-	        			wholeModel.addIsotope(IsotopeFactory.getInstance(wholeModel.getBuilder()).getMajorIsotope(1), implicitHs);
+	        		if (implicitHs > 0)
+	        			wholeModel.addIsotope(
+	        			        IsotopeFactory.getInstance(
+	        			                wholeModel.getBuilder()).getMajorIsotope(1),
+	        			                implicitHs);
 				} catch (IOException e) {
 					// do nothing
 				}
 		        String formula
-		        = MolecularFormulaManipulator.getHTML(
-		                        wholeModel,
-		                        true,
-		                        false);
+    		        = MolecularFormulaManipulator.getHTML(
+    		                        wholeModel,
+    		                        true,
+    		                        false);
 
-		        status = makeStatusBarString(formula, implicitHs, MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
+		        status = makeStatusBarString(
+		                formula, implicitHs, 
+		                MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
 		    }
 	    } else if (position == 2) {
 	        // depict brutto formula of the selected molecule or part of molecule
@@ -408,9 +428,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                	}
 	                }
 	                String formula = MolecularFormulaManipulator
-	                .getHTML(MolecularFormulaManipulator
-	                        .getMolecularFormula(ac), true, false);
-	                status = makeStatusBarString(formula, implicitHs, AtomContainerManipulator.getNaturalExactMass(ac));
+	                                .getHTML(MolecularFormulaManipulator
+	                                .getMolecularFormula(ac), true, false);
+	                status = makeStatusBarString(
+	                        formula, implicitHs, 
+	                        AtomContainerManipulator.getNaturalExactMass(ac));
 	            }
 	        }
 	    } else if (position == 3) {
@@ -422,12 +444,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		return status;
 	}
 
-	private String makeStatusBarString(String formula, int implicitHs, double mass){
+	private String makeStatusBarString(String formula, int implicitHs, double mass) {
 		DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
             + formula
             + (implicitHs == 0 ? "" : " ( "
-                + implicitHs + " "+GT._("Hs implicit")+")")+(mass>.1 ? " ("+GT._("mass")+" "+df1.format(mass)+")" : "")+"</html>";
+            + implicitHs + " "
+            + GT._("Hs implicit")+")")
+            + (mass>.1 ? " ("+GT._("mass")+" "+df1.format(mass)+")" : "")
+            +"</html>";
 	}
 
 	public Renderer getRenderer() {
@@ -440,7 +465,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public void doUndo(IUndoRedoable undoredo) {
 		undoManager.addEdit((UndoableEdit)undoredo);
-		if(this.getParent().getParent().getParent() instanceof JChemPaintPanel)
-			((JChemPaintPanel)this.getParent().getParent().getParent()).updateUndoRedoControls();
+		Container root = this.getParent().getParent().getParent(); 
+		if(root instanceof JChemPaintPanel)
+			((JChemPaintPanel)root).updateUndoRedoControls();
 	}
 }
