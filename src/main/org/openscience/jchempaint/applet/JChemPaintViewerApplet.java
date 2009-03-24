@@ -34,10 +34,14 @@ import org.openscience.jchempaint.JChemPaintViewerPanel;
 public class JChemPaintViewerApplet extends JChemPaintAbstractApplet{
 	
 	public void init() {
-		boolean fitToScreen=false;
-		if(this.getParameter("scrollbars")!=null && this.getParameter("scrollbars").equals("false"))
-			fitToScreen=true;
-		JChemPaintViewerPanel p=new JChemPaintViewerPanel(new ChemModel(), this.getWidth(), this.getHeight(), fitToScreen);	
+		boolean fitToScreen = false;
+		String scrollbarParam = this.getParameter("scrollbars"); 
+		if (scrollbarParam != null && scrollbarParam.equals("false")) {
+			fitToScreen = true;
+		}
+		JChemPaintViewerPanel p
+		    = new JChemPaintViewerPanel(
+		            new ChemModel(), getWidth(), getHeight(), fitToScreen);	
 		setTheJcpp(p);
 		this.add(p);
 		super.init();
