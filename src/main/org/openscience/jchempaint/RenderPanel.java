@@ -235,54 +235,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                    || chemModel.getReactionSet() != null);
 	}
 
-    private void shift(
-            Graphics2D g, Rectangle screenBounds, Rectangle diagramBounds) {
-        int screenMaxX  = screenBounds.x + screenBounds.width;
-        int screenMaxY  = screenBounds.y + screenBounds.height;
-        int diagramMaxX = diagramBounds.x + diagramBounds.width;
-        int diagramMaxY = diagramBounds.y + diagramBounds.height;
-
-        int leftOverlap   = screenBounds.x - diagramBounds.x;
-        int rightOverlap  = diagramMaxX - screenMaxX;
-        int topOverlap    = screenBounds.y - diagramBounds.y;
-        int bottomOverlap = diagramMaxY - screenMaxY;
-
-        boolean overlapsLeft   = leftOverlap   > 0;
-        boolean overlapsRight  = rightOverlap  > 0;
-        boolean overlapsTop    = topOverlap    > 0;
-        boolean overlapsBottom = bottomOverlap > 0;
-
-        int dx = 0;
-        int dy = 0;
-        int w = screenBounds.width;
-        int h = screenBounds.height;
-
-        if (overlapsLeft) {
-            dx = leftOverlap;
-        }
-
-        if (overlapsRight) {
-            w += rightOverlap;
-        }
-
-        if (overlapsTop) {
-            dy = topOverlap;
-        }
-
-        if (overlapsBottom) {
-            h += bottomOverlap;
-        }
-
-        if (dx != 0 || dy != 0) {
-            renderer.shiftDrawCenter(dx, dy);
-            this.setPreferredSize(new Dimension(w, h));
-            this.revalidate();
-            super.paint(g);
-            this.renderer.paintChemModel(
-                    this.hub.getIChemModel(),new AWTDrawVisitor(g));
-        }
-    }
-
     public void paint(Graphics g) {
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
@@ -320,14 +272,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
      * @param screen
      */
     private void paintChemModel(
-            IChemModel chemModel,Graphics2D g, Rectangle screen) {
+            IChemModel chemModel, Graphics2D g, Rectangle screen) {
 
         if (isNewChemModel) {
             renderer.setScale(chemModel);
         }
 
-        Rectangle diagram = renderer.paintChemModel(
-                chemModel, new AWTDrawVisitor(g));
+        Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
 
         isNewChemModel = false;
 
@@ -339,7 +290,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
         // determine the size the canvas needs to be to fit the model
         if (diagram != null) {
-        	shift(g, screen, diagram);
+            Rectangle result = renderer.shift(screen, diagram);
+            this.setPreferredSize(new Dimension(result.width, result.height));
+            this.revalidate();
+            super.paint(g);
+            renderer.paintChemModel(hub.getIChemModel(), new AWTDrawVisitor(g));
         }
     }
 
