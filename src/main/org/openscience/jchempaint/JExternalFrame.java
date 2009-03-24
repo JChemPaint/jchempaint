@@ -86,7 +86,7 @@ public class JExternalFrame extends JFrame {
 			this.setSize(200,150);
 		}
 
-		super.show();
+		super.setVisible(true);
 
 		if (!initialized) {
 			this.validate();

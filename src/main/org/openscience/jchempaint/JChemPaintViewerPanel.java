@@ -31,8 +31,6 @@ package org.openscience.jchempaint;
 import java.awt.BorderLayout;
 import java.awt.ScrollPane;
 
-import javax.swing.JScrollPane;
-
 import org.openscience.cdk.interfaces.IChemModel;
 
 public class JChemPaintViewerPanel extends AbstractJChemPaintPanel{
