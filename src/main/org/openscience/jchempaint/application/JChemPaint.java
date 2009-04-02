@@ -185,6 +185,8 @@ public class JChemPaint {
         try {
             ReaderFactory factory = new ReaderFactory();
             cor = factory.createReader(new FileReader(inFile));
+            if(cor instanceof CMLReader)
+            	cor = new CMLReader(inFile.toURI().toString());
         } catch (IOException ioExc) {
             // we do nothing right now and hoe it still works
         } catch (Exception exc) {
@@ -196,7 +198,7 @@ public class JChemPaint {
                 FileInputStream reader = new FileInputStream(inFile);
                 if (type.equals(JCPFileFilter.cml)
                         || type.equals(JCPFileFilter.xml)) {
-                    cor = new CMLReader(reader);
+                    cor = new CMLReader(inFile.toURI().toString());
                 } else if (type.equals(JCPFileFilter.sdf)) {
                     cor = new MDLV2000Reader(reader);//TODO once merged, egons new reader needs to be used here
                 } else if (type.equals(JCPFileFilter.mol)) {
@@ -280,14 +282,16 @@ public class JChemPaint {
         }
         
         //we remove molecules which are in MoleculeSet as well as in a reaction
-    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
-        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
-        	for(int k=0;k<aclist.size();k++){
-        		if(aclist.get(k)==chemModel.getMoleculeSet().getAtomContainer(i)){
-        			chemModel.getMoleculeSet().removeAtomContainer(i);
-        			break;
-        		}
-        	}
+        if(chemModel.getReactionSet()!=null){
+	    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
+	        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
+	        	for(int k=0;k<aclist.size();k++){
+	        		if(aclist.get(k)==chemModel.getMoleculeSet().getAtomContainer(i)){
+	        			chemModel.getMoleculeSet().removeAtomContainer(i);
+	        			break;
+	        		}
+	        	}
+	        }
         }        
         
         // check for bonds
