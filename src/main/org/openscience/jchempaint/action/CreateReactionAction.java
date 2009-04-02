@@ -35,12 +35,11 @@ import javax.swing.JOptionPane;
 import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 
 
@@ -68,6 +67,9 @@ public class CreateReactionAction extends JCPAction
 		if (object instanceof IAtom)
 		{
 			container = ChemModelManipulator.getRelevantAtomContainer(model, (IAtom) object);
+		} else if(object instanceof IBond)
+		{
+			container = ChemModelManipulator.getRelevantAtomContainer(model, (IBond) object);
 		} else
 		{
 			logger.error("Cannot add to reaction object of type: " + object.getClass().getName());
