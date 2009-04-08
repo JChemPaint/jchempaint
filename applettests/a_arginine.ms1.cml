@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cml xmlns="http://www.xml-cml.org/schema">
+    <moleculeList title="Ion list">
+        <molecule id="ion4_C6H14N4O2" formula="C 6 H 14 N 4 O 2">
+            <atomArray>
+                <atom id="a0" elementType="N" x2="617.9068" y2="-1162.6449" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b0" atomRefs2="a0 a1" order="S"/>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b4" atomRefs2="a2 a4" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion2_C6H12N3O2" formula="C 6 H 12 N 3 O 2">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b4" atomRefs2="a2 a4" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion7_C6H13N4O" formula="C 6 H 13 N 4 O 1">
+            <atomArray>
+                <atom id="a0" elementType="N" x2="617.9068" y2="-1162.6449" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b0" atomRefs2="a0 a1" order="S"/>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion12_CH4N3" formula="C 1 H 4 N 3">
+            <atomArray>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion3_C5H12N3O" formula="C 5 H 12 N 3 O 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b11" atomRefs2="a4 a1" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion0_C5H8NO" formula="C 5 H 8 N 1 O 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion9_C6H10N2O2" formula="C 6 H 10 N 2 O 2">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b4" atomRefs2="a2 a4" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion5_C5H11N3" formula="C 5 H 11 N 3">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion6_C4H8N" formula="C 4 H 8 N 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion8_C5H11N3" formula="C 5 H 11 N 3">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion11_C4H8O" formula="C 4 H 8 O 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b11" atomRefs2="a4 a1" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion1_C4H8N" formula="C 4 H 8 N 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+            </bondArray>
+        </molecule>
+        <molecule id="ion10_C5H10N2O" formula="C 5 H 10 N 2 O 1">
+            <atomArray>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b11" atomRefs2="a4 a1" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+                <bond id="b7" atomRefs2="a7 a8" order="S"/>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+    </moleculeList>
+    <moleculeList title="Neutral loss list">
+        <molecule id="nl2_H2N" formula="H 2 N 1">
+            <atomArray>
+                <atom id="a0" elementType="N" x2="617.9068" y2="-1162.6449" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray/>
+        </molecule>
+        <molecule id="nl5_HO" formula="H 1 O 1">
+            <atomArray>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray/>
+        </molecule>
+        <molecule id="nl11_C5H10NO2" formula="C 5 H 10 N 1 O 2">
+            <atomArray>
+                <atom id="a0" elementType="N" x2="617.9068" y2="-1162.6449" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a1" elementType="C" x2="814.5028" y2="-1162.6449" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a5" elementType="C" x2="912.8008" y2="-992.3878" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a6" elementType="C" x2="1109.3969" y2="-992.3877" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a7" elementType="C" x2="1207.6949" y2="-822.1305" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b0" atomRefs2="a0 a1" order="S"/>
+                <bond id="b1" atomRefs2="a1 a2" order="S"/>
+                <bond id="b2" atomRefs2="a1 a5" order="S"/>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+                <bond id="b4" atomRefs2="a2 a4" order="S"/>
+                <bond id="b5" atomRefs2="a5 a6" order="S"/>
+                <bond id="b6" atomRefs2="a6 a7" order="S"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl1_CO" formula="C 1 O 1">
+            <atomArray>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl9_CH4N2O" formula="C 1 H 4 N 2 O 1">
+            <atomArray>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl10_H2N" formula="H 2 N 1">
+            <atomArray>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray/>
+        </molecule>
+        <molecule id="nl3_HO" formula="H 1 O 1">
+            <atomArray>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray/>
+        </molecule>
+        <molecule id="nl4_CH4N2O" formula="C 1 H 4 N 2 O 1">
+            <atomArray>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl6_HO" formula="H 1 O 1">
+            <atomArray>
+                <atom id="a4" elementType="O" x2="1109.3969" y2="-1332.9021" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray/>
+        </molecule>
+        <molecule id="nl8_CH4N3" formula="C 1 H 4 N 3">
+            <atomArray>
+                <atom id="a8" elementType="N" x2="1404.2909" y2="-822.1304" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+                <atom id="a9" elementType="C" x2="1502.589" y2="-651.8732" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a10" elementType="N" x2="1404.2909" y2="-481.6161" formalCharge="0" hydrogenCount="2" isotopeNumber="0"/>
+                <atom id="a11" elementType="N" x2="1699.1849" y2="-651.8733" formalCharge="0" hydrogenCount="1" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b8" atomRefs2="a8 a9" order="S"/>
+                <bond id="b9" atomRefs2="a9 a10" order="S"/>
+                <bond id="b10" atomRefs2="a9 a11" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl0_CO" formula="C 1 O 1">
+            <atomArray>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+            </bondArray>
+        </molecule>
+        <molecule id="nl7_CO" formula="C 1 O 1">
+            <atomArray>
+                <atom id="a2" elementType="C" x2="912.8008" y2="-1332.9021" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+                <atom id="a3" elementType="O" x2="814.5028" y2="-1503.1592" formalCharge="0" hydrogenCount="0" isotopeNumber="0"/>
+            </atomArray>
+            <bondArray>
+                <bond id="b3" atomRefs2="a2 a3" order="D"/>
+            </bondArray>
+        </molecule>
+    </moleculeList>
+    <reactionList>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion4_C6H14N4O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion2_C6H12N3O2"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl2_H2N"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion4_C6H14N4O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion7_C6H13N4O"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl5_HO"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion4_C6H14N4O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion12_CH4N3"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl11_C5H10NO2"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion2_C6H12N3O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion3_C5H12N3O"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl1_CO"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion2_C6H12N3O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion0_C5H8NO"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl9_CH4N2O"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion2_C6H12N3O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion9_C6H10N2O2"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl10_H2N"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion3_C5H12N3O"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion5_C5H11N3"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl3_HO"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion3_C5H12N3O"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion6_C4H8N"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl4_CH4N2O"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion3_C5H12N3O"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion8_C5H11N3"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl6_HO"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion3_C5H12N3O"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion11_C4H8O"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl8_CH4N3"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion0_C5H8NO"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion1_C4H8N"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl0_CO"/>
+                </product>
+            </productList>
+        </reaction>
+        <reaction>
+            <reactantList>
+                <reactant>
+                    <molecule ref="ion9_C6H10N2O2"/>
+                </reactant>
+            </reactantList>
+            <productList>
+                <product role="ion">
+                    <molecule ref="ion10_C5H10N2O"/>
+                </product>
+                <product role="neutral_loss">
+                    <molecule ref="nl7_CO"/>
+                </product>
+            </productList>
+        </reaction>
+    </reactionList>
+</cml>

@@ -39,6 +39,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -50,10 +51,12 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.INChIReader;
@@ -185,6 +188,7 @@ public class JChemPaint {
         try {
             ReaderFactory factory = new ReaderFactory();
             cor = factory.createReader(new FileReader(inFile));
+            //this is a workaround for bug #2698194, since it works with url only
             if(cor instanceof CMLReader)
             	cor = new CMLReader(inFile.toURI().toString());
         } catch (IOException ioExc) {
@@ -198,6 +202,7 @@ public class JChemPaint {
                 FileInputStream reader = new FileInputStream(inFile);
                 if (type.equals(JCPFileFilter.cml)
                         || type.equals(JCPFileFilter.xml)) {
+                	//this is a workaround for bug #2698194, since it works with url only
                     cor = new CMLReader(inFile.toURI().toString());
                 } else if (type.equals(JCPFileFilter.sdf)) {
                     cor = new MDLV2000Reader(reader);//TODO once merged, egons new reader needs to be used here
@@ -280,13 +285,53 @@ public class JChemPaint {
         if (chemModel == null && chemFile != null) {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
+
+        //TODO this is a workaround for bug #2738105
+        for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)){
+        	for(IAtom atom : container.atoms()){
+        		if(atom.getPoint2d().y<0)
+        			atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
+        	}
+        }
         
+        //we give all reactions an ID, in case they have none
+        //IDs are needed for handling in JCP
+        if(chemModel.getReactionSet()!=null){
+        	int i=0;
+        	for(IReaction reaction : chemModel.getReactionSet().reactions()){
+        		if(reaction.getID()==null)
+        			reaction.setID("Reaction "+(++i));
+        	}
+        }
+        
+        //we make references in products/reactants clones, since same compounds in 
+        //different reactions need separete layout (different positions etc.)
+        if(chemModel.getReactionSet()!=null){
+	    	for(IReaction reaction : chemModel.getReactionSet().reactions()){
+	    		int i=0;
+	    		for(IAtomContainer product : reaction.getProducts().atomContainers()){
+	    			try {
+						reaction.getProducts().replaceAtomContainer(i, (IAtomContainer)product.clone());
+					} catch (CloneNotSupportedException e) {
+					}
+	    			i++;
+	    		}
+	    		i=0;
+	    		for(IAtomContainer reactant : reaction.getReactants().atomContainers()){
+	    			try {
+						reaction.getReactants().replaceAtomContainer(i, (IAtomContainer)reactant.clone());
+					} catch (CloneNotSupportedException e) {
+					}
+	    			i++;
+	    		}
+	    	}
+        }        
         //we remove molecules which are in MoleculeSet as well as in a reaction
         if(chemModel.getReactionSet()!=null){
 	    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
 	        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
 	        	for(int k=0;k<aclist.size();k++){
-	        		if(aclist.get(k)==chemModel.getMoleculeSet().getAtomContainer(i)){
+	        		if(aclist.get(k).getID().equals(chemModel.getMoleculeSet().getAtomContainer(i).getID())){
 	        			chemModel.getMoleculeSet().removeAtomContainer(i);
 	        			break;
 	        		}
@@ -301,14 +346,8 @@ public class JChemPaint {
         // check for coordinates
         JChemPaint.checkCoordinates(chemModel);
         
-        //we give all reactions an ID, in case they have none
-        //IDs are needed for handling in JCP
-        if(chemModel.getReactionSet()!=null){
-        	int i=0;
-        	for(IReaction reaction : chemModel.getReactionSet().reactions()){
-        		if(reaction.getID()==null)
-        			reaction.setID("Reaction "+(++i));
-        	}
+        if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()==0){
+        	chemModel.setMoleculeSet(null);
         }
 
         JChemPaintPanel p = showInstance(chemModel, inFile.getName());

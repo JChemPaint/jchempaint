@@ -62,6 +62,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
@@ -74,6 +75,7 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.LonePairGenerator;
 import org.openscience.cdk.renderer.generators.MergeAtomsGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
+import org.openscience.cdk.renderer.generators.ReactionBoxGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
@@ -81,8 +83,10 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
 public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListener {
@@ -106,21 +110,62 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
 		//we avoid overlaps
+		//first we we shift down the reactions
+		Rectangle2D usedReactionbounds=null;
+		if(chemModel.getReactionSet()!=null){
+			for(IReaction reaction : chemModel.getReactionSet().reactions()){
+	            // now move it so that they don't overlap
+	            Rectangle2D reactionbounds = ReactionBoxGenerator.getBounds(reaction);
+				if(usedReactionbounds!=null){
+	                double bondLength = GeometryTools.getBondLengthAverage(reaction);
+	                Rectangle2D shiftedBounds =
+	                    GeometryTools.shiftReactionVertical(
+	                            reaction, reactionbounds, usedReactionbounds, bondLength);
+	                usedReactionbounds = usedReactionbounds.createUnion(shiftedBounds);
+	            } else {
+	            	usedReactionbounds = reactionbounds;
+	            }
+			}
+		}
+		//then we shift the molecules not to overlap
 		Rectangle2D usedBounds = null;
-        for (IAtomContainer container :
-            ChemModelManipulator.getAllAtomContainers(chemModel)) {
-            // now move it so that they don't overlap
-            Rectangle2D bounds = Renderer.calculateBounds(container);
-            if (usedBounds != null) {
-                double bondLength = GeometryTools.getBondLengthAverage(container);
-                Rectangle2D shiftedBounds =
-                    GeometryTools.shiftContainer(
-                            container, bounds, usedBounds, bondLength);
-                usedBounds = usedBounds.createUnion(shiftedBounds);
-            } else {
-                usedBounds = bounds;
-            }
-        } 
+		if(chemModel.getMoleculeSet()!=null){
+	        for (IAtomContainer container :
+	        	AtomContainerSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
+	            // now move it so that they don't overlap
+	            Rectangle2D bounds = Renderer.calculateBounds(container);
+	            if (usedBounds != null) {
+	                double bondLength = GeometryTools.getBondLengthAverage(container);
+	                Rectangle2D shiftedBounds =
+	                    GeometryTools.shiftContainer(
+	                            container, bounds, usedBounds, bondLength);
+	                usedBounds = usedBounds.createUnion(shiftedBounds);
+	            } else {
+	                usedBounds = bounds;
+	            }
+	        } 
+		}
+		//and the products/reactants in every reaction
+		if(chemModel.getReactionSet()!=null){
+			for(IReaction reaction : chemModel.getReactionSet().reactions()){
+				usedBounds = null;
+		        for (IAtomContainer container :
+		        	ReactionManipulator.getAllAtomContainers(reaction)) {
+		            // now move it so that they don't overlap
+		            Rectangle2D bounds = Renderer.calculateBounds(container);
+		            if (usedBounds != null) {
+		                double bondLength = GeometryTools.getBondLengthAverage(container);
+		                Rectangle2D shiftedBounds =
+		                    GeometryTools.shiftContainer(
+		                            container, bounds, usedBounds, bondLength);
+		                usedBounds = usedBounds.createUnion(shiftedBounds);
+		            } else {
+		                usedBounds = bounds;
+		            }
+		        } 
+			}
+		}
+		//TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
