@@ -32,6 +32,7 @@ package org.openscience.jchempaint.applet;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -66,6 +67,7 @@ import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
+import org.openscience.jchempaint.application.JChemPaint;
 
 /**
  * An abstract class for JCP applets, doing parameter parsing
@@ -166,19 +168,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 */
 	public void loadModelFromUrl(URL fileURL) {
 		try {
-			InputStreamReader isReader = new InputStreamReader(fileURL.openStream());
-			ISimpleChemObjectReader reader = new ReaderFactory().createReader(isReader);
-			ChemModel chemModel = (ChemModel) reader.read(new ChemModel());
-    
-			if(chemModel.getMoleculeSet()!=null){
-				int count=0;
-				for(int i=0;i<chemModel.getMoleculeSet().getMoleculeCount();i++){
-					for(int k=0;k<chemModel.getMoleculeSet().getMolecule(i).getAtomCount();k++){
-						chemModel.getMoleculeSet().getMolecule(i).getAtom(k).setProperty("OriginalNumber", new Integer(count));
-						count++;
-					}
-				}
-			}
+			IChemModel chemModel = JChemPaint.readFromFile(new InputStreamReader(fileURL.openStream()), fileURL.toString(), null);
 			theJcpp.setChemModel(chemModel);
 		} catch (Exception exception) {
 			System.out.println("Cannot parse model: " + exception.toString());

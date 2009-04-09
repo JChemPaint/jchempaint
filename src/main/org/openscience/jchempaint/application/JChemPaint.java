@@ -33,8 +33,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -51,12 +55,14 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.INChIReader;
@@ -65,6 +71,7 @@ import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
@@ -173,11 +180,24 @@ public class JChemPaint {
 	}
 
 	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
-	    if (!inFile.exists()) {
+	    try{
+	    	IChemModel chemModel = readFromFile(new InputStreamReader(new FileInputStream(inFile)), inFile.toURI().toString(), type);
+
+	        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
+	        p.setCurrentWorkDirectory(inFile.getParentFile());
+	        p.setLastOpenedFile(inFile);
+	        p.setIsAlreadyAFile(inFile);
+	    }catch(CDKException ex){
+            JOptionPane.showMessageDialog(jcpPanel, ex.getMessage());
+            return;
+	    } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(jcpPanel, "File " + inFile.getPath()
                     + " does not exist.");
             return;
-        }
+		}
+	}
+	
+	public static IChemModel readFromFile(Reader instream, String URL, String type) throws CDKException{
         if (type == null) {
             type = "unknown";
         }
@@ -187,10 +207,10 @@ public class JChemPaint {
          */
         try {
             ReaderFactory factory = new ReaderFactory();
-            cor = factory.createReader(new FileReader(inFile));
+            cor = factory.createReader(instream);
             //this is a workaround for bug #2698194, since it works with url only
             if(cor instanceof CMLReader)
-            	cor = new CMLReader(inFile.toURI().toString());
+            	cor = new CMLReader(URL);
         } catch (IOException ioExc) {
             // we do nothing right now and hoe it still works
         } catch (Exception exc) {
@@ -198,44 +218,43 @@ public class JChemPaint {
         }
         if (cor == null) {
             // try to determine from user's guess
-            try {
-                FileInputStream reader = new FileInputStream(inFile);
-                if (type.equals(JCPFileFilter.cml)
-                        || type.equals(JCPFileFilter.xml)) {
-                	//this is a workaround for bug #2698194, since it works with url only
-                    cor = new CMLReader(inFile.toURI().toString());
-                } else if (type.equals(JCPFileFilter.sdf)) {
-                    cor = new MDLV2000Reader(reader);//TODO once merged, egons new reader needs to be used here
-                } else if (type.equals(JCPFileFilter.mol)) {
-                    cor = new MDLV2000Reader(reader);
-                } else if (type.equals(JCPFileFilter.inchi)) {
-                    cor = new INChIReader(reader);
-                } else if (type.equals(JCPFileFilter.rxn)) {
-                    cor = new MDLRXNV2000Reader(reader);
-                } else if (type.equals(JCPFileFilter.smi)) {
-                    cor = new SMILESReader(reader);
-                }
-            } catch (FileNotFoundException exception) {
-                // we do nothing right now and hoe it still works
+            if (type.equals(JCPFileFilter.cml)
+                    || type.equals(JCPFileFilter.xml)) {
+            	//this is a workaround for bug #2698194, since it works with url only
+                cor = new CMLReader(URL);
+            } else if (type.equals(JCPFileFilter.sdf)) {
+                cor = new MDLV2000Reader(instream);//TODO once merged, egons new reader needs to be used here
+            } else if (type.equals(JCPFileFilter.mol)) {
+                cor = new MDLV2000Reader(instream);
+            } else if (type.equals(JCPFileFilter.inchi)) {
+                try {
+					cor = new INChIReader(new URL(URL).openStream());
+				} catch (MalformedURLException e) {
+					// These should not happen, since URL is built from a file before
+				} catch (IOException e) {
+					// These should not happen, since URL is built from a file before
+				}
+            } else if (type.equals(JCPFileFilter.rxn)) {
+                cor = new MDLRXNV2000Reader(instream);
+            } else if (type.equals(JCPFileFilter.smi)) {
+                cor = new SMILESReader(instream);
             }
         }
         if (cor == null) {
-            JOptionPane.showMessageDialog(jcpPanel,
-                    "Could not determine file format.");
-            return;
+        	throw new CDKException("Could not determine file format");
         }
         // this takes care of files called .mol, but having several, sdf-style
         // entries
         if (cor instanceof MDLV2000Reader) {
             try {
-                BufferedReader in = new BufferedReader(new FileReader(inFile));
+                BufferedReader in = new BufferedReader(instream);
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (line.equals("$$$$")) {
                         String message = "It seems you opened a mol or sdf"
                                 + " file containing several molecules. "
                                 + "Only the first one will be shown";
-                        JOptionPane.showMessageDialog(jcpPanel, message,
+                        JOptionPane.showMessageDialog(null, message,
                                 "sdf-like file",
                                 JOptionPane.INFORMATION_MESSAGE);
                         break;
@@ -263,8 +282,7 @@ public class JChemPaint {
             }
         }
         if (error != null) {
-            JOptionPane.showMessageDialog(jcpPanel, error);
-            return;
+        	throw new CDKException(error);
         }
         if (cor.accepts(ChemModel.class)) {
             // try to read a ChemModel
@@ -279,7 +297,7 @@ public class JChemPaint {
             }
         }
         if (error != null) {
-            JOptionPane.showMessageDialog(jcpPanel, error);
+        	throw new CDKException(error);
         }
         
         if (chemModel == null && chemFile != null) {
@@ -327,7 +345,7 @@ public class JChemPaint {
 	    	}
         }        
         //we remove molecules which are in MoleculeSet as well as in a reaction
-        if(chemModel.getReactionSet()!=null){
+        if(chemModel.getReactionSet()!=null && chemModel.getMoleculeSet()!=null){
 	    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
 	        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
 	        	for(int k=0;k<aclist.size();k++){
@@ -349,55 +367,50 @@ public class JChemPaint {
         if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()==0){
         	chemModel.setMoleculeSet(null);
         }
-
-        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
-        p.setCurrentWorkDirectory(inFile.getParentFile());
-        p.setLastOpenedFile(inFile);
-        p.setIsAlreadyAFile(inFile);
+        return chemModel;
 	}
-	
+
 	// TODO
 	private static void checkCoordinates(IChemModel chemModel) {
-//	 if ((GeometryTools.has2DCoordinates(chemModel)==0)) {
-//        String error = "Model does not have 2D coordinates. Cannot open file.";
-//        logger.warn(error);
-//        JOptionPane.showMessageDialog(this, error);
-//        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
-//        frame.pack();
-//        frame.show();
-//        return;
-//    } else if ((GeometryTools.has2DCoordinatesNew(chemModel)==1)) {
-//        int result=JOptionPane.showConfirmDialog(this,"Model has some 2d coordinates. Do you want to show only the atoms with 2d coordiantes?","Only some 2d cooridantes",JOptionPane.YES_NO_OPTION);
-//        if(result>1){
-//            CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
-//            frame.pack();
-//            frame.show();
-//            return;
-//        }else{
-//            for(int i=0;i<chemModel.getMoleculeSet().getAtomContainerCount();i++){
-//                for(int k=0;i<chemModel.getMoleculeSet().getAtomContainer(i).getAtomCount();k++){
-//                    if(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k).getPoint2d()==null)
-//                        chemModel.getMoleculeSet().getAtomContainer(i).removeAtomAndConnectedElectronContainers(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k));
-//                }                       
-//            }
-//        }
-//    }
-//    if(jcpPanel.getJChemPaintModel().getControllerModel().getAutoUpdateImplicitHydrogens()){
-//        HydrogenAdder hydrogenAdder = new HydrogenAdder("org.openscience.cdk.tools.ValencyChecker");
-//        java.util.Iterator mols = chemFile.getChemSequence(0).getChemModel(0).getMoleculeSet().molecules();
-//        while (mols.hasNext())
-//        {
-//            org.openscience.cdk.interfaces.IMolecule molecule = (IMolecule)mols.next();
-//            if (molecule != null)
-//            {
-//                try{
-//                        hydrogenAdder.addImplicitHydrogensToSatisfyValency(molecule);
-//                }catch(Exception ex){
-//                    //do nothing
-//                }
-//            }
-//        }
-//    }
+//		 if ((GeometryTools.has2DCoordinates(chemModel)==0)) {
+//	        String error = "Model does not have 2D coordinates. Cannot open file.";
+//	        logger.warn(error);
+//	        JOptionPane.showMessageDialog(this, error);
+//	        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
+//	        frame.pack();
+//	        frame.show();
+//	        return;
+//	    } else if ((GeometryTools.has2DCoordinatesNew(chemModel)==1)) {
+//	        int result=JOptionPane.showConfirmDialog(this,"Model has some 2d coordinates. Do you want to show only the atoms with 2d coordiantes?","Only some 2d cooridantes",JOptionPane.YES_NO_OPTION);
+//	        if(result>1){
+//	            CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
+//	            frame.pack();
+//	            frame.show();
+//	            return;
+//	        }else{
+//	            for(int i=0;i<chemModel.getMoleculeSet().getAtomContainerCount();i++){
+//	                for(int k=0;i<chemModel.getMoleculeSet().getAtomContainer(i).getAtomCount();k++){
+//	                    if(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k).getPoint2d()==null)
+//	                        chemModel.getMoleculeSet().getAtomContainer(i).removeAtomAndConnectedElectronContainers(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k));
+//	                }                       
+//	            }
+//	        }
+//	    }
+		//add implicit hydrogens (in ControllerParameters, autoUpdateImplicitHydrogens is true by default, so we need to do that anyway)
+    	CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(chemModel.getBuilder());
+        Iterator<IAtomContainer> mols = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
+        while (mols.hasNext())
+        {
+            org.openscience.cdk.interfaces.IMolecule molecule = (IMolecule)mols.next();
+            if (molecule != null)
+            {
+               try {
+            	   hAdder.addImplicitHydrogens(molecule);
+               } catch (CDKException e) {
+            	   // do nothing
+               }
+            }
+        }
 	}
 	
 
