@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-14 17:31+0100\n"
-"PO-Revision-Date: 2009-03-05 23:48+0100\n"
+"PO-Revision-Date: 2009-04-14 21:41+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -691,11 +691,8 @@ msgid "An open-source editor for 2D chemical structures."
 msgstr "Un editor de código abierto para estructuras químicas en 2 dimensiones"
 
 #: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:74
-msgid ""
-"An OpenScience project by Christoph Steinbeck, Egon Willighagen and others."
-msgstr ""
-"Un proyecto de OpenScience, por Christoph Steinbeck, Egon Willighagen y "
-"otros."
+msgid "An OpenScience project by Christoph Steinbeck, Egon Willighagen and others."
+msgstr "Un proyecto de OpenScience, por Christoph Steinbeck, Egon Willighagen y otros."
 
 #: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:75
 msgid "See 'http://jchempaint.sourceforge.net' for more information."
@@ -719,8 +716,7 @@ msgstr "No es posible deshacer"
 
 #: src/main/org/openscience/jchempaint/action/ConvertToRadicalAction.java:76
 msgid "A radical cannot be added to this atom. Re-try with less hydrogens."
-msgstr ""
-"No se puede añadir un radical a este átomo. Inténtalo con menos hidrógenos."
+msgstr "No se puede añadir un radical a este átomo. Inténtalo con menos hidrógenos."
 
 #: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:76
 msgid "Generated SMILES:"
@@ -953,7 +949,7 @@ msgstr "Hacer implícitos los hidrógenos existentes"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:96
 msgid "Update Implicit Hydrogen Count"
-msgstr ""
+msgstr "Actualizar el recuento de hidrógenos implícitos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:97
 msgid "Edit..."
@@ -1104,9 +1100,8 @@ msgid "Select Reactants Only"
 msgstr "Seleccionar sólo los reactivos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:164
-#, fuzzy
 msgid "Select Products Only"
-msgstr "Seleccionar sólo los reactivos"
+msgstr "Seleccionar sólo los productos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:165
 msgid "Draw Bonds and Atoms"
@@ -1189,9 +1184,8 @@ msgid "Relayout the structures"
 msgstr "Reajustar las estructuras"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:186
-#, fuzzy
 msgid "Clear"
-msgstr "Reajustar la estructura"
+msgstr "Borrar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:188
 msgid "Create a new file"
@@ -1330,8 +1324,9 @@ msgid "Spanish"
 msgstr "Español"
 
 #: src/main/org/openscience/jchempaint/GT.java:125
+#, fuzzy
 msgid "Arabic"
-msgstr ""
+msgstr "Arabic"
 
 #: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:74
 msgid "CDK source code fragment"
@@ -1339,19 +1334,19 @@ msgstr "fragmento de código fuente de CDK"
 
 #: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:180
 msgid "MDL MOL file"
-msgstr ""
+msgstr "Archivo MOL de MDL"
 
 #: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:184
 msgid "MDL SDF Molfile"
-msgstr ""
+msgstr "Archivo SDF de MDL"
 
 #: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:188
 msgid "MDL RXN Molfile"
-msgstr ""
+msgstr "Archivo RXN de MDL"
 
 #: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:192
 msgid "IUPAC Chemical Identifier"
-msgstr ""
+msgstr "Identificador químico de IUPAC"
 
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:179
 msgid "Change drawing symbol to"
@@ -1359,12 +1354,10 @@ msgstr "Cambiar el símbolo de dibujo a"
 
 #~ msgid "Cut Bond"
 #~ msgstr "Cortar enlace"
-
 #~ msgid "of these"
 #~ msgstr "de estos"
-
 #~ msgid "Modify Renderer2D Options Dialog"
 #~ msgstr "Modificar el diálogo de opciones de trazado 2D"
-
 #~ msgid "Show implicit hydrogens if atom symbol is shown"
 #~ msgstr "Mostrar los hidrógenos implícitos si se muestra el símbolo atómico"
+
