@@ -34,6 +34,8 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
+import org.openscience.jchempaint.GT;
+
 /**
  * A file filter for JCP
  *
@@ -175,19 +177,19 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		String type = (String) types.get(0);
 		if (type.equals(mol))
 		{
-			return "MDL MOL file";
+			return GT._("MDL MOL file");
 		}
 		if (type.equals(sdf))
 		{
-			return "MDL SDF Molfile";
+			return GT._("MDL SDF Molfile");
 		}
 		if (type.equals(rxn))
 		{
-			return "MDL RXN Molfile";
+			return GT._("MDL RXN Molfile");
 		}
 		if (type.equals(inchi))
 		{
-			return "IUPAC Chemical Identifier";
+			return GT._("IUPAC Chemical Identifier");
 		}
 		if (type.equals(smi))
 		{
