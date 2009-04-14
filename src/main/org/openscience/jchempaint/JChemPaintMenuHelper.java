@@ -133,7 +133,6 @@ public class JChemPaintMenuHelper {
 			isChecked=true;
 			cmd=cmd.substring(0, cmd.length() - 1);
 		}
-		System.out.println(cmd);
 		String translation = "***" + cmd + "***";
 		try {
 			translation = JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(cmd);
@@ -141,7 +140,6 @@ public class JChemPaintMenuHelper {
 		} catch (MissingResourceException mre) {
 			logger.error("Could not find translation for: " + cmd);
 		}
-		System.out.println(translation);
 		JMenuItem mi = null;
 		if (isCheckBox) {
 			mi = new JCheckBoxMenuItem(translation);

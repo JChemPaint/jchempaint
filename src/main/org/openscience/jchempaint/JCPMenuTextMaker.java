@@ -94,7 +94,6 @@ public class JCPMenuTextMaker {
 		entries.put("makeHydrogenExplicit", GT._("Make Existing Implicit Hydrogens Explicit"));
 		entries.put("makeHydrogenImplicit", GT._("Make Existing Explicit Hydrogens Implicit"));
 		entries.put("updateHydrogenImplicit", GT._("Update Implicit Hydrogen Count"));
-		System.out.println(GT._("Update Implicit Hydrogen Count")+"____");
 		entries.put("editPreferences", GT._("Edit..."));
 		entries.put("reloadPreferences", GT._("Reload Preferences"));
 		entries.put("savePreferences", GT._("Save Preferences"));
