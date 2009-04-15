@@ -76,6 +76,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.dialog.CreateCoordinatesForFileDialog;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
@@ -360,6 +361,7 @@ public class JChemPaint {
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {
             error = "Model does not have bonds. Cannot depict contents.";
+            throw new CDKException(error);
         }
         // check for coordinates
         JChemPaint.checkCoordinates(chemModel);
@@ -370,32 +372,23 @@ public class JChemPaint {
         return chemModel;
 	}
 
-	// TODO
-	private static void checkCoordinates(IChemModel chemModel) {
-//		 if ((GeometryTools.has2DCoordinates(chemModel)==0)) {
-//	        String error = "Model does not have 2D coordinates. Cannot open file.";
-//	        logger.warn(error);
-//	        JOptionPane.showMessageDialog(this, error);
-//	        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
-//	        frame.pack();
-//	        frame.show();
-//	        return;
-//	    } else if ((GeometryTools.has2DCoordinatesNew(chemModel)==1)) {
-//	        int result=JOptionPane.showConfirmDialog(this,"Model has some 2d coordinates. Do you want to show only the atoms with 2d coordiantes?","Only some 2d cooridantes",JOptionPane.YES_NO_OPTION);
-//	        if(result>1){
-//	            CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel, jchemPaintModel.getRendererModel().getRenderingCoordinates());
-//	            frame.pack();
-//	            frame.show();
-//	            return;
-//	        }else{
-//	            for(int i=0;i<chemModel.getMoleculeSet().getAtomContainerCount();i++){
-//	                for(int k=0;i<chemModel.getMoleculeSet().getAtomContainer(i).getAtomCount();k++){
-//	                    if(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k).getPoint2d()==null)
-//	                        chemModel.getMoleculeSet().getAtomContainer(i).removeAtomAndConnectedElectronContainers(chemModel.getMoleculeSet().getAtomContainer(i).getAtom(k));
-//	                }                       
-//	            }
-//	        }
-//	    }
+	private static void checkCoordinates(IChemModel chemModel) throws CDKException{
+		List<IAtomContainer> acs = ChemModelManipulator.getAllAtomContainers(chemModel);
+		Iterator<IAtomContainer> it = acs.iterator();
+		while(it.hasNext()){
+			if(GeometryTools.has2DCoordinatesNew(it.next())!=2){
+		        String error = "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?";
+		        int answer = JOptionPane.showConfirmDialog(null, error, "No 2D coordinates", JOptionPane.YES_NO_OPTION);
+		        if(answer==JOptionPane.NO_OPTION){
+		        	throw new CDKException("Cannot display without 2D coordinates");
+		        }else{
+			        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel);
+			        frame.pack();
+			        frame.show();
+			        return;
+		        }
+			}
+		}
 		//add implicit hydrogens (in ControllerParameters, autoUpdateImplicitHydrogens is true by default, so we need to do that anyway)
     	CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(chemModel.getBuilder());
         Iterator<IAtomContainer> mols = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();

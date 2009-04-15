@@ -109,63 +109,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
-		//we avoid overlaps
-		//first we we shift down the reactions
-		Rectangle2D usedReactionbounds=null;
-		if(chemModel.getReactionSet()!=null){
-			for(IReaction reaction : chemModel.getReactionSet().reactions()){
-	            // now move it so that they don't overlap
-	            Rectangle2D reactionbounds = ReactionBoxGenerator.getBounds(reaction);
-				if(usedReactionbounds!=null){
-	                double bondLength = GeometryTools.getBondLengthAverage(reaction);
-	                Rectangle2D shiftedBounds =
-	                    GeometryTools.shiftReactionVertical(
-	                            reaction, reactionbounds, usedReactionbounds, bondLength);
-	                usedReactionbounds = usedReactionbounds.createUnion(shiftedBounds);
-	            } else {
-	            	usedReactionbounds = reactionbounds;
-	            }
-			}
-		}
-		//then we shift the molecules not to overlap
-		Rectangle2D usedBounds = null;
-		if(chemModel.getMoleculeSet()!=null){
-	        for (IAtomContainer container :
-	        	AtomContainerSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
-	            // now move it so that they don't overlap
-	            Rectangle2D bounds = Renderer.calculateBounds(container);
-	            if (usedBounds != null) {
-	                double bondLength = GeometryTools.getBondLengthAverage(container);
-	                Rectangle2D shiftedBounds =
-	                    GeometryTools.shiftContainer(
-	                            container, bounds, usedBounds, bondLength);
-	                usedBounds = usedBounds.createUnion(shiftedBounds);
-	            } else {
-	                usedBounds = bounds;
-	            }
-	        } 
-		}
-		//and the products/reactants in every reaction
-		if(chemModel.getReactionSet()!=null){
-			for(IReaction reaction : chemModel.getReactionSet().reactions()){
-				usedBounds = null;
-		        for (IAtomContainer container :
-		        	ReactionManipulator.getAllAtomContainers(reaction)) {
-		            // now move it so that they don't overlap
-		            Rectangle2D bounds = Renderer.calculateBounds(container);
-		            if (usedBounds != null) {
-		                double bondLength = GeometryTools.getBondLengthAverage(container);
-		                Rectangle2D shiftedBounds =
-		                    GeometryTools.shiftContainer(
-		                            container, bounds, usedBounds, bondLength);
-		                usedBounds = usedBounds.createUnion(shiftedBounds);
-		            } else {
-		                usedBounds = bounds;
-		            }
-		        } 
-			}
-		}
-		//TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
+		ControllerHub.avoidOverlap(chemModel);
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
