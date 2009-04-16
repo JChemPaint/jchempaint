@@ -69,7 +69,6 @@
     <target id="unjar-cdkjars" name="unjar-cdkjars">
 	 <unjar dest="${dist-classes}">
             <fileset dir="${cdk.dist}/jar">
-                <include name="cdk-applications.jar"/>
                 <include name="cdk-core.jar"/>
                 <include name="cdk-data.jar"/>
                 <include name="cdk-experimental.jar"/>
@@ -179,8 +178,6 @@
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor-opts.jar" includesfile="${metainf}/applet-editor-opts.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources.jar" includesfile="${metainf}/jchempaint.datafiles"/>
         <!-- the following jar files are packed from directory patterns -->
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_applications_jchempaint.jar" includepattern="org/openscience/cdk/applications/jchempaint/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_applications.jar" includepattern="org/openscience/cdk/applications/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" includepattern="org/openscience/cdk/io/**"/>
@@ -197,12 +194,10 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_omegahat.jar" includepattern="org/omegahat/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_w3c.jar" includepattern="org/w3c/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_xmlcml.jar" includepattern="org/xmlcml/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org.jar" includepattern="org/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-com_ozten.jar" includepattern="com/ozten/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-Jama.jar" includepattern="Jama/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-jas.jar" includepattern="jas/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-javax_media.jar" includepattern="javax/media/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-javax_vecmath.jar" includepattern="javax/vecmath/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-nu.jar" includepattern="nu/**"/>
         <!-- the following jar contains all other classes and resources -->
@@ -225,7 +220,7 @@
             </fileset>
             <!--for unknown reasons, this fails with a "negative seek offset" - could depand on ant version.
             it workd directly via jar. For this, go to dist jar and do
-            jar i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_applications_jchempaint.jar jchempaint-applet-org_openscience_cdk_applications.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_qsar.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_omegahat.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_media.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar
+            jar i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_qsar.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_omegahat.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar
             -->
             <!--indexjars>
                 <fileset dir=".">
