@@ -29,10 +29,18 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
@@ -80,7 +88,29 @@ public class OpenAction extends JCPAction {
 			if (ff instanceof JCPFileFilter) {
 				type = ((JCPFileFilter) ff).getType();
 			}
-			JChemPaint.showInstance(chooser.getSelectedFile(),type, jcpPanel);
+			if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
+		        int clear=jcpPanel.showWarning();
+		        if(clear==JOptionPane.YES_OPTION){
+		        	try {
+						IChemModel chemModel = JChemPaint.readFromFile(new InputStreamReader(new FileInputStream(chooser.getSelectedFile())), chooser.getSelectedFile().toURI().toString(), type);
+					    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
+						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
+						    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
+					    }
+						jcpPanel.getChemModel().setMoleculeSet(chemModel.getMoleculeSet());
+						jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
+			          	jcpPanel.get2DHub().updateView();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (CDKException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }
+		    }else{
+		    	JChemPaint.showInstance(chooser.getSelectedFile(),type, jcpPanel);
+		    }
 		}
 	}
 }

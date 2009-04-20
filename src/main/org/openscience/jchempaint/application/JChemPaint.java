@@ -31,10 +31,9 @@ package org.openscience.jchempaint.application;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,6 +54,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
@@ -182,7 +182,7 @@ public class JChemPaint {
 
 	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
 	    try{
-	    	IChemModel chemModel = readFromFile(new InputStreamReader(new FileInputStream(inFile)), inFile.toURI().toString(), type);
+	    	IChemModel chemModel = readFromFile(new FileReader(inFile), inFile.toURI().toString(), type);
 
 	        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
 	        p.setCurrentWorkDirectory(inFile.getParentFile());
@@ -369,6 +369,7 @@ public class JChemPaint {
         if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()==0){
         	chemModel.setMoleculeSet(null);
         }
+		ControllerHub.avoidOverlap(chemModel);
         return chemModel;
 	}
 

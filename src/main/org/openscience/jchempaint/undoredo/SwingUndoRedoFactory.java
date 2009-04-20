@@ -127,4 +127,10 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingChangeHydrogenCountEdit(atomHydrogenCountsMap, type);
 	}
 
+	public IUndoRedoable getLoadNewModelEdit(IChemModel chemModel,
+			IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom,
+			IReactionSet newsor, String type) {
+		return new SwingLoadNewModelEdit(chemModel, oldsom, oldsor, newsom, newsor, type);
+	}
+
 }

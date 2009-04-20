@@ -109,7 +109,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen) {
-		ControllerHub.avoidOverlap(chemModel);
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
