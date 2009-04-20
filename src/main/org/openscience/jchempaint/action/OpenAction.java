@@ -40,6 +40,7 @@ import javax.swing.filechooser.FileFilter;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.io.JCPFileFilter;
@@ -94,11 +95,13 @@ public class OpenAction extends JCPAction {
 		        	try {
 						IChemModel chemModel = JChemPaint.readFromFile(new InputStreamReader(new FileInputStream(chooser.getSelectedFile())), chooser.getSelectedFile().toURI().toString(), type);
 					    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
-						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
+						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), jcpPanel.getChemModel().getMoleculeSet(), jcpPanel.getChemModel().getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
 						    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
 					    }
 						jcpPanel.getChemModel().setMoleculeSet(chemModel.getMoleculeSet());
 						jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
+						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(
+		    			        new LogicalSelection(LogicalSelection.Type.NONE));
 			          	jcpPanel.get2DHub().updateView();
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
