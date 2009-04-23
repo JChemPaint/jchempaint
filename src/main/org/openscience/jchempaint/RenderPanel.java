@@ -36,7 +36,6 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -56,13 +55,11 @@ import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.controller.undoredo.IUndoListener;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
@@ -75,7 +72,6 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.LonePairGenerator;
 import org.openscience.cdk.renderer.generators.MergeAtomsGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
-import org.openscience.cdk.renderer.generators.ReactionBoxGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
@@ -83,10 +79,8 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
 public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListener {
@@ -263,7 +257,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             IChemModel chemModel, Graphics2D g, Rectangle screen) {
 
         if (isNewChemModel) {
-            renderer.setScale(chemModel);
+            renderer.setup(chemModel, screen);
         }
 
         Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
