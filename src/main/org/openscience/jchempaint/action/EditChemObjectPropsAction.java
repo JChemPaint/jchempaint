@@ -71,7 +71,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			ChemObjectPropertyDialog frame =
 					new ChemObjectPropertyDialog(jcpPanel.get2DHub(),editor);
 			frame.pack();
-			frame.show();
+			frame.setVisible(true);
 		}
 	}
 }
