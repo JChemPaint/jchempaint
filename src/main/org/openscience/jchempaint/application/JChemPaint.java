@@ -89,26 +89,26 @@ public class JChemPaint {
 		{
 			String vers = System.getProperty("java.version");
 			String requiredJVM = "1.5.0";
-			Package self = Package.getPackage("org.openscience.cdk.applications.jchempaint");
-			String version = "Could not determine JCP version";
+			Package self = Package.getPackage("org.openscience.jchempaint");
+			String version = GT._("Could not determine JCP version");
 			if(self!=null)
 				version=self.getImplementationVersion();
 			if (vers.compareTo(requiredJVM) < 0)
 			{
-				System.err.println("WARNING: JChemPaint "+version+" must be run with a Java VM version " +
-						requiredJVM + " or higher.");
-				System.err.println("Your JVM version: " + vers);
+				System.err.println(GT._("WARNING: JChemPaint")+" "+version+" "+GT._("must be run with a Java VM version")+ " " +
+						requiredJVM + " "+GT._("or higher."));
+				System.err.println(GT._("Your JVM version")+": " + vers);
 				System.exit(1);
 			}
 
 			Options options = new Options();
-			options.addOption("h", "help", false, "give this help page");
-			options.addOption("v", "version", false, "gives JChemPaints version number");
+			options.addOption("h", "help", false, GT._("gives this help page"));
+			options.addOption("v", "version", false, GT._("gives JChemPaints version number"));
 			options.addOption(
 					OptionBuilder.withArgName("property=value").
 					hasArg().
 					withValueSeparator().
-					withDescription("supported options are given below").
+					withDescription(GT._("supported options are given below")).
 					create("D")
 					);
 
@@ -140,6 +140,7 @@ public class JChemPaint {
 				formatter.printHelp("JChemPaint", options);
 
 				// now report on the -D options
+				//TODO which of these are still used?
 				System.out.println();
 				System.out.println("The -D options are as follows (defaults in parathesis):");
 				System.out.println("  cdk.debugging     [true|false] (false)");
@@ -160,7 +161,7 @@ public class JChemPaint {
 				File file = new File(modelFilename);
 				if (!file.exists())
 				{
-					System.err.println("File does not exist: " + modelFilename);
+					System.err.println(GT._("File does not exist")+": " + modelFilename);
 					System.exit(-1);
 				}
 				showInstance(file,null,null);
@@ -192,8 +193,7 @@ public class JChemPaint {
             JOptionPane.showMessageDialog(jcpPanel, ex.getMessage());
             return;
 	    } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(jcpPanel, "File " + inFile.getPath()
-                    + " does not exist.");
+            JOptionPane.showMessageDialog(jcpPanel, GT._("File does not exist")+": "+ inFile.getPath());
             return;
 		}
 	}
@@ -242,7 +242,7 @@ public class JChemPaint {
             }
         }
         if (cor == null) {
-        	throw new CDKException("Could not determine file format");
+        	throw new CDKException(GT._("Could not determine file format"));
         }
         // this takes care of files called .mol, but having several, sdf-style
         // entries
@@ -252,11 +252,11 @@ public class JChemPaint {
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (line.equals("$$$$")) {
-                        String message = "It seems you opened a mol or sdf"
+                        String message = GT._("It seems you opened a mol or sdf"
                                 + " file containing several molecules. "
-                                + "Only the first one will be shown";
+                                + "Only the first one will be shown");
                         JOptionPane.showMessageDialog(null, message,
-                                "sdf-like file",
+                        		GT._("sdf-like file"),
                                 JOptionPane.INFORMATION_MESSAGE);
                         break;
                     }
@@ -360,7 +360,7 @@ public class JChemPaint {
         
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {
-            error = "Model does not have bonds. Cannot depict contents.";
+            error = GT._("Model does not have bonds. Cannot depict contents.");
             throw new CDKException(error);
         }
         // check for coordinates
@@ -378,10 +378,10 @@ public class JChemPaint {
 		Iterator<IAtomContainer> it = acs.iterator();
 		while(it.hasNext()){
 			if(GeometryTools.has2DCoordinatesNew(it.next())!=2){
-		        String error = "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?";
-		        int answer = JOptionPane.showConfirmDialog(null, error, "No 2D coordinates", JOptionPane.YES_NO_OPTION);
+		        String error = GT._("Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?");
+		        int answer = JOptionPane.showConfirmDialog(null, error, GT._("No 2D coordinates"), JOptionPane.YES_NO_OPTION);
 		        if(answer==JOptionPane.NO_OPTION){
-		        	throw new CDKException("Cannot display without 2D coordinates");
+		        	throw new CDKException(GT._("Cannot display without 2D coordinates"));
 		        }else{
 			        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel);
 			        frame.pack();
