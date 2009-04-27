@@ -50,12 +50,41 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
+            	<includesfile name="${cdk.metainf}/atomtype.libdepends"/>
+            	<includesfile name="${cdk.metainf}/builder3d.libdepends"/>
+            	<includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
+            	<includesfile name="${cdk.metainf}/charges.libdepends"/>
+            	<includesfile name="${cdk.metainf}/control.libdepends"/>
                 <includesfile name="${cdk.metainf}/core.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
+            	<includesfile name="${cdk.metainf}/datadebug.libdepends"/>
+            	<includesfile name="${cdk.metainf}/dict.libdepends"/>
+            	<includesfile name="${cdk.metainf}/diff.libdepends"/>
                 <includesfile name="${cdk.metainf}/extra.libdepends"/>
+            	<includesfile name="${cdk.metainf}/forcefield.libdepends"/>
+            	<includesfile name="${cdk.metainf}/formula.libdepends"/>
+            	<includesfile name="${cdk.metainf}/inchi.libdepends"/>
+            	<includesfile name="${cdk.metainf}/interfaces.libdepends"/>
                 <includesfile name="${cdk.metainf}/io.libdepends"/>
+            	<includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
+            	<includesfile name="${cdk.metainf}/libiocml.libdepends"/>
+            	<includesfile name="${cdk.metainf}/libiomd.libdepends"/>
+            	<includesfile name="${cdk.metainf}/nonotify.libdepends"/>
+            	<includesfile name="${cdk.metainf}/pcore.libdepends"/>
+            	<includesfile name="${cdk.metainf}/pdb.libdepends"/>
+            	<includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qm.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsar.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qsaratomic.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qsarbond.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qsarcml.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qsarmolecular.libdepends"/>
+            	<includesfile name="${cdk.metainf}/qsarprotein.libdepends"/>
+            	<includesfile name="${cdk.metainf}/reaction.libdepends"/>
                 <includesfile name="${cdk.metainf}/render.libdepends"/>
+            	<includesfile name="${cdk.metainf}/sdg.libdepends"/>
+            	<includesfile name="${cdk.metainf}/smarts.libdepends"/>
+            	<includesfile name="${cdk.metainf}/smiles.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
             </fileset>
         </unjar>
