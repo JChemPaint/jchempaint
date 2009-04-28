@@ -168,7 +168,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 */
 	public void loadModelFromUrl(URL fileURL) {
 		try {
-			IChemModel chemModel = JChemPaint.readFromFile(new InputStreamReader(fileURL.openStream()), fileURL.toString(), null);
+			IChemModel chemModel = JChemPaint.readFromFileReader(new InputStreamReader(fileURL.openStream()), fileURL.toString(), null);
 			theJcpp.setChemModel(chemModel);
 		} catch (Exception exception) {
 			System.out.println("Cannot parse model: " + exception.toString());

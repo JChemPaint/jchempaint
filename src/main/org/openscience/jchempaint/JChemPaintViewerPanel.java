@@ -33,7 +33,7 @@ import java.awt.ScrollPane;
 
 import org.openscience.cdk.interfaces.IChemModel;
 
-public class JChemPaintViewerPanel extends AbstractJChemPaintPanel{
+public class JChemPaintViewerPanel extends AbstractJChemPaintPanel {
 
 	/**
 	 * Builds a JCPViewerPanel with a certain model
@@ -43,11 +43,11 @@ public class JChemPaintViewerPanel extends AbstractJChemPaintPanel{
 	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen){
 		this.setLayout(new BorderLayout());
 		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen);
-		if(!fitToScreen){
+		if (!fitToScreen) {
 	        ScrollPane scroller = new ScrollPane();
 	        scroller.add(renderPanel);
 	        this.add(scroller, BorderLayout.CENTER);
-		}else{
+		} else {
 			this.add(renderPanel,BorderLayout.CENTER);
 		}
 	}

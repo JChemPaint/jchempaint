@@ -93,7 +93,7 @@ public class OpenAction extends JCPAction {
 		        int clear=jcpPanel.showWarning();
 		        if(clear==JOptionPane.YES_OPTION){
 		        	try {
-						IChemModel chemModel = JChemPaint.readFromFile(new InputStreamReader(new FileInputStream(chooser.getSelectedFile())), chooser.getSelectedFile().toURI().toString(), type);
+						IChemModel chemModel = JChemPaint.readFromFileReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile())), chooser.getSelectedFile().toURI().toString(), type);
 					    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
 						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), jcpPanel.getChemModel().getMoleculeSet(), jcpPanel.getChemModel().getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
 						    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);

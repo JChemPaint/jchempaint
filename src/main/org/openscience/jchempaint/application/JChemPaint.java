@@ -37,12 +37,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -52,18 +50,19 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -71,6 +70,7 @@ import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
+import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
@@ -181,15 +181,16 @@ public class JChemPaint {
 		showInstance(chemModel, GT._("Untitled-")+(instancecounter++));
 	}
 
-	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel){
-	    try{
-	    	IChemModel chemModel = readFromFile(new FileReader(inFile), inFile.toURI().toString(), type);
+	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel) {
+	    try {
+	    	IChemModel chemModel = JChemPaint.readFromFile(inFile, type);
 
-	        JChemPaintPanel p = showInstance(chemModel, inFile.getName());
+	    	String name = inFile.getName();
+	        JChemPaintPanel p = JChemPaint.showInstance(chemModel, name);
 	        p.setCurrentWorkDirectory(inFile.getParentFile());
 	        p.setLastOpenedFile(inFile);
 	        p.setIsAlreadyAFile(inFile);
-	    }catch(CDKException ex){
+	    } catch (CDKException ex) {
             JOptionPane.showMessageDialog(jcpPanel, ex.getMessage());
             return;
 	    } catch (FileNotFoundException e) {
@@ -198,43 +199,88 @@ public class JChemPaint {
 		}
 	}
 	
-	public static IChemModel readFromFile(Reader instream, String URL, String type) throws CDKException{
-        if (type == null) {
+	public static IChemModel readFromFileReader(
+            Reader instream, String url, String type) throws CDKException {
+	    ISimpleChemObjectReader cor = JChemPaint.createReader(instream, url, type);
+        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
+        JChemPaint.cleanUpChemModel(chemModel);
+       
+        return chemModel;
+	}
+	
+	public static IChemModel readFromFile(
+	        File file, String type) throws CDKException, FileNotFoundException {
+        Reader reader = new FileReader(file);
+        String url = file.toURI().toString();
+        ISimpleChemObjectReader cor = JChemPaint.createReader(reader, url, type);
+        
+        cor.setReader(new FileReader(file));    // hack
+        
+        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
+        JChemPaint.cleanUpChemModel(chemModel);
+       
+        return chemModel;
+	}
+	
+	private static void cleanUpChemModel(IChemModel chemModel) throws CDKException {
+	    JChemPaint.setReactionIDs(chemModel);
+        JChemPaint.replaceReferencesWithClones(chemModel);    
+        JChemPaint.removeDuplicateMolecules(chemModel);
+        
+        // check for bonds
+        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
+            throw new CDKException(
+                    "Model does not have bonds. Cannot depict contents.");
+        }
+        
+        JChemPaint.checkCoordinates(chemModel);
+        JChemPaint.removeEmptyMolecules(chemModel);
+       
+        ControllerHub.avoidOverlap(chemModel);
+	}
+	
+	private static ISimpleChemObjectReader createReader(
+	        Reader instream, String url, String type) throws CDKException {
+	    if (type == null) {
             type = "unknown";
         }
-        ISimpleChemObjectReader cor = null;
-        /*
+	    
+	    ISimpleChemObjectReader cor = null;
+	    
+	    /*
          * Have the ReaderFactory determine the file format
          */
+        cor = new MDLV2000Reader(instream, Mode.RELAXED);
         try {
             ReaderFactory factory = new ReaderFactory();
             cor = factory.createReader(instream);
             //this is a workaround for bug #2698194, since it works with url only
-            if(cor instanceof CMLReader)
-            	cor = new CMLReader(URL);
+            if (cor instanceof CMLReader) {
+                cor = new CMLReader(url);
+            }
         } catch (IOException ioExc) {
-            // we do nothing right now and hoe it still works
+            // we do nothing right now and hope it still works
         } catch (Exception exc) {
-            // we do nothing right now and hoe it still works
+            // we do nothing right now and hope it still works
         }
         if (cor == null) {
             // try to determine from user's guess
             if (type.equals(JCPFileFilter.cml)
                     || type.equals(JCPFileFilter.xml)) {
-            	//this is a workaround for bug #2698194, since it works with url only
-                cor = new CMLReader(URL);
+                //this is a workaround for bug #2698194, since it works with url only
+                cor = new CMLReader(url);
             } else if (type.equals(JCPFileFilter.sdf)) {
                 cor = new MDLV2000Reader(instream);//TODO once merged, egons new reader needs to be used here
             } else if (type.equals(JCPFileFilter.mol)) {
                 cor = new MDLV2000Reader(instream);
             } else if (type.equals(JCPFileFilter.inchi)) {
                 try {
-					cor = new INChIReader(new URL(URL).openStream());
-				} catch (MalformedURLException e) {
-					// These should not happen, since URL is built from a file before
-				} catch (IOException e) {
-					// These should not happen, since URL is built from a file before
-				}
+                    cor = new INChIReader(new URL(url).openStream());
+                } catch (MalformedURLException e) {
+                    // These should not happen, since URL is built from a file before
+                } catch (IOException e) {
+                    // These should not happen, since URL is built from a file before
+                }
             } else if (type.equals(JCPFileFilter.rxn)) {
                 cor = new MDLRXNV2000Reader(instream);
             } else if (type.equals(JCPFileFilter.smi)) {
@@ -244,8 +290,8 @@ public class JChemPaint {
         if (cor == null) {
         	throw new CDKException(GT._("Could not determine file format"));
         }
-        // this takes care of files called .mol, but having several, sdf-style
-        // entries
+        //   this takes care of files called .mol, but having several, sdf-style
+        //   entries
         if (cor instanceof MDLV2000Reader) {
             try {
                 BufferedReader in = new BufferedReader(instream);
@@ -266,14 +312,19 @@ public class JChemPaint {
                 // get here, secondly, if only this does not work, don't worry
             }
         }
-        String error = null;
+        
+        return cor;
+	}
+	
+	private static IChemModel getChemModelFromReader(
+	        ISimpleChemObjectReader cor) throws CDKException {
+	    String error = null;
         ChemModel chemModel = null;
         IChemFile chemFile = null;
         if (cor.accepts(IChemFile.class)) {
             // try to read a ChemFile
             try {
-                chemFile = (IChemFile) cor
-                        .read((IChemObject) new org.openscience.cdk.ChemFile());
+                chemFile = (IChemFile) cor.read((IChemObject) new ChemFile());
                 if (chemFile == null) {
                     error = "The object chemFile was empty unexpectedly!";
                 }
@@ -283,11 +334,12 @@ public class JChemPaint {
             }
         }
         if (error != null) {
-        	throw new CDKException(error);
+            throw new CDKException(error);
         }
         if (cor.accepts(ChemModel.class)) {
             // try to read a ChemModel
             try {
+                
                 chemModel = (ChemModel) cor.read((IChemObject) new ChemModel());
                 if (chemModel == null) {
                     error = "The object chemModel was empty unexpectedly!";
@@ -298,106 +350,127 @@ public class JChemPaint {
             }
         }
         if (error != null) {
-        	throw new CDKException(error);
+            throw new CDKException(error);
         }
         
         if (chemModel == null && chemFile != null) {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
-
-        //TODO this is a workaround for bug #2738105
-        for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)){
-        	for(IAtom atom : container.atoms()){
-        		if(atom.getPoint2d().y<0)
-        			atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
-        	}
-        }
         
-        //we give all reactions an ID, in case they have none
-        //IDs are needed for handling in JCP
-        if(chemModel.getReactionSet()!=null){
-        	int i=0;
-        	for(IReaction reaction : chemModel.getReactionSet().reactions()){
-        		if(reaction.getID()==null)
-        			reaction.setID("Reaction "+(++i));
-        	}
-        }
-        
-        //we make references in products/reactants clones, since same compounds in 
-        //different reactions need separete layout (different positions etc.)
-        if(chemModel.getReactionSet()!=null){
-	    	for(IReaction reaction : chemModel.getReactionSet().reactions()){
-	    		int i=0;
-	    		for(IAtomContainer product : reaction.getProducts().atomContainers()){
-	    			try {
-						reaction.getProducts().replaceAtomContainer(i, (IAtomContainer)product.clone());
-					} catch (CloneNotSupportedException e) {
-					}
-	    			i++;
-	    		}
-	    		i=0;
-	    		for(IAtomContainer reactant : reaction.getReactants().atomContainers()){
-	    			try {
-						reaction.getReactants().replaceAtomContainer(i, (IAtomContainer)reactant.clone());
-					} catch (CloneNotSupportedException e) {
-					}
-	    			i++;
-	    		}
-	    	}
-        }        
-        //we remove molecules which are in MoleculeSet as well as in a reaction
-        if(chemModel.getReactionSet()!=null && chemModel.getMoleculeSet()!=null){
-	    	List<IAtomContainer> aclist = ReactionSetManipulator.getAllAtomContainers(chemModel.getReactionSet());
-	        for(int i=chemModel.getMoleculeSet().getAtomContainerCount()-1;i>=0;i--){
-	        	for(int k=0;k<aclist.size();k++){
-	        		if(aclist.get(k).getID().equals(chemModel.getMoleculeSet().getAtomContainer(i).getID())){
-	        			chemModel.getMoleculeSet().removeAtomContainer(i);
-	        			break;
-	        		}
-	        	}
-	        }
-        }        
-        
-        // check for bonds
-        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
-            error = GT._("Model does not have bonds. Cannot depict contents.");
-            throw new CDKException(error);
-        }
-        // check for coordinates
-        JChemPaint.checkCoordinates(chemModel);
-        
-        if(chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainerCount()==0){
-        	chemModel.setMoleculeSet(null);
-        }
-		ControllerHub.avoidOverlap(chemModel);
         return chemModel;
 	}
+	
+	private static void setReactionIDs(IChemModel chemModel) {
+	    // we give all reactions an ID, in case they have none
+        // IDs are needed for handling in JCP
+        IReactionSet reactionSet = chemModel.getReactionSet(); 
+        if (reactionSet != null) {
+            int i = 0;
+            for (IReaction reaction : reactionSet.reactions()) {
+                if (reaction.getID() == null)
+                    reaction.setID("Reaction " + (++i));
+            }
+        }
+	}
+	
+	private static void replaceReferencesWithClones(
+	        IChemModel chemModel) throws CDKException {
+	 // we make references in products/reactants clones, since same compounds 
+     // in different reactions need separate layout (different positions etc)
+        if (chemModel.getReactionSet() != null) {
+            for (IReaction reaction : chemModel.getReactionSet().reactions()) {
+                int i = 0;
+                IMoleculeSet products = reaction.getProducts();
+                for (IAtomContainer product : products.atomContainers()) {
+                    try {
+                        products.replaceAtomContainer(
+                                i, (IAtomContainer)product.clone());
+                    } catch (CloneNotSupportedException e) {
+                    }
+                    i++;
+                }
+                i = 0;
+                IMoleculeSet reactants = reaction.getReactants();
+                for (IAtomContainer reactant : reactants.atomContainers()) {
+                    try {
+                        reactants.replaceAtomContainer(
+                                i, (IAtomContainer)reactant.clone());
+                    } catch (CloneNotSupportedException e) {
+                    }
+                    i++;
+                }
+            }
+        }
 
-	private static void checkCoordinates(IChemModel chemModel) throws CDKException{
-		List<IAtomContainer> acs = ChemModelManipulator.getAllAtomContainers(chemModel);
-		Iterator<IAtomContainer> it = acs.iterator();
-		while(it.hasNext()){
-			if(GeometryTools.has2DCoordinatesNew(it.next())!=2){
-		        String error = GT._("Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?");
-		        int answer = JOptionPane.showConfirmDialog(null, error, GT._("No 2D coordinates"), JOptionPane.YES_NO_OPTION);
-		        if(answer==JOptionPane.NO_OPTION){
-		        	throw new CDKException(GT._("Cannot display without 2D coordinates"));
-		        }else{
-			        CreateCoordinatesForFileDialog frame = new CreateCoordinatesForFileDialog(chemModel);
+        // check for bonds
+        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
+            throw new CDKException(
+                    GT._("Model does not have bonds. Cannot depict contents."));
+        }
+	}
+	
+	private static void removeDuplicateMolecules(IChemModel chemModel) {
+	  //we remove molecules which are in MoleculeSet as well as in a reaction
+        IReactionSet reactionSet = chemModel.getReactionSet();
+        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        if (reactionSet != null && moleculeSet != null) {
+            List<IAtomContainer> aclist = 
+                ReactionSetManipulator.getAllAtomContainers(reactionSet);
+            for (int i = moleculeSet.getAtomContainerCount() - 1; i >= 0; i--) {
+                for (int k = 0; k < aclist.size(); k++) {
+                    String label = moleculeSet.getAtomContainer(i).getID(); 
+                    if (aclist.get(k).getID().equals(label)) {
+                        chemModel.getMoleculeSet().removeAtomContainer(i);
+                        break;
+                    }
+                }
+            }
+        }      
+	}
+	
+	private static void removeEmptyMolecules(IChemModel chemModel) {
+	    IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        if (moleculeSet != null && moleculeSet.getAtomContainerCount() == 0) {
+            chemModel.setMoleculeSet(null);
+        }
+	}
+
+	private static void checkCoordinates(IChemModel chemModel) throws CDKException {
+		for (IAtomContainer next : 
+		    ChemModelManipulator.getAllAtomContainers(chemModel)) {
+			if (GeometryTools.has2DCoordinatesNew(next) != 2) {
+		        String error = GT._("Not all atoms have 2D coordinates." +
+		        		" JCP can only show full 2D specified structures." +
+		        		" Shall we lay out the structure?");
+		        int answer = 
+		            JOptionPane.showConfirmDialog(null, 
+		                                          error,
+		                                          "No 2D coordinates", 
+		                                          JOptionPane.YES_NO_OPTION);
+		        
+		        if (answer == JOptionPane.NO_OPTION) {
+		        	throw new CDKException(
+		        	        GT._("Cannot display without 2D coordinates"));
+		        } else {
+			        CreateCoordinatesForFileDialog frame = 
+			            new CreateCoordinatesForFileDialog(chemModel);
 			        frame.pack();
 			        frame.show();
 			        return;
 		        }
 			}
 		}
-		//add implicit hydrogens (in ControllerParameters, autoUpdateImplicitHydrogens is true by default, so we need to do that anyway)
-    	CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(chemModel.getBuilder());
-        Iterator<IAtomContainer> mols = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
-        while (mols.hasNext())
-        {
-            org.openscience.cdk.interfaces.IMolecule molecule = (IMolecule)mols.next();
-            if (molecule != null)
-            {
+		
+		/*
+         * Add implicit hydrogens (in ControllerParameters,
+         * autoUpdateImplicitHydrogens is true by default, so we need to do that
+         * anyway)
+         */
+    	CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(
+    	        chemModel.getBuilder());
+        for (IAtomContainer molecule : 
+            ChemModelManipulator.getAllAtomContainers(chemModel)) {
+            if (molecule != null) {
                try {
             	   hAdder.addImplicitHydrogens(molecule);
                } catch (CDKException e) {
@@ -406,7 +479,6 @@ public class JChemPaint {
             }
         }
 	}
-	
 
 	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
 		JFrame f = new JFrame(title);
