@@ -50,10 +50,11 @@ public class JCPSaveFileFilter extends JCPFileFilter {
 
     /**
      * Adds the JCPFileFilter to the JFileChooser object.
-     * TODO why only these? what about e. g. rxn?
+     * TODO why only these?
      */
     public static void addChoosableFileFilters(JFileChooser chooser) {
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.mol));
+        chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rxn));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.smiles));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.cdk));
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.cml));

@@ -42,16 +42,19 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.Reaction;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
+import org.openscience.cdk.io.MDLRXNWriter;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.io.IJCPFileFilter;
@@ -103,8 +106,8 @@ public class SaveAsAction extends JCPAction
 		IChemModel jcpm = jcpPanel.getChemModel();
 		if (jcpm == null)
 		{
-			String error = "Nothing to save.";
-			JOptionPane.showMessageDialog(jcpPanel, error);
+			String error = GT._("Nothing to save.");
+			JOptionPane.showMessageDialog(jcpPanel, error,error,JOptionPane.WARNING_MESSAGE);
 		} else
 		{
 			saveAs(event);
@@ -153,7 +156,7 @@ public class SaveAsAction extends JCPAction
 					
 					if (object == null)
 					{
-						// called from main menu
+						// called from main menu, only possibility
 						try
 						{
 							if (type.equals(JCPSaveFileFilter.mol))
@@ -168,6 +171,9 @@ public class SaveAsAction extends JCPAction
 							} else if (type.equals(JCPSaveFileFilter.cdk))
 							{
 								outFile = saveAsCDKSourceCode(model, outFile);
+							} else if (type.equals(JCPSaveFileFilter.rxn))
+							{
+								outFile = saveAsRXN(model, outFile);
 							} else
 							{
 								String error = "Cannot save file in this format: " + type;
@@ -183,40 +189,48 @@ public class SaveAsAction extends JCPAction
 							logger.debug(exc);
 							JOptionPane.showMessageDialog(jcpPanel, error);
 						}
-		
-					} else if (object instanceof Reaction)
-					{
-						try
-						{
-							if (type.equals(JCPSaveFileFilter.cml))
-							{
-								outFile = saveAsCML2(object, outFile);
-							} else
-							{
-								String error = "Cannot save reaction in this format: " + type;
-								logger.error(error);
-								JOptionPane.showMessageDialog(jcpPanel, error);
-							}
-							jcpPanel.setModified(false);
-						} catch (Exception exc)
-						{
-							String error = "Error while writing file: " + exc.getMessage();
-							logger.error(error);
-							logger.debug(exc);
-							JOptionPane.showMessageDialog(jcpPanel, error);
-						}
 					}
 					jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());
 					jcpPanel.setCurrentSaveFileFilter(chooser.getFileFilter());
 					jcpPanel.setIsAlreadyAFile(outFile);
-					jcpPanel.getChemModel().setID(outFile.getName());
-					jcpPanel.setTitle(outFile.getName());
+					if(outFile!=null){
+						jcpPanel.getChemModel().setID(outFile.getName());
+						jcpPanel.setTitle(outFile.getName());
+					}
 				}
 			}
 		}
 	}
 
-    private boolean askIOSettings() {
+    protected File saveAsRXN(IChemModel model, File outFile) throws IOException, CDKException {
+    	if(model.getMoleculeSet()!=null && model.getMoleculeSet().getAtomContainerCount()>0){
+			String error = GT._("Problems handling data");
+			String message = GT._("RXN files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?");
+			int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
+			if(answer == JOptionPane.NO_OPTION)
+				return null;
+    	}
+    	if(model.getReactionSet()==null || model.getReactionSet().getReactionCount()==0){
+			String error = GT._("Problems handling data");
+			String message = GT._("RXN can only save reactions. You have no reactions painted!");
+			JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
+			return null;
+    	}
+		logger.info("Saving the contents in an rxn file...");
+        String fileName = outFile.toString();
+        if (!fileName.endsWith(".rxn")) {
+            fileName += ".rxn";
+            outFile = new File(fileName);
+        }
+        outFile=new File(fileName);
+        cow = new MDLRXNWriter(new FileWriter(outFile));
+		cow.write(model.getReactionSet());
+		cow.close();
+		jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+		return outFile;
+	}
+
+	private boolean askIOSettings() {
         return JCPPropertyHandler.getInstance().getJCPProperties()
             .getProperty("askForIOSettings", "true").equals("true");
     }
@@ -224,6 +238,19 @@ public class SaveAsAction extends JCPAction
 	protected File saveAsMol(IChemModel model, File outFile) throws Exception
 	{
 		logger.info("Saving the contents in a MDL molfile file...");
+    	if(model.getMoleculeSet()==null || model.getMoleculeSet().getAtomContainerCount()==0){
+			String error = GT._("Problems handling data");
+			String message = GT._("MDL mol files can only save separate molecules. You have no molecules painted!");
+			JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
+			return null;
+    	}
+    	if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
+			String error = GT._("Problems handling data");
+			String message = GT._("MDL mol files cannot contain reactions. Your have reaction(s) painted, which will not be in the file. Continue?");
+			int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
+			if(answer == JOptionPane.NO_OPTION)
+				return null;
+    	}
         String fileName = outFile.toString();
         if (!fileName.endsWith(".mol")) {
             fileName += ".mol";
@@ -270,6 +297,13 @@ public class SaveAsAction extends JCPAction
 	protected File saveAsSMILES(IChemModel model, File outFile) throws Exception
 	{
 		logger.info("Saving the contents in SMILES format...");
+    	if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
+			String error = GT._("Problems handling data");
+			String message = GT._("SMILES files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
+			int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
+			if(answer == JOptionPane.NO_OPTION)
+				return null;
+    	}
         String fileName = outFile.toString();
         if (!fileName.endsWith(".smi")) {
             fileName += ".smi";
@@ -280,7 +314,11 @@ public class SaveAsAction extends JCPAction
 		{
 			cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
 		}
-		org.openscience.cdk.interfaces.IMoleculeSet som = model.getMoleculeSet();
+		Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
+		org.openscience.cdk.interfaces.IMoleculeSet som = model.getBuilder().newMoleculeSet();
+		while (containers.hasNext()) {
+			som.addAtomContainer(containers.next());
+		}		
 		cow.write(som);
 		cow.close();
 		jcpPanel.setTitle(jcpPanel.getChemModel().getID());
