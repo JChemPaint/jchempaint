@@ -81,7 +81,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			+ "for more information";
 
 	private static String[][] paramInfo = {
-			{ "background", "color", 	"Background color as integer" },
+			{ "background", "color", 	"Background color as integer or hex starting with #" },
 			{ "atomNumbersVisible", "true or false", "should atom numbers be shown"},
 			{ "load", "url", "URL of the chemical data" },
 			{ "compact", "true or false", "compact means elements shown as dots, no figures etc. (default false)"},
