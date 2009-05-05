@@ -41,7 +41,7 @@ import org.openscience.cdk.interfaces.IAtom;
  */
 public class SwingChangeHydrogenCountEdit extends ChangeHydrogenCountEdit implements UndoableEdit{
 
-	public SwingChangeHydrogenCountEdit(Map<IAtom, int[]> atomCoordsMap, String type) {
+	public SwingChangeHydrogenCountEdit(Map<IAtom, Integer[]> atomCoordsMap, String type) {
 		super(atomCoordsMap, type);
 	}
 

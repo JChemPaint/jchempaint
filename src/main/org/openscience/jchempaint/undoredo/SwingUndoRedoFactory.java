@@ -123,7 +123,7 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getChangeHydrogenCountEdit(
-			Map<IAtom, int[]> atomHydrogenCountsMap, String type) {
+			Map<IAtom, Integer[]> atomHydrogenCountsMap, String type) {
 		return new SwingChangeHydrogenCountEdit(atomHydrogenCountsMap, type);
 	}
 
