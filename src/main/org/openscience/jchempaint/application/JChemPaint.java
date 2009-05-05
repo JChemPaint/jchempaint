@@ -31,6 +31,7 @@ package org.openscience.jchempaint.application;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -214,7 +215,10 @@ public class JChemPaint {
         String url = file.toURI().toString();
         ISimpleChemObjectReader cor = JChemPaint.createReader(reader, url, type);
         
-        cor.setReader(new FileReader(file));    // hack
+        if(cor instanceof CMLReader)
+        	cor.setReader(new FileInputStream(file));    // hack
+        else
+        	cor.setReader(new FileReader(file));    // hack
         
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
         JChemPaint.cleanUpChemModel(chemModel);
