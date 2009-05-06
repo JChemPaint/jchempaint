@@ -199,6 +199,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             else
                 rendererModel.setBackColor(new Color(Integer
                         .parseInt(background)));
+            theJcpp.getRenderPanel().setBackground(rendererModel.getBackColor());
         }
 		
 		if (getParameter("compact") != null

@@ -132,7 +132,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
 
-		this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
+		if(this.renderer==null)
+			this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
 
@@ -171,7 +172,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	}
 
 	private void setupPanel(int width, int height) {
-		this.setBackground(Color.WHITE);
+		this.setBackground(renderer.getRenderer2DModel().getBackColor());
 		this.setPreferredSize(new Dimension(width, height));
 	}
 
