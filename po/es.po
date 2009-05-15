@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-14 17:31+0100\n"
-"PO-Revision-Date: 2009-04-14 21:41+0100\n"
+"PO-Revision-Date: 2009-05-15 22:10+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -13,9 +13,74 @@ msgstr ""
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/main/org/openscience/jchempaint/application/JChemPaint.java:179
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:93
+msgid "Could not determine JCP version"
+msgstr "No se ha podido determinar la versión de JCP"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:98
+msgid "WARNING: JChemPaint"
+msgstr "Advertencia: JChemPaint"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:98
+msgid "must be run with a Java VM version"
+msgstr "debe ejecutarse con una versión de Máquina Virtual de Java"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:99
+msgid "or higher."
+msgstr "o superior."
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:100
+msgid "Your JVM version"
+msgstr "Su versión de JVM"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:105
+msgid "gives this help page"
+msgstr "muestra esta página de ayuda"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:106
+msgid "gives JChemPaints version number"
+msgstr "proporciona el número de versión de JChemPaint"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:111
+msgid "supported options are given below"
+msgstr "las opciones admitidas se muestran a continuación"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:164
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:196
+msgid "File does not exist"
+msgstr "El archivo no existe"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:181
 msgid "Untitled-"
 msgstr "Sin título - "
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:245
+msgid "Could not determine file format"
+msgstr "No se ha podido determinar el formato del archivo"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:255
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Al parecer, se ha abierto un archivo mol o sdf que contiene varias moléculas. Sólo se mostrará la primera."
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:259
+msgid "sdf-like file"
+msgstr "Archivo similar a sdf"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:363
+msgid "Model does not have bonds. Cannot depict contents."
+msgstr "El modelo no tiene enlaces. No es posible trazar el contenido."
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:381
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:382
+msgid "No 2D coordinates"
+msgstr "No hay coordenadas 2D"
+
+#: src/main/org/openscience/jchempaint/application/JChemPaint.java:384
+msgid "Cannot display without 2D coordinates"
+msgstr "No es posible trazar sin coordenadas 2D."
 
 #: src/main/org/openscience/jchempaint/InsertTextPanel.java:90
 msgid "Enter a CAS, SMILES or InChI string"
@@ -766,15 +831,15 @@ msgstr "No hay reacciones, por lo que no es posible añadir."
 msgid "No existing reactions"
 msgstr "No hay reacciones"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:439
+#: src/main/org/openscience/jchempaint/RenderPanel.java:382
 msgid "Zoomfactor"
 msgstr "Escala"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:453
+#: src/main/org/openscience/jchempaint/RenderPanel.java:396
 msgid "Hs implicit"
 msgstr "H implícitos"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:454
+#: src/main/org/openscience/jchempaint/RenderPanel.java:397
 msgid "mass"
 msgstr "masa"
 
@@ -1351,13 +1416,4 @@ msgstr "Identificador químico de IUPAC"
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:179
 msgid "Change drawing symbol to"
 msgstr "Cambiar el símbolo de dibujo a"
-
-#~ msgid "Cut Bond"
-#~ msgstr "Cortar enlace"
-#~ msgid "of these"
-#~ msgstr "de estos"
-#~ msgid "Modify Renderer2D Options Dialog"
-#~ msgstr "Modificar el diálogo de opciones de trazado 2D"
-#~ msgid "Show implicit hydrogens if atom symbol is shown"
-#~ msgstr "Mostrar los hidrógenos implícitos si se muestra el símbolo atómico"
 
