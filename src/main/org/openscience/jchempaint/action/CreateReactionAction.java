@@ -97,6 +97,7 @@ public class CreateReactionAction extends JCPAction
 			if ("addReactantToNew".equals(type))
 			{
 				hub.makeReactantInNewReaction(newContainer, container);
+				this.jcpPanel.atomAtomMappingButton.setEnabled(true);
 			} else if ("addReactantToExisting".equals(type))
 			{
 				if (reactionSet.getReactionCount() == 0)
@@ -108,7 +109,9 @@ public class CreateReactionAction extends JCPAction
 				{
 					Object[] ids = getReactionIDs(reactionSet);
 					
-					String s = (String) JOptionPane.showInputDialog(
+					String s = (String)ids[0];
+					if(ids.length>1){
+						s = (String) JOptionPane.showInputDialog(
 							null,
 							"Reaction Chooser",
 							"Choose reaction to add reaction to",
@@ -117,9 +120,11 @@ public class CreateReactionAction extends JCPAction
 							ids,
 							ids[0]
 							);
+					}
 					if ((s != null) && (s.length() > 0))
 					{
 						hub.makeReactantInExistingReaction(s, newContainer, container);
+						this.jcpPanel.atomAtomMappingButton.setEnabled(true);
 					} else
 					{
 						logger.error("No reaction selected");
@@ -128,6 +133,7 @@ public class CreateReactionAction extends JCPAction
 			} else if ("addProductToNew".equals(type))
 			{
 				hub.makeProductInNewReaction(newContainer, container);
+				this.jcpPanel.atomAtomMappingButton.setEnabled(true);
 			} else if ("addProductToExisting".equals(type))
 			{
 				if (reactionSet.getReactionCount() == 0)
@@ -138,7 +144,9 @@ public class CreateReactionAction extends JCPAction
 				} else
 				{
 					Object[] ids = getReactionIDs(reactionSet);
-					String s = (String) JOptionPane.showInputDialog(
+					String s = (String)ids[0];
+					if(ids.length>1){
+						s = (String) JOptionPane.showInputDialog(
 							null,
                             "Reaction Chooser",
 							"Choose reaction to add reaction to",
@@ -147,10 +155,12 @@ public class CreateReactionAction extends JCPAction
 							ids,
 							ids[0]
 							);
+					}
 
 					if ((s != null) && (s.length() > 0))
 					{
 						hub.makeProductInExistingReaction(s, newContainer, container);
+						this.jcpPanel.atomAtomMappingButton.setEnabled(true);
 					} else
 					{
 						logger.error("No reaction selected");

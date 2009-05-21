@@ -38,6 +38,7 @@ import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.controller.AddBondModule;
 import org.openscience.cdk.controller.AddRingModule;
 import org.openscience.cdk.controller.AlterBondStereoModule;
+import org.openscience.cdk.controller.AtomAtomMappingModule;
 import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.CycleSymbolModule;
@@ -122,6 +123,9 @@ public class ChangeModeAction extends JCPAction {
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("benzene")) {
             hub.setActiveDrawModule(new AddRingModule(hub, 6, true));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("atomatommapping")) {
+            hub.setActiveDrawModule(new AtomAtomMappingModule(hub));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.length() == 1 || type.length() == 2) {
             // I assume something with length of 1 is an atom name

@@ -103,6 +103,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     protected JButton moveButton = null;
     protected JButton undoButton;
     protected JButton redoButton;
+	public JButton atomAtomMappingButton;
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
     private LoggingTool logger = new LoggingTool(this);

@@ -141,10 +141,7 @@ public class JCPToolBar
 				{
 					astr = key;
 				}
-				//FIXME: make it choose the correct controller?
-				System.out.println("astr: " + astr + " key: " + key);
 				JCPAction a = new JCPAction().getAction(chemPaintPanel, astr);
-				//JCPActionChangeMode a = new JCPActionChangeMode(chemPaintPanel, key);
 				if (a != null)
 				{
 					b.setActionCommand(astr);
@@ -169,7 +166,6 @@ public class JCPToolBar
 					logger.debug(e);
 				}
 		}else{
-			//FIXME: make the correct actionlistener for the atom types? or whatever these are....
 			b=new JButton(key);
 			ChangeModeAction a = new ChangeModeAction ();
 			a.setJChemPaintPanel(chemPaintPanel);
@@ -189,6 +185,10 @@ public class JCPToolBar
 			chemPaintPanel.redoButton=b;
 		if(key.equals("undo"))
 			chemPaintPanel.undoButton=b;
+		if(key.equals("atomatommapping")){
+			chemPaintPanel.atomAtomMappingButton=b;
+			b.setEnabled(false);
+		}
 		return b;
 	}
 
