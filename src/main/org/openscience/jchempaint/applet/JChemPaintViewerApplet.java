@@ -41,7 +41,7 @@ public class JChemPaintViewerApplet extends JChemPaintAbstractApplet{
 		}
 		JChemPaintViewerPanel p
 		    = new JChemPaintViewerPanel(
-		            new ChemModel(), getWidth(), getHeight(), fitToScreen);	
+		            new ChemModel(), getWidth(), getHeight(), fitToScreen, debug);	
 		setTheJcpp(p);
 		this.add(p);
 		super.init();

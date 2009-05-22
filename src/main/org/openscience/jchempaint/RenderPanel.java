@@ -99,9 +99,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private boolean shouldPaintFromCache = false;
 
 	private UndoManager undoManager=new UndoManager();
+	
+	private boolean debug=false;
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
-            boolean fitToScreen) {
+            boolean fitToScreen, boolean debug) {
+		this.debug = debug;
 		this.setupMachinery(chemModel, fitToScreen);
 		this.setupPanel(width, height);
 		this.fitToScreen = fitToScreen;
@@ -156,7 +159,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	private List<IGenerator> makeGenerators() {
 	    List<IGenerator> generators = new ArrayList<IGenerator>();
-	    generators.add(new AtomContainerBoundsGenerator());
+	    if(debug)
+	    	generators.add(new AtomContainerBoundsGenerator());
 	    generators.add(new RingGenerator());
         generators.add(new BasicAtomGenerator());
         generators.add(new LonePairGenerator());

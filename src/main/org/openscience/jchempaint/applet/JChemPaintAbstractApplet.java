@@ -76,6 +76,7 @@ import org.openscience.jchempaint.application.JChemPaint;
 public abstract class JChemPaintAbstractApplet extends JApplet {
 	private AbstractJChemPaintPanel theJcpp = null;
 	private JExternalFrame jexf;
+	protected boolean debug=false;
 
 	private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
 			+ "for more information";
@@ -92,7 +93,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 			{ "smiles", "string", "a structure to load as smiles"},
 			{ "scrollbars", "true or false", "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet"},
 			{ "dotranslate", "true or false", "should user interface be translated (default) or not (e. g. if you want an English-only webpage)"},
-			{ "detachable", "true or false", "should the applet be detacheable by a double click (default false)"}
+			{ "detachable", "true or false", "should the applet be detacheable by a double click (default false)"},
+			{ "debug", "true or false", "switches on debug output (default false)"}
 	};
 
 	@Override
@@ -230,6 +232,12 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 		if(getParameter("dotranslate") != null && getParameter("dotranslate").equals("false")){
 			GT.setDoTranslate(false);
 		}
+		
+		if (getParameter("debug") != null
+                && getParameter("debug").equals("true")) {
+			this.debug=true;
+		}
+
 		
 		if (getParameter("impliciths") != null 
 		        && getParameter("impliciths").equals("false")) {

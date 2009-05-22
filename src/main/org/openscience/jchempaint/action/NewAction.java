@@ -56,7 +56,7 @@ public class NewAction extends JCPAction {
         	jcpPanel.get2DHub().updateView();
          }
       }else{
-		JChemPaint.showEmptyInstance();
+		JChemPaint.showEmptyInstance(jcpPanel.isDebug());
       }
     }
 }

@@ -34,7 +34,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
 	public static final String GUI_APPLET="applet";
 	public void init() {
-		JChemPaintPanel p = new JChemPaintPanel(new ChemModel(),GUI_APPLET,2);
+		JChemPaintPanel p = new JChemPaintPanel(new ChemModel(),GUI_APPLET,2,debug);
 		p.setShowInsertTextField(false);
 		p.setShowStatusBar(false);
 		setTheJcpp(p);

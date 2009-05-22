@@ -112,7 +112,7 @@ public class OpenAction extends JCPAction {
 					}
 		        }
 		    }else{
-		    	JChemPaint.showInstance(chooser.getSelectedFile(),type, jcpPanel);
+		    	JChemPaint.showInstance(chooser.getSelectedFile(),type, jcpPanel, jcpPanel.isDebug());
 		    }
 		}
 	}

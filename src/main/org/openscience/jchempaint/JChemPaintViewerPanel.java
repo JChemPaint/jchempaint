@@ -40,9 +40,9 @@ public class JChemPaintViewerPanel extends AbstractJChemPaintPanel {
 	 *  
 	 * @param chemModel The model
 	 */
-	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen){
+	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen, boolean debug){
 		this.setLayout(new BorderLayout());
-		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen);
+		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen, debug);
 		if (!fitToScreen) {
 	        ScrollPane scroller = new ScrollPane();
 	        scroller.add(renderPanel);

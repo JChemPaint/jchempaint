@@ -107,12 +107,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
     private LoggingTool logger = new LoggingTool(this);
+    private boolean debug=false;
 
-    public JChemPaintPanel(IChemModel chemModel, String gui) {
-        this(chemModel, gui, 1);
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug) {
+        this(chemModel, gui, 1, debug);
     }
 
-    /**
+	/**
      * Builds a JCPPanel with a certain model and a certain gui
      * 
      * @param chemModel
@@ -120,14 +121,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param gui
      *            The gui string
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, int lines) {
+    public JChemPaintPanel(IChemModel chemModel, String gui, int lines, boolean debug) {
         this.lines = lines;
         this.guistring = gui;
+        this.debug = debug;
         this.setLayout(new BorderLayout());
         topContainer = new JPanel(new BorderLayout());
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
-        renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false);
+        renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
         this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
 
         customizeView();
@@ -669,4 +671,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     public void zoomChanged() {
         this.updateStatusBar();
     }
+
+    /**
+     * Tells if debug output is desired or not.
+     * 
+     * @return debug output or not.
+     */
+    public boolean isDebug() {
+		return debug;
+	}
 }

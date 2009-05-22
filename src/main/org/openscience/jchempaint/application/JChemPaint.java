@@ -105,6 +105,7 @@ public class JChemPaint {
 			Options options = new Options();
 			options.addOption("h", "help", false, GT._("gives this help page"));
 			options.addOption("v", "version", false, GT._("gives JChemPaints version number"));
+			options.addOption("d", "debug", false, "switches on various debug options");
 			options.addOption(
 					OptionBuilder.withArgName("property=value").
 					hasArg().
@@ -152,6 +153,11 @@ public class JChemPaint {
 
 				System.exit(0);
 			}
+			boolean debug = false;
+			if (line.hasOption("d"))
+			{
+				debug=true;
+			}
 
 			// Process command line arguments
 			String modelFilename = "";
@@ -165,9 +171,9 @@ public class JChemPaint {
 					System.err.println(GT._("File does not exist")+": " + modelFilename);
 					System.exit(-1);
 				}
-				showInstance(file,null,null);
+				showInstance(file,null,null,debug);
 			}else{
-				showEmptyInstance();
+				showEmptyInstance(debug);
 			}
 
 		} catch (Throwable t)
@@ -177,17 +183,17 @@ public class JChemPaint {
 		}
 	}
 	
-	public static void showEmptyInstance() {
+	public static void showEmptyInstance(boolean debug) {
 		IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
-		showInstance(chemModel, GT._("Untitled-")+(instancecounter++));
+		showInstance(chemModel, GT._("Untitled-")+(instancecounter++), debug);
 	}
 
-	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel) {
+	public static void showInstance(File inFile, String type, JChemPaintPanel jcpPanel, boolean debug) {
 	    try {
 	    	IChemModel chemModel = JChemPaint.readFromFile(inFile, type);
 
 	    	String name = inFile.getName();
-	        JChemPaintPanel p = JChemPaint.showInstance(chemModel, name);
+	        JChemPaintPanel p = JChemPaint.showInstance(chemModel, name, debug);
 	        p.setCurrentWorkDirectory(inFile.getParentFile());
 	        p.setLastOpenedFile(inFile);
 	        p.setIsAlreadyAFile(inFile);
@@ -484,12 +490,12 @@ public class JChemPaint {
         }
 	}
 
-	public static JChemPaintPanel showInstance(IChemModel chemModel, String title){
+	public static JChemPaintPanel showInstance(IChemModel chemModel, String title, boolean debug){
 		JFrame f = new JFrame(title);
 		chemModel.setID(title);
 		f.addWindowListener(new JChemPaintPanel.AppCloser());
 		f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		JChemPaintPanel p = new JChemPaintPanel(chemModel,"stable");
+		JChemPaintPanel p = new JChemPaintPanel(chemModel,"stable", debug);
 		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
 		f.pack();
