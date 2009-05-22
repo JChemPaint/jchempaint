@@ -54,6 +54,7 @@ import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -273,6 +274,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         }
 
         moleculeSet.addMolecule(molecule);
+        ControllerHub.avoidOverlap(chemModel);
         jChemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
         jChemPaintPanel.get2DHub().updateView();
     }
