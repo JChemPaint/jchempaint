@@ -50,6 +50,7 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
 import org.openscience.cdk.controller.IViewEventRelay;
+import org.openscience.cdk.controller.PhantomBondGenerator;
 import org.openscience.cdk.controller.SwingMouseEventRelay;
 import org.openscience.cdk.controller.undoredo.IUndoListener;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
@@ -101,6 +102,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private UndoManager undoManager=new UndoManager();
 	
 	private boolean debug=false;
+	
+	private PhantomBondGenerator pbg = new PhantomBondGenerator();
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen, boolean debug) {
@@ -148,6 +151,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		                             this,
 		                             undoredohandler,
 		                             new SwingUndoRedoFactory());
+        pbg.setControllerHub(hub);
 
 		// connect mouse events from Panel to the Hub
 		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -171,6 +175,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         generators.add(new SelectAtomGenerator());
         generators.add(new SelectBondGenerator());
         generators.add(new MergeAtomsGenerator());
+        generators.add(pbg);
         return generators;
 	}
 

@@ -35,7 +35,7 @@ import java.util.EventObject;
 import javax.swing.JComponent;
 
 import org.openscience.cdk.controller.AddAtomModule;
-import org.openscience.cdk.controller.AddBondModule;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.controller.AddRingModule;
 import org.openscience.cdk.controller.AlterBondStereoModule;
 import org.openscience.cdk.controller.AtomAtomMappingModule;
@@ -74,7 +74,7 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("minus")) {
             hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, -1));
         } else if (type.equals("bond")) {
-            hub.setActiveDrawModule(new AddBondModule(hub));
+            hub.setActiveDrawModule(new AddBondDragModule(hub));
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("cyclesymbol")) {
             hub.setActiveDrawModule(new CycleSymbolModule(hub));
