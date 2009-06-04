@@ -29,6 +29,8 @@
 package org.openscience.jchempaint.application;
 
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,9 +83,9 @@ import org.openscience.jchempaint.dialog.CreateCoordinatesForFileDialog;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
-	
+
 	public static int instancecounter=1;
-	
+
 	@SuppressWarnings("static-access")
     public static void main(String[] args) {
 		try
@@ -182,7 +184,7 @@ public class JChemPaint {
 			t.printStackTrace(System.err);
 		}
 	}
-	
+
 	public static void showEmptyInstance(boolean debug) {
 		IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
 		showInstance(chemModel, GT._("Untitled-")+(instancecounter++), debug);
@@ -205,58 +207,58 @@ public class JChemPaint {
             return;
 		}
 	}
-	
+
 	public static IChemModel readFromFileReader(
             Reader instream, String url, String type) throws CDKException {
 	    ISimpleChemObjectReader cor = JChemPaint.createReader(instream, url, type);
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
         JChemPaint.cleanUpChemModel(chemModel);
-       
+
         return chemModel;
 	}
-	
+
 	public static IChemModel readFromFile(
 	        File file, String type) throws CDKException, FileNotFoundException {
         Reader reader = new FileReader(file);
         String url = file.toURI().toString();
         ISimpleChemObjectReader cor = JChemPaint.createReader(reader, url, type);
-        
+
         if(cor instanceof CMLReader)
         	cor.setReader(new FileInputStream(file));    // hack
         else
         	cor.setReader(new FileReader(file));    // hack
-        
+
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
         JChemPaint.cleanUpChemModel(chemModel);
-       
+
         return chemModel;
 	}
-	
+
 	private static void cleanUpChemModel(IChemModel chemModel) throws CDKException {
 	    JChemPaint.setReactionIDs(chemModel);
-        JChemPaint.replaceReferencesWithClones(chemModel);    
+        JChemPaint.replaceReferencesWithClones(chemModel);
         JChemPaint.removeDuplicateMolecules(chemModel);
-        
+
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {
             throw new CDKException(
                     "Model does not have bonds. Cannot depict contents.");
         }
-        
+
         JChemPaint.checkCoordinates(chemModel);
         JChemPaint.removeEmptyMolecules(chemModel);
-       
+
         ControllerHub.avoidOverlap(chemModel);
 	}
-	
+
 	private static ISimpleChemObjectReader createReader(
 	        Reader instream, String url, String type) throws CDKException {
 	    if (type == null) {
             type = "unknown";
         }
-	    
+
 	    ISimpleChemObjectReader cor = null;
-	    
+
 	    /*
          * Have the ReaderFactory determine the file format
          */
@@ -322,10 +324,10 @@ public class JChemPaint {
                 // get here, secondly, if only this does not work, don't worry
             }
         }
-        
+
         return cor;
 	}
-	
+
 	private static IChemModel getChemModelFromReader(
 	        ISimpleChemObjectReader cor) throws CDKException {
 	    String error = null;
@@ -349,7 +351,7 @@ public class JChemPaint {
         if (cor.accepts(ChemModel.class)) {
             // try to read a ChemModel
             try {
-                
+
                 chemModel = (ChemModel) cor.read((IChemObject) new ChemModel());
                 if (chemModel == null) {
                     error = "The object chemModel was empty unexpectedly!";
@@ -362,18 +364,18 @@ public class JChemPaint {
         if (error != null) {
             throw new CDKException(error);
         }
-        
+
         if (chemModel == null && chemFile != null) {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
-        
+
         return chemModel;
 	}
-	
+
 	private static void setReactionIDs(IChemModel chemModel) {
 	    // we give all reactions an ID, in case they have none
         // IDs are needed for handling in JCP
-        IReactionSet reactionSet = chemModel.getReactionSet(); 
+        IReactionSet reactionSet = chemModel.getReactionSet();
         if (reactionSet != null) {
             int i = 0;
             for (IReaction reaction : reactionSet.reactions()) {
@@ -382,10 +384,10 @@ public class JChemPaint {
             }
         }
 	}
-	
+
 	private static void replaceReferencesWithClones(
 	        IChemModel chemModel) throws CDKException {
-	 // we make references in products/reactants clones, since same compounds 
+	 // we make references in products/reactants clones, since same compounds
      // in different reactions need separate layout (different positions etc)
         if (chemModel.getReactionSet() != null) {
             for (IReaction reaction : chemModel.getReactionSet().reactions()) {
@@ -418,26 +420,26 @@ public class JChemPaint {
                     GT._("Model does not have bonds. Cannot depict contents."));
         }
 	}
-	
+
 	private static void removeDuplicateMolecules(IChemModel chemModel) {
 	  //we remove molecules which are in MoleculeSet as well as in a reaction
         IReactionSet reactionSet = chemModel.getReactionSet();
         IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         if (reactionSet != null && moleculeSet != null) {
-            List<IAtomContainer> aclist = 
+            List<IAtomContainer> aclist =
                 ReactionSetManipulator.getAllAtomContainers(reactionSet);
             for (int i = moleculeSet.getAtomContainerCount() - 1; i >= 0; i--) {
                 for (int k = 0; k < aclist.size(); k++) {
-                    String label = moleculeSet.getAtomContainer(i).getID(); 
+                    String label = moleculeSet.getAtomContainer(i).getID();
                     if (aclist.get(k).getID().equals(label)) {
                         chemModel.getMoleculeSet().removeAtomContainer(i);
                         break;
                     }
                 }
             }
-        }      
+        }
 	}
-	
+
 	private static void removeEmptyMolecules(IChemModel chemModel) {
 	    IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet != null && moleculeSet.getAtomContainerCount() == 0) {
@@ -446,23 +448,23 @@ public class JChemPaint {
 	}
 
 	private static void checkCoordinates(IChemModel chemModel) throws CDKException {
-		for (IAtomContainer next : 
+		for (IAtomContainer next :
 		    ChemModelManipulator.getAllAtomContainers(chemModel)) {
 			if (GeometryTools.has2DCoordinatesNew(next) != 2) {
 		        String error = GT._("Not all atoms have 2D coordinates." +
 		        		" JCP can only show full 2D specified structures." +
 		        		" Shall we lay out the structure?");
-		        int answer = 
-		            JOptionPane.showConfirmDialog(null, 
+		        int answer =
+		            JOptionPane.showConfirmDialog(null,
 		                                          error,
-		                                          "No 2D coordinates", 
+		                                          "No 2D coordinates",
 		                                          JOptionPane.YES_NO_OPTION);
-		        
+
 		        if (answer == JOptionPane.NO_OPTION) {
 		        	throw new CDKException(
 		        	        GT._("Cannot display without 2D coordinates"));
 		        } else {
-			        CreateCoordinatesForFileDialog frame = 
+			        CreateCoordinatesForFileDialog frame =
 			            new CreateCoordinatesForFileDialog(chemModel);
 			        frame.pack();
 			        frame.show();
@@ -470,7 +472,7 @@ public class JChemPaint {
 		        }
 			}
 		}
-		
+
 		/*
          * Add implicit hydrogens (in ControllerParameters,
          * autoUpdateImplicitHydrogens is true by default, so we need to do that
@@ -478,7 +480,7 @@ public class JChemPaint {
          */
     	CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(
     	        chemModel.getBuilder());
-        for (IAtomContainer molecule : 
+        for (IAtomContainer molecule :
             ChemModelManipulator.getAllAtomContainers(chemModel)) {
             if (molecule != null) {
                try {
@@ -499,6 +501,12 @@ public class JChemPaint {
 		f.setPreferredSize(new Dimension(1000,500));
 		f.add(p);
 		f.pack();
+		Point point = GraphicsEnvironment
+		             .getLocalGraphicsEnvironment()
+		             .getCenterPoint();
+		int w2 = (f.getWidth() / 2);
+		int h2 = (f.getHeight() / 2);
+		f.setLocation(point.x - w2, point.y - h2);
 		f.setVisible(true);
 		return p;
 	}
