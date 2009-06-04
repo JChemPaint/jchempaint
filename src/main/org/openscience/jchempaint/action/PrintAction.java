@@ -51,7 +51,7 @@ public class PrintAction extends JCPAction implements Printable {
 	 * @param  event  Description of the Parameter
 	 */
 	public void actionPerformed(ActionEvent event) {
-		
+
 		PrinterJob printJob = PrinterJob.getPrinterJob();
 		printJob.setPrintable(this);
 		if (printJob.printDialog()) {
@@ -78,7 +78,7 @@ public class PrintAction extends JCPAction implements Printable {
 		else {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-			jcpPanel.getRenderPanel().takeSnapshot(g2d, jcpPanel.getRenderPanel().getBounds());
+			jcpPanel.getRenderPanel().takeSnapshot(g2d);
 			return (PAGE_EXISTS);
 		}
 	}

@@ -35,6 +35,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -100,9 +101,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private boolean shouldPaintFromCache = false;
 
 	private UndoManager undoManager=new UndoManager();
-	
+
 	private boolean debug=false;
-	
+
 	private PhantomBondGenerator pbg = new PhantomBondGenerator();
 
 	public RenderPanel(IChemModel chemModel, int width, int height,
@@ -117,7 +118,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		                               .getProperty("General.UndoStackSize"));
 		undoManager.setLimit(limit);
 	}
-	
+
 	public void setFitToScreen(boolean fitToScreen) {
 	    this.renderer.getRenderer2DModel().setFitToScreen(fitToScreen);
 	}
@@ -137,15 +138,16 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
 		// setup the Renderer and the controller 'model'
 
-		if(this.renderer==null)
+		if (this.renderer == null) {
 			this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
+		}
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
 
 		UndoRedoHandler undoredohandler = new UndoRedoHandler();
 		undoredohandler.addIUndoListener(this);
 		// connect the Renderer to the Hub
-		this.hub = new ControllerHub(controllerModel, 
+		this.hub = new ControllerHub(controllerModel,
 		                             renderer,
 		                             chemModel,
 		                             this,
@@ -197,27 +199,40 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	}
 
 	public Image takeSnapshot() {
-	    return this.takeSnapshot(this.getBounds());
+	    IChemModel chemModel = hub.getIChemModel();
+	    if (isValidChemModel(chemModel)) {
+    	    Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
+    	    Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
+            Image image = GraphicsEnvironment
+                            .getLocalGraphicsEnvironment()
+                            .getScreenDevices()[0]
+                            .getDefaultConfiguration()
+                            .createCompatibleImage(
+                                    bounds.width, bounds.height);
+            Graphics2D g = (Graphics2D)image.getGraphics();
+            takeSnapshot(g, chemModel, bounds, modelBounds);
+            return image;
+	    } else{
+	        return null;
+	    }
 	}
 
-	public Image takeSnapshot(Rectangle bounds) {
-        Image image = GraphicsEnvironment
-                        .getLocalGraphicsEnvironment()
-                        .getScreenDevices()[0]
-                        .getDefaultConfiguration()
-                        .createCompatibleImage(bounds.width, bounds.height);
-        Graphics2D g = (Graphics2D)image.getGraphics();
-        takeSnapshot(g, bounds);
-        return image;
+	public void takeSnapshot(Graphics2D g) {
+	    IChemModel chemModel = hub.getIChemModel();
+	    Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
+        Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
+	    this.takeSnapshot(g, hub.getIChemModel(), bounds, modelBounds);
 	}
 
-	public void takeSnapshot(Graphics2D g, Rectangle bounds){
-        super.paint(g);
+	public void takeSnapshot(
+	        Graphics2D g, IChemModel chemModel, Rectangle s, Rectangle2D m) {
+	    g.setColor(renderer.getRenderer2DModel().getBackColor());
+	    g.fillRect(0, 0, s.width, s.height);
 
-        IChemModel chemModel = hub.getIChemModel();
-        if (isValidChemModel(chemModel)) {
-            this.paintChemModel(chemModel, g, bounds);
-        }
+	    renderer.setDrawCenter(s.getWidth() / 2, s.getHeight() / 2);
+	    renderer.setModelCenter(m.getCenterX(), m.getCenterY());
+
+	    renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
     }
 
 	private boolean isValidChemModel(IChemModel chemModel) {
@@ -285,7 +300,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             this.setPreferredSize(new Dimension(result.width, result.height));
             this.revalidate();
             super.paint(g);
-            renderer.paintChemModel(hub.getIChemModel(), new AWTDrawVisitor(g));
+            renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
         }
     }
 
@@ -327,9 +342,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		    IChemModel chemModel = hub.getIChemModel();
 		    IMoleculeSet molecules = chemModel.getMoleculeSet();
 		    if (molecules != null && molecules.getAtomContainerCount() > 0) {
-		        IMolecularFormula wholeModel = 
+		        IMolecularFormula wholeModel =
 		            NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
-		        Iterator<IAtomContainer> containers = 
+		        Iterator<IAtomContainer> containers =
 		            ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
 		        int implicitHs = 0;
 	        	while (containers.hasNext()) {
@@ -356,7 +371,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
     		                        false);
 
 		        status = makeStatusBarString(
-		                formula, implicitHs, 
+		                formula, implicitHs,
 		                MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
 		    }
 	    } else if (position == 2) {
@@ -377,7 +392,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	                                .getHTML(MolecularFormulaManipulator
 	                                .getMolecularFormula(ac), true, false);
 	                status = makeStatusBarString(
-	                        formula, implicitHs, 
+	                        formula, implicitHs,
 	                        AtomContainerManipulator.getNaturalExactMass(ac));
 	            }
 	        }
@@ -411,7 +426,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 
 	public void doUndo(IUndoRedoable undoredo) {
 		undoManager.addEdit((UndoableEdit)undoredo);
-		Container root = this.getParent().getParent().getParent(); 
+		Container root = this.getParent().getParent().getParent();
 		if(root instanceof JChemPaintPanel)
 			((JChemPaintPanel)root).updateUndoRedoControls();
 	}

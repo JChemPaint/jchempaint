@@ -32,7 +32,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -115,7 +114,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
 	/**
      * Builds a JCPPanel with a certain model and a certain gui
-     * 
+     *
      * @param chemModel
      *            The model
      * @param gui
@@ -181,7 +180,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Called to force a re-centring of the displayed structure.
-     * 
+     *
      * @param isNewChemModel
      */
     public void setIsNewChemModel(boolean isNewChemModel) {
@@ -190,7 +189,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Helps in keeping the current action button highlighted
-     * 
+     *
      * @return The last action button used
      */
     public JComponent getLastActionButton() {
@@ -199,7 +198,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Allows setting of the is modified stage (e. g. after save)
-     * 
+     *
      * @param isModified
      *            is modified
      */
@@ -218,7 +217,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     /**
      * Helps in keeping the current action button highlighted - needs to be set
      * if a new action button is choosen
-     * 
+     *
      * @param actionButton
      *            The new action button
      */
@@ -228,7 +227,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Gets the currentWorkDirectory attribute of the JChemPaintPanel object
-     * 
+     *
      *@return The currentWorkDirectory value
      */
     public File getCurrentWorkDirectory() {
@@ -237,7 +236,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the currentWorkDirectory attribute of the JChemPaintPanel object
-     * 
+     *
      *@param cwd
      *            The new currentWorkDirectory value
      */
@@ -247,7 +246,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Gets the lastOpenedFile attribute of the JChemPaintPanel object
-     * 
+     *
      *@return The lastOpenedFile value
      */
     public File getLastOpenedFile() {
@@ -256,7 +255,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the lastOpenedFile attribute of the JChemPaintPanel object
-     * 
+     *
      *@param lof
      *            The new lastOpenedFile value
      */
@@ -266,7 +265,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Gets the currentOpenFileFilter attribute of the JChemPaintPanel object
-     * 
+     *
      *@return The currentOpenFileFilter value
      */
     public FileFilter getCurrentOpenFileFilter() {
@@ -275,7 +274,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the currentOpenFileFilter attribute of the JChemPaintPanel object
-     * 
+     *
      *@param ff
      *            The new currentOpenFileFilter value
      */
@@ -285,7 +284,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Gets the currentSaveFileFilter attribute of the JChemPaintPanel object
-     * 
+     *
      *@return The currentSaveFileFilter value
      */
     public FileFilter getCurrentSaveFileFilter() {
@@ -294,7 +293,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the currentSaveFileFilter attribute of the JChemPaintPanel object
-     * 
+     *
      *@param ff
      *            The new currentSaveFileFilter value
      */
@@ -304,7 +303,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Tells if a menu is shown
-     * 
+     *
      *@return The showMenu value
      */
     public boolean getShowMenuBar() {
@@ -313,7 +312,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets if a menu is shown
-     * 
+     *
      *@param showMenuBar
      *            The new showMenuBar value
      */
@@ -359,7 +358,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Tells if a status bar is shown
-     * 
+     *
      *@return The showStatusBar value
      */
     public boolean getShowStatusBar() {
@@ -368,7 +367,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the value of showToolbar.
-     * 
+     *
      *@param showToolBar
      *            The value to assign showToolbar.
      */
@@ -378,7 +377,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the value of showToolbar.
-     * 
+     *
      *@param showToolBar
      *            The value to assign showToolbar.
      */
@@ -390,7 +389,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Returns the value of showToolbar.
-     * 
+     *
      *@return The showToolbar value
      */
     public boolean getShowToolBar() {
@@ -399,7 +398,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets if statusbar should be shown
-     * 
+     *
      *@param showStatusBar
      *            The value to assign showStatusBar.
      */
@@ -410,7 +409,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Sets the file currently used for saving this Panel.
-     * 
+     *
      *@param value
      *            The new isAlreadyAFile value
      */
@@ -421,7 +420,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     /**
      * Returns the file currently used for saving this Panel, null if not yet
      * saved
-     * 
+     *
      *@return The currently used file
      */
     public File isAlreadyAFile() {
@@ -434,7 +433,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Set to indicate whether the insert text field should be used.
-     * 
+     *
      * @param showInsertTextField
      *            true is the text entry widget is to be shown
      */
@@ -445,7 +444,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Tells if the enter text field is currently shown or not.
-     * 
+     *
      * @return text field shown or not
      */
     public boolean getShowInsertTextField() {
@@ -460,15 +459,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         return this.renderPanel.takeSnapshot();
     }
 
-    public Image takeSnapshot(Rectangle bounds) {
-        return this.renderPanel.takeSnapshot(bounds);
-    }
-
     /**
      * Shows a warning if the JCPPanel has unsaved content and does save, if the
      * user wants to do it.
-     * 
-     * @return 
+     *
+     * @return
      *         OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
      */
     public int showWarning() {
@@ -501,7 +496,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Class for closing jcp
-     * 
+     *
      *@author shk3
      *@cdk.created November 23, 2008
      */
@@ -510,7 +505,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         /**
          * closing Event. Shows a warning if this window has unsaved data and
          * terminates jvm, if last window.
-         * 
+         *
          * @param e
          *            Description of the Parameter
          */
@@ -674,7 +669,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Tells if debug output is desired or not.
-     * 
+     *
      * @return debug output or not.
      */
     public boolean isDebug() {
