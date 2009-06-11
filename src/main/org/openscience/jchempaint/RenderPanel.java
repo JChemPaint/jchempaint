@@ -66,6 +66,7 @@ import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.AtomContainerBoundsGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
 import org.openscience.cdk.renderer.generators.HighlightAtomGenerator;
 import org.openscience.cdk.renderer.generators.HighlightBondGenerator;
@@ -168,7 +169,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	    if(debug)
 	    	generators.add(new AtomContainerBoundsGenerator());
 	    generators.add(new RingGenerator());
-        generators.add(new BasicAtomGenerator());
+//        generators.add(new BasicAtomGenerator());
+        generators.add(new ExtendedAtomGenerator());
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
         generators.add(new ExternalHighlightGenerator());
