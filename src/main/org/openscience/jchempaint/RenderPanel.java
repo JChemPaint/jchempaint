@@ -63,17 +63,26 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
+import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.AtomContainerBoundsGenerator;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BoundsGenerator;
 import org.openscience.cdk.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
 import org.openscience.cdk.renderer.generators.HighlightAtomGenerator;
 import org.openscience.cdk.renderer.generators.HighlightBondGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IReactionGenerator;
 import org.openscience.cdk.renderer.generators.LonePairGenerator;
+import org.openscience.cdk.renderer.generators.MappingGenerator;
 import org.openscience.cdk.renderer.generators.MergeAtomsGenerator;
+import org.openscience.cdk.renderer.generators.ProductsBoxGenerator;
 import org.openscience.cdk.renderer.generators.RadicalGenerator;
+import org.openscience.cdk.renderer.generators.ReactantsBoxGenerator;
+import org.openscience.cdk.renderer.generators.ReactionArrowGenerator;
+import org.openscience.cdk.renderer.generators.ReactionBoxGenerator;
+import org.openscience.cdk.renderer.generators.ReactionPlusGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.SelectAtomGenerator;
 import org.openscience.cdk.renderer.generators.SelectBondGenerator;
@@ -140,7 +149,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		// setup the Renderer and the controller 'model'
 
 		if (this.renderer == null) {
-			this.renderer = new Renderer(makeGenerators(), new AWTFontManager());
+			this.renderer = new Renderer(makeGenerators(), makeReactionGenerators(), new AWTFontManager());
+			//any specific rendering settings defaults should go here
+			this.renderer.getRenderer2DModel().setShowEndCarbons(true);
 		}
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
@@ -162,6 +173,27 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		this.addMouseMotionListener(mouseEventRelay);
 		this.addMouseWheelListener(mouseEventRelay);
 		this.isNewChemModel = true;
+	}
+
+	private List<IReactionGenerator> makeReactionGenerators() {
+	    List<IReactionGenerator> generators = new ArrayList<IReactionGenerator>();
+	    // generate the bounds first, so that they are to the back
+	    BoundsGenerator boundsGenerator = new BoundsGenerator();
+	    if(debug)
+	    	generators.add(boundsGenerator);
+    	ReactionBoxGenerator boxGenerator = new ReactionBoxGenerator();
+    	generators.add(boxGenerator);
+	    ReactionArrowGenerator arrowGenerator = new ReactionArrowGenerator();
+	    generators.add(arrowGenerator);
+	    ReactionPlusGenerator plusGenerator = new ReactionPlusGenerator();
+	    generators.add(plusGenerator);
+	    ReactantsBoxGenerator reactantsBoxGenerator = new ReactantsBoxGenerator();
+		generators.add(reactantsBoxGenerator);
+	    ProductsBoxGenerator productsBoxGenerator = new ProductsBoxGenerator();
+		generators.add(productsBoxGenerator);
+	    MappingGenerator mapper = new MappingGenerator();
+	    generators.add(mapper);
+		return generators;
 	}
 
 	private List<IGenerator> makeGenerators() {
