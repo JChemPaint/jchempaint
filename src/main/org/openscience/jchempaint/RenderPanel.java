@@ -63,10 +63,8 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
-import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.AtomContainerBoundsGenerator;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BoundsGenerator;
 import org.openscience.cdk.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.cdk.renderer.generators.ExternalHighlightGenerator;
@@ -149,7 +147,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		// setup the Renderer and the controller 'model'
 
 		if (this.renderer == null) {
-			this.renderer = new Renderer(makeGenerators(), makeReactionGenerators(), new AWTFontManager());
+			this.renderer = new Renderer(makeGenerators(), 
+			                             makeReactionGenerators(), 
+			                             new AWTFontManager());
 			//any specific rendering settings defaults should go here
 			this.renderer.getRenderer2DModel().setShowEndCarbons(true);
 		}
@@ -178,30 +178,24 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	private List<IReactionGenerator> makeReactionGenerators() {
 	    List<IReactionGenerator> generators = new ArrayList<IReactionGenerator>();
 	    // generate the bounds first, so that they are to the back
-	    BoundsGenerator boundsGenerator = new BoundsGenerator();
-	    if(debug)
-	    	generators.add(boundsGenerator);
-    	ReactionBoxGenerator boxGenerator = new ReactionBoxGenerator();
-    	generators.add(boxGenerator);
-	    ReactionArrowGenerator arrowGenerator = new ReactionArrowGenerator();
-	    generators.add(arrowGenerator);
-	    ReactionPlusGenerator plusGenerator = new ReactionPlusGenerator();
-	    generators.add(plusGenerator);
-	    ReactantsBoxGenerator reactantsBoxGenerator = new ReactantsBoxGenerator();
-		generators.add(reactantsBoxGenerator);
-	    ProductsBoxGenerator productsBoxGenerator = new ProductsBoxGenerator();
-		generators.add(productsBoxGenerator);
-	    MappingGenerator mapper = new MappingGenerator();
-	    generators.add(mapper);
+        if (debug) {
+	    	generators.add(new BoundsGenerator());
+        }
+    	generators.add(new ReactionBoxGenerator());
+	    generators.add(new ReactionArrowGenerator());
+	    generators.add(new ReactionPlusGenerator());
+		generators.add(new ReactantsBoxGenerator());
+		generators.add(new ProductsBoxGenerator());
+	    generators.add(new MappingGenerator());
 		return generators;
 	}
 
 	private List<IGenerator> makeGenerators() {
 	    List<IGenerator> generators = new ArrayList<IGenerator>();
-	    if(debug)
+	    if (debug) {
 	    	generators.add(new AtomContainerBoundsGenerator());
+	    }
 	    generators.add(new RingGenerator());
-//        generators.add(new BasicAtomGenerator());
         generators.add(new ExtendedAtomGenerator());
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
