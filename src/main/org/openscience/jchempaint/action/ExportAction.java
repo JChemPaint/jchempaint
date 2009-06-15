@@ -105,6 +105,9 @@ public class ExportAction extends SaveAsAction {
                 	FileWriter writer = new FileWriter(outFile);
                 	writer.append(svg);
                 	writer.flush();
+                    JOptionPane.showMessageDialog(jcpPanel,
+                            "Exported image to " + outFile);
+                    return;
                 } catch (IOException e) {
                     String error = "Problem exporting to svg";
                     JOptionPane.showMessageDialog(jcpPanel, error);
@@ -134,6 +137,10 @@ public class ExportAction extends SaveAsAction {
                     } else {
                         // no writer of type imageIOType found
                         ImageIO.write(image, "PNG", outFile);
+                        JOptionPane.showMessageDialog(jcpPanel,
+                                "Exported image to " + outFile+
+                                " as PNG, since "+type+" could not be written");
+                        return;
                     }
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
