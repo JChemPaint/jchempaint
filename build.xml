@@ -109,7 +109,6 @@
                 <include name="cdk-dict.jar"/>
                 <include name="cdk-diff.jar"/>
                 <include name="cdk-extra.jar"/>
-                <include name="cdk-extra.jar"/>
                 <include name="cdk-fingerprint.jar"/>
                 <include name="cdk-forcefield.jar"/>
                 <include name="cdk-formula.jar"/>
@@ -277,6 +276,16 @@
                 </fileset>
             </indexjars-->
         </jar>
+        <signjar destDir=""
+            alias="${certificatealias}"
+            storepass="${keystorepassphrase}"
+            preservelastmodified="true">
+            <path>
+                <fileset dir=".">
+                    <includesfile name="${growing_classpath}"/>
+                </fileset>
+            </path>
+        </signjar>
     </target>
 </project>
 
