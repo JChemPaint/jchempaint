@@ -1,6 +1,6 @@
 <project name="JCPCDK" default="dist" basedir=".">
 	
-	<property file="ant.properties"/>
+    <property file="ant.properties"/>
 
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
