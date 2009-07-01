@@ -124,7 +124,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             IMolecule molecule = getMolecule();
             if (molecule == null)
                 return;
-            generateModel(molecule);
+            generateModel(jChemPaintPanel, molecule, true);
             if (closeafter != null)
                 closeafter.setVisible(false);
         }
@@ -252,30 +252,32 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         return data;
     }
 
-    public void generateModel(IMolecule molecule) {
+    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates) {
         if (molecule == null) return;
 
         // get relevant bits from active model
-        IChemModel chemModel = jChemPaintPanel.getChemModel();
+        IChemModel chemModel = chemPaintPanel.getChemModel();
         IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet == null) {
             moleculeSet = new MoleculeSet();
         }
 
-        // now generate 2D coordinates
-        StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-        sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
-        try {
-            sdg.setMolecule(molecule);
-            sdg.generateCoordinates(new Vector2d(0, 1));
-            molecule = sdg.getMolecule();
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        if(generateCoordinates){
+	        // now generate 2D coordinates
+	        StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+	        sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
+	        try {
+	            sdg.setMolecule(molecule);
+	            sdg.generateCoordinates(new Vector2d(0, 1));
+	            molecule = sdg.getMolecule();
+	        } catch (Exception exc) {
+	            exc.printStackTrace();
+	        }
         }
 
         moleculeSet.addMolecule(molecule);
         ControllerHub.avoidOverlap(chemModel);
-        jChemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
-        jChemPaintPanel.get2DHub().updateView();
+        chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
+        chemPaintPanel.get2DHub().updateView();
     }
 }

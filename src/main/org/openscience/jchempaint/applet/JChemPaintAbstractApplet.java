@@ -350,7 +350,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     newmol.append(mol.substring(s));
     MDLV2000Reader reader=new MDLV2000Reader(new StringReader(newmol.toString()));
     IMolecule cdkmol=(IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-    new InsertTextPanel(theJcpp,null).generateModel(cdkmol);
+    InsertTextPanel.generateModel(theJcpp,cdkmol,false);
     theJcpp.get2DHub().updateView();
     repaint();
   }
@@ -421,6 +421,22 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	    rendererModel.setExternalSelectedPart(ac);
 	    getTheJcpp().repaint();
   	}
+	
+	/**
+	 * Makes all implicit hydrogens explicit (same as using Edit->Hydrogens->Make all Implicit Hydrogens Explicit) 
+	 */
+	public void makeHydrogensExplicit(){
+		getTheJcpp().get2DHub().makeAllImplicitExplicit();
+		getTheJcpp().repaint();
+	}
+
+	/**
+	 * Makes all explicit hydrogens implicit (same as using Edit->Hydrogens->Make all Explicit Hydrogens Implicit) 
+	 */
+	public void makeHydrogensImplicit(){
+		getTheJcpp().get2DHub().makeAllExplicitImplicit();
+		getTheJcpp().repaint();
+	}
 
 	/**
 	 * @return Returns the jexf.

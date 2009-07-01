@@ -44,11 +44,17 @@ import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
+import net.sf.jniinchi.INCHI_RET;
+
+import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -76,6 +82,10 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
+import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.InsertTextPanel;
+
+import sun.awt.AWTAutoShutdown;
 
 /**
  * Action to copy/paste structures.
@@ -123,6 +133,7 @@ public class CopyPasteAction extends JCPAction{
 	        } else if ("paste".equals(type)) {
 	        	Transferable transfer = sysClip.getContents( null );
 	        	ISimpleChemObjectReader reader = null;
+		        String content=null;
 	        	// if a MIME type is given ...
 	        	try {
 	        	    if (supported(transfer, molFlavor)) {
@@ -132,7 +143,6 @@ public class CopyPasteAction extends JCPAction{
 	        	        reader = new MDLV2000Reader(new StringReader(mol));
 	        	    } else if (supported(transfer, DataFlavor.stringFlavor)) {
 	        	        // otherwise, try to use the ReaderFactory...
-	        	        String content;
 	        	        content = (String) transfer.getTransferData(
 	        	                DataFlavor.stringFlavor);
 	        	        reader = new ReaderFactory().createReader(
@@ -144,14 +154,14 @@ public class CopyPasteAction extends JCPAction{
 	        	    e1.printStackTrace();
 	        	}
 
-    			IAtomContainer toPaste = null;
+    			IMolecule toPaste = null;
         		if (reader != null) {
         		    IMolecule readMolecule =
         		        chemModel.getBuilder().newMolecule();
         			try {
-                        if (reader.accepts(IMolecule.class)) {
-                        	toPaste = (IAtomContainer) reader.read(readMolecule);
-                        } else if (reader.accepts(IChemFile.class)) {
+                        if (reader.accepts(Molecule.class)) {
+                        	toPaste = (IMolecule) reader.read(readMolecule);
+                        } else if (reader.accepts(ChemFile.class)) {
                         	toPaste = readMolecule;
                         	IChemFile file = (IChemFile) reader.read(
                         	            chemModel.getBuilder().newChemModel());
@@ -164,6 +174,7 @@ public class CopyPasteAction extends JCPAction{
                         e1.printStackTrace();
                     }
         		}
+        		//we just try smiles and inchi if no reader is found for content
         		if (toPaste == null &&
         		        supported(transfer, DataFlavor.stringFlavor)) {
         			try{
@@ -181,15 +192,23 @@ public class CopyPasteAction extends JCPAction{
                         );
                         sdg.generateCoordinates();
         			} catch (Exception ex) {
-        				//we just try smiles
+        				if (content.startsWith("InChI")) { // handle it as an InChI
+        		            try {
+        		                InChIGeneratorFactory inchiFactory = new InChIGeneratorFactory();
+        		                InChIToStructure inchiToStructure = inchiFactory.getInChIToStructure(content,jcpPanel.getChemModel().getBuilder());
+        		                INCHI_RET status = inchiToStructure.getReturnStatus();
+        		                if (status == INCHI_RET.OKAY) {
+        		                	IAtomContainer atomContainer = inchiToStructure.getAtomContainer();
+        		                	toPaste = atomContainer.getBuilder().newMolecule(atomContainer);
+        		                }
+        		            } catch (CDKException e2) {
+        		            	//we do nothing
+        		            }        			
+        		        }
         			}
         		}
 	            if (toPaste != null) {
-	                //translate the new structure a bit
-	                double hDistance = renderModel.getHighlightDistance();
-	                GeometryTools.translate2D(toPaste, hDistance, hDistance);
-	                ControllerHub hub = jcpPanel.get2DHub();
-	                hub.addFragment(toPaste);
+	            	InsertTextPanel.generateModel(jcpPanel, toPaste, false);
 
 	                //We select the inserted structure
 	                IChemObjectSelection selection
@@ -199,7 +218,9 @@ public class CopyPasteAction extends JCPAction{
 	                renderModel.setSelection(selection);
 	            	jcpPanel.setMoveAction();
 
-	    			hub.setActiveDrawModule(new MoveModule(hub));
+	    			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
+	            }else{
+	            	JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
 	            }
         	} else if (type.equals("cut")) {
     			IAtom atomInRange = null;
