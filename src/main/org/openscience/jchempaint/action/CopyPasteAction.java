@@ -128,7 +128,8 @@ public class CopyPasteAction extends JCPAction{
 	        IChemModel chemModel = jcpPanel.getChemModel();
 
 	        if ("copy".equals(type)) {
-	            addToClipboard(sysClip,
+	        	if(renderModel.getSelection().getConnectedAtomContainer()!=null)
+	        		addToClipboard(sysClip,
 	                    renderModel.getSelection().getConnectedAtomContainer());
 	        } else if ("paste".equals(type)) {
 	        	Transferable transfer = sysClip.getContents( null );
@@ -200,8 +201,14 @@ public class CopyPasteAction extends JCPAction{
         		                if (status == INCHI_RET.OKAY) {
         		                	IAtomContainer atomContainer = inchiToStructure.getAtomContainer();
         		                	toPaste = atomContainer.getBuilder().newMolecule(atomContainer);
-        		                }
-        		            } catch (CDKException e2) {
+        	        				StructureDiagramGenerator sdg =
+        	        				    new StructureDiagramGenerator((IMolecule)toPaste);
+
+        	                        sdg.setTemplateHandler(
+        	                            new TemplateHandler(toPaste.getBuilder())
+        	                        );
+        	                        sdg.generateCoordinates();        		                }
+        		            } catch (Exception e2) {
         		            	//we do nothing
         		            }        			
         		        }
