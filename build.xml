@@ -136,6 +136,7 @@
                 <include name="cdk-smarts.jar"/>
                 <include name="cdk-smiles.jar"/>
                 <include name="cdk-standard.jar"/>
+                <include name="cdk-controlbasic.jar"/>
                 <include name="cdk-structgen.jar"/>
                 <include name="cdk-valencycheck.jar"/>
             </fileset>
