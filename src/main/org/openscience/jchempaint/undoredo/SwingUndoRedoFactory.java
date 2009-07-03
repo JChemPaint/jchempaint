@@ -31,6 +31,9 @@ package org.openscience.jchempaint.undoredo;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -135,8 +138,33 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getEditOperation(IEdit edit) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EditOperationWrapper(edit);
 	}
 
+	static class EditOperationWrapper extends AbstractUndoableEdit implements IUndoRedoable{
+		
+		private static final long serialVersionUID = 1L;
+		
+		IEdit edit;
+		public EditOperationWrapper(IEdit edit) {
+			this.edit = edit;
+		}
+		
+		@Override
+		public void redo() throws CannotRedoException {
+			super.redo();
+			edit.redo();
+		}
+		
+		@Override
+		public void undo() throws CannotUndoException {
+			super.undo();
+			edit.redo();
+		}
+		
+		@Override
+		public String getPresentationName() {
+			return edit.getClass().getSimpleName();
+		}
+	}
 }
