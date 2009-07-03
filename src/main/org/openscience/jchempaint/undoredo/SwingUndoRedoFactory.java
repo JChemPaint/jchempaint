@@ -35,6 +35,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.controller.IChemModelRelay;
+import org.openscience.cdk.controller.edit.IEdit;
 import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
 import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.interfaces.IAtom;
@@ -131,6 +132,11 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 			IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom,
 			IReactionSet newsor, String type) {
 		return new SwingLoadNewModelEdit(chemModel, oldsom, oldsor, newsom, newsor, type);
+	}
+
+	public IUndoRedoable getEditOperation(IEdit edit) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
