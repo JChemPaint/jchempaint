@@ -187,6 +187,8 @@ public class JChemPaint {
 
 	public static void showEmptyInstance(boolean debug) {
 		IChemModel chemModel=DefaultChemObjectBuilder.getInstance().newChemModel();
+		chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
+		chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newAtomContainer());
 		showInstance(chemModel, GT._("Untitled-")+(instancecounter++), debug);
 	}
 
