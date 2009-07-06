@@ -123,6 +123,7 @@ org/openscience/cdk/exception/CDKException.class
 org/openscience/cdk/exception/InvalidSmilesException.class
 org/openscience/cdk/exception/NoSuchAtomException.class
 org/openscience/cdk/exception/NoSuchAtomTypeException.class
+org/openscience/cdk/formula/MolecularFormula.class
 org/openscience/cdk/geometry/GeometryTools.class
 org/openscience/cdk/graph/BFSShortestPath.class
 org/openscience/cdk/graph/BFSShortestPath$MyBreadthFirstIterator.class
@@ -285,6 +286,10 @@ org/openscience/cdk/layout/AtomPlacer.class
 org/openscience/cdk/layout/RingPlacer.class
 org/openscience/cdk/Molecule.class
 org/openscience/cdk/MoleculeSet.class
+org/openscience/cdk/nonotify/NNElement.class
+org/openscience/cdk/nonotify/NNIsotope.class
+org/openscience/cdk/nonotify/NNMolecularFormula.class
+org/openscience/cdk/nonotify/NoNotificationChemObjectBuilder.class
 org/openscience/cdk/PseudoAtom.class
 org/openscience/cdk/Reaction.class
 org/openscience/cdk/renderer/color/CDK2DAtomColors.class
@@ -358,6 +363,7 @@ org/openscience/cdk/tools/LoggingTool.class
 org/openscience/cdk/tools/manipulator/AtomContainerManipulator.class
 org/openscience/cdk/tools/manipulator/AtomContainerSetManipulator.class
 org/openscience/cdk/tools/manipulator/ChemModelManipulator.class
+org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator.class
 org/openscience/cdk/tools/manipulator/MoleculeSetManipulator.class
 org/openscience/cdk/tools/manipulator/RingSetManipulator.class
 org/openscience/cdk/validate/IValidator.class

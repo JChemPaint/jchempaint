@@ -77,8 +77,6 @@ org/openscience/cdk/AtomContainer$SingleElectronIterator.class
 org/openscience/cdk/atomtype/CDKAtomTypeMatcher.class
 org/openscience/cdk/AtomType.class
 org/openscience/cdk/atomtype/IAtomTypeMatcher.class
-org/openscience/cdk/Bond$1.class
-org/openscience/cdk/Bond$AtomsIterator.class
 org/openscience/cdk/Bond.class
 org/openscience/cdk/CDKConstants.class
 org/openscience/cdk/ChemModel.class
