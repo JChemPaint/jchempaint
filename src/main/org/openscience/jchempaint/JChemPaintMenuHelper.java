@@ -1,7 +1,5 @@
 package org.openscience.jchempaint;
 
-import java.awt.Toolkit;
-import java.lang.reflect.Field;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
@@ -12,8 +10,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
-import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.action.JCPAction;
+
 
 /**
  * A class containing various helper methods used in JChemPaintMenuBar and JChemPaintPopupMenu.
@@ -118,7 +117,7 @@ public class JChemPaintMenuHelper {
 	 *
 	 * @param  cmd         String The String to identify the MenuItem
 	 * @param  jcpPanel    Description of the Parameter
-	 * @param  isPopup     Tells if this menu will be a popup one or not
+	 * @param  isPopupMenu Tells if this menu will be a popup one or not
 	 * @return             JMenuItem The created JMenuItem
 	 */
 	protected JMenuItem createMenuItem(JChemPaintPanel jcpPanel, String cmd, boolean isPopupMenu) {
@@ -199,25 +198,4 @@ public class JChemPaintMenuHelper {
    }
   
 	
-	/**
-	 * Look up the int constant for a particular VK_KEY.
-	 * @param codeString VK_something
-	 * @param className the name of the class to use
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-    private int getCode(String codeString, String className) {
-	    try {
-	        Class klass = Class.forName(className);
-	        Field field = klass.getField(codeString);
-	        return field.getInt(klass);
-	    } catch (ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
-        } catch (NoSuchFieldException nsfe) {
-            nsfe.printStackTrace();
-        } catch (IllegalAccessException iae) {
-            iae.printStackTrace();
-        }
-        return -1;
-	}
 }
