@@ -174,50 +174,30 @@ public class JChemPaintMenuHelper {
 		return mi;
 	}
 	
-	/**
-	 *  Adds ShortCuts to the JChemPaintMenuBar object.
-	 *
-	 * @param  cmd  String The Strin to identify the MenuItem.
-	 * @param  mi   the regarding MenuItem.
-	 * @param  jcp  The JChemPaintPanel this menu is used for.
-	 */
-	private void addShortCuts(String cmd, JMenuItem mi, JChemPaintPanel jcp) {
-		Properties shortCutProps = 
-		    JCPPropertyHandler.getInstance().getJCPShort_Cuts();
-		
-		String shortCuts = shortCutProps.getProperty(cmd);
-		String charString = null;
-		if (shortCuts != null) {
-		    String[] scStrings = shortCuts.trim().split(",");
-		    
-		    int keyCode;
-		    int modifier;
-		    if (scStrings.length > 1) {
-		        charString = "VK_" + scStrings[1];
-		        String altKey = scStrings[0] + "_MASK";
-		        if (scStrings[0].equals("CTRL")) {
-		            modifier = 
-		                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-		        } else {
-		            modifier = getCode(altKey, "java.awt.event.InputEvent");
-		        }
-		        keyCode = getCode(charString, "java.awt.event.KeyEvent");
-		    } else {
-		        charString = "VK_" + scStrings[0];
+  
+  /**
+   *  Adds ShortCuts to the JChemPaintMenuBar object.<br>
+   *  This simplifies and replaces the previous approach using Keycodes (VK_xxx)
+   *  Keycodes do not work across different keyboards, notably the + key
+   *  for zooming is problematic.<br>
+   *  More here: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4262044
+   *
+   * @param  cmd  String The Strin to identify the MenuItem.
+   * @param  mi   the regarding MenuItem.
+   * @param  jcp  The JChemPaintPanel this menu is used for.
+   */
+  private void addShortCuts(String cmd, JMenuItem mi, JChemPaintPanel jcp) {
+      Properties shortCutProps = JCPPropertyHandler.getInstance().getJCPShort_Cuts();
 
-		        keyCode = getCode(charString, "java.awt.event.KeyEvent");
-		        modifier = 0;
-		    }
-		    
-		    KeyStroke keyStroke = 
-		        KeyStroke.getKeyStroke(keyCode, modifier, false);
-
-		    mi.setAccelerator(keyStroke);
-		    jcp.getInputMap().put(keyStroke, mi);
-		    jcp.getActionMap().put(mi, mi.getAction());
-			
-		}
-	}
+      String keyString = shortCutProps.getProperty(cmd);
+      if (keyString != null) {
+          KeyStroke keyStroke = KeyStroke.getKeyStroke(keyString);
+          mi.setAccelerator(keyStroke);
+          jcp.getInputMap().put(keyStroke, mi);
+          jcp.getActionMap().put(mi, mi.getAction());
+      }
+   }
+  
 	
 	/**
 	 * Look up the int constant for a particular VK_KEY.

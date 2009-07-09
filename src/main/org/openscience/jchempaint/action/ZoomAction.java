@@ -58,6 +58,10 @@ public class ZoomAction extends JCPAction {
         }
         jcpPanel.get2DHub().updateView();
         jcpPanel.updateStatusBar();
+
+        // temp fix
+        jcpPanel.getRenderPanel().getRenderer().setDrawCenter(0,0);
+
     }
 
 }
