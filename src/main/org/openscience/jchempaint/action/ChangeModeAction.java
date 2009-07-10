@@ -75,7 +75,7 @@ public class ChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, -1));
         } else if (type.equals("bond")) {
             hub.setActiveDrawModule(new AddBondDragModule(hub));
-            hub.getController2DModel().setDrawElement("C");
+            //hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("cyclesymbol")) {
             hub.setActiveDrawModule(new CycleSymbolModule(hub));
         } else if (type.equals("periodictable")) {
