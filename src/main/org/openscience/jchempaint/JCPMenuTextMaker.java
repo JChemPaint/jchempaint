@@ -56,7 +56,7 @@ public class JCPMenuTextMaker {
 		entries.put("saveAs", GT._("Save As..."));
 		entries.put("view", GT._("View"));
 		entries.put("print", GT._("Print..."));
-		entries.put("export", GT._("Export..."));
+		entries.put("export", GT._("Save As Image..."));
 		entries.put("save", GT._("Save"));
 		entries.put("edit", GT._("Edit"));
 		entries.put("report", GT._("Report"));
