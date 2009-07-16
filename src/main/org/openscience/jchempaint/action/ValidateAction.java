@@ -33,19 +33,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.swing.JCheckBoxMenuItem;
 
 import org.openscience.cdk.dict.DictionaryDatabase;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.validate.BasicValidator;
 import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.DictionaryValidator;
-import org.openscience.cdk.validate.ProblemMarker;
-import org.openscience.cdk.validate.ValencyValidator;
 import org.openscience.cdk.validate.ValidatorEngine;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.dialog.ValidateFrame;
@@ -169,7 +164,6 @@ public class ValidateAction extends JCPAction
 			engine = new ValidatorEngine();
 			// default validators
 			engine.addValidator(new BasicValidator());
-			engine.addValidator(new ValencyValidator());
 			engine.addValidator(new CDKValidator());
 			engine.addValidator(new DictionaryValidator(getDictionaryDatabase()));
 		}
