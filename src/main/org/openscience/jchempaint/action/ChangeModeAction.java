@@ -47,7 +47,7 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
-import org.openscience.cdk.controller.ControllerHub.Direction;
+import org.openscience.cdk.controller.IChemModelRelay.Direction;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
