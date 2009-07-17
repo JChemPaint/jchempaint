@@ -30,6 +30,9 @@ package org.openscience.jchempaint.action;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+
+import java.io.IOException;
+
 import java.util.EventObject;
 
 import javax.swing.JComponent;
@@ -49,6 +52,7 @@ import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.controller.IChemModelRelay.Direction;
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
@@ -157,9 +161,17 @@ public class ChangeModeAction extends JCPAction {
         public void stateChanged(EventObject event) {
             logger.debug("Element change signaled...");
             if (event.getSource() instanceof PeriodicTablePanel) {
-                PeriodicTablePanel source = (PeriodicTablePanel) event
-                        .getSource();
-                String symbol = source.getSelectedElement().getSymbol();
+                PeriodicTablePanel source = (PeriodicTablePanel)event.getSource();
+                String symbol=null;
+                try {
+                     symbol = source.getSelectedElement().getSymbol();
+                } catch (CDKException e) {
+                    throw new RuntimeException(e);
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                   
+                }
                 logger.debug("Setting drawing element to: ", symbol);
                 model.setDrawElement(symbol);
                 dialog.setVisible(false);

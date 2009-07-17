@@ -6,6 +6,5 @@ Bundle-Version: 2.3.0
 Bundle-ClassPath: .
 Bundle-Vendor: The Chemistry Development Kit Project
 Export-Package: org.openscience.jchempaint
-Require-Bundle: org.openscience.cdk.jcp;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

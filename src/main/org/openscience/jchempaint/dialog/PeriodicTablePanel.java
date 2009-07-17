@@ -36,6 +36,9 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
+import java.io.IOException;
+
 import java.net.URL;
 import java.util.EventObject;
 import java.util.Vector;
@@ -56,6 +59,7 @@ import org.openscience.cdk.Element;
 import org.openscience.cdk.PeriodicTableElement;
 import org.openscience.cdk.config.ElementPTFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.GT;
 /**
@@ -369,8 +373,13 @@ public class PeriodicTablePanel extends JPanel
 	*/
 	private JButton createButton(String elementS)
 	{
-		PeriodicTableElement element = factory.configure(new PeriodicTableElement(elementS));
-		String colorFS = "000000";
+		PeriodicTableElement element;
+        try {
+            element = factory.configure(new PeriodicTableElement(elementS));
+        } catch (CDKException e) {
+            throw new RuntimeException (e);
+        }
+    String colorFS = "000000";
 		Color colorF = new Color(0,0,0);
 		String colorPh = element.getPhase();
 		if(colorPh.equals("Solid")){
@@ -434,9 +443,13 @@ public class PeriodicTablePanel extends JPanel
 	 *
 	 *@return    The selectedElement value
 	 */
-	public Element getSelectedElement()
-	{
-		return PeriodicTableElement.configure(selectedElement);
+	public Element getSelectedElement() throws IOException, CDKException {
+
+     ElementPTFactory eptf = ElementPTFactory.getInstance();
+     return eptf.configure(selectedElement);
+    //or ? ->  factory.configure(new PeriodicTableElement(selectedElement.getSymbol()));
+    
+    //return PeriodicTableElement.configure(selectedElement);
 	}
 
 
@@ -551,9 +564,13 @@ public class PeriodicTablePanel extends JPanel
 		 */
 		public ElementButton(PeriodicTableElement element)
 		{
-			super("H");
-			this.element = factory.configure(element);
-		}
+ 			super("H");
+      try {
+         this.element = factory.configure(element);
+      } catch (CDKException e) {
+          throw new RuntimeException(e);
+      }
+    }
 		/**
 		 *  Constructor for the ElementButton object
 		 * 

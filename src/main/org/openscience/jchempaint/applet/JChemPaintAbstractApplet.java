@@ -170,7 +170,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	 */
 	public void loadModelFromUrl(URL fileURL) {
 		try {
-			IChemModel chemModel = JChemPaint.readFromFileReader(new InputStreamReader(fileURL.openStream()), fileURL.toString(), null);
+			IChemModel chemModel = JChemPaint.readFromFileReader(fileURL, fileURL.toString(), null);
 			theJcpp.setChemModel(chemModel);
 		} catch (Exception exception) {
 			System.out.println("Cannot parse model: " + exception.toString());
@@ -296,7 +296,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
 	public String getMolFile() throws CDKException{
 	    StringWriter sw = new StringWriter();
 	    MDLWriter mdlwriter = new MDLWriter(sw);
-	    mdlwriter.dontWriteAromatic();
+	    //mdlwriter.dontWriteAromatic();
 		org.openscience.cdk.interfaces.IMoleculeSet som = theJcpp.getChemModel().getMoleculeSet();
 	    mdlwriter.write(som);
 	    return(sw.toString());

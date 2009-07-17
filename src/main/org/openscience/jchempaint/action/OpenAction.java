@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -93,19 +94,22 @@ public class OpenAction extends JCPAction {
 		        int clear=jcpPanel.showWarning();
 		        if(clear==JOptionPane.YES_OPTION){
 		        	try {
-						IChemModel chemModel = JChemPaint.readFromFileReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile())), chooser.getSelectedFile().toURI().toString(), type);
+						IChemModel chemModel=null;
+						try {
+							chemModel = JChemPaint.readFromFileReader(chooser.getSelectedFile().toURI().toURL(), chooser.getSelectedFile().toURI().toString(), type);
+						} catch (MalformedURLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
 						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), jcpPanel.getChemModel().getMoleculeSet(), jcpPanel.getChemModel().getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
 						    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
 					    }
 						jcpPanel.getChemModel().setMoleculeSet(chemModel.getMoleculeSet());
-						jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
+						//jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
 						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(
 		    			        new LogicalSelection(LogicalSelection.Type.NONE));
 			          	jcpPanel.get2DHub().updateView();
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					} catch (CDKException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

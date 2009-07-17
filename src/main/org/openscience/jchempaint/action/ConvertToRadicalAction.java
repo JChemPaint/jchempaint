@@ -59,7 +59,14 @@ public class ConvertToRadicalAction extends JCPAction {
 				try {
 			        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
 					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
-					number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
+					
+          
+        
+          //TODO MR
+          //fix this ?? how  ??
+          //number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
+
+
 				} catch (CDKException e) {
 					e.printStackTrace();
 					e.getMessage();

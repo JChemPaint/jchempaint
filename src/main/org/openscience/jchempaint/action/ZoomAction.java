@@ -28,9 +28,14 @@
  */
 package org.openscience.jchempaint.action;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 
 /**
  * @cdk.module jchempaint
@@ -61,7 +66,12 @@ public class ZoomAction extends JCPAction {
 
         // temp fix
         //jcpPanel.getRenderPanel().getRenderer().setDrawCenter(0,0);
-
     }
+
+    void burp () {
+        //jcpPanel.getRenderPanel().paint(jcpPanel.getRenderPanel().getGraphics());
+        
+    }
+
 
 }

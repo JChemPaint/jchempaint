@@ -37,6 +37,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -211,8 +212,8 @@ public class JChemPaint {
 	}
 
 	public static IChemModel readFromFileReader(
-            Reader instream, String url, String type) throws CDKException {
-	    ISimpleChemObjectReader cor = JChemPaint.createReader(instream, url, type);
+            URL fileURL, String url, String type) throws CDKException {
+	    ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url, type);
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
         JChemPaint.cleanUpChemModel(chemModel);
 
@@ -223,7 +224,13 @@ public class JChemPaint {
 	        File file, String type) throws CDKException, FileNotFoundException {
         Reader reader = new FileReader(file);
         String url = file.toURI().toString();
-        ISimpleChemObjectReader cor = JChemPaint.createReader(reader, url, type);
+        ISimpleChemObjectReader cor=null;
+		try {
+			cor = JChemPaint.createReader(file.toURI().toURL(), url, type);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         if(cor instanceof CMLReader)
         	cor.setReader(new FileInputStream(file));    // hack
@@ -253,10 +260,22 @@ public class JChemPaint {
         ControllerHub.avoidOverlap(chemModel);
 	}
 
+	private static Reader getReader (URL url ) { 
+		InputStreamReader reader=null;
+		try {
+			reader= new InputStreamReader(url.openStream());
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return reader;
+		
+	}
 	private static ISimpleChemObjectReader createReader(
-	        Reader instream, String url, String type) throws CDKException {
+	        URL url, String urlString, String type) throws CDKException {
 	    if (type == null) {
-            type = "unknown";
+            type = "mol";
         }
 
 	    ISimpleChemObjectReader cor = null;
@@ -264,13 +283,13 @@ public class JChemPaint {
 	    /*
          * Have the ReaderFactory determine the file format
          */
-        cor = new MDLV2000Reader(instream, Mode.RELAXED);
+        cor = new MDLV2000Reader(getReader(url), Mode.RELAXED);
         try {
             ReaderFactory factory = new ReaderFactory();
-            cor = factory.createReader(instream);
+            cor = factory.createReader(getReader(url));
             //this is a workaround for bug #2698194, since it works with url only
             if (cor instanceof CMLReader) {
-                cor = new CMLReader(url);
+                cor = new CMLReader(urlString);
             }
         } catch (IOException ioExc) {
             // we do nothing right now and hope it still works
@@ -282,23 +301,23 @@ public class JChemPaint {
             if (type.equals(JCPFileFilter.cml)
                     || type.equals(JCPFileFilter.xml)) {
                 //this is a workaround for bug #2698194, since it works with url only
-                cor = new CMLReader(url);
+                cor = new CMLReader(urlString);
             } else if (type.equals(JCPFileFilter.sdf)) {
-                cor = new MDLV2000Reader(instream);//TODO once merged, egons new reader needs to be used here
+                cor = new MDLV2000Reader(getReader(url));//TODO once merged, egons new reader needs to be used here
             } else if (type.equals(JCPFileFilter.mol)) {
-                cor = new MDLV2000Reader(instream);
+                cor = new MDLV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.inchi)) {
                 try {
-                    cor = new INChIReader(new URL(url).openStream());
+                    cor = new INChIReader(new URL(urlString).openStream());
                 } catch (MalformedURLException e) {
                     // These should not happen, since URL is built from a file before
                 } catch (IOException e) {
                     // These should not happen, since URL is built from a file before
                 }
             } else if (type.equals(JCPFileFilter.rxn)) {
-                cor = new MDLRXNV2000Reader(instream);
+                cor = new MDLRXNV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.smi)) {
-                cor = new SMILESReader(instream);
+                cor = new SMILESReader(getReader(url));
             }
         }
         if (cor == null) {
@@ -308,7 +327,7 @@ public class JChemPaint {
         //   entries
         if (cor instanceof MDLV2000Reader) {
             try {
-                BufferedReader in = new BufferedReader(instream);
+                BufferedReader in = new BufferedReader(getReader(url));
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (line.equals("$$$$")) {

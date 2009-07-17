@@ -139,6 +139,16 @@
                 <include name="cdk-controlbasic.jar"/>
                 <include name="cdk-structgen.jar"/>
                 <include name="cdk-valencycheck.jar"/>
+                
+                <!-- added by MR, new controller/renderer -->
+                <include name="cdk-renderawt.jar"/>
+                <include name="cdk-renderbasic.jar"/>
+                <include name="cdk-rendercontrol.jar"/>
+                <include name="cdk-renderextra.jar"/>
+                <include name="cdk-rendersvg.jar"/>
+                <include name="cdk-ioformats.jar"/> 
+
+
             </fileset>
         </unjar>
     </target>

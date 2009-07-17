@@ -270,6 +270,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	}
 
     public void paint(Graphics g) {
+        Dimension appletSize = this.getSize();
+        int appletHeight = appletSize.height;
+        int appletWidth = appletSize.width;  
+         System.out.println("paint in : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
+
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
 
@@ -296,6 +301,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
     	        this.paintChemModel(chemModel, g2, screen);
     	    }
     	}
+
+
+        appletSize = this.getSize();
+        appletHeight = appletSize.height;
+        appletWidth = appletSize.width;  
+
+        System.out.println("paint out : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
+
     }
 
     /**
@@ -306,7 +319,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
      * @param screen
      */
     private void paintChemModel(
+
             IChemModel chemModel, Graphics2D g, Rectangle screen) {
+        Dimension appletSize = this.getSize();
+        int appletHeight = appletSize.height;
+        int appletWidth = appletSize.width;  
+         System.out.println("paintChemModel in : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
 
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
@@ -329,7 +347,17 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             this.revalidate();
             super.paint(g);
             renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
+
+
+
         }
+
+
+        appletSize = this.getSize();
+        appletHeight = appletSize.height;
+        appletWidth = appletSize.width;  
+         System.out.println("paintChemModel out : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
+
     }
 
     private void paintChemModelFitToScreen(
