@@ -177,6 +177,7 @@ org/openscience/cdk/interfaces/ISingleElectron.class
 org/openscience/cdk/interfaces/IStrand.class
 org/openscience/cdk/io/CMLReader.class
 org/openscience/cdk/io/DefaultChemObjectReader.class
+org/openscience/cdk/io/FormatFactory.class
 org/openscience/cdk/io/formats/ABINITFormat.class
 org/openscience/cdk/io/formats/Aces2Format.class
 org/openscience/cdk/io/formats/ADFFormat.class
@@ -292,6 +293,8 @@ org/openscience/cdk/nonotify/NNMolecularFormula.class
 org/openscience/cdk/nonotify/NoNotificationChemObjectBuilder.class
 org/openscience/cdk/PseudoAtom.class
 org/openscience/cdk/Reaction.class
+org/openscience/cdk/renderer/AtomContainerRenderer.class
+org/openscience/cdk/renderer/BoundsCalculator.class
 org/openscience/cdk/renderer/color/CDK2DAtomColors.class
 org/openscience/cdk/renderer/color/IAtomColorer.class
 org/openscience/cdk/renderer/elements/ArrowElement.class
@@ -301,7 +304,6 @@ org/openscience/cdk/renderer/elements/IRenderingElement.class
 org/openscience/cdk/renderer/elements/IRenderingVisitor.class
 org/openscience/cdk/renderer/elements/LineElement.class
 org/openscience/cdk/renderer/elements/OvalElement.class
-org/openscience/cdk/renderer/elements/PathElement.class
 org/openscience/cdk/renderer/elements/RectangleElement.class
 org/openscience/cdk/renderer/elements/TextElement.class
 org/openscience/cdk/renderer/elements/TextGroupElement$Child.class
@@ -334,6 +336,7 @@ org/openscience/cdk/renderer/generators/RingGenerator.class
 org/openscience/cdk/renderer/generators/SelectAtomGenerator$1.class
 org/openscience/cdk/renderer/generators/SelectAtomGenerator.class
 org/openscience/cdk/renderer/generators/SelectBondGenerator.class
+org/openscience/cdk/renderer/IRenderer.class
 org/openscience/cdk/renderer/Renderer.class
 org/openscience/cdk/renderer/RendererModel.class
 org/openscience/cdk/renderer/RenderingParameters$AtomShape.class
@@ -342,7 +345,6 @@ org/openscience/cdk/renderer/selection/AbstractSelection$1.class
 org/openscience/cdk/renderer/selection/AbstractSelection.class
 org/openscience/cdk/renderer/selection/IChemObjectSelection.class
 org/openscience/cdk/renderer/selection/IncrementalSelection.class
-org/openscience/cdk/renderer/selection/LassoSelection.class
 org/openscience/cdk/renderer/selection/RectangleSelection.class
 org/openscience/cdk/renderer/selection/ShapeSelection.class
 org/openscience/cdk/renderer/selection/SingleSelection.class
@@ -360,7 +362,6 @@ org/openscience/cdk/RingSet.class
 org/openscience/cdk/smiles/SmilesParser.class
 org/openscience/cdk/tools/CDKHydrogenAdder.class
 org/openscience/cdk/tools/LoggingTool.class
-org/openscience/cdk/tools/manipulator/AtomContainerManipulator.class
 org/openscience/cdk/tools/manipulator/AtomContainerSetManipulator.class
 org/openscience/cdk/tools/manipulator/ChemModelManipulator.class
 org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator.class
@@ -376,7 +377,6 @@ org/openscience/jchempaint/action/ChangeAtomSymbolAction.class
 org/openscience/jchempaint/action/ChangeIsotopeAction.class
 org/openscience/jchempaint/action/ChangeModeAction.class
 org/openscience/jchempaint/action/CleanupAction.class
-org/openscience/jchempaint/action/CloseAction.class
 org/openscience/jchempaint/action/ConvertToPseudoAtomAction.class
 org/openscience/jchempaint/action/ConvertToRadicalAction.class
 org/openscience/jchempaint/action/CopyPasteAction.class
@@ -386,7 +386,6 @@ org/openscience/jchempaint/action/CreateReactionAction.class
 org/openscience/jchempaint/action/CreateSmilesAction.class
 org/openscience/jchempaint/action/EditAtomContainerPropsAction.class
 org/openscience/jchempaint/action/EditChemObjectPropsAction.class
-org/openscience/jchempaint/action/ExitAction.class
 org/openscience/jchempaint/action/ExportAction.class
 org/openscience/jchempaint/action/FlipAction.class
 org/openscience/jchempaint/action/HelpAction.class
