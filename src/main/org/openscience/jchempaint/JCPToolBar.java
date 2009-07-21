@@ -60,7 +60,7 @@ public class JCPToolBar
 	 *
 	 *@return    The toolbar value
 	 */
-	public static JToolBar getToolbar(JChemPaintPanel chemPaintPanel, int lines)
+	public static JToolBar getToolbar(JChemPaintPanel chemPaintPanel, String key, int horizontalorvertical)
 	{
 		//Controller2DHub hub
 		if (logger == null)
@@ -68,9 +68,7 @@ public class JCPToolBar
 			logger = new LoggingTool(JCPToolBar.class);
 		}
 		
-		JToolBar maintoolbar=(JToolBar)createToolbar(SwingConstants.HORIZONTAL, "toolbar", chemPaintPanel, lines, false);
-		JToolBar elementtoolbar=(JToolBar)createToolbar(SwingConstants.HORIZONTAL, "elementtoolbar", chemPaintPanel, lines*2, true);
-		maintoolbar.add(elementtoolbar);
+		JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, 1);
 		return maintoolbar;
 	}
 
@@ -173,9 +171,9 @@ public class JCPToolBar
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
 			b.setToolTipText(GT._("Change drawing symbol to")+" "+key);
-			b.setSize(30,15);
-			b.setPreferredSize(new Dimension(30,15));
-			b.setMaximumSize(new Dimension(30,15));
+			b.setSize(28,28);
+			b.setPreferredSize(new Dimension(28,28));
+			b.setMaximumSize(new Dimension(28,28));
 		}
 		b.setRequestFocusEnabled(false);
 		b.setMargin(new Insets(1, 1, 1, 1));
@@ -199,10 +197,9 @@ public class JCPToolBar
 	 *
 	 *@param  orientation  int The orientation of the toolbar
 	 *@param  kind         String The String used to identify the toolbar
-	 *@param  elementtype  If true a special type of toolbar for element symbols will be created
 	 *@return              Component The created toolbar
 	 */
-	public static Component createToolbar(int orientation, String kind, JChemPaintPanel chemPaintPanel, int lines, boolean elementtype)
+	public static Component createToolbar(int orientation, String kind, JChemPaintPanel chemPaintPanel, int lines)
 	{
 		JToolBar toolbar2 = new JToolBar(orientation);
 		String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind, chemPaintPanel.getGuistring()));
@@ -242,7 +239,7 @@ public class JCPToolBar
 						toolbar2.add(box);
 					box=new Box(BoxLayout.Y_AXIS);
 				}
-				button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, elementtype);
+				button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length()==1);
 				/*if (toolKeys[i].equals("lasso"))
 				{
 					selectButton = button;
@@ -250,7 +247,7 @@ public class JCPToolBar
 				if (button != null)
 				{
 					box.add(button);
-					if (toolKeys[i].equals("bond") && !elementtype)
+					if (toolKeys[i].equals("bond"))
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);

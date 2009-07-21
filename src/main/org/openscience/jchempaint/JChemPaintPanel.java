@@ -53,6 +53,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.undo.UndoManager;
 
@@ -97,8 +98,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private boolean showMenuBar = true;
     private JMenuBar menu;
     private String guistring;
-    private JToolBar toolbar;
-    private int lines = 1;
+    private JToolBar uppertoolbar;
+    private JToolBar lefttoolbar;
+    private JToolBar lowertoolbar;
+    private JToolBar righttoolbar;
     // we remember some buttons and menus since these are special
     protected JButton moveButton = null;
     protected JButton undoButton;
@@ -109,10 +112,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private LoggingTool logger = new LoggingTool(this);
     private boolean debug=false;
 
-    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug) {
-        this(chemModel, gui, 1, debug);
-    }
-
 	/**
      * Builds a JCPPanel with a certain model and a certain gui
      *
@@ -121,8 +120,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param gui
      *            The gui string
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, int lines, boolean debug) {
-        this.lines = lines;
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug) {
         this.guistring = gui;
         this.debug = debug;
         this.setLayout(new BorderLayout());
@@ -344,12 +342,27 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             remove(statusBar);
         }
         if (showToolBar) {
-            if (toolbar == null) {
-                toolbar = JCPToolBar.getToolbar(this, lines);
+            if (uppertoolbar == null) {
+                uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL);
             }
-            centerContainer.add(toolbar, BorderLayout.NORTH);
+            centerContainer.add(uppertoolbar, BorderLayout.NORTH);
+            if (lefttoolbar == null) {
+            	lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL);
+            }
+            centerContainer.add(lefttoolbar, BorderLayout.WEST);
+            if (righttoolbar == null) {
+            	righttoolbar = JCPToolBar.getToolbar(this, "righttoolbar", SwingConstants.VERTICAL);
+            }
+            centerContainer.add(righttoolbar, BorderLayout.EAST);
+            if (lowertoolbar == null) {
+            	lowertoolbar = JCPToolBar.getToolbar(this, "lowertoolbar", SwingConstants.HORIZONTAL);
+            }
+            centerContainer.add(lowertoolbar, BorderLayout.SOUTH);
         } else {
-        	centerContainer.remove(toolbar);
+        	centerContainer.remove(uppertoolbar);
+        	centerContainer.remove(lowertoolbar);
+        	centerContainer.remove(lefttoolbar);
+        	centerContainer.remove(righttoolbar);
         }
         if (showInsertTextField) {
             if (insertTextPanel == null)
@@ -377,20 +390,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      *            The value to assign showToolbar.
      */
     public void setShowToolBar(boolean showToolBar) {
-        setShowToolBar(showToolBar, 1);
+        setShowToolBar(showToolBar);
     }
 
-    /**
-     * Sets the value of showToolbar.
-     *
-     *@param showToolBar
-     *            The value to assign showToolbar.
-     */
-    public void setShowToolBar(boolean showToolBar, int lines) {
-        this.showToolBar = showToolBar;
-        this.lines = lines;
-        customizeView();
-    }
 
     /**
      * Returns the value of showToolbar.
