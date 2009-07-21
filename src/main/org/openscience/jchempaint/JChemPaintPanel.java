@@ -91,6 +91,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private boolean showInsertTextField = true;
     private InsertTextPanel insertTextPanel = null;
     private JPanel topContainer = null;
+    private JPanel centerContainer = null;
     private boolean showToolBar = true;
     private boolean showStatusBar = true;
     private boolean showMenuBar = true;
@@ -129,7 +130,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
         renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
-        this.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
+        
+        centerContainer=new JPanel();
+        centerContainer.setLayout(new BorderLayout());
+        centerContainer.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
+        this.add(centerContainer);
 
         customizeView();
         updateUndoRedoControls();
@@ -342,9 +347,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             if (toolbar == null) {
                 toolbar = JCPToolBar.getToolbar(this, lines);
             }
-            topContainer.add(toolbar, BorderLayout.CENTER);
+            centerContainer.add(toolbar, BorderLayout.NORTH);
         } else {
-            topContainer.remove(toolbar);
+        	centerContainer.remove(toolbar);
         }
         if (showInsertTextField) {
             if (insertTextPanel == null)
