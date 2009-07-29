@@ -74,6 +74,7 @@ public class JChemPaintMenuHelper {
 	protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
 		logger.debug("Creating menu: ", key);
 		JMenu menu = new JMenu(JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(key));
+		menu.setName(key);
 		return createMenu(jcpPanel, key, isPopup, guiString, menu);
 	}
 
@@ -147,6 +148,7 @@ public class JChemPaintMenuHelper {
 		else {
 			mi = new JMenuItem(translation);
 		}
+		mi.setName(cmd);
 		logger.debug("Created new menu item...");
 		String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
         if (astr == null) {

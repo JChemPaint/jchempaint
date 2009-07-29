@@ -93,6 +93,7 @@ public class TextViewDialog extends JDialog {
         super(fr, title, true);
         textArea = new JTextArea(width,height);
         textArea.setEditable(false);
+        textArea.setName("textviewdialogtextarea");
         if (wrap) {
             textArea.setLineWrap(wrap);
             textArea.setWrapStyleWord(true);

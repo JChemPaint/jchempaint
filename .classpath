@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="org/openscience/jchempaint/TestEditor.java|org/openscience/jchempaint/TestRenderer.java" kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
 	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
 	<classpathentry kind="lib" path="po/classes"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.openscience.cdk"/>
+	<classpathentry kind="lib" path="lib/fest-swing-1.2a2.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.10-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-reflect-1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jchempaint-primary"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

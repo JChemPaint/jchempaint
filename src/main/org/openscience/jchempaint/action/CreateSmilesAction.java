@@ -66,6 +66,7 @@ public class CreateSmilesAction extends JCPAction
 		if (dialog == null)
 		{
 			dialog = new TextViewDialog(frame, "SMILES", null, false, 40, 2);
+			dialog.setName("smilestextdialog");
 		}
 		String smiles = "";
 		String chiralsmiles ="";
