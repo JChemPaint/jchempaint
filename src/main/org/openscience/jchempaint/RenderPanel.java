@@ -273,7 +273,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         Dimension appletSize = this.getSize();
         int appletHeight = appletSize.height;
         int appletWidth = appletSize.width;  
-         System.out.println("paint in : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
 
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
@@ -293,7 +292,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
     		 * of some container window, and its Graphics will be
     		 * translated relative to its parent.
     		 */
-    	    Rectangle screen = new Rectangle(0, 0, getWidth(), getHeight());
+    	    Rectangle screen = new Rectangle(0, 0, getParent().getWidth(), getParent().getHeight());
 
     	    if (renderer.getRenderer2DModel().isFitToScreen()) {
     	        this.paintChemModelFitToScreen(chemModel, g2, screen);
@@ -307,7 +306,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         appletHeight = appletSize.height;
         appletWidth = appletSize.width;  
 
-        System.out.println("paint out : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
 
     }
 
@@ -324,7 +322,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         Dimension appletSize = this.getSize();
         int appletHeight = appletSize.height;
         int appletWidth = appletSize.width;  
-         System.out.println("paintChemModel in : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
 
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
@@ -338,25 +335,24 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
          * This is dangerous, but necessary to allow fast
          * repainting when scrolling the canvas
          */
-        this.shouldPaintFromCache = true;
+        this.shouldPaintFromCache = false;
 
         // determine the size the canvas needs to be to fit the model
         if (diagram != null) {
-            Rectangle result = renderer.shift(screen, diagram);
+            Rectangle result = shift(screen, diagram);
+            
+            // this makes sure the toolbars get drawn 
             this.setPreferredSize(new Dimension(result.width, result.height));
+            
             this.revalidate();
             super.paint(g);
             renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
-
-
-
         }
 
 
         appletSize = this.getSize();
         appletHeight = appletSize.height;
         appletWidth = appletSize.width;  
-         System.out.println("paintChemModel out : appletWidth appletHeight "+ appletWidth+ " "+ appletHeight);
 
     }
 
@@ -486,4 +482,59 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 		if(root instanceof JChemPaintPanel)
 			((JChemPaintPanel)root).updateUndoRedoControls();
 	}
+
+
+   public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
+        
+        int screenMaxX  = screenBounds.x + screenBounds.width;
+        int screenMaxY  = screenBounds.y + screenBounds.height;
+        int diagramMaxX = diagramBounds.x + diagramBounds.width;
+        int diagramMaxY = diagramBounds.y + diagramBounds.height;
+        int leftOverlap   = screenBounds.x - diagramBounds.x;
+        int rightOverlap  = diagramMaxX - screenMaxX;
+        int topOverlap    = screenBounds.y - diagramBounds.y;
+        int bottomOverlap = diagramMaxY - screenMaxY;
+
+        int dx = 0;
+        int dy = 0;
+        int w = screenBounds.width;
+        int h = screenBounds.height;
+
+        if (leftOverlap > 0) {
+            dx = leftOverlap;
+        }
+
+        if (rightOverlap > 0) {
+            w += rightOverlap;
+        }
+
+        if (topOverlap > 0) {
+            dy = topOverlap;
+        }
+
+        if (bottomOverlap > 0) {
+            h += bottomOverlap;
+        }
+        
+        if (dx != 0 || dy != 0) {
+            this.renderer.shiftDrawCenter(dx, dy);
+
+        }
+        else {
+            // extra
+        	int dxShiftBack=0,dyShiftBack=0;
+	        //if (diagramBounds.x > screenMaxX/4) { 
+	        	/*prevent drifting off horizontally */
+                dxShiftBack = -1*(diagramBounds.x- (screenMaxX/5));
+	        //}
+	        //if (diagramBounds.y > screenMaxY/2) { 
+	        	/*prevent drifting off vertically ! */
+	        	dyShiftBack = -1*(diagramBounds.y- (screenMaxY/5));
+	        //}
+	        if(dxShiftBack != 0 || dyShiftBack != 0) {
+	        	this.renderer.shiftDrawCenter(dxShiftBack,dyShiftBack);
+	        }
+        }
+        return new Rectangle(dx, dy, w, h);
+   }
 }
