@@ -41,6 +41,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -57,13 +58,17 @@ import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
+import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
@@ -75,6 +80,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
@@ -382,6 +388,23 @@ public class JChemPaint {
                 exception.printStackTrace();
             }
         }
+
+        // necessary for Smiles reading..?
+        if (cor.accepts(MoleculeSet.class)) {
+            // try to read a Molecule set
+            try {
+                IMoleculeSet som = (MoleculeSet)cor.read(new MoleculeSet());
+                chemModel = new ChemModel(); 
+                chemModel.setMoleculeSet(som);
+                if (chemModel == null) {
+                    error = "The object chemModel was empty unexpectedly!";
+                }
+            } catch (Exception exception) {
+                error = "Error while reading file: " + exception.getMessage();
+                exception.printStackTrace();
+            }
+        }
+        
         if (error != null) {
             throw new CDKException(error);
         }
@@ -485,15 +508,19 @@ public class JChemPaint {
 		        	throw new CDKException(
 		        	        GT._("Cannot display without 2D coordinates"));
 		        } else {
-			        CreateCoordinatesForFileDialog frame =
-			            new CreateCoordinatesForFileDialog(chemModel);
-			        frame.pack();
-			        frame.show();
-			        return;
+			        //CreateCoordinatesForFileDialog frame =
+			        //    new CreateCoordinatesForFileDialog(chemModel);
+			        //frame.pack();
+			        //frame.show();
+
+		        	IMoleculeSet set = chemModel.getMoleculeSet();
+		        	chemModel.setMoleculeSet(generate2dCoordinates(set));
+		        	return;
 		        }
 			}
 		}
-
+		
+		
 		/*
          * Add implicit hydrogens (in ControllerParameters,
          * autoUpdateImplicitHydrogens is true by default, so we need to do that
@@ -512,7 +539,34 @@ public class JChemPaint {
             }
         }
 	}
+	
+	/**
+	 * Helper method to generate 2d coordinates when JChempaint loads a molecule
+	 * without 2D coordinates. Typically happens for SMILES strings.
+	 * 
+	 * @param molecules
+	 * @throws Exception
+	 */
+	private static IMoleculeSet generate2dCoordinates(IMoleculeSet molecules)
+     {
+		 IMoleculeSet molSet2Dcalculated = new MoleculeSet();
+		 StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+		 for (int atIdx=0; atIdx<molecules.getAtomContainerCount(); atIdx++) {
+			 	IAtomContainer mol = molecules.getAtomContainer(atIdx);
+			 	sdg.setMolecule( mol.getBuilder().newMolecule(mol) );
+			 	try {
+					sdg.generateCoordinates();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			 	IAtomContainer ac = sdg.getMolecule();
+			 	molSet2Dcalculated.addAtomContainer(ac);
+		 }
+		 return molSet2Dcalculated;
+    }
 
+	
+	
 	public static JChemPaintPanel showInstance(IChemModel chemModel, String title, boolean debug){
 		JFrame f = new JFrame(title);
 		chemModel.setID(title);
