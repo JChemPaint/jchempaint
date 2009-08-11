@@ -30,7 +30,10 @@ package org.openscience.jchempaint.io;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 
@@ -71,12 +74,24 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	 *  Description of the Field
 	 */
 	public final static String smi = "smi";
-
+	
 	/**
 	 *  Description of the Field
 	 */
 	protected List types;
 
+	
+	/**
+	 *  Alternative extensions to indicate file type. For example
+	 *  a SMILES file is standard "xxx.smi", but could also be "xxx.smiles".
+	 *  Add more alternatives to this map when required.
+	 */
+	public static Map<String, String> alternativeExtensions;
+	static {
+		alternativeExtensions = new HashMap<String, String>();
+		alternativeExtensions.put("smiles", "smi");
+		alternativeExtensions.put("smil", "smi");		
+	}
 
 	/**
 	 *  Constructor for the JCPFileFilter object
@@ -90,18 +105,6 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		types.add(type);
 	}
 
-
-	/**
-	 *  Adds an additional file type to the list
-	 *
-	 *@param  type  The feature to be added to the Type attribute
-	 */
-	public void addType(String type)
-	{
-		types.add(type);
-	}
-
-
 	/**
 	 *  Adds the JCPFileFilter to the JFileChooser object.
 	 *
@@ -110,14 +113,14 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	 */
 	public static void addChoosableFileFilters(JFileChooser chooser)
 	{
-		chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPFileFilter.mol));
+		chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPFileFilter.cml));  
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.smi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.inchi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.sdf));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rxn));
-		JCPFileFilter cmlFilter = new JCPFileFilter(JCPFileFilter.cml);
-		cmlFilter.addType(JCPFileFilter.xml);
-		chooser.addChoosableFileFilter(cmlFilter);
+		JCPFileFilter molFilter = new JCPFileFilter(JCPFileFilter.mol);
+		//molFilter.addType(JCPFileFilter.mol);
+		chooser.addChoosableFileFilter(molFilter);
 	}
 
 
@@ -143,6 +146,18 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		return ext;
 	}
 
+	
+	private boolean isAlternative (String extension, String type ) {
+		System.out.println(type);	
+		for ( Iterator<String> alternatives = alternativeExtensions.keySet().iterator();alternatives.hasNext();) {
+			String alt = alternatives.next();
+			if (alt.equals(extension))
+				if (alternativeExtensions.get(alt).equals(type))
+				return true;
+		}
+		return false;
+	}
+
 
 	// Accept all directories and all gif, jpg, or tiff files.
 	public boolean accept(File f)
@@ -155,7 +170,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		String extension = getExtension(f);
 		if (extension != null)
 		{
-			if (types.contains(extension))
+			if (types.contains(extension) ||  isAlternative (extension, (String)types.get(0))  )
 			{
 				return true;
 			} else
@@ -166,7 +181,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		return false;
 	}
 
-
+	
 	/**
 	 *  Gets a descriptive string for the currently choosen file type
 	 *

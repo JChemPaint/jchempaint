@@ -64,6 +64,7 @@ public class OpenAction extends JCPAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
+		
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
 		JCPFileFilter.addChoosableFileFilters(chooser);
@@ -89,6 +90,7 @@ public class OpenAction extends JCPAction {
 			javax.swing.filechooser.FileFilter ff = chooser.getFileFilter();
 			if (ff instanceof JCPFileFilter) {
 				type = ((JCPFileFilter) ff).getType();
+				System.out.println("FILE TYPE is "+type);
 			}
 			if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
 		        int clear=jcpPanel.showWarning();
@@ -109,6 +111,12 @@ public class OpenAction extends JCPAction {
 						//jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
 						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(
 		    			        new LogicalSelection(LogicalSelection.Type.NONE));
+						
+						// the newly opened file should be set to zoom factor one
+						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
+						// quick fix: Molfile molecules are drawn upside down when opened from file? flip ..
+						jcpPanel.get2DHub().flip(true);
+
 			          	jcpPanel.get2DHub().updateView();
 					} catch (CDKException e1) {
 						// TODO Auto-generated catch block
