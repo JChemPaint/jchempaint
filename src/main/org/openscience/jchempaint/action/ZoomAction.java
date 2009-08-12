@@ -61,18 +61,11 @@ public class ZoomAction extends JCPAction {
         } else {
             logger.error("Unkown zoom command: " + type);
         }
+        
         jcpPanel.get2DHub().updateView();
         jcpPanel.updateStatusBar();
+        jcpPanel.getRenderPanel().update(jcpPanel.getRenderPanel().getGraphics());
 
-        jcpPanel.getRenderPanel().setSize(1,1);
-        // temp fix
-        //jcpPanel.getRenderPanel().getRenderer().setDrawCenter(0,0);
     }
-
-    void burp () {
-        //jcpPanel.getRenderPanel().paint(jcpPanel.getRenderPanel().getGraphics());
-        
-    }
-
 
 }

@@ -270,10 +270,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	}
 
     public void paint(Graphics g) {
-        Dimension appletSize = this.getSize();
-        int appletHeight = appletSize.height;
-        int appletWidth = appletSize.width;  
-
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
 
@@ -292,21 +288,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
     		 * of some container window, and its Graphics will be
     		 * translated relative to its parent.
     		 */
-    	    Rectangle screen = new Rectangle(0, 0, getParent().getWidth(), getParent().getHeight());
-
+    	    Rectangle screen = new Rectangle(0, 0, getParent().getWidth()-20, getParent().getHeight()-20);
+    	    
     	    if (renderer.getRenderer2DModel().isFitToScreen()) {
     	        this.paintChemModelFitToScreen(chemModel, g2, screen);
     	    } else {
     	        this.paintChemModel(chemModel, g2, screen);
     	    }
     	}
-
-
-        appletSize = this.getSize();
-        appletHeight = appletSize.height;
-        appletWidth = appletSize.width;  
-
-
     }
 
     /**
@@ -318,23 +307,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
      */
     private void paintChemModel(
 
-            IChemModel chemModel, Graphics2D g, Rectangle screen) {
-        Dimension appletSize = this.getSize();
-        int appletHeight = appletSize.height;
-        int appletWidth = appletSize.width;  
-
+        IChemModel chemModel, Graphics2D g, Rectangle screen) {
+   	
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
         }
 
         Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
-
         isNewChemModel = false;
 
-        /*
-         * This is dangerous, but necessary to allow fast
-         * repainting when scrolling the canvas
-         */
         this.shouldPaintFromCache = false;
 
         // determine the size the canvas needs to be to fit the model
@@ -343,17 +324,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             
             // this makes sure the toolbars get drawn 
             this.setPreferredSize(new Dimension(result.width, result.height));
-            
             this.revalidate();
             super.paint(g);
             renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
+            
         }
-
-
-        appletSize = this.getSize();
-        appletHeight = appletSize.height;
-        appletWidth = appletSize.width;  
-
     }
 
     private void paintChemModelFitToScreen(
@@ -520,6 +495,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
             this.renderer.shiftDrawCenter(dx, dy);
 
         }
+        //TODO drift of top corner ! (triangle)
+        
         else {
             // extra
         	int dxShiftBack=0,dyShiftBack=0;
