@@ -90,7 +90,7 @@ public class OpenAction extends JCPAction {
 			javax.swing.filechooser.FileFilter ff = chooser.getFileFilter();
 			if (ff instanceof JCPFileFilter) {
 				type = ((JCPFileFilter) ff).getType();
-				System.out.println("FILE TYPE is "+type);
+				
 			}
 			if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
 		        int clear=jcpPanel.showWarning();

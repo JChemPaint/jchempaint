@@ -148,7 +148,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 
 	
 	private boolean isAlternative (String extension, String type ) {
-		System.out.println(type);	
+			
 		for ( Iterator<String> alternatives = alternativeExtensions.keySet().iterator();alternatives.hasNext();) {
 			String alt = alternatives.next();
 			if (alt.equals(extension))
