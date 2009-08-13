@@ -141,6 +141,7 @@
                 <include name="cdk-valencycheck.jar"/>
                 
                 <!-- added by MR, new controller/renderer -->
+                <include name="cdk-controlawt.jar"/>
                 <include name="cdk-renderawt.jar"/>
                 <include name="cdk-renderbasic.jar"/>
                 <include name="cdk-rendercontrol.jar"/>
