@@ -12,6 +12,6 @@
 	<classpathentry kind="lib" path="lib/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/fest-assert-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/fest-reflect-1.1.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jchempaint-primary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.openscience.cdk"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
