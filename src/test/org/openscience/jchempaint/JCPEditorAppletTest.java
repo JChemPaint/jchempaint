@@ -32,6 +32,7 @@ public class JCPEditorAppletTest {
 	  String text = applet.dialog("smilestextdialog").textBox("textviewdialogtextarea").text();
 	  Assert.assertTrue(text.indexOf("CCCCCCCC")>-1);
 	  Assert.assertTrue(text.indexOf("[H]C([H])([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])[H]")>-1);
+	  applet.dialog("smilestextdialog").close();
 	}
 
 	@AfterClass public static void tearDown() {
