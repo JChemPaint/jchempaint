@@ -64,6 +64,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.IChemObjectWriter;
+import org.openscience.cdk.io.INChIPlainTextReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
@@ -193,23 +194,21 @@ public class CopyPasteAction extends JCPAction{
                         );
                         sdg.generateCoordinates();
         			} catch (Exception ex) {
-        				if (content.startsWith("InChI")) { // handle it as an InChI
+        				if (content.indexOf("INChI")>-1) { // handle it as an InChI
         		            try {
-        		                InChIGeneratorFactory inchiFactory = new InChIGeneratorFactory();
-        		                InChIToStructure inchiToStructure = inchiFactory.getInChIToStructure(content,jcpPanel.getChemModel().getBuilder());
-        		                INCHI_RET status = inchiToStructure.getReturnStatus();
-        		                if (status == INCHI_RET.OKAY) {
-        		                	IAtomContainer atomContainer = inchiToStructure.getAtomContainer();
-        		                	toPaste = atomContainer.getBuilder().newMolecule(atomContainer);
-        	        				StructureDiagramGenerator sdg =
-        	        				    new StructureDiagramGenerator((IMolecule)toPaste);
+        		            	StringReader sr = new StringReader(content);
+        		                INChIPlainTextReader inchireader = new INChIPlainTextReader(sr);
+        		                IChemFile mol = DefaultChemObjectBuilder.getInstance().newChemFile();
+        		                toPaste = ((IChemFile) inchireader.read(mol)).getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
+    	        				StructureDiagramGenerator sdg =
+    	        				    new StructureDiagramGenerator((IMolecule)toPaste);
 
-        	                        sdg.setTemplateHandler(
-        	                            new TemplateHandler(toPaste.getBuilder())
-        	                        );
-        	                        sdg.generateCoordinates();        		                }
-        		            } catch (Exception e2) {
-        		            	//we do nothing
+    	                        sdg.setTemplateHandler(
+    	                            new TemplateHandler(toPaste.getBuilder())
+    	                        );
+    	                        sdg.generateCoordinates();
+    	                    } catch (Exception e2) {
+        		            	e2.printStackTrace();
         		            }        			
         		        }
         			}

@@ -107,6 +107,14 @@ public class ChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new AlterBondStereoModule(
                     hub, Direction.DOWN));
             hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("undefined_bond")) {
+            hub.setActiveDrawModule(new AlterBondStereoModule(
+                    hub, Direction.UNDEFINED));
+            hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("undefined_stereo_bond")) {
+            hub.setActiveDrawModule(new AlterBondStereoModule(
+                    hub, Direction.EZ_UNDEFINED));
+            hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("triangle")) {
             hub.setActiveDrawModule(new AddRingModule(hub, 3, false));
             hub.getController2DModel().setDrawElement("C");
