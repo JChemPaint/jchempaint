@@ -628,10 +628,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     }
 
     public void stateChanged(EventObject event) {
+    	updateUndoRedoControls();
     }
 
     public void zoomFactorChanged(EventObject event) {
-//        this.updateStatusBar();
     }
 
     public void keyPressed(KeyEvent arg0) {
