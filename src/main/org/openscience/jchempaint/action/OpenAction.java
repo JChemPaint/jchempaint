@@ -49,87 +49,111 @@ import org.openscience.jchempaint.io.JCPFileView;
 
 /**
  * Shows the open dialog
- *
+ * 
  */
 public class OpenAction extends JCPAction {
 
-	private static final long serialVersionUID = 1030940425527065876L;
+    private static final long serialVersionUID = 1030940425527065876L;
 
-	private FileFilter currentFilter = null;
+    private FileFilter currentFilter = null;
 
-	/**
-	 *  Opens an empty JChemPaint frame.
-	 *
-	 * @param  e  Description of the Parameter
-	 */
-	public void actionPerformed(ActionEvent e) {
+    /**
+     * Opens an empty JChemPaint frame.
+     * 
+     * @param e
+     *            Description of the Parameter
+     */
+    public void actionPerformed(ActionEvent e) {
 
-		
-		JFileChooser chooser = new JFileChooser();
-		chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
-		JCPFileFilter.addChoosableFileFilters(chooser);
-		if (jcpPanel.getCurrentOpenFileFilter() != null) {
-			chooser.setFileFilter(jcpPanel.getCurrentOpenFileFilter());
-		}
-		if (jcpPanel.getLastOpenedFile() != null) {
-			chooser.setSelectedFile(jcpPanel.getLastOpenedFile());
-		}
-		if (currentFilter != null) {
-			chooser.setFileFilter(currentFilter);
-		}
-		chooser.setFileView(new JCPFileView());
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
+        JCPFileFilter.addChoosableFileFilters(chooser);
+        if (jcpPanel.getCurrentOpenFileFilter() != null) {
+            chooser.setFileFilter(jcpPanel.getCurrentOpenFileFilter());
+        }
+        if (jcpPanel.getLastOpenedFile() != null) {
+            chooser.setSelectedFile(jcpPanel.getLastOpenedFile());
+        }
+        if (currentFilter != null) {
+            chooser.setFileFilter(currentFilter);
+        }
+        chooser.setFileView(new JCPFileView());
 
-		int returnVal = chooser.showOpenDialog(jcpPanel);
+        int returnVal = chooser.showOpenDialog(jcpPanel);
 
-		currentFilter = chooser.getFileFilter();
+        currentFilter = chooser.getFileFilter();
 
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());
-			jcpPanel.setCurrentOpenFileFilter(chooser.getFileFilter());
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());
+            jcpPanel.setCurrentOpenFileFilter(chooser.getFileFilter());
 
-			javax.swing.filechooser.FileFilter ff = chooser.getFileFilter();
-			if (ff instanceof JCPFileFilter) {
-				type = ((JCPFileFilter) ff).getType();
-				
-			}
-			if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
-		        int clear=jcpPanel.showWarning();
-		        if(clear==JOptionPane.YES_OPTION){
-		        	try {
-						IChemModel chemModel=null;
-						try {
-							chemModel = JChemPaint.readFromFileReader(chooser.getSelectedFile().toURI().toURL(), chooser.getSelectedFile().toURI().toString(), type);
-						} catch (MalformedURLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					    if(jcpPanel.get2DHub().getUndoRedoFactory()!=null && jcpPanel.get2DHub().getUndoRedoHandler()!=null){
-						    IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getLoadNewModelEdit(jcpPanel.getChemModel(), jcpPanel.getChemModel().getMoleculeSet(), jcpPanel.getChemModel().getReactionSet(), chemModel.getMoleculeSet(), chemModel.getReactionSet(), "Load "+chooser.getSelectedFile().getName());
-						    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
-					    }
-						jcpPanel.getChemModel().setMoleculeSet(chemModel.getMoleculeSet());
-						//jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
-						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(
-		    			        new LogicalSelection(LogicalSelection.Type.NONE));
-						
-						// the newly opened file should be set to zoom factor one
-						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
-						
-						// quick fix upside down mol files
-						//jcpPanel.get2DHub().flip(true);
+            javax.swing.filechooser.FileFilter ff = chooser.getFileFilter();
+            if (ff instanceof JCPFileFilter) {
+                type = ((JCPFileFilter) ff).getType();
 
-			          	//jcpPanel.get2DHub().updateView();
-			            jcpPanel.getRenderPanel().update(jcpPanel.getRenderPanel().getGraphics());
+            }
+            if (jcpPanel.getGuistring().equals(
+                    JChemPaintEditorApplet.GUI_APPLET)) {
+                int clear = jcpPanel.showWarning();
+                if (clear == JOptionPane.YES_OPTION) {
+                    try {
+                        IChemModel chemModel = null;
+                        try {
+                            chemModel = JChemPaint
+                                    .readFromFileReader(chooser
+                                            .getSelectedFile().toURI().toURL(),
+                                            chooser.getSelectedFile().toURI()
+                                                    .toString(), type);
+                        } catch (MalformedURLException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        if (jcpPanel.get2DHub().getUndoRedoFactory() != null
+                                && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
+                            IUndoRedoable undoredo = jcpPanel.get2DHub()
+                                    .getUndoRedoFactory().getLoadNewModelEdit(
+                                            jcpPanel.getChemModel(),
+                                            jcpPanel.getChemModel()
+                                                    .getMoleculeSet(),
+                                            jcpPanel.getChemModel()
+                                                    .getReactionSet(),
+                                            chemModel.getMoleculeSet(),
+                                            chemModel.getReactionSet(),
+                                            "Load "
+                                                    + chooser.getSelectedFile()
+                                                            .getName());
+                            jcpPanel.get2DHub().getUndoRedoHandler().postEdit(
+                                    undoredo);
+                        }
+                        jcpPanel.getChemModel().setMoleculeSet(
+                                chemModel.getMoleculeSet());
+                        // jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
+                        jcpPanel.getRenderPanel().getRenderer()
+                                .getRenderer2DModel().setSelection(
+                                        new LogicalSelection(
+                                                LogicalSelection.Type.NONE));
 
-					} catch (CDKException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-		        }
-		    }else{
-		    	JChemPaint.showInstance(chooser.getSelectedFile(),type, jcpPanel, jcpPanel.isDebug());
-		    }
-		}
-	}
+                        // the newly opened file should be set to zoom factor
+                        // one
+                        jcpPanel.getRenderPanel().getRenderer()
+                                .getRenderer2DModel().setZoomFactor(1);
+
+                        // quick fix upside down mol files
+                        // jcpPanel.get2DHub().flip(true);
+
+                        // jcpPanel.get2DHub().updateView();
+                        jcpPanel.getRenderPanel().update(
+                                jcpPanel.getRenderPanel().getGraphics());
+
+                    } catch (CDKException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            } else {
+                JChemPaint.showInstance(chooser.getSelectedFile(), type,
+                        jcpPanel, jcpPanel.isDebug());
+            }
+        }
+    }
 }
-
