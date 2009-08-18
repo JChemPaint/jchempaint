@@ -133,18 +133,20 @@ public class OpenAction extends JCPAction {
                                         new LogicalSelection(
                                                 LogicalSelection.Type.NONE));
 
-                        // the newly opened file should be set to zoom factor
-                        // one
-                        jcpPanel.getRenderPanel().getRenderer()
-                                .getRenderer2DModel().setZoomFactor(1);
+                        // the newly opened file should nicely fit the screen
+                        jcpPanel.getRenderPanel().setFitToScreen(true);
 
                         // quick fix upside down mol files
                         // jcpPanel.get2DHub().flip(true);
 
-                        // jcpPanel.get2DHub().updateView();
                         jcpPanel.getRenderPanel().update(
                                 jcpPanel.getRenderPanel().getGraphics());
 
+                        // enable zooming by removing constraint
+                        jcpPanel.getRenderPanel().setFitToScreen(false);
+
+                    
+                    
                     } catch (CDKException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
