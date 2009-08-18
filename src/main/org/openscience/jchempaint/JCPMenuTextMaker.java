@@ -190,6 +190,10 @@ public class JCPMenuTextMaker {
 		entries.put("redoTooltip", GT._("Redo Action"));
 		entries.put("saveAsTooltip", GT._("Save to a file"));
 		entries.put("undoTooltip", GT._("Undo Action"));
+		entries.put("zoominTooltip", GT._("Zoom in"));
+		entries.put("zoomoutTooltip", GT._("Zoom out"));
+		entries.put("undefined_bondTooltip", GT._("Stereo up or stereo down bond"));
+		entries.put("undefined_stereo_bondTooltip", GT._("Any stereo bond"));
 		entries.put("atomatommappingTooltip", GT._("Add an atom-atom-mapping"));
 		entries.put("bondMenuTitle", GT._("Bond Popup Menu"));
 		entries.put("chemmodelMenuTitle", GT._("ChemModel Popup Menu"));
