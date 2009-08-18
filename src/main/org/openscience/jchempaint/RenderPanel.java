@@ -348,9 +348,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
          * we assume that things have changed so we can't use the cache
          */
 	    this.shouldPaintFromCache = false;
-
 		this.repaint();
 	}
+	
+    public void update(Graphics g) {
+    	//System.out.println("renderpanel update");
+    	paint(g);
+    }
 
 	/**
 	 *  Returns one of the status strings at the given position

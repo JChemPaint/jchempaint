@@ -114,10 +114,13 @@ public class OpenAction extends JCPAction {
 						
 						// the newly opened file should be set to zoom factor one
 						jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
-						// quick fix: Molfile molecules are drawn upside down when opened from file? flip ..
-						jcpPanel.get2DHub().flip(true);
+						
+						// quick fix upside down mol files
+						//jcpPanel.get2DHub().flip(true);
 
-			          	jcpPanel.get2DHub().updateView();
+			          	//jcpPanel.get2DHub().updateView();
+			            jcpPanel.getRenderPanel().update(jcpPanel.getRenderPanel().getGraphics());
+
 					} catch (CDKException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
