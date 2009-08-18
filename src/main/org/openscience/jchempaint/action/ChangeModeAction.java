@@ -30,9 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-
 import java.io.IOException;
-
 import java.util.EventObject;
 
 import javax.swing.JComponent;
@@ -48,6 +46,7 @@ import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
+import org.openscience.cdk.controller.RotateModule;
 import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.controller.IChemModelRelay.Direction;
@@ -144,6 +143,8 @@ public class ChangeModeAction extends JCPAction {
             // (C/H/O/N/etc.)
             hub.setActiveDrawModule(new AddAtomModule(hub));
             hub.getController2DModel().setDrawElement(type);
+        } else if (type.equals("rotate")) {
+            hub.setActiveDrawModule(new RotateModule(hub));
         }
         if (this.jcpPanel.getLastActionButton() != null)
             this.jcpPanel.getLastActionButton().setBackground(Color.LIGHT_GRAY);
