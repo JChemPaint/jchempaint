@@ -195,6 +195,11 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_bondTooltip", GT._("Stereo up or stereo down bond"));
 		entries.put("undefined_stereo_bondTooltip", GT._("Any stereo bond"));
 		entries.put("rotateTooltip", GT._("Rotate selection"));
+		entries.put("cutSelectedTooltip", GT._("Cut selection"));
+		entries.put("copyTooltip", GT._("Copy selection to clipboard"));
+		entries.put("pasteTooltip", GT._("Paste from clipboard"));
+		entries.put("flipVerticalTooltip", GT._("Flip vertical"));
+		entries.put("flipHorizontalTooltip", GT._("Flip horizontal"));
 		entries.put("atomatommappingTooltip", GT._("Add an atom-atom-mapping"));
 		entries.put("bondMenuTitle", GT._("Bond Popup Menu"));
 		entries.put("chemmodelMenuTitle", GT._("ChemModel Popup Menu"));
