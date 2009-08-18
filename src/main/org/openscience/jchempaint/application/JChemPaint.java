@@ -368,7 +368,7 @@ public class JChemPaint {
         String error = null;
         ChemModel chemModel = null;
         IChemFile chemFile = null;
-        if (cor.accepts(IChemFile.class)) {
+        if (cor.accepts(IChemFile.class) && chemModel==null) {
             // try to read a ChemFile
             try {
                 chemFile = (IChemFile) cor.read((IChemObject) new ChemFile());
@@ -383,7 +383,7 @@ public class JChemPaint {
         if (error != null) {
             throw new CDKException(error);
         }
-        if (cor.accepts(ChemModel.class)) {
+        if (cor.accepts(ChemModel.class) && chemModel==null) {
             // try to read a ChemModel
             try {
 
@@ -397,8 +397,8 @@ public class JChemPaint {
             }
         }
 
-        // necessary for Smiles reading..?
-        if (cor.accepts(MoleculeSet.class)) {
+        // Smiles reading
+        if (cor.accepts(MoleculeSet.class) && chemModel==null) {
             // try to read a Molecule set
             try {
                 IMoleculeSet som = (MoleculeSet) cor.read(new MoleculeSet());
@@ -413,6 +413,26 @@ public class JChemPaint {
             }
         }
 
+        // MDLV3000 reading
+        if (cor.accepts(Molecule.class) && chemModel==null) {
+            // try to read a Molecule
+                IMolecule mol = (Molecule) cor.read(new Molecule());
+                if(mol!=null ) 
+                    try{
+                        IMoleculeSet newSet = new MoleculeSet();
+                        newSet.addMolecule(mol);
+                        chemModel = new ChemModel();
+                        chemModel.setMoleculeSet(newSet);
+                        if (chemModel == null) {
+                            error = "The object chemModel was empty unexpectedly!";
+                        }
+                    } catch (Exception exception) {
+                        error = "Error while reading file: " + exception.getMessage();
+                        exception.printStackTrace();
+                    }
+        }
+
+        
         if (error != null) {
             throw new CDKException(error);
         }
