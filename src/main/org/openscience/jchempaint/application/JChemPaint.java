@@ -41,7 +41,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -60,16 +59,19 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.io.CMLReader;
@@ -86,7 +88,6 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.dialog.CreateCoordinatesForFileDialog;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
@@ -263,6 +264,30 @@ public class JChemPaint {
         JChemPaint.removeEmptyMolecules(chemModel);
 
         ControllerHub.avoidOverlap(chemModel);
+        
+        //We update implicit Hs in any case
+        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
+        for (IAtomContainer container :
+            ChemModelManipulator.getAllAtomContainers(chemModel)) {
+           for (IAtom atom : container.atoms()) {
+               if (!(atom instanceof IPseudoAtom)) {
+                   try {
+                       IAtomType type = matcher.findMatchingAtomType(
+                           container, atom
+                       );
+                       if (type != null &&
+                           type.getFormalNeighbourCount() != null) {
+                           int connectedAtomCount = container.getConnectedAtomsCount(atom);
+                           atom.setHydrogenCount(
+                               type.getFormalNeighbourCount() - connectedAtomCount
+                           );
+                       }
+                   } catch ( CDKException e ) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }
     }
 
     private static Reader getReader(URL url) {

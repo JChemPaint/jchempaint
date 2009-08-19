@@ -49,6 +49,7 @@ public class JCPEditorAppletTest {
 	  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 	  Assert.assertEquals("",panel.getSmiles());
 	  restoreModel();
+	  panel.get2DHub().updateView();
 	}
 	
 	private void restoreModel(){

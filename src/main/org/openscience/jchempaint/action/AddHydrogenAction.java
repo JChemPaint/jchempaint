@@ -45,21 +45,13 @@ public class AddHydrogenAction extends JCPAction
 		logger.debug("Trying to add hydrogen in mode: ", type);
 		if (jcpPanel.getChemModel() != null)
 		{
-            if (type.equals("allexplicit")) {
-                jcpPanel.get2DHub().makeAllImplicitExplicit();
+            if (type.equals("hydroon")) {
+            	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
+            		.setShowImplicitHydrogens(true);
             }
-            else if ( type.equals("trackimplicit")) {
-				if(!jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
-					jcpPanel.get2DHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
-				}else{
-					jcpPanel.get2DHub().getController2DModel().setAutoUpdateImplicitHydrogens(false);
-				}
-            }
-            else if (type.equals("allimplicit")) {
-                jcpPanel.get2DHub().makeAllExplicitImplicit();
-            }
-            else if (type.equals("updateimplicit")) {
-                jcpPanel.get2DHub().updateImplicitHydrogenCounts();
+            else if ( type.equals("hydrooff")) {
+            	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
+            		.setShowImplicitHydrogens(false);
             }
             jcpPanel.get2DHub().updateView();
 		}

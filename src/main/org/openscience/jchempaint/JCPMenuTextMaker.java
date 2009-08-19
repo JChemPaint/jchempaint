@@ -71,7 +71,7 @@ public class JCPMenuTextMaker {
 		entries.put("paste", GT._("Paste"));
 		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));
-		entries.put("hydrogen", GT._("Hydrogens..."));
+		entries.put("hydrogen", GT._("Implicit Hydrogens"));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
 		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
 		entries.put("flip", GT._("Flip"));
@@ -92,10 +92,8 @@ public class JCPMenuTextMaker {
 		entries.put("tutorial", GT._("Tutorial"));
 		entries.put("license", GT._("License"));
 		entries.put("about", GT._("About"));
-		entries.put("addImplHydrogen", GT._("Switch on/off Tracking of Implicit Hydrogens"));
-		entries.put("makeHydrogenExplicit", GT._("Make Existing Implicit Hydrogens Explicit"));
-		entries.put("makeHydrogenImplicit", GT._("Make Existing Explicit Hydrogens Implicit"));
-		entries.put("updateHydrogenImplicit", GT._("Update Implicit Hydrogen Count"));
+		entries.put("hydroon", GT._("On all"));
+		entries.put("hydrooff", GT._("Off"));
 		entries.put("editPreferences", GT._("Edit..."));
 		entries.put("reloadPreferences", GT._("Reload Preferences"));
 		entries.put("savePreferences", GT._("Save Preferences"));

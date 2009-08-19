@@ -144,6 +144,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         renderPanel.getRenderer().getRenderer2DModel().addCDKChangeListener(
                 this);
         instances.add(this);
+        //we set this to true always, the user should have no option to switch it off
+        renderPanel.getHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         this.addKeyListener(this);
     }
 
