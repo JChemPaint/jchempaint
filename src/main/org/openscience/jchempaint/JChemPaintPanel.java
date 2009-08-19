@@ -640,16 +640,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     public void keyReleased(KeyEvent arg0) {
         RendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
-        if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
-            IChemObjectSelection selection = model.getSelection();
-            if (selection.isFilled()) {
-                IAtomContainer selected = selection.getConnectedAtomContainer();
-                relay.deleteFragment(selected);
-                model.setSelection(new LogicalSelection(
-                        LogicalSelection.Type.NONE));
-                relay.updateView();
-            }
-        } else if (model.getHighlightedAtom() != null) {
+        if (model.getHighlightedAtom() != null) {
             try {
                 IAtom closestAtom = model.getHighlightedAtom();
                 char x = arg0.getKeyChar();

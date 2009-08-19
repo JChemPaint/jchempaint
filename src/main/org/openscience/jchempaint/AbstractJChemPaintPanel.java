@@ -28,10 +28,14 @@
  */
 package org.openscience.jchempaint;
 
+import java.io.IOException;
+
 import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.action.CreateSmilesAction;
 
 /**
  * An abstract superclass for the viewer and editor panel.
@@ -75,5 +79,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	 */
 	public void setChemModel(IChemModel model){
 		renderPanel.setChemModel(model);
+	}
+	
+	public String getSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
+		return CreateSmilesAction.getSmiles(getChemModel());
 	}
 }

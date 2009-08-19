@@ -66,6 +66,8 @@ public class JCPMenuTextMaker {
 		entries.put("redo", GT._("Redo"));
 		entries.put("selectAll", GT._("Select All"));
 		entries.put("copy", GT._("Copy"));
+		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
+		entries.put("delete", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
 		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));

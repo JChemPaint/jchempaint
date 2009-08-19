@@ -40,11 +40,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
-import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JOptionPane;
-
-import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -52,9 +50,6 @@ import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -73,7 +68,6 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
@@ -85,8 +79,6 @@ import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
-
-import sun.awt.AWTAutoShutdown;
 
 /**
  * Action to copy/paste structures.
@@ -129,9 +121,38 @@ public class CopyPasteAction extends JCPAction{
 	        IChemModel chemModel = jcpPanel.getChemModel();
 
 	        if ("copy".equals(type)) {
-	        	if(renderModel.getSelection().getConnectedAtomContainer()!=null)
+	        	if(renderModel.getSelection().getConnectedAtomContainer()!=null){
 	        		addToClipboard(sysClip,
 	                    renderModel.getSelection().getConnectedAtomContainer());
+	        	}else{
+	        		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
+	        		IAtomContainer allinone=chemModel.getBuilder().newAtomContainer();
+	        		for(int i=0;i<acs.size();i++){
+	        			allinone.add(acs.get(i));
+	        		}
+	        		addToClipboard(sysClip,allinone);
+	        	}
+	        } else if ("copyAsSmiles".equals(type)) {
+	        	try {
+		        	if(renderModel.getSelection().getConnectedAtomContainer()!=null){
+		        		SmilesGenerator sg=new SmilesGenerator();
+		        		sysClip.setContents(new SmilesSelection(sg.createSMILES(renderModel.getSelection().getConnectedAtomContainer().getBuilder().newMolecule(renderModel.getSelection().getConnectedAtomContainer()))),null);
+		        	}else{
+		        		sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(chemModel)),null);
+		        	}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	        } else if ("delete".equals(type)) {
+	            IChemObjectSelection selection = renderModel.getSelection();
+	            if (selection.isFilled()) {
+	                IAtomContainer selected = selection.getConnectedAtomContainer();
+	                jcpPanel.get2DHub().deleteFragment(selected);
+	                renderModel.setSelection(new LogicalSelection(
+	                        LogicalSelection.Type.NONE));
+	                jcpPanel.get2DHub().updateView();
+	            }
 	        } else if ("paste".equals(type)) {
 	        	Transferable transfer = sysClip.getContents( null );
 	        	ISimpleChemObjectReader reader = null;
@@ -485,5 +506,41 @@ public class CopyPasteAction extends JCPAction{
     	System.out.println ("Lost ownership");
       }
    }
+    
+   class SmilesSelection implements Transferable, ClipboardOwner {
+		private DataFlavor [] supportedFlavors = {
+				DataFlavor.stringFlavor
+		};
+		
+		String smiles;
+
+		public SmilesSelection(String smiles) throws Exception {
+			this.smiles = smiles;
+		}
+		
+		public synchronized DataFlavor [] getTransferDataFlavors () {
+			return (supportedFlavors);
+		}
+
+        public boolean isDataFlavorSupported (DataFlavor parFlavor) {
+      	  for(int i=0;i<supportedFlavors.length;i++){
+      		  if(supportedFlavors[i].equals(parFlavor))
+      			  return true;
+      	  }
+      	  return false;
+        }
+
+        public synchronized Object getTransferData (DataFlavor parFlavor)	throws UnsupportedFlavorException {
+	      	if(parFlavor.equals(DataFlavor.stringFlavor)) {
+	      		return smiles;
+	    	} else {
+	    		throw new UnsupportedFlavorException (parFlavor);
+	    	}
+      	}
+
+        public void lostOwnership (Clipboard parClipboard, Transferable parTransferable) {
+        	System.out.println ("Lost ownership");
+        }
+     }
 }
 
