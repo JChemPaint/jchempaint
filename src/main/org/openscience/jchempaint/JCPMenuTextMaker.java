@@ -71,6 +71,13 @@ public class JCPMenuTextMaker {
 		entries.put("paste", GT._("Paste"));
 		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));
+		entries.put("atom", GT._("Atom"));
+		entries.put("formalCharge", GT._("Charge"));
+		entries.put("chargePlus2", GT._("+2"));
+		entries.put("chargePlus1", GT._("+1"));
+		entries.put("chargeZero", GT._("0"));
+		entries.put("chargeMinus1", GT._("-1"));
+		entries.put("chargeMinus2", GT._("-2"));
 		entries.put("hydrogen", GT._("Implicit Hydrogens"));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
 		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
@@ -104,7 +111,7 @@ public class JCPMenuTextMaker {
 		entries.put("selectFromChemObject", GT._("Select"));
 		entries.put("selectMolecule", GT._("Select Molecule"));
 		entries.put("symbolChange", GT._("Change Element..."));
-		entries.put("isotopeChange", GT._("Change Isotope..."));
+		entries.put("isotopeChange", GT._("Change Isotope"));
 		entries.put("convertToRadical", GT._("Convert to Radical"));
 		entries.put("reaction", GT._("Reaction..."));
 		entries.put("showChemObjectProperties", GT._("Properties"));

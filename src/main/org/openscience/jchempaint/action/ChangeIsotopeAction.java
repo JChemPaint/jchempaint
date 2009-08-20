@@ -29,9 +29,12 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
 
@@ -47,8 +50,26 @@ public class ChangeIsotopeAction extends JCPAction {
         logger.debug("About to change atom type of relevant atom!");
         IChemObject object = getSource(event);
         logger.debug("Source of call: ", object);
-        if (object instanceof Atom) {
-            Atom atom = (Atom) object;
+        Iterator<IAtom> atomsInRange = null;
+		if (object == null){
+			//this means the main menu was used
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
+		}else if (object instanceof IAtom)
+		{
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add((IAtom) object);
+			atomsInRange = atoms.iterator();
+		} else
+		{
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom());
+			atomsInRange = atoms.iterator();
+		}
+		if(atomsInRange==null)
+			return;
+		while(atomsInRange.hasNext()){
+            IAtom atom = atomsInRange.next();
             int isotopeNumber = 0;
             try {
                 IIsotope isotope = 

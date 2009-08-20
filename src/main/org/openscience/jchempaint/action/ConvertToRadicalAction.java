@@ -29,15 +29,16 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.SingleElectron;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.LonePairElectronChecker;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
@@ -51,42 +52,53 @@ public class ConvertToRadicalAction extends JCPAction {
 	public void actionPerformed(ActionEvent event) {
         logger.debug("Converting to radical: ", type);
         IChemObject object = getSource(event);
-        org.openscience.cdk.interfaces.IChemModel model = jcpPanel.getChemModel();
-        if (object != null) {
-            if (object instanceof Atom) {
-                Atom atom = (Atom)object;
-                double number=0;
-				try {
-			        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
-					AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
-					
-          
-        
-          //TODO MR
-          //fix this ?? how  ??
-          //number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
+        Iterator<IAtom> atomsInRange = null;
+		if (object == null){
+			//this means the main menu was used
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
+		}else if (object instanceof IAtom)
+		{
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add((IAtom) object);
+			atomsInRange = atoms.iterator();
+		} else
+		{
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom());
+			atomsInRange = atoms.iterator();
+		}
+		if(atomsInRange==null)
+			return;
+		while(atomsInRange.hasNext()){
+            IAtom atom = atomsInRange.next();
+            double number=0;
+			try {
+		        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
+				
+      
+    
+      //TODO MR
+      //fix this ?? how  ??
+      //number = new LonePairElectronChecker().getImplicitLonePairCount(atom, relevantContainer);
 
 
-				} catch (CDKException e) {
-					e.printStackTrace();
-					e.getMessage();
-					logger.error(e.getMessage());
-					logger.debug(e);				}
+			} catch (CDKException e) {
+				e.printStackTrace();
+				e.getMessage();
+				logger.error(e.getMessage());
+				logger.debug(e);				}
+            
+            if(number > 0.0)
+            {
+                jcpPanel.get2DHub().addSingleElectron(atom);
+                logger.info("Added single electron to atom");
                 
-                if(number > 0.0)
-                {
-                    jcpPanel.get2DHub().addSingleElectron(atom);
-                    logger.info("Added single electron to atom");
-                    
-                }
-                else 
-                	JOptionPane.showMessageDialog(jcpPanel,GT._("A radical cannot be added to this atom." +
-                	" Re-try with less hydrogens."));
-            } else {
-                logger.error("Object not an Atom! Cannot convert into a radical!");
             }
-        } else {
-            logger.warn("Cannot convert a null object!");
+            else 
+            	JOptionPane.showMessageDialog(jcpPanel,GT._("A radical cannot be added to this atom." +
+            	" Re-try with less hydrogens."));
         }
         jcpPanel.get2DHub().updateView();
     }

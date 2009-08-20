@@ -4,7 +4,7 @@
  *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
  *  $Revision: 7634 $
  *
- *  Copyright (C) 1997-2008 Stefan Kuhn
+ *  Copyright (C) 2009 Stefan Kuhn
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -33,22 +33,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
-;
+
 
 /**
- * Converts to and from pseudo atoms
+ * Changes the charge
  */
-public class ConvertToPseudoAtomAction extends JCPAction {
+public class ChargeAction extends JCPAction
+{
 
-	private static final long serialVersionUID = -598284013998335002L;
+	private static final long serialVersionUID = -8502905723573311893L;
 
-	public void actionPerformed(ActionEvent event) {
-        logger.debug("Converting to: ", type);
-        IChemObject object = getSource(event);
-        Iterator<IAtom> atomsInRange = null;
+	public void actionPerformed(ActionEvent event)
+	{
+		logger.debug("About to change atom type of relevant atom!");
+		Iterator<IAtom> atomsInRange = null;
+		IChemObject object = getSource(event);
+		logger.debug("Source of call: ", object);
 		if (object == null){
 			//this means the main menu was used
 			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
@@ -66,19 +68,23 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 		}
 		if(atomsInRange==null)
 			return;
+		String s = event.getActionCommand();
+		String action = s.substring(s.indexOf("@") + 1);
 		while(atomsInRange.hasNext()){
-            IAtom atom = atomsInRange.next();
-        	if(type.equals("normal")){
-                PseudoAtom pseudo = (PseudoAtom)atom;
-                IAtom normal = pseudo.getBuilder().newAtom(pseudo);
-                normal.setSymbol("C");
-                jcpPanel.get2DHub().replaceAtom(normal,pseudo);
-        	}else{
-                PseudoAtom pseudo = new PseudoAtom(atom);
-                pseudo.setLabel(type);
-                jcpPanel.get2DHub().replaceAtom(pseudo,atom);
-        	}
-        }
-        jcpPanel.get2DHub().updateView();
-    }
+			IAtom atom = atomsInRange.next();
+			if(action.equals("plus2")){
+				atom.setFormalCharge(2);
+			}else if(action.equals("plus1")){
+				atom.setFormalCharge(1);
+			}else if(action.equals("zero")){
+				atom.setFormalCharge(0);
+			}else if(action.equals("minus1")){
+				atom.setFormalCharge(-1);
+			}else if(action.equals("minus2")){
+				atom.setFormalCharge(-2);
+			}
+		}
+		jcpPanel.get2DHub().updateView();
+	}
 }
+

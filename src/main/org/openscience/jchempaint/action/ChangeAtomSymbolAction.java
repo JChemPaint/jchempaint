@@ -29,15 +29,15 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 
 
 /**
@@ -52,37 +52,49 @@ public class ChangeAtomSymbolAction extends JCPAction
 	{
 		logger.debug("About to change atom type of relevant atom!");
 		IControllerModel c2dm = jcpPanel.get2DHub().getController2DModel();
-		IAtom atomInRange = null;
 		IChemObject object = getSource(event);
 		logger.debug("Source of call: ", object);
-		if (object instanceof IAtom)
+        Iterator<IAtom> atomsInRange = null;
+		if (object == null){
+			//this means the main menu was used
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
+		}else if (object instanceof IAtom)
 		{
-			atomInRange = (IAtom) object;
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add((IAtom) object);
+			atomsInRange = atoms.iterator();
 		} else
 		{
-			atomInRange = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom();
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			atoms.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom());
+			atomsInRange = atoms.iterator();
 		}
+		if(atomsInRange==null)
+			return;
 		String s = event.getActionCommand();
 		String symbol = s.substring(s.indexOf("@") + 1);
-		//if the atom is a pseudoatom, we must convert it back to a normal atom
-		if(atomInRange instanceof IPseudoAtom){
-	        IPseudoAtom atom = (IPseudoAtom)atomInRange;
-	        IAtom newAtom = atom.getBuilder().newAtom(symbol, atom.getPoint2d());
-	        jcpPanel.get2DHub().replaceAtom(newAtom, atom);
-		}else{
-            jcpPanel.get2DHub().setSymbol(atomInRange,symbol);
-			// modify the current atom symbol
-			c2dm.setDrawElement(symbol);
-		}
-		//TODO still needed? should this go in hub?
-		// configure the atom, so that the atomic number matches the symbol
-		try
-		{
-			IsotopeFactory.getInstance(atomInRange.getBuilder()).configure(atomInRange);
-		} catch (Exception exception)
-		{
-			logger.error("Error while configuring atom");
-			logger.debug(exception);
+		while(atomsInRange.hasNext()){
+            IAtom atom = atomsInRange.next();
+			//if the atom is a pseudoatom, we must convert it back to a normal atom
+			if(atom instanceof IPseudoAtom){
+		        IAtom newAtom = atom.getBuilder().newAtom(symbol, atom.getPoint2d());
+		        jcpPanel.get2DHub().replaceAtom(newAtom, atom);
+			}else{
+	            jcpPanel.get2DHub().setSymbol(atom,symbol);
+				// modify the current atom symbol
+				c2dm.setDrawElement(symbol);
+			}
+			//TODO still needed? should this go in hub?
+			// configure the atom, so that the atomic number matches the symbol
+			try
+			{
+				IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+			} catch (Exception exception)
+			{
+				logger.error("Error while configuring atom");
+				logger.debug(exception);
+			}
 		}
 		jcpPanel.get2DHub().updateView();
 	}
