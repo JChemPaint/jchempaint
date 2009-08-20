@@ -92,110 +92,105 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
-public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListener {
+public class RenderPanel extends JPanel implements IViewEventRelay,
+        IUndoListener {
 
-	private Renderer renderer;
+    private Renderer renderer;
 
-	private boolean isNewChemModel;
+    private boolean isNewChemModel;
 
-	private ControllerHub hub;
+    private ControllerHub hub;
 
-	private ControllerModel controllerModel;
+    private ControllerModel controllerModel;
 
-	private SwingMouseEventRelay mouseEventRelay;
+    private SwingMouseEventRelay mouseEventRelay;
 
-	private boolean fitToScreen;
+    private boolean fitToScreen;
 
-	private boolean shouldPaintFromCache = false;
+    private boolean shouldPaintFromCache = false;
 
-	private UndoManager undoManager=new UndoManager();
+    private UndoManager undoManager = new UndoManager();
 
-	private boolean debug=false;
+    private boolean debug = false;
 
-	private PhantomBondGenerator pbg = new PhantomBondGenerator();
+    private PhantomBondGenerator pbg = new PhantomBondGenerator();
 
-	public RenderPanel(IChemModel chemModel, int width, int height,
+    public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen, boolean debug) {
-		this.debug = debug;
-		this.setupMachinery(chemModel, fitToScreen);
-		this.setupPanel(width, height);
-		this.fitToScreen = fitToScreen;
-		int limit = Integer.parseInt(JCPPropertyHandler
-		                               .getInstance()
-		                               .getJCPProperties()
-		                               .getProperty("General.UndoStackSize"));
-		undoManager.setLimit(limit);
-	}
+        this.debug = debug;
+        this.setupMachinery(chemModel, fitToScreen);
+        this.setupPanel(width, height);
+        this.fitToScreen = fitToScreen;
+        int limit = Integer.parseInt(JCPPropertyHandler.getInstance()
+                .getJCPProperties().getProperty("General.UndoStackSize"));
+        undoManager.setLimit(limit);
+    }
 
-	public void setFitToScreen(boolean fitToScreen) {
-	    this.renderer.getRenderer2DModel().setFitToScreen(fitToScreen);
-	}
+    public void setFitToScreen(boolean fitToScreen) {
+        this.renderer.getRenderer2DModel().setFitToScreen(fitToScreen);
+    }
 
-	public IChemModel getChemModel() {
-	    return this.hub.getIChemModel();
-	}
+    public IChemModel getChemModel() {
+        return this.hub.getIChemModel();
+    }
 
-	public void setChemModel(IChemModel model) {
-		this.hub.setChemModel(model);
-	}
+    public void setChemModel(IChemModel model) {
+        this.hub.setChemModel(model);
+    }
 
-	public ControllerHub getHub() {
-	    return hub;
-	}
+    public ControllerHub getHub() {
+        return hub;
+    }
 
-	private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
-		// setup the Renderer and the controller 'model'
+    private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
+        // setup the Renderer and the controller 'model'
 
-		if (this.renderer == null) {
-			this.renderer = new Renderer(makeGenerators(), 
-			                             makeReactionGenerators(), 
-			                             new AWTFontManager());
-			//any specific rendering settings defaults should go here
-			this.renderer.getRenderer2DModel().setShowEndCarbons(false);
-		}
-		this.setFitToScreen(fitToScreen);
-		this.controllerModel = new ControllerModel();
+        if (this.renderer == null) {
+            this.renderer = new Renderer(makeGenerators(),
+                    makeReactionGenerators(), new AWTFontManager());
+            // any specific rendering settings defaults should go here
+            this.renderer.getRenderer2DModel().setShowEndCarbons(false);
+            this.renderer.getRenderer2DModel().setShowAromaticity(false);
+        }
+        this.setFitToScreen(fitToScreen);
+        this.controllerModel = new ControllerModel();
 
-		UndoRedoHandler undoredohandler = new UndoRedoHandler();
-		undoredohandler.addIUndoListener(this);
-		// connect the Renderer to the Hub
-		this.hub = new ControllerHub(controllerModel,
-		                             renderer,
-		                             chemModel,
-		                             this,
-		                             undoredohandler,
-		                             new SwingUndoRedoFactory());
+        UndoRedoHandler undoredohandler = new UndoRedoHandler();
+        undoredohandler.addIUndoListener(this);
+        // connect the Renderer to the Hub
+        this.hub = new ControllerHub(controllerModel, renderer, chemModel,
+                this, undoredohandler, new SwingUndoRedoFactory());
         pbg.setControllerHub(hub);
 
-		// connect mouse events from Panel to the Hub
-		this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
-		this.addMouseListener(mouseEventRelay);
-		this.addMouseMotionListener(mouseEventRelay);
-		this.addMouseWheelListener(mouseEventRelay);
-		this.isNewChemModel = true;
-	}
+        // connect mouse events from Panel to the Hub
+        this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
+        this.addMouseListener(mouseEventRelay);
+        this.addMouseMotionListener(mouseEventRelay);
+        this.addMouseWheelListener(mouseEventRelay);
+        this.isNewChemModel = true;
+    }
 
-	private List<IReactionGenerator> makeReactionGenerators() {
-	    List<IReactionGenerator> generators = new ArrayList<IReactionGenerator>();
-	    // generate the bounds first, so that they are to the back
+    private List<IReactionGenerator> makeReactionGenerators() {
+        List<IReactionGenerator> generators = new ArrayList<IReactionGenerator>();
+        // generate the bounds first, so that they are to the back
         if (debug) {
-	    	generators.add(new BoundsGenerator());
+            generators.add(new BoundsGenerator());
         }
-    	generators.add(new ReactionBoxGenerator());
-	    generators.add(new ReactionArrowGenerator());
-	    generators.add(new ReactionPlusGenerator());
-		generators.add(new ReactantsBoxGenerator());
-		generators.add(new ProductsBoxGenerator());
-	    generators.add(new MappingGenerator());
-		return generators;
-	}
+        generators.add(new ReactionBoxGenerator());
+        generators.add(new ReactionArrowGenerator());
+        generators.add(new ReactionPlusGenerator());
+        generators.add(new ReactantsBoxGenerator());
+        generators.add(new ProductsBoxGenerator());
+        generators.add(new MappingGenerator());
+        return generators;
+    }
 
-	private List<IGenerator> makeGenerators() {
-	    List<IGenerator> generators = new ArrayList<IGenerator>();
-	    if (debug) {
-	    	generators.add(new AtomContainerBoundsGenerator());
-	    }
-	    generators.add(new RingGenerator());
+    private List<IGenerator> makeGenerators() {
+        List<IGenerator> generators = new ArrayList<IGenerator>();
+        if (debug) {
+            generators.add(new AtomContainerBoundsGenerator());
+        }
+        generators.add(new RingGenerator());
         generators.add(new ExtendedAtomGenerator());
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
@@ -207,108 +202,107 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         generators.add(new MergeAtomsGenerator());
         generators.add(pbg);
         return generators;
-	}
-
-	private void setupPanel(int width, int height) {
-		this.setBackground(renderer.getRenderer2DModel().getBackColor());
-		this.setPreferredSize(new Dimension(width, height));
-	}
-
-	public String toSVG() {
-	    IChemModel chemModel = this.hub.getIChemModel();
-	    if (chemModel != null && chemModel.getMoleculeSet() != null) {
-	    	SVGGenerator svgGenerator = new SVGGenerator();
-	    	this.renderer.paintChemModel(
-	    	        chemModel, svgGenerator, this.getBounds(), true);
-	    	return svgGenerator.getResult();
-	    } else {
-	    	return "<svg></svg>";
-	    }
-	}
-
-	public Image takeSnapshot() {
-	    IChemModel chemModel = hub.getIChemModel();
-	    if (isValidChemModel(chemModel)) {
-    	    Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
-    	    Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
-            Image image = GraphicsEnvironment
-                            .getLocalGraphicsEnvironment()
-                            .getScreenDevices()[0]
-                            .getDefaultConfiguration()
-                            .createCompatibleImage(
-                                    bounds.width, bounds.height);
-            Graphics2D g = (Graphics2D)image.getGraphics();
-            takeSnapshot(g, chemModel, bounds, modelBounds);
-            return image;
-	    } else{
-	        return null;
-	    }
-	}
-
-	public void takeSnapshot(Graphics2D g) {
-	    IChemModel chemModel = hub.getIChemModel();
-	    Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
-        Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
-	    this.takeSnapshot(g, hub.getIChemModel(), bounds, modelBounds);
-	}
-
-	public void takeSnapshot(
-	        Graphics2D g, IChemModel chemModel, Rectangle s, Rectangle2D m) {
-	    g.setColor(renderer.getRenderer2DModel().getBackColor());
-	    g.fillRect(0, 0, s.width, s.height);
-
-	    renderer.setDrawCenter(s.getWidth() / 2, s.getHeight() / 2);
-	    renderer.setModelCenter(m.getCenterX(), m.getCenterY());
-
-	    renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
     }
 
-	private boolean isValidChemModel(IChemModel chemModel) {
-	    return chemModel != null
-	            && (chemModel.getMoleculeSet() != null
-	                    || chemModel.getReactionSet() != null);
-	}
+    private void setupPanel(int width, int height) {
+        this.setBackground(renderer.getRenderer2DModel().getBackColor());
+        this.setPreferredSize(new Dimension(width, height));
+    }
+
+    public String toSVG() {
+        IChemModel chemModel = this.hub.getIChemModel();
+        if (chemModel != null && chemModel.getMoleculeSet() != null) {
+            SVGGenerator svgGenerator = new SVGGenerator();
+            this.renderer.paintChemModel(chemModel, svgGenerator, this
+                    .getBounds(), true);
+            return svgGenerator.getResult();
+        } else {
+            return "<svg></svg>";
+        }
+    }
+
+    public Image takeSnapshot() {
+        IChemModel chemModel = hub.getIChemModel();
+        if (isValidChemModel(chemModel)) {
+            Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
+            Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
+            Image image = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getScreenDevices()[0].getDefaultConfiguration()
+                    .createCompatibleImage(bounds.width, bounds.height);
+            Graphics2D g = (Graphics2D) image.getGraphics();
+            takeSnapshot(g, chemModel, bounds, modelBounds);
+            return image;
+        } else {
+            return null;
+        }
+    }
+
+    public void takeSnapshot(Graphics2D g) {
+        IChemModel chemModel = hub.getIChemModel();
+        Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
+        Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
+        this.takeSnapshot(g, hub.getIChemModel(), bounds, modelBounds);
+    }
+
+    public void takeSnapshot(Graphics2D g, IChemModel chemModel, Rectangle s,
+            Rectangle2D m) {
+        g.setColor(renderer.getRenderer2DModel().getBackColor());
+        g.fillRect(0, 0, s.width, s.height);
+
+        renderer.setDrawCenter(s.getWidth() / 2, s.getHeight() / 2);
+        renderer.setModelCenter(m.getCenterX(), m.getCenterY());
+
+        renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
+    }
+
+    private boolean isValidChemModel(IChemModel chemModel) {
+        return chemModel != null
+                && (chemModel.getMoleculeSet() != null || chemModel
+                        .getReactionSet() != null);
+    }
 
     public void paint(Graphics g) {
         this.setBackground(renderer.getRenderer2DModel().getBackColor());
         super.paint(g);
 
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
-    	if (this.shouldPaintFromCache) {
-    	    renderer.repaint(new AWTDrawVisitor(g2));
-    	} else {
-    	    IChemModel chemModel = this.hub.getIChemModel();
+        if (this.shouldPaintFromCache) {
+            renderer.repaint(new AWTDrawVisitor(g2));
+        } else {
+            IChemModel chemModel = this.hub.getIChemModel();
 
-    	    if (!isValidChemModel(chemModel)) return;
+            if (!isValidChemModel(chemModel))
+                return;
 
-    		/*
-    		 * It is more correct to use a rectangle starting at (0,0)
-    		 * than to use getBounds() as the RenderPanel may be a child
-    		 * of some container window, and its Graphics will be
-    		 * translated relative to its parent.
-    		 */
-    	    Rectangle screen = new Rectangle(0, 0, getParent().getWidth()-20, getParent().getHeight()-20);
-    	    
-    	    if (renderer.getRenderer2DModel().isFitToScreen()) {
-    	        this.paintChemModelFitToScreen(chemModel, g2, screen);
-    	    } else {
-    	        this.paintChemModel(chemModel, g2, screen);
-    	    }
-    	}
+            /*
+             * It is more correct to use a rectangle starting at (0,0) than to
+             * use getBounds() as the RenderPanel may be a child of some
+             * container window, and its Graphics will be translated relative to
+             * its parent.
+             */
+            Rectangle screen = new Rectangle(0, 0, getParent().getWidth() - 20,
+                    getParent().getHeight() - 20);
+
+            if (renderer.getRenderer2DModel().isFitToScreen()) {
+                this.paintChemModelFitToScreen(chemModel, g2, screen);
+            } else {
+                this.paintChemModel(chemModel, g2, screen);
+            }
+        }
     }
 
     /**
      * Paint the chem model not fit-to-screen
-     *
+     * 
      * @param chemModel
      * @param g
      * @param screen
      */
     private void paintChemModel(
 
-        IChemModel chemModel, Graphics2D g, Rectangle screen) {
-   	
+    IChemModel chemModel, Graphics2D g, Rectangle screen) {
+
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
         }
@@ -321,157 +315,152 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         // determine the size the canvas needs to be to fit the model
         if (diagram != null) {
             Rectangle result = shift(screen, diagram);
-            
-            // this makes sure the toolbars get drawn 
+
+            // this makes sure the toolbars get drawn
             this.setPreferredSize(new Dimension(result.width, result.height));
             this.revalidate();
             super.paint(g);
             renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
-            
+
         }
     }
 
-    private void paintChemModelFitToScreen(
-            IChemModel chemModel, Graphics2D g, Rectangle screen) {
+    private void paintChemModelFitToScreen(IChemModel chemModel, Graphics2D g,
+            Rectangle screen) {
 
         renderer.paintChemModel(chemModel, new AWTDrawVisitor(g), screen, true);
 
     }
 
     public void setIsNewChemModel(boolean isNewChemModel) {
-	    this.isNewChemModel = isNewChemModel;
-	}
-
-	public void updateView() {
-	    /*
-         * updateView should only be called in a ControllerModule where
-         * we assume that things have changed so we can't use the cache
-         */
-	    this.shouldPaintFromCache = false;
-		this.repaint();
-	}
-	
-    public void update(Graphics g) {
-    	//System.out.println("renderpanel update");
-    	paint(g);
+        this.isNewChemModel = isNewChemModel;
     }
 
-	/**
-	 *  Returns one of the status strings at the given position
-	 *
-	 * @param  position
-	 * @return the current status
-	 */
-	public String getStatus(int position) {
-		String status = "";
-		if (position == 0) {
-			// depict editing mode
-		    String mode = hub.getActiveDrawModule().getDrawModeString();
-			status = JCPMenuTextMaker.getInstance("applet").getText(mode);
-		} else if (position == 1) {
-			// depict bruto formula
-		    IChemModel chemModel = hub.getIChemModel();
-		    IMoleculeSet molecules = chemModel.getMoleculeSet();
-		    if (molecules != null && molecules.getAtomContainerCount() > 0) {
-		        IMolecularFormula wholeModel =
-		            NoNotificationChemObjectBuilder.getInstance().newMolecularFormula();
-		        Iterator<IAtomContainer> containers =
-		            ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
-		        int implicitHs = 0;
-	        	while (containers.hasNext()) {
-	        		for(IAtom atom : containers.next().atoms()){
-	        			wholeModel.addIsotope(atom);
-	                   	if (atom.getHydrogenCount() != null) {
-	                    	implicitHs += atom.getHydrogenCount();
-	                	}
-	                }
-	        	}
-	        	try {
-	        		if (implicitHs > 0)
-	        			wholeModel.addIsotope(
-	        			        IsotopeFactory.getInstance(
-	        			                wholeModel.getBuilder()).getMajorIsotope(1),
-	        			                implicitHs);
-				} catch (IOException e) {
-					// do nothing
-				}
-		        String formula
-    		        = MolecularFormulaManipulator.getHTML(
-    		                        wholeModel,
-    		                        true,
-    		                        false);
+    public void updateView() {
+        /*
+         * updateView should only be called in a ControllerModule where we
+         * assume that things have changed so we can't use the cache
+         */
+        this.shouldPaintFromCache = false;
+        this.repaint();
+    }
 
-		        status = makeStatusBarString(
-		                formula, implicitHs,
-		                MolecularFormulaManipulator.getNaturalExactMass(wholeModel));
-		    }
-	    } else if (position == 2) {
-	        // depict brutto formula of the selected molecule or part of molecule
-	        IChemObjectSelection selection =
-	            renderer.getRenderer2DModel().getSelection();
+    public void update(Graphics g) {
+        // System.out.println("renderpanel update");
+        paint(g);
+    }
 
-	        if (selection != null) {
-	            IAtomContainer ac = selection.getConnectedAtomContainer();
-	            if (ac != null) {
-			        int implicitHs = 0;
-	        		for(IAtom atom : ac.atoms()){
-	        			if (atom.getHydrogenCount() != null) {
-	                    	implicitHs += atom.getHydrogenCount();
-	                	}
-	                }
-	                String formula = MolecularFormulaManipulator
-	                                .getHTML(MolecularFormulaManipulator
-	                                .getMolecularFormula(ac), true, false);
-	                status = makeStatusBarString(
-	                        formula, implicitHs,
-	                        AtomContainerManipulator.getNaturalExactMass(ac));
-	            }
-	        }
-	    } else if (position == 3) {
-	    	status = GT._("Zoomfactor")
+    /**
+     * Returns one of the status strings at the given position
+     * 
+     * @param position
+     * @return the current status
+     */
+    public String getStatus(int position) {
+        String status = "";
+        if (position == 0) {
+            // depict editing mode
+            String mode = hub.getActiveDrawModule().getDrawModeString();
+            status = JCPMenuTextMaker.getInstance("applet").getText(mode);
+        } else if (position == 1) {
+            // depict bruto formula
+            IChemModel chemModel = hub.getIChemModel();
+            IMoleculeSet molecules = chemModel.getMoleculeSet();
+            if (molecules != null && molecules.getAtomContainerCount() > 0) {
+                IMolecularFormula wholeModel = NoNotificationChemObjectBuilder
+                        .getInstance().newMolecularFormula();
+                Iterator<IAtomContainer> containers = ChemModelManipulator
+                        .getAllAtomContainers(chemModel).iterator();
+                int implicitHs = 0;
+                while (containers.hasNext()) {
+                    for (IAtom atom : containers.next().atoms()) {
+                        wholeModel.addIsotope(atom);
+                        if (atom.getHydrogenCount() != null) {
+                            implicitHs += atom.getHydrogenCount();
+                        }
+                    }
+                }
+                try {
+                    if (implicitHs > 0)
+                        wholeModel.addIsotope(IsotopeFactory.getInstance(
+                                wholeModel.getBuilder()).getMajorIsotope(1),
+                                implicitHs);
+                } catch (IOException e) {
+                    // do nothing
+                }
+                String formula = MolecularFormulaManipulator.getHTML(
+                        wholeModel, true, false);
+
+                status = makeStatusBarString(formula, implicitHs,
+                        MolecularFormulaManipulator
+                                .getNaturalExactMass(wholeModel));
+            }
+        } else if (position == 2) {
+            // depict brutto formula of the selected molecule or part of
+            // molecule
+            IChemObjectSelection selection = renderer.getRenderer2DModel()
+                    .getSelection();
+
+            if (selection != null) {
+                IAtomContainer ac = selection.getConnectedAtomContainer();
+                if (ac != null) {
+                    int implicitHs = 0;
+                    for (IAtom atom : ac.atoms()) {
+                        if (atom.getHydrogenCount() != null) {
+                            implicitHs += atom.getHydrogenCount();
+                        }
+                    }
+                    String formula = MolecularFormulaManipulator
+                            .getHTML(MolecularFormulaManipulator
+                                    .getMolecularFormula(ac), true, false);
+                    status = makeStatusBarString(formula, implicitHs,
+                            AtomContainerManipulator.getNaturalExactMass(ac));
+                }
+            }
+        } else if (position == 3) {
+            status = GT._("Zoomfactor")
                     + ": "
                     + NumberFormat.getPercentInstance().format(
                             renderer.getRenderer2DModel().getZoomFactor());
-	    }
-		return status;
-	}
+        }
+        return status;
+    }
 
-	private String makeStatusBarString(String formula, int implicitHs, double mass) {
-		DecimalFormat df1 = new DecimalFormat("####.0000");
+    private String makeStatusBarString(String formula, int implicitHs,
+            double mass) {
+        DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
-            + formula
-            + (implicitHs == 0 ? "" : " ( "
-            + implicitHs + " "
-            + GT._("Hs implicit")+")")
-            + (mass>.1 ? " ("+GT._("mass")+" "+df1.format(mass)+")" : "")
-            +"</html>";
-	}
+                + formula
+                + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
+                        + GT._("Hs implicit") + ")")
+                + (mass > .1 ? " (" + GT._("mass") + " " + df1.format(mass)
+                        + ")" : "") + "</html>";
+    }
 
-	public Renderer getRenderer() {
-		return renderer;
-	}
+    public Renderer getRenderer() {
+        return renderer;
+    }
 
-	public UndoManager getUndoManager() {
-		return undoManager;
-	}
+    public UndoManager getUndoManager() {
+        return undoManager;
+    }
 
-	public void doUndo(IUndoRedoable undoredo) {
-		undoManager.addEdit((UndoableEdit)undoredo);
-		Container root = this.getParent().getParent().getParent();
-		if(root instanceof JChemPaintPanel)
-			((JChemPaintPanel)root).updateUndoRedoControls();
-	}
+    public void doUndo(IUndoRedoable undoredo) {
+        undoManager.addEdit((UndoableEdit) undoredo);
+        Container root = this.getParent().getParent().getParent();
+        if (root instanceof JChemPaintPanel)
+            ((JChemPaintPanel) root).updateUndoRedoControls();
+    }
 
+    public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
 
-   public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
-        
-        int screenMaxX  = screenBounds.x + screenBounds.width;
-        int screenMaxY  = screenBounds.y + screenBounds.height;
+        int screenMaxX = screenBounds.x + screenBounds.width;
+        int screenMaxY = screenBounds.y + screenBounds.height;
         int diagramMaxX = diagramBounds.x + diagramBounds.width;
         int diagramMaxY = diagramBounds.y + diagramBounds.height;
-        int leftOverlap   = screenBounds.x - diagramBounds.x;
-        int rightOverlap  = diagramMaxX - screenMaxX;
-        int topOverlap    = screenBounds.y - diagramBounds.y;
+        int leftOverlap = screenBounds.x - diagramBounds.x;
+        int rightOverlap = diagramMaxX - screenMaxX;
+        int topOverlap = screenBounds.y - diagramBounds.y;
         int bottomOverlap = diagramMaxY - screenMaxY;
 
         int dx = 0;
@@ -494,28 +483,28 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         if (bottomOverlap > 0) {
             h += bottomOverlap;
         }
-        
+
         if (dx != 0 || dy != 0) {
             this.renderer.shiftDrawCenter(dx, dy);
         }
 
         else {
-                int dxShiftBack=0,dyShiftBack=0;
-                if (diagramBounds.x > screenMaxX/3) {
-                        /*prevent drifting off horizontally */
-                dxShiftBack = -1*(diagramBounds.x- (screenMaxX/3));
-                }
-                if (diagramBounds.y > screenMaxY/3) {
-                        /*prevent drifting off vertically ! */
-                        dyShiftBack = -1*(diagramBounds.y- (screenMaxY/3));
-                }
+            int dxShiftBack = 0, dyShiftBack = 0;
+            if (diagramBounds.x > screenMaxX / 3) {
+                /* prevent drifting off horizontally */
+                dxShiftBack = -1 * (diagramBounds.x - (screenMaxX / 3));
+            }
+            if (diagramBounds.y > screenMaxY / 3) {
+                /* prevent drifting off vertically ! */
+                dyShiftBack = -1 * (diagramBounds.y - (screenMaxY / 3));
+            }
 
-                if(dxShiftBack != 0 || dyShiftBack != 0) {
-                        this.renderer.shiftDrawCenter(dxShiftBack,dyShiftBack);
-                        //System.out.println("shifting back");
-                }
+            if (dxShiftBack != 0 || dyShiftBack != 0) {
+                this.renderer.shiftDrawCenter(dxShiftBack, dyShiftBack);
+                // System.out.println("shifting back");
+            }
         }
-        
+
         return new Rectangle(dx, dy, w, h);
-   }
+    }
 }
