@@ -136,7 +136,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 	}
 
 	public void setChemModel(IChemModel model) {
-	    this.setupMachinery(model, this.fitToScreen);
+		this.hub.setChemModel(model);
 	}
 
 	public ControllerHub getHub() {
