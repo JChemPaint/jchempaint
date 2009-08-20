@@ -497,25 +497,25 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
         
         if (dx != 0 || dy != 0) {
             this.renderer.shiftDrawCenter(dx, dy);
+        }
 
-        }
-        //TODO drift of top corner ! (triangle)
-        
         else {
-            // extra
-        	int dxShiftBack=0,dyShiftBack=0;
-	        //if (diagramBounds.x > screenMaxX/4) { 
-	        	/*prevent drifting off horizontally */
-                dxShiftBack = -1*(diagramBounds.x- (screenMaxX/5));
-	        //}
-	        //if (diagramBounds.y > screenMaxY/2) { 
-	        	/*prevent drifting off vertically ! */
-	        	dyShiftBack = -1*(diagramBounds.y- (screenMaxY/5));
-	        //}
-	        if(dxShiftBack != 0 || dyShiftBack != 0) {
-	        	this.renderer.shiftDrawCenter(dxShiftBack,dyShiftBack);
-	        }
+                int dxShiftBack=0,dyShiftBack=0;
+                if (diagramBounds.x > screenMaxX/3) {
+                        /*prevent drifting off horizontally */
+                dxShiftBack = -1*(diagramBounds.x- (screenMaxX/3));
+                }
+                if (diagramBounds.y > screenMaxY/3) {
+                        /*prevent drifting off vertically ! */
+                        dyShiftBack = -1*(diagramBounds.y- (screenMaxY/3));
+                }
+
+                if(dxShiftBack != 0 || dyShiftBack != 0) {
+                        this.renderer.shiftDrawCenter(dxShiftBack,dyShiftBack);
+                        //System.out.println("shifting back");
+                }
         }
+        
         return new Rectangle(dx, dy, w, h);
    }
 }
