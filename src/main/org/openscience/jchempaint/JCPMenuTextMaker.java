@@ -72,6 +72,13 @@ public class JCPMenuTextMaker {
 		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));
 		entries.put("atom", GT._("Atom"));
+		entries.put("bond", GT._("Bond"));
+		entries.put("tools", GT._("Tools"));
+		entries.put("singleBond", GT._("Single"));
+		entries.put("stereoDownBond", GT._("Stereo Down"));
+		entries.put("stereoUpBond", GT._("Stereo Up"));
+		entries.put("undefinedStereoBond", GT._("Undefined Stereo"));
+		entries.put("undefinedEZBond", GT._("Undefined E/Z"));
 		entries.put("formalCharge", GT._("Charge"));
 		entries.put("chargePlus2", GT._("+2"));
 		entries.put("chargePlus1", GT._("+1"));
@@ -82,7 +89,7 @@ public class JCPMenuTextMaker {
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
 		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
 		entries.put("flip", GT._("Flip"));
-		entries.put("cleanup", GT._("Clean Up"));
+		entries.put("cleanup", GT._("Clean Structure"));
 		entries.put("preferences", GT._("Preferences"));
 		entries.put("toolbar", GT._("Toolbar"));
 		entries.put("statusbar", GT._("Statusbar"));
