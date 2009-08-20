@@ -265,14 +265,14 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
 
         if (getParameter("impliciths") != null
-                && getParameter("impliciths").equals("false")) {
-            controllerModel.setAutoUpdateImplicitHydrogens(false);
-            rendererModel.setShowImplicitHydrogens(false);
-            rendererModel.setShowEndCarbons(false);
-        } else {
+                && getParameter("impliciths").equals("true")) {
             controllerModel.setAutoUpdateImplicitHydrogens(true);
             rendererModel.setShowImplicitHydrogens(true);
             rendererModel.setShowEndCarbons(true);
+        } else {
+            controllerModel.setAutoUpdateImplicitHydrogens(false);
+            rendererModel.setShowImplicitHydrogens(false);
+            rendererModel.setShowEndCarbons(false);
 
             if (chemModel != null) {
                 List<IAtomContainer> atomContainers = ChemModelManipulator

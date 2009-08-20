@@ -151,7 +151,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay, IUndoListene
 			                             makeReactionGenerators(), 
 			                             new AWTFontManager());
 			//any specific rendering settings defaults should go here
-			this.renderer.getRenderer2DModel().setShowEndCarbons(true);
+			this.renderer.getRenderer2DModel().setShowEndCarbons(false);
 		}
 		this.setFitToScreen(fitToScreen);
 		this.controllerModel = new ControllerModel();
