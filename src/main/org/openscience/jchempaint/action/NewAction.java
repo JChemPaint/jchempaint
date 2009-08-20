@@ -54,6 +54,7 @@ public class NewAction extends JCPAction {
         if(clear==JOptionPane.YES_OPTION){
         	jcpPanel.get2DHub().zap();
         	jcpPanel.get2DHub().updateView();
+                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
          }
       }else{
 		JChemPaint.showEmptyInstance(jcpPanel.isDebug());
