@@ -121,7 +121,39 @@ public class CopyPasteAction extends JCPAction{
 	        IChemModel chemModel = jcpPanel.getChemModel();
 
 	        if ("copy".equals(type)) {
-	        	if(renderModel.getSelection().getConnectedAtomContainer()!=null){
+    			IAtom atomInRange = null;
+    			IChemObject object = getSource(e);
+    			logger.debug("Source of call: ", object);
+    			if (object instanceof IAtom) {
+    				atomInRange = (IAtom) object;
+    			} else {
+    				atomInRange = renderModel.getHighlightedAtom();
+    			}
+    			if (atomInRange != null) {
+    			    IAtomContainer tocopyclone =
+    			        atomInRange.getBuilder().newAtomContainer();
+    			    try {
+                        tocopyclone.addAtom((IAtom) atomInRange.clone());
+                        addToClipboard(sysClip, tocopyclone);
+    			    } catch (CloneNotSupportedException e1) {
+    			        e1.printStackTrace();
+    			    }
+    			}
+    			else if(renderModel.getHighlightedBond()!=null){
+    				IBond bond = renderModel.getHighlightedBond();
+    				if (bond != null) {
+        			    IAtomContainer tocopyclone =
+        			        bond.getBuilder().newAtomContainer();
+        			    try {
+                            tocopyclone.addAtom((IAtom) bond.getAtom(0).clone());
+                            tocopyclone.addAtom((IAtom) bond.getAtom(1).clone());
+                            tocopyclone.addBond(bond.getBuilder().newBond(tocopyclone.getAtom(0), tocopyclone.getAtom(1), bond.getOrder()));
+                            addToClipboard(sysClip, tocopyclone);
+        			    } catch (CloneNotSupportedException e1) {
+        			        e1.printStackTrace();
+        			    }
+    				}
+    			}else if(renderModel.getSelection().getConnectedAtomContainer()!=null){
 	        		addToClipboard(sysClip,
 	                    renderModel.getSelection().getConnectedAtomContainer());
 	        	}else{
@@ -145,8 +177,21 @@ public class CopyPasteAction extends JCPAction{
 					e1.printStackTrace();
 				}
 	        } else if ("delete".equals(type)) {
-	            IChemObjectSelection selection = renderModel.getSelection();
-	            if (selection.isFilled()) {
+    			IAtom atomInRange = null;
+    			IChemObject object = getSource(e);
+    			logger.debug("Source of call: ", object);
+    			if (object instanceof IAtom) {
+    				atomInRange = (IAtom) object;
+    			} else {
+    				atomInRange = renderModel.getHighlightedAtom();
+    			}
+    			if (atomInRange != null) {
+    				jcpPanel.get2DHub().removeAtom(atomInRange);
+    			}
+    			else if(renderModel.getHighlightedBond()!=null){
+    				jcpPanel.get2DHub().removeBond(renderModel.getHighlightedBond());
+    			}else if(renderModel.getSelection().getConnectedAtomContainer()!=null){
+    				IChemObjectSelection selection = renderModel.getSelection();
 	                IAtomContainer selected = selection.getConnectedAtomContainer();
 	                jcpPanel.get2DHub().deleteFragment(selected);
 	                renderModel.setSelection(new LogicalSelection(
@@ -367,53 +412,6 @@ public class CopyPasteAction extends JCPAction{
     			}
     			else {
     				logger.warn("Cannot select everything in : ", object);
-    			}
-    		}
-    		else if (type.equals("selectReactionReactants")) {
-    			IChemObject object = getSource(e);
-    			if (object instanceof IReaction) {
-    				IReaction reaction = (IReaction) object;
-    				IAtomContainer wholeModel =
-    				    jcpPanel.getChemModel().getBuilder().newAtomContainer();
-    	        	for (IAtomContainer container :
-    	        	    MoleculeSetManipulator.getAllAtomContainers(
-    	        	            reaction.getReactants())) {
-    	        		wholeModel.add(container);
-    	        	}
-    	        	ShapeSelection container = new RectangleSelection();
-    	        	for (IAtom atom : wholeModel.atoms()) {
-                        container.atoms.add(atom);
-                    }
-                    for (IBond bond : wholeModel.bonds()) {
-                        container.bonds.add(bond);
-                    }
-    				renderModel.setSelection(container);
-    			}
-    			else {
-    				logger.warn("Cannot select reactants from : ", object);
-    			}
-    		} else if (type.equals("selectReactionProducts")) {
-    			IChemObject object = getSource(e);
-    			if (object instanceof IReaction) {
-    				IReaction reaction = (IReaction) object;
-    				IAtomContainer wholeModel =
-    				    jcpPanel.getChemModel().getBuilder().newAtomContainer();
-    	        	for (IAtomContainer container :
-    	        	    MoleculeSetManipulator.getAllAtomContainers(
-    	        	            reaction.getProducts())) {
-    	        		wholeModel.add(container);
-    	        	}
-    	        	ShapeSelection container = new RectangleSelection();
-    	        	for (IAtom atom : wholeModel.atoms()) {
-                        container.atoms.add(atom);
-                    }
-                    for (IBond bond : wholeModel.bonds()) {
-                        container.bonds.add(bond);
-                    }
-    				renderModel.setSelection(container);
-    			}
-    			else {
-    				logger.warn("Cannot select reactants from : ", object);
     			}
     		}
             jcpPanel.get2DHub().updateView();
