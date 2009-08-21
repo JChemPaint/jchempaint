@@ -117,7 +117,7 @@ public class AtomEditor extends ChemObjectEditor {
 	        		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
 	        	if(!atom.getSymbol().equals(symbolField.getText()))
 	        		hub.setSymbol(atom, symbolField.getText());
-	        	if(atom.getMassNumber()!=majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue())
+	        	if(atom.getMassNumber()==null || atom.getMassNumber()!=majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue())
 	        		hub.setMassNumber(atom,majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue());
 	        }else{
 	            PseudoAtom pseudo = new PseudoAtom(atom);
