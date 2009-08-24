@@ -93,6 +93,7 @@
             	<include name="**/*" />
             </fileset>
         </unjar>
+        <delete dir="${dist-classes}/META-INF" />
 	 </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
@@ -153,6 +154,7 @@
 
             </fileset>
         </unjar>
+        <delete dir="${dist-classes}/META-INF" />
     </target>
 
     <target id="compile-jcp" name="compile-jcp">
@@ -265,6 +267,8 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_tools.jar" includepattern="org/openscience/cdk/tools/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_structgen.jar" includepattern="org/openscience/cdk/structgen/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar" includepattern="org/openscience/cdk/nonotify/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_modeling.jar" includepattern="org/openscience/cdk/modeling/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_controller.jar" includepattern="org/openscience/cdk/controller/**"/>
 
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience.jar" includepattern="org/openscience/**"/>
@@ -272,12 +276,16 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_omegahat.jar" includepattern="org/omegahat/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_w3c.jar" includepattern="org/w3c/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_fest.jar" includepattern="org/fest/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_jaxen.jar" includepattern="org/jaxen/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_xmlcml.jar" includepattern="org/xmlcml/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org.jar" includepattern="org/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-com_ozten.jar" includepattern="com/ozten/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-Jama.jar" includepattern="Jama/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-jas.jar" includepattern="jas/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-javax_vecmath.jar" includepattern="javax/vecmath/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-nu.jar" includepattern="nu/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-bsh.jar" includepattern="bsh/**"/>
         <!-- the following jar contains all other classes and resources -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-others.jar" includepattern="**/*"/>
         <!-- the main jar file is packed from a list, but it must be packed as last file because it contains INDEX.LIST -->
