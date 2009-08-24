@@ -1,5 +1,7 @@
 package org.openscience.jchempaint;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
@@ -22,6 +24,7 @@ public class JChemPaintMenuHelper {
 	
 	private LoggingTool logger;
 	private JCPAction jcpaction;
+	private static List<String> usedKeys = new ArrayList<String>();
 
 	
 	/**
@@ -148,7 +151,12 @@ public class JChemPaintMenuHelper {
 		else {
 			mi = new JMenuItem(translation);
 		}
-		mi.setName(cmd);
+		//this is to avoid to get a menu with the same name twice
+		if(usedKeys.contains(cmd))
+			mi.setName(cmd+"2");
+		else
+			mi.setName(cmd);
+		usedKeys.add(cmd);
 		logger.debug("Created new menu item...");
 		String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
         if (astr == null) {

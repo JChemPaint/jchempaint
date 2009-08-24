@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 
 /**
@@ -79,6 +80,8 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	 */
 	public void setChemModel(IChemModel model){
 		renderPanel.setChemModel(model);
+		//we need to do this to avoid npes later
+		renderPanel.getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 	}
 	
 	public String getSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
