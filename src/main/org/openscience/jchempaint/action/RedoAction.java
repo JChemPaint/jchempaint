@@ -30,6 +30,8 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
+import org.openscience.cdk.renderer.selection.LogicalSelection;
+
 
 /**
  * Performce a Redo - a repeat of the last undone action
@@ -51,6 +53,8 @@ public class RedoAction extends JCPAction
 		if (jcpPanel.getRenderPanel().getUndoManager().canRedo()) {
             jcpPanel.getRenderPanel().getUndoManager().redo();
         }
+        jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
+        	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 		jcpPanel.updateUndoRedoControls();
 		jcpPanel.updateStatusBar();
         jcpPanel.get2DHub().updateView();

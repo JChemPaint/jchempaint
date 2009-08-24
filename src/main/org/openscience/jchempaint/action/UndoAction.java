@@ -30,6 +30,10 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.cdk.renderer.selection.RectangleSelection;
+
 
 /**
  * An action for making things undone :-)
@@ -53,6 +57,8 @@ public class UndoAction extends JCPAction
         if (jcpPanel.getRenderPanel().getUndoManager().canUndo()) {
             jcpPanel.getRenderPanel().getUndoManager().undo();
         }
+        jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
+        	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
         jcpPanel.updateUndoRedoControls();
         jcpPanel.updateStatusBar();
         jcpPanel.get2DHub().updateView();
