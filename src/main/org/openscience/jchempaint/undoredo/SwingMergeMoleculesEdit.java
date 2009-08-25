@@ -42,35 +42,47 @@ import org.openscience.cdk.interfaces.IBond;
 
 /**
  * A swing undo-redo implementation for adding Atoms and Bonds
- *
+ * 
  */
-public class SwingMergeMoleculesEdit extends MergeMoleculesEdit implements UndoableEdit{
+public class SwingMergeMoleculesEdit extends MergeMoleculesEdit implements
+        UndoableEdit {
 
-	public SwingMergeMoleculesEdit(IAtom deletedAtom, IAtomContainer containerWhereAtomWasIn, List<IBond> deletedBonds, Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset, IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
-		super(deletedAtom, containerWhereAtomWasIn, deletedBonds, bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
-	}
+    public SwingMergeMoleculesEdit(IAtom deletedAtom,
+            IAtomContainer containerWhereAtomWasIn, List<IBond> deletedBonds,
+            Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset,
+            IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
 
-	public boolean addEdit(UndoableEdit arg0) {
-		return false;
-	}
+        // fix: the offset distorts the picture. use (0,0) for correct rendering
+        super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
+                bondsWithReplacedAtom, new Vector2d(0,0), atomwhichwasmoved, type, c2dm);
 
-	public void die() {
-	}
+        // super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
+        // bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
 
-	public String getRedoPresentationName() {
-		return getPresentationName();
-	}
+        
+    }
 
-	public String getUndoPresentationName() {
-		return getPresentationName();
-	}
+    public boolean addEdit(UndoableEdit arg0) {
+        return false;
+    }
 
-	public boolean isSignificant() {
-		return true;
-	}
+    public void die() {
+    }
 
-	public boolean replaceEdit(UndoableEdit arg0) {
-		return false;
-	}
+    public String getRedoPresentationName() {
+        return getPresentationName();
+    }
+
+    public String getUndoPresentationName() {
+        return getPresentationName();
+    }
+
+    public boolean isSignificant() {
+        return true;
+    }
+
+    public boolean replaceEdit(UndoableEdit arg0) {
+        return false;
+    }
 
 }
