@@ -109,6 +109,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	public JButton atomAtomMappingButton;
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
+    protected JComponent atomMenu;
+    protected JComponent bondMenu;
     private LoggingTool logger = new LoggingTool(this);
     private boolean debug=false;
 
@@ -589,6 +591,14 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     public void selectionChanged() {
         updateStatusBar();
+        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
+        	atomMenu.setEnabled(true);
+        else
+        	atomMenu.setEnabled(false);
+        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getBondCount()>0)
+        	bondMenu.setEnabled(true);
+        else
+        	bondMenu.setEnabled(false);
     }
 
     public void structureChanged() {

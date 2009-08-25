@@ -30,26 +30,34 @@ package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
+import java.util.EventObject;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
 
 /**
- * Dialog that shows a periodic table
+ * Dialog that shows a periodic table. The selected symbol
+ * can be derived with getChoosenSymbol after the dialog has been shown.
+ * getChoosenSymbol will be "" if dialog has been cancelled.
  */
-public class PeriodicTableDialog extends JFrame {
+public class PeriodicTableDialog extends JDialog {
 
 	private static final long serialVersionUID = -1136319713943259980L;
 	
-	//private static LoggingTool logger = null;
-    private PeriodicTablePanel ptp;
+	private PeriodicTablePanel ptp;
+    private String symbolfromtable="";
     
-    public PeriodicTableDialog(ICDKChangeListener listener) {
-        super("Choose an element");
-        //logger = new LoggingTool(this);
+    public String getChoosenSymbol() {
+		return symbolfromtable;
+	}
+
+	public PeriodicTableDialog() {
+     	super((JFrame)null,true);
         doInit();
-        ptp.addCDKChangeListener(listener);
     }
     
     public void doInit(){
@@ -58,8 +66,41 @@ public class PeriodicTableDialog extends JFrame {
         setTitle("Choose an element...");
         
         ptp = new PeriodicTablePanel();
+        ptp.addCDKChangeListener(new PTDialogChangeListener());
         getContentPane().add("Center",ptp);
         pack();
 		setVisible(true);
   }
+    
+  class PTDialogChangeListener implements ICDKChangeListener {
+
+        /**
+         * Constructor for the PTDialogChangeListener object
+         * 
+         */
+        public PTDialogChangeListener() {
+        }
+
+        public void stateChanged(EventObject event) {
+            if (event.getSource() instanceof PeriodicTablePanel) {
+                PeriodicTablePanel source = (PeriodicTablePanel)event.getSource();
+                String symbol=null;
+                try {
+                     symbol = source.getSelectedElement().getSymbol();
+                } catch (CDKException e) {
+                    throw new RuntimeException(e);
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                   
+                }
+                symbolfromtable=symbol;
+                setVisible(false);
+            } else {
+            }
+        }
+
+		public void zoomFactorChanged(EventObject event) {
+		}
+    }
 }

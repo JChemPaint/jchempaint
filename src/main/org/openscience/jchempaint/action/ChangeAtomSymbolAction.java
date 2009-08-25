@@ -29,15 +29,21 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.jchempaint.dialog.PeriodicTableDialog;
+import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 
 /**
@@ -47,7 +53,7 @@ public class ChangeAtomSymbolAction extends JCPAction
 {
 
 	private static final long serialVersionUID = -8502905723573311893L;
-
+	
 	public void actionPerformed(ActionEvent event)
 	{
 		logger.debug("About to change atom type of relevant atom!");
@@ -74,6 +80,14 @@ public class ChangeAtomSymbolAction extends JCPAction
 			return;
 		String s = event.getActionCommand();
 		String symbol = s.substring(s.indexOf("@") + 1);
+		if(symbol.equals("periodictable")){
+            // open PeriodicTable panel
+            PeriodicTableDialog dialog = new PeriodicTableDialog();
+            dialog.setName("periodictabledialog");
+            symbol=dialog.getChoosenSymbol();
+            if(symbol.equals(""))
+            	return;
+		}
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
 			//if the atom is a pseudoatom, we must convert it back to a normal atom
@@ -82,8 +96,6 @@ public class ChangeAtomSymbolAction extends JCPAction
 		        jcpPanel.get2DHub().replaceAtom(newAtom, atom);
 			}else{
 	            jcpPanel.get2DHub().setSymbol(atom,symbol);
-				// modify the current atom symbol
-				c2dm.setDrawElement(symbol);
 			}
 			//TODO still needed? should this go in hub?
 			// configure the atom, so that the atomic number matches the symbol
@@ -98,5 +110,7 @@ public class ChangeAtomSymbolAction extends JCPAction
 		}
 		jcpPanel.get2DHub().updateView();
 	}
+	
+
 }
 

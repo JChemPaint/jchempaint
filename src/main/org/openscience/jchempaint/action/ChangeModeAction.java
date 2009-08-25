@@ -63,7 +63,6 @@ import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 public class ChangeModeAction extends JCPAction {
 
     private static final long serialVersionUID = -4056416630614934238L;
-    private PeriodicTableDialog dialog;
 
     public void actionPerformed(ActionEvent e) {
         System.out.println("the key: " + type);
@@ -83,13 +82,10 @@ public class ChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new CycleSymbolModule(hub));
         } else if (type.equals("periodictable")) {
             hub.setActiveDrawModule(new AddAtomModule(hub));
-            if (dialog == null) {
-                // open PeriodicTable panel
-                dialog = new PeriodicTableDialog(
-                        new PTDialogChangeListener(hub.getController2DModel()));
-            }
-            dialog.pack();
-            dialog.setVisible(true);
+            // open PeriodicTable panel
+            PeriodicTableDialog dialog = new PeriodicTableDialog();
+            dialog.setName("periodictabledialog");
+            hub.getController2DModel().setDrawElement(dialog.getChoosenSymbol());
         } else if (type.equals("enterelement")) {
             hub.setActiveDrawModule(new EnterElementSwingModule(hub));
         } else if (type.equals("lasso")) {
@@ -151,47 +147,5 @@ public class ChangeModeAction extends JCPAction {
         this.jcpPanel.setLastActionButton((JComponent) e.getSource());
         ((JComponent) e.getSource()).setBackground(Color.GRAY);
         this.jcpPanel.updateStatusBar();
-    }
-
-    class PTDialogChangeListener implements ICDKChangeListener {
-
-        IControllerModel model;
-
-        /**
-         * Constructor for the PTDialogChangeListener object
-         * 
-         *@param model
-         *            Description of the Parameter
-         */
-        public PTDialogChangeListener(IControllerModel model) {
-            this.model = model;
-        }
-
-        public void stateChanged(EventObject event) {
-            logger.debug("Element change signaled...");
-            if (event.getSource() instanceof PeriodicTablePanel) {
-                PeriodicTablePanel source = (PeriodicTablePanel)event.getSource();
-                String symbol=null;
-                try {
-                     symbol = source.getSelectedElement().getSymbol();
-                } catch (CDKException e) {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e) {
-                    throw new RuntimeException(e);
-                   
-                }
-                logger.debug("Setting drawing element to: ", symbol);
-                model.setDrawElement(symbol);
-                dialog.setVisible(false);
-                dialog = null;
-            } else {
-                logger.warn("Unkown source for event: ", event.getSource()
-                        .getClass().getName());
-            }
-        }
-
-		public void zoomFactorChanged(EventObject event) {
-		}
     }
 }

@@ -111,6 +111,14 @@ public class JChemPaintMenuHelper {
 				menu.add(mi);
 			}
 		}
+		if(key.equals("atom")){
+			jcpPanel.atomMenu=menu;
+			menu.setEnabled(false);
+		}
+		if(key.equals("bond")){
+			jcpPanel.bondMenu=menu;
+			menu.setEnabled(false);
+		}
 		return menu;
 	}
 

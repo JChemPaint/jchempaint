@@ -424,6 +424,7 @@ public class PeriodicTablePanel extends JPanel
 		
 		JButton button = new ElementButton(element, new ElementButtonAction(), getTextButton(element,colorFS), colorF);
 		button.setBackground(colorB);
+		button.setName(elementS);
 		
 		return button;
 	}
