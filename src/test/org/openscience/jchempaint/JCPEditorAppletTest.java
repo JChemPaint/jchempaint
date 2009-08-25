@@ -1,12 +1,20 @@
 package org.openscience.jchempaint;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.swing.JComboBox;
 
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.fest.swing.launcher.AppletLauncher;
@@ -14,12 +22,22 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.ChemFile;
+import org.openscience.cdk.ChemObject;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
+import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class JCPEditorAppletTest {
 	private static AppletViewer viewer;
@@ -61,22 +79,50 @@ public class JCPEditorAppletTest {
 	  restoreModel();
 	}
 	
-	@Test public void testMenuSave() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testMenuSaveAsMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		  applet.menuItem("save").click();
 		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(1));
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test.cml");
-		  //TODO hit the ok button
-		  dialog.close();
+		  String file = "/tmp/test.mol";
+		  if(new File(file).exists())
+			  new File(file).delete();
+		  text.setText(file);
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  MDLReader reader = new MDLReader(new FileInputStream(file));
+		  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+		  Assert.assertEquals(originalModel.getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
+		  Assert.assertEquals(originalModel.getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
 	}
 	
 	@Test public void testMenuOpen() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  applet.menuItem("open").click();
-		  DialogFixture dialog = applet.dialog();
-		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test.cml");
-		  //TODO hit the ok button
-		  dialog.close();
+		String filename = "data/chebi/ChEBI_26120.mol";
+        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+		String file = "/tmp/test.mol";
+		if(new File(file).exists())
+			  new File(file).delete();
+        FileOutputStream fos = new FileOutputStream(new File(file));
+        while(ins.available()>0)
+        	fos.write(ins.read());
+		applet.menuItem("open").click();
+		DialogFixture dialog = applet.dialog();
+		JTextComponentFixture text = dialog.textBox();
+		text.setText(file);
+		JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+		okbutton.click();
+        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+        MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
+        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+        Assert.assertNotNull(chemFile);
+        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        Assert.assertEquals(1, containersList.size());
+        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+
 	}
 
 	@Test public void testMenuExport() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
