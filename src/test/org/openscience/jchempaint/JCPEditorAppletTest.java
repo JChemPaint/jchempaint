@@ -256,7 +256,7 @@ public class JCPEditorAppletTest {
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("periodictablemenu").click();
-		DialogFixture dialog = applet.dialog("periodictabledialog");
+		DialogFixture dialog = applet.dialog();
 		dialog.button("Li").click();
 		Assert.assertEquals("Li", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 	}
