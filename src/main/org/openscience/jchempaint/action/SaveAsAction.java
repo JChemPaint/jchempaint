@@ -262,8 +262,7 @@ public class SaveAsAction extends JCPAction
 		{
 			cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
 		}
-		org.openscience.cdk.interfaces.IMoleculeSet som = model.getMoleculeSet();
-		cow.write(som);
+		cow.write(model);
 		cow.close();
 		jcpPanel.setTitle(jcpPanel.getChemModel().getID());
 		return outFile;
