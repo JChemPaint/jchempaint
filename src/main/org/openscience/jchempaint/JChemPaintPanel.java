@@ -130,7 +130,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
         renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
-        
+        renderPanel.setName("renderpanel");
         centerContainer=new JPanel();
         centerContainer.setLayout(new BorderLayout());
         centerContainer.add(new JScrollPane(renderPanel), BorderLayout.CENTER);

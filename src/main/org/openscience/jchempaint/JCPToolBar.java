@@ -183,6 +183,7 @@ public class JCPToolBar
 		}
 		b.setRequestFocusEnabled(false);
 		b.setMargin(new Insets(1, 1, 1, 1));
+		b.setName(key);
 		if(key.equals("move"))
 			chemPaintPanel.moveButton=b;
 		if(key.equals("redo"))
