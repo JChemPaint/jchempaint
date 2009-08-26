@@ -55,6 +55,7 @@ public class JCPToolBar
 {
 
 	private static LoggingTool logger;
+	public static Color BUTTON_INACTIVE_COLOR=new Color(230,230,230);
 	/**
 	 *  Gets the toolbar attribute of the MainContainerPanel object
 	 *
@@ -255,7 +256,7 @@ public class JCPToolBar
 						chemPaintPanel.updateStatusBar();
 					} else
 					{
-						button.setBackground(Color.LIGHT_GRAY);
+						button.setBackground(BUTTON_INACTIVE_COLOR);
 					}
 				} else
 				{

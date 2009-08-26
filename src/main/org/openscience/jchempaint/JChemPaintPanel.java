@@ -579,7 +579,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * Selects the move button and action as the current action.
      */
     public void setMoveAction() {
-        getLastActionButton().setBackground(Color.LIGHT_GRAY);
+        getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
         setLastActionButton(moveButton);
         moveButton.setBackground(Color.GRAY);
     }

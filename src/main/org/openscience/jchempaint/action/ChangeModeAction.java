@@ -52,6 +52,7 @@ import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.controller.IChemModelRelay.Direction;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.jchempaint.JCPToolBar;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.dialog.PeriodicTablePanel;
@@ -143,7 +144,7 @@ public class ChangeModeAction extends JCPAction {
             hub.setActiveDrawModule(new RotateModule(hub));
         }
         if (this.jcpPanel.getLastActionButton() != null)
-            this.jcpPanel.getLastActionButton().setBackground(Color.LIGHT_GRAY);
+            this.jcpPanel.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
         this.jcpPanel.setLastActionButton((JComponent) e.getSource());
         ((JComponent) e.getSource()).setBackground(Color.GRAY);
         this.jcpPanel.updateStatusBar();
