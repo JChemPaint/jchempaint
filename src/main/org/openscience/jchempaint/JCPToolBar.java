@@ -42,7 +42,10 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.controller.AddBondDragModule;
+import org.openscience.cdk.renderer.color.CDK2DAtomColors;
+import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.ChangeModeAction;
 import org.openscience.jchempaint.action.JCPAction;
@@ -54,6 +57,7 @@ import org.openscience.jchempaint.action.JCPAction;
 public class JCPToolBar
 {
 
+	private static IAtomColorer colorer = new CDK2DAtomColors();
 	private static LoggingTool logger;
 	public static Color BUTTON_INACTIVE_COLOR=new Color(230,230,230);
 	/**
@@ -172,9 +176,10 @@ public class JCPToolBar
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
 			b.setToolTipText(GT._("Change drawing symbol to")+" "+key);
+			b.setForeground(colorer.getAtomColor(DefaultChemObjectBuilder.getInstance().newAtom(key)));
 			b.setSize(28,28);
-			b.setPreferredSize(new Dimension(28,28));
-			b.setMaximumSize(new Dimension(28,28));
+			b.setPreferredSize(new Dimension(32,32));
+			b.setMaximumSize(new Dimension(32,32));
 		}
 		b.setRequestFocusEnabled(false);
 		b.setMargin(new Insets(1, 1, 1, 1));

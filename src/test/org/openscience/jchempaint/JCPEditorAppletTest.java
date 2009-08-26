@@ -97,7 +97,7 @@ public class JCPEditorAppletTest {
 		  Assert.assertEquals(originalModel.getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
 	}
 	
-	@Test public void testMenuOpen() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testMenuOpenMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		String filename = "data/chebi/ChEBI_26120.mol";
         InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
 		String file = "/tmp/test.mol";
