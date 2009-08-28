@@ -39,7 +39,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.URL;
 import java.util.EventObject;
 import java.util.Vector;
 
@@ -47,7 +46,6 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -640,30 +638,19 @@ public class PeriodicTablePanel extends JPanel
 				+" Name: "+element.getName()+"<br>"
 				+" Serie: "+element.getChemicalSerie()+"<br>"
 				+" State: "+element.getPhase()+"<br>"
+				+" Electronativity: "+(element.getPaulingEneg()==null ? "undefined" : element.getPaulingEneg())+"<br>"
 				+"</FONT></PRE></html>");
 			label.setMinimumSize(new Dimension(145,150));
 			pan.add(label,BorderLayout.CENTER);
 		}
 		else
 		{
-			label = new JLabel("<html></head><br><br>"
-				+"<p><FONT><pre>   PERIODIC TABLE<pre></FONT></p>"
-				+"<p><PRE>    of elements</PRE></p><br><br><br><br>"
-				+"<FONT SIZE=-2>D.I. Mendeleev(1834-1907)</FONT></html>");
-			
+			label = new JLabel("                 Periodic Table of elements");
+			label.setHorizontalTextPosition(JLabel.CENTER);
+			label.setVerticalTextPosition(JLabel.CENTER);
 			label.setOpaque(true);
 			label.setBackground(color);
-			pan.add(label,BorderLayout.EAST);
-			URL url = this.getClass().getResource(
-				"/org/openscience/jchempaint/resources/large-bin/periodicTable_Mendeleev.jpg");
-			if(url!=null)
-			{
-				ImageIcon image = new ImageIcon(url);
-				
-				label = new JLabel(image,JLabel.CENTER);
-				
-				pan.add(label,BorderLayout.WEST);
-			}
+			pan.add(label,BorderLayout.CENTER);
 		}
 		
 		pan.setBackground(color);
