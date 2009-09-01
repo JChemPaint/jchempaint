@@ -47,6 +47,7 @@ import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
@@ -58,6 +59,7 @@ import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -90,6 +92,7 @@ import org.openscience.cdk.renderer.visitor.SVGGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.jchempaint.action.ZoomAction;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
@@ -306,7 +309,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
         }
+        //for (IBond b  : chemModel.getMoleculeSet().getAtomContainer(0).bonds()){
+        //    System.out.println("bond "+b.getOrder()+" aromatic "+b.getFlag(CDKConstants.ISAROMATIC));
+        //}
+        //System.out.println("atoms : "+chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount());
+        //System.out.println("bonds : "+chemModel.getMoleculeSet().getAtomContainer(0).getBondCount());
+        //System.out.println("-----------------------");
 
+        
         Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
         isNewChemModel = false;
 
@@ -485,6 +495,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         }
 
         if (dx != 0 || dy != 0) {
+            System.out.println("shifting "+dx+" "+dy);
             this.renderer.shiftDrawCenter(dx, dy);
         }
 
@@ -500,8 +511,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             }
 
             if (dxShiftBack != 0 || dyShiftBack != 0) {
-                this.renderer.shiftDrawCenter(dxShiftBack, dyShiftBack);
-                // System.out.println("shifting back");
+
+                if(ZoomAction.zoomDone) {
+                    ZoomAction.zoomDone=false;
+                    this.renderer.shiftDrawCenter(dxShiftBack, dyShiftBack);
+                    System.out.println("shifting back");
+                }
             }
         }
 

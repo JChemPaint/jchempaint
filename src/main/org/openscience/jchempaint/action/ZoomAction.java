@@ -44,7 +44,8 @@ import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 public class ZoomAction extends JCPAction {
 
     private static final long serialVersionUID = -2459332630141921895L;
-
+    public static boolean zoomDone=false;
+    
     public void actionPerformed(ActionEvent e) {
 
         RendererModel rendererModel = 
@@ -61,7 +62,7 @@ public class ZoomAction extends JCPAction {
         } else {
             logger.error("Unkown zoom command: " + type);
         }
-        
+        zoomDone=true;
         jcpPanel.get2DHub().updateView();
         jcpPanel.updateStatusBar();
         jcpPanel.getRenderPanel().update(jcpPanel.getRenderPanel().getGraphics());
