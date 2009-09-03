@@ -90,13 +90,7 @@ public class ChangeAtomSymbolAction extends JCPAction
 		}
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
-			//if the atom is a pseudoatom, we must convert it back to a normal atom
-			if(atom instanceof IPseudoAtom){
-		        IAtom newAtom = atom.getBuilder().newAtom(symbol, atom.getPoint2d());
-		        jcpPanel.get2DHub().replaceAtom(newAtom, atom);
-			}else{
-	            jcpPanel.get2DHub().setSymbol(atom,symbol);
-			}
+            jcpPanel.get2DHub().setSymbol(atom,symbol);
 			//TODO still needed? should this go in hub?
 			// configure the atom, so that the atomic number matches the symbol
 			try
