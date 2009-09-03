@@ -185,6 +185,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					}
 				}
 			}
+			chemModelRelay.getController2DModel().setDrawElement(x);
 			chemModelRelay.updateView();				
 		}catch(Exception ex){
 			ex.printStackTrace();

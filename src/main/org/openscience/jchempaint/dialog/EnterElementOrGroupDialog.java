@@ -93,6 +93,7 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
         cancelButton.addActionListener(this);
         //
         final JButton setButton = new JButton("Ok");
+        setButton.setName("ok");
         setButton.setActionCommand("Set");
         setButton.addActionListener(this);
         getRootPane().setDefaultButton(setButton);
