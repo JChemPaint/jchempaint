@@ -135,6 +135,16 @@ public class JCPMenuTextMaker {
 		entries.put("majorMinusOne", GT._("Major Minus One"));
 		entries.put("majorMinusTwo", GT._("Major Minus Two"));
 		entries.put("majorMinusThree", GT._("Major Minus Three"));
+		entries.put("valence", GT._("Valence"));
+		entries.put("valenceOff", GT._("Valence Off"));
+		entries.put("valence1", GT._("Valence 1"));
+		entries.put("valence2", GT._("Valence 2"));
+		entries.put("valence3", GT._("Valence 3"));
+		entries.put("valence4", GT._("Valence 4"));
+		entries.put("valence5", GT._("Valence 5"));
+		entries.put("valence6", GT._("Valence 6"));
+		entries.put("valence7", GT._("Valence 7"));		
+		entries.put("valence8", GT._("Valence 8"));
 		entries.put("symbolC", GT._("C"));
 		entries.put("symbolO", GT._("O"));
 		entries.put("symbolN", GT._("N"));

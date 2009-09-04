@@ -167,4 +167,11 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 			return edit.getClass().getSimpleName();
 		}
 	}
+
+	public IUndoRedoable getChangeValenceEdit(IAtom atomInRange,
+			Integer formerValence, Integer valence, String text,
+			IChemModelRelay chemModelRelay) {
+		return new SwingChangeValenceEdit(atomInRange, formerValence, valence, 
+				text, chemModelRelay);
+	}
 }
