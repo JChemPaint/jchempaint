@@ -47,7 +47,6 @@ import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.ControllerModel;
@@ -59,11 +58,9 @@ import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.renderer.Renderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.AtomContainerBoundsGenerator;
@@ -377,8 +374,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             IChemModel chemModel = hub.getIChemModel();
             IMoleculeSet molecules = chemModel.getMoleculeSet();
             if (molecules != null && molecules.getAtomContainerCount() > 0) {
-                IMolecularFormula wholeModel = NoNotificationChemObjectBuilder
-                        .getInstance().newMolecularFormula();
+                IMolecularFormula wholeModel = hub.getIChemModel().getBuilder()
+                        .newMolecularFormula();
                 Iterator<IAtomContainer> containers = ChemModelManipulator
                         .getAllAtomContainers(chemModel).iterator();
                 int implicitHs = 0;
@@ -401,9 +398,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 String formula = MolecularFormulaManipulator.getHTML(
                         wholeModel, true, false);
 
-                status = makeStatusBarString(formula, implicitHs,
-                        MolecularFormulaManipulator
-                                .getNaturalExactMass(wholeModel));
+                status = makeStatusBarString(formula, implicitHs);
             }
         } else if (position == 2) {
             // depict brutto formula of the selected molecule or part of
@@ -423,8 +418,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                     String formula = MolecularFormulaManipulator
                             .getHTML(MolecularFormulaManipulator
                                     .getMolecularFormula(ac), true, false);
-                    status = makeStatusBarString(formula, implicitHs,
-                            AtomContainerManipulator.getNaturalExactMass(ac));
+                    status = makeStatusBarString(formula, implicitHs);
                 }
             }
         } else if (position == 3) {
@@ -436,15 +430,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return status;
     }
 
-    private String makeStatusBarString(String formula, int implicitHs,
-            double mass) {
+    private String makeStatusBarString(String formula, int implicitHs) {
         DecimalFormat df1 = new DecimalFormat("####.0000");
         return "<html>"
                 + formula
                 + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
                         + GT._("Hs implicit") + ")")
-                + (mass > .1 ? " (" + GT._("mass") + " " + df1.format(mass)
-                        + ")" : "") + "</html>";
+                + "</html>";
     }
 
     public Renderer getRenderer() {

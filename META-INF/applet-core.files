@@ -77,6 +77,8 @@ org/openscience/cdk/AtomContainer$SingleElectronIterator.class
 org/openscience/cdk/atomtype/CDKAtomTypeMatcher.class
 org/openscience/cdk/AtomType.class
 org/openscience/cdk/atomtype/IAtomTypeMatcher.class
+org/openscience/cdk/Bond$1.class
+org/openscience/cdk/Bond$AtomsIterator.class
 org/openscience/cdk/Bond.class
 org/openscience/cdk/CDKConstants.class
 org/openscience/cdk/ChemModel.class
@@ -122,6 +124,7 @@ org/openscience/cdk/graph/BiconnectivityInspector.class
 org/openscience/cdk/graph/ConnectivityChecker.class
 org/openscience/cdk/graph/MoleculeGraphs.class
 org/openscience/cdk/graph/PathTools.class
+org/openscience/cdk/graph/SpanningTree.class
 org/openscience/cdk/interfaces/IAdductFormula.class
 org/openscience/cdk/interfaces/IAminoAcid.class
 org/openscience/cdk/interfaces/IAtom.class
@@ -291,6 +294,7 @@ org/openscience/cdk/renderer/elements/TextGroupElement$Child.class
 org/openscience/cdk/renderer/elements/TextGroupElement.class
 org/openscience/cdk/renderer/elements/TextGroupElement$Position.class
 org/openscience/cdk/renderer/elements/WedgeLineElement.class
+org/openscience/cdk/renderer/elements/WigglyLineElement.class
 org/openscience/cdk/renderer/font/AbstractFontManager.class
 org/openscience/cdk/renderer/font/AWTFontManager.class
 org/openscience/cdk/renderer/font/IFontManager.class
@@ -322,6 +326,9 @@ org/openscience/cdk/renderer/RendererModel.class
 org/openscience/cdk/renderer/RenderingParameters$AtomShape.class
 org/openscience/cdk/renderer/RenderingParameters.class
 org/openscience/cdk/renderer/selection/IChemObjectSelection.class
+org/openscience/cdk/renderer/selection/IncrementalSelection.class
+org/openscience/cdk/renderer/selection/LogicalSelection.class
+org/openscience/cdk/renderer/selection/LogicalSelection$Type.class
 org/openscience/cdk/renderer/visitor/AbstractAWTDrawVisitor.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor$1.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor.class
