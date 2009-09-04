@@ -155,6 +155,9 @@
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
+        <delete>
+           <fileset dir="${dist-classes}" includes="*"/>
+        </delete>
     </target>
 
     <target id="compile-jcp" name="compile-jcp">
