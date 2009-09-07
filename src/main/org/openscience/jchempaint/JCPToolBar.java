@@ -59,7 +59,7 @@ public class JCPToolBar
 
 	private static IAtomColorer colorer = new CDK2DAtomColors();
 	private static LoggingTool logger;
-	public static Color BUTTON_INACTIVE_COLOR=new Color(230,230,230);
+	public static Color BUTTON_INACTIVE_COLOR=Color.WHITE;//new Color(230,230,230);
 	/**
 	 *  Gets the toolbar attribute of the MainContainerPanel object
 	 *

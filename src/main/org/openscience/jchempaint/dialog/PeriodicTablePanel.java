@@ -35,15 +35,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -81,6 +81,8 @@ public class PeriodicTablePanel extends JPanel
 	
 	private ElementPTFactory factory;
 	private LoggingTool logger;
+
+	private Map<JButton,Color> buttoncolors = new HashMap<JButton,Color>();
 	
 	public static int APPLICATION = 0;
 	/*default*/
@@ -91,7 +93,6 @@ public class PeriodicTablePanel extends JPanel
 	 * APPLICATION = with html
 	 * JCP = default
 	 */ 	
-	private int controlViewerButton;
 	
 	/**
 	*  Constructor of the PeriodicTablePanel object
@@ -108,23 +109,12 @@ public class PeriodicTablePanel extends JPanel
 			logger.debug(ex1);
 		}
 		layeredPane = new JLayeredPane();
-		layeredPane.setPreferredSize(new Dimension(611, 575));
-		layeredPane.setBorder(BorderFactory.createTitledBorder(
-                                    GT._("Periodic Table for JChemPaint")));
+		layeredPane.setPreferredSize(new Dimension(581, 435));
 		JPanel tp = PTPanel();
-		tp.setBounds(8,85,600, 480);
+		tp.setBounds(8,85,570, 340);
 		
-		JButton button = new JButton(GT._("Reload"));
-		button.setVerticalTextPosition(AbstractButton.BOTTOM);
-		button.setHorizontalTextPosition(AbstractButton.CENTER);
-		button.setMnemonic(KeyEvent.VK_R);
-		button.setToolTipText(GT._("Click this button to go back to PeriodicTable."));
-		button.setFont(new Font("Times-Roman",Font.BOLD, 10));
-		button.setBounds(510, 20, 90, 20);
-		button.addActionListener( new BackAction() );
 		panel = CreateLabelProperties(null);
 		
-		layeredPane.add(button, new Integer(1));
 		layeredPane.add(tp, new Integer(0));
 		layeredPane.add(panel, new Integer(1));
 		add(layeredPane);
@@ -133,12 +123,13 @@ public class PeriodicTablePanel extends JPanel
 	private JPanel PTPanel()
 	{
 
-		controlViewerButton = PeriodicTablePanel.JCP;
 		JPanel panel = new JPanel();
 		listeners = new Vector();
-		panel.setLayout(new GridLayout(0, 18));
+		panel.setLayout(new GridLayout(0, 19));
 		
 		//--------------------------------
+		Box.createHorizontalGlue();
+		panel.add(Box.createHorizontalGlue());
 		JButton butt = new JButton("1");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
@@ -152,6 +143,10 @@ public class PeriodicTablePanel extends JPanel
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		
+		
+		butt = new JButton("1");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		panel.add(createButton("H"));
 		
 		butt = new JButton("2");
@@ -161,29 +156,33 @@ public class PeriodicTablePanel extends JPanel
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
-		butt = new JButton("3");
+		butt = new JButton("13");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		
-		butt = new JButton("4");
+		butt = new JButton("14");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		
-		butt = new JButton("5");
+		butt = new JButton("15");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		
-		butt = new JButton("6");
+		butt = new JButton("16");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		
-		butt = new JButton("7");
+		butt = new JButton("17");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
 		//
 		
 		panel.add(createButton(GT._("He")));
 		
+		butt = new JButton("2");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+
 		panel.add(createButton(GT._("Li")));
 		
 		panel.add(createButton(GT._("Be")));
@@ -200,9 +199,27 @@ public class PeriodicTablePanel extends JPanel
 		//
 		panel.add(createButton(GT._("Ne")));
 		
+		butt = new JButton("3");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		panel.add(createButton(GT._("Na")));
 		panel.add(createButton(GT._("Mg")));
 		
+		butt = new JButton("3");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+		butt = new JButton("4");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+		butt = new JButton("5");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+		butt = new JButton("6");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+		butt = new JButton("7");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		butt = new JButton("8");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
@@ -218,21 +235,6 @@ public class PeriodicTablePanel extends JPanel
 		butt = new JButton("12");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
-		butt = new JButton("13");
-		butt.setBorder(new EmptyBorder(2,2,2,2));
-		panel.add(butt);
-		butt = new JButton("14");
-		butt.setBorder(new EmptyBorder(2,2,2,2));
-		panel.add(butt);
-		butt = new JButton("15");
-		butt.setBorder(new EmptyBorder(2,2,2,2));
-		panel.add(butt);
-		butt = new JButton("16");
-		butt.setBorder(new EmptyBorder(2,2,2,2));
-		panel.add(butt);
-		butt = new JButton("17");
-		butt.setBorder(new EmptyBorder(2,2,2,2));
-		panel.add(butt);
 		//no metall
 		panel.add(createButton(GT._("Al")));
 		panel.add(createButton(GT._("Si")));
@@ -242,6 +244,9 @@ public class PeriodicTablePanel extends JPanel
 		//
 		panel.add(createButton(GT._("Ar")));
 		
+		butt = new JButton("4");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		panel.add(createButton(GT._("K")));
 		panel.add(createButton(GT._("Ca")));
 		//transition
@@ -264,6 +269,9 @@ public class PeriodicTablePanel extends JPanel
 		//
 		panel.add(createButton(GT._("Kr")));
 		
+		butt = new JButton("5");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		panel.add(createButton(GT._("Rb")));
 		panel.add(createButton(GT._("Sr")));
 		//transition
@@ -286,6 +294,9 @@ public class PeriodicTablePanel extends JPanel
 		//
 		panel.add(createButton(GT._("Xe")));
 		
+		butt = new JButton("6");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
 		panel.add(createButton(GT._("Cs")));
 		panel.add(createButton(GT._("Ba")));
 		//transition
@@ -308,7 +319,10 @@ public class PeriodicTablePanel extends JPanel
 		//
 		panel.add(createButton(GT._("Rn")));
 		
-		panel.add(createButton(GT._("Fr")));
+		butt = new JButton("7");
+		butt.setBorder(new EmptyBorder(2,2,2,2));
+		panel.add(butt);
+ 		panel.add(createButton(GT._("Fr")));
 		panel.add(createButton(GT._("Ra")));
 		//transition
 		panel.add(createButton(GT._("Ac")));
@@ -320,7 +334,7 @@ public class PeriodicTablePanel extends JPanel
 		panel.add(createButton(GT._("Mt")));
 		panel.add(createButton(GT._("Ds")));
 		panel.add(createButton(GT._("Rg")));
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
@@ -339,7 +353,7 @@ public class PeriodicTablePanel extends JPanel
 		panel.add(createButton(GT._("Tm")));
 		panel.add(createButton(GT._("Yb")));
 		panel.add(createButton(GT._("Lu")));
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			panel.add(Box.createHorizontalGlue());
 		}
@@ -377,25 +391,8 @@ public class PeriodicTablePanel extends JPanel
         } catch (CDKException e) {
             throw new RuntimeException (e);
         }
-    String colorFS = "000000";
+        String colorFS = "000000";
 		Color colorF = new Color(0,0,0);
-		String colorPh = element.getPhase();
-		if(colorPh.equals("Solid")){
-			colorFS = "000000"; 
-			colorF = new Color(0,0,0);
-		}
-		else if(colorPh.equals("Gas")){
-			colorFS = "CC0033"; 
-			colorF = new Color(200,0,0);
-		}
-		else if(colorPh.equals("Liquid")){
-			colorFS = "3300CC"; 
-			colorF = new Color(0,0,200);
-		}
-		else if(colorPh.equals("Synthetic")){
-			colorFS = "FFCC00";
-			colorF = new Color(235,208,6);
-		}
 		
 		Color colorB = null;
 		String serie = element.getChemicalSerie();
@@ -423,6 +420,7 @@ public class PeriodicTablePanel extends JPanel
 		JButton button = new ElementButton(element, new ElementMouseAction(), getTextButton(element,colorFS), colorF);
 		button.setBackground(colorB);
 		button.setName(elementS);
+		buttoncolors.put(button,colorB);
 		
 		return button;
 	}
@@ -495,14 +493,7 @@ public class PeriodicTablePanel extends JPanel
 	 * @return the String to show
 	 */
 	public String getTextButton(PeriodicTableElement element, String color){
-		String buttonString = null;
-		switch (controlViewerButton) {
-			case 0: buttonString ="<html><p><u><FONT SIZE=-2>"+element.getAtomicNumber()+"</FONT></u></p><p><font COLOR="+color+">"
-			+element.getSymbol()+"<font></p></html>";break;
-			case 1: buttonString = element.getSymbol();break;
-			default: buttonString = element.getSymbol();break;
-		}
-		return buttonString;
+		return element.getSymbol();
 	}
 
 
@@ -529,9 +520,12 @@ public class PeriodicTablePanel extends JPanel
 			panel = CreateLabelProperties(button.getElement());
 			layeredPane.add(panel, new Integer(1));
 			layeredPane.repaint();
+			
+			button.setBackground(Color.LIGHT_GRAY);
 		}
 
 		public void mouseExited(MouseEvent e) {
+			((ElementButton)e.getSource()).setBackground(buttoncolors.get(e.getSource()));
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -592,10 +586,7 @@ public class PeriodicTablePanel extends JPanel
 				PeriodicTableElement element, MouseListener e,String buttonString, Color color)
 		{
 			super(buttonString);
-			if(controlViewerButton == JCP){
-				setForeground(color);
-			}
-			
+			setForeground(color);
 			this.element = element;
 			setFont(new Font("Times-Roman",Font.BOLD, 15));
 			setBorder( new BevelBorder(BevelBorder.RAISED) );
@@ -623,29 +614,29 @@ public class PeriodicTablePanel extends JPanel
 		JPanel pan = new JPanel();
 		pan.setLayout(new BorderLayout());
 		Color color = new Color(255,255,255);
-		Point origin = new Point(90, 20);   	
+		Point origin = new Point(120, 20);   	
 		JLabel label;
 		if(element != null){
-			label = new JLabel("<html><PRE>   <FONT SIZE=+2>"
-				+element.getSymbol()+"</FONT>"
-				+":   At.No "+element.getAtomicNumber()
-				+", Group "+element.getGroup()+", Period "
-				+ element.getPeriod()+"</PRE></html>");
+			label = new JLabel("<html><FONT SIZE=+2>"
+				+element.getName()+" ("+element.getSymbol()+")</FONT><br>"
+				+" Atomic number "+element.getAtomicNumber()
+				+ (element.getGroup()!=null ?
+					", Group "+element.getGroup() : "")
+				+", Period "+ element.getPeriod()+"</html>");
 			pan.add(label,BorderLayout.NORTH);
 			
-			label = new JLabel("<html><PRE><FONT SIZE=-2>"
-				+" CAS id: "+element.getCASid()+"<br>"
-				+" Name: "+element.getName()+"<br>"
-				+" Serie: "+element.getChemicalSerie()+"<br>"
+			label = new JLabel("<html><FONT SIZE=-2>"
+				+" CAS RN: "+element.getCASid()+"<br>"
+				+" Element Category: "+element.getChemicalSerie()+"<br>"
 				+" State: "+element.getPhase()+"<br>"
 				+" Electronativity: "+(element.getPaulingEneg()==null ? "undefined" : element.getPaulingEneg())+"<br>"
-				+"</FONT></PRE></html>");
-			label.setMinimumSize(new Dimension(145,150));
+				+"</FONT></html>");
+			label.setMinimumSize(new Dimension(165,150));
 			pan.add(label,BorderLayout.CENTER);
 		}
 		else
 		{
-			label = new JLabel("                 Periodic Table of elements");
+			label = new JLabel("     Periodic Table of elements");
 			label.setHorizontalTextPosition(JLabel.CENTER);
 			label.setVerticalTextPosition(JLabel.CENTER);
 			label.setOpaque(true);
@@ -656,16 +647,8 @@ public class PeriodicTablePanel extends JPanel
 		pan.setBackground(color);
 		pan.setForeground(Color.black);
 		pan.setBorder(BorderFactory.createLineBorder(Color.black));
-		pan.setBounds(origin.x, origin.y, 295, 210);
+		pan.setBounds(origin.x, origin.y, 255, 160);
 		return pan;
-	}
-	/**
-	 * set the form to do a button {html or normal)
-	 * 
-	 * @param controlViewer
-	 */
-	public void setControlViewer(int controlViewer){
-		this.controlViewerButton = controlViewer;
 	}
 }
 

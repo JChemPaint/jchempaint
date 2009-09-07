@@ -1,50 +1,30 @@
 package org.openscience.jchempaint;
 
 import java.awt.Point;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComboBox;
 import javax.vecmath.Point2d;
 
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
 import org.fest.swing.launcher.AppletLauncher;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omegahat.Environment.Parser.AntlrParser.ResettableLexer;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.ChemFile;
-import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.cdk.io.CMLReader;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.renderer.selection.SingleSelection;
-import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
-import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class JCPEditorAppletDrawingTest {
 	private static AppletViewer viewer;
