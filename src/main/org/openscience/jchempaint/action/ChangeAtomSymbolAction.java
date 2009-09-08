@@ -31,19 +31,21 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.dialog.EnterElementOrGroupDialog;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
-import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 
 /**
@@ -87,6 +89,25 @@ public class ChangeAtomSymbolAction extends JCPAction
             symbol=dialog.getChoosenSymbol();
             if(symbol.equals(""))
             	return;
+		}else if(symbol.equals("enterelement")){
+			String[] funcGroupsKeys=new String[0];
+			symbol=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol:", "Enter element", funcGroupsKeys, "","");
+			if(symbol!=null && symbol.length()>0){
+				if(Character.isLowerCase(symbol.toCharArray()[0]))
+					symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
+					IsotopeFactory ifa;
+					try {
+						ifa = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
+						IIsotope iso=ifa.getMajorIsotope(symbol);
+						if(iso==null){
+							JOptionPane.showMessageDialog(jcpPanel, "No valid element symbol entered", "Invalid symbol", JOptionPane.WARNING_MESSAGE);
+						    return;
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+						return;
+					}
+				}
 		}
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
