@@ -59,6 +59,7 @@ public class JCPAction extends AbstractAction
 	 *  Description of the Field
 	 */
 	public final static String imageSuffix = "Image";
+	public final static String disabled_imageSuffix = "DisabledImage";
 	/**
 	 *  Description of the Field
 	 */

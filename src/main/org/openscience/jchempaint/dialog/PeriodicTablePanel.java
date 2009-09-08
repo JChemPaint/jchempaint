@@ -625,7 +625,7 @@ public class PeriodicTablePanel extends JPanel
 				+", Period "+ element.getPeriod()+"</html>");
 			pan.add(label,BorderLayout.NORTH);
 			
-			label = new JLabel("<html><FONT SIZE=-2>"
+			label = new JLabel("<html><FONT>"
 				+" CAS RN: "+element.getCASid()+"<br>"
 				+" Element Category: "+element.getChemicalSerie()+"<br>"
 				+" State: "+element.getPhase()+"<br>"
