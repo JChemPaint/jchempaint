@@ -48,6 +48,8 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	private static Hashtable<String, JChemPaintPopupMenu> popupMenus = new Hashtable<String, JChemPaintPopupMenu>();
 
 	private RenderPanel rendererPanel;
+	
+	private String ID;
 
 	public SwingPopupModule(RenderPanel renderer,IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
@@ -130,5 +132,15 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		} else {
 			logger.warn("Popup menu is null! Could not set source!");
 		}
+	}
+
+
+	public String getID() {
+		return ID;
+	}
+
+
+	public void setID(String ID) {
+		this.ID = ID;		
 	}
 }

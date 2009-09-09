@@ -192,16 +192,7 @@ public class JCPToolBar
 		b.setRequestFocusEnabled(false);
 		b.setMargin(new Insets(1, 1, 1, 1));
 		b.setName(key);
-		if(key.equals("move"))
-			chemPaintPanel.moveButton=b;
-		if(key.equals("redo"))
-			chemPaintPanel.redoButton=b;
-		if(key.equals("undo"))
-			chemPaintPanel.undoButton=b;
-		if(key.equals("atomatommapping")){
-			chemPaintPanel.atomAtomMappingButton=b;
-			b.setEnabled(false);
-		}
+		chemPaintPanel.buttons.put(key, b);
 		return b;
 	}
 
@@ -266,7 +257,9 @@ public class JCPToolBar
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);
-						chemPaintPanel.get2DHub().setActiveDrawModule(new AddBondDragModule(chemPaintPanel.get2DHub()));
+						AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub());
+						activeModule.setID(toolKeys[i]);
+						chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
 						chemPaintPanel.updateStatusBar();
 					} else
 					{

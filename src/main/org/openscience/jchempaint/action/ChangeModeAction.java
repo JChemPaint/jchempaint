@@ -44,6 +44,7 @@ import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.CycleSymbolModule;
 import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.controller.IControllerModule;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.RotateModule;
@@ -66,87 +67,83 @@ public class ChangeModeAction extends JCPAction {
     private static final long serialVersionUID = -4056416630614934238L;
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println("the key: " + type);
         ControllerHub hub = jcpPanel.get2DHub();
+        IControllerModule newActiveModule=null;
         if (type.equals("move")) {
-            hub.setActiveDrawModule(new MoveModule(hub));
+        	newActiveModule=new MoveModule(hub);
         } else if (type.equals("eraser")) {
-            hub.setActiveDrawModule(new RemoveModule(hub));
+        	newActiveModule=new RemoveModule(hub);
         } else if (type.equals("plus")) {
-            hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, 1));
+        	newActiveModule=new ChangeFormalChargeModule(hub, 1);
         } else if (type.equals("minus")) {
-            hub.setActiveDrawModule(new ChangeFormalChargeModule(hub, -1));
+        	newActiveModule=new ChangeFormalChargeModule(hub, -1);
         } else if (type.equals("bond")) {
-            hub.setActiveDrawModule(new AddBondDragModule(hub));
-            //hub.getController2DModel().setDrawElement("C");
-        } else if (type.equals("cyclesymbol")) {
-            hub.setActiveDrawModule(new CycleSymbolModule(hub));
+        	newActiveModule=new AddBondDragModule(hub);
         } else if (type.equals("periodictable")) {
-            hub.setActiveDrawModule(new AddAtomModule(hub));
+        	newActiveModule=new AddAtomModule(hub);
             // open PeriodicTable panel
             PeriodicTableDialog dialog = new PeriodicTableDialog();
             dialog.setName("periodictabledialog");
             hub.getController2DModel().setDrawElement(dialog.getChoosenSymbol());
         } else if (type.equals("enterelement")) {
-            hub.setActiveDrawModule(new EnterElementSwingModule(hub));
+        	newActiveModule=new EnterElementSwingModule(hub);
         } else if (type.equals("lasso")) {
-            hub.setActiveDrawModule(new SelectLassoModule(hub));
+        	newActiveModule=new SelectLassoModule(hub);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("select")) {
-            hub.setActiveDrawModule(new SelectSquareModule(hub));
+        	newActiveModule=new SelectSquareModule(hub);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("up_bond")) {
-            hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, Direction.UP));
+        	newActiveModule=new AlterBondStereoModule(
+                    hub, Direction.UP);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("down_bond")) {
-            hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, Direction.DOWN));
+        	newActiveModule=new AlterBondStereoModule(
+                    hub, Direction.DOWN);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("undefined_bond")) {
-            hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, Direction.UNDEFINED));
+        	newActiveModule=new AlterBondStereoModule(
+                    hub, Direction.UNDEFINED);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("undefined_stereo_bond")) {
-            hub.setActiveDrawModule(new AlterBondStereoModule(
-                    hub, Direction.EZ_UNDEFINED));
+        	newActiveModule=new AlterBondStereoModule(
+                    hub, Direction.EZ_UNDEFINED);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("triangle")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 3, false));
+        	newActiveModule=new AddRingModule(hub, 3, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("square")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 4, false));
+        	newActiveModule=new AddRingModule(hub, 4, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("pentagon")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 5, false));
+        	newActiveModule=new AddRingModule(hub, 5, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("hexagon")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 6, false));
+        	newActiveModule=new AddRingModule(hub, 6, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("heptagon")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 7, false));
+        	newActiveModule=new AddRingModule(hub, 7, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("octagon")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 8, false));
+        	newActiveModule=new AddRingModule(hub, 8, false);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("benzene")) {
-            hub.setActiveDrawModule(new AddRingModule(hub, 6, true));
+        	newActiveModule=new AddRingModule(hub, 6, true);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("atomatommapping")) {
-            hub.setActiveDrawModule(new AtomAtomMappingModule(hub));
+        	newActiveModule=new AtomAtomMappingModule(hub);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.length() == 1 || type.length() == 2) {
             // I assume something with length of 1 is an atom name
             // (C/H/O/N/etc.)
-            hub.setActiveDrawModule(new AddAtomModule(hub));
+        	newActiveModule=new AddAtomModule(hub);
             hub.getController2DModel().setDrawElement(type);
         } else if (type.equals("rotate")) {
-            hub.setActiveDrawModule(new RotateModule(hub));
+        	newActiveModule=new RotateModule(hub);
         }
-        if (this.jcpPanel.getLastActionButton() != null)
-            this.jcpPanel.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
-        this.jcpPanel.setLastActionButton((JComponent) e.getSource());
-        ((JComponent) e.getSource()).setBackground(Color.GRAY);
-        this.jcpPanel.updateStatusBar();
+        if(newActiveModule!=null){
+	        newActiveModule.setID(type);
+	        hub.setActiveDrawModule(newActiveModule);
+        }
     }
 }

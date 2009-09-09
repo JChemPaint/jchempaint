@@ -42,7 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -61,24 +63,23 @@ import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.Reaction;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.controller.IChangeModeListener;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
+import org.openscience.cdk.controller.IControllerModule;
+import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
-        IChemModelEventRelayHandler, ICDKChangeListener, KeyListener {
+        IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
 
     private JComponent lastActionButton;
     private File currentWorkDirectory;
@@ -102,11 +103,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private JToolBar lefttoolbar;
     private JToolBar lowertoolbar;
     private JToolBar righttoolbar;
-    // we remember some buttons and menus since these are special
-    protected JButton moveButton = null;
-    protected JButton undoButton;
-    protected JButton redoButton;
-	public JButton atomAtomMappingButton;
+    // buttons are remembered in here using the string from config files as key
+    Map<String, JButton> buttons=new HashMap<String, JButton>();
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
     protected JComponent atomMenu;
@@ -130,6 +128,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
         renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
+        renderPanel.getHub().addChangeModeListener(this);
         renderPanel.setName("renderpanel");
         centerContainer=new JPanel();
         centerContainer.setLayout(new BorderLayout());
@@ -575,15 +574,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
     }
 
-    /**
-     * Selects the move button and action as the current action.
-     */
-    public void setMoveAction() {
-        getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
-        setLastActionButton(moveButton);
-        moveButton.setBackground(Color.GRAY);
-    }
-
     public void coordinatesChanged() {
         setModified(true);
         updateStatusBar();
@@ -613,7 +603,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     public void updateUndoRedoControls() {
         UndoManager undoManager = renderPanel.getUndoManager();
-
+        JButton redoButton=buttons.get("redo");
+        JButton undoButton=buttons.get("undo");
         if (undoManager.canRedo()) {
             redoButton.setEnabled(true);
             redoMenu.setEnabled(true);
@@ -680,5 +671,19 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public boolean isDebug() {
 		return debug;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
+	 */
+	public void modeChanged(IControllerModule newActiveModule) {
+        if (this.getLastActionButton() != null)
+            this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+        JButton newActionButton=buttons.get(newActiveModule.getID());
+        if(newActionButton!=null){
+	        this.setLastActionButton(newActionButton);
+	        newActionButton.setBackground(Color.GRAY);
+	        this.updateStatusBar();
+        }
 	}
 }

@@ -62,6 +62,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 
 	private HashMap<String,IMolecule> funcgroupsmap=new HashMap<String,IMolecule>();
 	private final static RingPlacer ringPlacer = new RingPlacer();
+	private String ID;
 	
 	public EnterElementSwingModule(IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
@@ -194,5 +195,13 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 
 	public String getDrawModeString() {
 		return "Enter Element or Group";
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String ID) {
+		this.ID=ID;		
 	}
 }

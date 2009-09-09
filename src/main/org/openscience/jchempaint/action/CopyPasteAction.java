@@ -288,7 +288,6 @@ public class CopyPasteAction extends JCPAction{
 
 	                selection.select(ChemModelManipulator.newChemModel(toPaste));
 	                renderModel.setSelection(selection);
-	            	jcpPanel.setMoveAction();
 
 	    			jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
 	            }else{
@@ -353,8 +352,9 @@ public class CopyPasteAction extends JCPAction{
 
     		    allSelection.select(hub.getIChemModel());
     		    renderModel.setSelection(allSelection);
-    			jcpPanel.setMoveAction();
-    			hub.setActiveDrawModule(new MoveModule(hub));
+    		    MoveModule newActiveModule = new MoveModule(hub);
+    		    newActiveModule.setID("move");
+    			hub.setActiveDrawModule(newActiveModule);
     		} else if (type.equals("selectMolecule")) {
     			IChemObject object = getSource(e);
     			IAtomContainer relevantAtomContainer = null;
