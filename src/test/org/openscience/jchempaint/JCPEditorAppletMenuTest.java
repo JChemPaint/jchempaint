@@ -65,9 +65,12 @@ public class JCPEditorAppletMenuTest {
 		  applet.menuItem("export").click();
 		  DialogFixture dialog = applet.dialog();
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test.cml");
-		  //TODO hit the ok button
-		  dialog.close();
+		  text.setText("/tmp/test");
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  File file=new File("/tmp/test.tiff");
+		  //we only check the existence of file for now
+		  Assert.assertTrue(file.exists());
 	}
 	
 	@Test public void testMenuPrint() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
