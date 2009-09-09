@@ -164,6 +164,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 sdg.setMolecule(mol);
                 sdg.generateCoordinates(new Vector2d(0, 1));
                 mol = sdg.getMolecule();
+                //for some reason, smilesparser sets valencies, which we don't want in jcp
+                for(int i=0;i<mol.getAtomCount();i++){
+                	mol.getAtom(i).setValency(null);
+                }
                 IChemModel chemModel = DefaultChemObjectBuilder.getInstance()
                         .newChemModel();
                 chemModel.setMoleculeSet(DefaultChemObjectBuilder.getInstance()

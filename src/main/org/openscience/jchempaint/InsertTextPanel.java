@@ -164,6 +164,11 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             try {
                 molecule = smilesParser.parseSmiles(text);
+                //for some reason, smilesparser sets valencies, which we don't want in jcp
+                for(int i=0;i<molecule.getAtomCount();i++){
+                	molecule.getAtom(i).setValency(null);
+                }
+
             } catch (InvalidSmilesException e1) {
                 JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Invalid SMILES specified"));
                 return null;
@@ -235,7 +240,12 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         // got the canonical SMILES, lets get the molecule
         SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         try {
-            return smilesParser.parseSmiles(smiles);
+        	IMolecule mol=smilesParser.parseSmiles(smiles);
+            //for some reason, smilesparser sets valencies, which we don't want in jcp
+            for(int i=0;i<mol.getAtomCount();i++){
+            	mol.getAtom(i).setValency(null);
+            }
+            return mol;
         } catch (InvalidSmilesException e1) {
             JOptionPane.showMessageDialog(jChemPaintPanel, "Couldn't process data from PubChem");
             return null;

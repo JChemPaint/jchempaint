@@ -43,6 +43,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.vecmath.Point2d;
 
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -99,7 +100,7 @@ public class CopyPasteAction extends JCPAction{
 
 	private void addToClipboard(Clipboard clipboard, IAtomContainer container) {
 	    try {
-    	    JcpSelection jcpselection = new JcpSelection(container);
+    	    JcpSelection jcpselection = new JcpSelection((IAtomContainer)container.clone());
             clipboard.setContents(jcpselection,null);
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -259,6 +260,10 @@ public class CopyPasteAction extends JCPAction{
                             new TemplateHandler(toPaste.getBuilder())
                         );
                         sdg.generateCoordinates();
+                        //for some reason, smilesparser sets valencies, which we don't want in jcp
+                        for(int i=0;i<toPaste.getAtomCount();i++){
+                        	toPaste.getAtom(i).setValency(null);
+                        }
         			} catch (Exception ex) {
         				if (content.indexOf("INChI")>-1) { // handle it as an InChI
         		            try {
@@ -280,6 +285,9 @@ public class CopyPasteAction extends JCPAction{
         			}
         		}
 	            if (toPaste != null) {
+	            	//somehow, in case of single atoms, there are no coordinates
+	            	if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
+	            		toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
 	            	InsertTextPanel.generateModel(jcpPanel, toPaste, false);
 
 	                //We select the inserted structure

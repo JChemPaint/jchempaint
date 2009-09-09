@@ -81,7 +81,12 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 						StringTokenizer st=new StringTokenizer(sb.toString());
 						String key=(String)st.nextElement();
 						String value=(String)st.nextElement();
-						funcgroupsmap.put(key, sp.parseSmiles(value));
+						IMolecule mol = sp.parseSmiles(value);
+						//for some reason, smilesparser sets valencies, which we don't want in jcp
+		                for(int k=0;k<mol.getAtomCount();k++){
+		                	mol.getAtom(k).setValency(null);
+		                }
+						funcgroupsmap.put(key, mol);
 						sb=new StringBuffer();
 					}
 				}else{
@@ -92,7 +97,12 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				StringTokenizer st=new StringTokenizer(sb.toString());
 				String key=(String)st.nextElement();
 				String value=(String)st.nextElement();
-				funcgroupsmap.put(key, sp.parseSmiles(value));
+				IMolecule mol = sp.parseSmiles(value);
+				//for some reason, smilesparser sets valencies, which we don't want in jcp
+                for(int k=0;k<mol.getAtomCount();k++){
+                	mol.getAtom(k).setValency(null);
+                }
+				funcgroupsmap.put(key, mol);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
