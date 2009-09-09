@@ -267,3 +267,4 @@ org/openscience/jchempaint/JCPPropertyHandler.class
 org/openscience/jchempaint/JExternalFrame.class
 org/openscience/jchempaint/RenderPanel.class
 org/openscience/jchempaint/undoredo/SwingUndoRedoFactory.class
+io-formats.set
