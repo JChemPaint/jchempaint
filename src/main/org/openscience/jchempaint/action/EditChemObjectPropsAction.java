@@ -73,6 +73,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			frame.pack();
 			frame.setVisible(true);
 		}
+		jcpPanel.get2DHub().updateView();
 	}
 }
 
