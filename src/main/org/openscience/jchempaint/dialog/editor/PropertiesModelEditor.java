@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Properties;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -39,12 +40,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.RenderingParameters;
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 
 import com.ozten.font.JFontChooser;
@@ -52,7 +57,7 @@ import com.ozten.font.JFontChooser;
 /**
  * @cdk.bug          1525961
  */
-public class RendererModelEditor extends FieldTablePanel implements ActionListener {
+public class PropertiesModelEditor extends FieldTablePanel implements ActionListener {
     
     private static final long serialVersionUID = 8694652992068950179L;
     
@@ -116,13 +121,28 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
     
     private RendererModel model;
     
-	public RendererModelEditor(JFrame frame) {
+	private JCheckBox askForIOSettings;
+	
+	private JTextField undoStackSize;
+    
+	public PropertiesModelEditor(JFrame frame) {
         super();
         this.frame = frame;
         constructPanel();
 	}
     
     private void constructPanel() {
+    	
+    	addField("General Settings",new JPanel());
+    	
+        askForIOSettings = new JCheckBox();
+        addField(GT._("Ask for IO settings"), askForIOSettings);
+        
+        undoStackSize = new JTextField();
+        addField(GT._("Undo/redo stack size"), undoStackSize);
+        
+        addField("",new JPanel());
+    	addField("Rendering Settings",new JPanel());
         
         drawNumbers = new JCheckBox();
         addField(GT._("Draw atom numbers"), drawNumbers);
@@ -267,6 +287,10 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         if (currentColor != null) {
             color.setForeground(currentColor);
         }
+        //the general settings
+        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
+        undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
 	
@@ -300,6 +324,23 @@ public class RendererModelEditor extends FieldTablePanel implements ActionListen
         
         model.setFontName(currentFontName);
         model.setBackColor(currentColor);
+        //the general settings
+        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+        props.setProperty("askForIOSettings",
+            askForIOSettings.isSelected() ? "true" : "false"
+        );
+        try{
+        	int size=Integer.parseInt(undoStackSize.getText());
+        	if(size<1 || size>100)
+        		throw new Exception("wrong number");
+            props.setProperty("General.UndoStackSize",
+                    undoStackSize.getText()
+            );
+            JCPPropertyHandler.getInstance().saveProperties();
+        }
+        catch(Exception ex){
+        	JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     /**

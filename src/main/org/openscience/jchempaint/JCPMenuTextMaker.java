@@ -98,7 +98,7 @@ public class JCPMenuTextMaker {
 		entries.put("zoomin", GT._("Zoom in"));
 		entries.put("zoomout", GT._("Zoom Out"));
 		entries.put("zoomoriginal", GT._("Zoom 100%"));
-		entries.put("renderOptions", GT._("Rendering Options"));
+		entries.put("options", GT._("Options"));
 		entries.put("createSMILES", GT._("Create SMILES"));
 		entries.put("createInChI", GT._("Create InChI"));
 		entries.put("help", GT._("Help"));

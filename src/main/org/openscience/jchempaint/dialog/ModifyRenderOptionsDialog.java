@@ -42,7 +42,7 @@ import javax.swing.JPanel;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.dialog.editor.RendererModelEditor;
+import org.openscience.jchempaint.dialog.editor.PropertiesModelEditor;
 
 /**
   * Simple Dialog that shows the loaded dictionaries..
@@ -52,7 +52,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
 
 	private static final long serialVersionUID = -7228371698429720333L;
 	
-	private RendererModelEditor editor;
+	private PropertiesModelEditor editor;
     private RendererModel model;
     private JChemPaintPanel jcpPanel;
     
@@ -63,7 +63,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
         super();
         this.model = model;
         this.jcpPanel=jcpPanel;
-        editor = new RendererModelEditor(this);
+        editor = new PropertiesModelEditor(this);
         createDialog();
         pack();
         setVisible(true);
