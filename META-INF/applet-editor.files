@@ -312,6 +312,7 @@ org/openscience/jchempaint/InsertTextPanel.class
 org/openscience/jchempaint/io/JCPFileView.class
 org/openscience/jchempaint/JChemPaintMenuBar.class
 org/openscience/jchempaint/JChemPaintMenuHelper.class
+org/openscience/jchempaint/JChemPaintMenuHelper$1.class
 org/openscience/jchempaint/JChemPaintPanel.class
 org/openscience/jchempaint/JChemPaintPopupMenu.class
 org/openscience/jchempaint/JCPMenuTextMaker.class

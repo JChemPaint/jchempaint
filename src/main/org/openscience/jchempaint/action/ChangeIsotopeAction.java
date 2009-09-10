@@ -97,7 +97,9 @@ public class ChangeIsotopeAction extends JCPAction {
                 isotopeNumber -= 2;
             } else if (type.equals("majorMinusThree")) {
                 isotopeNumber -= 3;
-            }
+            } else if (type.indexOf("specific")==0) {
+            	isotopeNumber = Integer.parseInt(type.substring(8));
+			}
             jcpPanel.get2DHub().setMassNumber(atom,isotopeNumber);
             jcpPanel.get2DHub().updateView();
         }

@@ -1,5 +1,8 @@
 package org.openscience.jchempaint;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -11,9 +14,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
+import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
+
+import com.sun.org.apache.bcel.internal.generic.ISTORE;
 
 
 /**
@@ -93,7 +102,7 @@ public class JChemPaintMenuHelper {
 	 * @param  menu		 The menu to add the new menu to (must either be JMenu or JPopupMenu)
 	 * @return           The created JMenu
 	 */
-	protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, JComponent menu) {
+	protected JComponent createMenu(final JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu) {
 		String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
 		for (int i = 0; i < itemKeys.length; i++) {
 			if (itemKeys[i].equals("-")) {
@@ -118,6 +127,52 @@ public class JChemPaintMenuHelper {
 		if(key.equals("bond")){
 			jcpPanel.bondMenu=menu;
 			menu.setEnabled(false);
+		}
+		if(key.equals("isotopeChange")){
+			((JMenu)menu).addMenuListener(new MenuListener(){
+				public void menuCanceled(MenuEvent arg0) {
+				}
+
+				public void menuDeselected(MenuEvent arg0) {
+				}
+
+				public void menuSelected(MenuEvent arg0) {
+					menu.removeAll();
+					if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled()){
+						if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>1){
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusThree", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusTwo", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusOne", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "major", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusOne", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusTwo", false));
+							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusThree", false));
+						}else{
+							try {
+								IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
+								for(int i=0;i<isotopes.length;i++){
+									String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
+									JMenuItem mi = new JMenuItem(cmd);
+									mi.setName(cmd);
+									usedKeys.add(cmd);
+									String astr="org.openscience.jchempaint.action.ChangeIsotopeAction@specific"+isotopes[i].getMassNumber();
+									mi.setActionCommand(astr);
+									JCPAction action = getJCPAction().getAction(jcpPanel, astr, false);
+									if (action != null) {
+										// sync some action properties with menu
+										mi.setEnabled(action.isEnabled());
+										mi.addActionListener(action);
+										logger.debug("Coupled action to new menu item...");
+									}
+									menu.add(mi);
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}							
+						}
+					}
+				}
+			});
 		}
 		return menu;
 	}
