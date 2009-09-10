@@ -20,6 +20,7 @@ org/openscience/jchempaint/resources/small-bin/paste.gif
 org/openscience/jchempaint/resources/small-bin/pentagon.gif
 org/openscience/jchempaint/resources/small-bin/plus_one.gif
 org/openscience/jchempaint/resources/small-bin/redo.gif
+org/openscience/jchempaint/resources/small-bin/redo_disabled.gif
 org/openscience/jchempaint/resources/small-bin/rotation.gif
 org/openscience/jchempaint/resources/small-bin/selectsquare.gif
 org/openscience/jchempaint/resources/small-bin/square.gif
@@ -27,6 +28,7 @@ org/openscience/jchempaint/resources/small-bin/triangle.gif
 org/openscience/jchempaint/resources/small-bin/undefined_bond.gif
 org/openscience/jchempaint/resources/small-bin/undefined_stereo_bond.gif
 org/openscience/jchempaint/resources/small-bin/undo.gif
+org/openscience/jchempaint/resources/small-bin/undo_disabled.gif
 org/openscience/jchempaint/resources/small-bin/up_bond.gif
 org/openscience/jchempaint/resources/small-bin/zoomin.gif
 org/openscience/jchempaint/resources/small-bin/zoomout.gif
