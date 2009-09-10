@@ -32,33 +32,43 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 
 /**
  * Opens a new empty JChemPaintFrame.
- *
+ * 
  */
 public class NewAction extends JCPAction {
 
     private static final long serialVersionUID = -6710948755122145479L;
 
     /**
-     *  Opens an empty JChemPaint frame.
-     *
-     *@param  e  Description of the Parameter
+     * Opens an empty JChemPaint frame.
+     * 
+     *@param e
+     *            Description of the Parameter
      */
     public void actionPerformed(ActionEvent e) {
-      if(jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)){
-        int clear=jcpPanel.showWarning();
-        if(clear==JOptionPane.YES_OPTION){
-        	jcpPanel.get2DHub().zap();
-        	jcpPanel.get2DHub().updateView();
-                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
-         }
-      }else{
-		JChemPaint.showEmptyInstance(jcpPanel.isDebug());
-      }
+        if (jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)) {
+            int clear = jcpPanel.showWarning();
+            if (clear == JOptionPane.YES_OPTION) {
+                jcpPanel.get2DHub().zap();
+                jcpPanel.get2DHub().updateView();
+                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
+                        .setZoomFactor(1);
+
+                IChemObjectSelection selection = new LogicalSelection(
+                        LogicalSelection.Type.NONE);
+                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
+                        .setSelection(selection);
+
+            }
+        } else {
+            JChemPaint.showEmptyInstance(jcpPanel.isDebug());
+        }
     }
 }
-
