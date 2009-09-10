@@ -156,7 +156,7 @@
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
         <delete>
-           <fileset dir="${dist-classes}" includes="*"/>
+           <fileset dir="${dist-classes}" includes="*" excludes="io-formats.set"/>
         </delete>
     <delete dir="${dist-classes}/org/omegahat" />
     </target>
