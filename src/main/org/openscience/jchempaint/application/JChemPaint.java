@@ -457,13 +457,20 @@ public class JChemPaint {
                     }
         }
 
-        
         if (error != null) {
             throw new CDKException(error);
         }
 
         if (chemModel == null && chemFile != null) {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
+        }
+
+		//for some reason, smilesparser sets valencies, which we don't want in jcp
+        if(cor instanceof SMILESReader){
+        	IAtomContainer allinone = JChemPaintPanel.getAllAtomContainersInOne(chemModel);
+   	        for(int k=0;k<allinone.getAtomCount();k++){
+   	        	allinone.getAtom(k).setValency(null);
+    		}
         }
 
         return chemModel;
@@ -632,5 +639,4 @@ public class JChemPaint {
         f.setVisible(true);
         return p;
     }
-
 }

@@ -29,9 +29,6 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 
 import javax.swing.JFileChooser;
@@ -42,6 +39,8 @@ import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.io.JCPFileFilter;
@@ -93,7 +92,8 @@ public class OpenAction extends JCPAction {
 
             }
             if (jcpPanel.getGuistring().equals(
-                    JChemPaintEditorApplet.GUI_APPLET)) {
+                    JChemPaintEditorApplet.GUI_APPLET) ||
+                    JChemPaintPanel.getAllAtomContainersInOne(jcpPanel.getChemModel()).getAtomCount()==0) {
                 int clear = jcpPanel.showWarning();
                 if (clear == JOptionPane.YES_OPTION) {
                     try {

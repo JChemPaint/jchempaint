@@ -71,10 +71,12 @@ import org.openscience.cdk.controller.IControllerModule;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
@@ -686,4 +688,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	        this.updateStatusBar();
         }
 	}
+	
+    public static IAtomContainer getAllAtomContainersInOne(IChemModel chemModel){
+		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
+		IAtomContainer allinone=chemModel.getBuilder().newAtomContainer();
+		for(int i=0;i<acs.size();i++){
+			allinone.add(acs.get(i));
+		}
+		return allinone;
+    }
 }

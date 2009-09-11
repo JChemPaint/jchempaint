@@ -80,6 +80,7 @@ import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
+import org.openscience.jchempaint.JChemPaintPanel;
 
 /**
  * Action to copy/paste structures.
@@ -158,12 +159,7 @@ public class CopyPasteAction extends JCPAction{
 	        		addToClipboard(sysClip,
 	                    renderModel.getSelection().getConnectedAtomContainer());
 	        	}else{
-	        		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
-	        		IAtomContainer allinone=chemModel.getBuilder().newAtomContainer();
-	        		for(int i=0;i<acs.size();i++){
-	        			allinone.add(acs.get(i));
-	        		}
-	        		addToClipboard(sysClip,allinone);
+	        		addToClipboard(sysClip, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
 	        	}
 	        } else if ("copyAsSmiles".equals(type)) {
 	        	try {
