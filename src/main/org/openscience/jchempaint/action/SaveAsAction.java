@@ -147,8 +147,8 @@ public class SaveAsAction extends JCPAction
 						if(new File(outFile.getCanonicalFile()+"."+type).exists()){
 							ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
 						}
-					}catch(IOException ex){
-						logger.error("IOException when trying to ask for existing file");
+					}catch(Throwable ex){
+						jcpPanel.announceError(ex);
 					}
 					ready=0;
 				}
