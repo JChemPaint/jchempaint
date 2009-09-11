@@ -134,7 +134,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorPlusThree").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C15").click();
 		Assert.assertEquals(15, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -144,7 +145,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorPlusTwo").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C14").click();
 		Assert.assertEquals(14, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -154,7 +156,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorPlusOne").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C13").click();
 		Assert.assertEquals(13, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -164,7 +167,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("major").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C12").click();
 		Assert.assertEquals(12, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -174,7 +178,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorMinusOne").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C11").click();
 		Assert.assertEquals(11, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -184,7 +189,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorMinusTwo").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C10").click();
 		Assert.assertEquals(10, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
@@ -194,7 +200,8 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("majorMinusThree").click();
+		applet.menuItem("isotopeChange").click();
+		applet.menuItem("C9").click();
 		Assert.assertEquals(9, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
 	}
