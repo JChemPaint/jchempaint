@@ -14,7 +14,7 @@ public class ButtonTextComponentMatcher extends GenericTypeMatcher<JButton> {
 	}
 	@Override
 	protected boolean isMatching(JButton arg0) {
-		if(arg0.getText()!=null && arg0.getText().equals(text))
+		if(arg0.getText()!=null && arg0.isShowing() && arg0.getText().equals(text))
 			return true;
 		else
 			return false;

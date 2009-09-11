@@ -15,6 +15,7 @@ import javax.vecmath.Point2d;
 
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JButtonFixture;
@@ -61,18 +62,99 @@ public class JCPEditorAppletMenuTest {
 		applet.show();
 	}
 
-	@Test public void testMenuExport() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testMenuExportBmp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  File file=new File("/tmp/test.bmp");
+		  if(file.exists())
+			  file.delete();
 		  applet.menuItem("export").click();
 		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(1));
 		  JTextComponentFixture text = dialog.textBox();
 		  text.setText("/tmp/test");
 		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 		  okbutton.click();
-		  File file=new File("/tmp/test.tiff");
+		  dialog = applet.dialog();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.click();
+		  //we only check the existence of file for now
+		  Assert.assertTrue(file.exists());
+	}
+
+	@Test public void testMenuExportJpg() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  File file=new File("/tmp/test.jpg");
+		  if(file.exists())
+			  file.delete();
+		  applet.menuItem("export").click();
+		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(2));
+		  JTextComponentFixture text = dialog.textBox();
+		  text.setText("/tmp/test");
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  dialog = applet.dialog();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.click();
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}
 	
+	@Test public void testMenuExportPng() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  File file=new File("/tmp/test.png");
+		  if(file.exists())
+			  file.delete();
+		  applet.menuItem("export").click();
+		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(3));
+		  JTextComponentFixture text = dialog.textBox();
+		  text.setText("/tmp/test");
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  dialog = applet.dialog();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.click();
+		  //we only check the existence of file for now
+		  Assert.assertTrue(file.exists());
+	}
+	
+	@Test public void testMenuExportSvg() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  File file=new File("/tmp/test.svg");
+		  if(file.exists())
+			  file.delete();
+		  applet.menuItem("export").click();
+		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(4));
+		  JTextComponentFixture text = dialog.textBox();
+		  text.setText("/tmp/test");
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  dialog = applet.dialog();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.click();
+		  //we only check the existence of file for now
+		  Assert.assertTrue(file.exists());
+	}
+	@Test public void testMenuExportTiff() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  File file=new File("/tmp/test.tiff");
+		  if(file.exists())
+			  file.delete();
+		  applet.menuItem("export").click();
+		  DialogFixture dialog = applet.dialog();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(5));
+		  JTextComponentFixture text = dialog.textBox();
+		  text.setText("/tmp/test");
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  dialog = applet.dialog();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.click();
+		  //we only check the existence of file for now
+		  Assert.assertTrue(file.exists());
+	}
 	@Test public void testMenuPrint() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		  applet.menuItem("print").click();
 		  //TODO in linux, the java print dialog is not working
