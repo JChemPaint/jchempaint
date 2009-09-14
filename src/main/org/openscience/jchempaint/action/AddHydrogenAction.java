@@ -48,10 +48,14 @@ public class AddHydrogenAction extends JCPAction
             if (type.equals("hydroon")) {
             	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
             		.setShowImplicitHydrogens(true);
+            	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
+        			.setKekuleStructure(true);
             }
             else if ( type.equals("hydrooff")) {
             	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
             		.setShowImplicitHydrogens(false);
+            	jcpPanel.get2DHub().getRenderer().getRenderer2DModel()
+            		.setKekuleStructure(false);
             }
             jcpPanel.get2DHub().updateView();
 		}

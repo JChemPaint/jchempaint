@@ -464,18 +464,18 @@ public class CopyPasteAction extends JCPAction{
     	  try {
     		  cmlWriterClass = this.getClass().getClassLoader().loadClass(
     		          "org.openscience.cdk.io.CMLWriter");
+        	  if (cmlWriterClass != null) {
+        		  IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
+        		  Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
+        		  cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
+        		  cow.write(tocopy);
+        		  cow.close();
+        	  }
+        	  cml=sw.toString();
     	  } catch (Exception exception) {
     		  logger.error("Could not load CMLWriter: ", exception.getMessage());
     		  logger.debug(exception);
     	  }
-    	  if (cmlWriterClass != null) {
-    		  IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
-    		  Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
-    		  cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
-    		  cow.write(tocopy);
-    		  cow.close();
-    	  }
-    	  cml=sw.toString();
       }
 
       public synchronized DataFlavor [] getTransferDataFlavors () {
