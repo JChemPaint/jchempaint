@@ -111,9 +111,9 @@ public class AtomEditor extends ChemObjectEditor {
         IAtom atom = (IAtom)source;
         try{
 	        if(IsotopeFactory.getInstance(atom.getBuilder()).getElement(symbolField.getText())!=null){
-	        	if(atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
+	        	if(atom.getHydrogenCount()==null || atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
 	        		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
-	        	if(atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
+	        	if(atom.getFormalCharge()==null || atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
 	        		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
 	        	if(!atom.getSymbol().equals(symbolField.getText()))
 	        		hub.setSymbol(atom, symbolField.getText());
