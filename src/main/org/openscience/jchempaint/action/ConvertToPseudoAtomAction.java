@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -73,6 +75,11 @@ public class ConvertToPseudoAtomAction extends JCPAction {
                 IAtom normal = pseudo.getBuilder().newAtom(pseudo);
                 normal.setSymbol("C");
                 jcpPanel.get2DHub().replaceAtom(normal,pseudo);
+        	}else if(type.equals("RX")){
+        		String x = JOptionPane.showInputDialog("Enter label", "R");
+                PseudoAtom pseudo = new PseudoAtom(atom);
+                pseudo.setLabel(x);
+                jcpPanel.get2DHub().replaceAtom(pseudo,atom);
         	}else{
                 PseudoAtom pseudo = new PseudoAtom(atom);
                 pseudo.setLabel(type);

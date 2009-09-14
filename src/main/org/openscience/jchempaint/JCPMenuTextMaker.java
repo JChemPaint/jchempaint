@@ -97,7 +97,7 @@ public class JCPMenuTextMaker {
 		entries.put("zoomin", GT._("Zoom in"));
 		entries.put("zoomout", GT._("Zoom Out"));
 		entries.put("zoomoriginal", GT._("Zoom 100%"));
-		entries.put("options", GT._("Options"));
+		entries.put("options", GT._("Preferences..."));
 		entries.put("createSMILES", GT._("Create SMILES"));
 		entries.put("createInChI", GT._("Create InChI"));
 		entries.put("help", GT._("Help"));
@@ -113,7 +113,7 @@ public class JCPMenuTextMaker {
 		entries.put("symbolChange", GT._("Change Element"));
 		entries.put("periodictablemenu", GT._("Periodic Table"));
 		entries.put("enterelmentmenu", GT._("Custom"));
-		entries.put("isotopeChange", GT._("Change Isotope"));
+		entries.put("isotopeChange", GT._("Isotopes"));
 		entries.put("convertToRadical", GT._("Convert to Radical"));
 		entries.put("showChemObjectProperties", GT._("Properties"));
 		entries.put("showACProperties", GT._("Molecule Properties"));
@@ -222,8 +222,13 @@ public class JCPMenuTextMaker {
 		entries.put("symbolSb", GT._("Sb"));
 		entries.put("symbolTe", GT._("Te"));
 		entries.put("symbolPo", GT._("Po"));
-		entries.put("pseudoStar", GT._("*"));
+		entries.put("pseudoStar", GT._("Variable Attachment Point *"));
 		entries.put("pseudoR", GT._("R"));	
+		entries.put("pseudoRX", GT._("R.."));	
+		entries.put("pseudoR1", GT._("R1"));	
+		entries.put("pseudoR2", GT._("R2"));	
+		entries.put("pseudoR3", GT._("R3"));	
+		entries.put("pseudoR4", GT._("R4"));	
 		entries.put("selectReactants", GT._("Select Reactants Only"));
 		entries.put("selectProducts", GT._("Select Products Only"));
 		entries.put("bondTooltip", GT._("Draw Bonds and Atoms"));

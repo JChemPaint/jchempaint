@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -179,21 +180,23 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
 			    }
 			}else if(x!=null && x.length()>0){
-				if(closestAtom==null){
-					IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
-					addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord));
-				    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-					    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay);
-					    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
-				    }
-				}else{
-					if(Character.isLowerCase(x.toCharArray()[0]))
-						x=Character.toUpperCase(x.charAt(0))+x.substring(1);
-					IsotopeFactory ifa=IsotopeFactory.getInstance(closestAtom.getBuilder());
-					IIsotope iso=ifa.getMajorIsotope(x);
-					if(iso!=null){
+				if(Character.isLowerCase(x.toCharArray()[0]))
+					x=Character.toUpperCase(x.charAt(0))+x.substring(1);
+				IsotopeFactory ifa=IsotopeFactory.getInstance(chemModelRelay.getIChemModel().getBuilder());
+				IIsotope iso=ifa.getMajorIsotope(x);
+				if(iso!=null){
+					if(closestAtom==null){
+						IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
+						addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord));
+					    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
+						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, GT._("Add Atom"), chemModelRelay);
+						    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
+					    }
+					}else{
 					    chemModelRelay.setSymbol(closestAtom, x);
 					}
+				}else{
+					JOptionPane.showMessageDialog(null, x+" "+GT._("is not a valid element symbol or functional group."), GT._("No valid input"), JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			chemModelRelay.getController2DModel().setDrawElement(x);
