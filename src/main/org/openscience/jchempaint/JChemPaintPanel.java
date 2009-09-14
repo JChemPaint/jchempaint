@@ -587,11 +587,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     public void selectionChanged() {
         updateStatusBar();
-        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
+        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
+        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
+        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
         	atomMenu.setEnabled(true);
         else
         	atomMenu.setEnabled(false);
-        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getBondCount()>0)
+        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
+        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
+        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getBondCount()>0)
         	bondMenu.setEnabled(true);
         else
         	bondMenu.setEnabled(false);
