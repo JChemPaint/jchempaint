@@ -112,7 +112,7 @@ public class JCPMenuTextMaker {
 		entries.put("selectMolecule", GT._("Select Molecule"));
 		entries.put("symbolChange", GT._("Change Element"));
 		entries.put("periodictablemenu", GT._("Periodic Table"));
-		entries.put("enterelmentmenu", GT._("Custom"));
+		entries.put("enterelementmenu", GT._("Custom"));
 		entries.put("isotopeChange", GT._("Isotopes"));
 		entries.put("convertToRadical", GT._("Convert to Radical"));
 		entries.put("showChemObjectProperties", GT._("Properties"));

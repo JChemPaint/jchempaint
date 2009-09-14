@@ -1,13 +1,13 @@
 package org.openscience.jchempaint;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -21,8 +21,6 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.JCPAction;
-
-import com.sun.org.apache.bcel.internal.generic.ISTORE;
 
 
 /**
@@ -213,6 +211,13 @@ public class JChemPaintMenuHelper {
 		}
 		else {
 			mi = new JMenuItem(translation);
+		}
+		JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance();
+		URL url = jcpph.getResource(cmd + JCPAction.imageSuffix);
+		if (url != null)
+		{
+			ImageIcon image = new ImageIcon(url);
+			mi.setIcon(image);
 		}
 		//this is to avoid to get a menu with the same name twice
 		if(usedKeys.contains(cmd))
