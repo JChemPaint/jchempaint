@@ -293,6 +293,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 this.paintChemModel(chemModel, g2, screen);
             }
         }
+        //for some reason, the first drawing of a string takes around 0.5 seconds.
+        //If the user experiences this delay, it's annoying, so we do a dummy draw.
     	if(isFirstDrawing && this.isVisible()){
     		g.setFont(((AWTFontManager)renderer.getFontManager()).getFont());
     		g.setColor(getBackground());
