@@ -30,12 +30,14 @@ package org.openscience.jchempaint;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 
 /**
@@ -45,6 +47,7 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
 public abstract class AbstractJChemPaintPanel extends JPanel{
 
 	protected RenderPanel renderPanel;
+    protected LoggingTool logger = new LoggingTool(this);
 
 	/**
 	 * 
@@ -87,4 +90,22 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	public String getSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
 		return CreateSmilesAction.getSmiles(getChemModel());
 	}
+	
+    
+    /**
+     * This method handles an error when we do not know what to do. It clearly 
+     * announces to the user that an error occured. This is preferable compared 
+     * to failing silently.
+     * 
+     * @param ex The throwable which occured.
+     */
+    public void announceError(Throwable ex){
+    	JOptionPane.showMessageDialog(this, 
+    			GT._("The error was:")+" "+ex.getMessage()+". "+GT._("Please file a bug report at"+
+    			"https://sourceforge.net/tracker/?func=browse&group_id=20024&atid=120024. "+
+    			"We apologize for any inconvenience!"), GT._("Error occured"),
+    			JOptionPane.ERROR_MESSAGE);
+    	ex.printStackTrace();
+    	logger.error(ex.getMessage());
+    }
 }

@@ -30,6 +30,7 @@ package org.openscience.jchempaint;
 
 import java.awt.BorderLayout;
 import java.awt.ScrollPane;
+import java.io.IOException;
 
 import org.openscience.cdk.interfaces.IChemModel;
 
@@ -42,7 +43,11 @@ public class JChemPaintViewerPanel extends AbstractJChemPaintPanel {
 	 */
 	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen, boolean debug){
 		this.setLayout(new BorderLayout());
-		renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen, debug);
+		try {
+			renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen, debug);
+		} catch (IOException e) {
+			announceError(e);
+		}
 		if (!fitToScreen) {
 	        ScrollPane scroller = new ScrollPane();
 	        scroller.add(renderPanel);

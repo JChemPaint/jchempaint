@@ -28,6 +28,7 @@
  */
 package org.openscience.jchempaint;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -114,9 +115,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private boolean debug = false;
 
     private PhantomBondGenerator pbg = new PhantomBondGenerator();
+    
+    boolean isFirstDrawing = true;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
-            boolean fitToScreen, boolean debug) {
+            boolean fitToScreen, boolean debug) throws IOException {
         this.debug = debug;
         this.setupMachinery(chemModel, fitToScreen);
         this.setupPanel(width, height);
@@ -142,11 +145,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return hub;
     }
 
-    private void setupMachinery(IChemModel chemModel, boolean fitToScreen) {
+    private void setupMachinery(IChemModel chemModel, boolean fitToScreen) throws IOException {
         // setup the Renderer and the controller 'model'
 
         if (this.renderer == null) {
-            this.renderer = new Renderer(makeGenerators(),
+            this.renderer = new Renderer(makeGenerators(chemModel),
                     makeReactionGenerators(), new AWTFontManager());
             // any specific rendering settings defaults should go here
             this.renderer.getRenderer2DModel().setShowEndCarbons(false);
@@ -185,13 +188,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return generators;
     }
 
-    private List<IGenerator> makeGenerators() {
+    private List<IGenerator> makeGenerators(IChemModel chemModel) throws IOException {
         List<IGenerator> generators = new ArrayList<IGenerator>();
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
         }
         generators.add(new RingGenerator());
-        generators.add(new ExtendedAtomGenerator());
+        generators.add(new ExtendedAtomGenerator(chemModel.getBuilder()));
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
         generators.add(new ExternalHighlightGenerator());
@@ -290,6 +293,12 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 this.paintChemModel(chemModel, g2, screen);
             }
         }
+    	if(isFirstDrawing && this.isVisible()){
+    		g.setFont(((AWTFontManager)renderer.getFontManager()).getFont());
+    		g.setColor(getBackground());
+    		g.drawString("Black",100,100);
+    		isFirstDrawing=false;
+    	}
     }
 
     /**

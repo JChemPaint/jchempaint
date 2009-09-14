@@ -112,7 +112,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     protected JMenuItem redoMenu;
     protected JComponent atomMenu;
     protected JComponent bondMenu;
-    private LoggingTool logger = new LoggingTool(this);
     private boolean debug=false;
 
 	/**
@@ -130,7 +129,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         topContainer = new JPanel(new BorderLayout());
         topContainer.setLayout(new BorderLayout());
         this.add(topContainer, BorderLayout.NORTH);
-        renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
+        try {
+			renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
+		} catch (IOException e) {
+			announceError(e);
+		}
         renderPanel.getHub().addChangeModeListener(this);
         renderPanel.setName("renderpanel");
         centerContainer=new JPanel();
@@ -655,7 +658,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     relay.setSymbol(closestAtom, Character.toString(x));
                 }
             } catch (IOException e) {
-                logger.debug(e);
+                announceError(e);
             }
         }
     }
@@ -697,22 +700,5 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 			allinone.add(acs.get(i));
 		}
 		return allinone;
-    }
-    
-    /**
-     * This method handles an error when we do not know what to do. It clearly 
-     * announces to the user that an error occured. This is preferable compared 
-     * to failing silently.
-     * 
-     * @param ex The throwable which occured.
-     */
-    public void announceError(Throwable ex){
-    	JOptionPane.showMessageDialog(this, 
-    			"The error was: "+ex.getMessage()+". Please file a bug report at"+
-    			"https://sourceforge.net/tracker/?func=browse&group_id=20024&atid=120024. "+
-    			"We apologize for any inconvenience!", "Error occured",
-    			JOptionPane.ERROR_MESSAGE);
-    	ex.printStackTrace();
-    	logger.error(ex.getMessage());
     }
 }
