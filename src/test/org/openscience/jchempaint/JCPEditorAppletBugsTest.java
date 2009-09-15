@@ -1,16 +1,12 @@
 package org.openscience.jchempaint;
 
+import java.awt.Frame;
 import java.awt.Point;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.vecmath.Point2d;
-
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.launcher.AppletLauncher;
@@ -18,29 +14,28 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
 public class JCPEditorAppletBugsTest {
 	private static AppletViewer viewer;
 	private static FrameFixture applet;
+	private static JChemPaintEditorApplet jcpApplet;
 
 
 	@BeforeClass public static void setUp() {
+	    jcpApplet = new JChemPaintEditorApplet();
 		Map<String, String> parameters = new HashMap<String, String>();
-		viewer = AppletLauncher.applet(new JChemPaintEditorApplet())
+		viewer = AppletLauncher.applet(jcpApplet)
 			.withParameters(parameters)
 			.start();
 		applet = new FrameFixture(viewer);
 		applet.show();
 	}
 
-	@Test public void testSquareSelectSingleAtom() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testSquareSelectSingleAtom()  {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		applet.button("C").click();
@@ -57,6 +52,17 @@ public class JCPEditorAppletBugsTest {
 		Assert.assertEquals(1, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
 		restoreModel();
 	}
+	
+	@Test public void testGetMolFile() throws CDKException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        Point movetopint=new Point(100,100);    
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), movetopint, MouseButton.LEFT_BUTTON,1);
+	    Assert.assertTrue(jcpApplet.getMolFile().indexOf("6  6  0  0  0  0  0  0  0  0999 V2000")>0);
+        restoreModel();	    
+	}
+	
 	
 	private void restoreModel(){
 		JPanelFixture jcppanel=applet.panel("appletframe");

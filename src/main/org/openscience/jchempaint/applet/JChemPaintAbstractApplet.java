@@ -328,8 +328,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         StringWriter sw = new StringWriter();
         MDLWriter mdlwriter = new MDLWriter(sw);
         // mdlwriter.dontWriteAromatic();
-        org.openscience.cdk.interfaces.IMoleculeSet som = theJcpp
-                .getChemModel().getMoleculeSet();
+        org.openscience.cdk.interfaces.IChemModel som = theJcpp
+                .getChemModel();
         mdlwriter.write(som);
         return (sw.toString());
     }
