@@ -42,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
@@ -257,7 +258,7 @@ public class JCPToolBar
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);
-						AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub());
+						AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), CDKConstants.STEREO_BOND_NONE);
 						activeModule.setID(toolKeys[i]);
 						chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
 						chemPaintPanel.updateStatusBar();
