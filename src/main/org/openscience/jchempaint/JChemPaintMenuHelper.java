@@ -119,12 +119,12 @@ public class JChemPaintMenuHelper {
 			}
 		}
 		if(key.equals("atom")){
-			jcpPanel.atomMenu=menu;
-			menu.setEnabled(false);
+			jcpPanel.atomMenu=(JMenu)menu;
+			jcpPanel.enOrDisableMenus((JMenu)menu, false);
 		}
 		if(key.equals("bond")){
-			jcpPanel.bondMenu=menu;
-			menu.setEnabled(false);
+			jcpPanel.bondMenu=(JMenu)menu;
+            jcpPanel.enOrDisableMenus((JMenu)menu, false);
 		}
 		if(key.equals("isotopeChange")){
 			((JMenu)menu).addMenuListener(new MenuListener(){
@@ -136,38 +136,37 @@ public class JChemPaintMenuHelper {
 
 				public void menuSelected(MenuEvent arg0) {
 					menu.removeAll();
-					if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled()){
-						if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>1){
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusThree", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusTwo", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusOne", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "major", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusOne", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusTwo", false));
-							menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusThree", false));
-						}else{
-							try {
-								IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
-								for(int i=0;i<isotopes.length;i++){
-									String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
-									JMenuItem mi = new JMenuItem(cmd);
-									mi.setName(cmd);
-									usedKeys.add(cmd);
-									String astr="org.openscience.jchempaint.action.ChangeIsotopeAction@specific"+isotopes[i].getMassNumber();
-									mi.setActionCommand(astr);
-									JCPAction action = getJCPAction().getAction(jcpPanel, astr, false);
-									if (action != null) {
-										// sync some action properties with menu
-										mi.setEnabled(action.isEnabled());
-										mi.addActionListener(action);
-										logger.debug("Coupled action to new menu item...");
-									}
-									menu.add(mi);
+					if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==1){
+						try {
+							IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
+							for(int i=0;i<isotopes.length;i++){
+								String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
+								JMenuItem mi = new JMenuItem(cmd);
+								mi.setName(cmd);
+								usedKeys.add(cmd);
+								String astr="org.openscience.jchempaint.action.ChangeIsotopeAction@specific"+isotopes[i].getMassNumber();
+								mi.setActionCommand(astr);
+								JCPAction action = getJCPAction().getAction(jcpPanel, astr, false);
+								if (action != null) {
+									// sync some action properties with menu
+									mi.setEnabled(action.isEnabled());
+									mi.addActionListener(action);
+									logger.debug("Coupled action to new menu item...");
 								}
-							} catch (IOException e) {
-								e.printStackTrace();
-							}							
-						}
+								menu.add(mi);
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}							
+					}else{
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusThree", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusTwo", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorPlusOne", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "major", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusOne", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusTwo", false));
+                        menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusThree", false));
+                        jcpPanel.enOrDisableMenus((JMenu)menu, jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()==null || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==0 ? false : true);
 					}
 				}
 			});

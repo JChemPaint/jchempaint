@@ -50,6 +50,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -110,8 +111,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     Map<String, JButton> buttons=new HashMap<String, JButton>();
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
-    protected JComponent atomMenu;
-    protected JComponent bondMenu;
+    protected JMenu atomMenu;
+    protected JMenu bondMenu;
     private boolean debug=false;
 
 	/**
@@ -590,15 +591,31 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
         		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
         		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
-        	atomMenu.setEnabled(true);
+            enOrDisableMenus(atomMenu,true);
         else
-        	atomMenu.setEnabled(false);
+            enOrDisableMenus(atomMenu,false);
         if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
         		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
         		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getBondCount()>0)
-        	bondMenu.setEnabled(true);
+            enOrDisableMenus(bondMenu,true);
         else
-        	bondMenu.setEnabled(false);
+            enOrDisableMenus(bondMenu,false);
+    }
+    
+    /**
+     * Enables or disables all JMenuItems in a JMenu recursivly.
+     * 
+     * @param root  The JMenu to search in.
+     * @param b     Enable or disable.
+     */
+    protected void enOrDisableMenus(JMenu root, boolean b) {
+        for(int i=0;i<root.getItemCount();i++){
+            if(root.getItem(i) instanceof JMenu){
+                this.enOrDisableMenus((JMenu)root.getItem(i), b);
+            }else if(root.getItem(i) instanceof JMenuItem){
+                ((JMenuItem)root.getItem(i)).setEnabled(b);
+            }
+        }
     }
 
     public void structureChanged() {
