@@ -28,36 +28,16 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.EventObject;
 
-import javax.swing.JComponent;
-
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.controller.AddAtomModule;
-import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.controller.AddRingModule;
-import org.openscience.cdk.controller.AlterBondStereoModule;
 import org.openscience.cdk.controller.AtomAtomMappingModule;
-import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.CycleSymbolModule;
-import org.openscience.cdk.controller.IControllerModel;
 import org.openscience.cdk.controller.IControllerModule;
 import org.openscience.cdk.controller.MoveModule;
-import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.RotateModule;
 import org.openscience.cdk.controller.SelectLassoModule;
 import org.openscience.cdk.controller.SelectSquareModule;
-import org.openscience.cdk.controller.IChemModelRelay.Direction;
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.jchempaint.JCPToolBar;
-import org.openscience.jchempaint.dialog.EnterElementSwingModule;
-import org.openscience.jchempaint.dialog.PeriodicTableDialog;
-import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 /**
  * JChemPaint menu actions
@@ -72,20 +52,6 @@ public class ChangeModeAction extends JCPAction {
         IControllerModule newActiveModule=null;
         if (type.equals("move")) {
         	newActiveModule=new MoveModule(hub);
-        } else if (type.equals("eraser")) {
-        	newActiveModule=new RemoveModule(hub);
-        } else if (type.equals("plus")) {
-        	newActiveModule=new ChangeFormalChargeModule(hub, 1);
-        } else if (type.equals("minus")) {
-        	newActiveModule=new ChangeFormalChargeModule(hub, -1);
-        } else if (type.equals("periodictable")) {
-        	newActiveModule=new AddAtomModule(hub);
-            // open PeriodicTable panel
-            PeriodicTableDialog dialog = new PeriodicTableDialog();
-            dialog.setName("periodictabledialog");
-            hub.getController2DModel().setDrawElement(dialog.getChoosenSymbol());
-        } else if (type.equals("enterelement")) {
-        	newActiveModule=new EnterElementSwingModule(hub);
         } else if (type.equals("lasso")) {
         	newActiveModule=new SelectLassoModule(hub);
             hub.getController2DModel().setDrawElement("C");
@@ -116,11 +82,6 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("atomatommapping")) {
         	newActiveModule=new AtomAtomMappingModule(hub);
             hub.getController2DModel().setDrawElement("C");
-        } else if (type.length() == 1 || type.length() == 2) {
-            // I assume something with length of 1 is an atom name
-            // (C/H/O/N/etc.)
-        	newActiveModule=new AddAtomModule(hub);
-            hub.getController2DModel().setDrawElement(type);
         } else if (type.equals("rotate")) {
         	newActiveModule=new RotateModule(hub);
         }

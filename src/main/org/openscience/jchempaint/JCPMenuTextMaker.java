@@ -67,7 +67,7 @@ public class JCPMenuTextMaker {
 		entries.put("selectAll", GT._("Select All"));
 		entries.put("copy", GT._("Copy"));
 		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
-		entries.put("delete", GT._("Delete"));
+		entries.put("eraser", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
 		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));
@@ -81,9 +81,9 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_stereo_bond", GT._("Undefined E/Z"));
 		entries.put("formalCharge", GT._("Charge"));
 		entries.put("chargePlus2", GT._("+2"));
-		entries.put("chargePlus1", GT._("+1"));
+		entries.put("plus", GT._("+1"));
 		entries.put("chargeZero", GT._("0"));
-		entries.put("chargeMinus1", GT._("-1"));
+		entries.put("minus", GT._("-1"));
 		entries.put("chargeMinus2", GT._("-2"));
 		entries.put("hydrogen", GT._("Implicit Hydrogens"));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
@@ -111,8 +111,8 @@ public class JCPMenuTextMaker {
 		entries.put("selectFromChemObject", GT._("Select"));
 		entries.put("selectMolecule", GT._("Select Molecule"));
 		entries.put("symbolChange", GT._("Change Element"));
-		entries.put("periodictablemenu", GT._("Periodic Table"));
-		entries.put("enterelementmenu", GT._("Custom"));
+		entries.put("periodictable", GT._("Periodic Table"));
+		entries.put("enterelement", GT._("Custom"));
 		entries.put("isotopeChange", GT._("Isotopes"));
 		entries.put("convertToRadical", GT._("Convert to Radical"));
 		entries.put("showChemObjectProperties", GT._("Properties"));

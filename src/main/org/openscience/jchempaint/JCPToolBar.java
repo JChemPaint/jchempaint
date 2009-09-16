@@ -48,6 +48,7 @@ import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
 import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.jchempaint.action.ChangeAtomSymbolAction;
 import org.openscience.jchempaint.action.ChangeModeAction;
 import org.openscience.jchempaint.action.JCPAction;
 
@@ -179,9 +180,9 @@ public class JCPToolBar
 				}
 		}else{
 			b=new JButton(key);
-			ChangeModeAction a = new ChangeModeAction ();
+			ChangeAtomSymbolAction a = new ChangeAtomSymbolAction();
 			a.setJChemPaintPanel(chemPaintPanel);
-			a.setType(key);
+			b.setActionCommand(a.getClass().getName()+"@"+key);
 			b.addActionListener(a);
 			b.setEnabled(a.isEnabled());
 			b.setToolTipText(GT._("Change drawing symbol to")+" "+key);

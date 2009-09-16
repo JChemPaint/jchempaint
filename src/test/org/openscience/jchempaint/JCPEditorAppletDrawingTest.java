@@ -103,10 +103,13 @@ public class JCPEditorAppletDrawingTest {
 	}
 	
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
+	    applet.button("down_bond").click();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		applet.button("O").click();
+        Assert.assertEquals("O",panel.get2DHub().getActiveDrawModule().getID());
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals("O",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
@@ -115,6 +118,7 @@ public class JCPEditorAppletDrawingTest {
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("O",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
+		Assert.assertEquals("O",panel.get2DHub().getController2DModel().getDrawElement());
 	}
 	
 	@Test public void testPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {

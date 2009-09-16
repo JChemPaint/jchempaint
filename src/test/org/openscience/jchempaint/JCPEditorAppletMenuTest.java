@@ -161,34 +161,15 @@ public class JCPEditorAppletMenuTest {
 		  //TODO printing as a such can not be tested, I suppose
 	}
 	
-	@Test public void testMenuChargePlus2() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
-		panel.selectionChanged();
-		applet.menuItem("chargePlus2").click();
-		Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
-	}
-	
 	@Test public void testMenuChargePlus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("chargePlus1").click();
+		applet.menuItem("plus").click();
 		Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
-	}
-
-	@Test public void testMenuChargeZero() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
-		panel.selectionChanged();
-		applet.menuItem("chargeZero").click();
-		Assert.assertEquals(0, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
+        Assert.assertEquals("plus",panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuChargeMinus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -196,21 +177,12 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("chargeMinus1").click();
+		applet.menuItem("minus").click();
 		Assert.assertEquals(-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
+        Assert.assertEquals("minus",panel.get2DHub().getActiveDrawModule().getID());
 	}
 	
-	@Test public void testMenuChargeMinus2() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
-		panel.selectionChanged();
-		applet.menuItem("chargeMinus2").click();
-		Assert.assertEquals(-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
-	}
-
 	@Test public void testMenuIsotopeMajorPlusThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -314,8 +286,8 @@ public class JCPEditorAppletMenuTest {
 	@Test public void testMenuPseudoR() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.selectionChanged();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
+		panel.selectionChanged();
 		applet.menuItem("pseudoR").click();
 		Assert.assertEquals("R", ((IPseudoAtom)panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)).getLabel());
         IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
@@ -326,14 +298,14 @@ public class JCPEditorAppletMenuTest {
 	@Test public void testMenuPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.selectionChanged();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
-		applet.menuItem("periodictablemenu").click();
+		applet.menuItem("periodictable").click();
 		DialogFixture dialog = applet.dialog();
 		dialog.button("Li").click();
 		Assert.assertEquals("Li", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		panel.get2DHub().setSymbol(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0),"C");
+        Assert.assertEquals("periodictable",panel.get2DHub().getActiveDrawModule().getID());
 	}
 		
 	@Test public void testMenuBondSingle() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -345,6 +317,7 @@ public class JCPEditorAppletMenuTest {
 		applet.menuItem("bond").click();
 		Assert.assertEquals(IBond.Order.SINGLE, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getOrder());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setOrder(IBond.Order.SINGLE);
+		Assert.assertEquals("bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 	
 	@Test public void testMenuBondStereoDown() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -356,6 +329,7 @@ public class JCPEditorAppletMenuTest {
 		applet.menuItem("down_bond").click();
 		Assert.assertEquals(CDKConstants.STEREO_BOND_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals("down_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondStereoUp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -367,6 +341,7 @@ public class JCPEditorAppletMenuTest {
 		applet.menuItem("up_bond").click();
 		Assert.assertEquals(CDKConstants.STEREO_BOND_UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals("up_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondUndefinedStereo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -378,6 +353,7 @@ public class JCPEditorAppletMenuTest {
 		applet.menuItem("undefined_bond").click();
 		Assert.assertEquals(CDKConstants.STEREO_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals("undefined_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondUndefinedEZ() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -389,6 +365,7 @@ public class JCPEditorAppletMenuTest {
 		applet.menuItem("undefined_stereo_bond").click();
 		Assert.assertEquals(CDKConstants.EZ_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals("undefined_stereo_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 	
 	@Test public void testMenuReportSmiles() {

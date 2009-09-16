@@ -50,6 +50,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
+import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -173,7 +174,10 @@ public class CopyPasteAction extends JCPAction{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-	        } else if ("delete".equals(type)) {
+	        } else if ("eraser".equals(type)) {
+	            RemoveModule newActiveModule = new RemoveModule(jcpPanel.get2DHub());
+	            newActiveModule.setID(type);
+	            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
     			IAtom atomInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);

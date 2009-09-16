@@ -37,14 +37,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
+import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.IControllerModule;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.EnterElementOrGroupDialog;
+import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 
 
@@ -55,17 +54,18 @@ public class ChangeAtomSymbolAction extends JCPAction
 {
 
 	private static final long serialVersionUID = -8502905723573311893L;
+    private IControllerModule newActiveModule;
 	
 	public void actionPerformed(ActionEvent event)
 	{
 		logger.debug("About to change atom type of relevant atom!");
-		IControllerModel c2dm = jcpPanel.get2DHub().getController2DModel();
 		IChemObject object = getSource(event);
 		logger.debug("Source of call: ", object);
         Iterator<IAtom> atomsInRange = null;
 		if (object == null){
 			//this means the main menu was used
-			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && 
+			        jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
 				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
 		}else if (object instanceof IAtom)
 		{
@@ -78,18 +78,23 @@ public class ChangeAtomSymbolAction extends JCPAction
 			atoms.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom());
 			atomsInRange = atoms.iterator();
 		}
-		if(atomsInRange==null)
-			return;
 		String s = event.getActionCommand();
 		String symbol = s.substring(s.indexOf("@") + 1);
 		if(symbol.equals("periodictable")){
+            newActiveModule=new AddAtomModule(jcpPanel.get2DHub());
+            newActiveModule.setID(symbol);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
             // open PeriodicTable panel
             PeriodicTableDialog dialog = new PeriodicTableDialog();
             dialog.setName("periodictabledialog");
             symbol=dialog.getChoosenSymbol();
             if(symbol.equals(""))
             	return;
+            jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
 		}else if(symbol.equals("enterelement")){
+		    newActiveModule=new EnterElementSwingModule(jcpPanel.get2DHub());
+		    newActiveModule.setID(symbol);
+		    jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 			String[] funcGroupsKeys=new String[0];
 			symbol=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol:", "Enter element", funcGroupsKeys, "","");
 			if(symbol!=null && symbol.length()>0){
@@ -108,20 +113,28 @@ public class ChangeAtomSymbolAction extends JCPAction
 						return;
 					}
 				}
+		}else{
+		    //it must be a symbol
+	        newActiveModule=new AddAtomModule(jcpPanel.get2DHub());
+	        newActiveModule.setID(symbol);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+	        jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
 		}
-		while(atomsInRange.hasNext()){
-            IAtom atom = atomsInRange.next();
-            jcpPanel.get2DHub().setSymbol(atom,symbol);
-			//TODO still needed? should this go in hub?
-			// configure the atom, so that the atomic number matches the symbol
-			try
-			{
-				IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
-			} catch (Exception exception)
-			{
-				logger.error("Error while configuring atom");
-				logger.debug(exception);
-			}
+		if(atomsInRange!=null){
+    		while(atomsInRange.hasNext()){
+                IAtom atom = atomsInRange.next();
+                jcpPanel.get2DHub().setSymbol(atom,symbol);
+    			//TODO still needed? should this go in hub?
+    			// configure the atom, so that the atomic number matches the symbol
+    			try
+    			{
+    				IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+    			} catch (Exception exception)
+    			{
+    				logger.error("Error while configuring atom");
+    				logger.debug(exception);
+    			}
+    		}
 		}
 		jcpPanel.get2DHub().updateView();
 	}

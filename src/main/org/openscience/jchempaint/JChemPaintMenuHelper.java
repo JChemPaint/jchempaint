@@ -167,7 +167,7 @@ public class JChemPaintMenuHelper {
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusOne", false));
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusTwo", false));
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusThree", false));
-                        jcpPanel.enOrDisableMenus((JMenu)menu, jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()==null || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==0 ? false : true);
+                        jcpPanel.enOrDisableMenus((JMenu)menu, jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()==null || !jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() ? false : true);
 					}
 				}
 			});

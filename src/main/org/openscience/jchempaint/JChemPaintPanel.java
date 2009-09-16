@@ -77,6 +77,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.action.SaveAction;

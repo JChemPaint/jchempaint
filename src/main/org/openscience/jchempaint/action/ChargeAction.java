@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openscience.cdk.controller.ChangeFormalChargeModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 
@@ -70,20 +71,26 @@ public class ChargeAction extends JCPAction
 			return;
 		String s = event.getActionCommand();
 		String action = s.substring(s.indexOf("@") + 1);
+		int charge=0;
+        if(action.equals("plus2")){
+            charge=2;
+        }else if(action.equals("plus")){
+            charge=1;
+        }else if(action.equals("minus")){
+            charge=-1;
+        }else if(action.equals("minus2")){
+            charge=-2;
+        }
 		while(atomsInRange.hasNext()){
 			IAtom atom = atomsInRange.next();
-			if(action.equals("plus2")){
-				atom.setFormalCharge(2);
-			}else if(action.equals("plus1")){
-				atom.setFormalCharge(1);
-			}else if(action.equals("zero")){
-				atom.setFormalCharge(0);
-			}else if(action.equals("minus1")){
-				atom.setFormalCharge(-1);
-			}else if(action.equals("minus2")){
-				atom.setFormalCharge(-2);
-			}
+	        int newCharge = charge;
+	        if( atom.getFormalCharge() != null)
+	            newCharge += atom.getFormalCharge();
+	        jcpPanel.get2DHub().setCharge(atom, newCharge);
 		}
+        ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
+        newActiveModule.setID(action);
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 		jcpPanel.get2DHub().updateView();
 	}
 }
