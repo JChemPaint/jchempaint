@@ -1,5 +1,6 @@
 package org.openscience.jchempaint;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -216,7 +217,18 @@ public class JChemPaintMenuHelper {
 		if (url != null)
 		{
 			ImageIcon image = new ImageIcon(url);
-			mi.setIcon(image);
+			Image img = image.getImage();
+			Image newimg = img.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+			mi.setIcon(new ImageIcon(newimg));
+            URL disabledurl = jcpph.getResource(cmd + JCPAction.disabled_imageSuffix);
+            if (disabledurl != null){
+                ImageIcon disabledimage = new ImageIcon(disabledurl);
+                if (image != null){
+                    Image disabledimg = disabledimage.getImage();
+                    Image disablednewimg = disabledimg.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+                    mi.setDisabledIcon(new ImageIcon(disablednewimg));
+                }
+            }
 		}
 		//this is to avoid to get a menu with the same name twice
 		if(usedKeys.contains(cmd))
