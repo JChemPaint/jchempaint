@@ -78,8 +78,6 @@ public class ChangeModeAction extends JCPAction {
         	newActiveModule=new ChangeFormalChargeModule(hub, 1);
         } else if (type.equals("minus")) {
         	newActiveModule=new ChangeFormalChargeModule(hub, -1);
-        } else if (type.equals("bond")) {
-        	newActiveModule=new AddBondDragModule(hub,CDKConstants.STEREO_BOND_NONE);
         } else if (type.equals("periodictable")) {
         	newActiveModule=new AddAtomModule(hub);
             // open PeriodicTable panel
@@ -94,14 +92,6 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("select")) {
         	newActiveModule=new SelectSquareModule(hub);
             hub.getController2DModel().setDrawElement("C");
-        } else if (type.equals("up_bond")) {
-        	newActiveModule=new AddBondDragModule(hub, CDKConstants.STEREO_BOND_UP);
-        } else if (type.equals("down_bond")) {
-        	newActiveModule=new AddBondDragModule(hub, CDKConstants.STEREO_BOND_DOWN);
-        } else if (type.equals("undefined_bond")) {
-        	newActiveModule=new AddBondDragModule(hub, CDKConstants.STEREO_BOND_UNDEFINED);
-        } else if (type.equals("undefined_stereo_bond")) {
-        	newActiveModule=new AddBondDragModule(hub, CDKConstants.EZ_BOND_UNDEFINED);
         } else if (type.equals("triangle")) {
         	newActiveModule=new AddRingModule(hub, 3, false);
             hub.getController2DModel().setDrawElement("C");

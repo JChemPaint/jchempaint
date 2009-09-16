@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.controller.IControllerModel;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 
@@ -49,14 +49,28 @@ public class ChangeBondAction extends JCPAction
 
 	public void actionPerformed(ActionEvent event)
 	{
+	    //first switch mode
+        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_NONE);
+        if(type.equals("down_bond")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_DOWN);
+        }else if(type.equals("up_bond")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UP);
+        }else if(type.equals("undefined_bond")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UNDEFINED);
+        }else if(type.equals("undefined_stereo_bond")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.EZ_BOND_UNDEFINED);
+        }
+        newActiveModule.setID(type);
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+        //then handle selection or highlight if there is one
 		logger.debug("About to change atom type of relevant atom!");
-		IControllerModel c2dm = jcpPanel.get2DHub().getController2DModel();
 		IChemObject object = getSource(event);
 		logger.debug("Source of call: ", object);
         Iterator<IBond> bondsInRange = null;
 		if (object == null){
 			//this means the main menu was used
-			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
+			        && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
 				bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().bonds().iterator();
 		}else if (object instanceof IBond)
 		{
@@ -75,19 +89,19 @@ public class ChangeBondAction extends JCPAction
 		String type = s.substring(s.indexOf("@") + 1);
 		while(bondsInRange.hasNext()){
 			IBond bond = bondsInRange.next();
-			if(type.equals("single")){
+			if(type.equals("bond")){
 				bond.setStereo(CDKConstants.STEREO_BOND_NONE);
 				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("stereoDown")){
+			}else if(type.equals("down_bond")){
 				bond.setStereo(CDKConstants.STEREO_BOND_DOWN);
 				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("stereoUp")){
+			}else if(type.equals("up_bond")){
 				bond.setStereo(CDKConstants.STEREO_BOND_UP);
 				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("undefinedStereo")){
+			}else if(type.equals("undefined_bond")){
 				bond.setStereo(CDKConstants.STEREO_BOND_UNDEFINED);
 				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("undefinedEZ")){
+			}else if(type.equals("undefined_stereo_bond")){
 				bond.setStereo(CDKConstants.EZ_BOND_UNDEFINED);
 				bond.setOrder(IBond.Order.SINGLE);
 			}

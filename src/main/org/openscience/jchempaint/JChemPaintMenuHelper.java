@@ -119,11 +119,11 @@ public class JChemPaintMenuHelper {
 				menu.add(mi);
 			}
 		}
-		if(key.equals("atom")){
+		if(key.equals("atomMenu")){
 			jcpPanel.atomMenu=(JMenu)menu;
 			jcpPanel.enOrDisableMenus((JMenu)menu, false);
 		}
-		if(key.equals("bond")){
+		if(key.equals("bondMenu")){
 			jcpPanel.bondMenu=(JMenu)menu;
             jcpPanel.enOrDisableMenus((JMenu)menu, false);
 		}
