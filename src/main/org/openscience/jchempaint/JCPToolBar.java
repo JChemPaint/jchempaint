@@ -247,7 +247,7 @@ public class JCPToolBar
 						toolbar2.add(box);
 					box=new Box(BoxLayout.Y_AXIS);
 				}
-				button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length()==1);
+				button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length()<3);
 				/*if (toolKeys[i].equals("lasso"))
 				{
 					selectButton = button;
