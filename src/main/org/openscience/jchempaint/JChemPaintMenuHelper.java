@@ -137,9 +137,10 @@ public class JChemPaintMenuHelper {
 
 				public void menuSelected(MenuEvent arg0) {
 					menu.removeAll();
-					if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==1){
+					if((jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==1)
+					        || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom()!=null){
 						try {
-							IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
+							IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom()!=null ? jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom().getSymbol() : jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
 							for(int i=0;i<isotopes.length;i++){
 								String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
 								JMenuItem mi = new JMenuItem(cmd);
@@ -167,7 +168,7 @@ public class JChemPaintMenuHelper {
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusOne", false));
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusTwo", false));
                         menu.add(new JChemPaintMenuHelper().createMenuItem(jcpPanel, "majorMinusThree", false));
-                        jcpPanel.enOrDisableMenus((JMenu)menu, jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()==null || !jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() ? false : true);
+                        jcpPanel.enOrDisableMenus((JMenu)menu, jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()==null || !jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom()==null ? false : true);
 					}
 				}
 			});
