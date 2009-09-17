@@ -247,7 +247,73 @@ public class JCPEditorAppletMenuTest {
 	    genericIsotopeTest(9);
 	}
 	
-	@Test public void testMenuConvertToRadical() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testMenuValenceOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(1);
+    }
+	
+    @Test public void testMenuValenceTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(2);
+    }
+    
+    @Test public void testMenuValenceThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(3);
+    }
+    
+    @Test public void testMenuValenceFour() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(4);
+    }
+    
+    @Test public void testMenuValenceFive() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(5);
+    }
+    
+    @Test public void testMenuValenceSix() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(6);
+    }
+
+    @Test public void testMenuValenceSeven() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(7);
+    }
+
+    @Test public void testMenuValenceEight() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        genericValenceTest(8);
+    }
+
+    @Test public void testMenuValenceOff() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setValency(1);
+        panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).setValency(2);
+        genericValenceTest(-1);
+    }
+    
+    private void genericValenceTest(int valence){
+        //we go to move mode
+        applet.button("move").click();
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
+        panel.selectionChanged();
+        applet.menuItem("isotopeChange").click();
+        applet.menuItem("valence"+(valence==-1 ? "Off" : valence)).click();
+        if(valence==-1)
+            Assert.assertNull(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getValency());
+        else
+            Assert.assertEquals(valence, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getValency().intValue());
+        //the mode should have changed now
+        Assert.assertEquals("valence", panel.get2DHub().getActiveDrawModule().getID());
+        //if we click somewhere, we should get a new atom with specified properties
+        Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y);   
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        if(valence==-1)
+            Assert.assertNull(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getValency());
+        else
+            Assert.assertEquals(valence, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getValency().intValue());
+        panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setValency(null);
+        panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).setValency(null);
+    }
+
+    @Test public void testMenuConvertToRadical() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));

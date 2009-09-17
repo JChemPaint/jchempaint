@@ -29,21 +29,13 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.controller.ChangeValenceModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.jchempaint.dialog.PeriodicTableDialog;
-import org.openscience.jchempaint.dialog.PeriodicTablePanel;
 
 
 /**
@@ -79,15 +71,20 @@ public class ChangeValenceAction extends JCPAction
 			return;
 		String s = event.getActionCommand();
 		String symbol = s.substring(s.indexOf("@") + 1);
+        Integer valence=null;
+        if(!symbol.equals("off"))
+            valence = new Integer(symbol);
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
 			if(symbol.equals("off")){
 				jcpPanel.get2DHub().setValence(atom,null);
 			}else{
-				Integer valence=new Integer(symbol);
 				jcpPanel.get2DHub().setValence(atom,valence);
 			}
 		}
+        ChangeValenceModule newActiveModule = new ChangeValenceModule(jcpPanel.get2DHub(), valence==null ? -1 : valence);
+        newActiveModule.setID("valence");
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 		jcpPanel.get2DHub().updateView();
 	}
 	
