@@ -81,9 +81,9 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_stereo_bond", GT._("Undefined E/Z"));
 		entries.put("formalCharge", GT._("Charge"));
 		entries.put("chargePlus2", GT._("+2"));
-		entries.put("plus", GT._("+1"));
+		entries.put("plus", GT._("Plus"));
 		entries.put("chargeZero", GT._("0"));
-		entries.put("minus", GT._("-1"));
+		entries.put("minus", GT._("Minus"));
 		entries.put("chargeMinus2", GT._("-2"));
 		entries.put("hydrogen", GT._("Implicit Hydrogens"));
 		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));

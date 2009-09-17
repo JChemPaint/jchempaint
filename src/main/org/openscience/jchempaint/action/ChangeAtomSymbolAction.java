@@ -91,15 +91,17 @@ public class ChangeAtomSymbolAction extends JCPAction
             if(symbol.equals(""))
             	return;
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
+            jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
 		}else if(symbol.equals("enterelement")){
 		    newActiveModule=new EnterElementSwingModule(jcpPanel.get2DHub());
 		    newActiveModule.setID(symbol);
 		    jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-			String[] funcGroupsKeys=new String[0];
-			symbol=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol:", "Enter element", funcGroupsKeys, "","");
-			if(symbol!=null && symbol.length()>0){
-				if(Character.isLowerCase(symbol.toCharArray()[0]))
-					symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
+		    if(atomsInRange!=null){
+    			String[] funcGroupsKeys=new String[0];
+    			symbol=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol:", "Enter element", funcGroupsKeys, "","");
+    			if(symbol!=null && symbol.length()>0){
+    				if(Character.isLowerCase(symbol.toCharArray()[0]))
+    					symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
 					IsotopeFactory ifa;
 					try {
 						ifa = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
@@ -112,13 +114,15 @@ public class ChangeAtomSymbolAction extends JCPAction
 						e.printStackTrace();
 						return;
 					}
-				}
+    			}
+		    }
 		}else{
 		    //it must be a symbol
 	        newActiveModule=new AddAtomModule(jcpPanel.get2DHub());
 	        newActiveModule.setID(symbol);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 	        jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
+	        jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
 		}
 		if(atomsInRange!=null){
     		while(atomsInRange.hasNext()){

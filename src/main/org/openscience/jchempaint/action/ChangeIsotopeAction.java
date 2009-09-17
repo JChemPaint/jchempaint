@@ -34,9 +34,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 
 /**
  * Changes the isotope for a selected atom
@@ -47,6 +49,8 @@ public class ChangeIsotopeAction extends JCPAction {
     private static final long serialVersionUID = -4692219842740123315L;
 
     public void actionPerformed(ActionEvent event) {
+        //first switch draw mode
+        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub());
         logger.debug("About to change atom type of relevant atom!");
         IChemObject object = getSource(event);
         logger.debug("Source of call: ", object);
@@ -102,6 +106,10 @@ public class ChangeIsotopeAction extends JCPAction {
 			}
             jcpPanel.get2DHub().setMassNumber(atom,isotopeNumber);
             jcpPanel.get2DHub().updateView();
+            newActiveModule.setID(atom.getSymbol());
+            jcpPanel.get2DHub().getController2DModel().setDrawElement(atom.getSymbol());
+            jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(isotopeNumber);
         }
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
     }
 }
