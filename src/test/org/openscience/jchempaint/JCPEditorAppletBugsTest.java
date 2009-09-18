@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.vecmath.Point2d;
 
 import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JPanelFixture;
@@ -210,6 +211,29 @@ public class JCPEditorAppletBugsTest {
             }
         }
         restoreModel();     
+	}
+	
+	@Test public void testMove() throws InterruptedException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        //we draw a hexagon
+        applet.button("hexagon").click();
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100, 100), MouseButton.LEFT_BUTTON,1);
+        //select this
+        applet.button("select").click();
+        Point movetopint=new Point(50,50);
+        ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
+        dandd.drag(applet.panel("renderpanel").component(), movetopint);
+        movetopint=new Point(300,300);
+        dandd.drop(applet.panel("renderpanel").component(), movetopint);
+        Point2d oldcoord=new Point2d(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
+        //switch to move mode
+        applet.button("move").click();
+        applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").target,new Point(100,100));
+        applet.panel("renderpanel").robot.pressMouse(MouseButton.LEFT_BUTTON);
+        applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").target,new Point(150,150));
+        applet.panel("renderpanel").robot.releaseMouseButtons();
+        Assert.assertFalse(oldcoord.equals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d()));
 	}
 	
 
