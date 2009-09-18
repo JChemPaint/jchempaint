@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
@@ -79,7 +80,7 @@ public class JCPEditorAppletBugsTest {
 	}
 	
 	/*
-	 * @cdk.bug 2859344 /7
+	 * @cdk.bug 2859344 /6
 	 */
 	@Test public void overwriteStereo(){
 	    JPanelFixture jcppanel=applet.panel("appletframe");
@@ -105,8 +106,91 @@ public class JCPEditorAppletBugsTest {
 	    restoreModel();     
 	}
 	
+	@Test public void testUpBond(){
+	    genericStereoBondTest(CDKConstants.STEREO_BOND_UP);
+	}
+	
+    @Test public void testDownBond(){
+        genericStereoBondTest(CDKConstants.STEREO_BOND_DOWN);
+    }
+    
+    @Test public void testUndefinedBond(){
+        genericStereoBondTest(CDKConstants.STEREO_BOND_UNDEFINED);
+    }
 
-	@AfterClass public static void tearDown() {
+    /*
+     * @cdk.bug 2859344 /7
+     */
+    @Test public void testUndefinedEzBond(){
+        genericStereoBondTest(CDKConstants.EZ_BOND_UNDEFINED);
+    }
+    
+    @Test public void testNoneBond(){
+        genericStereoBondTest(CDKConstants.STEREO_BOND_NONE);
+    }
+    
+    /**
+	 * This is a test for overwriting of stereo bonds. Any stereo bond
+	 * must overwrite all others and flip itself. 
+	 * 
+	 * @param directionToTest
+	 */
+	private void genericStereoBondTest(int directionToTest){
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        //we draw a hexagon
+        applet.button("hexagon").click();
+        applet.click();
+        //we make all bond types in there
+        applet.button("up_bond").click();
+        Point2d moveto=getBondPoint(panel,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(CDKConstants.STEREO_BOND_UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(1).getStereo());
+        applet.button("down_bond").click();
+        moveto=getBondPoint(panel,2);   
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(CDKConstants.STEREO_BOND_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+        applet.button("undefined_bond").click();
+        moveto=getBondPoint(panel,3);   
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(CDKConstants.STEREO_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(3).getStereo());
+        applet.button("undefined_stereo_bond").click();
+        moveto=getBondPoint(panel,4);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(CDKConstants.EZ_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
+        //now we click on all of them with disired bond
+        if(directionToTest==CDKConstants.STEREO_BOND_UP)
+            applet.button("up_bond").click();
+        if(directionToTest==CDKConstants.STEREO_BOND_DOWN)
+            applet.button("down_bond").click();
+        if(directionToTest==CDKConstants.STEREO_BOND_UNDEFINED)
+            applet.button("undefined_bond").click();
+        if(directionToTest==CDKConstants.EZ_BOND_UNDEFINED)
+            applet.button("undefined_stereo_bond").click();
+        if(directionToTest==CDKConstants.STEREO_BOND_NONE)
+            applet.button("bond").click();
+        for(int i=0;i<5;i++){
+            boolean self=false;
+            if(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo()==directionToTest)
+                self=true;
+            moveto=getBondPoint(panel,i);
+            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+            if(self){
+                Assert.assertEquals(directionToTest==CDKConstants.EZ_BOND_UNDEFINED || directionToTest==CDKConstants.STEREO_BOND_NONE ? directionToTest : directionToTest==CDKConstants.STEREO_BOND_DOWN ? directionToTest-1 : directionToTest+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
+            }else{
+                Assert.assertEquals(directionToTest, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
+            }
+        }
+        restoreModel();     
+	}
+	
+
+	private Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
+	    IBond bond = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(bondnumber);
+	    return panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
+    }
+
+    @AfterClass public static void tearDown() {
 	  viewer.unloadApplet();
 	  applet.cleanUp();
 	}
