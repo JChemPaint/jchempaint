@@ -217,7 +217,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setMinorTickSpacing(1);
         addField(GT._("Highlight Distance"), highlightDistance);
         
-        wedgeWidth = new JSlider(1, 5);
+        wedgeWidth = new JSlider(1, 10);
         wedgeWidth.setSnapToTicks(true);
         wedgeWidth.setPaintLabels(true);
         wedgeWidth.setPaintTicks(true);
