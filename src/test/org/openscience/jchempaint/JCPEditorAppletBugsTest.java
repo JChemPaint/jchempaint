@@ -128,6 +128,34 @@ public class JCPEditorAppletBugsTest {
     @Test public void testNoneBond(){
         genericStereoBondTest(CDKConstants.STEREO_BOND_NONE);
     }
+    /*
+     * @cdk.bug 2860015
+     */
+    @Test public void testBug2860015(){
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("bond").click();
+        applet.click();
+        applet.click();
+        applet.click();
+        applet.click();
+        Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(4, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        moveto=getBondPoint(panel,0);
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
+        applet.moveTo(new Point(100,100));
+        applet.button("eraser").click();
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        moveto=getBondPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+    }
     
     /**
 	 * This is a test for overwriting of stereo bonds. Any stereo bond

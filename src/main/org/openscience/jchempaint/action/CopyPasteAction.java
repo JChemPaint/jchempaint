@@ -40,7 +40,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
@@ -51,6 +50,7 @@ import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -77,7 +77,6 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
@@ -190,7 +189,8 @@ public class CopyPasteAction extends JCPAction{
     				jcpPanel.get2DHub().removeAtom(atomInRange);
     			}
     			else if(renderModel.getHighlightedBond()!=null){
-    				jcpPanel.get2DHub().removeBond(renderModel.getHighlightedBond());
+    			    IBond bondToRemove = renderModel.getHighlightedBond();
+    				jcpPanel.get2DHub().removeBondAndLoneAtoms(bondToRemove);
     			}else if(renderModel.getSelection().getConnectedAtomContainer()!=null){
     				IChemObjectSelection selection = renderModel.getSelection();
 	                IAtomContainer selected = selection.getConnectedAtomContainer();
