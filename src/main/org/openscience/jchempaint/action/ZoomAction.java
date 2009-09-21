@@ -54,9 +54,9 @@ public class ZoomAction extends JCPAction {
         logger.debug("Zooming in/out in mode: ", type);
         
         if (type.equals("in") && zoom < 10) {
-            rendererModel.setZoomFactor(zoom * 1.5);
+            rendererModel.setZoomFactor(zoom * 1.2);
         } else if (type.equals("out") && zoom > .1) {
-            rendererModel.setZoomFactor(zoom / 1.5);
+            rendererModel.setZoomFactor(zoom / 1.2);
         } else if (type.equals("original")) {
             rendererModel.setZoomFactor(1);
         } else {
