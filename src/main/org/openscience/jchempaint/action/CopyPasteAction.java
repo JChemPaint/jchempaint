@@ -75,6 +75,7 @@ import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
@@ -191,7 +192,7 @@ public class CopyPasteAction extends JCPAction{
     			else if(renderModel.getHighlightedBond()!=null){
     			    IBond bondToRemove = renderModel.getHighlightedBond();
     				jcpPanel.get2DHub().removeBondAndLoneAtoms(bondToRemove);
-    			}else if(renderModel.getSelection().getConnectedAtomContainer()!=null){
+    			}else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
     				IChemObjectSelection selection = renderModel.getSelection();
 	                IAtomContainer selected = selection.getConnectedAtomContainer();
 	                jcpPanel.get2DHub().deleteFragment(selected);
@@ -285,6 +286,16 @@ public class CopyPasteAction extends JCPAction{
         			}
         		}
 	            if (toPaste != null) {
+	                //add implicit hs
+	                if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
+    	                CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(chemModel
+    	                        .getBuilder());
+                        try {
+                            hAdder.addImplicitHydrogens(toPaste);
+                        } catch (CDKException ex) {
+                            // do nothing
+                        }
+	                }
 	            	//somehow, in case of single atoms, there are no coordinates
 	            	if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
 	            		toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
