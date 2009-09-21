@@ -363,31 +363,6 @@ public class CopyPasteAction extends JCPAction{
     		    MoveModule newActiveModule = new MoveModule(hub);
     		    newActiveModule.setID("move");
     			hub.setActiveDrawModule(newActiveModule);
-    		} else if (type.equals("selectMolecule")) {
-    			IChemObject object = getSource(e);
-    			IAtomContainer relevantAtomContainer = null;
-    			if (object instanceof IAtom) {
-    				relevantAtomContainer =
-    				    ChemModelManipulator.getRelevantAtomContainer(
-    				            chemModel,(IAtom)object);
-    			} else if (object instanceof IBond) {
-    				relevantAtomContainer =
-    				    ChemModelManipulator.getRelevantAtomContainer(
-    				            chemModel,(IBond)object);
-    			} else {
-    				logger.warn("selectMolecule not defined for the calling " +
-    						"object ", object);
-    			}
-    			if (relevantAtomContainer != null) {
-    	        	ShapeSelection container = new RectangleSelection();
-    	        	for (IAtom atom : relevantAtomContainer.atoms()) {
-    	        		container.atoms.add(atom);
-    	        	}
-    	        	for (IBond bond : relevantAtomContainer.bonds()) {
-    	        		container.bonds.add(bond);
-    	        	}
-    				renderModel.setSelection(container);
-    			}
     		} else if (type.equals("selectFromChemObject")) {
     			// FIXME: implement for others than Reaction, Atom, Bond
     			IChemObject object = getSource(e);

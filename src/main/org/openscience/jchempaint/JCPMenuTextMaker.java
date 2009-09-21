@@ -109,7 +109,6 @@ public class JCPMenuTextMaker {
 		entries.put("flipHorizontal", GT._("Horizontal"));
 		entries.put("flipVertical", GT._("Vertical"));
 		entries.put("selectFromChemObject", GT._("Select"));
-		entries.put("selectMolecule", GT._("Select Molecule"));
 		entries.put("symbolChange", GT._("Change Element"));
 		entries.put("periodictable", GT._("Periodic Table"));
 		entries.put("enterelement", GT._("Custom"));
