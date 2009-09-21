@@ -212,18 +212,6 @@ public class JCPToolBar
 		JToolBar toolbar2 = new JToolBar(orientation);
 		String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind, chemPaintPanel.getGuistring()));
 		JButton button = null;
-
-		if (toolKeys.length != 0)
-		{
-			String[] sdiToolKeys = new String[(toolKeys.length)];
-			for (int i = 0; i < toolKeys.length; i++)
-			{
-				int j = i - 0;
-				sdiToolKeys[j] = toolKeys[i];
-			}
-			toolKeys = sdiToolKeys;
-		}
-
 		Box box=null;
 		int counter=0;
 		for (int i = 0; i < toolKeys.length; i++)

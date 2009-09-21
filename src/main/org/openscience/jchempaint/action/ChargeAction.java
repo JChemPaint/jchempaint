@@ -48,13 +48,28 @@ public class ChargeAction extends JCPAction
 
 	public void actionPerformed(ActionEvent event)
 	{
+        String s = event.getActionCommand();
+        String action = s.substring(s.indexOf("@") + 1);
+        int charge=0;
+        if(action.equals("plus2")){
+            charge=2;
+        }else if(action.equals("plus")){
+            charge=1;
+        }else if(action.equals("minus")){
+            charge=-1;
+        }else if(action.equals("minus2")){
+            charge=-2;
+        }
+        ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
+        newActiveModule.setID(action);
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 		logger.debug("About to change atom type of relevant atom!");
 		Iterator<IAtom> atomsInRange = null;
 		IChemObject object = getSource(event);
 		logger.debug("Source of call: ", object);
 		if (object == null){
 			//this means the main menu was used
-			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
 				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
 		}else if (object instanceof IAtom)
 		{
@@ -69,18 +84,6 @@ public class ChargeAction extends JCPAction
 		}
 		if(atomsInRange==null)
 			return;
-		String s = event.getActionCommand();
-		String action = s.substring(s.indexOf("@") + 1);
-		int charge=0;
-        if(action.equals("plus2")){
-            charge=2;
-        }else if(action.equals("plus")){
-            charge=1;
-        }else if(action.equals("minus")){
-            charge=-1;
-        }else if(action.equals("minus2")){
-            charge=-2;
-        }
 		while(atomsInRange.hasNext()){
 			IAtom atom = atomsInRange.next();
 	        int newCharge = charge;
@@ -88,9 +91,6 @@ public class ChargeAction extends JCPAction
 	            newCharge += atom.getFormalCharge();
 	        jcpPanel.get2DHub().setCharge(atom, newCharge);
 		}
-        ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
-        newActiveModule.setID(action);
-        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 		jcpPanel.get2DHub().updateView();
 	}
 }
