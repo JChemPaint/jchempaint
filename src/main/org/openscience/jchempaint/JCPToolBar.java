@@ -247,7 +247,7 @@ public class JCPToolBar
 					{
 						button.setBackground(Color.GRAY);
 						chemPaintPanel.setLastActionButton(button);
-						AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), CDKConstants.STEREO_BOND_NONE);
+						AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), CDKConstants.STEREO_BOND_NONE, true);
 						activeModule.setID(toolKeys[i]);
 						chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
 						chemPaintPanel.updateStatusBar();

@@ -63,24 +63,33 @@ public class JCPEditorAppletBugsTest {
         jcpApplet.setSmiles("CCCC");
         panel.get2DHub().updateView();
         Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        restoreModel();
     }
 
     @Test public void testSetMolFile() throws CDKException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         jcpApplet.setMolFile("\n  CDK    1/19/07,10:3\n\n  2  1  0  0  0  0  0  0  0  0999 V2000 \n  2.520000 10.220000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2.270000 10.470000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \nM  END");
-        panel.get2DHub().updateView();
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        restoreModel();
     }
 	
 	@Test public void testGetMolFile() throws CDKException{
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").click();
         Point movetopint=new Point(100,100);    
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), movetopint, MouseButton.LEFT_BUTTON,1);
 	    Assert.assertTrue(jcpApplet.getMolFile().indexOf("6  6  0  0  0  0  0  0  0  0999 V2000")>0);
         restoreModel();	    
+	}
+	
+	@Test public void testBug2858663(){
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("bond").click();
+        applet.click();
+        Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        restoreModel();
 	}
 	
 	

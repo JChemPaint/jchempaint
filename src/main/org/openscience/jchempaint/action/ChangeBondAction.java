@@ -50,15 +50,15 @@ public class ChangeBondAction extends JCPAction
 	public void actionPerformed(ActionEvent event)
 	{
 	    //first switch mode
-        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_NONE);
+        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_NONE, true);
         if(type.equals("down_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_DOWN);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_DOWN, true);
         }else if(type.equals("up_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UP);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UP, true);
         }else if(type.equals("undefined_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UNDEFINED);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UNDEFINED, true);
         }else if(type.equals("undefined_stereo_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.EZ_BOND_UNDEFINED);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.EZ_BOND_UNDEFINED, true);
         }
         newActiveModule.setID(type);
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
