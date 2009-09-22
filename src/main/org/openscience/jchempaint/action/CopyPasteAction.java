@@ -73,6 +73,7 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.renderer.selection.RectangleSelection;
 import org.openscience.cdk.renderer.selection.ShapeSelection;
+import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -378,13 +379,11 @@ public class CopyPasteAction extends JCPAction{
     			// FIXME: implement for others than Reaction, Atom, Bond
     			IChemObject object = getSource(e);
     			if (object instanceof IAtom) {
-    				ShapeSelection container = new RectangleSelection();
-    				container.atoms.add((IAtom) object);
-    				renderModel.setSelection(container);
+                    SingleSelection<IAtom> container = new SingleSelection<IAtom>((IAtom)object);
+                    renderModel.setSelection(container);
     			}
     			else if (object instanceof IBond) {
-    				ShapeSelection container = new RectangleSelection();
-    				container.bonds.add((IBond) object);
+    				SingleSelection<IBond> container = new SingleSelection<IBond>((IBond)object);
     				renderModel.setSelection(container);
     			}
     			else if (object instanceof IReaction) {
