@@ -389,7 +389,12 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 .getInstance().newMolecule());
         InsertTextPanel.generateModel(theJcpp, cdkmol, false);
         theJcpp.get2DHub().updateView();
-        repaint();
+        // the newly opened file should nicely fit the screen
+        theJcpp.getRenderPanel().setFitToScreen(true);
+        theJcpp.getRenderPanel().update(
+                theJcpp.getRenderPanel().getGraphics());
+        // enable zooming by removing constraint
+        theJcpp.getRenderPanel().setFitToScreen(false);
     }
 
     /**
@@ -411,13 +416,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             newmol.append(System.getProperty("file.separator"));
             s = e + 1;
         }
-        newmol.append(mol.substring(s));
-        MDLV2000Reader reader = new MDLV2000Reader(new StringReader(mol));
-        IMolecule cdkmol = (IMolecule) reader.read(DefaultChemObjectBuilder
-                .getInstance().newMolecule());
-        theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
-        theJcpp.get2DHub().updateView();
-        repaint();
+        setMolFile(newmol.toString());
     }
 
     /**
