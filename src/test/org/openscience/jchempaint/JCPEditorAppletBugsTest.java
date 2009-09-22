@@ -57,6 +57,22 @@ public class JCPEditorAppletBugsTest {
 		restoreModel();
 	}
 	
+    @Test public void testSetSmiles() throws CDKException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        jcpApplet.setSmiles("CCCC");
+        panel.get2DHub().updateView();
+        Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+    }
+
+    @Test public void testSetMolFile() throws CDKException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        jcpApplet.setMolFile("\n  CDK    1/19/07,10:3\n\n  2  1  0  0  0  0  0  0  0  0999 V2000 \n  2.520000 10.220000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2.270000 10.470000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \nM  END");
+        panel.get2DHub().updateView();
+        Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+    }
+	
 	@Test public void testGetMolFile() throws CDKException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;

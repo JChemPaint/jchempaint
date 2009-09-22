@@ -57,6 +57,7 @@ import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
+import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -426,12 +427,18 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * @throws Exception
      */
     public void setMolFile(String mol) throws CDKException {
-        MDLV2000Reader reader = new MDLV2000Reader(new StringReader(mol));
-        IMolecule cdkmol = (IMolecule) reader.read(DefaultChemObjectBuilder
-                .getInstance().newMolecule());
-        theJcpp.setChemModel(ChemModelManipulator.newChemModel(cdkmol));
+        
+        ISimpleChemObjectReader cor = new MDLV2000Reader(new StringReader(mol), Mode.RELAXED);
+        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
+        JChemPaint.cleanUpChemModel(chemModel);
+        theJcpp.setChemModel(chemModel);
         theJcpp.get2DHub().updateView();
-        repaint();
+        // the newly opened file should nicely fit the screen
+        theJcpp.getRenderPanel().setFitToScreen(true);
+        theJcpp.getRenderPanel().update(
+                theJcpp.getRenderPanel().getGraphics());
+        // enable zooming by removing constraint
+        theJcpp.getRenderPanel().setFitToScreen(false);
     }
 
     /**

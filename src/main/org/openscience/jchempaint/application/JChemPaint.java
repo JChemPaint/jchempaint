@@ -248,7 +248,7 @@ public class JChemPaint {
         return chemModel;
     }
 
-    private static void cleanUpChemModel(IChemModel chemModel)
+    public static void cleanUpChemModel(IChemModel chemModel)
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
         JChemPaint.replaceReferencesWithClones(chemModel);
@@ -388,7 +388,7 @@ public class JChemPaint {
         return cor;
     }
 
-    private static IChemModel getChemModelFromReader(ISimpleChemObjectReader cor)
+    public static IChemModel getChemModelFromReader(ISimpleChemObjectReader cor)
             throws CDKException {
         String error = null;
         ChemModel chemModel = null;
