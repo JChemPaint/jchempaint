@@ -14,6 +14,7 @@
     <property name="lib" value="lib" />
 	<property name="dist" value="dist" />
     <property name="dist-classes" value="${dist}/classes" />
+	<property name="dist-test" value="${dist}/test" />
 	<property name="metainf" value="META-INF" />
 	<property name="po-classes" value="po/classes" />
 
@@ -311,6 +312,46 @@
              <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources-core.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_fest.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar" />
         </exec>
     </target>
+	
+	<target id="test-applet" name="test-applet">
+		<mkdir dir="${dist-test}" />
+        <javac srcdir="${src}/test" destdir="${dist-test}" optimize="${optimization}"
+                nowarn="${nowarn}"
+                debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
+            <classpath>
+                <fileset dir="${dist}/jar/">
+                        <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib}">
+                        <include name="*.jar" />
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                        <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </javac>
+		<copy todir="${dist-test}/data">
+			<fileset dir="${src}/test/data"/>
+		</copy>
+	    <junit forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no">
+            <classpath>
+                <fileset dir="${dist}/jar/">
+                        <include name="*.jar" />
+                </fileset>
+                <fileset dir="${lib}">
+                        <include name="*.jar" />
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                        <include name="*.jar" />
+                </fileset>
+                <pathelement location="${dist-test}"/>
+            </classpath>
+            <test name="org.openscience.jchempaint.AllJCPTests"
+                haltonfailure="no">
+                <formatter type="brief" />
+            </test>
+	    </junit>
+	</target>
 </project>
 
 

@@ -58,7 +58,7 @@ public class PrintAction extends JCPAction implements Printable {
 			try {
 				printJob.print();
 			} catch (PrinterException pe) {
-				System.out.println("Error printing: " + pe);
+				jcpPanel.announceError(pe);
 			}
 		}
 	}
