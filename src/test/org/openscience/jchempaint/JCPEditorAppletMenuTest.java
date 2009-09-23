@@ -15,7 +15,6 @@ import javax.vecmath.Point2d;
 
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JButtonFixture;
@@ -30,7 +29,6 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -40,12 +38,14 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
+import org.openscience.jchempaint.matchers.DialogTitleComponentMatcher;
 
 public class JCPEditorAppletMenuTest {
 	private static AppletViewer viewer;
@@ -516,7 +516,7 @@ public class JCPEditorAppletMenuTest {
 	        restoreModel();
 		}
 
-		/*@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			String filename = "data/smiles.smi";
 	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
 			String file = "/tmp/test.smi";
@@ -534,7 +534,7 @@ public class JCPEditorAppletMenuTest {
 			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
 			okbutton.click();
 			DialogFixture coordsdialog = new DialogFixture(applet.robot, applet.robot.finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
-			JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot, coordsdialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+			JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot, coordsdialog.robot.finder().find(new ButtonTextComponentMatcher("Yes")));
 			okbuttoncoordsdialog.click();
 	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
 	        SMILESReader reader = new SMILESReader(ins);
@@ -547,8 +547,29 @@ public class JCPEditorAppletMenuTest {
 	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
 	        restoreModel();
-		}*/
+		}
 		//TODO do this for all formats
+		
+		@Test public void testMenuCut(){
+		    JPanelFixture jcppanel=applet.panel("appletframe");
+	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+	        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
+	        panel.selectionChanged();
+	        Assert.assertEquals(8,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+	        applet.menuItem("cut").click();
+            Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            applet.menuItem("paste").click();
+            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+            Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
+            applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),new Point((int)moveto.x,(int)moveto.y));
+            applet.panel("renderpanel").robot.pressMouse(MouseButton.RIGHT_BUTTON);
+            applet.menuItem("cut2").click();
+            Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(6,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+		}
 
 		
 	private void restoreModel(){

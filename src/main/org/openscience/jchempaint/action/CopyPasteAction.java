@@ -197,12 +197,9 @@ public class CopyPasteAction extends JCPAction{
                 }
     			if (atomInRange != null) {
     				jcpPanel.get2DHub().removeAtom(atomInRange);
-    			} else if (atomInRange != null) {
+    			} else if (bondInRange != null) {
                     jcpPanel.get2DHub().removeBond(bondInRange);
-                } else if(renderModel.getHighlightedBond()!=null){
-    			    IBond bondToRemove = renderModel.getHighlightedBond();
-    				jcpPanel.get2DHub().removeBondAndLoneAtoms(bondToRemove);
-    			}else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
+                } else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
     				IChemObjectSelection selection = renderModel.getSelection();
 	                IAtomContainer selected = selection.getConnectedAtomContainer();
 	                jcpPanel.get2DHub().deleteFragment(selected);
@@ -328,59 +325,39 @@ public class CopyPasteAction extends JCPAction{
                 Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
                 handleSystemClipboard(sysClip);
     			IAtom atomInRange = null;
+    			IBond bondInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);
-    			if (object instanceof IAtom) {
-    				atomInRange = (IAtom) object;
-    			} else {
-    				atomInRange = renderModel.getHighlightedAtom();
-    			}
-    			if (atomInRange != null) {
-    			    IAtomContainer tocopyclone =
-    			        atomInRange.getBuilder().newAtomContainer();
-    			    try {
-                        tocopyclone.addAtom((IAtom) atomInRange.clone());
-                        addToClipboard(sysClip, tocopyclone);
-    			    } catch (CloneNotSupportedException e1) {
-    			        e1.printStackTrace();
-    			    }
-    				jcpPanel.get2DHub().removeAtom(atomInRange);
-    			}
-    			else {
-    				IBond bond = renderModel.getHighlightedBond();
-    				if (bond != null) {
-    					jcpPanel.get2DHub().removeBond(bond);
-    				}
-    			}
-    		}
-    		else if (type.equals("cutSelected")) {
-    		    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-   	            handleSystemClipboard(sysClip);
-    			logger.debug("Deleting all selected atoms...");
-    			IAtomContainer selected =
-    			    renderModel.getSelection().getConnectedAtomContainer();
-    			if (selected == null || selected.getAtomCount() == 0) {
-    				JOptionPane.showMessageDialog(jcpPanel,
-    				        "No selection made. Please select some " +
-    				        		"atoms first!",
-    				        "Error warning", JOptionPane.WARNING_MESSAGE);
-    			} else {
-    				IAtomContainer tocopyclone;
-                    try {
-                        tocopyclone = (IAtomContainer) selected.clone();
-    				addToClipboard(sysClip, tocopyclone);
-                    } catch (CloneNotSupportedException e1) {
-                        e1.printStackTrace();
-                    }
-    				logger.debug("Found # atoms to delete: ",
-    				        selected.getAtomCount());
-    				jcpPanel.get2DHub().deleteFragment(selected);
-    			}
-    			renderModel.setSelection(
-    			        new LogicalSelection(LogicalSelection.Type.NONE));
-
-    		}
-    		else if (type.equals("selectAll")) {
+                if (object instanceof IAtom) {
+                    atomInRange = (IAtom) object;
+                } else {
+                    atomInRange = renderModel.getHighlightedAtom();
+                }
+                if (object instanceof IBond) {
+                    bondInRange = (IBond) object;
+                } else {
+                    bondInRange = renderModel.getHighlightedBond();
+                }
+                IAtomContainer tocopyclone =
+                    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                if (atomInRange != null) {
+                    tocopyclone.addAtom(atomInRange);
+                    jcpPanel.get2DHub().removeAtom(atomInRange);
+                } else if (bondInRange != null) {
+                    tocopyclone.addBond(bondInRange);
+                    jcpPanel.get2DHub().removeBond(bondInRange);
+                }else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
+                    IChemObjectSelection selection = renderModel.getSelection();
+                    IAtomContainer selected = selection.getConnectedAtomContainer();
+                    tocopyclone.add(selected);
+                    jcpPanel.get2DHub().deleteFragment(selected);
+                    renderModel.setSelection(new LogicalSelection(
+                            LogicalSelection.Type.NONE));
+                    jcpPanel.get2DHub().updateView();
+                }
+                if(tocopyclone.getAtomCount()>0 || tocopyclone.getBondCount()>0)
+                    addToClipboard(sysClip, tocopyclone);
+        	}else if (type.equals("selectAll")) {
     			ControllerHub hub = jcpPanel.get2DHub();
     		    IChemObjectSelection allSelection =
     		        new LogicalSelection(LogicalSelection.Type.ALL);

@@ -69,7 +69,6 @@ public class JCPMenuTextMaker {
 		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
 		entries.put("eraser", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
-		entries.put("cutSelected", GT._("Cut"));
 		entries.put("cut", GT._("Cut"));
 		entries.put("atomMenu", GT._("Atom"));
 		entries.put("bondMenu", GT._("Bond"));
@@ -263,7 +262,7 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_bondTooltip", GT._("Stereo up or stereo down bond"));
 		entries.put("undefined_stereo_bondTooltip", GT._("Any stereo bond"));
 		entries.put("rotateTooltip", GT._("Rotate selection"));
-		entries.put("cutSelectedTooltip", GT._("Cut selection"));
+		entries.put("cutTooltip", GT._("Cut selection"));
 		entries.put("copyTooltip", GT._("Copy selection to clipboard"));
 		entries.put("pasteTooltip", GT._("Paste from clipboard"));
 		entries.put("flipVerticalTooltip", GT._("Flip vertical"));
