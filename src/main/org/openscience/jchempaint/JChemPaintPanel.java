@@ -686,6 +686,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 if (iso != null) {
                     relay.setSymbol(closestAtom, Character.toString(x));
                 }
+                this.get2DHub().updateView();
             } catch (IOException e) {
                 announceError(e);
             }

@@ -182,6 +182,7 @@ public class CopyPasteAction extends JCPAction{
 	            newActiveModule.setID(type);
 	            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
     			IAtom atomInRange = null;
+    			IBond bondInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);
     			if (object instanceof IAtom) {
@@ -189,10 +190,16 @@ public class CopyPasteAction extends JCPAction{
     			} else {
     				atomInRange = renderModel.getHighlightedAtom();
     			}
+                if (object instanceof IBond) {
+                    bondInRange = (IBond) object;
+                } else {
+                    bondInRange = renderModel.getHighlightedBond();
+                }
     			if (atomInRange != null) {
     				jcpPanel.get2DHub().removeAtom(atomInRange);
-    			}
-    			else if(renderModel.getHighlightedBond()!=null){
+    			} else if (atomInRange != null) {
+                    jcpPanel.get2DHub().removeBond(bondInRange);
+                } else if(renderModel.getHighlightedBond()!=null){
     			    IBond bondToRemove = renderModel.getHighlightedBond();
     				jcpPanel.get2DHub().removeBondAndLoneAtoms(bondToRemove);
     			}else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
