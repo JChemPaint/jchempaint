@@ -115,8 +115,6 @@ public class CopyPasteAction extends JCPAction{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-    	    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
-    		handleSystemClipboard(sysClip);
 	        logger.info("  type  ", type);
 	        logger.debug("  source ", e.getSource());
 
@@ -125,6 +123,8 @@ public class CopyPasteAction extends JCPAction{
 	        IChemModel chemModel = jcpPanel.getChemModel();
 
 	        if ("copy".equals(type)) {
+	            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+	            handleSystemClipboard(sysClip);
     			IAtom atomInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);
@@ -164,6 +164,8 @@ public class CopyPasteAction extends JCPAction{
 	        		addToClipboard(sysClip, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
 	        	}
 	        } else if ("copyAsSmiles".equals(type)) {
+	            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+	            handleSystemClipboard(sysClip);
 	        	try {
 		        	if(renderModel.getSelection().getConnectedAtomContainer()!=null){
 		        		SmilesGenerator sg=new SmilesGenerator();
@@ -202,6 +204,8 @@ public class CopyPasteAction extends JCPAction{
 	                jcpPanel.get2DHub().updateView();
 	            }
 	        } else if ("paste".equals(type)) {
+	            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+	            handleSystemClipboard(sysClip);
 	        	Transferable transfer = sysClip.getContents( null );
 	        	ISimpleChemObjectReader reader = null;
 		        String content=null;
@@ -314,6 +318,8 @@ public class CopyPasteAction extends JCPAction{
 	            	JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
 	            }
         	} else if (type.equals("cut")) {
+                Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+                handleSystemClipboard(sysClip);
     			IAtom atomInRange = null;
     			IChemObject object = getSource(e);
     			logger.debug("Source of call: ", object);
@@ -341,6 +347,8 @@ public class CopyPasteAction extends JCPAction{
     			}
     		}
     		else if (type.equals("cutSelected")) {
+    		    Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+   	            handleSystemClipboard(sysClip);
     			logger.debug("Deleting all selected atoms...");
     			IAtomContainer selected =
     			    renderModel.getSelection().getConnectedAtomContainer();
