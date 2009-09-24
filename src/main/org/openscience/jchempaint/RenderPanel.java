@@ -497,7 +497,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         }
 
         if (dx != 0 || dy != 0) {
-            System.out.println("shifting "+dx+" "+dy);
+            //System.out.println("shifting "+dx+" "+dy);
             this.renderer.shiftDrawCenter(dx, dy);
         }
 
@@ -517,7 +517,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 if(ZoomAction.zoomDone) {
                     ZoomAction.zoomDone=false;
                     this.renderer.shiftDrawCenter(dxShiftBack, dyShiftBack);
-                    System.out.println("shifting back");
+                    //System.out.println("shifting back");
                 }
             }
         }
