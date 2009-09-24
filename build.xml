@@ -210,6 +210,13 @@
             <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
         </zip>
     </target>
+	
+	<!-- since only targets can be conditional, we need this in a separte target -->
+	<target name="concat" id="concat" unless="appendtolist">
+		<concat destfile="${growing_list_file}" fixlastline="yes" append="yes">
+		    <fileset file="@{includesfile}" />
+        </concat>
+    </target>
     
 	<target id="build-applet" name="build-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars" description="Builds the JChemPaint applet jar files with jarindex">
         <!-- At first jars are packed from file lists -->
@@ -230,9 +237,7 @@
                         <excludesfile name="${growing_list_file}"/>
                     </fileset>
                 </jar>
-                <concat destfile="${growing_list_file}" fixlastline="yes" append="yes">
-                    <fileset file="@{includesfile}" />
-                </concat>
+            	<antcall target="concat"/>
                 <concat destfile="${growing_classpath}" fixlastline="no" append="yes">@{destfile}${line.separator}</concat>
             </sequential>
         </macrodef>
@@ -260,7 +265,11 @@
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-viewer-opts.jar" includesfile="${metainf}/applet-viewer-opts.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor.jar" includesfile="${metainf}/applet-editor.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor-opts.jar" includesfile="${metainf}/applet-editor-opts.files"/>
+		<!-- since for the display of the help, we need the icons in the same jar, we do not log
+		this to the growing_list_file, so that icons go into the resources.jar as well -->
+		<property name="appendtolist" value="true"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources-core.jar" includesfile="${metainf}/applet-resources-core.files"/>
+		<available file="build.xml" property="appendtolist"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources.jar" includesfile="${metainf}/jchempaint.datafiles"/>
         <!-- the following jar files are packed from directory patterns -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
