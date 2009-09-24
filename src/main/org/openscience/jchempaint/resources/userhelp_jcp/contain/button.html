@@ -21,33 +21,17 @@
   <hr>
 </div>
 
-<h2>The Button Panel</h2>
+<h2>The Button Panels</h2>
 <p>
-In the following pages you can find an explanation of the function of the buttons in the button panel. </p>
+In the following pages you can find an explanation of the function of the buttons in the button panels. </p>
   <td><img src="../../small-bin/hg_proc.gif" width="18" height="13"></td>
-  <td><a href="drawingButtons.html"><b>Drawing buttons</b></a></td>
+  <td><a href="otherButtons.html"><b>Top buttons</b></a></td>
   <td><img src="../../small-bin/hg_proc.gif" width="18" height="13"></td>
-  <td><a href="moveButtons.html"><b>Move buttons</b></a></td>
+  <td><a href="drawingButtons.html"><b>Bond buttons (left)</b></a></td>
   <td><img src="../../small-bin/hg_proc.gif" width="18" height="13"></td>
-  <td><a href="otherButtons.html"><b>Other buttons</b></a></td>
-<p>But before starting on that, let's look at the code which offers the source of
-this functionality.<br>
-JChemPaint's source code provides only the GUI part, but all the
-chemoinformational algorithms which make JChemPaint an editor are provided by the
-CDK. The two main classes of interest are:
-<ul type="circle">
-  <li>the renderer.Renderer </li>
-  <li>controller.Controller </li>
-</ul>
-The first deals with graphical rendering of
-the chemical information and the second deals with user input from mouse and
-button events, and extends the renderer with editing features.
-But the Controller does not handle all editing; it only does the editing
-functionality in some editing mode, like the drawing and bond mode. A few
-other buttons - and most menu items - do not use the functionality in this class,
-but provide algorithms from other CDK classes. Where possible, the information
-about the buttons will also link to the CDK classes that provide the algorithms
-used.
+  <td><a href="elementButtons.html"><b>Element buttons (right)</b></a></td>
+  <td><img src="../../small-bin/hg_proc.gif" width="18" height="13"></td>
+  <td><a href="bottomButtons.html"><b>Ring buttons (bottom)</b></a></td>
 
 <div class="navfooter"><hr>
  <table width="100%">

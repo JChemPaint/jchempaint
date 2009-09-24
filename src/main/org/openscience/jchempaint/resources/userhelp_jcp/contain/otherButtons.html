@@ -10,75 +10,103 @@
 <div class="navheader">
   <table width="100%">
    <tr>
-    <th align="center" colspan="3">The Button Panel</th>
+    <th align="center" colspan="3">Buttons for other operations</th>
    </tr>
    <tr>
-    <td align="left" width="20%"><a href="moveButtons.html">Prev</a></td>
+     <td align="left" width="20%"><a href="button.html">Prev</a>&nbsp;</td>
      <th align="center" width="60%">&nbsp;</th>
-     <td align="right" width="20%">&nbsp;<a href="menuFile.html">Next</a></td>
+     <td align="right" width="20%">&nbsp;<a href="drawingButtons.html">Next</a></td>
      </tr>
   </table>
   <hr>
 </div>
 
 
-<h3>Buttons for other operations</h3><br>
+<h3>Top Buttons</h3><br>
    <ul type="circle">
-     <li>  The Toggle Symbol Button <img src="../../small-bin/symbol.gif"></li>
+     <li>The Select (Square) Button <img src="../../small-bin/selectsquare.gif"> </li>
    </ul>
-     <p>This drawing mode allows toggling of the atom's element by clicking
-     one or more time on an atom. It toggles between a few common elements.
-     </p><br>
-
-   <ul type="circle">
-     <li>The Element Symbol Button <img src="../../small-bin/element.gif"></li>
-   </ul>
-     <p>This button allows selecting a new drawing element from a list a
-     periodic table.</p><br>
-
-   <ul type="circle">
-     <li>The Text Symbol Button <img src="../../small-bin/enterelement.gif">
-     </li>
-   </ul>
-     <p>This button allows entering of element symbols via keyboard. Click on an
-     atom and enter the element name. Capitalisation does not matter. You can
-     also enter functional groups here which will be "expanded". For the
-     possible groups see <a href="../../text/funcgroups.txt">here</a>.</p><br>
-
-   <ul type="circle">
-     <li> The Eraser Button <img src="../../small-bin/eraser.gif"></li>
-   </ul>
-     <p>This mode makes it possible to delete selected objects, no matter
-     if preselected with the lasso or selected on the fly by clicking on an
-     object when in eraser mode.</p>
-     </p>The algorithms behind this button are provided by the
-     controller.Controller class.</p><br>
+     <p>In this mode one can select objects inside a square shape.</p>
+     <p>If you click on a selected part after the selection, you are switched
+      automatically to the move mode.</p>
 
    <ul type="circle">
      <li>The Select (Lasso) Button <img src="../../small-bin/lasso.gif"> </li>
    </ul>
-     <p>In this mode one can select objects with a lasso.</p>
+     <p>In this mode one can select objects inside a free form shape.</p>
      <p>If you click on a selected part after the selection, you are switched
-      automatically to the move mode. When you hover inside a selected area,
-      a ring will appear. When you drag the mouse while this is visible, you can
-       rotate the marked structure.</p>
-     <p>The algorithms behind this button are provided by the
-     controller.Controller class.</p><br>
+      automatically to the move mode.</p>
+      
+   <ul type="circle">
+     <li> The Eraser Button <img src="../../small-bin/eraser.gif"></li>
+   </ul>
+     <p>This mode makes it possible to delete objects. It deletes the current selection 
+     and deletes anythign you click on afterwards.</p>
 
    <ul type="circle">
-     <li>The Cleanup Button <img src="../../small-bin/cleanup.gif"></li>
+     <li>The Undo Button <img src="../../small-bin/undo.gif"></li>
    </ul>
-     <p>Clicking this button cleans up the structure on the screen, using
-     the MDraw algorithm [ BLE91 ]. </p>
-     <p>JChemPaint 2.x uses the CDK implementation
-     of this algorithm in the controller.Controller2D class.</p><br>
+     <p>This button undos the last action. It is only active when something was 
+     done before. This button does not have a mode associated.</p><br>
 
+   <ul type="circle">
+     <li>The Redo Button <img src="../../small-bin/redo.gif"></li>
+   </ul>
+     <p>This button redos the last undone action. It is only active when something was 
+     undone before. This button does not have a mode associated.</p><br>
+
+   <ul type="circle">
+     <li>The Zoom In/Zoom Out Buttons <img src="../../small-bin/zoomin.gif"> <img src="../../small-bin/zoomout.gif">
+     </li>
+   </ul>
+     <p>This zooms the structure in or out. It only sets the scale of the drawing, 
+     it does not change the structure. These buttons have no mode associated.</p><br>
+
+   <ul type="circle">
+     <li>The Rotate Button <img src="../../small-bin/rotation.gif"></li>
+   </ul>
+     <p>This button rotates the current selection or the whole structure if nothing 
+     is selected. Click and drag round to achieve the effect.</p><br>
+
+   <ul type="circle">
+     <li> The +1/-1 buttons <img src="../../small-bin/plus_one.gif"><img src="../../small-bin/min_one.gif"></li>
+   </ul>
+     <p>These buttons increase or decrease charges of atoms by one. The button 
+     changes the selection. It also switches to a mode where clicking on atoms 
+     changes charge.</p><br>
+
+   <ul type="circle">
+     <li>The Cut Button <img src="../../small-bin/cut.gif"> </li>
+   </ul>
+     <p>This button removes the current selection from the drawing and puts it 
+     into the system clipboard. Paste can be used to use it again. This button 
+     does not trigger a mode.</p><br>
+
+   <ul type="circle">
+     <li>The Copy Button <img src="../../small-bin/copy.gif"> </li>
+   </ul>
+     <p>This button copies the current selection into the system clipboard. Paste 
+     can be used to use it again. This button does not trigger a mode.</p><br>
+     
+   <ul type="circle">
+     <li>The Paste Button <img src="../../small-bin/paste.gif"> </li>
+   </ul>
+     <p>This button puts the content of the system clipboard into the drawing. 
+     The system clipboard must either contain a copy from JChemPaint or text in 
+     a <a href="formats.html">format</a> JChemPaint can read. This button does not trigger a mode.</p><br>
+
+   <ul type="circle">
+     <li>The Flip Horizontal/Vertical Buttons <img src="../../small-bin/flip_H.gif"><img src="../../small-bin/flip_V.gif"></li>
+   </ul>
+     <p>These buttons flip either the selection or the complete structure (if no 
+     selection is done) around the horizontal or vertical axis. These buttons 
+     do not trigger a mode.</p><br>
      <div class="navfooter"><hr>
  <table width="100%">
   <tr>
-   <td align="left" width="40%"><a href="moveButtons.html">Prev</a>&nbsp;</td>
+  <td align="left" width="20%"><a href="button.html">Prev</a>&nbsp;</td>
    <td align="center" width="20%"><a href="../jcp.html">Home</a></td>
-   <td align="right" width="40%"><a href="menuFile.html">Next</a></td>
+   <td align="right" width="40%"><a href="drawingButtons.html">Next</a></td>
   </tr>
   <tr>
    <td align="left" width="40%">&nbsp;</td>
