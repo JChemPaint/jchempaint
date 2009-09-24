@@ -337,7 +337,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             // this makes sure the toolbars get drawn
             this.setPreferredSize(new Dimension(result.width, result.height));
             this.revalidate();
-            super.paint(g);
             renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
 
         }

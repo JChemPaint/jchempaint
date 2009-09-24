@@ -32,9 +32,9 @@ package org.openscience.jchempaint.applet;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileInputStream;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
@@ -56,7 +56,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
-import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.RendererModel;
@@ -66,6 +65,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
+import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -115,6 +115,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     "should user interface be translated (default) or not (e. g. if you want an English-only webpage)" },
             { "detachable", "true or false",
                     "should the applet be detacheable by a double click (default false)" },
+            { "detachableeditor", "true or false",
+                    "should the applet be detacheable as an editor by a double click (default false), only for viewer" },
             { "debug", "true or false",
                     "switches on debug output (default false)" } };
 
@@ -512,5 +514,35 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 }
             });
         }
+        if (getParameter("detachableeditor") != null
+                && getParameter("detachableeditor").equals("true")) {
+            getTheJcpp().getRenderPanel().addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    if (e.getButton() == 1 && e.getClickCount() == 2)
+                        if (!getJexf().isShowing()) {
+                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug);
+                            p.setName("appletframe");
+                            p.setShowInsertTextField(false);
+                            p.setShowStatusBar(false);
+                            p.getChemModel().setID("JChemPaint Editor");
+                            getJexf();
+                            jexf.setTitle("JChemPaint Editor");
+                            jexf.add(p);
+                            jexf.pack();
+                            jexf.setVisible(true);
+                            jexf.addWindowListener(new WindowAdapter(){
+                                public void windowClosing(WindowEvent e) {
+                                    JChemPaintAbstractApplet.this.setChemModel(p.getChemModel());
+                                }
+                            });
+                        }
+                }
+            });
+        }
+    }
+
+    protected void setChemModel(IChemModel chemModel) {
+        theJcpp.setChemModel(chemModel);
+        theJcpp.get2DHub().updateView();
     }
 }
