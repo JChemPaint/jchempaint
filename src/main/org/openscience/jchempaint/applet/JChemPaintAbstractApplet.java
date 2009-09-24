@@ -143,8 +143,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 fileURL = new URL(documentBase, load);
             smiles = getParameter("smiles");
         } catch (Exception exception) {
-            System.out.println("Cannot load model: " + exception.toString());
-            exception.printStackTrace();
+            theJcpp.announceError(exception);
         }
         if (fileURL != null)
             loadModelFromUrl(fileURL);
@@ -178,9 +177,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 chemModel.getMoleculeSet().addAtomContainer(mol);
                 theJcpp.setChemModel(chemModel);
             } catch (Exception exception) {
-                System.out.println("Cannot parse model: "
-                        + exception.toString());
-                exception.printStackTrace();
+                theJcpp.announceError(exception);
             }
         } else {
             theJcpp.setChemModel(new ChemModel());
@@ -204,8 +201,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     fileURL.toString(), null);
             theJcpp.setChemModel(chemModel);
         } catch (Exception exception) {
-            System.out.println("Cannot parse model: " + exception.toString());
-            exception.printStackTrace();
+            theJcpp.announceError(exception);
         }
     }
 

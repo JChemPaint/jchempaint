@@ -91,11 +91,9 @@ public class JCPToolBar
 		String str;
 		try
 		{
-			System.out.println("instance: "+ JCPPropertyHandler.getInstance().getGUIDefinition(guistring));
 			str = JCPPropertyHandler.getInstance().getGUIDefinition(guistring).getString(key);
 		} catch (MissingResourceException mre)
 		{
-			System.out.println("Missing resource:");
 			mre.printStackTrace();
 			str = null;
 		}
