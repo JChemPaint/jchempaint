@@ -19,6 +19,7 @@ import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
+import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.fest.swing.launcher.AppletLauncher;
 import org.junit.AfterClass;
@@ -563,12 +564,12 @@ public class JCPEditorAppletMenuTest {
             Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
             Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
             Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
-            applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),new Point((int)moveto.x,(int)moveto.y));
-            applet.panel("renderpanel").robot.pressMouse(MouseButton.RIGHT_BUTTON);
-            applet.menuItem("cut2").click();
+            JPopupMenuFixture popup = applet.panel("renderpanel").showPopupMenuAt(new Point((int)moveto.x,(int)moveto.y));
+            popup.menuItem("cut2").click();
             Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(6,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
 		}
 
 		

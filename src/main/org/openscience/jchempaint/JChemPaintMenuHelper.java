@@ -233,7 +233,7 @@ public class JChemPaintMenuHelper {
 		}
 		//this is to avoid to get a menu with the same name twice
 		if(usedKeys.contains(cmd))
-			mi.setName(cmd+"2");
+	        mi.setName(cmd+"2");
 		else
 			mi.setName(cmd);
 		usedKeys.add(cmd);
