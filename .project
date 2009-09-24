@@ -3,6 +3,7 @@
 	<name>org.openscience.cdk.jchempaint</name>
 	<comment></comment>
 	<projects>
+		<project>org.openscience.cdk</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
