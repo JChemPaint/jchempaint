@@ -33,15 +33,12 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-import org.openscience.cdk.Reaction;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -138,65 +135,70 @@ public class SaveAsAction extends JCPAction
 				ready=0;
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				type = ((IJCPFileFilter) currentFilter).getType();
-				File outFile = chooser.getSelectedFile();
-				if(outFile.exists()){
-					ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
-				}else{
-					try{
-						if(new File(outFile.getCanonicalFile()+"."+type).exists()){
-							ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
-						}
-					}catch(Throwable ex){
-						jcpPanel.announceError(ex);
-					}
-					ready=0;
-				}
-				if(ready==0){
-					
-					if (object == null)
-					{
-						// called from main menu, only possibility
-						try
-						{
-							if (type.equals(JCPSaveFileFilter.mol))
-							{
-								outFile = saveAsMol(model, outFile);
-							} else if (type.equals(JCPSaveFileFilter.cml))
-							{
-								outFile = saveAsCML2(model, outFile);
-							} else if (type.equals(JCPSaveFileFilter.smiles))
-							{
-								outFile = saveAsSMILES(model, outFile);
-							} else if (type.equals(JCPSaveFileFilter.cdk))
-							{
-								outFile = saveAsCDKSourceCode(model, outFile);
-							} else if (type.equals(JCPSaveFileFilter.rxn))
-							{
-								outFile = saveAsRXN(model, outFile);
-							} else
-							{
-								String error = "Cannot save file in this format: " + type;
-								logger.error(error);
-								JOptionPane.showMessageDialog(jcpPanel, error);
-								return;
-							}
-							jcpPanel.setModified(false);
-						} catch (Exception exc)
-						{
-							String error = "Error while writing file: " + exc.getMessage();
-							logger.error(error);
-							logger.debug(exc);
-							JOptionPane.showMessageDialog(jcpPanel, error);
-						}
-					}
-					jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());
-					jcpPanel.setCurrentSaveFileFilter(chooser.getFileFilter());
-					jcpPanel.setIsAlreadyAFile(outFile);
-					if(outFile!=null){
-						jcpPanel.getChemModel().setID(outFile.getName());
-						jcpPanel.setTitle(outFile.getName());
-					}
+			    if(!(currentFilter instanceof IJCPFileFilter)){
+                    JOptionPane.showMessageDialog(jcpPanel, GT._("Please chose a file type!"), GT._("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
+                    return;
+			    }else{
+    				type = ((IJCPFileFilter) currentFilter).getType();
+    				File outFile = chooser.getSelectedFile();
+    				if(outFile.exists()){
+    					ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
+    				}else{
+    					try{
+    						if(new File(outFile.getCanonicalFile()+"."+type).exists()){
+    							ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
+    						}
+    					}catch(Throwable ex){
+    						jcpPanel.announceError(ex);
+    					}
+    					ready=0;
+    				}
+    				if(ready==0){
+    					
+    					if (object == null)
+    					{
+    						// called from main menu, only possibility
+    						try
+    						{
+    							if (type.equals(JCPSaveFileFilter.mol))
+    							{
+    								outFile = saveAsMol(model, outFile);
+    							} else if (type.equals(JCPSaveFileFilter.cml))
+    							{
+    								outFile = saveAsCML2(model, outFile);
+    							} else if (type.equals(JCPSaveFileFilter.smiles))
+    							{
+    								outFile = saveAsSMILES(model, outFile);
+    							} else if (type.equals(JCPSaveFileFilter.cdk))
+    							{
+    								outFile = saveAsCDKSourceCode(model, outFile);
+    							} else if (type.equals(JCPSaveFileFilter.rxn))
+    							{
+    								outFile = saveAsRXN(model, outFile);
+    							} else
+    							{
+    								String error = "Cannot save file in this format: " + type;
+    								logger.error(error);
+    								JOptionPane.showMessageDialog(jcpPanel, error);
+    								return;
+    							}
+    							jcpPanel.setModified(false);
+    						} catch (Exception exc)
+    						{
+    							String error = GT._("Error while writing file")+": " + exc.getMessage();
+    							logger.error(error);
+    							logger.debug(exc);
+    							JOptionPane.showMessageDialog(jcpPanel, error);
+    						}
+    					}
+    					jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());
+    					jcpPanel.setCurrentSaveFileFilter(chooser.getFileFilter());
+    					jcpPanel.setIsAlreadyAFile(outFile);
+    					if(outFile!=null){
+    						jcpPanel.getChemModel().setID(outFile.getName());
+    						jcpPanel.setTitle(outFile.getName());
+    					}
+    				}
 				}
 			}
 		}
