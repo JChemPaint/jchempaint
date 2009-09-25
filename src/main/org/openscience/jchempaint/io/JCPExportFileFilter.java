@@ -45,7 +45,6 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
     // only those extensions are given here that are *not* on JCPFileFilter
     public final static String bmp = "bmp";
     public final static String png = "png";
-    public final static String tiff = "tiff";
     public final static String jpg = "jpg";
     public final static String svg = "svg";
 
@@ -65,7 +64,6 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.jpg));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.png));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.svg));
-        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.tiff));
     }
 
     /**
@@ -78,8 +76,6 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
             result = "PNG";
         } else if (type.equals(bmp)) {
             result = "BMP";
-        } else if (type.equals(tiff)) {
-            result = "TIFF";
         } else if (type.equals(jpg)) {
             result = "JPEG";
         } else if (type.equals(svg)) {

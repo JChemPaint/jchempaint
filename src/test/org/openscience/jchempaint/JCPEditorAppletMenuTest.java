@@ -138,24 +138,6 @@ public class JCPEditorAppletMenuTest {
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}
-	@Test public void testMenuExportTiff() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  File file=new File("/tmp/test.tiff");
-		  if(file.exists())
-			  file.delete();
-		  applet.menuItem("export").click();
-		  DialogFixture dialog = applet.dialog();
-		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
-		  combobox.setSelectedItem(combobox.getItemAt(5));
-		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test");
-		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-		  okbutton.click();
-		  dialog = applet.dialog();
-		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-		  okbutton.click();
-		  //we only check the existence of file for now
-		  Assert.assertTrue(file.exists());
-	}
 	@Test public void testMenuPrint() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		  //applet.menuItem("print").click();
 		  //TODO in linux, the java print dialog is not working

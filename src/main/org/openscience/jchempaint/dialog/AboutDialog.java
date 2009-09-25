@@ -71,7 +71,7 @@ public class AboutDialog extends JFrame {
 		String version = self.getImplementationVersion();
 		String s1 = "JChemPaint " + version + "\n";
 		s1 += GT._("An open-source editor for 2D chemical structures.");
-		String s2 = GT._("An OpenScience project by Christoph Steinbeck, Egon Willighagen and others.")+"\n";
+		String s2 = GT._("An OpenScience project.")+"\n";
 		s2 += GT._("See 'http://jchempaint.sourceforge.net' for more information.");
 
 		getContentPane().setLayout(new BorderLayout());

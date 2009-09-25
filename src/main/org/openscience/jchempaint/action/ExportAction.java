@@ -120,8 +120,6 @@ public class ExportAction extends SaveAsAction {
                     String imageIOType;
                     if (type.equals(JCPExportFileFilter.bmp)) {
                         imageIOType = "BMP";
-                    } else if (type.equals(JCPExportFileFilter.tiff)) {
-                        imageIOType = "TIFF";
                     } else if (type.equals(JCPExportFileFilter.jpg)) {
                         imageIOType = "JPEG";
                     } else {
