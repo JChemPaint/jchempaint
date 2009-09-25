@@ -26,77 +26,46 @@
 <h3>Undo</h3>
  <p>Recovers the state of the frame before the last operation that you did.</p>
 
-<h3>Undo</h3>
+<h3>Redo</h3>
  <p>Re-does the last undo.</p>
 
-<h3>New (applet only)</h3>
- <p>Cleans the document (in the standalone up, there is a New item in the File
-  menu).</p>
+<h3>Cut</h3>
+ <p>Removes the current selection (or all, if none) from the drawing and puts it 
+     into the system clipboard. Paste can be used to use it again.</p>
 
-<h3>Cut Selected</h3>
- <p>Removes the selected part from the model.</p>
+<h3>Copy</h3>
+ <p>Copies the current selection (or all, if none) into the system clipboard. Paste 
+     can be used to use it again. JChemPaint uses several formats (SMILES, mol, CML, 
+     SVG) so you should also be able to paste it into other programs (depending on 
+     abilities of the program).</p>
+
+<h3>Copy as SMILES</h3>
+ <p>Copies the current selection into the system clipboard as smiles only. This 
+ is useful if you want to copy to text editors and want the smiles.</p>
+
+<h3>Paste</h3>
+ <p>This button puts the content of the system clipboard into the drawing. 
+     The system clipboard must either contain a copy from JChemPaint or text in 
+     a <a href="formats.html">format</a> JChemPaint can read.</p>
+
+<h3>Delete</h3>
+ <p>his button removes the current selection (or all, if none) from the drawing. It is 
+ like cut without using the clipboard.</p>
 
 <h3>Select all</h3>
  <p>Selects and marks all atoms in the molecule, so that it can be rotated,
- moved, deleted, etc. This is a useful way to recover parts of the molecule
- that are outside the display area - select all, go into move mode and
- move the molecule using a visible part of it.</p>
+ moved, deleted, etc.</p>
 
-<h3>Hydrogens</h3>
-<h4>Add Implicit Hydrogens</h4>
-<p>JCP can run in two different modes with respect to implicit hydrogens. You can 
-switch between them here. The two modes are:
- <ul>
-<li>Tracking of Implicit Hydrogens on: JCP will update atoms on which anything (e. g. charge, symbol) 
-gets changed, for their 
-implicit H count, so that atoms will always be fully saturated.</li>
-<li>Tracking of Implicit Hydrogens off: No implicit hydrogens will get added. 
-You need to take care of hydrogens yourself, if you want any.</li></ul>
-Note that:
- <ul>
- <li>Switching between modes will not change hydrogen count, i. e. if switching off 
- implicit hydrogens will stay and future changes will lead to wrong counts, whereas 
- switching on will not add hydrogens on existing atoms, only new/changed atoms 
- will get the correct count.</li>
- <li>The implicit hydrogens will be only visible when the option "Show
- implicit hydrogens when the atom symbol is shown" is selected in View ->
- Options (default: on). For which atoms the symbols are visible is controlled by
-  other settings here.</li>
- <li>You can set hydrogen count of individual atoms via the context menu of the 
- atom (item Properties). This can be used on difficult configurations.</li>
- <li>Whether or not the hydrogens will be contained in an exported file.
- Depends on the file format.(e.g. CML has got implicit Hs, mol has not).
+<h3>Preferences...</h3>
+ <p>Here you can set some preferences. The dialog has two sections:
+ <ul><li>General: Preferences influencing the overall behaviour of JChemPaint
+ <ul><li>Ask for IO settings: If set, saving of some file formats offer some options.</li>
+ <li>Undo/Redo stack size: Number of actions which can redone/undone.</li></ul>
  </li>
- </ul>
- The following menu options allow manipulations of the implicit Hs.
- </p>
-<h4>Make Hydrogens Explicit</h4>
- <p>This will transform implicit hydrogens to
- separate atoms connected by a single bond. This will only have an effect if you
-  are in implicit mode (see "Add Implicit Hydrogens")</p>
-<h4>Make Hydrogens Implicit</h4>
- <p>This will delete bonds to hydrogens and add hydrogens directly to their
- parent atoms as implicit hydrogens.</p>
-<h4>Update Implicit Hydrogen Count</h4>
- <p>This will set the implicit hydrogens on all atoms to satisfy valency. This can be
- called in both modes. If tracking of implicit Hs is off, this will only have a one-off 
- effect.</p>
-
-<p>
-<h3>Adjust Bond Orders</h3>
- <p>Sets the order of all bonds so that every atom is saturated.</p>
-
-<h3>Reset Bond Orders</h3>
- <p>Sets the order of all bonds to single.</p>
-
-<h3>Clean Up</h3>
- <p>This changes coordinates of atoms and length of bonds to standard
- representation.</p>
-
-<h3>Model Properties</h3>
- <p>Changes properties for this frame. Current properties are: author
- (who generated this model), generation date and software. Additionally,
- a CAS number and checksum can be given.</p>
+ <li>Rendering Settings: These properties (e.g. if atom numbers shall be drawn)
+ determine how the molecule is rendered (e.g. if atom numbers shall be drawn). Note 
+ they do not influence the chemistry or what will be saved, it is just a matter 
+ of good looks.</p>
 <p>
 <p>
 

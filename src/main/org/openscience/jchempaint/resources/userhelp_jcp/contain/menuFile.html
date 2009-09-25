@@ -23,96 +23,36 @@
 
 <h2>The File menu</h2>
  <h3>New</h3>
- <p>A new empty frame is generated. Generation date, author and software by
- which this model was generated is now set.
- This information can be changed with Edit->Model Properties.</p>
+ <p>Applet: The drawing is cleared. Use undo to get your drawing back. Application: 
+ A new empty frame is generated.</p>
+
  <h3>Open</h3>
- <p>Opens a new internal or external frame (depending on if SDI or MDI is used)
- frame with structures read from one of the following file formats (the type
- is determined from the files extension).</p>
- <p>
- <p>Table 1. Extensions for loadable chemistry file formats</p>
-<table border=0 cellpadding=5>
-  <tr valign="top">
-    <td nowrap>.cml</td>
-    <td>CML files are a chemistry implementation of the the XML standard for
-    coding information. See the CML homepage for more.</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.mol</td>
-    <td> MDL mol files. A de-facto standard file format [ DAL92 ] invented by
-    the company Molecular Design Ltd. The MDL people call this an SD file.
-    </td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.sdf</td>
-    <td>May contain multiple molecule in SD format, separated by a "$$$$" line.
-    JChemPaint opens one frame for each structure it finds.</td>
-  </tr>
-</table>
+ <p>Opens a structure read from one of the following file formats (the type
+ is determined from the files extension). In the application, a new frame will 
+ be opened, in the applet the current structure is replaces (use undo to get 
+ the old content back. Possible formats are explained <a href="formats.html">here</a>.</p>
 
-  <h3>Save</h3>
- <p>Saves the currently active internal frame to one of the following file
- formats. The type is determined from the file extension that you use.</p>
- <p>
- <p>Table 2. Extensions for chemistry file formats that JChemPaint can write
- </p>
-<table border=0 cellpadding=5>
-  <tr valign="top">
-    <td nowrap>.cml</td>
-    <td>CML files are a chemistry implementation of the the XML standard for
-    coding information. See the CML homepage for more.</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.mol</td>
-    <td>MDL mol files. A de-facto standard file format [ DAL92 ] invented by
-    the company Molecular Design Ldt. The MDL people call this an SD file.
-    </td>
-  </tr>
-</table>
+ <h3>Save</h3>
+ <p>Saves the current structure in the currently edited file. If you are working 
+ on a new structure, you will be forwarded to Save As.</p>
 
-  <h3>Export as image</h3>
+ <h3>Save As...</h3>
+ <p>Saves the current structure in a file you can specify. Possible formats are explained <a href="formats.html">here</a>.</p>
+
+ <h3>Save as image..</h3>
  <p>This menu option can be used to generate images of the structure drawn.
- Four formats can be saves: GIF, BMP, TIFF and JPEG. The choice of format is
- determined by the extension:</p>
- <p>
- <p>Table 3. Extensions for image formats</p>
-<table border=0 cellpadding=5>
-  <tr valign="top">
-    <td nowrap>.bmp</td>
-    <td>BMP</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.tiff</td>
-    <td>TIFF</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.tiff</td>
-    <td>TIFF</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.gif</td>
-    <td>GIF</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.png</td>
-    <td>PNG</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.svg</td>
-    <td>Scalable Vector Graphics (SVG)</td>
-  </tr>
-  <tr valign="top">
-    <td nowrap>.other</td>
-    <td>JPEG</td>
-  </tr>
-</table>
+ These formats can be saved: BMP, JPEG, SVG and PNG.
 
-  <h3>Export CompChem</h3>
- <p>This allows export in formats used in computational chemistry. Currently
- export as an input for Gaussian is possible.</p>
- <h3>Exit</h3>
- <p>This quits JChemPaint.</p>
+ <h3>Print</h3>
+ <p>This prints the current drawing.</p>
+
+ <h3>Close (not for Applet)</h3>
+ <p>This quits the JChemPaint frame you are working in. You will be warned if there
+ are unsave data.</p>
+
+ <h3>Exit (not for Applet)</h3>
+ <p>This quits all JChemPaint frames. You will be warned if there
+ are unsave data.</p>
 
 
 <div class="navfooter"><hr>
