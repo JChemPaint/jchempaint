@@ -213,14 +213,14 @@ public class JCPEditorAppletMenuTest {
         Assert.assertEquals("C", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
         //if we click somewhere, we should get a new atom with specified properties
-        jcppanel.click();
+        jcppanel.robot.click(jcppanel.component(), new Point(100,100));
         Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getSymbol());
         Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getMassNumber().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
         applet.button("eraser").click();
-        jcppanel.click();
-	}
+        jcppanel.robot.click(jcppanel.component(), new Point(100,100));
+    }
 	
 	@Test public void testMenuIsotopeMajorMinusTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    genericIsotopeTest(10);
