@@ -319,7 +319,7 @@
                 </manifest>
             <fileset dir="${dist-classes}">
                 <includesfile name="${metainf}/applet-core.files"/>
-                <exclude name="org/apache/log4j/**"/>
+                <!--exclude name="org/apache/log4j/**"/-->
             </fileset>
         </jar>
         <exec dir="${dist}/jar" executable="jar" >
