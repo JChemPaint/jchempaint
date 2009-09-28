@@ -11,11 +11,11 @@ The JChemPaint Applet
 </h2>
 
 <applet code="org.openscience.jchempaint.applet.JChemPaintEditorApplet" archive="dist/jar/jchempaint-applet-core.jar"
-		name="Editor"
-        width="600" height="500">
-<!--param name="load" value="applettests/big.mol"-->
-<param name="impliciths" value="true">
+    		name="Editor" width="600" height="500">
+   <param name="impliciths" value="true">
+   <param name="codebase_lookup" value="false" />
 </applet>
+
 <a href="javascript:alert(document.Editor.getMolFile())">show mol file</a>
 <a href="javascript:alert(document.Editor.getSmiles())">show smiles</a>
 <a href="javascript:alert(document.Editor.getSmilesChiral())">show stereo smiles</a>
