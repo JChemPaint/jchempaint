@@ -85,8 +85,6 @@ public class JCPMenuTextMaker {
 		entries.put("minus", GT._("Minus"));
 		entries.put("chargeMinus2", GT._("-2"));
 		entries.put("hydrogen", GT._("Implicit Hydrogens"));
-		entries.put("adjustBondOrders", GT._("Adjust Bond Orders"));
-		entries.put("resetBondOrders", GT._("Reset Bond Orders"));
 		entries.put("flip", GT._("Flip"));
 		entries.put("cleanup", GT._("Clean Structure"));
 		entries.put("toolbar", GT._("Toolbar"));
