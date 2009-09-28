@@ -643,7 +643,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (undoManager.canRedo()) {
             redoButton.setEnabled(true);
             redoMenu.setEnabled(true);
-            redoButton.setToolTipText(GT._("Undo")+": "+undoManager.getRedoPresentationName());
+            redoButton.setToolTipText(GT._("Redo")+": "+undoManager.getRedoPresentationName());
         } else {
             redoButton.setEnabled(false);
             redoMenu.setEnabled(false);
@@ -653,7 +653,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (undoManager.canUndo()) {
             undoButton.setEnabled(true);
             undoMenu.setEnabled(true);
-            undoButton.setToolTipText(GT._("Redo")+": "+undoManager.getUndoPresentationName());
+            undoButton.setToolTipText(GT._("Undo")+": "+undoManager.getUndoPresentationName());
         } else {
             undoButton.setEnabled(false);
             undoMenu.setEnabled(false);
