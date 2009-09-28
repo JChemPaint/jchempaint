@@ -314,6 +314,10 @@ public class JCPEditorAppletMenuTest {
 		panel.selectionChanged();
 		applet.menuItem("pseudoStar").click();
 		Assert.assertEquals("*", ((IPseudoAtom)panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)).getLabel());
+        //the mode should have changed now
+        Assert.assertEquals("*", panel.get2DHub().getActiveDrawModule().getID());
+        Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
+        Assert.assertEquals("*",panel.get2DHub().getActiveDrawModule().getID());
         IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
         normal.setSymbol("C");
         panel.get2DHub().replaceAtom(normal,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
@@ -326,6 +330,10 @@ public class JCPEditorAppletMenuTest {
 		panel.selectionChanged();
 		applet.menuItem("pseudoR").click();
 		Assert.assertEquals("R", ((IPseudoAtom)panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)).getLabel());
+        //the mode should have changed now
+        Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
+        Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
+        Assert.assertEquals("R",panel.get2DHub().getActiveDrawModule().getID());
         IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
         normal.setSymbol("C");
         panel.get2DHub().replaceAtom(normal,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));

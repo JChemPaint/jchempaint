@@ -92,6 +92,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             	return;
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
+            jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
 		}else if(symbol.equals("enterelement")){
 		    newActiveModule=new EnterElementSwingModule(jcpPanel.get2DHub());
 		    newActiveModule.setID(symbol);

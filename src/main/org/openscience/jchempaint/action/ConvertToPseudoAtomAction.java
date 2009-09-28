@@ -36,6 +36,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.PseudoAtom;
+import org.openscience.cdk.controller.AddAtomModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 ;
@@ -68,6 +69,9 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 		}
 		if(atomsInRange==null)
 			return;
+		String x = type;
+		if(type.equals("RX"))
+		    x = JOptionPane.showInputDialog("Enter label", "R");
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
         	if(type.equals("normal")){
@@ -75,17 +79,28 @@ public class ConvertToPseudoAtomAction extends JCPAction {
                 IAtom normal = pseudo.getBuilder().newAtom(pseudo);
                 normal.setSymbol("C");
                 jcpPanel.get2DHub().replaceAtom(normal,pseudo);
-        	}else if(type.equals("RX")){
-        		String x = JOptionPane.showInputDialog("Enter label", "R");
-                PseudoAtom pseudo = new PseudoAtom(atom);
-                pseudo.setLabel(x);
-                jcpPanel.get2DHub().replaceAtom(pseudo,atom);
-        	}else{
-                PseudoAtom pseudo = new PseudoAtom(atom);
-                pseudo.setLabel(type);
-                jcpPanel.get2DHub().replaceAtom(pseudo,atom);
+        	}else {
+        		setTo(atom,x);
         	}
         }
         jcpPanel.get2DHub().updateView();
     }
+	
+	/**
+	 * Converts atom to a pseudo atom with label and sets active draw module to 
+	 * AddAtomModule drawing pseudo atoms with label.
+	 * 
+	 * @param atom  The atom to convert.
+	 * @param label The label to use.
+	 */
+	private void setTo(IAtom atom, String label){	    
+        jcpPanel.get2DHub().convertToPseudoAtom(atom,label);
+        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub());
+        newActiveModule.setID(label);
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+        jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(true);
+        jcpPanel.get2DHub().getController2DModel().setDrawElement(label);
+        jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
+
+	}
 }

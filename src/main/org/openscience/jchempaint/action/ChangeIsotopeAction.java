@@ -109,6 +109,7 @@ public class ChangeIsotopeAction extends JCPAction {
             newActiveModule.setID(atom.getSymbol());
             jcpPanel.get2DHub().getController2DModel().setDrawElement(atom.getSymbol());
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(isotopeNumber);
+            jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
         }
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
     }
