@@ -354,6 +354,7 @@ org/openscience/cdk/renderer/selection/IChemObjectSelection.class
 org/openscience/cdk/renderer/selection/IncrementalSelection.class
 org/openscience/cdk/renderer/selection/LogicalSelection.class
 org/openscience/cdk/renderer/selection/LogicalSelection$Type.class
+org/openscience/cdk/renderer/selection/SingleSelection.class
 org/openscience/cdk/renderer/visitor/AbstractAWTDrawVisitor.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor$1.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor.class
