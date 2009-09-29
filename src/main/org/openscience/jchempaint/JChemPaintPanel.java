@@ -36,6 +36,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -156,6 +159,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         //we set this to true always, the user should have no option to switch it off
         renderPanel.getHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         this.addKeyListener(this);
+        renderPanel.addMouseListener(new MouseAdapter(){
+            public void mouseExited(MouseEvent e) {
+                //this avoids ghost phantom rings if the user leaves the panel
+                JChemPaintPanel.this.get2DHub().clearPhantoms();
+                JChemPaintPanel.this.get2DHub().updateView();
+            }            
+        });
     }
 
     public Container getTopLevelContainer() {
