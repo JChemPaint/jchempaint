@@ -123,6 +123,10 @@ public class GT {
       new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
       new Language("es",    GT._("Spanish"),                  true),
       new Language("ar",    GT._("Arabic"),                   true),
+      new Language("nb",    GT._("Norwegian Bokmal"),         true),
+      new Language("cs",    GT._("Czech"),                    true),
+      new Language("hu",    GT._("Hungarian"),                true),
+      new Language("th",    GT._("Thai"),                     true),
     };
     doTranslate = wasTranslating;
     return languageList;
