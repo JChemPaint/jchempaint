@@ -399,6 +399,7 @@ public class CopyPasteAction extends JCPAction{
     				logger.warn("Cannot select everything in : ", object);
     			}
     		}
+	        jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
             jcpPanel.get2DHub().updateView();
             jcpPanel.updateStatusBar();
 
