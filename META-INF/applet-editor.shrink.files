@@ -88,9 +88,7 @@ org/openscience/cdk/AtomContainerSet$1.class
 org/openscience/cdk/AtomContainerSet$AtomContainerIterator.class
 org/openscience/cdk/AtomContainerSet.class
 org/openscience/cdk/AtomContainer$SingleElectronIterator.class
-org/openscience/cdk/atomtype/CDKAtomTypeMatcher.class
 org/openscience/cdk/AtomType.class
-org/openscience/cdk/atomtype/IAtomTypeMatcher.class
 org/openscience/cdk/Bond$1.class
 org/openscience/cdk/Bond$AtomsIterator.class
 org/openscience/cdk/Bond.class
@@ -335,3 +333,11 @@ org/openscience/jchempaint/StringHelper.class
 org/openscience/jchempaint/SwingPopupModule.class
 org/openscience/jchempaint/undoredo/SwingAddAtomsAndBondsEdit.class
 org/openscience/jchempaint/undoredo/SwingUndoRedoFactory.class
+org/openscience/cdk/atomtype/CDKAtomTypeMatcher.class
+org/openscience/cdk/atomtype/IAtomTypeMatcher.class
+org/openscience/cdk/config/AtomTypeFactory.class
+org/openscience/cdk/config/atomtypes/OWLAtomTypeHandler.class
+org/openscience/cdk/config/atomtypes/OWLAtomTypeReader.class
+org/openscience/cdk/config/IAtomTypeConfigurator.class
+org/openscience/cdk/config/OWLBasedAtomTypeConfigurator.class
+

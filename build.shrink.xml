@@ -195,7 +195,7 @@
        <mkdir dir="${dist}/jar/shrinkout"/>
 
 
-      <!-- shrink jcp editor file -->
+      <!-- shrink jcp editor file>
        <yguard>
          <inoutpair in="${dist}/jar/jchempaint-applet-editor.jar" out="${dist}/jar/shrinkout/jchempaint-applet-editor.jar"/>
          <externalclasses>
@@ -213,7 +213,7 @@
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
              <property name="error-checking" value="pedantic"/>
          </shrink>
-      </yguard>
+      </yguard-->
 
        <!-- shrink jcp core file -->
        <yguard>
