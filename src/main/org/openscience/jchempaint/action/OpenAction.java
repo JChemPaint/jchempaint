@@ -54,8 +54,6 @@ public class OpenAction extends JCPAction {
 
     private static final long serialVersionUID = 1030940425527065876L;
 
-    private FileFilter currentFilter = null;
-
     /**
      * Opens an empty JChemPaint frame.
      * 
@@ -68,19 +66,17 @@ public class OpenAction extends JCPAction {
         chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
         JCPFileFilter.addChoosableFileFilters(chooser);
         if (jcpPanel.getCurrentOpenFileFilter() != null) {
-            chooser.setFileFilter(jcpPanel.getCurrentOpenFileFilter());
+            for(int i=0;i<chooser.getChoosableFileFilters().length;i++){
+                if(chooser.getChoosableFileFilters()[i].getDescription().equals(jcpPanel.getCurrentOpenFileFilter().getDescription()))
+                    chooser.setFileFilter(chooser.getChoosableFileFilters()[i]);
+            }
         }
         if (jcpPanel.getLastOpenedFile() != null) {
             chooser.setSelectedFile(jcpPanel.getLastOpenedFile());
         }
-        if (currentFilter != null) {
-            chooser.setFileFilter(currentFilter);
-        }
         chooser.setFileView(new JCPFileView());
 
         int returnVal = chooser.showOpenDialog(jcpPanel);
-
-        currentFilter = chooser.getFileFilter();
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             jcpPanel.setCurrentWorkDirectory(chooser.getCurrentDirectory());

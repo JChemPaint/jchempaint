@@ -69,7 +69,6 @@ public class SaveAsAction extends JCPAction
     
     protected IChemObjectWriter cow;
     protected static String type = null;
-    private FileFilter currentFilter = null;
 
 
 	/**
@@ -121,7 +120,10 @@ public class SaveAsAction extends JCPAction
 			JCPSaveFileFilter.addChoosableFileFilters(chooser);
 			if (jcpPanel.getCurrentSaveFileFilter() != null)
 			{
-				chooser.setFileFilter(jcpPanel.getCurrentSaveFileFilter());
+	            for(int i=0;i<chooser.getChoosableFileFilters().length;i++){
+	                if(chooser.getChoosableFileFilters()[i].getDescription().equals(jcpPanel.getCurrentSaveFileFilter().getDescription()))
+	                    chooser.setFileFilter(chooser.getChoosableFileFilters()[i]);
+	            }
 			}
 			chooser.setFileView(new JCPFileView());
 			if(jcpPanel.isAlreadyAFile()!=null)
@@ -130,7 +132,7 @@ public class SaveAsAction extends JCPAction
 			int returnVal = chooser.showSaveDialog(jcpPanel);
 			
 			IChemObject object = getSource(event);
-			currentFilter = chooser.getFileFilter();
+			FileFilter currentFilter = chooser.getFileFilter();
 			if(returnVal==JFileChooser.CANCEL_OPTION)
 				ready=0;
 			if (returnVal == JFileChooser.APPROVE_OPTION)
