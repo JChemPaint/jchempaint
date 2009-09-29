@@ -22,14 +22,13 @@
 
 
 <h2>Setting the GUI language</h2>
-<p>TODO this does not work, mention -Duser.language=de and perhaps make language settable in GUI<br>
-The file ${HOME}/.jchempaint/properties has two properties with which 
-your local language can be set:</p>
-<pre>Locale_language = nl</pre>
-<pre>Locale_country = NL</pre>
-   
-<p>This particular example sets the language to Dutch (nl_NL). The default 
-language is English (en_US).</p>
+<p>The GUI of JChemPaint (menus, messages etc.) is available in several languages. 
+By default, the language is taken from platform settings of your computer. If this 
+is not possible or your langage does not exist in JCP, English is the default 
+language. You can override the settings by starting JChemPaint with a parameter 
+-Duser.language=de. The country can be set with -Duser.country=DE. This 
+particular example sets the language to German German (de_DE). The default 
+language is British English (en_GB).</p>
 
 <h2>Finding and Reporting bugs</h2>
 <p> Though JChemPaint is already very useful, it is not without errors.
@@ -39,7 +38,9 @@ language is English (en_US).</p>
     acknowledging, and fixing bugs. The JChemPaint team aims to uphold
     the same standard - which is sometimes a bit difficult as there is
     so much to do. Nevertheless, we appreciate it very much if bugs got reported;
-    the JChemPaint team does solve many bugs in each release.</p>
+    the JChemPaint team does solve many bugs in each release. Bug reports can 
+    be filed at http://sourceforge.net/tracker/?group_id=20024&atid=120024 
+    using the category "jchempaint".</p>
 
 <h3> Starting JChemPaint to get debug information </h3>
 <p>Debugging is a lot easier when debug information is supplied along with
