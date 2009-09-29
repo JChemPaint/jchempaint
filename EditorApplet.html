@@ -12,8 +12,15 @@ The JChemPaint Applet
 
 <applet code="org.openscience.jchempaint.applet.JChemPaintEditorApplet" archive="dist/jar/jchempaint-applet-core.jar"
     		name="Editor" width="600" height="500">
-   <param name="impliciths" value="true">
-   <param name="codebase_lookup" value="false" />
+
+  <param name="impliciths" value="true">
+  <param name="codebase_lookup" value="false" />
+  <PARAM name="onLoadTarget" value="statusFrame">
+  <PARAM NAME="image" VALUE="hourglass.gif">
+  <PARAM NAME="boxborder" VALUE="false">
+  <PARAM NAME="centerimage" VALUE="true">
+  <!--param name="load" value="applettests/big.mol"-->
+
 </applet>
 
 <a href="javascript:alert(document.Editor.getMolFile())">show mol file</a>
