@@ -125,6 +125,7 @@ public class GT {
       new Language("cs",    GT._("Czech"),                    true),
       new Language("hu",    GT._("Hungarian"),                true),
       new Language("th",    GT._("Thai"),                     true),
+      new Language("ru",    GT._("Russian"),                  true),
     };
     doTranslate = wasTranslating;
     return languageList;
