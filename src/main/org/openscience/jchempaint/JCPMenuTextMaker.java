@@ -79,11 +79,8 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_bond", GT._("Undefined Stereo"));
 		entries.put("undefined_stereo_bond", GT._("Undefined E/Z"));
 		entries.put("formalCharge", GT._("Charge"));
-		entries.put("chargePlus2", GT._("+2"));
 		entries.put("plus", GT._("Plus"));
-		entries.put("chargeZero", GT._("0"));
 		entries.put("minus", GT._("Minus"));
-		entries.put("chargeMinus2", GT._("-2"));
 		entries.put("hydrogen", GT._("Implicit Hydrogens"));
 		entries.put("flip", GT._("Flip"));
 		entries.put("cleanup", GT._("Clean Structure"));
@@ -225,8 +222,6 @@ public class JCPMenuTextMaker {
 		entries.put("pseudoR2", GT._("R2"));	
 		entries.put("pseudoR3", GT._("R3"));	
 		entries.put("pseudoR4", GT._("R4"));	
-		entries.put("selectReactants", GT._("Select Reactants Only"));
-		entries.put("selectProducts", GT._("Select Products Only"));
 		entries.put("bondTooltip", GT._("Draw Bonds and Atoms"));
 		entries.put("cyclesymbolTooltip", GT._("Change the Atom's Symbol"));
 		entries.put("periodictableTooltip", GT._("Select new drawing symbol from periodic table"));

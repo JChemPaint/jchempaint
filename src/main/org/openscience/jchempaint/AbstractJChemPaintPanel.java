@@ -101,9 +101,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      */
     public void announceError(Throwable ex){
     	JOptionPane.showMessageDialog(this, 
-    			GT._("The error was:")+" "+ex.getMessage()+". "+GT._("Please file a bug report at"+
+    			GT._("The error was:")+" "+ex.getMessage()+". "+GT._("Please file a bug report at ")+
     			"https://sourceforge.net/tracker/?func=browse&group_id=20024&atid=120024. "+
-    			"We apologize for any inconvenience!"), GT._("Error occured"),
+    			GT._("We apologize for any inconvenience!"), GT._("Error occured"),
     			JOptionPane.ERROR_MESSAGE);
     	ex.printStackTrace();
     	logger.error(ex.getMessage());
