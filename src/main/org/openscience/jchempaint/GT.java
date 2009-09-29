@@ -117,9 +117,7 @@ public class GT {
     languageList = new Language[] {
       new Language("nl",    GT._("Dutch"),                    true),
       new Language("en_US", GT._("American English"),         true), // global default for "en" will be "en_US"
-      new Language("fr",    GT._("French"),                   true),
       new Language("de",    GT._("German"),                   true),
-      new Language("pl",    GT._("Polish"),                   false),
       new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
       new Language("es",    GT._("Spanish"),                  true),
       new Language("ar",    GT._("Arabic"),                   true),
