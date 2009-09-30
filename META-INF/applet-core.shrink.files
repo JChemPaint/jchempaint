@@ -387,6 +387,7 @@ org/openscience/jchempaint/applet/JChemPaintAbstractApplet$2.class
 org/openscience/jchempaint/applet/JChemPaintAbstractApplet.class
 org/openscience/jchempaint/applet/JChemPaintViewerApplet.class
 org/openscience/jchempaint/application/JChemPaint.class
+org/openscience/jchempaint/JChemPaintPanel$1.class
 org/openscience/jchempaint/JChemPaintPanel.class
 org/openscience/jchempaint/JChemPaintViewerPanel.class
 org/openscience/jchempaint/JCPPropertyHandler.class
@@ -400,3 +401,6 @@ org/openscience/cdk/controller/undoredo/AdjustBondOrdersEdit.class
 org/openscience/jchempaint/undoredo/SwingAdjustBondOrdersEdit.class
 org/openscience/cdk/controller/IChemModelRelay$Direction.class
 org/openscience/cdk/renderer/elements/WedgeLineElement$Direction.class
+org/openscience/cdk/controller/AddAtomModule.class
+org/openscience/cdk/controller/undoredo/ChangeAtomSymbolEdit.class
+org/openscience/jchempaint/undoredo/SwingChangeAtomSymbolEdit.class
