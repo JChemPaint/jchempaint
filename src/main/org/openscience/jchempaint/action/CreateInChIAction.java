@@ -67,7 +67,7 @@ public class CreateInChIAction extends JCPAction
         
         InChIGeneratorFactory factory = null;
         try {
-            factory = new InChIGeneratorFactory();
+            factory = InChIGeneratorFactory.getInstance();
         } catch (CDKException cdke) {
             String message = GT._("Error loading InChI library:")+" " + cdke.getMessage();
             logger.error(message);

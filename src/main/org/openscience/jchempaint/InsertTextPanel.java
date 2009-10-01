@@ -140,7 +140,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         if (text.startsWith("InChI")) { // handle it as an InChI
             try {
-                InChIGeneratorFactory inchiFactory = new InChIGeneratorFactory();
+                InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
                 InChIToStructure inchiToStructure = inchiFactory.getInChIToStructure(text,jChemPaintPanel.getChemModel().getBuilder());
                 INCHI_RET status = inchiToStructure.getReturnStatus();
                 if (status != INCHI_RET.OKAY) {

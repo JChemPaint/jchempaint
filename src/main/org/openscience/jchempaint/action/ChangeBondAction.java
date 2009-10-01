@@ -50,15 +50,15 @@ public class ChangeBondAction extends JCPAction
 	public void actionPerformed(ActionEvent event)
 	{
 	    //first switch mode
-        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_NONE, true);
+        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
         if(type.equals("down_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_DOWN, true);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
         }else if(type.equals("up_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UP, true);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.UP, true);
         }else if(type.equals("undefined_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.STEREO_BOND_UNDEFINED, true);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.UP_OR_DOWN, true);
         }else if(type.equals("undefined_stereo_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),CDKConstants.EZ_BOND_UNDEFINED, true);
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.E_OR_Z, true);
         }
         newActiveModule.setID(type);
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
@@ -90,19 +90,19 @@ public class ChangeBondAction extends JCPAction
 		while(bondsInRange.hasNext()){
 			IBond bond = bondsInRange.next();
 			if(type.equals("bond")){
-				bond.setStereo(CDKConstants.STEREO_BOND_NONE);
+				bond.setStereo(IBond.Stereo.NONE);
 				bond.setOrder(IBond.Order.SINGLE);
 			}else if(type.equals("down_bond")){
-				bond.setStereo(CDKConstants.STEREO_BOND_DOWN);
+				bond.setStereo(IBond.Stereo.DOWN);
 				bond.setOrder(IBond.Order.SINGLE);
 			}else if(type.equals("up_bond")){
-				bond.setStereo(CDKConstants.STEREO_BOND_UP);
+				bond.setStereo(IBond.Stereo.UP);
 				bond.setOrder(IBond.Order.SINGLE);
 			}else if(type.equals("undefined_bond")){
-				bond.setStereo(CDKConstants.STEREO_BOND_UNDEFINED);
+				bond.setStereo(IBond.Stereo.UP_OR_DOWN);
 				bond.setOrder(IBond.Order.SINGLE);
 			}else if(type.equals("undefined_stereo_bond")){
-				bond.setStereo(CDKConstants.EZ_BOND_UNDEFINED);
+				bond.setStereo(IBond.Stereo.E_OR_Z);
 				bond.setOrder(IBond.Order.SINGLE);
 			}
 		}

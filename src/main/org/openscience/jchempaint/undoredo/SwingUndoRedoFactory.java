@@ -60,7 +60,7 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, type, c2dm);
 	}
 	
-	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, Integer[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay){
+	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, IBond.Stereo[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay){
 		return new SwingAdjustBondOrdersEdit(changedBonds, changedBondsStereo, type, chemModelRelay);
 	}
 

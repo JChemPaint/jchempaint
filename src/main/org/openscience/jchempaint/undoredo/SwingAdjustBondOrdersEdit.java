@@ -42,9 +42,11 @@ import org.openscience.cdk.interfaces.IBond;
  */
 public class SwingAdjustBondOrdersEdit extends AdjustBondOrdersEdit implements UndoableEdit{
 
-	public SwingAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, Integer[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay) {
+	public SwingAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond,IBond.Stereo[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay) {
 		super(changedBonds, changedBondsStereo, type, chemModelRelay);
-	}
+
+}
+
 
 	public boolean addEdit(UndoableEdit arg0) {
 		return false;

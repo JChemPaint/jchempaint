@@ -367,48 +367,48 @@ public class JCPEditorAppletMenuTest {
 	@Test public void testMenuBondStereoDown() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
 		panel.selectionChanged();
 		applet.menuItem("down_bond").click();
-		Assert.assertEquals(CDKConstants.STEREO_BOND_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		Assert.assertEquals("down_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondStereoUp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
 		panel.selectionChanged();
 		applet.menuItem("up_bond").click();
-		Assert.assertEquals(CDKConstants.STEREO_BOND_UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		Assert.assertEquals("up_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondUndefinedStereo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
 		panel.selectionChanged();
 		applet.menuItem("undefined_bond").click();
-		Assert.assertEquals(CDKConstants.STEREO_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		Assert.assertEquals("undefined_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 
 	@Test public void testMenuBondUndefinedEZ() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
 		panel.selectionChanged();
 		applet.menuItem("undefined_stereo_bond").click();
-		Assert.assertEquals(CDKConstants.EZ_BOND_UNDEFINED, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
-		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(CDKConstants.STEREO_BOND_NONE);
+		Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
+		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
 		Assert.assertEquals("undefined_stereo_bond", panel.get2DHub().getActiveDrawModule().getID());
 	}
 	
