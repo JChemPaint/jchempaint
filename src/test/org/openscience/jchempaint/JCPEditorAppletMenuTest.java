@@ -518,7 +518,8 @@ public class JCPEditorAppletMenuTest {
 	        	fos.write(ins.read());
 			applet.menuItem("open").click();
 			DialogFixture dialog = applet.dialog();
-			JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+			//it seems the Combo selection depends on if you run test as single test or all in class, no idea why
+			JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter","org.openscience.jchempaint.io.JCPSaveFileFilter"));
 	        combobox.setSelectedItem(combobox.getItemAt(2));
 			JTextComponentFixture text = dialog.textBox();
 			text.setText(file);

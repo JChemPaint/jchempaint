@@ -7,17 +7,26 @@ import org.fest.swing.core.GenericTypeMatcher;
 public class ComboBoxTextComponentMatcher extends GenericTypeMatcher<JComboBox> {
 
 	private String text;
+	private String altText;
 	
 	public ComboBoxTextComponentMatcher(String text){
 		super(JComboBox.class);
 		this.text=text;
 	}
-	@Override
+	public ComboBoxTextComponentMatcher(String text, String altText) {
+	    super(JComboBox.class);
+        this.text = text;
+        this.altText = altText;
+    }
+    @Override
 	protected boolean isMatching(JComboBox arg0) {
 		if(arg0.getSelectedItem()!=null && arg0.getSelectedItem().toString().indexOf(text)==0)
 			return true;
 		else
-			return false;
+		    if(arg0.getSelectedItem()!=null && altText!=null && arg0.getSelectedItem().toString().indexOf(altText)==0)
+		        return true;
+		    else
+		        return false;
 	}
 
 }

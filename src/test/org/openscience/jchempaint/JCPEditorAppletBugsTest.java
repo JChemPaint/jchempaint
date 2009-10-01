@@ -126,6 +126,7 @@ public class JCPEditorAppletBugsTest {
 				basic.getBuilder().newMolecule());
 		panel.setChemModel(basic);
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
+	    panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
 		panel.get2DHub().updateView();
 	}
 	
