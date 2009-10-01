@@ -64,7 +64,7 @@ public class JCPEditorAppletMenuTest {
 	}
 
 	@Test public void testMenuExportBmp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  File file=new File("/tmp/test.bmp");
+		  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.bmp");
 		  if(file.exists())
 			  file.delete();
 		  applet.menuItem("export").click();
@@ -72,7 +72,7 @@ public class JCPEditorAppletMenuTest {
 		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  combobox.setSelectedItem(combobox.getItemAt(1));
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test");
+		  text.setText(file.toString().substring(0, file.toString().length()-4));
 		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 		  okbutton.click();
 		  dialog = applet.dialog();
@@ -83,7 +83,7 @@ public class JCPEditorAppletMenuTest {
 	}
 
 	@Test public void testMenuExportJpg() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  File file=new File("/tmp/test.jpg");
+        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.jpg");
 		  if(file.exists())
 			  file.delete();
 		  applet.menuItem("export").click();
@@ -91,7 +91,7 @@ public class JCPEditorAppletMenuTest {
 		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  combobox.setSelectedItem(combobox.getItemAt(2));
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test");
+		  text.setText(file.toString().substring(0, file.toString().length()-4));
 		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 		  okbutton.click();
 		  dialog = applet.dialog();
@@ -102,7 +102,7 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuExportPng() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  File file=new File("/tmp/test.png");
+        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.png");
 		  if(file.exists())
 			  file.delete();
 		  applet.menuItem("export").click();
@@ -110,7 +110,7 @@ public class JCPEditorAppletMenuTest {
 		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  combobox.setSelectedItem(combobox.getItemAt(3));
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test");
+		  text.setText(file.toString().substring(0, file.toString().length()-4));
 		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 		  okbutton.click();
 		  dialog = applet.dialog();
@@ -121,7 +121,7 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuExportSvg() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  File file=new File("/tmp/test.svg");
+	      File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.svg");
 		  if(file.exists())
 			  file.delete();
 		  applet.menuItem("export").click();
@@ -129,7 +129,7 @@ public class JCPEditorAppletMenuTest {
 		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  combobox.setSelectedItem(combobox.getItemAt(4));
 		  JTextComponentFixture text = dialog.textBox();
-		  text.setText("/tmp/test");
+		  text.setText(file.toString().substring(0, file.toString().length()-4));
 		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 		  okbutton.click();
 		  dialog = applet.dialog();
@@ -434,10 +434,10 @@ public class JCPEditorAppletMenuTest {
 			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
 			  combobox.setSelectedItem(combobox.getItemAt(1));
 			  JTextComponentFixture text = dialog.textBox();
-			  String file = "/tmp/test.mol";
-			  if(new File(file).exists())
-				  new File(file).delete();
-			  text.setText(file);
+			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+			  if(file.exists())
+				  file.delete();
+			  text.setText(file.toString());
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 			  okbutton.click();
 			  MDLReader reader = new MDLReader(new FileInputStream(file));
@@ -452,16 +452,16 @@ public class JCPEditorAppletMenuTest {
 		@Test public void testMenuOpenMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			String filename = "data/chebi/ChEBI_26120.mol";
 	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-			String file = "/tmp/test.mol";
-			if(new File(file).exists())
-				  new File(file).delete();
-	        FileOutputStream fos = new FileOutputStream(new File(file));
+	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+			if(file.exists())
+				  file.delete();
+	        FileOutputStream fos = new FileOutputStream(file);
 	        while(ins.available()>0)
 	        	fos.write(ins.read());
 			applet.menuItem("open").click();
 			DialogFixture dialog = applet.dialog();
 			JTextComponentFixture text = dialog.textBox();
-			text.setText(file);
+			text.setText(file.toString());
 			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
 			okbutton.click();
 	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -480,10 +480,10 @@ public class JCPEditorAppletMenuTest {
 		@Test public void testMenuOpenCml() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			String filename = "data/a-pinen.cml";
 	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-			String file = "/tmp/test.cml";
-			if(new File(file).exists())
-				  new File(file).delete();
-	        FileOutputStream fos = new FileOutputStream(new File(file));
+	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.cml");
+			if(file.exists())
+				  file.delete();
+	        FileOutputStream fos = new FileOutputStream(file);
 	        while(ins.available()>0)
 	        	fos.write(ins.read());
 			applet.menuItem("open").click();
@@ -491,7 +491,7 @@ public class JCPEditorAppletMenuTest {
 			JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
 	        combobox.setSelectedItem(combobox.getItemAt(1));
 			JTextComponentFixture text = dialog.textBox();
-			text.setText(file);
+			text.setText(file.toString());
 			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
 			okbutton.click();
 	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -510,10 +510,10 @@ public class JCPEditorAppletMenuTest {
 		@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			String filename = "data/smiles.smi";
 	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-			String file = "/tmp/test.smi";
-			if(new File(file).exists())
-				  new File(file).delete();
-	        FileOutputStream fos = new FileOutputStream(new File(file));
+	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.smi");
+			if(file.exists())
+				  file.delete();
+	        FileOutputStream fos = new FileOutputStream(file);
 	        while(ins.available()>0)
 	        	fos.write(ins.read());
 			applet.menuItem("open").click();
@@ -522,7 +522,7 @@ public class JCPEditorAppletMenuTest {
 			JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter","org.openscience.jchempaint.io.JCPSaveFileFilter"));
 	        combobox.setSelectedItem(combobox.getItemAt(2));
 			JTextComponentFixture text = dialog.textBox();
-			text.setText(file);
+			text.setText(file.toString());
 			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
 			okbutton.click();
 			DialogFixture coordsdialog = new DialogFixture(applet.robot, applet.robot.finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
