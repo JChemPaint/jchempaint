@@ -214,12 +214,6 @@ public class JCPEditorAppletMenuTest {
         Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
         //if we click somewhere, we should get a new atom with specified properties
         jcppanel.robot.click(jcppanel.component(), new Point(100,100));
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getSymbol());
         Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getMassNumber().intValue());
