@@ -54,6 +54,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.io.IJCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.io.JCPSaveFileFilter;
@@ -115,6 +116,7 @@ public class SaveAsAction extends JCPAction
         int ready=1;
         while(ready==1){
             IChemModel model = jcpPanel.getChemModel();
+
             JFileChooser chooser = new JFileChooser();
             chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
             JCPSaveFileFilter.addChoosableFileFilters(chooser);
@@ -267,8 +269,11 @@ public class SaveAsAction extends JCPAction
         {
             cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
         }
+        JChemPaint.flipOnReadingAndWriting(model);
         cow.write(model);
         cow.close();
+        JChemPaint.flipOnReadingAndWriting(model);
+
         jcpPanel.setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }

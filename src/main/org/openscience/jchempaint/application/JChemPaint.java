@@ -45,6 +45,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -220,6 +221,7 @@ public class JChemPaint {
         ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url,
                 type);
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
+        flipOnReadingAndWriting(chemModel);
         JChemPaint.cleanUpChemModel(chemModel);
 
         return chemModel;
@@ -639,5 +641,15 @@ public class JChemPaint {
         f.setLocation(point.x - w2, point.y - h2);
         f.setVisible(true);
         return p;
+    }
+
+
+    public static void flipOnReadingAndWriting (IChemModel chemModel) {
+        // flip needed due to difference between Java and chem coordinates
+        for (IAtom atom : chemModel.getMoleculeSet().getAtomContainer(0).atoms()) {
+            System.out.println(atom.getPoint2d());
+            atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
+        }
+
     }
 }
