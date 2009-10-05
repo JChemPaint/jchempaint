@@ -20,6 +20,8 @@ public class ComboBoxTextComponentMatcher extends GenericTypeMatcher<JComboBox> 
     }
     @Override
 	protected boolean isMatching(JComboBox arg0) {
+        if(!arg0.isVisible())
+            return false;
 		if(arg0.getSelectedItem()!=null && arg0.getSelectedItem().toString().indexOf(text)==0)
 			return true;
 		else
