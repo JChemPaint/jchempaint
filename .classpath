@@ -5,15 +5,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="po/classes"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.openscience.cdk"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/commons-cli.jar"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/fest-assert-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/fest-reflect-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/fest-swing-1.2a2.jar"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/fest-util-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/markr/svn/jchempaint/jchempaint/trunk/lib/jfontchooser.jar"/>
-	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/jar/vecmath1.2-1.14.jar"/>
-	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/jar/jniinchi-0.5.jar"/>
-	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/develjar/junit-4.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jchempaint-primary-public"/>
+	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
+	<classpathentry kind="lib" path="lib/fest-assert-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-reflect-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/fest-swing-1.2a2.jar"/>
+	<classpathentry kind="lib" path="lib/fest-util-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
