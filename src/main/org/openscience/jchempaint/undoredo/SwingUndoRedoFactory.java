@@ -159,7 +159,7 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		@Override
 		public void undo() throws CannotUndoException {
 			super.undo();
-			edit.redo();
+			edit.undo();
 		}
 		
 		@Override
