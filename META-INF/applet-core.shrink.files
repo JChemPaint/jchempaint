@@ -362,6 +362,7 @@ org/openscience/cdk/renderer/selection/LogicalSelection$Type.class
 org/openscience/cdk/renderer/selection/SingleSelection.class
 org/openscience/cdk/renderer/visitor/AbstractAWTDrawVisitor.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor$1.class
+org/openscience/cdk/renderer/visitor/AWTDrawVisitor$2.class
 org/openscience/cdk/renderer/visitor/AWTDrawVisitor.class
 org/openscience/cdk/renderer/visitor/IDrawVisitor.class
 org/openscience/cdk/Ring.class
@@ -394,6 +395,7 @@ org/openscience/jchempaint/JCPPropertyHandler.class
 org/openscience/jchempaint/JExternalFrame.class
 org/openscience/jchempaint/RenderPanel.class
 io-formats.set
+org/openscience/jchempaint/undoredo/SwingUndoRedoFactory$EditOperationWrapper.class
 org/openscience/jchempaint/undoredo/SwingUndoRedoFactory.class
 org/openscience/jchempaint/InsertTextPanel.class
 org/openscience/jchempaint/JCPMenuTextMaker.class
@@ -404,3 +406,21 @@ org/openscience/cdk/renderer/elements/WedgeLineElement$Direction.class
 org/openscience/cdk/controller/AddAtomModule.class
 org/openscience/cdk/controller/undoredo/ChangeAtomSymbolEdit.class
 org/openscience/jchempaint/undoredo/SwingChangeAtomSymbolEdit.class
+org/openscience/cdk/interfaces/IBond$Stereo.class
+org/openscience/cdk/renderer/elements/path/Close.class
+org/openscience/cdk/renderer/elements/path/CubicTo.class
+org/openscience/cdk/renderer/elements/path/LineTo.class
+org/openscience/cdk/renderer/elements/path/MoveTo.class
+org/openscience/cdk/renderer/elements/path/PathBuilder.class
+org/openscience/cdk/renderer/elements/path/PathElement.class
+org/openscience/cdk/renderer/elements/path/QuadTo.class
+org/openscience/cdk/renderer/elements/path/Type.class
+org/openscience/cdk/controller/IAtomBondEdits.class
+org/openscience/cdk/renderer/elements/AtomMassSymbolElement.class
+org/openscience/cdk/renderer/elements/GeneralPath.class
+org/openscience/cdk/renderer/elements/LineElement$LineType.class
+org/openscience/cdk/renderer/elements/PathElement.class
+org/openscience/cdk/renderer/elements/RingElement.class
+org/openscience/cdk/renderer/selection/MultiSelection.class
+org/openscience/cdk/tools/manipulator/BondManipulator.class
+

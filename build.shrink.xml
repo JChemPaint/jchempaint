@@ -201,7 +201,7 @@
          <externalclasses>
              <fileset dir="${dist}/jar">
                 <include name="**/*.jar"/>
-                <exclude name="**/jchempaint-applet-editor.jar"/>
+                <!--exclude name="**/jchempaint-applet-editor.jar"/-->
              </fileset>
          </externalclasses>
 
@@ -221,7 +221,7 @@
          <externalclasses>
              <fileset dir="${dist}/jar">
                 <include name="**/*.jar"/>
-                <exclude name="**/jchempaint-applet-core.jar"/>
+                <!--exclude name="**/jchempaint-applet-core.jar"/-->
              </fileset>
          </externalclasses>
          <shrink logfile="shrinklog.core.xml">
@@ -231,13 +231,20 @@
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar"/>
              <property name="error-checking" value="pedantic"/>
+
              <keep>
+                <class classes="public">
+                 <patternset>
+                   <include name="org.openscience.jchempaint.undoredo.**.*"/>
+                </patternset>
+                </class>
                 <class name="org.openscience.cdk.tools.LoggingTool" methods="public" fields="none" />
                 <class name="org.openscience.cdk.interfaces.IChemObjectBuilder" methods="public" fields="none" />
                 <class name="org.openscience.cdk.controller.IControllerModel" methods="public" fields="none" />
                 <class name="org.openscience.cdk.controller.IChemModelRelay" methods="public" fields="none" />
                 <class name="org.openscience.cdk.tools.manipulator.AtomContainerManipulator" methods="public" fields="none" />
                 <class name="org.openscience.jchempaint.JChemPaintPanel$1" methods="public" fields="none" />
+                <class name="org.openscience.cdk.renderer.selection.MultiSelection" methods="public" fields="none" />
              </keep>
          </shrink>
       </yguard>
@@ -339,7 +346,7 @@
        </fileset>
       </move>
       <delete dir="${dist}/jar/shrinkout"/>
-
+      
       <signjar destDir=""
             alias="${certificatealias}"
             storepass="${keystorepassphrase}"
@@ -350,6 +357,7 @@
                 </fileset>
             </path>
       </signjar>
+      
       <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
             <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
