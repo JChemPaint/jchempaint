@@ -5,6 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="po/classes"/>
+	<classpathentry kind="lib" path="lib/batik.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jchempaint-primary-public"/>
 	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
 	<classpathentry kind="lib" path="lib/fest-assert-1.1.jar"/>

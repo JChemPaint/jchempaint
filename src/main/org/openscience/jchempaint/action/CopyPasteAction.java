@@ -50,7 +50,6 @@ import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -83,6 +82,7 @@ import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.dialog.TemplateBrowser;
 
 /**
  * Action to copy/paste structures.
@@ -207,6 +207,11 @@ public class CopyPasteAction extends JCPAction{
                         LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             }
+        } else if ("pasteTemplate".equals(type)) {
+            TemplateBrowser templateBrowser = new TemplateBrowser();
+            if(templateBrowser.getChosenmolecule()!=null){
+                insertStructure(templateBrowser.getChosenmolecule(), renderModel);
+            }
         } else if ("paste".equals(type)) {
             Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
             handleSystemClipboard(sysClip);
@@ -295,29 +300,7 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
             if (toPaste != null) {
-                //add implicit hs
-                if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
-                    CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(chemModel
-                            .getBuilder());
-                    try {
-                        hAdder.addImplicitHydrogens(toPaste);
-                    } catch (CDKException ex) {
-                        // do nothing
-                    }
-                }
-                //somehow, in case of single atoms, there are no coordinates
-                if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
-                    toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
-                InsertTextPanel.generateModel(jcpPanel, toPaste, false);
-
-                //We select the inserted structure
-                IChemObjectSelection selection
-                = new LogicalSelection(LogicalSelection.Type.ALL);
-
-                selection.select(ChemModelManipulator.newChemModel(toPaste));
-                renderModel.setSelection(selection);
-
-                jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));
+                insertStructure(toPaste, renderModel);
             }else{
                 JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
@@ -405,6 +388,39 @@ public class CopyPasteAction extends JCPAction{
 
     }
 
+    /**
+     * Inserts a structure into the panel. It adds Hs if needed and highlights the structure after insert.
+     * 
+     * @param toPaste     The structure to paste.
+     * @param renderModel The current renderer model.
+     */
+    private void insertStructure(IMolecule toPaste, RendererModel renderModel) {
+        //add implicit hs
+        if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
+            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(toPaste
+                    .getBuilder());
+            try {
+                hAdder.addImplicitHydrogens(toPaste);
+            } catch (CDKException ex) {
+                // do nothing
+            }
+        }
+        //somehow, in case of single atoms, there are no coordinates
+        if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
+            toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
+        InsertTextPanel.generateModel(jcpPanel, toPaste, false);
+
+        //We select the inserted structure
+        IChemObjectSelection selection
+            = new LogicalSelection(LogicalSelection.Type.ALL);
+
+        selection.select(ChemModelManipulator.newChemModel(toPaste));
+        renderModel.setSelection(selection);
+
+        jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));        
+    }
+
+    @SuppressWarnings("unchecked")
     private void handleSystemClipboard(Clipboard clipboard) {
         Transferable clipboardContent = clipboard.getContents(this);
         DataFlavor flavors[]=clipboardContent.getTransferDataFlavors();
@@ -430,6 +446,7 @@ public class CopyPasteAction extends JCPAction{
         String svg;
         String cml;
 
+        @SuppressWarnings("unchecked")
         public JcpSelection(IAtomContainer tocopy1) throws Exception {
             IMolecule tocopy= tocopy1.getBuilder().newMolecule(tocopy1);
             // MDL mol output
