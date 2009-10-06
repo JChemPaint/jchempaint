@@ -29,7 +29,6 @@
 package org.openscience.jchempaint.dialog.editor;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
@@ -40,11 +39,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.JSlider;
-import javax.swing.JTextField;
 
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.RenderingParameters;
@@ -52,301 +50,314 @@ import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 
-import com.ozten.font.JFontChooser;
-
 /**
  * @cdk.bug          1525961
  */
 public class PropertiesModelEditor extends FieldTablePanel implements ActionListener {
-    
+
     private static final long serialVersionUID = 8694652992068950179L;
-    
+
     private JCheckBox drawNumbers;
-    
-    private JCheckBox showAtomAtomMapping;
-    
+
+    //private JCheckBox showAtomAtomMapping;
+
     private JCheckBox useKekuleStructure;
-    
+
     private JCheckBox showEndCarbons;
-    
+
     private JCheckBox showExplicitHydrogens;
-    
+
     private JCheckBox showImplicitHydrogens;
-    
+
     private JCheckBox showAromaticity;
-    
-    private JCheckBox showAromaticityCDKStyle;
-    
+
+    //private JCheckBox showAromaticityCDKStyle;
+
     private JCheckBox colorAtomsByType;
-    
-    private JCheckBox showToolTip;
-    
-    private JCheckBox showReactionBoxes;
-    
+
+    //private JCheckBox showToolTip;
+
+    //private JCheckBox showReactionBoxes;
+
     private JCheckBox useAntiAliasing;
-    
+
     private JCheckBox isCompact;
-    
+
     private JCheckBox isFitToScreen;
-    
+
     private JSlider bondWidth;
-    
-    private JSlider bondLength;
-    
+
+    //private JSlider bondLength;
+
     private JSlider highlightDistance;
-    
+
     private JSlider atomRadius;
-    
+
     private JSlider wedgeWidth;
-    
+
     private ButtonGroup group = new ButtonGroup();
-    
+
     private JRadioButton compactShapeOval;
-    
+
     private JRadioButton compactShapeSquare;
 
-    private JLabel fontName;
-    
-    private JButton chooseFontButton;
-    
-    private String currentFontName;
-    
+    //private JLabel fontName;
+
+    //private JButton chooseFontButton;
+
+    //private String currentFontName;
+
     private JLabel color;
-    
+
     private JButton chooseColorButton;
-    
+
     private Color currentColor;
-    
+
     private JFrame frame;
-    
+
     private RendererModel model;
-    
-	private JCheckBox askForIOSettings;
-	
-	private JTextField undoStackSize;
-    
-	public PropertiesModelEditor(JFrame frame) {
+
+    //private JCheckBox askForIOSettings;
+
+    //private JTextField undoStackSize;
+
+    public PropertiesModelEditor(JFrame frame) {
         super();
         this.frame = frame;
         constructPanel();
-	}
-    
+    }
+
     private void constructPanel() {
-    	
-    	addField("General Settings",new JPanel());
-    	
-        askForIOSettings = new JCheckBox();
-        addField(GT._("Ask for IO settings"), askForIOSettings);
-        
-        undoStackSize = new JTextField();
-        addField(GT._("Undo/redo stack size"), undoStackSize);
-        
-        addField("",new JPanel());
-    	addField("Rendering Settings",new JPanel());
-        
+
+        JLabel label = new JLabel("JChempaint settings");
+        label.setForeground(Color.BLUE);
+        label.setSize(30, 80);
+
+        //askForIOSettings = new JCheckBox();
+        //addField(GT._("Ask for IO settings"), askForIOSettings);
+
+        //undoStackSize = new JTextField();
+        //addField(GT._("Undo/redo stack size"), undoStackSize);
+
+        //addField("",new JPanel());
+        //addField("Rendering Settings",new JPanel());
+
         drawNumbers = new JCheckBox();
         addField(GT._("Draw atom numbers"), drawNumbers);
-        
-        showAtomAtomMapping = new JCheckBox();
-        addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
-        
+
+        //showAtomAtomMapping = new JCheckBox();
+        //addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
+
         useKekuleStructure = new JCheckBox();
         addField(GT._("Explicit carbons"), useKekuleStructure);
-        
+
         showEndCarbons = new JCheckBox();
         addField(GT._("Show explicit methyl groups"), showEndCarbons);
-        
+
         showExplicitHydrogens = new JCheckBox();
         addField(GT._("Show explicit hydrogens"), showExplicitHydrogens);
-        
+
         showImplicitHydrogens = new JCheckBox();
         addField(GT._("Show implicit hydrogens"), showImplicitHydrogens);
-        
+
         showAromaticity = new JCheckBox();
-        addField(GT._("Use aromatic ring circles"), showAromaticity);
-        
-        showAromaticityCDKStyle = new JCheckBox();
-        addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
-        
+        addField(GT._("Show aromatic ring circles"), showAromaticity);
+
+        //showAromaticityCDKStyle = new JCheckBox();
+        //addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
+
         colorAtomsByType = new JCheckBox();
         addField(GT._("Color atoms by element"), colorAtomsByType);
-        
+
         useAntiAliasing = new JCheckBox();
         addField(GT._("Use Anti-Aliasing"), useAntiAliasing);
-        
-        showToolTip = new JCheckBox();
-        addField(GT._("Show tooltips"), showToolTip);
-        
-        showReactionBoxes = new JCheckBox();
-        addField(GT._("Show boxes around reactions"), showReactionBoxes);
-        
-        isCompact = new JCheckBox();
-        addField(GT._("Show atoms in compact form"), isCompact);
-        
+
+        //showToolTip = new JCheckBox();
+        //addField(GT._("Show tooltips"), showToolTip);
+
+        //showReactionBoxes = new JCheckBox();
+        //addField(GT._("Show boxes around reactions"), showReactionBoxes);
+
+
         isFitToScreen = new JCheckBox();
         addField(GT._("Set fit to screen"), isFitToScreen);
-        
+
+
+        addField("", new JSeparator());
+
+        isCompact = new JCheckBox();
+        addField(GT._("Show atoms in compact form"), isCompact);
+
+        compactShapeOval = new JRadioButton();
+        group.add(compactShapeOval);
+        addField(GT._("Oval Compact Atoms"), compactShapeOval);
+
+        compactShapeSquare = new JRadioButton();
+        group.add(compactShapeSquare);
+        addField(GT._("Square Compact Atoms"), compactShapeSquare);
+
         atomRadius = new JSlider(0, 20);
         atomRadius.setSnapToTicks(true);
         atomRadius.setPaintLabels(true);
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
         atomRadius.setMinorTickSpacing(1);
-        addField(GT._("Atom size"), atomRadius);
-        
+        addField(GT._("Compact form atom size"), atomRadius);
+        addField("", new JSeparator());
+
+
         bondWidth = new JSlider(1, 5);
         bondWidth.setSnapToTicks(true);
         bondWidth.setPaintLabels(true);
         bondWidth.setPaintTicks(true);
         bondWidth.setMajorTickSpacing(1);
         addField(GT._("Bond width"), bondWidth);
-        
-        bondLength = new JSlider(20, 60);
-        bondLength.setSnapToTicks(true);
-        bondLength.setPaintLabels(true);
-        bondLength.setPaintTicks(true);
-        bondLength.setMajorTickSpacing(5);
-        bondLength.setMinorTickSpacing(1);
-        addField(GT._("Bond length"), bondLength);
-        
+        addField("", new JSeparator());
+
+        //bondLength = new JSlider(20, 60);
+        //bondLength.setSnapToTicks(true);
+        //bondLength.setPaintLabels(true);
+        //bondLength.setPaintTicks(true);
+        //bondLength.setMajorTickSpacing(5);
+        //bondLength.setMinorTickSpacing(1);
+        //addField(GT._("Bond length"), bondLength);
+
         highlightDistance = new JSlider(0, 25);
         highlightDistance.setSnapToTicks(true);
         highlightDistance.setPaintLabels(true);
         highlightDistance.setPaintTicks(true);
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
-        addField(GT._("Highlight Distance"), highlightDistance);
-        
+        addField(GT._("Highlight/Select radius"), highlightDistance);
+        addField("", new JSeparator());
+
         wedgeWidth = new JSlider(1, 10);
         wedgeWidth.setSnapToTicks(true);
         wedgeWidth.setPaintLabels(true);
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
         addField(GT._("Wedge width"), wedgeWidth);
+        addField("", new JSeparator());
 
-        compactShapeOval = new JRadioButton();
-        group.add(compactShapeOval);
-        addField(GT._("Oval Compact Atoms"), compactShapeOval);
-        
-        compactShapeSquare = new JRadioButton();
-        group.add(compactShapeSquare);
-        addField(GT._("Square Compact Atoms"), compactShapeSquare);
-        
+        /*
         currentFontName = "";
         fontName = new JLabel();
         addField(GT._("Font name"), fontName);
-        
         chooseFontButton = new JButton(GT._("Choose Font..."));
         chooseFontButton.addActionListener(this);
         chooseFontButton.setActionCommand("chooseFont");
         addField("", chooseFontButton);
-        
+         */
+
         color = new JLabel(GT._("BACKCOLOR"));
         addField(GT._("Background color"), color);
-        
-        chooseColorButton = new JButton(GT._("Choose Color..."));
+
+        chooseColorButton = new JButton(GT._("Choose BG color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
         addField("", chooseColorButton);
     }
-    
+
     public void setModel(RendererModel model) {
         this.model = model;
         drawNumbers.setSelected(model.getDrawNumbers());
-        showAtomAtomMapping.setSelected(model.getShowAtomAtomMapping());
+        //showAtomAtomMapping.setSelected(model.getShowAtomAtomMapping());
         useKekuleStructure.setSelected(model.getKekuleStructure());
         showEndCarbons.setSelected(model.getShowEndCarbons());
         showExplicitHydrogens.setSelected(model.getShowExplicitHydrogens());
         showImplicitHydrogens.setSelected(model.getShowImplicitHydrogens());
         showAromaticity.setSelected(model.getShowAromaticity());
-        showAromaticityCDKStyle.setSelected(model.getShowAromaticityCDKStyle());
+        //showAromaticityCDKStyle.setSelected(model.getShowAromaticityCDKStyle());
         colorAtomsByType.setSelected(model.getColorAtomsByType());
         useAntiAliasing.setSelected(model.getUseAntiAliasing());
-        showToolTip.setSelected(model.getShowTooltip());
-        showReactionBoxes.setSelected(model.getShowReactionBoxes());
+        //showToolTip.setSelected(model.getShowTooltip());
+        //showReactionBoxes.setSelected(model.getShowReactionBoxes());
         isCompact.setSelected(model.getIsCompact());
         isFitToScreen.setSelected(model.isFitToScreen());
-        
+
         atomRadius.setValue((int)model.getAtomRadius());
         bondWidth.setValue((int)model.getBondWidth());
-        bondLength.setValue((int)model.getBondLength());
+        //bondLength.setValue((int)model.getBondLength());
         highlightDistance.setValue((int)model.getHighlightDistance());
         wedgeWidth.setValue((int)model.getWedgeWidth());
-        
+
         if (model.getCompactShape() == RenderingParameters.AtomShape.OVAL) {
             group.setSelected(compactShapeOval.getModel(), true);
         } else {
             group.setSelected(compactShapeSquare.getModel(), true);
         }
-        
+        /*
         currentFontName = model.getFontName();
         if (!currentFontName.equals("")) {
             fontName.setText(currentFontName);
         }
+         */
+
         currentColor = model.getBackColor();
         if (currentColor != null) {
             color.setForeground(currentColor);
         }
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
-        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
-        undoStackSize.setText(props.getProperty("General.UndoStackSize"));
+        //askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
+        //undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
-	
+
     public void applyChanges() {
         model.setDrawNumbers(drawNumbers.isSelected());
-        model.setShowAtomAtomMapping(showAtomAtomMapping.isSelected());
+        //model.setShowAtomAtomMapping(showAtomAtomMapping.isSelected());
         model.setKekuleStructure(useKekuleStructure.isSelected());
         model.setShowEndCarbons(showEndCarbons.isSelected());
         model.setShowExplicitHydrogens(showExplicitHydrogens.isSelected());
         model.setShowImplicitHydrogens(showImplicitHydrogens.isSelected());
         model.setShowAromaticity(showAromaticity.isSelected());
-        model.setShowAromaticityCDKStyle(showAromaticityCDKStyle.isSelected());
+        //model.setShowAromaticityCDKStyle(showAromaticityCDKStyle.isSelected());
         model.setColorAtomsByType(colorAtomsByType.isSelected());
         model.setUseAntiAliasing(useAntiAliasing.isSelected());
-        model.setShowTooltip(showToolTip.isSelected());
-        model.setShowReactionBoxes(showReactionBoxes.isSelected());
+        //model.setShowTooltip(showToolTip.isSelected());
+        //model.setShowReactionBoxes(showReactionBoxes.isSelected());
         model.setIsCompact(isCompact.isSelected());
         model.setFitToScreen(isFitToScreen.isSelected());
-        
+
         model.setAtomRadius(atomRadius.getValue());
-        model.setBondLength(bondLength.getValue());
+        //model.setBondLength(bondLength.getValue());
         model.setBondWidth(bondWidth.getValue());
         model.setHighlightDistance(highlightDistance.getValue());
         model.setWedgeWidth(wedgeWidth.getValue());
-        
+
         if (compactShapeOval.isSelected()) {
             model.setCompactShape(RenderingParameters.AtomShape.OVAL);
         } else {
             model.setCompactShape(RenderingParameters.AtomShape.SQUARE);
         }
-        
-        model.setFontName(currentFontName);
+
+        //model.setFontName(currentFontName);
         model.setBackColor(currentColor);
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
-        props.setProperty("askForIOSettings",
-            askForIOSettings.isSelected() ? "true" : "false"
-        );
-        try{
-        	int size=Integer.parseInt(undoStackSize.getText());
-        	if(size<1 || size>100)
-        		throw new Exception("wrong number");
-            props.setProperty("General.UndoStackSize",
-                    undoStackSize.getText()
-            );
-            JCPPropertyHandler.getInstance().saveProperties();
-        }
-        catch(Exception ex){
-        	JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
-        }
+        //props.setProperty("askForIOSettings",
+        //    askForIOSettings.isSelected() ? "true" : "false"
+        //);
+        //try{
+        //	int size=Integer.parseInt(undoStackSize.getText());
+        // 	if(size<1 || size>100)
+        //		throw new Exception("wrong number");
+        //    props.setProperty("General.UndoStackSize",
+        //            undoStackSize.getText()
+        //    );
+        //    JCPPropertyHandler.getInstance().saveProperties();
+        //}
+        //catch(Exception ex){
+        //	JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        //}
     }
-    
+
     /**
      * Required by the ActionListener interface.
      */
     public void actionPerformed(ActionEvent e) {
+        /*
         if ("chooseFont".equals(e.getActionCommand())) {
             Font newFont = JFontChooser.showDialog(
                     this.frame,
@@ -358,6 +369,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 fontName.setText(currentFontName);
             }
         }
+        */
         if ("chooseColor".equals(e.getActionCommand())) {
             Color newColor = JColorChooser.showDialog(this, GT._("Choose Background Color"), model.getBackColor());
             if (newColor != null) {
