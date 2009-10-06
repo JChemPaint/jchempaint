@@ -647,7 +647,7 @@ public class JChemPaint {
     public static void flipOnReadingAndWriting (IChemModel chemModel) {
         // flip needed due to difference between Java and chem coordinates
         for (IAtom atom : chemModel.getMoleculeSet().getAtomContainer(0).atoms()) {
-            System.out.println(atom.getPoint2d());
+            //System.out.println(atom.getPoint2d());
             atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
         }
 
