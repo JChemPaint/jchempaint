@@ -94,16 +94,11 @@ public class OpenAction extends JCPAction {
                 if (clear == JOptionPane.YES_OPTION) {
                     try {
                         IChemModel chemModel = null;
-                        try {
                             chemModel = JChemPaint
                                     .readFromFileReader(chooser
                                             .getSelectedFile().toURI().toURL(),
                                             chooser.getSelectedFile().toURI()
                                                     .toString(), type);
-                        } catch (MalformedURLException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
                         if (jcpPanel.get2DHub().getUndoRedoFactory() != null
                                 && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
                             IUndoRedoable undoredo = jcpPanel.get2DHub()
@@ -143,9 +138,11 @@ public class OpenAction extends JCPAction {
 
                     
                     
-                    } catch (CDKException e1) {
+                    } catch (Exception e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
+                        jcpPanel.announceError(e1);
+
                     }
                 }
             } else {

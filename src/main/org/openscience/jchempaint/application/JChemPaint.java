@@ -524,7 +524,7 @@ public class JChemPaint {
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {
             throw new CDKException(GT
-                    ._("Model does not have bonds. Cannot depict contents."));
+                    ._("Cannot depict contents. Model does not have bonds."));
         }
     }
 
@@ -646,10 +646,12 @@ public class JChemPaint {
 
     public static void flipOnReadingAndWriting (IChemModel chemModel) {
         // flip needed due to difference between Java and chem coordinates
-        for (IAtom atom : chemModel.getMoleculeSet().getAtomContainer(0).atoms()) {
-            //System.out.println(atom.getPoint2d());
-            atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
-        }
+        if (chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainer(0)!=null)
+            for (IAtom atom : chemModel.getMoleculeSet().getAtomContainer(0).atoms()) {
+                if (atom.getPoint2d()!=null) {
+                    atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
+                }
+             }
 
     }
 }
