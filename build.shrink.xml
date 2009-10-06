@@ -51,6 +51,7 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
+            	<include name="xercesImpl-2.9.0.jar"/>
             	<includesfile name="${cdk.metainf}/atomtype.libdepends"/>
             	<includesfile name="${cdk.metainf}/builder3d.libdepends"/>
             	<includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
@@ -182,6 +183,8 @@
 
          </javac>
     	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+        <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
+        <delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
     	<copy todir="${dist-classes}">
     	    <fileset dir="${po-classes}"/>
     	</copy>
@@ -473,7 +476,8 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience.jar" includepattern="org/openscience/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_3pq.jar" includepattern="org/_3pq/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
+		<jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache_batik.jar" includepattern="org/apache/batik/**"/>
+		<jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_w3c.jar" includepattern="org/w3c/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_fest.jar" includepattern="org/fest/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_jaxen.jar" includepattern="org/jaxen/**"/>
@@ -504,7 +508,7 @@
             </fileset>
         </jar>
         <exec dir="${dist}/jar" executable="jar" >
-             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_fest.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar" />
+             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_fest.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_apache_batik.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar" />
         </exec>
     </target>
 	
