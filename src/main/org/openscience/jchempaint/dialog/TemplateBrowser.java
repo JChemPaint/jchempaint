@@ -23,6 +23,7 @@
 package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,10 +63,10 @@ import org.openscience.jchempaint.dialog.templates.DummyClass;
  * This class shows a list of templates. The one chosen by the user can queried 
  * with getChosenmolecule(). The templates are organized in tabs. The headers of 
  * the tabs are the names of all directories in TEMPLATES_PACKAGE. All files in 
- * theses directories are read as MOL files and put as a template on the respective 
- * tab. Do not put anything else in these directories. TEMPLATES_PACKAGE must 
- * contain a class called DummyClass.
- *
+ * theses directories named *.mol are read as MOL files and put as a template on 
+ * the respective tab. If there is a *.png file in the same directy, it is used 
+ * as icon. Do not put anything else in these directories. TEMPLATES_PACKAGE must 
+ * contain a class called DummyClass for the directory being located.
  */
 public class TemplateBrowser extends JDialog implements ActionListener {
     
@@ -169,6 +170,8 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     if(icon!=null)
                         button.setIcon(icon);
                     panel.add(button);
+                    button.setPreferredSize(new Dimension(100,120));
+                    button.setMaximumSize(new Dimension(100,120));
                     button.addActionListener(this);
                     button.setVerticalTextPosition(SwingConstants.BOTTOM);
                     button.setHorizontalTextPosition(SwingConstants.CENTER);
