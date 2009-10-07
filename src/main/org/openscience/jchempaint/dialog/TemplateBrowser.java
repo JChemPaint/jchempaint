@@ -23,19 +23,12 @@
 package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +37,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
@@ -58,30 +50,13 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
-import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.batik.svggen.SVGGraphics2DIOException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.renderer.Renderer;
-import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
-import org.openscience.cdk.renderer.generators.IGenerator;
-import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.templates.DummyClass;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
 
 /**
  * This class shows a list of templates. The one chosen by the user can queried 
@@ -159,7 +134,9 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     }
                 }
             }catch(ZipException ex){
-                File file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()+TEMPLATES_PACKAGE);
+                //This is a version we fall back to if no jar available. This should be in Eclipse only.
+                //You need to change separator chars in TEMPLATES_PACKAGE if on windows or other weired OSes.
+                File file = new File(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE);
                 for (int i=0;i<file.listFiles().length ; i++) {
                     if(file.listFiles()[i].isDirectory()){
                         File dir = file.listFiles()[i];
