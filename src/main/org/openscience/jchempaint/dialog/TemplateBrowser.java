@@ -36,6 +36,8 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.JarURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -57,7 +59,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.ext.awt.image.GammaTransfer;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -128,7 +129,11 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         Map<String,List<IMolecule>> entries = new HashMap<String,List<IMolecule>>(); 
         try {
             try{
-                JarFile jarfile = new JarFile(new File(dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()));
+                // Create a URL that refers to a jar file on the net
+                URL url = new URL("jar:"+dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()+"!/");
+                // Get the jar file
+                JarURLConnection conn = (JarURLConnection)url.openConnection();
+                JarFile jarfile = conn.getJarFile();
                 for (Enumeration<JarEntry> e = jarfile.entries() ; e.hasMoreElements() ;) {
                     JarEntry entry = e.nextElement();
                     if(entry.getName().indexOf(TEMPLATES_PACKAGE+"/")==0){
