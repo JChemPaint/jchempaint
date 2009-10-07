@@ -43,11 +43,13 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLRXNWriter;
 import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -305,6 +307,7 @@ public class SaveAsAction extends JCPAction
 
     protected File saveAsSMILES(IChemModel model, File outFile) throws Exception
     {
+        
         logger.info("Saving the contents in SMILES format...");
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
             String error = GT._("Problems handling data");
@@ -314,7 +317,7 @@ public class SaveAsAction extends JCPAction
                 return null;
         }
         String fileName = outFile.toString();
-        if (!fileName.endsWith(".smi")) {
+        if (!fileName.endsWith(".smi") && !fileName.endsWith(".smiles")) {
             fileName += ".smi";
             outFile = new File(fileName);
         }
@@ -324,9 +327,11 @@ public class SaveAsAction extends JCPAction
             cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
         }
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-        org.openscience.cdk.interfaces.IMoleculeSet som = model.getBuilder().newMoleculeSet();
+        IMoleculeSet som = model.getBuilder().newMoleculeSet();
         while (containers.hasNext()) {
-            som.addAtomContainer(containers.next());
+            //Clone() is here because the SMILESWriter sets valencies and we don't
+            //want these changes visible
+            som.addAtomContainer((IAtomContainer) containers.next().clone());
         }		
         cow.write(som);
         cow.close();

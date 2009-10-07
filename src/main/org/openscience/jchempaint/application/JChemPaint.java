@@ -468,7 +468,7 @@ public class JChemPaint {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
 
-		//for some reason, smilesparser sets valencies, which we don't want in jcp
+	//for some reason, smilesparser sets valencies, which we don't want in jcp
         if(cor instanceof SMILESReader){
         	IAtomContainer allinone = JChemPaintPanel.getAllAtomContainersInOne(chemModel);
    	        for(int k=0;k<allinone.getAtomCount();k++){
