@@ -100,7 +100,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
     private JTabbedPane tabbedPane;
     private Map<JButton, IMolecule> mols = new HashMap<JButton, IMolecule>();
     private IMolecule chosenmolecule;
-    private final String TEMPLATES_PACKAGE = "org/openscience/jchempaint/dialog/templates";
+    public final static String TEMPLATES_PACKAGE = "org/openscience/jchempaint/dialog/templates";
 
     /**
      * The molecule chosen by the user.
@@ -126,7 +126,9 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         myPanel.add(bottomPanel, BorderLayout.SOUTH); 
         tabbedPane = new JTabbedPane();
         DummyClass dummy = new DummyClass();
-        Map<String,List<IMolecule>> entries = new HashMap<String,List<IMolecule>>(); 
+        Map<String,List<IMolecule>> entriesMol = new HashMap<String,List<IMolecule>>(); 
+        Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
+        Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
         try {
             try{
                 // Create a URL that refers to a jar file on the net
@@ -140,12 +142,18 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                         String restname = entry.getName().substring(new String(TEMPLATES_PACKAGE+"/").length());
                         if(restname.length()>2){
                             if(restname.indexOf("/")==restname.length()-1){
-                                entries.put(restname.substring(0,restname.length()-1), new ArrayList<IMolecule>());
+                                entriesMol.put(restname.substring(0,restname.length()-1), new ArrayList<IMolecule>());
                             }else if(restname.indexOf("/")>-1){
-                                InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
-                                MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
-                                IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-                                entries.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
+                                if(entry.getName().indexOf(".mol")>-1){
+                                    InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
+                                    MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
+                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+                                    entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
+                                    entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
+                                }else{
+                                    Icon icon = new ImageIcon(new URL(url.toString()+entry.getName()));
+                                    entriesIcon.put(entry.getName().substring(0,entry.getName().length()-4),icon);
+                                }
                             }
                         }
                     }
@@ -155,36 +163,34 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                 for (int i=0;i<file.listFiles().length ; i++) {
                     if(file.listFiles()[i].isDirectory()){
                         File dir = file.listFiles()[i];
-                        entries.put(dir.getName(), new ArrayList<IMolecule>());
+                        entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
                         for(int k=0;k<dir.list().length;k++){
-                            MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
-                            IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-                            entries.get(dir.getName()).add(cdkmol);
+                            if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
+                                MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
+                                IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+                                entriesMol.get(dir.getName()).add(cdkmol);
+                                entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
+                            }else{
+                                Icon icon = new ImageIcon(dir.listFiles()[k].getAbsolutePath());
+                                entriesIcon.put(dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4),icon);
+                            }
                         }
                     }
                 }                
             }
             myPanel.add( tabbedPane, BorderLayout.CENTER );
-            Iterator<String> it = entries.keySet().iterator();
+            Iterator<String> it = entriesMol.keySet().iterator();
             while(it.hasNext()) {
                 String key=it.next();
                 JPanel panel = new JPanel();
                 GridLayout experimentLayout = new GridLayout(0,8);
                 panel.setLayout(experimentLayout);
-                for(int k=0;k<entries.get(key).size();k++){
-                    IMolecule cdkmol = entries.get(key).get(k);
-                    String inputstr = getMolSvg(cdkmol, 100, 100);
-                    ImageTranscoder imageTranscoder = new JPEGTranscoder();
-                    imageTranscoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
-                    TranscoderInput input = new TranscoderInput(new StringReader(inputstr));
-                    ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-                    TranscoderOutput output = new TranscoderOutput(ostream);
-                    imageTranscoder.transcode(input, output);
-                    ostream.flush();
-                    ostream.close();
-                    Icon icon = new ImageIcon(ostream.toByteArray());
+                for(int k=0;k<entriesMol.get(key).size();k++){
+                    IMolecule cdkmol = entriesMol.get(key).get(k);
+                    Icon icon = entriesIcon.get(entriesMolName.get(cdkmol));
                     JButton button = new JButton();
-                    button.setIcon(icon);
+                    if(icon!=null)
+                        button.setIcon(icon);
                     panel.add(button);
                     button.addActionListener(this);
                     button.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -212,63 +218,4 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         }
         this.setVisible(false);        
     }
-    
-    /**
-     * Gets a molecule as an svg graphics.
-     * 
-     * @param cdkmol The molecule to generate image for.
-     * @param width  Size of image.
-     * @param height Size of image.
-     * @return The svg.
-     * @throws UnsupportedEncodingException 
-     * @throws SVGGraphics2DIOException 
-     */
-    private String getMolSvg(IAtomContainer cdkmol, int width, int height) throws UnsupportedEncodingException, SVGGraphics2DIOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        List<IGenerator> generators = new ArrayList<IGenerator>();
-        generators.add(new BasicBondGenerator());
-        generators.add(new BasicAtomGenerator());
-        Renderer renderer = new Renderer(generators,new AWTFontManager());
-        RendererModel r2dm = renderer.getRenderer2DModel();
-        r2dm.setDrawNumbers(false);
-        r2dm.setBackColor(Color.LIGHT_GRAY);
-        r2dm.setIsCompact(true);
-        r2dm.setShowImplicitHydrogens(false);
-        r2dm.setShowEndCarbons(false);
-        int number=((int)Math.sqrt(cdkmol.getAtomCount()))+1;
-        int moleculewidth = number*100;
-        int moleculeheight = number*100;
-        if(width>-1){
-            moleculewidth=width;
-            moleculeheight=height;
-        }
-        if(moleculeheight<200 || moleculewidth<200){
-          r2dm.setIsCompact(true);
-          r2dm.setBondDistance(3);
-        }
-        Rectangle drawArea = new Rectangle(moleculewidth, moleculeheight);
-        renderer.setup(cdkmol, drawArea);
-        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
-        Document document = domImpl.createDocument(null, "svg", null);
-        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-        svgGenerator.setBackground(Color.LIGHT_GRAY);
-        svgGenerator.setColor(Color.LIGHT_GRAY);
-        svgGenerator.fill(new Rectangle(0, 0, moleculewidth, moleculeheight));
-        renderer.paintMolecule(cdkmol, new AWTDrawVisitor(svgGenerator), drawArea, false);
-        boolean useCSS = false;
-        baos = new ByteArrayOutputStream();
-        Writer outwriter = new OutputStreamWriter(baos, "UTF-8");
-        StringBuffer sb = new StringBuffer();
-        svgGenerator.stream(outwriter, useCSS);
-        StringTokenizer tokenizer = new StringTokenizer(baos.toString(), "\n");
-        while (tokenizer.hasMoreTokens()) {
-          String name = tokenizer.nextToken();
-          if (name.length() > 4 && name.substring(0, 5).equals("<svg ")) {
-            sb.append(name.substring(0, name.length() - 1)).append(" width=\"" + moleculewidth + "\" height=\"" + moleculeheight + "\">" + "\n\r");
-          } else {
-            sb.append(name + "\n\r");
-          }
-        }
-        return (sb.toString());
-      }
 }
