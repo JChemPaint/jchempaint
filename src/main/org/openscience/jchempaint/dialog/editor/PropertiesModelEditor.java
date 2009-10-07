@@ -39,10 +39,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.RenderingParameters;
@@ -119,7 +121,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     //private JCheckBox askForIOSettings;
 
-    //private JTextField undoStackSize;
+    private JTextField undoStackSize;
 
     public PropertiesModelEditor(JFrame frame) {
         super();
@@ -135,9 +137,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         //askForIOSettings = new JCheckBox();
         //addField(GT._("Ask for IO settings"), askForIOSettings);
-
-        //undoStackSize = new JTextField();
-        //addField(GT._("Undo/redo stack size"), undoStackSize);
 
         //addField("",new JPanel());
         //addField("Rendering Settings",new JPanel());
@@ -256,6 +255,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
         addField("", chooseColorButton);
+
+        undoStackSize = new JTextField();
+        addField(GT._("Undo/redo stack size"), undoStackSize);
+
     }
 
     public void setModel(RendererModel model) {
@@ -300,7 +303,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         //askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
-        //undoStackSize.setText(props.getProperty("General.UndoStackSize"));
+        undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
 
@@ -339,18 +342,18 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //props.setProperty("askForIOSettings",
         //    askForIOSettings.isSelected() ? "true" : "false"
         //);
-        //try{
-        //	int size=Integer.parseInt(undoStackSize.getText());
-        // 	if(size<1 || size>100)
-        //		throw new Exception("wrong number");
-        //    props.setProperty("General.UndoStackSize",
-        //            undoStackSize.getText()
-        //    );
-        //    JCPPropertyHandler.getInstance().saveProperties();
-        //}
-        //catch(Exception ex){
-        //	JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
-        //}
+
+        try{
+            int size=Integer.parseInt(undoStackSize.getText());
+            if(size<1 || size>100)
+                throw new Exception("wrong number");
+            props.setProperty("General.UndoStackSize",
+                    undoStackSize.getText());
+            JCPPropertyHandler.getInstance().saveProperties();
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
