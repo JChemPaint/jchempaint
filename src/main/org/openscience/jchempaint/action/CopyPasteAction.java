@@ -416,8 +416,9 @@ public class CopyPasteAction extends JCPAction{
 
         selection.select(ChemModelManipulator.newChemModel(toPaste));
         renderModel.setSelection(selection);
-
-        jcpPanel.get2DHub().setActiveDrawModule(new MoveModule(jcpPanel.get2DHub()));        
+        MoveModule newActiveModule = new MoveModule(jcpPanel.get2DHub());
+        newActiveModule.setID("move");
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);        
     }
 
     @SuppressWarnings("unchecked")

@@ -24,6 +24,7 @@ package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -177,6 +178,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     button.setHorizontalTextPosition(SwingConstants.CENTER);
                     button.setText((String)cdkmol.getProperty(CDKConstants.TITLE));
                     button.setToolTipText((String)cdkmol.getProperty(CDKConstants.TITLE));
+                    button.setFont(button.getFont().deriveFont(10f));
                     mols.put(button, cdkmol);
                 }
                 tabbedPane.addTab(key, panel );

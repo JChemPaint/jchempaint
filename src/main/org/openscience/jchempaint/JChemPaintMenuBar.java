@@ -77,7 +77,11 @@ public class JChemPaintMenuBar extends JMenuBar {
 		String definition = menuDefinition;
 		String[] menuKeys = StringHelper.tokenize(definition);
 		for (int i = 0; i < menuKeys.length; i++) {
-			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString);
+		    JComponent m;
+		    if(menuHelper.getMenuResourceString(menuKeys[i], guiString)==null)
+		        m = menuHelper.createMenuItem(jcpPanel, menuKeys[i], false);
+		    else
+		        m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString);
 			if (m != null) {
 				this.add(m);
 			}

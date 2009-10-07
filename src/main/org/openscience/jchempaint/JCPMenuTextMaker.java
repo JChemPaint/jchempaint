@@ -69,7 +69,7 @@ public class JCPMenuTextMaker {
 		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
 		entries.put("eraser", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
-		entries.put("pasteTemplate", GT._("Paste from Template"));
+		entries.put("pasteTemplate", GT._("Templates"));
 		entries.put("cut", GT._("Cut"));
 		entries.put("atomMenu", GT._("Atom"));
 		entries.put("bondMenu", GT._("Bond"));
@@ -261,7 +261,7 @@ public class JCPMenuTextMaker {
 		entries.put("pasteTooltip", GT._("Paste from clipboard"));
 		entries.put("flipVerticalTooltip", GT._("Flip vertical"));
 		entries.put("flipHorizontalTooltip", GT._("Flip horizontal"));
-		entries.put("atomatommappingTooltip", GT._("Add an atom-atom-mapping"));
+		entries.put("pasteTemplateTooltip", GT._("Choose from complex templates"));
 		entries.put("bondMenuTitle", GT._("Bond Popup Menu"));
 		entries.put("chemmodelMenuTitle", GT._("ChemModel Popup Menu"));
 		entries.put("Enter Element or Group", GT._("Enter Element or Group"));
