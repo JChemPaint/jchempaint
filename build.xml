@@ -95,7 +95,7 @@
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
-	 </target>
+     </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
 	 <unjar dest="${dist-classes}">
@@ -151,15 +151,15 @@
                 <include name="cdk-renderextra.jar"/>
                 <include name="cdk-rendersvg.jar"/>
                 <include name="cdk-ioformats.jar"/> 
-
-
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
         <delete>
            <fileset dir="${dist-classes}" includes="*" excludes="io-formats.set"/>
         </delete>
-    <delete dir="${dist-classes}/org/omegahat" />
+        <delete dir="${dist-classes}/org/omegahat" />
+        <delete dir="${dist-classes}/org/openscience/cdk/modeling" />
+        <delete dir="${dist-classes}/org/openscience/cdk/fingerprint" />
     </target>
 
     <target id="compile-jcp" name="compile-jcp">
@@ -182,12 +182,192 @@
 
          </javac>
     	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
-    	<copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
-    	<delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
+        <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
+        <delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
     	<copy todir="${dist-classes}">
     	    <fileset dir="${po-classes}"/>
     	</copy>
-   </target>
+    </target>
+
+
+
+    <target name="dist-applet-shrunk-signed" depends="build-applet">
+      <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="yguard.jar"/>
+
+       <mkdir dir="${dist}/jar/shrinkout"/>
+
+
+      <!-- shrink jcp editor file-->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-editor.jar" out="${dist}/jar/shrinkout/jchempaint-applet-editor.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <!--exclude name="**/jchempaint-applet-editor.jar"/-->
+             </fileset>
+         </externalclasses>
+
+         <shrink logfile="shrinklog.editor.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
+             <property name="error-checking" value="pedantic"/>
+         </shrink>
+      </yguard>
+
+       <!-- shrink jcp core file -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-core.jar" out="${dist}/jar/shrinkout/jchempaint-applet-core.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <!--exclude name="**/jchempaint-applet-core.jar"/-->
+             </fileset>
+         </externalclasses>
+         <shrink logfile="shrinklog.core.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar"/>
+             <property name="error-checking" value="pedantic"/>
+
+             <keep>
+                <class classes="public">
+                 <patternset>
+                   <include name="org.openscience.jchempaint.undoredo.**.*"/>
+                </patternset>
+                </class>
+                <class name="org.openscience.cdk.tools.LoggingTool" methods="public" fields="none" />
+                <class name="org.openscience.cdk.interfaces.IChemObjectBuilder" methods="public" fields="none" />
+                <class name="org.openscience.cdk.controller.IControllerModel" methods="public" fields="none" />
+                <class name="org.openscience.cdk.controller.IChemModelRelay" methods="public" fields="none" />
+                <class name="org.openscience.cdk.tools.manipulator.AtomContainerManipulator" methods="public" fields="none" />
+                <class name="org.openscience.jchempaint.JChemPaintPanel$1" methods="public" fields="none" />
+                <class name="org.openscience.cdk.renderer.selection.MultiSelection" methods="public" fields="none" />
+             </keep>
+         </shrink>
+      </yguard>
+
+      <!-- shrink CDK jar -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" out="${dist}/jar/shrinkout/jchempaint-applet-org_openscience_cdk.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <exclude name="**/jchempaint-applet-org_openscience_cdk.jar"/>
+             </fileset>
+         </externalclasses>
+         <shrink logfile="shrinklog.cdk.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_controller.jar"/>
+             <property name="error-checking" value="pedantic"/>
+             <keep>
+               <class classes="public">
+               <patternset>
+                <include name="org.openscience.cdk.renderer.**.*"/>
+                <include name="org.openscience.cdk.controller.**.*"/>
+              </patternset>
+              </class>
+              <class name="org.openscience.cdk.PeriodicTableElement" />
+              <class name="org.openscience.cdk.renderer.selection.MultiSelection" />
+          </keep>
+         </shrink>
+      </yguard>
+
+    <!-- shrink IO jar -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" out="${dist}/jar/shrinkout/jchempaint-applet-org_openscience_cdk_io.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <exclude name="**/jchempaint-applet-org_openscience_cdk_io.jar"/>
+             </fileset>
+         </externalclasses>
+
+         <shrink logfile="shrinklog.io.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
+             <property name="error-checking" value="pedantic"/>
+         </shrink>
+      </yguard>
+
+
+    <!-- shrink config jar -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" out="${dist}/jar/shrinkout/jchempaint-applet-org_openscience_cdk_config.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <exclude name="**/jchempaint-applet-org_openscience_cdk_config.jar"/>
+             </fileset>
+         </externalclasses>
+
+         <shrink logfile="shrinklog.config.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <property name="error-checking" value="pedantic"/>
+         </shrink>
+      </yguard>
+
+
+   <!-- shrink tools jar -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-org_openscience_cdk_tools.jar" out="${dist}/jar/shrinkout/jchempaint-applet-org_openscience_cdk_tools.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+                <exclude name="**/jchempaint-applet-org_openscience_cdk_tools.jar"/>
+             </fileset>
+         </externalclasses>
+
+         <shrink logfile="shrinklog.config.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
+             <property name="error-checking" value="pedantic"/>
+         </shrink>
+      </yguard>
+
+
+      <move todir="${dist}/jar">
+       <fileset dir="${dist}/jar/shrinkout">
+        <include name="**/*.jar"/>
+       </fileset>
+      </move>
+      <delete dir="${dist}/jar/shrinkout"/>
+      
+      <signjar destDir=""
+            alias="${certificatealias}"
+            storepass="${keystorepassphrase}"
+            preservelastmodified="true">
+            <path>
+                <fileset dir=".">
+                    <includesfile name="${growing_classpath}"/>
+                </fileset>
+            </path>
+      </signjar>
+      
+      <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
+            <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
+            <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
+      </zip>
+    </target>
+
+
 
     <target id="dist-applet" name="dist-applet" depends="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
         <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
@@ -276,11 +456,12 @@
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor-opts.jar" includesfile="${metainf}/applet-editor-opts.files"/>
 		<!-- since for the display of the help, we need the icons in the same jar, we do not log
 		this to the growing_list_file, so that icons go into the resources.jar as well -->
-        <jar-from-list-no-concat destfile="${dist}/jar/jchempaint-applet-resources-core.jar" includesfile="${metainf}/applet-resources-core.files"/>
+        <!--jar-from-list-no-concat destfile="${dist}/jar/jchempaint-applet-resources-core.jar" includesfile="${metainf}/applet-resources-core.files"/-->
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources.jar" includesfile="${metainf}/jchempaint.datafiles"/>
         <!-- the following jar files are packed from directory patterns -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"/>
+        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io_cml.jar" includepattern="org/openscience/cdk/io/cml/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" includepattern="org/openscience/cdk/io/**"/>
         <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_qsar.jar" includepattern="org/openscience/cdk/qsar/**"/-->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_iupac.jar" includepattern="org/openscience/cdk/iupac/**"/>
@@ -294,7 +475,7 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience.jar" includepattern="org/openscience/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_3pq.jar" includepattern="org/_3pq/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
+		<jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_w3c.jar" includepattern="org/w3c/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_fest.jar" includepattern="org/fest/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_jaxen.jar" includepattern="org/jaxen/**"/>
@@ -325,7 +506,7 @@
             </fileset>
         </jar>
         <exec dir="${dist}/jar" executable="jar" >
-             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources-core.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_fest.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar" />
+             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_fest.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-others.jar" />
         </exec>
     </target>
 	
