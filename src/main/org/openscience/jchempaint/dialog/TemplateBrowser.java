@@ -24,7 +24,6 @@ package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
@@ -103,7 +103,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         myPanel.add(bottomPanel, BorderLayout.SOUTH); 
         tabbedPane = new JTabbedPane();
         DummyClass dummy = new DummyClass();
-        Map<String,List<IMolecule>> entriesMol = new HashMap<String,List<IMolecule>>(); 
+        Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
         Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
         try {
@@ -181,7 +181,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     button.setFont(button.getFont().deriveFont(10f));
                     mols.put(button, cdkmol);
                 }
-                tabbedPane.addTab(key, panel );
+                tabbedPane.addTab(key.replace('_', ' '), panel );
             }                
             pack();
             setVisible(true);
