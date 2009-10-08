@@ -42,13 +42,13 @@ public class PseudoAtomEditor extends ChemObjectEditor {
     JTextField labelField;
     
 	public PseudoAtomEditor() {
-        super();
+        super(false);
         constructPanel();
 	}
     
     private void constructPanel() {
         labelField = new JTextField(20);
-        addField("Label", labelField);
+        addField("Label", labelField, this);
     }
     
     public void setChemObject(IChemObject object) {

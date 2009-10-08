@@ -49,23 +49,23 @@ public class ReactionEditor extends ChemObjectEditor {
     private JTextField tempField;
     
 	public ReactionEditor() {
-        super();
+        super(false);
         constructPanel();
 	}
     
     private void constructPanel() {
         idField = new JTextField(40);
-        addField("Reaction ID", idField);
+        addField("Reaction ID", idField, this);
         // the options given next should match the order in the Reaction class!
         String[] options = {
             "", "Forward", "Backward", "Bidirectional"
         };
         directionField = new JComboBox(options);
-        addField("Direction", directionField);
+        addField("Direction", directionField, this);
         solventField = new JTextField(40);
-        addField("Solvent", solventField);
+        addField("Solvent", solventField, this);
         tempField = new JTextField(10);
-        addField("Temperature", tempField);
+        addField("Temperature", tempField, this);
     }
     
     public void setChemObject(IChemObject object) {

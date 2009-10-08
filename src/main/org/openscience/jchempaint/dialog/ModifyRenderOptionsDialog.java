@@ -72,7 +72,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle(GT._("Rendering Options"));
+        setTitle(GT._("Preferences"));
         editor.setModel(model);
         getContentPane().add("Center",editor);
         

@@ -119,57 +119,52 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private RendererModel model;
 
-    //private JCheckBox askForIOSettings;
+    private JCheckBox askForIOSettings;
 
     private JTextField undoStackSize;
 
     public PropertiesModelEditor(JFrame frame) {
-        super();
+        super(true);
         this.frame = frame;
         constructPanel();
     }
 
     private void constructPanel() {
 
-        JLabel label = new JLabel("JChempaint settings");
-        label.setForeground(Color.BLUE);
-        label.setSize(30, 80);
-
-        //askForIOSettings = new JCheckBox();
-        //addField(GT._("Ask for IO settings"), askForIOSettings);
+        JPanel rendererOptionsPanel = this.addTab(GT._("Renderer Preferences"));
 
         //addField("",new JPanel());
         //addField("Rendering Settings",new JPanel());
 
         drawNumbers = new JCheckBox();
-        addField(GT._("Draw atom numbers"), drawNumbers);
+        addField(GT._("Draw atom numbers"), drawNumbers, rendererOptionsPanel);
 
         //showAtomAtomMapping = new JCheckBox();
         //addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
 
         useKekuleStructure = new JCheckBox();
-        addField(GT._("Explicit carbons"), useKekuleStructure);
+        addField(GT._("Explicit carbons"), useKekuleStructure, rendererOptionsPanel);
 
         showEndCarbons = new JCheckBox();
-        addField(GT._("Show explicit methyl groups"), showEndCarbons);
+        addField(GT._("Show explicit methyl groups"), showEndCarbons, rendererOptionsPanel);
 
         showExplicitHydrogens = new JCheckBox();
-        addField(GT._("Show explicit hydrogens"), showExplicitHydrogens);
+        addField(GT._("Show explicit hydrogens"), showExplicitHydrogens, rendererOptionsPanel);
 
         showImplicitHydrogens = new JCheckBox();
-        addField(GT._("Show implicit hydrogens"), showImplicitHydrogens);
+        addField(GT._("Show implicit hydrogens"), showImplicitHydrogens, rendererOptionsPanel);
 
         showAromaticity = new JCheckBox();
-        addField(GT._("Show aromatic ring circles"), showAromaticity);
+        addField(GT._("Show aromatic ring circles"), showAromaticity, rendererOptionsPanel);
 
         //showAromaticityCDKStyle = new JCheckBox();
         //addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
 
         colorAtomsByType = new JCheckBox();
-        addField(GT._("Color atoms by element"), colorAtomsByType);
+        addField(GT._("Color atoms by element"), colorAtomsByType, rendererOptionsPanel);
 
         useAntiAliasing = new JCheckBox();
-        addField(GT._("Use Anti-Aliasing"), useAntiAliasing);
+        addField(GT._("Use Anti-Aliasing"), useAntiAliasing, rendererOptionsPanel);
 
         //showToolTip = new JCheckBox();
         //addField(GT._("Show tooltips"), showToolTip);
@@ -179,21 +174,21 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
 
         isFitToScreen = new JCheckBox();
-        addField(GT._("Set fit to screen"), isFitToScreen);
+        addField(GT._("Set fit to screen"), isFitToScreen, rendererOptionsPanel);
 
 
-        addField("", new JSeparator());
+        addField("", new JSeparator(), rendererOptionsPanel);
 
         isCompact = new JCheckBox();
-        addField(GT._("Show atoms in compact form"), isCompact);
+        addField(GT._("Show atoms in compact form"), isCompact, rendererOptionsPanel);
 
         compactShapeOval = new JRadioButton();
         group.add(compactShapeOval);
-        addField(GT._("Oval Compact Atoms"), compactShapeOval);
+        addField(GT._("Oval Compact Atoms"), compactShapeOval, rendererOptionsPanel);
 
         compactShapeSquare = new JRadioButton();
         group.add(compactShapeSquare);
-        addField(GT._("Square Compact Atoms"), compactShapeSquare);
+        addField(GT._("Square Compact Atoms"), compactShapeSquare, rendererOptionsPanel);
 
         atomRadius = new JSlider(0, 20);
         atomRadius.setSnapToTicks(true);
@@ -201,8 +196,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
         atomRadius.setMinorTickSpacing(1);
-        addField(GT._("Compact form atom size"), atomRadius);
-        addField("", new JSeparator());
+        addField(GT._("Compact form atom size"), atomRadius, rendererOptionsPanel);
+        addField("", new JSeparator(), rendererOptionsPanel);
 
 
         bondWidth = new JSlider(1, 5);
@@ -210,8 +205,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         bondWidth.setPaintLabels(true);
         bondWidth.setPaintTicks(true);
         bondWidth.setMajorTickSpacing(1);
-        addField(GT._("Bond width"), bondWidth);
-        addField("", new JSeparator());
+        addField(GT._("Bond width"), bondWidth, rendererOptionsPanel);
+        addField("", new JSeparator(), rendererOptionsPanel);
 
         //bondLength = new JSlider(20, 60);
         //bondLength.setSnapToTicks(true);
@@ -227,16 +222,16 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setPaintTicks(true);
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
-        addField(GT._("Highlight/Select radius"), highlightDistance);
-        addField("", new JSeparator());
+        addField(GT._("Highlight/Select radius"), highlightDistance, rendererOptionsPanel);
+        addField("", new JSeparator(), rendererOptionsPanel);
 
         wedgeWidth = new JSlider(1, 10);
         wedgeWidth.setSnapToTicks(true);
         wedgeWidth.setPaintLabels(true);
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
-        addField(GT._("Wedge width"), wedgeWidth);
-        addField("", new JSeparator());
+        addField(GT._("Wedge width"), wedgeWidth, rendererOptionsPanel);
+        addField("", new JSeparator(), rendererOptionsPanel);
 
         /*
         currentFontName = "";
@@ -249,16 +244,20 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
          */
 
         color = new JLabel(GT._("BACKCOLOR"));
-        addField(GT._("Background color"), color);
+        addField(GT._("Background color"), color, rendererOptionsPanel);
 
         chooseColorButton = new JButton(GT._("Choose BG color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
-        addField("", chooseColorButton);
+        addField("", chooseColorButton, rendererOptionsPanel);
 
+        JPanel otherOptionsPanel = this.addTab(GT._("Other Preferences"));
+        
         undoStackSize = new JTextField();
-        addField(GT._("Undo/redo stack size"), undoStackSize);
+        addField(GT._("Undo/redo stack size"), undoStackSize, otherOptionsPanel);
 
+        askForIOSettings = new JCheckBox();
+        addField(GT._("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
     }
 
     public void setModel(RendererModel model) {
@@ -302,7 +301,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
-        //askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
+        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
@@ -339,9 +338,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         model.setBackColor(currentColor);
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
-        //props.setProperty("askForIOSettings",
-        //    askForIOSettings.isSelected() ? "true" : "false"
-        //);
+        props.setProperty("askForIOSettings",
+            askForIOSettings.isSelected() ? "true" : "false"
+        );
 
         try{
             int size=Integer.parseInt(undoStackSize.getText());

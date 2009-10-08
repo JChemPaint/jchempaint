@@ -45,7 +45,7 @@ public class BondEditor extends ChemObjectEditor {
     IChemModelRelay hub;
     
     public BondEditor(IChemModelRelay hub) {
-        super();
+        super(false);
         constructPanel();
         this.hub = hub;
     }
@@ -53,7 +53,7 @@ public class BondEditor extends ChemObjectEditor {
     private void constructPanel() {
     	String[] orderString = { Order.SINGLE.toString(), Order.DOUBLE.toString(), Order.TRIPLE.toString(), Order.QUADRUPLE.toString() };
         orderField = new JComboBox(orderString);
-        addField("Order", orderField);
+        addField("Order", orderField, this);
     }
     
     public void setChemObject(IChemObject object) {

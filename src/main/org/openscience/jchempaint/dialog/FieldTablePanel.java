@@ -29,6 +29,7 @@
 
 package org.openscience.jchempaint.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,6 +38,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 /**
  * Swing class that allows easy building of edit forms.
@@ -48,20 +50,50 @@ public class FieldTablePanel extends JPanel {
 	private static final long serialVersionUID = -697566299504877020L;
 	
 	protected int rows;
+
+    private JTabbedPane tabbedPane;
     
-    public FieldTablePanel() {
-        setLayout(new GridBagLayout());
+    /**
+     * Constructor for field table panel.
+     * 
+     * @param hasTabs True=tabs are added, false=fields go directly on here.
+     */
+    public FieldTablePanel(boolean hasTabs) {
+        if(hasTabs){
+            setLayout(new BorderLayout());
+            tabbedPane = new JTabbedPane();
+            add( tabbedPane, BorderLayout.CENTER );
+        }else{
+            setLayout(new GridBagLayout());
+        }
         rows = 0;
+    }
+    
+    /**
+     * Adds a tab.
+     * 
+     * @param header The header for the tab.
+     * @return A JPanel, which you will need later to add fields.
+     */
+    public JPanel addTab(String header){
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        tabbedPane.addTab(header, panel );
+        return panel;
     }
     
     /**
      * Adds a new JComponent to the 2 column table layout. Both
      * elements will be layed out in the same row. For larger
      * <code>JComponent</code>s the addArea() can be used.
-     *
-     * @see #addArea(String, JComponent)
+     * 
+     * @param labelText The text in left column.
+     * @param component The control to add.
+     * @param panel     The panel to add to. This must be either a panel you got from addTab or null if in no tab mode.
      */
-    public void addField(String labelText, JComponent component) {
+    public void addField(String labelText, JComponent component, JPanel panel) {
+        if(panel==null)
+            panel=this;
         rows++;
         GridBagConstraints constraints = new GridBagConstraints();
         JLabel label = new JLabel("", JLabel.TRAILING);
@@ -74,10 +106,10 @@ public class FieldTablePanel extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.LINE_START;
         constraints.weightx = 1.0;
-        add(label, constraints);
+        panel.add(label, constraints);
         constraints.gridx = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        add(component, constraints);
+        panel.add(component, constraints);
     }
     
     /**

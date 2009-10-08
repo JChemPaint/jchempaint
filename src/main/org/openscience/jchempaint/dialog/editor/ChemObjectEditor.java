@@ -35,6 +35,10 @@ import org.openscience.jchempaint.dialog.FieldTablePanel;
  */
 public abstract class ChemObjectEditor extends FieldTablePanel {
     
+    public ChemObjectEditor(boolean hasTabs) {
+        super(hasTabs);
+    }
+
     protected IChemObject source;
     protected boolean mayclose=true;
     

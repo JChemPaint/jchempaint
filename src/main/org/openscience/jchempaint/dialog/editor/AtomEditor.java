@@ -63,7 +63,7 @@ public class AtomEditor extends ChemObjectEditor {
     int majorIsotopeNumber;
     
 	public AtomEditor(IChemModelRelay hub) {
-        super();
+        super(false);
         constructPanel();
         this.hub=hub;
         super.mayclose=false;
@@ -72,13 +72,13 @@ public class AtomEditor extends ChemObjectEditor {
     private void constructPanel() {
         symbolField = new JTextField(4);
         symbolField.getDocument().addDocumentListener(new MyDocumentListener(this));
-        addField("Symbol", symbolField);
+        addField("Symbol", symbolField, this);
         hCountField = new JSpinner(new SpinnerNumberModel());
-        addField("H Count", hCountField);
+        addField("H Count", hCountField, this);
         formalChargeField = new JSpinner(new SpinnerNumberModel());
-        addField("Formal Charge", formalChargeField);
+        addField("Formal Charge", formalChargeField, this);
         isotopeField = new JSpinner(new SpinnerNumberModel());
-        addField("Isotope number", isotopeField);
+        addField("Isotope number", isotopeField, this);
     }
     
     public void setChemObject(IChemObject object) {
