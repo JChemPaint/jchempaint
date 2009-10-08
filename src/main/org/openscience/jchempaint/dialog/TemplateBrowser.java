@@ -137,8 +137,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                 }
             }catch(ZipException ex){
                 //This is a version we fall back to if no jar available. This should be in Eclipse only.
-                //You need to change separator chars in TEMPLATES_PACKAGE if on windows or other weired OSes.
-                File file = new File(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE);
+                File file = new File(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE.replace('/', File.separatorChar));
                 for (int i=0;i<file.listFiles().length ; i++) {
                     if(file.listFiles()[i].isDirectory()){
                         File dir = file.listFiles()[i];
