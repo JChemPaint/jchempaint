@@ -199,8 +199,8 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	private void genericIsotopeTest(int isotopeNumber){
-	    //we go to move mode
-        applet.button("move").click();
+	    //we go to select mode
+        applet.button("select").click();
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
@@ -272,8 +272,8 @@ public class JCPEditorAppletMenuTest {
     }
     
     private void genericValenceTest(int valence){
-        //we go to move mode
-        applet.button("move").click();
+        //we go to select mode
+        applet.button("select").click();
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));

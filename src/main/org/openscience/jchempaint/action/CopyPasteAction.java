@@ -50,6 +50,7 @@ import org.openscience.cdk.Molecule;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
+import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -348,7 +349,9 @@ public class CopyPasteAction extends JCPAction{
 
             allSelection.select(hub.getIChemModel());
             renderModel.setSelection(allSelection);
-            MoveModule newActiveModule = new MoveModule(hub);
+            SelectSquareModule succusorModule = new SelectSquareModule(hub);
+            succusorModule.setID("select");
+            MoveModule newActiveModule = new MoveModule(hub, succusorModule);
             newActiveModule.setID("move");
             hub.setActiveDrawModule(newActiveModule);
         } else if (type.equals("selectFromChemObject")) {
@@ -422,7 +425,9 @@ public class CopyPasteAction extends JCPAction{
 
         selection.select(ChemModelManipulator.newChemModel(toPaste));
         renderModel.setSelection(selection);
-        MoveModule newActiveModule = new MoveModule(jcpPanel.get2DHub());
+        SelectSquareModule succusorModule = new SelectSquareModule(jcpPanel.get2DHub());
+        succusorModule.setID("select");
+        MoveModule newActiveModule = new MoveModule(jcpPanel.get2DHub(), succusorModule);
         newActiveModule.setID("move");
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);        
     }

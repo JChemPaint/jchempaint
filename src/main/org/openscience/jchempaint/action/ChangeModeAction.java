@@ -50,9 +50,7 @@ public class ChangeModeAction extends JCPAction {
     public void actionPerformed(ActionEvent e) {
         ControllerHub hub = jcpPanel.get2DHub();
         IControllerModule newActiveModule=null;
-        if (type.equals("move")) {
-        	newActiveModule=new MoveModule(hub);
-        } else if (type.equals("lasso")) {
+        if (type.equals("lasso")) {
         	newActiveModule=new SelectLassoModule(hub);
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("select")) {

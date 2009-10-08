@@ -118,6 +118,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     protected JMenu atomMenu;
     protected JMenu bondMenu;
     private boolean debug=false;
+    private String lastSelectId;
 
 	/**
      * Builds a JCPPanel with a certain model and a certain gui
@@ -725,11 +726,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	public void modeChanged(IControllerModule newActiveModule) {
         if (this.getLastActionButton() != null)
             this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
-        JButton newActionButton=buttons.get(newActiveModule.getID());
+        String actionid = newActiveModule.getID();
+        //this is because move mode does not have a button
+        if(actionid.equals("move"))
+            actionid=lastSelectId;
+        JButton newActionButton=buttons.get(actionid);
         if(newActionButton!=null){
 	        this.setLastActionButton(newActionButton);
 	        newActionButton.setBackground(Color.GRAY);
         }
+        //we remember the last activated move mode so that we can switch back to it after move
+        if(newActiveModule.getID().equals("select") || newActiveModule.getID().equals("lasso"))
+            lastSelectId = newActiveModule.getID();
         this.updateStatusBar();
 	}
 	

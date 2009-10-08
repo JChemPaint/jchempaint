@@ -231,7 +231,6 @@ public class JCPMenuTextMaker {
 		entries.put("down_bondTooltip", GT._("Make the Bonds Stereo Down"));
 		entries.put("plusTooltip", GT._("Increase the charge on an Atom"));
 		entries.put("minusTooltip", GT._("Decrease the charge on an Atom"));
-		entries.put("moveTooltip", GT._("Move Atoms and Bonds"));
 		entries.put("eraserTooltip", GT._("Delete Atoms and Bonds"));
 		entries.put("lassoTooltip", GT._("Select Atoms and Bonds"));
 		entries.put("selectTooltip", GT._("Select Atoms and Bonds in a square region"));
@@ -282,7 +281,6 @@ public class JCPMenuTextMaker {
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
 		entries.put("Select Square", GT._("Select Square"));
-		entries.put("Move", GT._("Move"));
 	}
 	
 	/**

@@ -72,8 +72,7 @@ public class JCPEditorAppletBugsTest {
         movetopint=new Point(300,300);
         dandd.drop(applet.panel("renderpanel").component(), movetopint);
         Point2d oldcoord=new Point2d(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
-        //switch to move mode
-        applet.button("move").click();
+        //switch to move mode should happen automatically
         applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").target,new Point(100,100));
         applet.panel("renderpanel").robot.pressMouse(MouseButton.LEFT_BUTTON);
         applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").target,new Point(150,150));
