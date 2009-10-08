@@ -49,7 +49,6 @@ import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLRXNWriter;
 import org.openscience.cdk.io.MDLWriter;
-import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
