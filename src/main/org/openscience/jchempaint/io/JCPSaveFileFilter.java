@@ -53,10 +53,11 @@ public class JCPSaveFileFilter extends JCPFileFilter {
      * TODO why only these?
      */
     public static void addChoosableFileFilters(JFileChooser chooser) {
-        chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.mol));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.smiles));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.cdk));
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.cml));
+        chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.mol));
+
     }
 
     /**
