@@ -284,6 +284,22 @@ public class JCPEditorAppletDrawingTest {
         restoreModel();
     }
 
+	@Test public void selectByDoubleClick(){
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+        //we add a hexagon
+        applet.button("hexagon").click();
+        Point2d moveto=new Point2d(100,100);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        applet.button("select").click();
+        //double click on atom
+        moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
+        Assert.assertEquals(panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount(), oldAtomCount);
+	}
+	
 	private void restoreModel(){
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -301,7 +317,6 @@ public class JCPEditorAppletDrawingTest {
 			e.printStackTrace();
 		}
 	}
-	
 
 	@AfterClass public static void tearDown() {
 	  viewer.unloadApplet();
