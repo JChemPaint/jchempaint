@@ -142,16 +142,21 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                 for (int i=0;i<file.listFiles().length ; i++) {
                     if(file.listFiles()[i].isDirectory()){
                         File dir = file.listFiles()[i];
-                        entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
-                        for(int k=0;k<dir.list().length;k++){
-                            if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
-                                MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
-                                IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-                                entriesMol.get(dir.getName()).add(cdkmol);
-                                entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
-                            }else{
-                                Icon icon = new ImageIcon(dir.listFiles()[k].getAbsolutePath());
-                                entriesIcon.put(dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4),icon);
+                        if(!dir.getName().startsWith(".")) { 
+                            entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
+                            for(int k=0;k<dir.list().length;k++){
+                                if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
+                                    MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
+                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+                                    entriesMol.get(dir.getName()).add(cdkmol);
+                                    entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
+                                }else{
+
+                                    Icon icon = new ImageIcon(dir.listFiles()[k].getAbsolutePath());
+                                    if ( dir.listFiles()[k].getName().toLowerCase().endsWith("png")) {
+                                        entriesIcon.put(dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4),icon);
+                                    }
+                                }
                             }
                         }
                     }
