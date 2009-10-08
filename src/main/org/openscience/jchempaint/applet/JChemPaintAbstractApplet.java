@@ -30,6 +30,7 @@
 package org.openscience.jchempaint.applet;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -503,7 +504,11 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 && getParameter("detachable").equals("true")) {
             getTheJcpp().getRenderPanel().addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    if (e.getButton() == 1 && e.getClickCount() == 2)
+                    Container applet = (Container)e.getSource();
+                    while(!(applet instanceof JChemPaintEditorApplet || applet instanceof JChemPaintViewerApplet)){
+                        applet=applet.getParent();
+                    }
+                    if (e.getButton() == 1 && e.getClickCount() == 2 && applet instanceof JChemPaintViewerApplet)
                         if (!getJexf().isShowing()) {
                             getJexf().show(getTheJcpp());
                         }
@@ -514,7 +519,11 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 && getParameter("detachableeditor").equals("true")) {
             getTheJcpp().getRenderPanel().addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    if (e.getButton() == 1 && e.getClickCount() == 2)
+                    Container applet = (Container)e.getSource();
+                    while(!(applet instanceof JChemPaintEditorApplet || applet instanceof JChemPaintViewerApplet)){
+                        applet=applet.getParent();
+                    }
+                    if (e.getButton() == 1 && e.getClickCount() == 2 && applet instanceof JChemPaintViewerApplet)
                         if (!getJexf().isShowing()) {
                             final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug);
                             p.setName("appletframe");
