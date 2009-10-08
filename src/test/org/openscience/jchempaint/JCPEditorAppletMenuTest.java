@@ -26,7 +26,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -42,6 +41,8 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
@@ -149,14 +150,20 @@ public class JCPEditorAppletMenuTest {
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
+		int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
 		applet.menuItem("plus").click();
 		Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
+		Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
         Assert.assertEquals("plus",panel.get2DHub().getActiveDrawModule().getID());
         Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);
+        oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
         Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
+        oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
         Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).setFormalCharge(0);
 	}
@@ -574,6 +581,14 @@ public class JCPEditorAppletMenuTest {
 		IChemModel basic;
 		try {
 			basic = (IChemModel) reader.read(DefaultChemObjectBuilder.getInstance().newChemModel());
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(basic.getMoleculeSet().getAtomContainer(0));
+            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(basic
+                    .getBuilder());
+            hAdder.addImplicitHydrogens(basic.getMoleculeSet().getAtomContainer(0));
+            //valencies are set when doing atom typing, which we don't want in jcp
+            for(int i=0;i<basic.getMoleculeSet().getAtomContainer(0).getAtomCount();i++){
+                basic.getMoleculeSet().getAtomContainer(0).getAtom(i).setValency(null);
+            }
 			panel.setChemModel(basic);
 			panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
 			panel.get2DHub().updateView();
