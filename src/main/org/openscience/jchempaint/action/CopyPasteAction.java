@@ -76,6 +76,7 @@ import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
@@ -397,10 +398,15 @@ public class CopyPasteAction extends JCPAction{
     private void insertStructure(IMolecule toPaste, RendererModel renderModel) {
         //add implicit hs
         if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
-            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(toPaste
-                    .getBuilder());
             try {
+                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(toPaste);
+                CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(toPaste
+                        .getBuilder());
                 hAdder.addImplicitHydrogens(toPaste);
+                //valencies are set when doing atom typing, which we don't want in jcp
+                for(int i=0;i<toPaste.getAtomCount();i++){
+                    toPaste.getAtom(i).setValency(null);
+                }
             } catch (CDKException ex) {
                 // do nothing
             }
