@@ -117,6 +117,14 @@ public class CreateSmilesAction extends JCPAction
         			bool[i]=true;
         	}
         	chiralsmiles += generator.createChiralSMILES(moleculewithh,bool);
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container);
+            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(container
+                    .getBuilder());
+            hAdder.addImplicitHydrogens(container);
+            //valencies are set when creating smiles, which we don't want in jcp
+            for(int i=0;i<container.getAtomCount();i++){
+                container.getAtom(i).setValency(null);
+            }
         	if (containers.hasNext()) {
         		chiralsmiles += ".";
         	}
