@@ -297,8 +297,6 @@ org/openscience/cdk/io/IChemObjectReader$Mode.class
 org/openscience/cdk/io/ISimpleChemObjectReader.class
 org/openscience/cdk/io/MDLV2000Reader.class
 org/openscience/cdk/io/ReaderFactory.class
-org/openscience/cdk/io/setting/BooleanIOSetting.class
-org/openscience/cdk/io/setting/IOSetting.class
 org/openscience/cdk/io/SMILESReader.class
 org/openscience/cdk/Isotope.class
 org/openscience/cdk/layout/AtomPlacer$1.class

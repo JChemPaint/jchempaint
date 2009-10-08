@@ -228,8 +228,6 @@
          </externalclasses>
          <shrink logfile="shrinklog.core.xml">
              <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
-             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
-             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io_cml.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
@@ -250,6 +248,7 @@
                 <class name="org.openscience.jchempaint.JChemPaintPanel$1" methods="public" fields="none" />
                 <class name="org.openscience.cdk.tools.manipulator.ChemModelManipulator" methods="public" fields="none" />
                 <class name="org.openscience.cdk.renderer.selection.MultiSelection" methods="public" fields="none" />
+                <class name="org.openscience.cdk.tools.manipulator.BondManipulator" methods="public" fields="none" />
                 <class name="org.apache.log4j.Logger" methods="public"  />
                 <class name="org.apache.log4j.Category" methods="public" />
              </keep>
