@@ -16,29 +16,14 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
-public class JCPEditorAppletBugsTest {
-	private static AppletViewer viewer;
-	private static FrameFixture applet;
-	private static JChemPaintEditorApplet jcpApplet;
-
-
-	@BeforeClass public static void setUp() {
-	    jcpApplet = new JChemPaintEditorApplet();
-		Map<String, String> parameters = new HashMap<String, String>();
-		viewer = AppletLauncher.applet(jcpApplet)
-			.withParameters(parameters)
-			.start();
-		applet = new FrameFixture(viewer);
-		applet.show();
-	}
-    
+public class JCPEditorAppletBugsTest extends AbstractAppletTest{
     @Test public void testSquareSelectSingleAtom()  {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -54,7 +39,7 @@ public class JCPEditorAppletBugsTest {
 		applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),movetopint);
 		applet.panel("renderpanel").robot.releaseMouse(MouseButton.LEFT_BUTTON);
 		Assert.assertEquals(1, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
-		restoreModel();
+		restoreModelToEmpty();
 	}
 	
     
@@ -86,7 +71,7 @@ public class JCPEditorAppletBugsTest {
         jcpApplet.setSmiles("CCCC");
         panel.get2DHub().updateView();
         Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        restoreModel();
+        restoreModelToEmpty();
     }
 
     @Test public void testSetMolFile() throws CDKException{
@@ -94,7 +79,7 @@ public class JCPEditorAppletBugsTest {
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         jcpApplet.setMolFile("\n  CDK    1/19/07,10:3\n\n  2  1  0  0  0  0  0  0  0  0999 V2000 \n  2.520000 10.220000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2.270000 10.470000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \nM  END");
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        restoreModel();
+        restoreModelToEmpty();
     }
 	
 	@Test public void testGetMolFile() throws CDKException{
@@ -102,7 +87,7 @@ public class JCPEditorAppletBugsTest {
         Point movetopint=new Point(100,100);    
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), movetopint, MouseButton.LEFT_BUTTON,1);
 	    Assert.assertTrue(jcpApplet.getMolFile().indexOf("6  6  0  0  0  0  0  0  0  0999 V2000")>0);
-        restoreModel();	    
+        restoreModelToEmpty();	    
 	}
 	
 	@Test public void testBug2858663(){
@@ -112,21 +97,7 @@ public class JCPEditorAppletBugsTest {
         applet.click();
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-        restoreModel();
-	}
-	
-	
-	private void restoreModel(){
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		IChemModel basic = DefaultChemObjectBuilder.getInstance().newChemModel();
-		basic.setMoleculeSet(basic.getBuilder().newMoleculeSet());
-		basic.getMoleculeSet().addAtomContainer(
-				basic.getBuilder().newMolecule());
-		panel.setChemModel(basic);
-		panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
-	    panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
-		panel.get2DHub().updateView();
+        restoreModelToEmpty();
 	}
 	
 	/*
@@ -153,7 +124,7 @@ public class JCPEditorAppletBugsTest {
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);   
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
-	    restoreModel();     
+	    restoreModelToEmpty();     
 	}
 	
 	@Test public void testUpBond(){
@@ -205,6 +176,7 @@ public class JCPEditorAppletBugsTest {
         Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
         Assert.assertEquals(5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        restoreModelToEmpty();
     }
     
     /**
@@ -253,22 +225,49 @@ public class JCPEditorAppletBugsTest {
                 self=true;
             moveto=getBondPoint(panel,i);
             applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-            //if(self){
-            //    Assert.assertEquals(directionToTest==IBond.Stereo.E_OR_Z || directionToTest==IBond.Stereo.NONE ? directionToTest : directionToTest==IBond.Stereo.DOWN ? directionToTest-1 : directionToTest+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
-            //}else{
-            //    Assert.assertEquals(directionToTest, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
-            //}
+            if(self){
+                IBond.Stereo desiredDirection=null;
+                if(directionToTest==IBond.Stereo.E_OR_Z)
+                    desiredDirection=IBond.Stereo.E_OR_Z;
+                else if(directionToTest==IBond.Stereo.NONE)
+                    desiredDirection=IBond.Stereo.NONE;
+                else if(directionToTest==IBond.Stereo.DOWN)
+                    desiredDirection=IBond.Stereo.DOWN_INVERTED;
+                else if(directionToTest==IBond.Stereo.UP)
+                    desiredDirection=IBond.Stereo.UP_INVERTED;
+                //FIXME Egon needs to add this
+                //else if(directionToTest==IBond.Stereo.UP_OR_DOWN)
+                //    desiredDirection=IBond.Stereo.UP_OR_DOWN_INVERTED;
+                Assert.assertEquals(desiredDirection, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
+            }else{
+                Assert.assertEquals(directionToTest, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
+            }
         }
-        restoreModel();     
+        restoreModelToEmpty();     
+	}
+	
+	@Test public void testFlipWithStereo(){
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        applet.click();
+        applet.button("up_bond").click();
+        Point2d moveto=getAtomPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        applet.button("down_bond").click();
+        moveto=getAtomPoint(panel,2);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        applet.button("flipHorizontal").click();
+        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(6).getStereo());
+        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(7).getStereo());
+        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(8).getStereo());
+        applet.button("flipVertical").click();
+        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(6).getStereo());
+        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(7).getStereo());
+        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(8).getStereo());
+        restoreModelToEmpty();
 	}
 
-	private Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
-	    IBond bond = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(bondnumber);
-	    return panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
-    }
-
-    @AfterClass public static void tearDown() {
-	  viewer.unloadApplet();
-	  applet.cleanUp();
-	}
 }
