@@ -52,6 +52,7 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -212,6 +213,16 @@ public class CopyPasteAction extends JCPAction{
         } else if ("pasteTemplate".equals(type)) {
             TemplateBrowser templateBrowser = new TemplateBrowser();
             if(templateBrowser.getChosenmolecule()!=null){
+                //we make sure the bond length in template is either as in canvas or default if empty
+                double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
+                IMolecule topaste = templateBrowser.getChosenmolecule();
+                double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
+                double scale=bondLengthModel/bondLengthInsert;
+                for (IAtom atom : topaste.atoms()) {
+                    if (atom.getPoint2d()!=null) {
+                        atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale));
+                    }
+                }
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
             }
         } else if ("paste".equals(type)) {
