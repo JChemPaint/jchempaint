@@ -220,7 +220,8 @@ public class CopyPasteAction extends JCPAction{
                 double scale=bondLengthModel/bondLengthInsert;
                 for (IAtom atom : topaste.atoms()) {
                     if (atom.getPoint2d()!=null) {
-                        atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale));
+                        //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
+                        atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
                     }
                 }
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
