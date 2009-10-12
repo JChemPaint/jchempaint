@@ -25,6 +25,8 @@ public class AbstractAppletTest {
     private static AppletViewer viewer;
     protected static FrameFixture applet;
     protected static JChemPaintEditorApplet jcpApplet;
+    protected static JChemPaintPanel panel;
+    
 
 
     @BeforeClass public static void setUp() {
@@ -35,6 +37,8 @@ public class AbstractAppletTest {
             .start();
         applet = new FrameFixture(viewer);
         applet.show();
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        panel = (JChemPaintPanel)jcppanel.target;
     }
     
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
