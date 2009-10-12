@@ -117,9 +117,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 		  Assert.assertTrue(file.exists());
 	}
 	@Test public void testMenuPrint() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		  //applet.menuItem("print").click();
-		  //TODO in linux, the java print dialog is not working
-		  //TODO printing as a such can not be tested, I suppose
+		  //Printing only works from signed applet. We cannot test this.
 	}
 	
 	@Test public void testMenuChargePlus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
