@@ -93,9 +93,7 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule molecule = new Molecule((IAtomContainer)container.clone());
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
-        	CDKHueckelAromaticityDetector.detectAromaticity(molecule);
+        	Molecule molecule = new Molecule(container);
         	smiles += generator.createSMILES(molecule);
         	if (containers.hasNext()) {
         		smiles += ".";
@@ -111,9 +109,7 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule moleculewithh = new Molecule((IAtomContainer)container.clone());
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(moleculewithh);
-            CDKHueckelAromaticityDetector.detectAromaticity(moleculewithh);
+        	Molecule moleculewithh = new Molecule(container);
         	CDKHydrogenAdder.getInstance(moleculewithh.getBuilder()).addImplicitHydrogens(moleculewithh);
         	AtomContainerManipulator.convertImplicitToExplicitHydrogens(moleculewithh);
         	double bondLength = GeometryTools.getBondLengthAverage(container);
