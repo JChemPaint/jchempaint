@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class UndoRedoTest extends AbstractAppletTest {
+public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
 
     private static List<IAtomContainer> models = new ArrayList<IAtomContainer>();
     

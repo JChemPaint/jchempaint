@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses( value = { 
         JCPEditorAppletMenuTest.class,
         JCPEditorAppletDrawingTest.class,
-        JCPEditorAppletBugsTest.class} )
+        JCPEditorAppletBugsTest.class,
+        JCPEditorAppletUndoRedoTest.class} )
 public class AllJCPTests {
 
 }
