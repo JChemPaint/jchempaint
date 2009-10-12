@@ -35,6 +35,7 @@ import java.util.Iterator;
 import javax.swing.JFrame;
 
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -88,10 +89,13 @@ public class CreateSmilesAction extends JCPAction
 	public static String getSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
 		String smiles="";
         SmilesGenerator generator = new SmilesGenerator();
+        generator.setUseAromaticityFlag(true);
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule molecule = new Molecule(container);
+        	Molecule molecule = new Molecule((IAtomContainer)container.clone());
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
+        	CDKHueckelAromaticityDetector.detectAromaticity(molecule);
         	smiles += generator.createSMILES(molecule);
         	if (containers.hasNext()) {
         		smiles += ".";
@@ -103,10 +107,13 @@ public class CreateSmilesAction extends JCPAction
 	public static String getChiralSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		String chiralsmiles="";
         SmilesGenerator generator = new SmilesGenerator();
+        generator.setUseAromaticityFlag(true);
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule moleculewithh = new Molecule(container);
+        	Molecule moleculewithh = new Molecule((IAtomContainer)container.clone());
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(moleculewithh);
+            CDKHueckelAromaticityDetector.detectAromaticity(moleculewithh);
         	CDKHydrogenAdder.getInstance(moleculewithh.getBuilder()).addImplicitHydrogens(moleculewithh);
         	AtomContainerManipulator.convertImplicitToExplicitHydrogens(moleculewithh);
         	double bondLength = GeometryTools.getBondLengthAverage(container);
