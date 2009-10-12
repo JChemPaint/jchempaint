@@ -6,25 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComboBox;
 import javax.vecmath.Point2d;
 
-import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
-import org.fest.swing.launcher.AppletLauncher;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemObject;
@@ -33,7 +26,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLReader;
@@ -41,30 +33,15 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.renderer.selection.SingleSelection;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 import org.openscience.jchempaint.matchers.DialogTitleComponentMatcher;
 
-public class JCPEditorAppletMenuTest {
-	private static AppletViewer viewer;
-	private static FrameFixture applet;
-
-
-	@BeforeClass public static void setUp() {
-		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("smiles", "CCCCCCCC");
-		viewer = AppletLauncher.applet(new JChemPaintEditorApplet())
-			.withParameters(parameters)
-			.start();
-		applet = new FrameFixture(viewer);
-		applet.show();
-	}
+public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 
 	@Test public void testMenuExportBmp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.bmp");
 		  if(file.exists())
 			  file.delete();
@@ -146,8 +123,6 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuChargePlus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
@@ -173,8 +148,6 @@ public class JCPEditorAppletMenuTest {
 	}
 
 	@Test public void testMenuChargeMinus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
         int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
@@ -221,8 +194,6 @@ public class JCPEditorAppletMenuTest {
 	private void genericIsotopeTest(int isotopeNumber){
 	    //we go to select mode
         applet.button("select").click();
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -233,13 +204,13 @@ public class JCPEditorAppletMenuTest {
         Assert.assertEquals("C", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
         //if we click somewhere, we should get a new atom with specified properties
-        jcppanel.robot.click(jcppanel.component(), new Point(100,100));
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100));
         Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getSymbol());
         Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getMassNumber().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
         applet.button("eraser").click();
-        jcppanel.robot.click(jcppanel.component(), new Point(100,100));
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100));
         Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
     }
 	
@@ -294,8 +265,6 @@ public class JCPEditorAppletMenuTest {
     private void genericValenceTest(int valence){
         //we go to select mode
         applet.button("select").click();
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         applet.menuItem("isotopeChange").click();
@@ -318,8 +287,6 @@ public class JCPEditorAppletMenuTest {
     }
 
     @Test public void testMenuConvertToRadical() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		//applet.menuItem("convertToRadical").click();
@@ -329,8 +296,6 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuPseudoStar() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("pseudoStar").click();
@@ -345,8 +310,6 @@ public class JCPEditorAppletMenuTest {
 	}
 
 	@Test public void testMenuPseudoR() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("pseudoR").click();
@@ -361,8 +324,6 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("periodictable").click();
@@ -434,6 +395,7 @@ public class JCPEditorAppletMenuTest {
 	}
 	
 	@Test public void testMenuReportSmiles() {
+	    restoreModelWithBasicmol();
 		  applet.menuItem("createSMILES").click();
 		  String text = applet.dialog("smilestextdialog").textBox("textviewdialogtextarea").text();
 		  Assert.assertTrue(text.indexOf("CCCCCCCC")>-1);
@@ -446,8 +408,8 @@ public class JCPEditorAppletMenuTest {
 		  JPanelFixture jcppanel=applet.panel("appletframe");
 		  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		  Assert.assertEquals("",panel.getSmiles());
-		  restoreModel();
-		}
+		  restoreModelWithBasicmol();
+    }
 		
 		@Test public void testMenuSaveAsMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			  applet.menuItem("save").click();
@@ -495,7 +457,7 @@ public class JCPEditorAppletMenuTest {
 	        Assert.assertEquals(1, containersList.size());
 	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-	        restoreModel();
+	        restoreModelWithBasicmol();
 		}
 		
 		@Test public void testMenuOpenCml() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -525,7 +487,7 @@ public class JCPEditorAppletMenuTest {
 	        Assert.assertEquals(containersList.size(), containersList.size());
 	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-	        restoreModel();
+	        restoreModelWithBasicmol();
 		}
 
 		@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
@@ -559,7 +521,7 @@ public class JCPEditorAppletMenuTest {
 	        Assert.assertEquals(containersList.size(), containersList.size());
 	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-	        restoreModel();
+	        restoreModelWithBasicmol();
 		}
 		//TODO do this for all formats
 		
@@ -583,37 +545,5 @@ public class JCPEditorAppletMenuTest {
             Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
             Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
 		}
-
-		
-	private void restoreModel(){
-		JPanelFixture jcppanel=applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		String filename = "data/basic.mol";
-        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-		MDLV2000Reader reader = new MDLV2000Reader(ins);
-		IChemModel basic;
-		try {
-			basic = (IChemModel) reader.read(DefaultChemObjectBuilder.getInstance().newChemModel());
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(basic.getMoleculeSet().getAtomContainer(0));
-            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(basic
-                    .getBuilder());
-            hAdder.addImplicitHydrogens(basic.getMoleculeSet().getAtomContainer(0));
-            //valencies are set when doing atom typing, which we don't want in jcp
-            for(int i=0;i<basic.getMoleculeSet().getAtomContainer(0).getAtomCount();i++){
-                basic.getMoleculeSet().getAtomContainer(0).getAtom(i).setValency(null);
-            }
-			panel.setChemModel(basic);
-			panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
-			panel.get2DHub().updateView();
-		} catch (CDKException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
-
-	@AfterClass public static void tearDown() {
-	  viewer.unloadApplet();
-	  applet.cleanUp();
-	}
 }

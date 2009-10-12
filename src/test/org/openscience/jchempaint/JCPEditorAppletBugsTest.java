@@ -1,27 +1,16 @@
 package org.openscience.jchempaint;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.vecmath.Point2d;
 
-import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.launcher.AppletLauncher;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 
 public class JCPEditorAppletBugsTest extends AbstractAppletTest{
     @Test public void testSquareSelectSingleAtom()  {
