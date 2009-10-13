@@ -54,6 +54,7 @@ import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectSquareModule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -61,6 +62,7 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
@@ -292,21 +294,25 @@ public class CopyPasteAction extends JCPAction{
                         toPaste.getAtom(i).setValency(null);
                     }
                 } catch (Exception ex) {
-                    if (content.indexOf("INChI")>-1) { // handle it as an InChI
+                    if (content.indexOf("INChI")>-1 || content.indexOf("InChI")>-1) { // handle it as an InChI
                         try {
                             StringReader sr = new StringReader(content);
                             INChIPlainTextReader inchireader = new INChIPlainTextReader(sr);
                             IChemFile mol = DefaultChemObjectBuilder.getInstance().newChemFile();
                             toPaste = ((IChemFile) inchireader.read(mol)).getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
-                            StructureDiagramGenerator sdg =
-                                new StructureDiagramGenerator((IMolecule)toPaste);
+                            IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
+                            for(int i=0;i<mols.getAtomContainerCount();i++)
+                            {
+                                StructureDiagramGenerator sdg =
+                                    new StructureDiagramGenerator((IMolecule)mols.getMolecule(i));
 
-                            sdg.setTemplateHandler(
-                                    new TemplateHandler(toPaste.getBuilder())
-                            );
-                            sdg.generateCoordinates();
+                                sdg.setTemplateHandler(
+                                        new TemplateHandler(toPaste.getBuilder())
+                                );
+                                sdg.generateCoordinates();
+                            }
                         } catch (Exception e2) {
-                            e2.printStackTrace();
+                            jcpPanel.announceError(e2);
                         }        			
                     }
                 }
@@ -416,12 +422,13 @@ public class CopyPasteAction extends JCPAction{
                 CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(toPaste
                         .getBuilder());
                 hAdder.addImplicitHydrogens(toPaste);
-                //valencies are set when doing atom typing, which we don't want in jcp
-                for(int i=0;i<toPaste.getAtomCount();i++){
-                    toPaste.getAtom(i).setValency(null);
-                }
             } catch (CDKException ex) {
+                ex.printStackTrace();
                 // do nothing
+            }
+            //valencies are set when doing atom typing, which we don't want in jcp
+            for(int i=0;i<toPaste.getAtomCount();i++){
+                toPaste.getAtom(i).setValency(null);
             }
         }
         //somehow, in case of single atoms, there are no coordinates
