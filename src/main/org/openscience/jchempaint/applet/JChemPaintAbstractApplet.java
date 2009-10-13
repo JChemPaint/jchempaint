@@ -386,7 +386,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 .toString()));
         IMolecule cdkmol = (IMolecule) reader.read(DefaultChemObjectBuilder
                 .getInstance().newMolecule());
-        InsertTextPanel.generateModel(theJcpp, cdkmol, false);
+        InsertTextPanel.generateModel(theJcpp, cdkmol, false,false);
         theJcpp.get2DHub().updateView();
         // the newly opened file should nicely fit the screen
         theJcpp.getRenderPanel().setFitToScreen(true);

@@ -35,6 +35,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -61,6 +62,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.INChIPlainTextReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -232,26 +234,19 @@ public class CopyPasteAction extends JCPAction{
             Transferable transfer = sysClip.getContents( null );
             ISimpleChemObjectReader reader = null;
             String content=null;
-            // if a MIME type is given ...
-            try {
-                if (supported(transfer, molFlavor)) {
 
-                    String mol =
-                        (String) transfer.getTransferData(molFlavor);
-                    reader = new MDLV2000Reader(new StringReader(mol));
-                } else if (supported(transfer, DataFlavor.stringFlavor)) {
-                    // otherwise, try to use the ReaderFactory...
-                    content = (String) transfer.getTransferData(
-                            DataFlavor.stringFlavor);
-                    reader = new ReaderFactory().createReader(
-                            new StringReader(content));
-                }
-            } catch (UnsupportedFlavorException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
+            try {
+               content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
+               reader = new ReaderFactory().createReader(new StringReader(content));
+            } catch (Exception e1) {
                 e1.printStackTrace();
             }
 
+            // escape for CML - InputStream required. Reader throws error.
+            if(content!=null && content.indexOf("cml")>-1) {
+                reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
+            }
+            
             IMolecule toPaste = null;
             if (reader != null) {
                 IMolecule readMolecule =
@@ -261,8 +256,9 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = (IMolecule) reader.read(readMolecule);
                     } else if (reader.accepts(ChemFile.class)) {
                         toPaste = readMolecule;
-                        IChemFile file = (IChemFile) reader.read(
-                                chemModel.getBuilder().newChemModel());
+                        //IChemFile file = (IChemFile) reader.read(
+                        //        chemModel.getBuilder().newChemModel());
+                        IChemFile file = (IChemFile) reader.read(new ChemFile());
                         for (IAtomContainer ac :
                             ChemFileManipulator.getAllAtomContainers(file)) {
                             toPaste.add(ac);
@@ -429,7 +425,7 @@ public class CopyPasteAction extends JCPAction{
         //somehow, in case of single atoms, there are no coordinates
         if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
-        InsertTextPanel.generateModel(jcpPanel, toPaste, false);
+        InsertTextPanel.generateModel(jcpPanel, toPaste, false,true);
 
         //We select the inserted structure
         IChemObjectSelection selection
