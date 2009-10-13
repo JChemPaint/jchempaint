@@ -224,9 +224,8 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
                     desiredDirection=IBond.Stereo.DOWN_INVERTED;
                 else if(directionToTest==IBond.Stereo.UP)
                     desiredDirection=IBond.Stereo.UP_INVERTED;
-                //FIXME Egon needs to add this
-                //else if(directionToTest==IBond.Stereo.UP_OR_DOWN)
-                //    desiredDirection=IBond.Stereo.UP_OR_DOWN_INVERTED;
+                else if(directionToTest==IBond.Stereo.UP_OR_DOWN)
+                    desiredDirection=IBond.Stereo.UP_OR_DOWN_INVERTED;
                 Assert.assertEquals(desiredDirection, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
             }else{
                 Assert.assertEquals(directionToTest, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo());
