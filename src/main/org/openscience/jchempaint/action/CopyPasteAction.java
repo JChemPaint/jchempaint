@@ -36,7 +36,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -52,7 +51,6 @@ import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectSquareModule;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -69,7 +67,6 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.INChIPlainTextReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
-import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -217,7 +214,7 @@ public class CopyPasteAction extends JCPAction{
             }
         } else if ("pasteTemplate".equals(type)) {
             TemplateBrowser templateBrowser = new TemplateBrowser();
-            
+
             if(templateBrowser.getChosenmolecule()!=null){
                 flipAndScaleMolecule(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
@@ -242,7 +239,7 @@ public class CopyPasteAction extends JCPAction{
             if(content!=null && content.indexOf("cml")>-1) {
                 reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
             }
-            
+
             IMolecule toPaste = null;
             if (reader != null) {
                 IMolecule readMolecule =
@@ -256,7 +253,7 @@ public class CopyPasteAction extends JCPAction{
                         for (IAtomContainer ac :
                             ChemFileManipulator.getAllAtomContainers(file)) {
                             toPaste.add(ac);
-                            
+
                         }
                     }
                     flipAndScaleMolecule(readMolecule);
@@ -402,20 +399,20 @@ public class CopyPasteAction extends JCPAction{
 
     }
 
-    
+
     private void flipAndScaleMolecule (IMolecule topaste)  {
-            //we make sure the bond length in template is either as in canvas or default if empty
-            double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
-            double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
-            double scale=bondLengthModel/bondLengthInsert;
-            for (IAtom atom : topaste.atoms()) {
-                if (atom.getPoint2d()!=null) {
-                    //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
-                    atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
-                }
+        //we make sure the bond length in template is either as in canvas or default if empty
+        double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
+        double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
+        double scale=bondLengthModel/bondLengthInsert;
+        for (IAtom atom : topaste.atoms()) {
+            if (atom.getPoint2d()!=null) {
+                //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
+                atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
             }
+        }
     }
-    
+
     /**
      * Inserts a structure into the panel. It adds Hs if needed and highlights the structure after insert.
      * 
@@ -446,7 +443,7 @@ public class CopyPasteAction extends JCPAction{
 
         //We select the inserted structure
         IChemObjectSelection selection
-            = new LogicalSelection(LogicalSelection.Type.ALL);
+        = new LogicalSelection(LogicalSelection.Type.ALL);
 
         selection.select(ChemModelManipulator.newChemModel(toPaste));
         renderModel.setSelection(selection);
