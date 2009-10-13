@@ -71,6 +71,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's
@@ -129,7 +130,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             IMolecule molecule = getMolecule();
             if (molecule == null)
                 return;
-            generateModel(jChemPaintPanel, molecule, true, false);
+            JChemPaintAbstractApplet.generateModel(jChemPaintPanel, molecule, true, false);
             if (closeafter != null)
                 closeafter.setVisible(false);
         }
@@ -267,66 +268,4 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         return data;
     }
 
-    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) {
-        if (molecule == null) return;
-
-        // get relevant bits from active model
-        IChemModel chemModel = chemPaintPanel.getChemModel();
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
-        if (moleculeSet == null) {
-            moleculeSet = new MoleculeSet();
-        }
-        
-        // On copy & paste on top of an existing drawn structure, prevent the
-        // pasted section to be drawn exactly on top or to far away from the 
-        // original by shifting it to a fixed position next to it. 
-        if (shiftPasted && moleculeSet.getAtomContainer(0)!=null && moleculeSet.getAtomContainer(0).getAtomCount()!=0) {
-            // where is the right border of the current structure?
-            double maxXCurr = Double.NEGATIVE_INFINITY;
-            for (IAtom atom : moleculeSet.getAtomContainer(0).atoms()) {
-                if(atom.getPoint2d().x>maxXCurr)
-                    maxXCurr = atom.getPoint2d().x;
-            }
-            // where is the left border of the pasted structure?
-            double minXPaste = Double.POSITIVE_INFINITY;
-            for (IAtom atom : molecule.atoms()) {
-                if(atom.getPoint2d().x<minXPaste)
-                    minXPaste = atom.getPoint2d().x;
-            }
-            // shift the pasted structure to be nicely next to the existing one.
-            final int MARGIN=1;
-            final double SHIFT = maxXCurr - minXPaste; 
-            for (IAtom atom : molecule.atoms()) {
-                atom.setPoint2d(new Point2d (atom.getPoint2d().x+MARGIN+SHIFT, atom.getPoint2d().y ));
-            }
-        }
-
-        if(generateCoordinates){
-	        // now generate 2D coordinates
-	        StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-	        sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
-	        try {
-	            sdg.setMolecule(molecule);
-	            sdg.generateCoordinates(new Vector2d(0, 1));
-	            molecule = sdg.getMolecule();
-	        } catch (Exception exc) {
-	            exc.printStackTrace();
-	        }
-        }
-
-        moleculeSet.getAtomContainer(0).add(molecule);
-
-        IUndoRedoFactory i= chemPaintPanel.get2DHub().getUndoRedoFactory();
-        UndoRedoHandler ih= chemPaintPanel.get2DHub().getUndoRedoHandler();
-        if (i!=null) {
-            IUndoRedoable undoredo = i.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
-            molecule, "Paste", chemPaintPanel.get2DHub());
-            ih.postEdit(undoredo);
-        }
-        
-        //moleculeSet.addMolecule(molecule); // don't create another atom container...
-        ControllerHub.avoidOverlap(chemModel);
-        chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
-        chemPaintPanel.get2DHub().updateView();
-    }
 }
