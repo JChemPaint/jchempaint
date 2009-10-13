@@ -160,6 +160,7 @@
         <delete dir="${dist-classes}/org/omegahat" />
         <delete dir="${dist-classes}/org/openscience/cdk/modeling" />
         <delete dir="${dist-classes}/org/openscience/cdk/fingerprint" />
+        <delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" />
     </target>
 
     <target id="compile-jcp" name="compile-jcp">
@@ -229,6 +230,7 @@
          <shrink logfile="shrinklog.core.xml">
              <entrypointjar name="${dist}/jar/jchempaint-applet-editor.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar"/>
@@ -251,6 +253,7 @@
                 <class name="org.openscience.cdk.tools.manipulator.BondManipulator" methods="public" fields="none" />
                 <class name="org.apache.log4j.Logger" methods="public"  />
                 <class name="org.apache.log4j.Category" methods="public" />
+                <class name="org.openscience.cdk.interfaces.IBond" methods="public" fields="none" />
              </keep>
          </shrink>
       </yguard>
@@ -361,7 +364,6 @@
          <shrink logfile="shrinklogcml.xml">
              <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
-             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
              <property name="error-checking" value="pedantic"/>
@@ -373,6 +375,27 @@
                    <include name="org.xmlcml.cml.attribute.*"/>
                 </patternset>
                 </class>
+             </keep>
+         </shrink>
+      </yguard>
+
+      <!-- shrink nu.xom jar -->
+       <yguard>
+         <inoutpair in="${dist}/jar/jchempaint-applet-nu.jar" out="${dist}/jar/shrinkout/jchempaint-applet-nu.jar"/>
+         <externalclasses>
+             <fileset dir="${dist}/jar">
+                <include name="**/*.jar"/>
+             </fileset>
+         </externalclasses>
+         <shrink logfile="shrinklog.config.xml">
+             <entrypointjar name="${dist}/jar/jchempaint-applet-core.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
+             <entrypointjar name="${dist}/jar/jchempaint-applet-org_xmlcml.jar"/>
+             <property name="error-checking" value="pedantic"/>
+             <keep>
+               <class name="nu.xom.XPathContext"  methods="public" fields="none"/>
+               <class name="nu.xom.Node"  methods="public" fields="none"/>
              </keep>
          </shrink>
       </yguard>
