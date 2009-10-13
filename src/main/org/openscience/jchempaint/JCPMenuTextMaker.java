@@ -108,7 +108,8 @@ public class JCPMenuTextMaker {
 		entries.put("periodictable", GT._("Periodic Table"));
 		entries.put("enterelement", GT._("Custom"));
 		entries.put("isotopeChange", GT._("Isotopes"));
-		entries.put("convertToRadical", GT._("Convert to Radical"));
+		entries.put("convertToRadical", GT._("Add Single Electron"));
+        entries.put("convertFromRadical", GT._("Remove Single Electron"));
 		entries.put("showChemObjectProperties", GT._("Properties"));
 		entries.put("showACProperties", GT._("Molecule Properties"));
 		entries.put("makeNormal", GT._("Convert to Regular Atom"));

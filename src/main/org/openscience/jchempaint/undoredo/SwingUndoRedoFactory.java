@@ -89,10 +89,12 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingReplaceAtomEdit(chemModel, oldAtom, newAtom, type);
 	}
 
-	public IUndoRedoable getConvertToRadicalEdit(
+	public IUndoRedoable getSingleElectronEdit(
 			IAtomContainer relevantContainer,
-			IElectronContainer electronContainer, String type) {
-		return new SwingConvertToRadicalEdit(relevantContainer, electronContainer, type);
+			IElectronContainer electronContainer, boolean addSingleElectron,
+			IChemModelRelay chemModelRelay, IAtom atom, String type) {
+		return new SwingConvertToRadicalEdit(relevantContainer, electronContainer, 
+		        addSingleElectron, chemModelRelay, atom, type);
 	}
 
 	public IUndoRedoable getChangeIsotopeEdit(IAtom atom,

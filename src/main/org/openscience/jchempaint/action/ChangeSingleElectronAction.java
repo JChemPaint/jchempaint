@@ -33,20 +33,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
-import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.controller.ChangeSingleElectronModule;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.LonePairElectronChecker;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.GT;
 
 /**
  */
-public class ConvertToRadicalAction extends JCPAction {
+public class ChangeSingleElectronAction extends JCPAction {
 
 	private static final long serialVersionUID = 1898335761308427006L;
 	
@@ -71,40 +64,21 @@ public class ConvertToRadicalAction extends JCPAction {
 		}
 		if(atomsInRange==null)
 			return;
+		ChangeSingleElectronModule newActiveModule = null;
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
-            boolean number=false;
-			//try {
-		        //IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atom);
-				//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(relevantContainer);
-				
-      
-    
-      //TODO MR
-      //fix this ?? how  ??
-      //number = new LonePairElectronChecker().isSaturated(atom, relevantContainer);
-      //valencies are set when doing atom typing, which we don't want in jcp
-      //for(int i=0;i<relevantContainer.getAtomCount();i++){
-      //    relevantContainer.getAtom(i).setValency(null);
-      //}
-
-
-		/*	} catch (CDKException e) {
-				e.printStackTrace();
-				e.getMessage();
-				logger.error(e.getMessage());
-				logger.debug(e);				}
-            
-            if(number )
-            {*/
+            if(type.equals("add")){
                 jcpPanel.get2DHub().addSingleElectron(atom);
                 logger.info("Added single electron to atom");
-                
-            /*}
-            else 
-            	JOptionPane.showMessageDialog(jcpPanel,GT._("A radical cannot be added to this atom." +
-            	" Re-try with less hydrogens."));*/
+                newActiveModule = new ChangeSingleElectronModule(jcpPanel.get2DHub(), true);
+            }else{
+                jcpPanel.get2DHub().removeSingleElectron(atom);
+                logger.info("Removed single electron to atom");
+                newActiveModule = new ChangeSingleElectronModule(jcpPanel.get2DHub(), false);
+            }
         }
         jcpPanel.get2DHub().updateView();
+        newActiveModule.setID(type);
+        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
     }
 }
