@@ -235,11 +235,13 @@ public class CopyPasteAction extends JCPAction{
             ISimpleChemObjectReader reader = null;
             String content=null;
 
-            try {
-               content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
-               reader = new ReaderFactory().createReader(new StringReader(content));
-            } catch (Exception e1) {
-                e1.printStackTrace();
+            if (supported(transfer, DataFlavor.stringFlavor) ) {
+                try {
+                    content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
+                    reader = new ReaderFactory().createReader(new StringReader(content));
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
 
             // escape for CML - InputStream required. Reader throws error.
