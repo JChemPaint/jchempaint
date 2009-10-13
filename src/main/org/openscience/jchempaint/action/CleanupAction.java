@@ -28,14 +28,8 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
-
-import org.omegahat.Environment.Interpreter.Task;
 import org.openscience.cdk.controller.IChemModelRelay;
 
 /**
@@ -45,7 +39,6 @@ import org.openscience.cdk.controller.IChemModelRelay;
 public class CleanupAction extends JCPAction {
 
     private static final long serialVersionUID = -1048878006430754582L;
-    private JProgressBar progressBar;
 
     /**
      * Constructor for the CleanupAction object
@@ -62,25 +55,9 @@ public class CleanupAction extends JCPAction {
      */
     public void actionPerformed(ActionEvent e) {
         logger.info("Going to perform a clean up...");
-        JFrame frame = new JFrame("Stepping Progress");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final JProgressBar aJProgressBar = new JProgressBar(JProgressBar.VERTICAL);
-        aJProgressBar.setStringPainted(true);
-        aJProgressBar.setIndeterminate(true);
-
-        frame.add(aJProgressBar, BorderLayout.NORTH);
-        frame.setSize(300, 200);
-        frame.setVisible(true);
         IChemModelRelay hub = jcpPanel.get2DHub(); 
         hub.cleanup();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         jcpPanel.setIsNewChemModel(true);
         hub.updateView();
-        frame.setVisible(false);
     }
 }
