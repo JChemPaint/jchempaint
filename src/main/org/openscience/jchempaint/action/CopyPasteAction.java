@@ -52,6 +52,7 @@ import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.controller.RemoveModule;
 import org.openscience.cdk.controller.SelectSquareModule;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -216,18 +217,9 @@ public class CopyPasteAction extends JCPAction{
             }
         } else if ("pasteTemplate".equals(type)) {
             TemplateBrowser templateBrowser = new TemplateBrowser();
+            
             if(templateBrowser.getChosenmolecule()!=null){
-                //we make sure the bond length in template is either as in canvas or default if empty
-                double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
-                IMolecule topaste = templateBrowser.getChosenmolecule();
-                double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
-                double scale=bondLengthModel/bondLengthInsert;
-                for (IAtom atom : topaste.atoms()) {
-                    if (atom.getPoint2d()!=null) {
-                        //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
-                        atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
-                    }
-                }
+                flipAndScaleMolecule(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
             }
         } else if ("paste".equals(type)) {
@@ -246,7 +238,7 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
 
-            // escape for CML - InputStream required. Reader throws error.
+            // if looks like CML - InputStream required. Reader throws error.
             if(content!=null && content.indexOf("cml")>-1) {
                 reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
             }
@@ -260,18 +252,19 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = (IMolecule) reader.read(readMolecule);
                     } else if (reader.accepts(ChemFile.class)) {
                         toPaste = readMolecule;
-                        //IChemFile file = (IChemFile) reader.read(
-                        //        chemModel.getBuilder().newChemModel());
                         IChemFile file = (IChemFile) reader.read(new ChemFile());
                         for (IAtomContainer ac :
                             ChemFileManipulator.getAllAtomContainers(file)) {
                             toPaste.add(ac);
+                            
                         }
                     }
+                    flipAndScaleMolecule(readMolecule);
                 } catch (CDKException e1) {
                     e1.printStackTrace();
                 }
             }
+
             //we just try smiles and inchi if no reader is found for content
             if (toPaste == null &&
                     supported(transfer, DataFlavor.stringFlavor)) {
@@ -319,6 +312,7 @@ public class CopyPasteAction extends JCPAction{
             }
             if (toPaste != null) {
                 insertStructure(toPaste, renderModel);
+
             }else{
                 JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
@@ -408,6 +402,20 @@ public class CopyPasteAction extends JCPAction{
 
     }
 
+    
+    private void flipAndScaleMolecule (IMolecule topaste)  {
+            //we make sure the bond length in template is either as in canvas or default if empty
+            double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
+            double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
+            double scale=bondLengthModel/bondLengthInsert;
+            for (IAtom atom : topaste.atoms()) {
+                if (atom.getPoint2d()!=null) {
+                    //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
+                    atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
+                }
+            }
+    }
+    
     /**
      * Inserts a structure into the panel. It adds Hs if needed and highlights the structure after insert.
      * 

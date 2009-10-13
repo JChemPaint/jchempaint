@@ -56,6 +56,9 @@ import net.sf.jniinchi.INCHI_RET;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
+import org.openscience.cdk.controller.undoredo.IUndoRedoable;
+import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -312,6 +315,15 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         }
 
         moleculeSet.getAtomContainer(0).add(molecule);
+
+        IUndoRedoFactory i= chemPaintPanel.get2DHub().getUndoRedoFactory();
+        UndoRedoHandler ih= chemPaintPanel.get2DHub().getUndoRedoHandler();
+        if (i!=null) {
+            IUndoRedoable undoredo = i.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
+            molecule, "Paste", chemPaintPanel.get2DHub());
+            ih.postEdit(undoredo);
+        }
+        
         //moleculeSet.addMolecule(molecule); // don't create another atom container...
         ControllerHub.avoidOverlap(chemModel);
         chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
