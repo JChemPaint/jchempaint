@@ -191,6 +191,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	
 	private void genericIsotopeTest(int isotopeNumber){
 	    //we go to select mode
+	    restoreModelWithBasicmol();
         applet.button("select").click();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
@@ -207,9 +208,6 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getSymbol());
         Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getMassNumber().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
-        applet.button("eraser").click();
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100));
-        Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
     }
 	
 	@Test public void testMenuIsotopeMajorMinusTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
