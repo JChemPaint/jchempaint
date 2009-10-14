@@ -36,6 +36,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
+import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -127,9 +128,9 @@ public class CopyPasteAction extends JCPAction{
         RendererModel renderModel =
             jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         IChemModel chemModel = jcpPanel.getChemModel();
+        Clipboard sysClip = jcpPanel.getToolkit().getSystemClipboard();
 
         if ("copy".equals(type)) {
-            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
             handleSystemClipboard(sysClip);
             IAtom atomInRange = null;
             IChemObject object = getSource(e);
@@ -170,7 +171,6 @@ public class CopyPasteAction extends JCPAction{
                 addToClipboard(sysClip, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
             }
         } else if ("copyAsSmiles".equals(type)) {
-            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
             handleSystemClipboard(sysClip);
             try {
                 if(renderModel.getSelection().getConnectedAtomContainer()!=null){
@@ -221,7 +221,6 @@ public class CopyPasteAction extends JCPAction{
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
             }
         } else if ("paste".equals(type)) {
-            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
             handleSystemClipboard(sysClip);
             Transferable transfer = sysClip.getContents( null );
             ISimpleChemObjectReader reader = null;
@@ -315,7 +314,6 @@ public class CopyPasteAction extends JCPAction{
                 JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
         } else if (type.equals("cut")) {
-            Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
             handleSystemClipboard(sysClip);
             IAtom atomInRange = null;
             IBond bondInRange = null;
@@ -526,13 +524,13 @@ public class CopyPasteAction extends JCPAction{
 
         public synchronized Object getTransferData (DataFlavor parFlavor)	throws UnsupportedFlavorException {
             if (parFlavor.equals (molFlavor)) {
-                return mol;
+                return new StringBufferInputStream(mol);
             } else if(parFlavor.equals(DataFlavor.stringFlavor)) {
                 return smiles;
             } else if(parFlavor.equals(cmlFlavor)) {
-                return cml;
+                return new StringBufferInputStream(cml);
             } else if(parFlavor.equals(svgFlavor)) {
-                return svg;
+                return new StringBufferInputStream(svg);
             } else {
                 throw new UnsupportedFlavorException (parFlavor);
             }
