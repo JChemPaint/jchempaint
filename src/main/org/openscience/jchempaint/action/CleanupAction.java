@@ -31,6 +31,7 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 
 import org.openscience.cdk.controller.IChemModelRelay;
+import org.openscience.jchempaint.dialog.WaitDialog;
 
 /**
  * Triggers the invocation of the structure diagram generator
@@ -55,9 +56,11 @@ public class CleanupAction extends JCPAction {
      */
     public void actionPerformed(ActionEvent e) {
         logger.info("Going to perform a clean up...");
+        WaitDialog.showDialog();
         IChemModelRelay hub = jcpPanel.get2DHub(); 
         hub.cleanup();
         jcpPanel.setIsNewChemModel(true);
+        WaitDialog.hideDialog();
         hub.updateView();
     }
 }
