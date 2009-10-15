@@ -35,7 +35,9 @@ import java.util.List;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
@@ -50,7 +52,11 @@ public class ChangeIsotopeAction extends JCPAction {
 
     public void actionPerformed(ActionEvent event) {
         //first switch draw mode
-        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub());
+        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+        if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+        else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
         logger.debug("About to change atom type of relevant atom!");
         IChemObject object = getSource(event);
         logger.debug("Source of call: ", object);

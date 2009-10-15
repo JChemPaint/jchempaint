@@ -38,8 +38,10 @@ import javax.swing.JOptionPane;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.controller.IControllerModule;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.jchempaint.dialog.EnterElementOrGroupDialog;
@@ -81,7 +83,12 @@ public class ChangeAtomSymbolAction extends JCPAction
 		String s = event.getActionCommand();
 		String symbol = s.substring(s.indexOf("@") + 1);
 		if(symbol.equals("periodictable")){
-            newActiveModule=new AddAtomModule(jcpPanel.get2DHub());
+		    if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+		        newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+            else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+		    else
+		        newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
             newActiveModule.setID(symbol);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
             // open PeriodicTable panel
@@ -119,7 +126,12 @@ public class ChangeAtomSymbolAction extends JCPAction
 		    }
 		}else{
 		    //it must be a symbol
-	        newActiveModule=new AddAtomModule(jcpPanel.get2DHub());
+            if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+            else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+            else
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
 	        newActiveModule.setID(symbol);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 	        jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);

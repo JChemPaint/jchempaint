@@ -37,7 +37,9 @@ import javax.swing.JOptionPane;
 
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 ;
 
@@ -95,7 +97,11 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 	 */
 	private void setTo(IAtom atom, String label){	    
         jcpPanel.get2DHub().convertToPseudoAtom(atom,label);
-        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub());
+        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+        if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+        else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
         newActiveModule.setID(label);
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(true);

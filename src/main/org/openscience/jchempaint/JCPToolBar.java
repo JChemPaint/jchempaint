@@ -262,6 +262,9 @@ public class JCPToolBar
 						activeModule.setID(toolKeys[i]);
 						chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
 						chemPaintPanel.updateStatusBar();
+					} else if(toolKeys[i].equals("C")){
+					    button.setBackground(Color.GRAY);
+					    chemPaintPanel.setLastSecondaryButton(button);
 					} else
 					{
 						button.setBackground(BUTTON_INACTIVE_COLOR);

@@ -69,6 +69,8 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.controller.AddAtomModule;
+import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.controller.IChangeModeListener;
 import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.controller.IChemModelEventRelayHandler;
@@ -77,6 +79,7 @@ import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.renderer.RendererModel;
@@ -90,6 +93,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
 
     private JComponent lastActionButton;
+    private JComponent lastSecondaryButton;
     private File currentWorkDirectory;
     private File lastOpenedFile;
     private FileFilter currentOpenFileFilter;
@@ -724,20 +728,57 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
 	 */
 	public void modeChanged(IControllerModule newActiveModule) {
+	    //we set the old button to inactive colour
         if (this.getLastActionButton() != null)
             this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+        if (this.lastSecondaryButton != null)
+            this.lastSecondaryButton.setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
         String actionid = newActiveModule.getID();
         //this is because move mode does not have a button
         if(actionid.equals("move"))
             actionid=lastSelectId;
-        JButton newActionButton=buttons.get(actionid);
-        if(newActionButton!=null){
-	        this.setLastActionButton(newActionButton);
-	        newActionButton.setBackground(Color.GRAY);
-        }
         //we remember the last activated move mode so that we can switch back to it after move
         if(newActiveModule.getID().equals("select") || newActiveModule.getID().equals("lasso"))
             lastSelectId = newActiveModule.getID();
+        //we set the new button to active colour
+        JButton newActionButton=buttons.get(actionid);
+        if(newActionButton!=null){
+            this.setLastActionButton(newActionButton);
+            newActionButton.setBackground(Color.GRAY);
+        }
+        if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
+            if(this.buttons.get(this.get2DHub().getController2DModel().getDrawElement())!=null){
+                this.buttons.get(this.get2DHub().getController2DModel().getDrawElement()).setBackground(Color.GRAY);
+                lastSecondaryButton = this.buttons.get(this.get2DHub().getController2DModel().getDrawElement());
+            }else if(buttons.get("periodictable")!=null){
+                buttons.get("periodictable").setBackground(Color.GRAY);
+                lastSecondaryButton = buttons.get("periodictable");
+            }
+        }
+        if(JCPToolBar.getToolbarResourceString("lowertoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
+            //the newActiveModule should always be an AddAtomModule, but we still check
+            if(newActiveModule instanceof AddAtomModule){
+                if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.NONE)){
+                    this.buttons.get("bond").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("bond");
+                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.UP)){
+                    this.buttons.get("up_bond").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("up_bond");
+                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.DOWN)){
+                    this.buttons.get("down_bond").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("down_bond");
+                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.E_OR_Z)){
+                    this.buttons.get("undefined_bond").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("undefined_bond");
+                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.UP_OR_DOWN)){
+                    this.buttons.get("undefined_stereo_bond").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("undefined_stereo_bond");
+                }
+            }else{
+                this.buttons.get("bond").setBackground(Color.GRAY);
+                lastSecondaryButton = this.buttons.get("bond");
+            }
+        }
         this.updateStatusBar();
 	}
 	
@@ -748,5 +789,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 			allinone.add(acs.get(i));
 		}
 		return allinone;
+    }
+
+    public void setLastSecondaryButton(JComponent lastSecondaryButton) {
+        this.lastSecondaryButton = lastSecondaryButton;
     }
 }
