@@ -421,4 +421,3 @@ org/openscience/cdk/renderer/elements/PathElement.class
 org/openscience/cdk/renderer/elements/RingElement.class
 org/openscience/cdk/renderer/selection/MultiSelection.class
 org/openscience/cdk/tools/manipulator/BondManipulator.class
-
