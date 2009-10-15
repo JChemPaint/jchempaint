@@ -256,7 +256,6 @@ public class CopyPasteAction extends JCPAction{
 
                         }
                     }
-                    flipAndScaleMolecule(readMolecule);
                 } catch (CDKException e1) {
                     e1.printStackTrace();
                 }
@@ -313,6 +312,7 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
             if (toPaste != null) {
+                flipAndScaleMolecule(toPaste);
                 insertStructure(toPaste, renderModel);
 
             }else{
