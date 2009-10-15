@@ -594,16 +594,16 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
 
         if(generateCoordinates){
-        // now generate 2D coordinates
-        StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-        sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
-        try {
-            sdg.setMolecule(molecule);
-            sdg.generateCoordinates(new Vector2d(0, 1));
-            molecule = sdg.getMolecule();
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
+            // now generate 2D coordinates
+            StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+            sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
+            try {
+                sdg.setMolecule(molecule);
+                sdg.generateCoordinates(new Vector2d(0, 1));
+                molecule = sdg.getMolecule();
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
         }
 
         moleculeSet.getAtomContainer(0).add(molecule);

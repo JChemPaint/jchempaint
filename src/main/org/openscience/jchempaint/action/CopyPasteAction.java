@@ -269,21 +269,26 @@ public class CopyPasteAction extends JCPAction{
                     SmilesParser sp = new SmilesParser(
                             DefaultChemObjectBuilder.getInstance());
                     toPaste = sp.parseSmiles(
-                            (String) transfer.getTransferData(
-                                    DataFlavor.stringFlavor));
+                            ((String) transfer.getTransferData(
+                                    DataFlavor.stringFlavor)).trim());
 
-                    StructureDiagramGenerator sdg =
-                        new StructureDiagramGenerator((IMolecule)toPaste);
+                    IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
+                    for(int i=0;i<mols.getAtomContainerCount();i++)
+                    {
+                        StructureDiagramGenerator sdg =
+                            new StructureDiagramGenerator((IMolecule)mols.getMolecule(i));
 
-                    sdg.setTemplateHandler(
-                            new TemplateHandler(toPaste.getBuilder())
-                    );
-                    sdg.generateCoordinates();
+                        sdg.setTemplateHandler(
+                                new TemplateHandler(toPaste.getBuilder())
+                        );
+                        sdg.generateCoordinates();
+                    }
                     //for some reason, smilesparser sets valencies, which we don't want in jcp
                     for(int i=0;i<toPaste.getAtomCount();i++){
                         toPaste.getAtom(i).setValency(null);
                     }
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     if (content.indexOf("INChI")>-1 || content.indexOf("InChI")>-1) { // handle it as an InChI
                         try {
                             StringReader sr = new StringReader(content);
