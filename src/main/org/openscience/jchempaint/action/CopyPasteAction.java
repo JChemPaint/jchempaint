@@ -219,7 +219,7 @@ public class CopyPasteAction extends JCPAction{
             TemplateBrowser templateBrowser = new TemplateBrowser();
 
             if(templateBrowser.getChosenmolecule()!=null){
-                flipAndScaleMolecule(templateBrowser.getChosenmolecule());
+                flipAndScaleMolecule(templateBrowser.getChosenmolecule(), true);
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
             }
         } else if ("paste".equals(type)) {
@@ -227,8 +227,22 @@ public class CopyPasteAction extends JCPAction{
             Transferable transfer = sysClip.getContents( null );
             ISimpleChemObjectReader reader = null;
             String content=null;
-
+            boolean flip=true;
+            
             if (supported(transfer, molFlavor) ) {
+                try {
+                    StringBufferInputStream sbis = (StringBufferInputStream) transfer.getTransferData(molFlavor);
+                    int x;
+                    StringBuffer sb = new StringBuffer();
+                    while((x=sbis.read())!=-1){
+                        sb.append((char)x);
+                    }
+                    reader = new ReaderFactory().createReader(new StringReader(sb.toString()));
+                    flip=false;
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            } else if (supported(transfer, DataFlavor.stringFlavor) ) {
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
@@ -314,7 +328,7 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
             if (toPaste != null) {
-                flipAndScaleMolecule(toPaste);
+                flipAndScaleMolecule(toPaste, flip);
                 insertStructure(toPaste, renderModel);
 
             }else{
@@ -406,7 +420,7 @@ public class CopyPasteAction extends JCPAction{
     }
 
 
-    private void flipAndScaleMolecule (IMolecule topaste)  {
+    private void flipAndScaleMolecule (IMolecule topaste, boolean flip)  {
         //we make sure the bond length in template is either as in canvas or default if empty
         double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
         double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
@@ -414,7 +428,7 @@ public class CopyPasteAction extends JCPAction{
         for (IAtom atom : topaste.atoms()) {
             if (atom.getPoint2d()!=null) {
                 //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
-                atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*-1));
+                atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*(flip ? -1 :1)));
             }
         }
     }
