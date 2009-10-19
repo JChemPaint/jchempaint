@@ -204,7 +204,6 @@
          <externalclasses>
              <fileset dir="${dist}/jar">
                 <include name="**/*.jar"/>
-                <!--exclude name="**/jchempaint-applet-editor.jar"/-->
              </fileset>
          </externalclasses>
 
@@ -224,7 +223,6 @@
          <externalclasses>
              <fileset dir="${dist}/jar">
                 <include name="**/*.jar"/>
-                <!--exclude name="**/jchempaint-applet-core.jar"/-->
              </fileset>
          </externalclasses>
          <shrink logfile="shrinklog.core.xml">
@@ -254,6 +252,9 @@
                 <class name="org.apache.log4j.Logger" methods="public"  />
                 <class name="org.apache.log4j.Category" methods="public" />
                 <class name="org.openscience.cdk.interfaces.IBond" methods="public" fields="none" />
+                <class name="org.openscience.jchempaint.applet.JChemPaintAbstractApplet" methods="public" fields="none" />
+                <class name="org.openscience.jchempaint.applet.JChemPaintViewerApplet"   methods="public" fields="none" />
+                <class name="org.openscience.jchempaint.applet.JChemPaintEditorApplet"   methods="public" fields="none" />
              </keep>
          </shrink>
       </yguard>
