@@ -623,6 +623,7 @@ public class PeriodicTablePanel extends JPanel
 				+ (element.getGroup()!=null ?
 					", Group "+element.getGroup() : "")
 				+", Period "+ element.getPeriod()+"</html>");
+	        label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 			pan.add(label,BorderLayout.NORTH);
 			
 			label = new JLabel("<html><FONT>"
@@ -632,6 +633,7 @@ public class PeriodicTablePanel extends JPanel
 				+" Electronativity: "+(element.getPaulingEneg()==null ? "undefined" : element.getPaulingEneg())+"<br>"
 				+"</FONT></html>");
 			label.setMinimumSize(new Dimension(165,150));
+	        label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 			pan.add(label,BorderLayout.CENTER);
 		}
 		else
