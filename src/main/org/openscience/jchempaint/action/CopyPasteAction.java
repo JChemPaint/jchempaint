@@ -106,6 +106,8 @@ public class CopyPasteAction extends JCPAction{
             "image/svg+xml",          "scalable vector graphics");
     private DataFlavor cmlFlavor = new DataFlavor(
             "image/cml",          "chemical markup language");
+    private DataFlavor smilesFlavor = new DataFlavor(
+            "chemical/x-daylight-smiles", "smiles format");
 
 
     private void addToClipboard(Clipboard clipboard, IAtomContainer container) {
@@ -226,7 +228,7 @@ public class CopyPasteAction extends JCPAction{
             ISimpleChemObjectReader reader = null;
             String content=null;
 
-            if (supported(transfer, DataFlavor.stringFlavor) ) {
+            if (supported(transfer, molFlavor) ) {
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
@@ -478,7 +480,7 @@ public class CopyPasteAction extends JCPAction{
 
     class JcpSelection implements Transferable, ClipboardOwner {
         private DataFlavor [] supportedFlavors = {
-                molFlavor, DataFlavor.stringFlavor, svgFlavor, cmlFlavor
+                molFlavor, DataFlavor.stringFlavor, svgFlavor, cmlFlavor, smilesFlavor
         };
         String mol;
         String smiles;
@@ -531,8 +533,10 @@ public class CopyPasteAction extends JCPAction{
         public synchronized Object getTransferData (DataFlavor parFlavor)	throws UnsupportedFlavorException {
             if (parFlavor.equals (molFlavor)) {
                 return new StringBufferInputStream(mol);
+            } else if (parFlavor.equals (smilesFlavor)) {
+                return new StringBufferInputStream(smiles);
             } else if(parFlavor.equals(DataFlavor.stringFlavor)) {
-                return smiles;
+                return mol;
             } else if(parFlavor.equals(cmlFlavor)) {
                 return new StringBufferInputStream(cml);
             } else if(parFlavor.equals(svgFlavor)) {
