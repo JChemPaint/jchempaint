@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-29 11:57+0100\n"
-"PO-Revision-Date: 2009-02-25 22:40-0300\n"
-"Last-Translator: Ricardo Stefani <ricardo.stefani@gmail.com>\n"
+"PO-Revision-Date: 2009-09-29 12:49+0000\n"
+"Last-Translator: Ricardo Stefani <Unknown>\n"
 "Language-Team: Project-Id-Version: gtranslatorReport-Msgid-Bugs-To: POT-"
 "Creation-Date: 2004-07-27 14:56-0400PO-Revision-Date: 2004-07-27 14:57-"
 "0400Last-Translator: Afonso Celso Medina <medina@maua.br>Language-Team: "
@@ -18,6 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2009-10-20 10:00+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:103
 msgid "Could not determine JCP version"
@@ -1021,7 +1023,7 @@ msgstr "Adicionar Átomo"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:74
 #, fuzzy
 msgid "Bond"
-msgstr "Recortar ligação"
+msgstr "Desenha Ligação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:75
 #, fuzzy
@@ -1415,9 +1417,8 @@ msgid "Relayout the structures"
 msgstr "Refaz o layout das estruturas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:246
-#, fuzzy
 msgid "Clear"
-msgstr "Arrumar"
+msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:248
 msgid "Create a new file"
@@ -1495,7 +1496,7 @@ msgstr "Entrar com Elemento ou Grupo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:267
 msgid "Add Atom Or Change Element"
-msgstr "Adicionar Átomo ou mudar Elemento "
+msgstr "Adicionar Átomo ou mudar Elemento"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:268
 msgid "Draw Bond"
@@ -1631,5 +1632,104 @@ msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:199
 msgid "Change drawing symbol to"
-msgstr "Mudar simbolo de desenho para "
+msgstr "Mudar simbolo de desenho para"
 
+#~ msgid "Reload"
+#~ msgstr "Recarregar"
+
+#~ msgid "Click this button to go back to PeriodicTable."
+#~ msgstr "Clique neste botão para retornar à Tabela Periódica"
+
+#~ msgid "General Settings"
+#~ msgstr "Configurações Gerais"
+
+#~ msgid ""
+#~ "An OpenScience project by Christoph Steinbeck, Egon Willighagen and "
+#~ "others."
+#~ msgstr ""
+#~ "Um projeto de código aberto de Christoph Steinbeck, Egon Willighagen e "
+#~ "outros."
+
+#~ msgid "No reaction existing. Cannot add therefore to something!"
+#~ msgstr "Não há reação. Portanto, não há como adicionar a algo !"
+
+#~ msgid "No existing reactions"
+#~ msgstr "Não há reações"
+
+#~ msgid "mass"
+#~ msgstr "massa"
+
+#~ msgid "Export..."
+#~ msgstr "Exportar..."
+
+#~ msgid "Hydrogens..."
+#~ msgstr "Hidrogênios..."
+
+#~ msgid "Adjust Bond Orders"
+#~ msgstr "Ajustar ordens de ligação"
+
+#~ msgid "Reset Bond Orders"
+#~ msgstr "Resetar ordens de ligação"
+
+#~ msgid "Clean Up"
+#~ msgstr "Arrumar"
+
+#~ msgid "Validate"
+#~ msgstr "Validar"
+
+#~ msgid "Switch on/off Tracking of Implicit Hydrogens"
+#~ msgstr "Ligar/desligar \"tracking\" de hidrogênios implícitos"
+
+#~ msgid "Make Existing Implicit Hydrogens Explicit"
+#~ msgstr "Converter hidrogênios implícitos existentes para explícitos"
+
+#~ msgid "Make Existing Explicit Hydrogens Implicit"
+#~ msgstr "Converter os hidrogênios explícitos existente em implícitos"
+
+#~ msgid "Edit..."
+#~ msgstr "Editar..."
+
+#~ msgid "Reload Preferences"
+#~ msgstr "Recarregar Preferências"
+
+#~ msgid "Save Preferences"
+#~ msgstr "Salvar Preferências"
+
+#~ msgid "Run Validate"
+#~ msgstr "Executar validação"
+
+#~ msgid "Clear Validate Results"
+#~ msgstr "Limpar Resultados de Validação"
+
+#~ msgid "Select Molecule"
+#~ msgstr "Selecionar Molécula"
+
+#~ msgid "Change Isotope..."
+#~ msgstr "Mudar Isótopo"
+
+#~ msgid "Reaction..."
+#~ msgstr "Reação..."
+
+#~ msgid "Make Reactant in new Reaction"
+#~ msgstr "Fazer como Reagente em nova Reação"
+
+#~ msgid "Make Reactant in existing Reaction"
+#~ msgstr "Fazer como Reagente em uma Reação existente"
+
+#~ msgid "Make Product in new Reaction"
+#~ msgstr "Fazer Prtoduto em uma Nova Reação"
+
+#~ msgid "Make Product in existing Reaction"
+#~ msgstr "Fazer Produto em uma Reação existente"
+
+#~ msgid "NMR Nuclei..."
+#~ msgstr "RMN de núcleo..."
+
+#~ msgid "Others..."
+#~ msgstr "Outros"
+
+#~ msgid "Select Reactants Only"
+#~ msgstr "Selecionar apenas os reagentes"
+
+#~ msgid "Reaction Popup Menu"
+#~ msgstr "Menu popup de reações"
