@@ -131,7 +131,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private void constructPanel() {
 
-        JPanel rendererOptionsPanel = this.addTab(GT._("Renderer Preferences"));
+        JPanel rendererOptionsPanel = this.addTab(GT._("Display Preferences"));
 
         //addField("",new JPanel());
         //addField("Rendering Settings",new JPanel());
