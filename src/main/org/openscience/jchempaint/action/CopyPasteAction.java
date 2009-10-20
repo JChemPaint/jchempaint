@@ -219,15 +219,19 @@ public class CopyPasteAction extends JCPAction{
             TemplateBrowser templateBrowser = new TemplateBrowser();
 
             if(templateBrowser.getChosenmolecule()!=null){
-                flipAndScaleMolecule(templateBrowser.getChosenmolecule(), true);
+                //Note: flipping is a workaround for the molfile upside down
+                flipStructure(templateBrowser.getChosenmolecule());
+                scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
+                jcpPanel.getRenderPanel().setZoomWide(true);
+
             }
         } else if ("paste".equals(type)) {
+            boolean flip=false;
             handleSystemClipboard(sysClip);
             Transferable transfer = sysClip.getContents( null );
             ISimpleChemObjectReader reader = null;
             String content=null;
-            boolean flip=true;
             
             if (supported(transfer, molFlavor) ) {
                 try {
@@ -238,7 +242,6 @@ public class CopyPasteAction extends JCPAction{
                         sb.append((char)x);
                     }
                     reader = new ReaderFactory().createReader(new StringReader(sb.toString()));
-                    flip=false;
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -246,6 +249,7 @@ public class CopyPasteAction extends JCPAction{
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
+                    flip=true;
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -328,7 +332,10 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
             if (toPaste != null) {
-                flipAndScaleMolecule(toPaste, flip);
+                jcpPanel.getRenderPanel().setZoomWide(true);
+                if (flip)
+                   flipStructure(toPaste);
+                scaleStructure(toPaste);
                 insertStructure(toPaste, renderModel);
 
             }else{
@@ -420,15 +427,32 @@ public class CopyPasteAction extends JCPAction{
     }
 
 
-    private void flipAndScaleMolecule (IMolecule topaste, boolean flip)  {
-        //we make sure the bond length in template is either as in canvas or default if empty
+    /**
+     * A workaround for reading structure from file, these tend to get
+     * in upside down
+     * TODO remove when obsolete.
+     * 
+     * @param topaste
+     */
+    private void flipStructure (IMolecule topaste)  {
+        for (IAtom atom : topaste.atoms()) {
+            if (atom.getPoint2d()!=null) {
+                atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
+            }
+        }
+    }
+
+    /**
+     * Scale the structure to be pasted to the same scale of the current drawing 
+     * @param topaste
+     */
+    private void scaleStructure (IMolecule topaste)  {
         double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
         double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
         double scale=bondLengthModel/bondLengthInsert;
         for (IAtom atom : topaste.atoms()) {
             if (atom.getPoint2d()!=null) {
-                //FIXME: notice the *-1, this is for flipping templates around, it needs to be removed once the renderer is able to handle directions properly
-                atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale*(flip ? -1 :1)));
+                atom.setPoint2d(new Point2d(atom.getPoint2d().x*scale,atom.getPoint2d().y*scale));
             }
         }
     }

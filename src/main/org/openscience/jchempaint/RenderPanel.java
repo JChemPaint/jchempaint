@@ -108,6 +108,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     private boolean fitToScreen;
 
+    private boolean zoomWide;
+
     private boolean shouldPaintFromCache = false;
 
     private UndoManager undoManager = new UndoManager();
@@ -115,7 +117,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private boolean debug = false;
 
     private PhantomBondGenerator pbg = new PhantomBondGenerator();
-    
+
     boolean isFirstDrawing = true;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
@@ -133,6 +135,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.renderer.getRenderer2DModel().setFitToScreen(fitToScreen);
     }
 
+    public void setZoomWide(boolean zoomWide) {
+        this.zoomWide=zoomWide;
+    }
+
+    
     public IChemModel getChemModel() {
         return this.hub.getIChemModel();
     }
@@ -145,7 +152,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return hub;
     }
 
-    private void setupMachinery(IChemModel chemModel, boolean fitToScreen) throws IOException {
+    private void setupMachinery(IChemModel chemModel, boolean fitToScreen)
+            throws IOException {
         // setup the Renderer and the controller 'model'
 
         if (this.renderer == null) {
@@ -188,7 +196,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return generators;
     }
 
-    private List<IGenerator> makeGenerators(IChemModel chemModel) throws IOException {
+    private List<IGenerator> makeGenerators(IChemModel chemModel)
+            throws IOException {
         List<IGenerator> generators = new ArrayList<IGenerator>();
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
@@ -287,20 +296,25 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             Rectangle screen = new Rectangle(0, 0, getParent().getWidth() - 20,
                     getParent().getHeight() - 20);
 
-            if (renderer.getRenderer2DModel().isFitToScreen()) {
+            if (renderer.getRenderer2DModel().isFitToScreen()||zoomWide) {
                 this.paintChemModelFitToScreen(chemModel, g2, screen);
+                if(zoomWide)
+                    zoomWide=false;
+                
             } else {
                 this.paintChemModel(chemModel, g2, screen);
             }
         }
-        //for some reason, the first drawing of a string takes around 0.5 seconds.
-        //If the user experiences this delay, it's annoying, so we do a dummy draw.
-    	if(isFirstDrawing && this.isVisible()){
-    		g.setFont(((AWTFontManager)renderer.getFontManager()).getFont());
-    		g.setColor(getBackground());
-    		g.drawString("Black",100,100);
-    		isFirstDrawing=false;
-    	}
+        // for some reason, the first drawing of a string takes around 0.5
+        // seconds.
+        // If the user experiences this delay, it's annoying, so we do a dummy
+        // draw.
+        if (isFirstDrawing && this.isVisible()) {
+            g.setFont(((AWTFontManager) renderer.getFontManager()).getFont());
+            g.setColor(getBackground());
+            g.drawString("Black", 100, 100);
+            isFirstDrawing = false;
+        }
     }
 
     /**
@@ -317,14 +331,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
         }
-        //for (IBond b  : chemModel.getMoleculeSet().getAtomContainer(0).bonds()){
-        //    System.out.println("bond "+b.getOrder()+" aromatic "+b.getFlag(CDKConstants.ISAROMATIC));
-        //}
-        //System.out.println("atoms : "+chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount());
-        //System.out.println("bonds : "+chemModel.getMoleculeSet().getAtomContainer(0).getBondCount());
-        //System.out.println("-----------------------");
+        // for (IBond b :
+        // chemModel.getMoleculeSet().getAtomContainer(0).bonds()){
+        // System.out.println("bond "+b.getOrder()+" aromatic "+b.getFlag(CDKConstants.ISAROMATIC));
+        // }
+        // System.out.println("atoms : "+chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount());
+        // System.out.println("bonds : "+chemModel.getMoleculeSet().getAtomContainer(0).getBondCount());
+        // System.out.println("-----------------------");
 
-        
         Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
         isNewChemModel = false;
 
@@ -445,8 +459,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return "<html>"
                 + formula
                 + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
-                        + GT._("Hs implicit") + ")")
-                + "</html>";
+                        + GT._("Hs implicit") + ")") + "</html>";
     }
 
     public Renderer getRenderer() {
@@ -497,7 +510,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         }
 
         if (dx != 0 || dy != 0) {
-            //System.out.println("shifting "+dx+" "+dy);
+            // System.out.println("shifting "+dx+" "+dy);
             this.renderer.shiftDrawCenter(dx, dy);
         }
 
@@ -514,10 +527,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
             if (dxShiftBack != 0 || dyShiftBack != 0) {
 
-                if(ZoomAction.zoomDone) {
-                    ZoomAction.zoomDone=false;
+                if (ZoomAction.zoomDone) {
+                    ZoomAction.zoomDone = false;
                     this.renderer.shiftDrawCenter(dxShiftBack, dyShiftBack);
-                    //System.out.println("shifting back");
+                    // System.out.println("shifting back");
                 }
             }
         }
