@@ -213,7 +213,8 @@ public class SaveAsAction extends JCPAction
         /*This needs to be reactivated once we have got reactions again
     	if(model.getMoleculeSet()!=null && model.getMoleculeSet().getAtomContainerCount()>0){
 			String error = GT._("Problems handling data");
-			String message = GT._("RXN files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?");
+			String message = GT._("{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?","RXN");
+
 			int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.NO_OPTION)
 				return null;
@@ -254,7 +255,7 @@ public class SaveAsAction extends JCPAction
         }
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
             String error = GT._("Problems handling data");
-            String message = "MDL mol "+GT._("files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
+            String message = GT._("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?","MDL mol");
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)
                 return null;
@@ -310,7 +311,8 @@ public class SaveAsAction extends JCPAction
         logger.info("Saving the contents in SMILES format...");
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
             String error = GT._("Problems handling data");
-            String message = "SMILES "+GT._("files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
+            String message = GT._("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?","SMILES");
+
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)
                 return null;
