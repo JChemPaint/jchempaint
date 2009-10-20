@@ -97,7 +97,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         myPanel = new JPanel();
         getContentPane().add(myPanel);
         myPanel.setLayout(new BorderLayout());
-        yesButton = new JButton("Cancel");
+        yesButton = new JButton(GT._("Cancel"));
         yesButton.addActionListener(this);
         JPanel bottomPanel =new JPanel();
         bottomPanel.add(yesButton);
