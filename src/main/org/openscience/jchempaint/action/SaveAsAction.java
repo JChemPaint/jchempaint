@@ -248,13 +248,13 @@ public class SaveAsAction extends JCPAction
         logger.info("Saving the contents in a MDL molfile file...");
         if(model.getMoleculeSet()==null || model.getMoleculeSet().getAtomContainerCount()==0){
             String error = GT._("Problems handling data");
-            String message = GT._("MDL mol files can only save separate molecules. You have no molecules painted!");
+            String message = GT._("MDL mol files can only save molecules. You have no molecules painted!");
             JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
             return null;
         }
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
             String error = GT._("Problems handling data");
-            String message = GT._("MDL mol files cannot contain reactions. Your have reaction(s) painted, which will not be in the file. Continue?");
+            String message = "MDL mol "+GT._("files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)
                 return null;
@@ -310,7 +310,7 @@ public class SaveAsAction extends JCPAction
         logger.info("Saving the contents in SMILES format...");
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
             String error = GT._("Problems handling data");
-            String message = GT._("SMILES files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
+            String message = "SMILES "+GT._("files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?");
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)
                 return null;

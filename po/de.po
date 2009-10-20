@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-20 14:07+0100\n"
+"POT-Creation-Date: 2009-10-20 14:22+0100\n"
 "PO-Revision-Date: 2009-02-25 16:30+0000\n"
 "Last-Translator: Stefan Kuhn <stefan.kuhn@ebi.ac.uk>\n"
 "Language-Team: \n"
@@ -72,7 +72,7 @@ msgstr "sdf-ähnliche Datei"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:527
 msgid "Cannot depict contents. Model does not have bonds."
-msgstr ""
+msgstr "Inhalt kann nicht gezeichnet werden. Model hat keine Bindungen."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:562
 msgid ""
@@ -708,7 +708,7 @@ msgstr "Bindungsweite"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:225
 msgid "Highlight/Select radius"
-msgstr ""
+msgstr "Radius ausgewählter Objekte"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:233
 msgid "Wedge width"
@@ -888,22 +888,19 @@ msgid "Problems handling data"
 msgstr "Probleme mit den Daten"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
-msgid ""
-"MDL mol files can only save separate molecules. You have no molecules "
-"painted!"
+msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
+"MDL mol Dateien können nur Moleküle speichern. Sie haben keine Moleküle "
+"gezeichnet"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
-msgid ""
-"MDL mol files cannot contain reactions. Your have reaction(s) painted, which "
-"will not be in the file. Continue?"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
 msgid ""
-"SMILES files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
+"files cannot contain reactions. Your have reaction(s) painted. The reactants/"
+"products of these will be included as separate molecules. Continue?"
 msgstr ""
+"Dateien können keine Reaktionen beinhalten. Sie haben Reaktionen gezeichnet, "
+"die nicht in der Datei gespeichert weren. Fortfahren?"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:435
 msgid "Zoomfactor"
@@ -990,7 +987,7 @@ msgstr "Einfügen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:72
 msgid "Templates"
-msgstr ""
+msgstr "Vorlagen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:73
 msgid "Cut"
@@ -1159,11 +1156,11 @@ msgstr "Hauptisotop"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:111
 msgid "Add Single Electron"
-msgstr ""
+msgstr "Ungepaartes Elektron hinzufügen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:112
 msgid "Remove Single Electron"
-msgstr ""
+msgstr "Ungepaartes Elektron entfernen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:113
 msgid "Properties"
@@ -1466,7 +1463,7 @@ msgstr "Horizontal spiegeln"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:264
 msgid "Choose from complex templates"
-msgstr ""
+msgstr "Aus komplizierten Vorlagen wählen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:265
 msgid "Bond Popup Menu"
@@ -1570,24 +1567,24 @@ msgstr "Arabic"
 
 #: src/main/org/openscience/jchempaint/GT.java:124
 msgid "Norwegian Bokmal"
-msgstr ""
+msgstr "Norwegian Bokmal"
 
 #: src/main/org/openscience/jchempaint/GT.java:125
 msgid "Czech"
-msgstr ""
+msgstr "Czech"
 
 #: src/main/org/openscience/jchempaint/GT.java:126
 msgid "Hungarian"
-msgstr ""
+msgstr "Hungarian"
 
 #: src/main/org/openscience/jchempaint/GT.java:127
 #, fuzzy
 msgid "Thai"
-msgstr "Ti"
+msgstr "Thai"
 
 #: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Russian"
-msgstr ""
+msgstr "Russian"
 
 #: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:75
 msgid "CDK source code fragment"

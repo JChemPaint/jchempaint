@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-20 14:07+0100\n"
+"POT-Creation-Date: 2009-10-20 14:22+0100\n"
 "PO-Revision-Date: 2009-09-29 12:49+0000\n"
 "Last-Translator: Ricardo Stefani <Unknown>\n"
 "Language-Team: Project-Id-Version: gtranslatorReport-Msgid-Bugs-To: POT-"
@@ -889,21 +889,14 @@ msgid "Problems handling data"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
-msgid ""
-"MDL mol files can only save separate molecules. You have no molecules "
-"painted!"
+msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
-msgid ""
-"MDL mol files cannot contain reactions. Your have reaction(s) painted, which "
-"will not be in the file. Continue?"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
 msgid ""
-"SMILES files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
+"files cannot contain reactions. Your have reaction(s) painted. The reactants/"
+"products of these will be included as separate molecules. Continue?"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:435
