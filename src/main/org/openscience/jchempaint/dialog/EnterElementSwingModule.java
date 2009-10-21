@@ -196,7 +196,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					    chemModelRelay.setSymbol(closestAtom, x);
 					}
 				}else{
-					JOptionPane.showMessageDialog(null, x+" "+GT._("is not a valid element symbol or functional group."), GT._("No valid input"), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, GT._("{0} is not a valid element symbol or functional group.", x), GT._("No valid input"), JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			chemModelRelay.getController2DModel().setDrawElement(x);

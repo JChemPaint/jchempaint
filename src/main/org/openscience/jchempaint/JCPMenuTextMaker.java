@@ -123,13 +123,13 @@ public class JCPMenuTextMaker {
 		entries.put("metalloids", GT._("Metalloids"));
 		entries.put("Transition m", GT._("Non-Metals"));
 		entries.put("pseudoSymbols", GT._("Pseudo Atoms"));
-		entries.put("majorPlusThree", GT._("Major Plus Three"));
-		entries.put("majorPlusTwo", GT._("Major Plus Two"));
-		entries.put("majorPlusOne", GT._("Major Plus One"));
+		entries.put("majorPlusThree", GT._("Major Plus {0}","3"));
+		entries.put("majorPlusTwo", GT._("Major Plus {0}","2"));
+		entries.put("majorPlusOne", GT._("Major Plus {0}","1"));
 		entries.put("major", GT._("Major Isotope"));
-		entries.put("majorMinusOne", GT._("Major Minus One"));
-		entries.put("majorMinusTwo", GT._("Major Minus Two"));
-		entries.put("majorMinusThree", GT._("Major Minus Three"));
+		entries.put("majorMinusOne", GT._("Major Minus {0}","1"));
+		entries.put("majorMinusTwo", GT._("Major Minus {0}","2"));
+		entries.put("majorMinusThree", GT._("Major Minus {0}","3"));
 		entries.put("valence", GT._("Valence"));
 		entries.put("valenceOff", GT._("Valence Off"));
 		entries.put("valence1", GT._("Valence {0}","1"));
@@ -233,8 +233,8 @@ public class JCPMenuTextMaker {
 		entries.put("plusTooltip", GT._("Increase the charge on an Atom"));
 		entries.put("minusTooltip", GT._("Decrease the charge on an Atom"));
 		entries.put("eraserTooltip", GT._("Delete Atoms and Bonds"));
-		entries.put("lassoTooltip", GT._("Select Atoms and Bonds"));
-		entries.put("selectTooltip", GT._("Select Atoms and Bonds in a square region"));
+		entries.put("lassoTooltip", GT._("Select Atoms and Bonds in a free-form region"));
+		entries.put("selectTooltip", GT._("Select Atoms and Bonds in a rectangular region"));
 		entries.put("triangleTooltip", GT._("Add a propane ring"));
 		entries.put("squareTooltip", GT._("Add a butane ring"));
 		entries.put("pentagonTooltip", GT._("Add a pentane ring"));
@@ -267,12 +267,12 @@ public class JCPMenuTextMaker {
 		entries.put("Enter Element or Group", GT._("Enter Element or Group"));
 		entries.put("Add Atom Or Change Element", GT._("Add Atom Or Change Element"));
 		entries.put("Draw Bond", GT._("Draw Bond"));
-		entries.put("Ring 3", GT._("Ring 3"));
-		entries.put("Ring 4", GT._("Ring 4"));
-		entries.put("Ring 5", GT._("Ring 5"));
-		entries.put("Ring 6", GT._("Ring 6"));
-		entries.put("Ring 7", GT._("Ring 7"));
-		entries.put("Ring 8", GT._("Ring 8"));
+		entries.put("Ring 3", GT._("Ring {0}","3"));
+		entries.put("Ring 4", GT._("Ring {0}","4"));
+		entries.put("Ring 5", GT._("Ring {0}","5"));
+		entries.put("Ring 6", GT._("Ring {0}","6"));
+		entries.put("Ring 7", GT._("Ring {0}","7"));
+		entries.put("Ring 8", GT._("Ring {0}","8"));
 		entries.put("Add or convert to bond up", GT._("Add or convert to bond up"));
 		entries.put("Add or convert to bond down", GT._("Add or convert to bond down"));
 		entries.put("Decrease Charge", GT._("Decrease Charge"));
@@ -281,7 +281,7 @@ public class JCPMenuTextMaker {
 		entries.put("Delete", GT._("Delete"));
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
-		entries.put("Select Square", GT._("Select Square"));
+		entries.put("Select Square", GT._("Select Rectangle"));
 	}
 	
 	/**
