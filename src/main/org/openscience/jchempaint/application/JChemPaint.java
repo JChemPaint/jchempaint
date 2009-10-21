@@ -105,9 +105,7 @@ public class JChemPaint {
             if (self != null)
                 version = self.getImplementationVersion();
             if (vers.compareTo(requiredJVM) < 0) {
-                System.err.println(GT._("WARNING: JChemPaint") + " " + version
-                        + " " + GT._("must be run with a Java VM version")
-                        + " " + requiredJVM + " " + GT._("or higher."));
+                System.err.println(GT._("WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher.", new String[]{version, requiredJVM}));
                 System.err.println(GT._("Your JVM version") + ": " + vers);
                 System.exit(1);
             }

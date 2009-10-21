@@ -27,6 +27,7 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
         attachRing();
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
         deleteAtom();
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
         applet.button("undo").click();

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-20 14:22+0100\n"
+"POT-Creation-Date: 2009-10-21 10:04+0100\n"
 "PO-Revision-Date: 2009-02-25 16:30+0000\n"
 "Last-Translator: Stefan Kuhn <stefan.kuhn@ebi.ac.uk>\n"
 "Language-Team: \n"
@@ -765,6 +765,7 @@ msgid "Apply"
 msgstr "Anwenden"
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:96
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:100
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -811,13 +812,13 @@ msgstr "Rückgängig"
 msgid "No undo possible"
 msgstr "Rückgängig machen nicht möglich"
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:335
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:342
 msgid "The content you tried to copy could not be read to any known format"
 msgstr ""
 "Der Inhalt der Zwischenablage konnte in kein bekanntes Format eingelesen "
 "werden"
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:335
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:342
 #, fuzzy
 msgid "Could not process content"
 msgstr "InChI konnte nicht verarbeitet werden"
@@ -881,32 +882,33 @@ msgstr "Nichts zu speichern"
 msgid "Error while writing file"
 msgstr "Fehler während der SMILES-Erzeugung"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:250
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:256
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:312
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
 msgid "Problems handling data"
 msgstr "Probleme mit den Daten"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:252
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
 "MDL mol Dateien können nur Moleküle speichern. Sie haben keine Moleküle "
 "gezeichnet"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:258
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:314
+#, fuzzy, java-format
 msgid ""
-"files cannot contain reactions. Your have reaction(s) painted. The reactants/"
-"products of these will be included as separate molecules. Continue?"
+"{0} files cannot contain reactions. Your have reaction(s) painted. The "
+"reactants/products of these will be included as separate molecules. Continue?"
 msgstr ""
-"Dateien können keine Reaktionen beinhalten. Sie haben Reaktionen gezeichnet, "
+"{0} Dateien können keine Reaktionen beinhalten. Sie haben Reaktionen gezeichnet, "
 "die nicht in der Datei gespeichert weren. Fortfahren?"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:435
+#: src/main/org/openscience/jchempaint/RenderPanel.java:449
 msgid "Zoomfactor"
 msgstr "Vergrößerungsfaktor"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:448
+#: src/main/org/openscience/jchempaint/RenderPanel.java:462
 msgid "Hs implicit"
 msgstr "Hs implizit"
 
@@ -1255,36 +1257,16 @@ msgid "Valence Off"
 msgstr "Keine Valenz"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:135
-msgid "Valence 1"
-msgstr "Valenz 1"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:136
-msgid "Valence 2"
-msgstr "Valenz 2"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:137
-msgid "Valence 3"
-msgstr "Valenz 3"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:138
-msgid "Valence 4"
-msgstr "Valenz 4"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:139
-msgid "Valence 5"
-msgstr "Valenz 5"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:140
-msgid "Valence 6"
-msgstr "Valenz 6"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:141
-msgid "Valence 7"
-msgstr "Valenz 7"
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:142
-msgid "Valence 8"
-msgstr "Valenz 8"
+#, fuzzy, java-format
+msgid "Valence {0}"
+msgstr "Valenz {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:146
 msgid "H"
@@ -1631,6 +1613,27 @@ msgstr "Ein Fehler ist aufgetreten"
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:200
 msgid "Change drawing symbol to"
 msgstr "Benutztes Symbol ändern nach"
+
+#~ msgid "Valence 2"
+#~ msgstr "Valenz 2"
+
+#~ msgid "Valence 3"
+#~ msgstr "Valenz 3"
+
+#~ msgid "Valence 4"
+#~ msgstr "Valenz 4"
+
+#~ msgid "Valence 5"
+#~ msgstr "Valenz 5"
+
+#~ msgid "Valence 6"
+#~ msgstr "Valenz 6"
+
+#~ msgid "Valence 7"
+#~ msgstr "Valenz 7"
+
+#~ msgid "Valence 8"
+#~ msgstr "Valenz 8"
 
 #~ msgid "Model does not have bonds. Cannot depict contents."
 #~ msgstr "Model hat keine Bindungen. Inhalt kann nicht gezeichnet werden."

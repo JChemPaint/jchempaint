@@ -121,6 +121,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	}
 	
 	@Test public void testMenuChargePlus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
@@ -134,25 +135,26 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getHydrogenCount().intValue();
         oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
+        Assert.assertEquals(oldhcount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
         Assert.assertEquals(oldcharge+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
         oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getHydrogenCount().intValue();
         oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
+        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getHydrogenCount().intValue());
         Assert.assertEquals(oldcharge+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).setFormalCharge(0);
 	}
 
 	@Test public void testMenuChargeMinus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
         int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue();
         int oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue();
 		applet.menuItem("minus").click();
 		Assert.assertEquals(oldcharge-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
-        Assert.assertEquals(oldhcount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
+        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
 		panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
         Assert.assertEquals("minus",panel.get2DHub().getActiveDrawModule().getID());
         Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);
@@ -160,11 +162,12 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
         Assert.assertEquals(oldcharge-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
-        Assert.assertEquals(oldhcount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
+        Assert.assertEquals(oldhcount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
         oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getHydrogenCount().intValue();
-        oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue();        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue();
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
         Assert.assertEquals(oldcharge-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getFormalCharge().intValue());
-        Assert.assertEquals(oldhcount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getHydrogenCount().intValue());
+        Assert.assertEquals(oldhcount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getHydrogenCount().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).setFormalCharge(0);
     }

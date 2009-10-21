@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-20 14:22+0100\n"
+"POT-Creation-Date: 2009-10-21 10:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -757,6 +757,7 @@ msgid "Apply"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:96
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:100
 msgid "Cancel"
 msgstr ""
 
@@ -802,11 +803,11 @@ msgstr ""
 msgid "No undo possible"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:335
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:342
 msgid "The content you tried to copy could not be read to any known format"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:335
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:342
 msgid "Could not process content"
 msgstr ""
 
@@ -866,28 +867,29 @@ msgstr ""
 msgid "Error while writing file"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:250
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:256
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:312
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
 msgid "Problems handling data"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:251
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:252
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:257
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:313
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:258
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:314
+#, java-format
 msgid ""
-"files cannot contain reactions. Your have reaction(s) painted. The reactants/"
-"products of these will be included as separate molecules. Continue?"
+"{0} files cannot contain reactions. Your have reaction(s) painted. The "
+"reactants/products of these will be included as separate molecules. Continue?"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:435
+#: src/main/org/openscience/jchempaint/RenderPanel.java:449
 msgid "Zoomfactor"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:448
+#: src/main/org/openscience/jchempaint/RenderPanel.java:462
 msgid "Hs implicit"
 msgstr ""
 
@@ -1218,35 +1220,15 @@ msgid "Valence Off"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:135
-msgid "Valence 1"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:136
-msgid "Valence 2"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:137
-msgid "Valence 3"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:138
-msgid "Valence 4"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:139
-msgid "Valence 5"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:140
-msgid "Valence 6"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:141
-msgid "Valence 7"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:142
-msgid "Valence 8"
+#, java-format
+msgid "Valence {0}"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:146
