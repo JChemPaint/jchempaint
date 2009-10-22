@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-20 14:22+0100\n"
-"PO-Revision-Date: 2009-10-21 20:06+0100\n"
+"PO-Revision-Date: 2009-10-22 21:36+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1502,7 +1502,7 @@ msgstr "Norsk Bokmål"
 
 #: src/main/org/openscience/jchempaint/GT.java:125
 msgid "Czech"
-msgstr "Čeština"
+msgstr "Ceština"
 
 #: src/main/org/openscience/jchempaint/GT.java:126
 msgid "Hungarian"
@@ -1514,7 +1514,7 @@ msgstr "Thai"
 
 #: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Russian"
-msgstr ""
+msgstr "русский язык"
 
 #: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:75
 msgid "CDK source code fragment"
@@ -1563,4 +1563,25 @@ msgstr "Ha habido un error"
 #: src/main/org/openscience/jchempaint/JCPToolBar.java:200
 msgid "Change drawing symbol to"
 msgstr "Cambiar el símbolo de dibujo a"
+
+#~ msgid "Major Plus {0}"
+#~ msgstr "Principal + {0}"
+#~ msgid "Major Minus {0}"
+#~ msgstr "Principal - {0}"
+#~ msgid "Select Atoms and Bonds in a free-form region"
+#~ msgstr "Seleccionar átomos y enlaces en cualquier área"
+#~ msgid "Select Atoms and Bonds in a rectangular region"
+#~ msgstr "Seleccionar átomos y enlaces en una región rectangular"
+#~ msgid "Ring {0}"
+#~ msgstr "Anillo de {0}"
+#~ msgid "Select Rectangle"
+#~ msgstr "Seleccionar en rectángulo"
+#~ msgid "Change drawing symbol to {0}"
+#~ msgstr "Cambiar el símbolo de dibujo a {0}"
+#~ msgid "Your JVM version is {0}"
+#~ msgstr "Su versión de JVM es {0}"
+#~ msgid "{0} is not a valid element symbol or functional group."
+#~ msgstr "{0} no es un símbolo válido para un elemento o un grupo funcional."
+#~ msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+#~ msgstr "Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina Virtual de Java {1} o superior."
 
