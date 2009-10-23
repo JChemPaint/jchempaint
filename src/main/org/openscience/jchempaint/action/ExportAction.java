@@ -94,7 +94,12 @@ public class ExportAction extends SaveAsAction {
             }else{
                 type = ((JCPExportFileFilter) currentFilter).getType();
                 File outFile = new File(
-                        chooser.getSelectedFile().getAbsolutePath() + "." + type);
+                        chooser.getSelectedFile().getAbsolutePath());
+                String fileName = outFile.toString();
+                if (!fileName.endsWith("."+type)) {
+                    fileName += "."+type;
+                    outFile = new File(fileName);
+                }
                 if (outFile.exists()) {
                     String message = "File already exists. Do you want to overwrite it?";
                     String title = "File already exists";
