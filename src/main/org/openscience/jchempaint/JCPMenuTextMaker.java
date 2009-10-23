@@ -69,7 +69,7 @@ public class JCPMenuTextMaker {
 		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
 		entries.put("eraser", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
-		entries.put("pasteTemplate", GT._("Templates"));
+		entries.put("pasteTemplate", GT._("All Templates"));
 		entries.put("cut", GT._("Cut"));
 		entries.put("atomMenu", GT._("Atom"));
 		entries.put("bondMenu", GT._("Bond"));
