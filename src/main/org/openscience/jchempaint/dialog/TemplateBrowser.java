@@ -91,8 +91,9 @@ public class TemplateBrowser extends JDialog implements ActionListener {
 
     /**
      * Constructor for TemplateBrowser.
+	 * @param tabToSelect a tab with that name will be shown at startup.
      */
-    public TemplateBrowser() {
+    public TemplateBrowser(String tabToSelect) {
         super((JFrame)null, GT._("Structure Templates"), true);
         myPanel = new JPanel();
         getContentPane().add(myPanel);
@@ -103,67 +104,14 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         bottomPanel.add(yesButton);
         myPanel.add(bottomPanel, BorderLayout.SOUTH); 
         tabbedPane = new JTabbedPane();
-        DummyClass dummy = new DummyClass();
         Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
         Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
-        try {
-            try{
-                // Create a URL that refers to a jar file on the net
-                URL url = new URL("jar:"+dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()+"!/");
-                // Get the jar file
-                JarURLConnection conn = (JarURLConnection)url.openConnection();
-                JarFile jarfile = conn.getJarFile();
-                for (Enumeration<JarEntry> e = jarfile.entries() ; e.hasMoreElements() ;) {
-                    JarEntry entry = e.nextElement();
-                    if(entry.getName().indexOf(TEMPLATES_PACKAGE+"/")==0){
-                        String restname = entry.getName().substring(new String(TEMPLATES_PACKAGE+"/").length());
-                        if(restname.length()>2){
-                            if(restname.indexOf("/")==restname.length()-1){
-                                entriesMol.put(restname.substring(0,restname.length()-1), new ArrayList<IMolecule>());
-                            }else if(restname.indexOf("/")>-1){
-                                if(entry.getName().indexOf(".mol")>-1){
-                                    InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
-                                    MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
-                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-                                    entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
-                                    entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
-                                }else{
-                                    Icon icon = new ImageIcon(new URL(url.toString()+entry.getName()));
-                                    entriesIcon.put(entry.getName().substring(0,entry.getName().length()-4),icon);
-                                }
-                            }
-                        }
-                    }
-                }
-            }catch(ZipException ex){
-                //This is a version we fall back to if no jar available. This should be in Eclipse only.
-                File file = new File(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE.replace('/', File.separatorChar));
-                for (int i=0;i<file.listFiles().length ; i++) {
-                    if(file.listFiles()[i].isDirectory()){
-                        File dir = file.listFiles()[i];
-                        if(!dir.getName().startsWith(".")) { 
-                            entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
-                            for(int k=0;k<dir.list().length;k++){
-                                if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
-                                    MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
-                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
-                                    entriesMol.get(dir.getName()).add(cdkmol);
-                                    entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
-                                }else{
-
-                                    Icon icon = new ImageIcon(dir.listFiles()[k].getAbsolutePath());
-                                    if ( dir.listFiles()[k].getName().toLowerCase().endsWith("png")) {
-                                        entriesIcon.put(dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4),icon);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }                
-            }
+        try{
+            createTemplatesMaps(entriesMol, entriesMolName, entriesIcon, true);
             myPanel.add( tabbedPane, BorderLayout.CENTER );
             Iterator<String> it = entriesMol.keySet().iterator();
+            int count=0;
             while(it.hasNext()) {
                 String key=it.next();
                 JPanel panel = new JPanel();
@@ -187,6 +135,10 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     mols.put(button, cdkmol);
                 }
                 tabbedPane.addTab(key.replace('_', ' '), panel );
+                if(tabToSelect.equals(key.replace('_',' '))){
+                    tabbedPane.setSelectedIndex(count);
+                }
+                count++;
             }                
             pack();
             setVisible(true);
@@ -204,5 +156,77 @@ public class TemplateBrowser extends JDialog implements ActionListener {
             chosenmolecule = mols.get(e.getSource());
         }
         this.setVisible(false);        
+    }
+
+
+    /**
+     * Extracts templates from directories.
+     * 
+     * @param entriesMol      A map of category names and structure.
+     * @param entriesMolName  A map of structures and names.
+     * @param entriesIcon     A map of structures and images.
+     * @param withsubdirs     true=all of the above will be filled, false=only names in entriesMol will be filled (values in entriesMol will be empty, other maps as well, these can be passed as null).
+     * @throws Exception      Problems reading directories.
+     */
+    public static void createTemplatesMaps(Map<String, List<IMolecule>> entriesMol,
+            Map<IMolecule, String> entriesMolName, Map<String, Icon> entriesIcon, boolean withsubdirs) throws Exception{
+        DummyClass dummy = new DummyClass();
+            try{
+                // Create a URL that refers to a jar file on the net
+                URL url = new URL("jar:"+dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()+"!/");
+                // Get the jar file
+                JarURLConnection conn = (JarURLConnection)url.openConnection();
+                JarFile jarfile = conn.getJarFile();
+                for (Enumeration<JarEntry> e = jarfile.entries() ; e.hasMoreElements() ;) {
+                    JarEntry entry = e.nextElement();
+                    if(entry.getName().indexOf(TEMPLATES_PACKAGE+"/")==0){
+                        String restname = entry.getName().substring(new String(TEMPLATES_PACKAGE+"/").length());
+                        if(restname.length()>2){
+                            if(restname.indexOf("/")==restname.length()-1){
+                                entriesMol.put(restname.substring(0,restname.length()-1), new ArrayList<IMolecule>());
+                            }else if(restname.indexOf("/")>-1 && withsubdirs){
+                                if(entry.getName().indexOf(".mol")>-1){
+                                    InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
+                                    MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
+                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+                                    entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
+                                    entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
+                                }else{
+                                    Icon icon = new ImageIcon(new URL(url.toString()+entry.getName()));
+                                    entriesIcon.put(entry.getName().substring(0,entry.getName().length()-4),icon);
+                                }
+                            }
+                        }
+                    }
+                }
+            }catch(ZipException ex){
+                //This is a version we fall back to if no jar available. This should be in Eclipse only.
+                File file = new File(new File(dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE.replace('/', File.separatorChar));
+                for (int i=0;i<file.listFiles().length ; i++) {
+                    if(file.listFiles()[i].isDirectory()){
+                        File dir = file.listFiles()[i];
+                        if(!dir.getName().startsWith(".")) { 
+                            entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
+                            if(withsubdirs){
+                                for(int k=0;k<dir.list().length;k++){
+                                    if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
+                                        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
+                                        IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+                                        entriesMol.get(dir.getName()).add(cdkmol);
+                                        entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
+                                    }else{
+    
+                                        Icon icon = new ImageIcon(dir.listFiles()[k].getAbsolutePath());
+                                        if ( dir.listFiles()[k].getName().toLowerCase().endsWith("png")) {
+                                            entriesIcon.put(dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4),icon);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }                
+            }
+        
     }
 }

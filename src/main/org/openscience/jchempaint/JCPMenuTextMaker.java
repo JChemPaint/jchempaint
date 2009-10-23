@@ -74,6 +74,7 @@ public class JCPMenuTextMaker {
 		entries.put("atomMenu", GT._("Atom"));
 		entries.put("bondMenu", GT._("Bond"));
 		entries.put("tools", GT._("Tools"));
+		entries.put("templates", GT._("Templates"));
 		entries.put("bond", GT._("Single"));
 		entries.put("down_bond", GT._("Stereo Down"));
 		entries.put("up_bond", GT._("Stereo Up"));

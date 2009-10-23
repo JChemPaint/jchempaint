@@ -23,13 +23,17 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     
     @Test public void testUndo() throws CloneNotSupportedException{
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
+        System.err.println(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         drawRing();
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
+        System.err.println(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         attachRing();
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
+        System.err.println(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
         deleteAtom();
         models.add((IAtomContainer)panel.getChemModel().getMoleculeSet().getAtomContainer(0).clone());
+        System.err.println(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         applet.button("undo").click();
         Assert.assertEquals(models.get(2).getAtomCount(), panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(models.get(2).getBondCount(), panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
