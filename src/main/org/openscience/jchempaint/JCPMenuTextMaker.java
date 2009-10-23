@@ -99,6 +99,7 @@ public class JCPMenuTextMaker {
 		entries.put("createInChI", GT._("Create InChI"));
 		entries.put("help", GT._("Help"));
 		entries.put("tutorial", GT._("Tutorial"));
+		entries.put("feedback", GT._("Report Feedback"));
 		entries.put("license", GT._("License"));
 		entries.put("about", GT._("About"));
 		entries.put("hydroon", GT._("On all"));
