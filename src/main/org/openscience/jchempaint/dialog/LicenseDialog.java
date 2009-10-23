@@ -36,6 +36,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
+import org.openscience.jchempaint.JCPPropertyHandler;
+
 
 
 /**
@@ -59,7 +61,7 @@ public class LicenseDialog extends JFrame {
     
     public void doInit(){
         Package self = Package.getPackage("org.openscience.jchempaint");
-	String version = self.getImplementationVersion();
+	String version = JCPPropertyHandler.getInstance().getVersion();
 
         String s1 = 
             "JChemPaint "  + version + " is licensed LGPL, but " +

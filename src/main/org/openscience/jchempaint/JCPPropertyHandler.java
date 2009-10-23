@@ -321,5 +321,9 @@ public class JCPPropertyHandler
 		}
 		return str;
 	}
+	
+	public String getVersion(){
+	    return this.getJCPProperties().getProperty("General.JCPVersion");
+	}
 
 }

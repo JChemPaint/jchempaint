@@ -88,6 +88,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
@@ -103,7 +104,7 @@ public class JChemPaint {
             Package self = Package.getPackage("org.openscience.jchempaint");
             String version = GT._("Could not determine JCP version");
             if (self != null)
-                version = self.getImplementationVersion();
+                version = JCPPropertyHandler.getInstance().getVersion();
             if (vers.compareTo(requiredJVM) < 0) {
                 System.err.println(GT._("WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher.", new String[]{version, requiredJVM}));
                 System.err.println(GT._("Your JVM version is {0}", vers));

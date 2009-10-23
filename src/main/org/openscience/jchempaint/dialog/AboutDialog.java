@@ -68,7 +68,7 @@ public class AboutDialog extends JFrame {
 
 	public void doInit() {
 		Package self = Package.getPackage("org.openscience.jchempaint");
-		String version = self.getImplementationVersion();
+		String version = JCPPropertyHandler.getInstance().getVersion();
 		String s1 = "JChemPaint " + version + "\n";
 		s1 += GT._("An open-source editor for 2D chemical structures.");
 		String s2 = GT._("An OpenScience project.")+"\n";

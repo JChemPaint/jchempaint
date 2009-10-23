@@ -183,6 +183,7 @@
 
          </javac>
     	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+    	<replace file="${dist-classes}/org/openscience/jchempaint/resources/JChemPaintResources.properties" token="@@@" value="${jcp.version}"/>
         <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
         <delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
     	<copy todir="${dist-classes}">
@@ -453,6 +454,17 @@
 	
     
 	<target id="build-applet" name="build-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars" description="Builds the JChemPaint applet jar files with jarindex">
+		<manifest file="MANIFEST.MF">
+		    <attribute name="Built-By" value="${user.name}"/>
+		    <section name="common">
+                <attribute name="Specification-Title" value="JChemPaint"/>
+                <attribute name="Specification-Version" value="1.0"/>
+                <attribute name="Specification-Vendor" value="The CDK Project"/>
+                <attribute name="Implementation-Title" value="org.openscience.cdk"/>
+                <attribute name="Implementation-Version" value="${jcp.version}"/>
+                <attribute name="Implementation-Vendor" value="The CDK Project"/>
+		    </section>
+		</manifest>
         <!-- At first jars are packed from file lists -->
         <!-- The file lists are generated from tomcat access log files with unpacked class files (and without jar files) -->
         <!-- cat apache/jakarta-tomcat-5.0.28/logs/localhost_access_log.2005-04-27.txt | awk -v classdir="/jcpapplet/classes/" '$9 != 404 && substr($7,0,length(classdir)) == classdir { print substr($7,length(classdir)+1) }' | sort -->
@@ -465,7 +477,7 @@
             <attribute name="destfile"/>
             <attribute name="includesfile"/>
             <sequential>
-                <jar destfile="@{destfile}">
+                <jar destfile="@{destfile}" manifest="MANIFEST.MF">
                     <fileset dir="${dist-classes}">
                         <includesfile name="@{includesfile}"/>
                         <excludesfile name="${growing_list_file}"/>
@@ -475,24 +487,11 @@
                 <concat destfile="${growing_classpath}" fixlastline="no" append="yes">@{destfile}${line.separator}</concat>
             </sequential>
         </macrodef>
-        <macrodef name="jar-from-list-no-concat">
-            <attribute name="destfile"/>
-            <attribute name="includesfile"/>
-            <sequential>
-                <jar destfile="@{destfile}">
-                    <fileset dir="${dist-classes}">
-                        <includesfile name="@{includesfile}"/>
-                        <excludesfile name="${growing_list_file}"/>
-                    </fileset>
-                </jar>
-                <concat destfile="${growing_classpath}" fixlastline="no" append="yes">@{destfile}${line.separator}</concat>
-            </sequential>
-        </macrodef>
         <macrodef name="jar-from-pattern">
             <attribute name="destfile"/>
             <attribute name="includepattern"/>
             <sequential>
-                <jar destfile="@{destfile}">
+                <jar destfile="@{destfile}" manifest="MANIFEST.MF">
                     <fileset dir="${dist-classes}">
                         <include name="@{includepattern}"/>
                         <excludesfile name="${growing_list_file}"/>
@@ -512,9 +511,6 @@
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-viewer-opts.jar" includesfile="${metainf}/applet-viewer-opts.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor.jar" includesfile="${metainf}/applet-editor.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor-opts.jar" includesfile="${metainf}/applet-editor-opts.files"/>
-		<!-- since for the display of the help, we need the icons in the same jar, we do not log
-		this to the growing_list_file, so that icons go into the resources.jar as well -->
-        <!--jar-from-list-no-concat destfile="${dist}/jar/jchempaint-applet-resources-core.jar" includesfile="${metainf}/applet-resources-core.files"/-->
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources.jar" includesfile="${metainf}/jchempaint.datafiles"/>
         <!-- the following jar files are packed from directory patterns -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
@@ -547,17 +543,7 @@
         <!-- the following jar contains all other classes and resources -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-others.jar" includepattern="**/*"/>
         <!-- the main jar file is packed from a list, but it must be packed as last file because it contains INDEX.LIST -->
-        <jar destfile="${dist}/jar/jchempaint-applet-core.jar" index="true">
-            <manifest>
-                        <section name="org/openscience/cdk/applications/jchempaint/">
-                            <attribute name="Specification-Title" value="JChemPaint"/>
-                            <attribute name="Specification-Version" value="1.0"/>
-                            <attribute name="Specification-Vendor" value="The CDK Project"/>
-                            <attribute name="Implementation-Title" value="org.openscience.cdk"/>
-                            <attribute name="Implementation-Version" value="${jcp.version}"/>
-                            <attribute name="Implementation-Vendor" value="The CDK Project"/>
-                        </section>
-                </manifest>
+        <jar destfile="${dist}/jar/jchempaint-applet-core.jar" index="true" manifest="MANIFEST.MF">
             <fileset dir="${dist-classes}">
                 <includesfile name="${metainf}/applet-core.files"/>
                 <!--exclude name="org/apache/log4j/**"/-->
