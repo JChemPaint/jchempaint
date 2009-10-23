@@ -2,6 +2,7 @@
 	
     <property file="ant.properties"/>
 
+    <property name="jcp.version" value="2.5.9" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
