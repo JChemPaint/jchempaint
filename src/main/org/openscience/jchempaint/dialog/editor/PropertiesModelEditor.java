@@ -83,8 +83,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private JCheckBox useAntiAliasing;
 
-    private JCheckBox isCompact;
-
     private JCheckBox isFitToScreen;
 
     private JSlider bondWidth;
@@ -98,7 +96,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JSlider wedgeWidth;
 
     private ButtonGroup group = new ButtonGroup();
-
+    
+    private JRadioButton nonCompactShape;
+    
     private JRadioButton compactShapeOval;
 
     private JRadioButton compactShapeSquare;
@@ -163,8 +163,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         colorAtomsByType = new JCheckBox();
         addField(GT._("Color atoms by element"), colorAtomsByType, rendererOptionsPanel);
 
-        useAntiAliasing = new JCheckBox();
-        addField(GT._("Use Anti-Aliasing"), useAntiAliasing, rendererOptionsPanel);
+        //useAntiAliasing = new JCheckBox();
+        //addField(GT._("Use Anti-Aliasing"), useAntiAliasing, rendererOptionsPanel);
 
         //showToolTip = new JCheckBox();
         //addField(GT._("Show tooltips"), showToolTip);
@@ -179,16 +179,17 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         addField("", new JSeparator(), rendererOptionsPanel);
 
-        isCompact = new JCheckBox();
-        addField(GT._("Show atoms in compact form"), isCompact, rendererOptionsPanel);
+        nonCompactShape = new JRadioButton();
+        group.add(nonCompactShape);
+        addField(GT._("Show atom symbols"), nonCompactShape, rendererOptionsPanel);
 
         compactShapeOval = new JRadioButton();
         group.add(compactShapeOval);
-        addField(GT._("Oval Compact Atoms"), compactShapeOval, rendererOptionsPanel);
+        addField(GT._("Show ball atoms"), compactShapeOval, rendererOptionsPanel);
 
         compactShapeSquare = new JRadioButton();
         group.add(compactShapeSquare);
-        addField(GT._("Square Compact Atoms"), compactShapeSquare, rendererOptionsPanel);
+        addField(GT._("Show square atoms"), compactShapeSquare, rendererOptionsPanel);
 
         atomRadius = new JSlider(0, 20);
         atomRadius.setSnapToTicks(true);
@@ -196,7 +197,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
         atomRadius.setMinorTickSpacing(1);
-        addField(GT._("Compact form atom size"), atomRadius, rendererOptionsPanel);
+        addField(GT._("Atom size"), atomRadius, rendererOptionsPanel);
+        addField("", new JLabel(" "), rendererOptionsPanel);
         addField("", new JSeparator(), rendererOptionsPanel);
 
 
@@ -206,6 +208,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         bondWidth.setPaintTicks(true);
         bondWidth.setMajorTickSpacing(1);
         addField(GT._("Bond width"), bondWidth, rendererOptionsPanel);
+        addField("", new JLabel(" "), rendererOptionsPanel);
         addField("", new JSeparator(), rendererOptionsPanel);
 
         //bondLength = new JSlider(20, 60);
@@ -222,7 +225,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setPaintTicks(true);
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
-        addField(GT._("Highlight/Select radius"), highlightDistance, rendererOptionsPanel);
+        addField(GT._("Highlight/Select diameter"), highlightDistance, rendererOptionsPanel);
+        addField("", new JLabel(" "), rendererOptionsPanel);
         addField("", new JSeparator(), rendererOptionsPanel);
 
         wedgeWidth = new JSlider(1, 10);
@@ -231,6 +235,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
         addField(GT._("Wedge width"), wedgeWidth, rendererOptionsPanel);
+        addField("", new JLabel(" "), rendererOptionsPanel);
         addField("", new JSeparator(), rendererOptionsPanel);
 
         /*
@@ -246,7 +251,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         color = new JLabel(GT._("BACKCOLOR"));
         addField(GT._("Background color"), color, rendererOptionsPanel);
 
-        chooseColorButton = new JButton(GT._("Choose BG color..."));
+        chooseColorButton = new JButton(GT._("Choose background color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
         addField("", chooseColorButton, rendererOptionsPanel);
@@ -254,7 +259,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         JPanel otherOptionsPanel = this.addTab(GT._("Other Preferences"));
         
         undoStackSize = new JTextField();
-        addField(GT._("Undo/redo stack size"), undoStackSize, otherOptionsPanel);
+        addField(GT._("Number of undoable operations"), undoStackSize, otherOptionsPanel);
 
         askForIOSettings = new JCheckBox();
         addField(GT._("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
@@ -271,10 +276,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         showAromaticity.setSelected(model.getShowAromaticity());
         //showAromaticityCDKStyle.setSelected(model.getShowAromaticityCDKStyle());
         colorAtomsByType.setSelected(model.getColorAtomsByType());
-        useAntiAliasing.setSelected(model.getUseAntiAliasing());
+        //useAntiAliasing.setSelected(model.getUseAntiAliasing());
         //showToolTip.setSelected(model.getShowTooltip());
         //showReactionBoxes.setSelected(model.getShowReactionBoxes());
-        isCompact.setSelected(model.getIsCompact());
         isFitToScreen.setSelected(model.isFitToScreen());
 
         atomRadius.setValue((int)model.getAtomRadius());
@@ -283,7 +287,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setValue((int)model.getHighlightDistance());
         wedgeWidth.setValue((int)model.getWedgeWidth());
 
-        if (model.getCompactShape() == RenderingParameters.AtomShape.OVAL) {
+        if (!model.getIsCompact()){
+            group.setSelected(nonCompactShape.getModel(), true);
+        } else if(model.getCompactShape() == RenderingParameters.AtomShape.OVAL) {
             group.setSelected(compactShapeOval.getModel(), true);
         } else {
             group.setSelected(compactShapeSquare.getModel(), true);
@@ -316,10 +322,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         model.setShowAromaticity(showAromaticity.isSelected());
         //model.setShowAromaticityCDKStyle(showAromaticityCDKStyle.isSelected());
         model.setColorAtomsByType(colorAtomsByType.isSelected());
-        model.setUseAntiAliasing(useAntiAliasing.isSelected());
+        //model.setUseAntiAliasing(useAntiAliasing.isSelected());
         //model.setShowTooltip(showToolTip.isSelected());
         //model.setShowReactionBoxes(showReactionBoxes.isSelected());
-        model.setIsCompact(isCompact.isSelected());
+        model.setIsCompact(!nonCompactShape.isSelected());
         model.setFitToScreen(isFitToScreen.isSelected());
 
         model.setAtomRadius(atomRadius.getValue());
@@ -351,7 +357,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             JCPPropertyHandler.getInstance().saveProperties();
         }
         catch(Exception ex){
-            JOptionPane.showMessageDialog(this, GT._("Undo/redo stack size")+" "+GT._("must be a number from 1 to 100"), GT._("Undo/redo stack size"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
     }
 
