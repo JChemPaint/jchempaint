@@ -81,7 +81,12 @@ public class ExportAction extends SaveAsAction {
         chooser.setCurrentDirectory(this.jcpPanel.getCurrentWorkDirectory());
         JCPExportFileFilter.addChoosableFileFilters(chooser);
         if (currentFilter != null) {
-            chooser.setFileFilter(currentFilter);
+            {
+                for(int i=0;i<chooser.getChoosableFileFilters().length;i++){
+                    if(chooser.getChoosableFileFilters()[i].getDescription().equals(currentFilter.getDescription()))
+                        chooser.setFileFilter(chooser.getChoosableFileFilters()[i]);
+                }
+            }
         }
         chooser.setFileView(new JCPFileView());
 
