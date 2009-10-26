@@ -68,6 +68,8 @@ import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -451,9 +453,15 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * Clears the applet
      */
     public void clear() {
-        theJcpp.setChemModel(new ChemModel());
+        theJcpp.get2DHub().zap();
         theJcpp.get2DHub().updateView();
-        repaint();
+        theJcpp.getRenderPanel().getRenderer().getRenderer2DModel()
+                .setZoomFactor(1);
+
+        IChemObjectSelection selection = new LogicalSelection(
+                LogicalSelection.Type.NONE);
+        theJcpp.getRenderPanel().getRenderer().getRenderer2DModel()
+                .setSelection(selection);
     }
 
     /**
