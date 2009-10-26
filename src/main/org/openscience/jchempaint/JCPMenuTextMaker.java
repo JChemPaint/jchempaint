@@ -66,7 +66,7 @@ public class JCPMenuTextMaker {
 		entries.put("redo", GT._("Redo"));
 		entries.put("selectAll", GT._("Select All"));
 		entries.put("copy", GT._("Copy"));
-		entries.put("copyAsSmiles", GT._("Copy as SMILES"));
+		entries.put("copyAsSmiles", GT._("Copy As SMILES"));
 		entries.put("eraser", GT._("Delete"));
 		entries.put("paste", GT._("Paste"));
 		entries.put("pasteTemplate", GT._("All Templates"));
@@ -91,7 +91,7 @@ public class JCPMenuTextMaker {
 		entries.put("statusbar", GT._("Statusbar"));
 		entries.put("menubar", GT._("Menubar"));
 		entries.put("insertstructure", GT._("Direct Entry as SMILES/InChI/CAS"));
-		entries.put("zoomin", GT._("Zoom in"));
+		entries.put("zoomin", GT._("Zoom In"));
 		entries.put("zoomout", GT._("Zoom Out"));
 		entries.put("zoomoriginal", GT._("Zoom 100%"));
 		entries.put("options", GT._("Preferences..."));
@@ -102,7 +102,7 @@ public class JCPMenuTextMaker {
 		entries.put("feedback", GT._("Report Feedback"));
 		entries.put("license", GT._("License"));
 		entries.put("about", GT._("About"));
-		entries.put("hydroon", GT._("On all"));
+		entries.put("hydroon", GT._("On All"));
 		entries.put("hydrooff", GT._("Off"));
 		entries.put("flipHorizontal", GT._("Horizontal"));
 		entries.put("flipVertical", GT._("Vertical"));
