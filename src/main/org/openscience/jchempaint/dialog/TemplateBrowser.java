@@ -107,6 +107,10 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
         Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
+        JPanel allPanel = new JPanel();
+        GridLayout experimentLayout = new GridLayout(0,8);
+        allPanel.setLayout(experimentLayout);
+        tabbedPane.addTab("All", allPanel );
         try{
             createTemplatesMaps(entriesMol, entriesMolName, entriesIcon, true);
             myPanel.add( tabbedPane, BorderLayout.CENTER );
@@ -115,7 +119,6 @@ public class TemplateBrowser extends JDialog implements ActionListener {
             while(it.hasNext()) {
                 String key=it.next();
                 JPanel panel = new JPanel();
-                GridLayout experimentLayout = new GridLayout(0,8);
                 panel.setLayout(experimentLayout);
                 for(int k=0;k<entriesMol.get(key).size();k++){
                     IMolecule cdkmol = entriesMol.get(key).get(k);
@@ -133,10 +136,24 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     button.setToolTipText((String)cdkmol.getProperty(CDKConstants.TITLE));
                     button.setFont(button.getFont().deriveFont(10f));
                     mols.put(button, cdkmol);
+                    JButton allButton = new JButton();
+                    if(icon!=null)
+                        allButton.setIcon(icon);
+                    panel.add(button);
+                    allButton.setPreferredSize(new Dimension(100,120));
+                    allButton.setMaximumSize(new Dimension(100,120));
+                    allButton.addActionListener(this);
+                    allButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+                    allButton.setHorizontalTextPosition(SwingConstants.CENTER);
+                    allButton.setText((String)cdkmol.getProperty(CDKConstants.TITLE));
+                    allButton.setToolTipText((String)cdkmol.getProperty(CDKConstants.TITLE));
+                    allButton.setFont(allButton.getFont().deriveFont(10f));
+                    mols.put(allButton, cdkmol);
+                    allPanel.add(allButton);
                 }
                 tabbedPane.addTab(key.replace('_', ' '), panel );
                 if(tabToSelect.equals(key.replace('_',' '))){
-                    tabbedPane.setSelectedIndex(count);
+                    tabbedPane.setSelectedIndex(count+1);
                 }
                 count++;
             }                
