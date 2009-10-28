@@ -90,6 +90,7 @@ import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
@@ -574,7 +575,9 @@ public class JChemPaint {
                     // frame.show();
 
                     IMoleculeSet set = chemModel.getMoleculeSet();
+                    WaitDialog.showDialog();
                     chemModel.setMoleculeSet(generate2dCoordinates(set));
+                    WaitDialog.hideDialog();
                     return;
                 }
             }
