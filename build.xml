@@ -509,6 +509,7 @@
                 </javac>-->
 
         <mkdir dir="${dist}/jar" />
+        <delete dir="${dist-classes}/org/openscience/jchempaint/resources/apponly"></delete>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-viewer-opts.jar" includesfile="${metainf}/applet-viewer-opts.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor.jar" includesfile="${metainf}/applet-editor.files"/>
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-editor-opts.jar" includesfile="${metainf}/applet-editor-opts.files"/>
