@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-27 16:29+0000\n"
-"PO-Revision-Date: 2009-10-22 21:36+0100\n"
+"PO-Revision-Date: 2009-10-28 21:32+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -21,11 +21,8 @@ msgstr "No se ha podido determinar la versión de JCP"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:109
 #, java-format
-msgid ""
-"WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
-msgstr ""
-"Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina "
-"Virtual de Java {1} o superior."
+msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+msgstr "Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina Virtual de Java {1} o superior."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:110
 #, java-format
@@ -58,12 +55,8 @@ msgid "Could not determine file format"
 msgstr "No se ha podido determinar el formato del archivo"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:375
-msgid ""
-"It seems you opened a mol or sdf file containing several molecules. Only the "
-"first one will be shown"
-msgstr ""
-"Al parecer, se ha abierto un archivo mol o sdf que contiene varias "
-"moléculas. Sólo se mostrará la primera."
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Al parecer, se ha abierto un archivo mol o sdf que contiene varias moléculas. Sólo se mostrará la primera."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:379
 msgid "sdf-like file"
@@ -74,12 +67,8 @@ msgid "Cannot depict contents. Model does not have bonds."
 msgstr "No se puede mostrar el contenido, pues el modelo no contiene enlaces."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:561
-msgid ""
-"Not all atoms have 2D coordinates. JCP can only show full 2D specified "
-"structures. Shall we lay out the structure?"
-msgstr ""
-"Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras "
-"con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:569
 msgid "Cannot display without 2D coordinates"
@@ -681,30 +670,27 @@ msgstr "Ajustar a la pantalla"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:184
 msgid "Show atom symbols"
-msgstr ""
+msgstr "Mostrar los símbolos de átomos"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:188
 msgid "Show ball atoms"
-msgstr ""
+msgstr "Mostrar átomos como esferas"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:192
-#, fuzzy
 msgid "Show square atoms"
-msgstr "Átomos compactos cuadrados"
+msgstr "Mostrar átomos cuadrados"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:200
-#, fuzzy
 msgid "Atom size"
-msgstr "Átomo"
+msgstr "Tamaño de átomo"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:210
 msgid "Bond width"
 msgstr "Grosor de enlaces"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:228
-#, fuzzy
 msgid "Highlight/Select diameter"
-msgstr "Radio de resaltado o seleccionado"
+msgstr "Diámetro de resaltado o seleccionado"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:237
 msgid "Wedge width"
@@ -719,9 +705,8 @@ msgid "Background color"
 msgstr "Color de fondo"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:254
-#, fuzzy
 msgid "Choose background color..."
-msgstr "Elegir color de fondo"
+msgstr "Elegir color de fondo..."
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:259
 msgid "Other Preferences"
@@ -730,7 +715,7 @@ msgstr "Otras preferencias"
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:262
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:360
 msgid "Number of undoable operations"
-msgstr ""
+msgstr "Número de operaciones que es posible deshacer"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:265
 msgid "Ask for CML settings when saving"
@@ -806,8 +791,7 @@ msgstr "No es posible deshacer"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:352
 msgid "The content you tried to copy could not be read to any known format"
-msgstr ""
-"El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
+msgstr "El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:352
 msgid "Could not process content"
@@ -877,20 +861,13 @@ msgstr "Problemas al gestionar los datos"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:252
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
-msgstr ""
-"Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula "
-"dibujada."
+msgstr "Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula dibujada."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:258
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:314
 #, java-format
-msgid ""
-"{0} files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
-msgstr ""
-"Los archivos {0} no pueden contener reacciones, y se han dibujado "
-"reacciones. Sus reactantes y productos se incluirán como moléculas "
-"independientes. ¿Desea continuar?"
+msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
+msgstr "Los archivos {0} no pueden contener reacciones, y se han dibujado reacciones. Sus reactantes y productos se incluirán como moléculas independientes. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:449
 msgid "Zoomfactor"
@@ -961,7 +938,6 @@ msgid "Copy"
 msgstr "Copiar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:69
-#, fuzzy
 msgid "Copy As SMILES"
 msgstr "Copiar como código SMILES"
 
@@ -975,9 +951,8 @@ msgid "Paste"
 msgstr "Pegar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:72
-#, fuzzy
 msgid "All Templates"
-msgstr "Plantillas"
+msgstr "Todas las plantillas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:73
 msgid "Cut"
@@ -1001,7 +976,7 @@ msgstr "Plantillas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:78
 msgid "Radical"
-msgstr ""
+msgstr "Radical"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:79
 msgid "Single"
@@ -1064,7 +1039,6 @@ msgid "Direct Entry as SMILES/InChI/CAS"
 msgstr "Entrada directa de SMILES, InChI o CAS"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:94
-#, fuzzy
 msgid "Zoom In"
 msgstr "Ampliar"
 
@@ -1098,7 +1072,7 @@ msgstr "Manual de JChemPaint"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:102
 msgid "Report Feedback"
-msgstr ""
+msgstr "Enviar comentarios"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:103
 msgid "License"
@@ -1109,7 +1083,6 @@ msgid "About"
 msgstr "Acerca de JChemPaint"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:105
-#, fuzzy
 msgid "On All"
 msgstr "En todos"
 
@@ -1146,14 +1119,12 @@ msgid "Isotopes"
 msgstr "Isótopos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:114
-#, fuzzy
 msgid "Add Electron Pair"
-msgstr "Añadir un electrón"
+msgstr "Añadir un par de electrones"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:115
-#, fuzzy
 msgid "Remove Electron Pair"
-msgstr "Retirar un electrón"
+msgstr "Retirar un par de electrones"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:116
 msgid "Properties"
@@ -1578,81 +1549,56 @@ msgstr "Cambiar el símbolo de dibujo a {0}"
 
 #~ msgid "WARNING: JChemPaint"
 #~ msgstr "Advertencia: JChemPaint"
-
 #~ msgid "must be run with a Java VM version"
 #~ msgstr "debe ejecutarse con una versión de Máquina Virtual de Java"
-
 #~ msgid "or higher."
 #~ msgstr "o superior."
-
 #~ msgid "Your JVM version"
 #~ msgstr "Su versión de JVM"
-
 #~ msgid "is not a valid element symbol or functional group."
 #~ msgstr "no es un símbolo válido para un elemento o un grupo funcional"
-
 #~ msgid "Use Anti-Aliasing"
 #~ msgstr "Usar suavizado"
-
 #~ msgid "Show atoms in compact form"
 #~ msgstr "Mostrar átomos en forma compacta"
-
 #~ msgid "Oval Compact Atoms"
 #~ msgstr "Átomos compactos ovalados"
-
 #~ msgid "Compact form atom size"
 #~ msgstr "Tamaño de átomos compactos"
-
 #~ msgid "Choose BG color..."
 #~ msgstr "Elegir color..."
-
 #~ msgid "Undo/redo stack size"
 #~ msgstr "El tamaño de la pila de deshacer y rehacer"
-
 #~ msgid "Major Plus Three"
 #~ msgstr "Principal + 3"
-
 #~ msgid "Major Plus Two"
 #~ msgstr "Principal + 2"
-
 #~ msgid "Major Plus One"
 #~ msgstr "Principal + 1"
-
 #~ msgid "Major Minus One"
 #~ msgstr "Principal - 1"
-
 #~ msgid "Major Minus Two"
 #~ msgstr "Principal - 2"
-
 #~ msgid "Major Minus Three"
 #~ msgstr "Principal - 3"
-
 #~ msgid "Select Atoms and Bonds"
 #~ msgstr "Seleccionar átomos y enlaces"
-
 #~ msgid "Select Atoms and Bonds in a square region"
 #~ msgstr "Seleccionar átomos y enlaces en una región rectangular"
-
 #~ msgid "Ring 3"
 #~ msgstr "Anillo de 3"
-
 #~ msgid "Ring 4"
 #~ msgstr "Anillo de 4"
-
 #~ msgid "Ring 5"
 #~ msgstr "Anillo de 5"
-
 #~ msgid "Ring 6"
 #~ msgstr "Anillo de 6"
-
 #~ msgid "Ring 7"
 #~ msgstr "Anillo de 7"
-
 #~ msgid "Ring 8"
 #~ msgstr "Anillo de 8"
-
 #~ msgid "Select Square"
 #~ msgstr "Seleccionar en rectángulo"
-
 #~ msgid "Change drawing symbol to"
 #~ msgstr "Cambiar el símbolo de dibujo a"
+
