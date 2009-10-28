@@ -68,6 +68,7 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.INChIPlainTextReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
+import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -86,7 +87,6 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
@@ -251,7 +251,7 @@ public class CopyPasteAction extends JCPAction{
                     while((x=sbis.read())!=-1){
                         sb.append((char)x);
                     }
-                    reader = new ReaderFactory().createReader(new StringReader(sb.toString()));
+                    reader = new MDLReader(new StringReader(sb.toString()));
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
