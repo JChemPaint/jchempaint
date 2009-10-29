@@ -112,7 +112,7 @@ public class JCPMenuTextMaker {
 		entries.put("enterelement", GT._("Custom"));
 		entries.put("isotopeChange", GT._("Isotopes"));
 		entries.put("convertToRadical", GT._("Add Electron Pair"));
-        entries.put("convertFromRadical", GT._("Remove Electron Pair"));
+                entries.put("convertFromRadical", GT._("Remove Electron Pair"));
 		entries.put("showChemObjectProperties", GT._("Properties"));
 		entries.put("showACProperties", GT._("Molecule Properties"));
 		entries.put("makeNormal", GT._("Convert to Regular Atom"));
@@ -285,7 +285,18 @@ public class JCPMenuTextMaker {
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
 		entries.put("Select Square", GT._("Select Rectangle"));
-	}
+                entries.put("CTooltip", GT._("Change drawing symbol to C"));
+                entries.put("HTooltip", GT._("Change drawing symbol to H"));
+                entries.put("OTooltip", GT._("Change drawing symbol to O"));
+                entries.put("NTooltip", GT._("Change drawing symbol to N"));
+                entries.put("PTooltip", GT._("Change drawing symbol to P"));
+                entries.put("STooltip", GT._("Change drawing symbol to S"));
+                entries.put("FTooltip", GT._("Change drawing symbol to F"));
+                entries.put("FTooltip", GT._("Change drawing symbol to Cl"));
+                entries.put("BrTooltip", GT._("Change drawing symbol to Br"));
+                entries.put("ITooltip", GT._("Change drawing symbol to I"));
+
+}
 	
 	/**
 	 * Gives the text for an item.
