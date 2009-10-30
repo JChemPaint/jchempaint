@@ -780,9 +780,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 lastSecondaryButton = this.buttons.get("bond");
             }
         }
-        if(!(newActiveModule instanceof MoveModule))
+        if(!(newActiveModule instanceof MoveModule)){
             this.getChemModel().setFlag(
                 CDKConstants.SHOW_MOVE_ARRAY, false);
+            this.get2DHub().updateView();
+        }
         this.updateStatusBar();
 	}
 	
