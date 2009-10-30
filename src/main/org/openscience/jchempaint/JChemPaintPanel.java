@@ -66,6 +66,7 @@ import javax.swing.undo.UndoManager;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
@@ -779,6 +780,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 lastSecondaryButton = this.buttons.get("bond");
             }
         }
+        if(!(newActiveModule instanceof MoveModule))
+            this.getChemModel().setFlag(
+                CDKConstants.SHOW_MOVE_ARRAY, false);
         this.updateStatusBar();
 	}
 	
