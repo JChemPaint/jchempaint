@@ -285,16 +285,16 @@ public class JCPMenuTextMaker {
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
 		entries.put("Select Square", GT._("Select Rectangle"));
-                entries.put("CTooltip", GT._("Change drawing symbol to C"));
-                entries.put("HTooltip", GT._("Change drawing symbol to H"));
-                entries.put("OTooltip", GT._("Change drawing symbol to O"));
-                entries.put("NTooltip", GT._("Change drawing symbol to N"));
-                entries.put("PTooltip", GT._("Change drawing symbol to P"));
-                entries.put("STooltip", GT._("Change drawing symbol to S"));
-                entries.put("FTooltip", GT._("Change drawing symbol to F"));
-                entries.put("FTooltip", GT._("Change drawing symbol to Cl"));
-                entries.put("BrTooltip", GT._("Change drawing symbol to Br"));
-                entries.put("ITooltip", GT._("Change drawing symbol to I"));
+        entries.put("CTooltip", GT._("Change drawing symbol to C"));
+        entries.put("HTooltip", GT._("Change drawing symbol to H"));
+        entries.put("OTooltip", GT._("Change drawing symbol to O"));
+        entries.put("NTooltip", GT._("Change drawing symbol to N"));
+        entries.put("PTooltip", GT._("Change drawing symbol to P"));
+        entries.put("STooltip", GT._("Change drawing symbol to S"));
+        entries.put("FTooltip", GT._("Change drawing symbol to F"));
+        entries.put("ClTooltip", GT._("Change drawing symbol to Cl"));
+        entries.put("BrTooltip", GT._("Change drawing symbol to Br"));
+        entries.put("ITooltip", GT._("Change drawing symbol to I"));
 
 }
 	

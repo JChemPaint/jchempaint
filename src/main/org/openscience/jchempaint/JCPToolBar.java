@@ -189,34 +189,6 @@ public class JCPToolBar
                 b.setDisabledIcon(disabledimage);
             }
         }
-        /* OBSOLETE - remove
-
-                }
-                else{ 
-			b=new JButton();
-			//We use a panel instead of setting the text directly so that the 
-			//buttons get a border when being activated (other buttons have an 
-			//icon with while background for that effect)
-			JPanel innerPanel=new JPanel();
-			innerPanel.setBackground(Color.white);
-			innerPanel.setPreferredSize(new Dimension(28,28));
-			innerPanel.setMaximumSize(new Dimension(28,28));
-			innerPanel.setSize(new Dimension(28,28));
-			JLabel label = new JLabel(key);
-                        label.setForeground(colorer.getAtomColor(DefaultChemObjectBuilder.getInstance().newAtom(key)));
-			innerPanel.add(label);
-			b.add(innerPanel);
-			ChangeAtomSymbolAction a = new ChangeAtomSymbolAction();
-			a.setJChemPaintPanel(chemPaintPanel);
-			b.setActionCommand(a.getClass().getName()+"@"+key);
-			b.addActionListener(a);
-			b.setEnabled(a.isEnabled());
-			b.setToolTipText(GT._("Change drawing symbol to {0}",key));
-			b.setSize(32,32);
-			b.setPreferredSize(new Dimension(32,32));
-			b.setMaximumSize(new Dimension(32,32));
-		}
-         */
         b.setRequestFocusEnabled(false);
         b.setMargin(new Insets(1, 1, 1, 1));
         b.setName(key);
