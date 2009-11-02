@@ -12,6 +12,9 @@
 	<classpathentry kind="lib" path="lib/fest-swing-1.2a2.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jchempaint-primary-public"/>
+	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/develjar/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/jar/jniinchi-0.5.jar"/>
+	<classpathentry kind="lib" path="/home/markr/git/ourPrimary/jchempaint-primary-public/jar/vecmath1.2-1.14.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.openscience.cdk"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

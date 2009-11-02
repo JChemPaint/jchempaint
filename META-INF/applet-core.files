@@ -422,3 +422,5 @@ org/openscience/cdk/renderer/elements/RingElement.class
 org/openscience/cdk/renderer/selection/MultiSelection.class
 org/openscience/cdk/tools/manipulator/BondManipulator.class
 org/openscience/cdk/tools/manipulator/AtomContainerComparatorBy2DCenter.class
+org/openscience/cdk/io/MDLReader.class
+org/openscience/jchempaint/dialog/TemplateBrowser.class

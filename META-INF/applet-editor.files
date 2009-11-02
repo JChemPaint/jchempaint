@@ -327,3 +327,4 @@ org/openscience/cdk/config/IAtomTypeConfigurator.class
 org/openscience/cdk/config/OWLBasedAtomTypeConfigurator.class
 org/openscience/cdk/dict/data/cdk-atom-types.owl
 org/openscience/jchempaint/action/ChangeSingleElectronAction.class
+org/openscience/cdk/controller/AbstractSelectModule.class

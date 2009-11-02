@@ -6,10 +6,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -23,11 +21,9 @@ import javax.swing.event.MenuListener;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.CopyPasteAction;
 import org.openscience.jchempaint.action.JCPAction;
-import org.openscience.jchempaint.dialog.TemplateBrowser;
 
 
 /**
@@ -181,10 +177,29 @@ public class JChemPaintMenuHelper {
         }
         //The templates sub menus are built from the dirctories where the templates are in
         if(key.equals("templates")){
-            Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
             try {
+                /*
+                // Removed by markr: this created a relatively large dependency to the
+                // templates on startup.
+
+                Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
                 TemplateBrowser.createTemplatesMaps(entriesMol, null, null, false);
                 Iterator<String> it = entriesMol.keySet().iterator();
+
+                */
+                
+                ArrayList<String> templates = new ArrayList<String>(); 
+                templates.add("Alkaloids");
+                templates.add("Beta Lactams");
+                templates.add("Carbohydrates");
+                templates.add("Inositols");
+                templates.add("Lipids");
+                templates.add("Miscellaneous");
+                templates.add("Nucleosides");
+                templates.add("Porphyrins");
+                templates.add("Steroids");
+                Iterator<String> it = templates.iterator();
+                
                 while(it.hasNext()){
                     String name=it.next().replace("_", " ");
                     JMenuItem mi = new JMenuItem(name);
