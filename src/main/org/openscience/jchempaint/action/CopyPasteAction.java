@@ -234,6 +234,8 @@ public class CopyPasteAction extends JCPAction{
                 scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
                 jcpPanel.getRenderPanel().setZoomWide(true);
+                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+
 
             }
         } else if ("paste".equals(type)) {
@@ -343,6 +345,8 @@ public class CopyPasteAction extends JCPAction{
             }
             if (toPaste != null) {
                 jcpPanel.getRenderPanel().setZoomWide(true);
+                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+
                 if (flip)
                    flipStructure(toPaste);
                 scaleStructure(toPaste);
@@ -430,7 +434,6 @@ public class CopyPasteAction extends JCPAction{
                 logger.warn("Cannot select everything in : ", object);
             }
         }
-        jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
         jcpPanel.get2DHub().updateView();
         jcpPanel.updateStatusBar();
 
