@@ -172,23 +172,6 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IAtomContainer deleteFragment(IAtomContainer toDelete);
     public void cleanup();
     public void flip(boolean horizontal);
-	public void makeReactantInNewReaction(IAtomContainer newContainer, IAtomContainer oldcontainer);
-	/**
-	 * @param reactionId	The id of the reaction to add to
-	 * @param newContainer	The structure to add to the reaction
-	 * @param container		The structure to remove from the MoleculeSet
-	 */
-	public void makeReactantInExistingReaction(String reactionId,
-			IAtomContainer newContainer, IAtomContainer container);
-	public void makeProductInNewReaction(IAtomContainer newContainer,
-			IAtomContainer container);
-	/**
-	 * @param reactionId	The id of the reaction to add to
-	 * @param newContainer	The structure to add to the reaction
-	 * @param container		The structure to remove from the MoleculeSet
-	 */
-	public void makeProductInExistingReaction(String reactionId,
-			IAtomContainer newContainer, IAtomContainer container);
     /**
      * Adjusts all bond orders to fit valency
      */

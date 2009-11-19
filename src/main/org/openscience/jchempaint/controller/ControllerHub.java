@@ -95,7 +95,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	private IChemModel chemModel;
 
-	private IControllerModel controllerModel;
+    private IControllerModel controllerModel;
 	
 	private IRenderer renderer;
 	
@@ -1769,7 +1769,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         this.changeHandler = handler;
     }
 
-    private void structureChanged() {
+    protected void structureChanged() {
         if(renderer.getRenderer2DModel().getSelection() instanceof IncrementalSelection)
             select( (IncrementalSelection)renderer.getRenderer2DModel().getSelection() );
         if (changeHandler != null) changeHandler.structureChanged();
@@ -1852,83 +1852,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	    }
 	    structureChanged();
 	    return removed;
-	}
-
-	public void makeReactantInNewReaction(IAtomContainer newContainer, IAtomContainer oldcontainer) {
-		IReaction reaction = newContainer.getBuilder().newReaction();
-		reaction.setID("reaction-" + System.currentTimeMillis());
-		IMolecule mol=newContainer.getBuilder().newMolecule(newContainer);
-		mol.setID(newContainer.getID());
-		reaction.addReactant(mol);
-		IReactionSet reactionSet = chemModel.getReactionSet();
-		if (reactionSet == null)
-		{
-			reactionSet = chemModel.getBuilder().newReactionSet();
-		}
-		reactionSet.addReaction(reaction);
-		chemModel.setReactionSet(reactionSet);
-		chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
-	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getMakeReactantOrProductInNewReactionEdit(chemModel, newContainer, oldcontainer, true, "Make Reactant in new Reaction");
-		    getUndoRedoHandler().postEdit(undoredo);
-	    }
-	    structureChanged();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.controller.IChemModelRelay#makeReactantInExistingReaction(java.lang.String, org.openscience.cdk.interfaces.IAtomContainer, org.openscience.cdk.interfaces.IAtomContainer)
-	 */
-	public void makeReactantInExistingReaction(String reactionId,
-			IAtomContainer newContainer, IAtomContainer oldcontainer) {
-		IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionId);
-		IMolecule mol=newContainer.getBuilder().newMolecule(newContainer);
-		mol.setID(newContainer.getID());
-		reaction.addReactant(mol);
-		chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
-	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getMakeReactantOrProductInExistingReactionEdit(chemModel, newContainer, oldcontainer, reactionId, true, "Make Reactant in "+reactionId);
-		    getUndoRedoHandler().postEdit(undoredo);
-	    }
-	    structureChanged();
-	}
-
-	public void makeProductInNewReaction(IAtomContainer newContainer,
-			IAtomContainer oldcontainer) {
-		IReaction reaction = newContainer.getBuilder().newReaction();
-		reaction.setID("reaction-" + System.currentTimeMillis());
-		IMolecule mol=newContainer.getBuilder().newMolecule(newContainer);
-		mol.setID(newContainer.getID());
-		reaction.addProduct(mol);
-		IReactionSet reactionSet = chemModel.getReactionSet();
-		if (reactionSet == null)
-		{
-			reactionSet = chemModel.getBuilder().newReactionSet();
-		}
-		reactionSet.addReaction(reaction);
-		chemModel.setReactionSet(reactionSet);
-		chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
-	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getMakeReactantOrProductInNewReactionEdit(chemModel, newContainer, oldcontainer, false, "Make Reactant in new Reaction");
-		    getUndoRedoHandler().postEdit(undoredo);
-	    }
-	    structureChanged();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openscience.cdk.controller.IChemModelRelay#makeProductInExistingReaction(java.lang.String, org.openscience.cdk.interfaces.IAtomContainer, org.openscience.cdk.interfaces.IAtomContainer)
-	 */
-	public void makeProductInExistingReaction(String reactionId,
-			IAtomContainer newContainer, IAtomContainer oldcontainer) {
-		IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionId);
-		IMolecule mol=newContainer.getBuilder().newMolecule(newContainer);
-		mol.setID(newContainer.getID());
-		reaction.addProduct(mol);
-		chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
-	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getMakeReactantOrProductInExistingReactionEdit(chemModel, newContainer, oldcontainer, reactionId, false, "Make Reactant in "+reactionId);
-		    getUndoRedoHandler().postEdit(undoredo);
-	    }
-	    structureChanged();
 	}
 
 	/**
@@ -2259,5 +2182,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                     moveToWithoutUndo(atom, newpoint);
             }
         }
+    }
+
+    public IChemModel getChemModel() {
+        return chemModel;
     }
 }
