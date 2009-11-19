@@ -33,8 +33,8 @@ import java.util.Map;
 import javax.swing.undo.UndoableEdit;
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.controller.undoredo.ChangeCoordsEdit;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.undoredo.ChangeCoordsEdit;
 
 /**
  * A swing undo-redo implementation for clean up

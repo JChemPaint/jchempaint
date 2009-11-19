@@ -55,10 +55,6 @@ import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
-import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -72,6 +68,10 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's

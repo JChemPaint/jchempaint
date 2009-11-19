@@ -30,8 +30,8 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
+import org.openscience.jchempaint.renderer.RendererModel;
 
 
 /**

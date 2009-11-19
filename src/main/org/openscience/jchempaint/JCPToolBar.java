@@ -50,13 +50,13 @@ import javax.swing.plaf.basic.BasicBorders;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.renderer.color.CDK2DAtomColors;
-import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.ChangeAtomSymbolAction;
 import org.openscience.jchempaint.action.JCPAction;
+import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.renderer.color.CDK2DAtomColors;
+import org.openscience.jchempaint.renderer.color.IAtomColorer;
 
 /**
  *  This class makes the JCPToolBar

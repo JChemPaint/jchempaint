@@ -70,25 +70,25 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.AddAtomModule;
-import org.openscience.cdk.controller.AddBondDragModule;
-import org.openscience.cdk.controller.IChangeModeListener;
-import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.IChemModelEventRelayHandler;
-import org.openscience.cdk.controller.IControllerModule;
-import org.openscience.cdk.controller.MoveModule;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.controller.AddAtomModule;
+import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.IChangeModeListener;
+import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
+import org.openscience.jchempaint.controller.IControllerModule;
+import org.openscience.jchempaint.controller.MoveModule;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {

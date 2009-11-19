@@ -33,9 +33,9 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.renderer.Renderer;
-import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 
 /**
  * @cdk.module jchempaint

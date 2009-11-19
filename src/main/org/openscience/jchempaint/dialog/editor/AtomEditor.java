@@ -39,7 +39,6 @@ import javax.swing.text.Document;
 
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -48,6 +47,7 @@ import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  */

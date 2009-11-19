@@ -30,7 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.renderer.selection.LogicalSelection;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 
 /**

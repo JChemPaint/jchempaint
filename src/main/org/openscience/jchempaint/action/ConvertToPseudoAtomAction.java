@@ -36,11 +36,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.controller.AddAtomModule;
-import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.jchempaint.controller.AddAtomModule;
+import org.openscience.jchempaint.controller.AddBondDragModule;
 ;
 
 /**

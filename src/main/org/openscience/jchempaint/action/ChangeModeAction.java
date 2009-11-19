@@ -30,14 +30,14 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.controller.AddRingModule;
-import org.openscience.cdk.controller.AtomAtomMappingModule;
-import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.IControllerModule;
-import org.openscience.cdk.controller.MoveModule;
-import org.openscience.cdk.controller.RotateModule;
-import org.openscience.cdk.controller.SelectLassoModule;
-import org.openscience.cdk.controller.SelectSquareModule;
+import org.openscience.jchempaint.controller.AddRingModule;
+import org.openscience.jchempaint.controller.AtomAtomMappingModule;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.IControllerModule;
+import org.openscience.jchempaint.controller.MoveModule;
+import org.openscience.jchempaint.controller.RotateModule;
+import org.openscience.jchempaint.controller.SelectLassoModule;
+import org.openscience.jchempaint.controller.SelectSquareModule;
 
 /**
  * JChemPaint menu actions

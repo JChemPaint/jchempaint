@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.renderer.selection.SingleSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	

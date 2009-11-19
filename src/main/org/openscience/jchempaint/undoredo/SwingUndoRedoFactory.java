@@ -37,10 +37,6 @@ import javax.swing.undo.CannotUndoException;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.edit.IEdit;
-import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -48,6 +44,10 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.edit.IEdit;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
 /**
  * A class returning Swing-Implementations of all the undo-redo edits

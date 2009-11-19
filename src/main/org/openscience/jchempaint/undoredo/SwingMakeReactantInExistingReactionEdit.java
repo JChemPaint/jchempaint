@@ -2,9 +2,9 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.undoredo.MakeReactantOrProductInExistingReactionEdit;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.controller.undoredo.MakeReactantOrProductInExistingReactionEdit;
 
 public class SwingMakeReactantInExistingReactionEdit extends
 		MakeReactantOrProductInExistingReactionEdit  implements UndoableEdit{

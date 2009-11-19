@@ -30,9 +30,9 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.undoredo.ChangeChargeEdit;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.ChangeChargeEdit;
 
 /**
  * A swing undo-redo implementation for changing charge of an Atom.

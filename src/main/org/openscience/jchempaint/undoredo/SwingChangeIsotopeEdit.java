@@ -30,8 +30,8 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.undoredo.ChangeIsotopeEdit;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.undoredo.ChangeIsotopeEdit;
 
 /**
  * A swing undo-redo implementation for changing the isotope of an atom.

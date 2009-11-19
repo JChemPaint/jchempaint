@@ -46,11 +46,11 @@ import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
-import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.RenderingParameters;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  * @cdk.bug          1525961

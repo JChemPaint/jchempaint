@@ -30,7 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.dialog.WaitDialog;
 
 /**

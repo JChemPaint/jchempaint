@@ -39,7 +39,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.openscience.cdk.controller.ControllerHub;
+import org.openscience.jchempaint.controller.ControllerHub;
 
 /**
   * Simple Dialog that shows the loaded dictionaries.

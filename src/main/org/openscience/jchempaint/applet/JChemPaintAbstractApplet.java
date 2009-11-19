@@ -50,11 +50,6 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.controller.ControllerHub;
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.IUndoRedoFactory;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
-import org.openscience.cdk.controller.undoredo.UndoRedoHandler;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -67,9 +62,6 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -80,6 +72,14 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.IControllerModel;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**
  * An abstract class for JCP applets, doing parameter parsing

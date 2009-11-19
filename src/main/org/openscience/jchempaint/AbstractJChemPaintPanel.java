@@ -33,12 +33,12 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.jchempaint.action.CreateSmilesAction;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**
  * An abstract superclass for the viewer and editor panel.

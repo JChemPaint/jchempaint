@@ -30,10 +30,10 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.undoredo.LoadNewModelEdit;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.jchempaint.controller.undoredo.LoadNewModelEdit;
 
 /**
  * A swing undo-redo implementation for loading a new ChemModel.

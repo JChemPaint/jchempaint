@@ -34,9 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.jchempaint.controller.AddBondDragModule;
 
 
 /**

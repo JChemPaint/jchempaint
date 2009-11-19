@@ -30,11 +30,11 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.AddAtomsAndBondsEdit;
-import org.openscience.cdk.controller.undoredo.MakeReactantOrProductInNewReactionEdit;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.controller.IControllerModel;
+import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
+import org.openscience.jchempaint.controller.undoredo.MakeReactantOrProductInNewReactionEdit;
 
 /**
  * A swing undo-redo implementation for adding Atoms and Bonds

@@ -61,7 +61,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
-import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
@@ -90,6 +89,7 @@ import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.io.JCPFileFilter;
 

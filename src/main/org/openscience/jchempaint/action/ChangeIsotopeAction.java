@@ -34,12 +34,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.AddAtomModule;
-import org.openscience.cdk.controller.AddBondDragModule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.jchempaint.controller.AddAtomModule;
+import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 
 /**

@@ -30,9 +30,9 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.undoredo.ChangeAtomSymbolEdit;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.ChangeAtomSymbolEdit;
 
 /**
  * Undo/Redo Edit class for the ChangeAtomSymbolAction, containing the methods

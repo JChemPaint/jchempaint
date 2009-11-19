@@ -47,7 +47,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.openscience.cdk.controller.ControllerHub;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.Projector;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -57,6 +56,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.LoggingTool;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.controller.ControllerHub;
 
 /**
  * Dialog for coordinate creationg

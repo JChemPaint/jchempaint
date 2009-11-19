@@ -30,10 +30,10 @@ package org.openscience.jchempaint.dialog.editor;
 
 import javax.swing.JComboBox;
 
-import org.openscience.cdk.controller.IChemModelRelay;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  */

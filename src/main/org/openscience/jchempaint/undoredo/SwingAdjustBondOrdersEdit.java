@@ -32,9 +32,9 @@ import java.util.Map;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.undoredo.AdjustBondOrdersEdit;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
 
 /**
  * A swing undo-redo implementation for adding Atoms and Bonds

@@ -31,8 +31,8 @@ package org.openscience.jchempaint.undoredo;
 import javax.swing.undo.UndoableEdit;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.controller.undoredo.MoveAtomEdit;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.controller.undoredo.MoveAtomEdit;
 
 /**
  * A swing undo-redo implementation for moving atoms

@@ -35,16 +35,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.renderer.selection.LogicalSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**
  * Shows the open dialog

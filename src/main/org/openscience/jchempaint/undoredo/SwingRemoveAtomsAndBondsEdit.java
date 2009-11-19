@@ -30,10 +30,10 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.undoredo.RemoveAtomsAndBondsEdit;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.RemoveAtomsAndBondsEdit;
 
 /**
  * A swing undo-redo implementation for moving atoms

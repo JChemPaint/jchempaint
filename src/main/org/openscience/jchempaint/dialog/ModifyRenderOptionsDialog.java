@@ -39,10 +39,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.dialog.editor.PropertiesModelEditor;
+import org.openscience.jchempaint.renderer.RendererModel;
 
 /**
   * Simple Dialog that shows the loaded dictionaries..

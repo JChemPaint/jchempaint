@@ -40,10 +40,6 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.controller.ControllerModuleAdapter;
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -58,6 +54,10 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.controller.ControllerModuleAdapter;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.IControllerModel;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
 

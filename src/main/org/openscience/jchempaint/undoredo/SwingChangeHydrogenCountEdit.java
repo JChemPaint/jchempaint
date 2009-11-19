@@ -32,8 +32,8 @@ import java.util.Map;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.undoredo.ChangeHydrogenCountEdit;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.undoredo.ChangeHydrogenCountEdit;
 
 /**
  * A swing undo-redo implementation for clean up

@@ -32,11 +32,11 @@ import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.renderer.selection.SingleSelection;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 import org.openscience.jchempaint.matchers.DialogTitleComponentMatcher;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 

@@ -30,11 +30,11 @@ package org.openscience.jchempaint.undoredo;
 
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.controller.IChemModelRelay;
-import org.openscience.cdk.controller.undoredo.AddSingleElectronEdit;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IElectronContainer;
+import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.AddSingleElectronEdit;
 
 /**
  * A swing undo-redo implementation for converting an atom to a radical.
