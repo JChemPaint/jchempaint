@@ -31,9 +31,6 @@ package org.openscience.jchempaint.undoredo;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -45,7 +42,6 @@ import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
-import org.openscience.jchempaint.controller.edit.IEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
@@ -137,37 +133,6 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 			IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom,
 			IReactionSet newsor, String type) {
 		return new SwingLoadNewModelEdit(chemModel, oldsom, oldsor, newsom, newsor, type);
-	}
-
-	public IUndoRedoable getEditOperation(IEdit edit) {
-		return new EditOperationWrapper(edit);
-	}
-
-	static class EditOperationWrapper extends AbstractUndoableEdit implements IUndoRedoable{
-		
-		private static final long serialVersionUID = 1L;
-		
-		IEdit edit;
-		public EditOperationWrapper(IEdit edit) {
-			this.edit = edit;
-		}
-		
-		@Override
-		public void redo() throws CannotRedoException {
-			super.redo();
-			edit.redo();
-		}
-		
-		@Override
-		public void undo() throws CannotUndoException {
-			super.undo();
-			edit.undo();
-		}
-		
-		@Override
-		public String getPresentationName() {
-			return edit.getClass().getSimpleName();
-		}
 	}
 
 	public IUndoRedoable getChangeValenceEdit(IAtom atomInRange,

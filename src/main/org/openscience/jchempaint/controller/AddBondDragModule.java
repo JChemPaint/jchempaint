@@ -23,11 +23,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import static org.openscience.jchempaint.controller.edit.AddAtom.createAtom;
-import static org.openscience.jchempaint.controller.edit.AddBond.addBond;
-import static org.openscience.jchempaint.controller.edit.AppendAtom.appendAtom;
-import static org.openscience.jchempaint.controller.edit.SetBondOrder.cycleBondValence;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +39,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
-import org.openscience.jchempaint.controller.edit.IEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
@@ -71,10 +65,6 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     //if this is true, initally a bond will be drawn, if not, just an atom
     boolean makeInitialBond;
 
-    class State {
-        // atom || point
-        IEdit edit;
-    }
     /**
      * Constructor for the AddBondDragModule.
      * 
@@ -197,7 +187,6 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-        final IEdit edit;
         chemModelRelay.clearPhantoms();
         if(isBond) return;
 

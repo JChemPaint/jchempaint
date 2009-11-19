@@ -44,7 +44,6 @@ import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
-import org.openscience.jchempaint.controller.edit.IEdit;
 
 /**
  * This interface needs to be implemented in an application to return instances of classes 
@@ -54,7 +53,6 @@ import org.openscience.jchempaint.controller.edit.IEdit;
  * @cdk.module control
  */
 public interface IUndoRedoFactory {
-    public IUndoRedoable getEditOperation(IEdit edit);
 	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel, IAtomContainer undoRedoContainer, String type, IChemModelRelay c2dm);
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond,
 		IBond.Order[]> changedBonds,

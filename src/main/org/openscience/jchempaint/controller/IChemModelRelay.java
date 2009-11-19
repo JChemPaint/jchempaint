@@ -37,7 +37,6 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Stereo;
-import org.openscience.jchempaint.controller.edit.IEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -205,7 +204,6 @@ public interface IChemModelRelay extends IAtomBondEdits {
 
     public IUndoRedoFactory getUndoRedoFactory();
     public UndoRedoHandler getUndoRedoHandler();
-    public void execute( IEdit edit );
     public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
     public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond);
     public void setValence(IAtom atom, Integer newValence);

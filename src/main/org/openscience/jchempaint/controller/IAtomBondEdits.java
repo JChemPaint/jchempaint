@@ -23,6 +23,8 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.util.Collection;
+
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -49,6 +51,7 @@ public interface IAtomBondEdits {
     public IAtom addAtomWithoutUndo(String element, IAtom atom);
     public void moveToWithoutUndo(IAtom atom, Point2d point);
     public void moveTo(IAtom atom, Point2d point);
+    public void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove);
     public void setSymbol(IAtom atom, String symbol);
     public void setCharge(IAtom atom, int charge);
     public void setMassNumber(IAtom atom, int charge);

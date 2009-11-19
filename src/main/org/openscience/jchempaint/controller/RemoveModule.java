@@ -26,19 +26,11 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.controller.edit.CompositEdit;
-import org.openscience.jchempaint.controller.edit.IEdit;
-import org.openscience.jchempaint.controller.edit.RemoveAtom;
-import org.openscience.jchempaint.controller.edit.RemoveBond;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 
 
@@ -63,8 +55,7 @@ public class RemoveModule extends ControllerModuleAdapter {
 	    if(selectedAC == null)
 	        return;
 	    for(IAtom atom:selectedAC.atoms()) {
-	        IEdit edit = RemoveAtom.edit( atom, chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0) );
-	        chemModelRelay.execute(edit);
+	        chemModelRelay.removeAtom(atom);
 
 	    }
 	    for(IBond bond:selectedAC.bonds()) {

@@ -26,15 +26,11 @@
 
 package org.openscience.jchempaint.controller;
 
-import static org.openscience.jchempaint.controller.edit.AppendAtom.addNewBond;
-import static org.openscience.jchempaint.controller.edit.SetBondOrder.cycleBondValence;
-
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.jchempaint.controller.edit.AppendAtom;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
@@ -59,18 +55,15 @@ public class AddBondModule extends ControllerModuleAdapter {
             getHighlighted(worldCoordinate, closestAtom, closestBond);
 
         if (singleSelection == null) {
-            chemModelRelay.execute(addNewBond(worldCoordinate, chemModelRelay
-                    .getIChemModel().getMoleculeSet().getAtomContainer(0)));
+            chemModelRelay.addNewBond(worldCoordinate);
             setSelection(AbstractSelection.EMPTY_SELECTION);
         } else if (singleSelection instanceof IAtom) {
             String atomType =
                 chemModelRelay.getController2DModel().getDrawElement();
 
-            chemModelRelay.execute(AppendAtom.appendAtom(
-                    atomType, (IAtom) singleSelection, chemModelRelay
-                    .getIChemModel().getMoleculeSet().getAtomContainer(0)));
+            chemModelRelay.addAtom(atomType, (IAtom) singleSelection);
         } else if (singleSelection instanceof IBond) {
-            chemModelRelay.execute(cycleBondValence((IBond) singleSelection));
+            chemModelRelay.cycleBondValence((IBond) singleSelection);
             setSelection(new SingleSelection<IChemObject>(singleSelection));
         }
         chemModelRelay.updateView();

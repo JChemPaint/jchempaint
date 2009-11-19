@@ -26,10 +26,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import static org.openscience.jchempaint.controller.edit.CompositEdit.compose;
-import static org.openscience.jchempaint.controller.edit.Merge.merge;
-import static org.openscience.jchempaint.controller.edit.MoveOptionalUndo.move;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,8 +46,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.jchempaint.controller.edit.IEdit;
-import org.openscience.jchempaint.controller.edit.MoveOptionalUndo;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -152,46 +146,9 @@ public class MoveModule extends ControllerModuleAdapter {
                                           .getRenderer2DModel().getMerge();
             // Do the merge of atoms
             if (!mergeMap.isEmpty()) {
-
-                // First try to shift the selection to be aligned nicely
-                // with the target of the merge. This makes the end results 
-                // visually 'correct' with symmetrical rings. 
-                // Without this, the selection will be moved to where 
-                // the user clicked up, which can be slightly off target.
-                RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-                Iterator<IAtom> it = mergeMap.keySet().iterator();
-                if (it.hasNext()) {
-                    IAtomContainer movedAtomContainer = chemModelRelay.getRenderer().getRenderer2DModel()
-                            .getSelection().getConnectedAtomContainer();
-                    if (movedAtomContainer != null) {
-                        IAtom atomA = (IAtom) it.next();
-                        IAtom atomB = model.getMerge().get(atomA);
-                        Vector2d shift = new Vector2d();
-                        shift.sub(atomB.getPoint2d(), atomA.getPoint2d());
-                        
-                        for (IAtom shiftAtom : movedAtomContainer.atoms()) {
-                            shiftAtom.getPoint2d().x+=shift.x;
-                            shiftAtom.getPoint2d().y+=shift.y;
-                        }
-                    }
-                }
-                
-                //Continue with real merge
-                it = mergeMap.keySet().iterator();
-                IAtom atomA = (IAtom) it.next();
-                IAtom atomB = mergeMap.get( atomA );
-                Vector2d shift = new Vector2d();
-                shift.sub( atomB.getPoint2d(), atomA.getPoint2d() );
-                IEdit smallMove = move( shift, false, atomsToMove );
-                shift.add( end );
-                IEdit shiftEdit = move( shift, true, atomsToMove);
-
-                IEdit mergeEdit = merge(mergeMap);
-                mergeMap.clear();
-                chemModelRelay.execute( compose(smallMove, shiftEdit, mergeEdit) );
+                chemModelRelay.mergeMolecules(end);
             }else {
-                IEdit edit = MoveOptionalUndo.move( end, true, atomsToMove );
-                chemModelRelay.execute(edit);
+                chemModelRelay.moveBy(atomsToMove, null, end);
             }
     	}
     	endMove();
@@ -212,7 +169,6 @@ public class MoveModule extends ControllerModuleAdapter {
             Vector2d d = new Vector2d();
             d.sub(worldCoordTo, worldCoordFrom);
 
-            IEdit edit  = MoveOptionalUndo.move( d, false, atomsToMove );
             // check for possible merges
             RendererModel model = 
                 chemModelRelay.getRenderer().getRenderer2DModel();
@@ -220,7 +176,7 @@ public class MoveModule extends ControllerModuleAdapter {
 
             model.getMerge().putAll( calculateMerge(atomsToMove) );
 
-            chemModelRelay.execute( edit );
+            chemModelRelay.moveBy(atomsToMove, d, null);
             chemModelRelay.updateView();
 
         } else {

@@ -71,8 +71,6 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
-import org.openscience.jchempaint.controller.edit.IEdit;
-import org.openscience.jchempaint.controller.edit.MoveOptionalUndo;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
@@ -2156,18 +2154,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 
 
-    public void execute( IEdit edit ) {
-
-        IAtomContainer ac = chemModel.getMoleculeSet().getAtomContainer( 0 );
-        edit.execute(ac);
-        if(edit instanceof MoveOptionalUndo && !((MoveOptionalUndo)edit).isFinal())
-            ;
-        else
-            postEdit( edit );
-        //TODO add implicit hydrogen calculation and aromacity
-        fireEvents( edit.getTypeOfChanges() );
-    }
-
     private void fireEvents(Collection<Changed> events) {
         for(Changed changed:events) {
             switch(changed) {
@@ -2177,14 +2163,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 case Selection: changeHandler.selectionChanged();break;
                 case Zoom: changeHandler.zoomChanged();break;
             }
-        }
-    }
-
-    private void postEdit(final IEdit edit) {
-        IUndoRedoFactory factory = getUndoRedoFactory();
-        UndoRedoHandler handler = getUndoRedoHandler();
-        if(factory!=null && handler != null) {
-            handler.postEdit(factory.getEditOperation( edit));
         }
     }
 
@@ -2263,5 +2241,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         pseudo.setLabel(label);
         replaceAtom(pseudo,atom);
         return pseudo;
+    }
+
+    public void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove) {
+        if(totalmove!=null && getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
+            IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
+            for(IAtom atom : atoms){
+                    undoRedoContainer.addAtom(atom);
+            }
+            IUndoRedoable undoredo = getUndoRedoFactory().getMoveAtomEdit(undoRedoContainer, totalmove, "Move atom");
+            getUndoRedoHandler().postEdit(undoredo);
+        }
+        if(move!=null){
+            for(IAtom atom : atoms){
+                    Point2d newpoint = new Point2d(atom.getPoint2d());
+                    newpoint.add(move);
+                    moveToWithoutUndo(atom, newpoint);
+            }
+        }
     }
 }

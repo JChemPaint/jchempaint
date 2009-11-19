@@ -71,10 +71,8 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 		for(IBond bond : bondsWithReplacedAtom.keySet()){
 			bond.setAtom(atomwhichwasmoved, bondsWithReplacedAtom.get(bond));
 		}
-		deletedAtom.getPoint2d().x-=offset.x;
-		deletedAtom.getPoint2d().y-=offset.y;
-		atomwhichwasmoved.getPoint2d().x-=offset.x;
-		atomwhichwasmoved.getPoint2d().y-=offset.y;
+		deletedAtom.getPoint2d().x+=offset.x;
+		deletedAtom.getPoint2d().y+=offset.y;
 		c2dm.updateAtom(atomwhichwasmoved);
 	}
 
@@ -86,10 +84,8 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 		for(IBond bond : bondsWithReplacedAtom.keySet()){
 			bond.setAtom(deletedAtom, bondsWithReplacedAtom.get(bond));
 		}
-		deletedAtom.getPoint2d().x+=offset.x;
-		deletedAtom.getPoint2d().y+=offset.y;
-		atomwhichwasmoved.getPoint2d().x+=offset.x;
-		atomwhichwasmoved.getPoint2d().y+=offset.y;
+		deletedAtom.getPoint2d().x-=offset.x;
+		deletedAtom.getPoint2d().y-=offset.y;
 		c2dm.updateAtom(deletedAtom);
 		c2dm.updateAtom(atomwhichwasmoved);
 	}

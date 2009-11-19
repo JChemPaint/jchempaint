@@ -52,14 +52,9 @@ public class SwingMergeMoleculesEdit extends MergeMoleculesEdit implements
             Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset,
             IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
 
-        // fix: the offset distorts the picture. use (0,0) for correct rendering
         super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
-                bondsWithReplacedAtom, new Vector2d(0,0), atomwhichwasmoved, type, c2dm);
+                bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
 
-        // super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
-        // bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
-
-        
     }
 
     public boolean addEdit(UndoableEdit arg0) {

@@ -25,8 +25,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import static org.openscience.jchempaint.controller.edit.SetSymbol.setSymbol;
-
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -69,13 +67,9 @@ public class CycleSymbolModule extends ControllerModuleAdapter {
         for (int i = 0; i < elements.length; i++) {
             if (elements[i].equals(symbol)) {
                 if (i < elements.length - 2) {
-                    chemModelRelay.execute(setSymbol( closestAtom,elements[i + 1], 
-                            chemModelRelay.getIChemModel().getMoleculeSet().
-                            getAtomContainer(0)));
+                    chemModelRelay.setSymbol( closestAtom,elements[i + 1]);
                 } else {
-                    chemModelRelay.execute(setSymbol( closestAtom, elements[0], 
-                            chemModelRelay.getIChemModel().getMoleculeSet().
-                            getAtomContainer(0)));
+                    chemModelRelay.setSymbol( closestAtom, elements[0]);
                 }
                 changed = true;
                 break;

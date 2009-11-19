@@ -26,8 +26,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import static org.openscience.jchempaint.controller.edit.SetCharge.setCharge;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,8 +62,7 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 	        int newCharge = change;
 	        if( atom.getFormalCharge() != null)
 	            newCharge += atom.getFormalCharge();
-	        chemModelRelay.execute( setCharge( atom, newCharge, chemModelRelay
-	                .getIChemModel().getMoleculeSet().getAtomContainer(0) ));
+	        chemModelRelay.setCharge(atom, newCharge);
 	    }
 	    setSelection( new MultiSelection<IAtom>(newSelection) );
 	    chemModelRelay.updateView();// FIXME do you really need to call it here?
