@@ -25,7 +25,8 @@ import java.io.IOException;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.elements.AtomMassSymbolElement;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
@@ -35,7 +36,8 @@ import org.openscience.jchempaint.renderer.elements.IRenderingElement;
  */
 public class AtomMassGenerator extends BasicAtomGenerator {
 
-    private LoggingTool logger = new LoggingTool(AtomMassGenerator.class);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(AtomMassGenerator.class);
 
 	public AtomMassGenerator() {}
 

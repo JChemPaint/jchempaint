@@ -24,7 +24,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +32,12 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 /**
@@ -48,7 +47,8 @@ import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
  */
 public class RotateModule extends ControllerModuleAdapter {
 
-    private LoggingTool logger = new LoggingTool(RotateModule.class);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(RotateModule.class);
 
     private double rotationAngle;
     private boolean selectionMade = false;

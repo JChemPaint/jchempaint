@@ -40,7 +40,8 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 /**
  *  A property manager for JChemPaint.
@@ -51,7 +52,8 @@ public class JCPPropertyHandler
 
 	private static JCPPropertyHandler jcpPropsHandler = null;
 
-	private LoggingTool logger;
+	private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(JCPPropertyHandler.class);
 	private Properties currentProperties;
 	//private File defaultPropsFile;
 	private File userPropsFile;
@@ -68,7 +70,6 @@ public class JCPPropertyHandler
 	 */
 	private JCPPropertyHandler()
 	{
-		logger = new LoggingTool(this);
 		currentProperties = null;
 		//defaultPropsFile = null;
 		userPropsFile = null;

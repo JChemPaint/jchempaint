@@ -30,7 +30,6 @@ package org.openscience.jchempaint;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Insets;
 import java.net.URL;
 import java.util.MissingResourceException;
@@ -39,8 +38,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
@@ -48,15 +45,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicBorders;
 
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.jchempaint.action.ChangeAtomSymbolAction;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.controller.AddBondDragModule;
-import org.openscience.jchempaint.renderer.color.CDK2DAtomColors;
-import org.openscience.jchempaint.renderer.color.IAtomColorer;
 
 /**
  *  This class makes the JCPToolBar
@@ -64,9 +57,8 @@ import org.openscience.jchempaint.renderer.color.IAtomColorer;
  */
 public class JCPToolBar
 {
-
-    private static IAtomColorer colorer = new CDK2DAtomColors();
-    private static LoggingTool logger;
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(JCPToolBar.class);
     public static Color BUTTON_INACTIVE_COLOR=Color.WHITE;//new Color(230,230,230);
     /**
      *  Gets the toolbar attribute of the MainContainerPanel object
@@ -75,12 +67,6 @@ public class JCPToolBar
      */
     public static JToolBar getToolbar(JChemPaintPanel chemPaintPanel, String key, int horizontalorvertical)
     {
-        //Controller2DHub hub
-        if (logger == null)
-        {
-            logger = new LoggingTool(JCPToolBar.class);
-        }
-
         JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, 1);
         return maintoolbar;
     }

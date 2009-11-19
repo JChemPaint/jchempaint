@@ -20,7 +20,6 @@
 package org.openscience.jchempaint.renderer.generators;
 
 import java.awt.Color;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.vecmath.Point2d;
@@ -36,8 +35,8 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparatorBy2DCenter;
 import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -53,7 +52,8 @@ import org.openscience.jchempaint.renderer.elements.WedgeLineElement.Direction;
  */
 public class BasicBondGenerator implements IGenerator {
 
-	private LoggingTool logger = new LoggingTool(BasicBondGenerator.class);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(BasicBondGenerator.class);
 
 	protected IRingSet ringSet;
 

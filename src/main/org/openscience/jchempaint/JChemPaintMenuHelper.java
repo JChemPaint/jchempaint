@@ -21,7 +21,8 @@ import javax.swing.event.MenuListener;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.CopyPasteAction;
 import org.openscience.jchempaint.action.JCPAction;
 
@@ -32,7 +33,8 @@ import org.openscience.jchempaint.action.JCPAction;
  */
 public class JChemPaintMenuHelper {
 
-    private LoggingTool logger;
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(JChemPaintMenuHelper.class);
     private JCPAction jcpaction;
     private static List<String> usedKeys = new ArrayList<String>();
 
@@ -41,7 +43,6 @@ public class JChemPaintMenuHelper {
      * Constructor for JChemPaintMenuHelper
      */
     public JChemPaintMenuHelper(){
-        this.logger=new LoggingTool();
     }
 
 

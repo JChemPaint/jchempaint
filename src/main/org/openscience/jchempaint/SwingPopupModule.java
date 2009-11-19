@@ -35,7 +35,8 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IReactionSet;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.controller.ControllerModuleAdapter;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.renderer.Renderer;
@@ -43,7 +44,8 @@ import org.openscience.jchempaint.renderer.RendererModel;
 
 public class SwingPopupModule extends ControllerModuleAdapter {
 
-	private LoggingTool logger = new LoggingTool(this);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(SwingPopupModule.class);
 
 	private static Hashtable<String, JChemPaintPopupMenu> popupMenus = new Hashtable<String, JChemPaintPopupMenu>();
 

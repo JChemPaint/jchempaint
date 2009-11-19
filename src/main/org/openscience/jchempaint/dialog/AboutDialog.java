@@ -39,11 +39,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPMenuTextMaker;
 import org.openscience.jchempaint.JCPPropertyHandler;
-import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.action.JCPAction;
 
 
@@ -57,12 +57,12 @@ public class AboutDialog extends JFrame {
 
 	private static final long serialVersionUID = 8890609574363086221L;
 	
-	protected static LoggingTool logger = null;
+    private static ILoggingTool logger =
+	        LoggingToolFactory.createLoggingTool(AboutDialog.class);
 
 	/** Displays the About Dialog for JChemPaint.  */
 	public AboutDialog(String guistring) {
 		super(JCPMenuTextMaker.getInstance(guistring).getText("about"));
-		logger = new LoggingTool(this);
 		doInit();
 	}
 

@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -59,7 +59,8 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
  */
 public class MoveModule extends ControllerModuleAdapter {
 
-    private LoggingTool logger = new LoggingTool(MoveModule.class);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(MoveModule.class);
     
     private Vector2d offset;
     

@@ -37,7 +37,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.JChemPaintMenuBar;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JChemPaintPopupMenu;
@@ -68,7 +69,8 @@ public class JCPAction extends AbstractAction
 	/**
 	 *  Description of the Field
 	 */
-	protected static LoggingTool logger = null;
+	protected static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(JCPAction.class);
 
 	private Hashtable actions = null;
 	private Hashtable popupActions = null;
@@ -99,11 +101,6 @@ public class JCPAction extends AbstractAction
 	public JCPAction(JChemPaintPanel jcpPanel, String type, boolean isPopupAction)
 	{
 		super();
-		//logger.debug("JCPAction->type: " + type);
-		if (JCPAction.logger == null)
-		{
-			JCPAction.logger = new LoggingTool(this);
-		}
 		if (this.actions == null)
 		{
 			this.actions = new Hashtable();

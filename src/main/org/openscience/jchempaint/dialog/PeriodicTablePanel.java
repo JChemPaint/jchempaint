@@ -58,7 +58,8 @@ import org.openscience.cdk.PeriodicTableElement;
 import org.openscience.cdk.config.ElementPTFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.GT;
 /**
  * JPanel version of the periodic system.
@@ -80,7 +81,8 @@ public class PeriodicTablePanel extends JPanel
 	private JLayeredPane layeredPane;
 	
 	private ElementPTFactory factory;
-	private LoggingTool logger;
+	private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(PeriodicTableDialog.class);
 
 	private Map<JButton,Color> buttoncolors = new HashMap<JButton,Color>();
 	

@@ -24,8 +24,12 @@
 package org.openscience.jchempaint;
 
 import java.text.MessageFormat;
-import java.util.*;
-import org.openscience.cdk.tools.LoggingTool;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 public class GT {
 
@@ -35,7 +39,8 @@ public class GT {
   private int translationResourcesCount = 0;
   private boolean doTranslate = true;
   private String language;
-  protected static LoggingTool logger = new LoggingTool();
+  private static ILoggingTool logger =
+      LoggingToolFactory.createLoggingTool(GT.class);
 
   public GT(String la) {
     getTranslation(la);

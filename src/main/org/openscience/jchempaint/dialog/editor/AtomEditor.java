@@ -40,13 +40,10 @@ import javax.swing.text.Document;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.tools.LoggingTool;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -54,7 +51,8 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
 public class AtomEditor extends ChemObjectEditor {
     
     private static final long serialVersionUID = -6693485657147158966L;
-    protected LoggingTool logger = new LoggingTool(this);
+    private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(AtomEditor.class);
     JTextField symbolField;
     JSpinner   hCountField;
     JSpinner   formalChargeField;

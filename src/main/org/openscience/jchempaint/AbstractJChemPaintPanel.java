@@ -35,7 +35,8 @@ import javax.swing.JPanel;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -47,7 +48,8 @@ import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 public abstract class AbstractJChemPaintPanel extends JPanel{
 
 	protected RenderPanel renderPanel;
-    protected LoggingTool logger = new LoggingTool(this);
+	private static ILoggingTool logger =
+        LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
 
 	/**
 	 * 

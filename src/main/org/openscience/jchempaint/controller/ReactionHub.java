@@ -36,7 +36,7 @@ public class ReactionHub {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#makeReactantInExistingReaction(java.lang.String, org.openscience.cdk.interfaces.IAtomContainer, org.openscience.cdk.interfaces.IAtomContainer)
      */
-    public void makeReactantInExistingReaction(ControllerHub controllerhub, String reactionId,
+    public static void makeReactantInExistingReaction(ControllerHub controllerhub, String reactionId,
             IAtomContainer newContainer, IAtomContainer oldcontainer) {
         IChemModel chemModel = controllerhub.getChemModel();
         IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionId);
@@ -51,7 +51,7 @@ public class ReactionHub {
         controllerhub.structureChanged();
     }
 
-    public void makeProductInNewReaction(ControllerHub controllerhub, IAtomContainer newContainer,
+    public static void makeProductInNewReaction(ControllerHub controllerhub, IAtomContainer newContainer,
             IAtomContainer oldcontainer) {
         IChemModel chemModel = controllerhub.getChemModel();
         IReaction reaction = newContainer.getBuilder().newReaction();
@@ -77,7 +77,7 @@ public class ReactionHub {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#makeProductInExistingReaction(java.lang.String, org.openscience.cdk.interfaces.IAtomContainer, org.openscience.cdk.interfaces.IAtomContainer)
      */
-    public void makeProductInExistingReaction(ControllerHub controllerhub, String reactionId,
+    public static void makeProductInExistingReaction(ControllerHub controllerhub, String reactionId,
             IAtomContainer newContainer, IAtomContainer oldcontainer) {
         IChemModel chemModel = controllerhub.getChemModel();
         IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionId);

@@ -52,12 +52,10 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
-            	<includesfile name="${cdk.metainf}/atomtype.libdepends"/>
             	<includesfile name="${cdk.metainf}/builder3d.libdepends"/>
             	<includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
             	<includesfile name="${cdk.metainf}/charges.libdepends"/>
             	<includesfile name="${cdk.metainf}/control.libdepends"/>
-                <includesfile name="${cdk.metainf}/core.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
             	<includesfile name="${cdk.metainf}/datadebug.libdepends"/>
             	<includesfile name="${cdk.metainf}/dict.libdepends"/>
@@ -107,6 +105,7 @@
                 <include name="cdk-charges.jar"/>
                 <include name="cdk-control.jar"/>
                 <include name="cdk-core.jar"/>
+            	<include name="cdk-log4j.jar"/>
                 <!--include name="cdk-datadebug.jar"/-->
                 <include name="cdk-data.jar"/>
                 <include name="cdk-dict.jar"/>
