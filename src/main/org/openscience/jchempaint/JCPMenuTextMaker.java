@@ -249,8 +249,10 @@ public class JCPMenuTextMaker {
 		if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET))
 			entries.put("newTooltip", GT._("Clear"));
 		else
-			entries.put("newTooltip", GT._("Create a new file"));
-		entries.put("openTooltip", GT._("Open a file"));
+            entries.put("newTooltip", GT._("Create new file"));
+        entries.put("openTooltip", GT._("Open existing file"));
+        entries.put("saveTooltip", GT._("Save current file"));
+        entries.put("printTooltip", GT._("Print current file"));			entries.put("newTooltip", GT._("Create new file"));
 		entries.put("redoTooltip", GT._("Redo Action"));
 		entries.put("saveAsTooltip", GT._("Save to a file"));
 		entries.put("undoTooltip", GT._("Undo Action"));
@@ -303,7 +305,16 @@ public class JCPMenuTextMaker {
         entries.put("selectReactants", GT._("Select Reactants"));
         entries.put("selectProducts", GT._("Select Products"));
         entries.put("reactionMenuTitle", GT._("Reaction Popup Menu"));
-	}
+        entries.put("alkaloids", GT._("Alkaloids"));
+        entries.put("beta_lactams", GT._("Beta Lactams"));
+        entries.put("carbohydrates", GT._("Carbohydrates"));
+        entries.put("inositols", GT._("Inositols"));
+        entries.put("lipids", GT._("Lipids"));
+        entries.put("miscellaneous", GT._("Miscellaneous"));
+        entries.put("nucleosides", GT._("Nucleosides"));
+        entries.put("porphyrins", GT._("Porphyrins"));
+        entries.put("steroids", GT._("Steroids"));
+    }
 	
 	/**
 	 * Gives the text for an item.

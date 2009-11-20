@@ -63,12 +63,16 @@ import org.openscience.jchempaint.dialog.templates.DummyClass;
 /**
  * This class shows a list of templates. The one chosen by the user can queried 
  * with getChosenmolecule(). The templates are organized in tabs. The headers of 
- * the tabs are the names of all directories in TEMPLATES_PACKAGE. All files in 
+ * the tabs are the names of all directories in TEMPLATES_PACKAGE. _ in 
+ * directory name is replaced by a space. All files in 
  * theses directories named *.mol are read as MOL files and put as a template on 
  * the respective tab. The first line of the MOL file is used as name to 
  * display. If there is a *.png file in the same directy, it is used 
  * as icon. Do not put anything else in these directories. TEMPLATES_PACKAGE must 
- * contain a class called DummyClass for the directory being located.
+ * contain a class called DummyClass for the directory being located. 
+ * If wished, the tab can be added to the Templates menu with an action like:
+ * menuitemnameAction=org.openscience.jchempaint.action.CopyPasteAction@pasteX
+ * where X is the directory name.
  */
 public class TemplateBrowser extends JDialog implements ActionListener {
     
