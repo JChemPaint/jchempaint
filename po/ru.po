@@ -842,7 +842,7 @@ msgstr "Lr"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:622
 msgid "Atomic number"
-msgstr "Номера атомов"
+msgstr "Атомный номер"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:624
 msgid "Group"
@@ -1556,8 +1556,8 @@ msgid "Alkaloids"
 msgstr "Алкалоиды"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:301
-msgid "Beta_Lactams"
-msgstr "Бета-лактамы"
+msgid "Beta Lactams"
+msgstr "Бета лактамы"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:302
 msgid "Carbohydrates"
