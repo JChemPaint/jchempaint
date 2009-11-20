@@ -45,6 +45,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.BoxLayout;
 
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
@@ -132,39 +133,54 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private void constructPanel() {
 
         JPanel rendererOptionsPanel = this.addTab(GT._("Display Preferences"));
+		rendererOptionsPanel.setLayout(new java.awt.GridLayout(1,2,5,0));
+		JPanel options1 = new JPanel();
+		options1.setLayout(new BoxLayout(options1, BoxLayout.PAGE_AXIS));
+		rendererOptionsPanel.add(options1);
+		JPanel options2 = new JPanel();
+		options2.setLayout(new BoxLayout(options2, BoxLayout.PAGE_AXIS));
+		rendererOptionsPanel.add(options2);
 
         //addField("",new JPanel());
         //addField("Rendering Settings",new JPanel());
+		addField("", new JLabel(" "), options1);
 
-        drawNumbers = new JCheckBox();
-        addField(GT._("Draw atom numbers"), drawNumbers, rendererOptionsPanel);
+        drawNumbers = new JCheckBox(GT._("Draw atom numbers"));
+		options1.add(drawNumbers);
+        //addField(GT._("Draw atom numbers"), drawNumbers, options1);
 
         //showAtomAtomMapping = new JCheckBox();
         //addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
 
-        useKekuleStructure = new JCheckBox();
-        addField(GT._("Explicit carbons"), useKekuleStructure, rendererOptionsPanel);
+        useKekuleStructure = new JCheckBox(GT._("Explicit carbons"));
+		options1.add(useKekuleStructure);
+        //addField(GT._("Explicit carbons"), useKekuleStructure, options1);
 
-        showEndCarbons = new JCheckBox();
-        addField(GT._("Show explicit methyl groups"), showEndCarbons, rendererOptionsPanel);
+        showEndCarbons = new JCheckBox(GT._("Show explicit methyl groups"));
+		options1.add(showEndCarbons);
+        //addField(GT._("Show explicit methyl groups"), showEndCarbons, options1);
 
-        showExplicitHydrogens = new JCheckBox();
-        addField(GT._("Show explicit hydrogens"), showExplicitHydrogens, rendererOptionsPanel);
+        showExplicitHydrogens = new JCheckBox(GT._("Show explicit hydrogens"));
+		options1.add(showExplicitHydrogens);
+        //addField(GT._("Show explicit hydrogens"), showExplicitHydrogens, options1);
 
-        showImplicitHydrogens = new JCheckBox();
-        addField(GT._("Show implicit hydrogens"), showImplicitHydrogens, rendererOptionsPanel);
+        showImplicitHydrogens = new JCheckBox(GT._("Show implicit hydrogens"));
+		options1.add(showImplicitHydrogens);
+        //addField(GT._("Show implicit hydrogens"), showImplicitHydrogens, options1);
 
-        showAromaticity = new JCheckBox();
-        addField(GT._("Show aromatic ring circles"), showAromaticity, rendererOptionsPanel);
+        showAromaticity = new JCheckBox(GT._("Show aromatic ring circles"));
+		options1.add(showAromaticity);
+        //addField(GT._("Show aromatic ring circles"), showAromaticity, options1);
 
         //showAromaticityCDKStyle = new JCheckBox();
         //addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
 
-        colorAtomsByType = new JCheckBox();
-        addField(GT._("Color atoms by element"), colorAtomsByType, rendererOptionsPanel);
+        colorAtomsByType = new JCheckBox(GT._("Color atoms by element"));
+		options1.add(colorAtomsByType);
+        //addField(GT._("Color atoms by element"), colorAtomsByType, options1);
 
         //useAntiAliasing = new JCheckBox();
-        //addField(GT._("Use Anti-Aliasing"), useAntiAliasing, rendererOptionsPanel);
+        //addField(GT._("Use Anti-Aliasing"), useAntiAliasing, options1);
 
         //showToolTip = new JCheckBox();
         //addField(GT._("Show tooltips"), showToolTip);
@@ -173,23 +189,30 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //addField(GT._("Show boxes around reactions"), showReactionBoxes);
 
 
-        isFitToScreen = new JCheckBox();
-        addField(GT._("Set fit to screen"), isFitToScreen, rendererOptionsPanel);
+        isFitToScreen = new JCheckBox(GT._("Set fit to screen"));
+		options1.add(isFitToScreen);
+        //addField(GT._("Set fit to screen"), isFitToScreen, options1);
 
+        addField("", new JLabel(" "), options1);
+        addField("", new JSeparator(), options1);
+		addField("", new JLabel(" "), options1);
 
-        addField("", new JSeparator(), rendererOptionsPanel);
-
-        nonCompactShape = new JRadioButton();
+        nonCompactShape = new JRadioButton(GT._("Show atom symbols"));
         group.add(nonCompactShape);
-        addField(GT._("Show atom symbols"), nonCompactShape, rendererOptionsPanel);
+		options1.add(nonCompactShape);
+        //addField(GT._("Show atom symbols"), nonCompactShape, options1);
 
-        compactShapeOval = new JRadioButton();
+        compactShapeOval = new JRadioButton(GT._("Show ball atoms"));
         group.add(compactShapeOval);
-        addField(GT._("Show ball atoms"), compactShapeOval, rendererOptionsPanel);
+		options1.add(compactShapeOval);
+        //addField(GT._("Show ball atoms"), compactShapeOval, options1);
 
-        compactShapeSquare = new JRadioButton();
+        compactShapeSquare = new JRadioButton(GT._("Show square atoms"));
         group.add(compactShapeSquare);
-        addField(GT._("Show square atoms"), compactShapeSquare, rendererOptionsPanel);
+		options1.add(compactShapeSquare);
+        //addField(GT._("Show square atoms"), compactShapeSquare, options1);
+        addField("", new JLabel(" "), options1);
+		addField("", new JSeparator(), options1);
 
         atomRadius = new JSlider(0, 20);
         atomRadius.setSnapToTicks(true);
@@ -197,9 +220,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         atomRadius.setPaintTicks(true);
         atomRadius.setMajorTickSpacing(5);
         atomRadius.setMinorTickSpacing(1);
-        addField(GT._("Atom size"), atomRadius, rendererOptionsPanel);
-        addField("", new JLabel(" "), rendererOptionsPanel);
-        addField("", new JSeparator(), rendererOptionsPanel);
+		addField("", new JLabel(" "), options2);
+        addField(GT._("Atom size"), atomRadius, options2);
+        addField("", new JLabel(" "), options2);
+        addField("", new JSeparator(), options2);
 
 
         bondWidth = new JSlider(1, 5);
@@ -207,9 +231,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         bondWidth.setPaintLabels(true);
         bondWidth.setPaintTicks(true);
         bondWidth.setMajorTickSpacing(1);
-        addField(GT._("Bond width"), bondWidth, rendererOptionsPanel);
-        addField("", new JLabel(" "), rendererOptionsPanel);
-        addField("", new JSeparator(), rendererOptionsPanel);
+		addField("", new JLabel(" "), options2);
+        addField(GT._("Bond width"), bondWidth, options2);
+        addField("", new JLabel(" "), options2);
+        addField("", new JSeparator(), options2);
 
         //bondLength = new JSlider(20, 60);
         //bondLength.setSnapToTicks(true);
@@ -225,18 +250,20 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setPaintTicks(true);
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
-        addField(GT._("Highlight/Select diameter"), highlightDistance, rendererOptionsPanel);
-        addField("", new JLabel(" "), rendererOptionsPanel);
-        addField("", new JSeparator(), rendererOptionsPanel);
+		addField("", new JLabel(" "), options2);
+        addField(GT._("Highlight/Select diameter"), highlightDistance, options2);
+        addField("", new JLabel(" "), options2);
+        addField("", new JSeparator(), options2);
 
         wedgeWidth = new JSlider(1, 10);
         wedgeWidth.setSnapToTicks(true);
         wedgeWidth.setPaintLabels(true);
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
-        addField(GT._("Wedge width"), wedgeWidth, rendererOptionsPanel);
-        addField("", new JLabel(" "), rendererOptionsPanel);
-        addField("", new JSeparator(), rendererOptionsPanel);
+		addField("", new JLabel(" "), options2);
+        addField(GT._("Wedge width"), wedgeWidth, options2);
+        addField("", new JLabel(" "), options2);
+        //addField("", new JSeparator(), options2);
 
         /*
         currentFontName = "";
@@ -248,13 +275,20 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         addField("", chooseFontButton);
          */
 
-        color = new JLabel(GT._("BACKCOLOR"));
-        addField(GT._("Background color"), color, rendererOptionsPanel);
+        color = new JLabel();
+		color.setText("      "+GT._("Background color")+"      ");
+		color.setOpaque(true);
+		addField("", new JLabel(" "), options1);
+		options1.add(color);
+		addField("", new JLabel(" "), options1);
+        //addField(GT._("Background color"), color, options2);
 
         chooseColorButton = new JButton(GT._("Choose background color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
-        addField("", chooseColorButton, rendererOptionsPanel);
+		options1.add(chooseColorButton);
+		addField("", new JLabel(" "), options1);
+        //addField("", chooseColorButton, options2);
 
         JPanel otherOptionsPanel = this.addTab(GT._("Other Preferences"));
         
@@ -303,7 +337,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         currentColor = model.getBackColor();
         if (currentColor != null) {
-            color.setForeground(currentColor);
+            color.setBackground(currentColor);
         }
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
@@ -382,7 +416,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             Color newColor = JColorChooser.showDialog(this, GT._("Choose Background Color"), model.getBackColor());
             if (newColor != null) {
                 currentColor = newColor;
-                color.setForeground(currentColor);
+                color.setBackground(currentColor);
             }
         }
     }     
