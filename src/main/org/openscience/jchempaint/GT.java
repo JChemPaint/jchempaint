@@ -367,6 +367,10 @@ public class GT {
     return str;
   }
 
+  public static String getStringNoExtraction(String string) {
+      return getTextWrapper().getString(string);  
+  }
+  
   private String getString(String string) {
     if (!doTranslate || translationResourcesCount == 0)
       return string;

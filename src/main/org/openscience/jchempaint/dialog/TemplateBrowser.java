@@ -114,7 +114,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         JPanel allPanel = new JPanel();
         GridLayout experimentLayout = new GridLayout(0,8);
         allPanel.setLayout(experimentLayout);
-        tabbedPane.addTab("All", allPanel );
+        tabbedPane.addTab(GT._("All"), allPanel );
         try{
             createTemplatesMaps(entriesMol, entriesMolName, entriesIcon, true);
             myPanel.add( tabbedPane, BorderLayout.CENTER );
@@ -155,7 +155,8 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     mols.put(allButton, cdkmol);
                     allPanel.add(allButton);
                 }
-                tabbedPane.addTab(key.replace('_', ' '), panel );
+                System.err.println(key);
+                tabbedPane.addTab(GT.getStringNoExtraction(key.replace('_', ' ')), panel );
                 if(tabToSelect.equals(key.replace('_',' '))){
                     tabbedPane.setSelectedIndex(count+1);
                 }
