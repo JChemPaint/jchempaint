@@ -53,7 +53,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.interfaces.IBond.Order;
@@ -69,7 +68,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 import org.openscience.cdk.tools.manipulator.BondManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
-import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -457,9 +455,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		    molSet.addMolecule(ac);
 		    chemModel.setMoleculeSet(molSet);
 		}
-		IAtomContainer newAtomContainer = chemModel.getBuilder().newAtomContainer();
+		IMolecule newAtomContainer = chemModel.getBuilder().newMolecule();
+		if(chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount()==0)
+		    newAtomContainer = (IMolecule)chemModel.getMoleculeSet().getAtomContainer(0);
+		else
+		    molSet.addAtomContainer(newAtomContainer);
 		newAtomContainer.addAtom(newAtom);
-		molSet.addAtomContainer(newAtomContainer);
 		updateAtom(newAtom);
 		RendererModel model = this.getRenderer().getRenderer2DModel();
 		double nudgeDistance = model.getHighlightDistance() / model.getScale();
@@ -1083,9 +1084,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             set = chemModel.getBuilder().newMoleculeSet();
             chemModel.setMoleculeSet(set);
         }
-        IMolecule container = set.getBuilder().newMolecule();
-        set.addAtomContainer(container);
-        container.add(ring);
+        IMolecule newAtomContainer = chemModel.getBuilder().newMolecule();
+        if(chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount()==0)
+            newAtomContainer = (IMolecule)chemModel.getMoleculeSet().getAtomContainer(0);
+        else
+            chemModel.getMoleculeSet().addMolecule(newAtomContainer);
+        newAtomContainer.add(ring);
         updateAtoms(ring, ring.atoms());
         structureChanged();
 	    if(undoable && getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
@@ -1112,9 +1116,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             set = chemModel.getBuilder().newMoleculeSet();
             chemModel.setMoleculeSet(set);
         }
-        IMolecule container = set.getBuilder().newMolecule();
-        set.addAtomContainer(container);
-        container.add(ring);
+        IMolecule newAtomContainer = chemModel.getBuilder().newMolecule();
+        if(chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount()==0)
+            newAtomContainer = (IMolecule)chemModel.getMoleculeSet().getAtomContainer(0);
+        else
+            chemModel.getMoleculeSet().addMolecule(newAtomContainer);
+        newAtomContainer.add(ring);
+        newAtomContainer.add(ring);
         updateAtoms(ring, ring.atoms());
         structureChanged();
 	    if(undoable && getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
@@ -2104,9 +2112,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      */
     public double calculateAverageBondLength(IMoleculeSet moleculeSet) {
         Double averageBondModelLength = 0.0;
-        for (IAtomContainer atomContainer : moleculeSet.molecules()) {
-            averageBondModelLength +=
-             GeometryTools.getBondLengthAverage(atomContainer);
+        for (IAtomContainer atomContainer :
+            ChemModelManipulator.getAllAtomContainers(chemModel)) {
+                averageBondModelLength +=
+                    GeometryTools.getBondLengthAverage(atomContainer);
         }
         if(!averageBondModelLength.isNaN() && averageBondModelLength!=0 ) {
            return averageBondModelLength / moleculeSet.getAtomContainerCount();
@@ -2158,6 +2167,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 }
             }                       
         }
+        removeEmptyContainers();
         IUndoRedoable undoredo = getUndoRedoFactory().
             getRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, 
             "Delete Bond", this);

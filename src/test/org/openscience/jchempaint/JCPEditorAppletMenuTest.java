@@ -207,9 +207,9 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
         //if we click somewhere, we should get a new atom with specified properties
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100));
-        Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getSymbol());
-        Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(oldAtomCount).getMassNumber().intValue());
+        Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+        Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtom(0).getSymbol());
+        Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtom(0).getMassNumber().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
     }
 	

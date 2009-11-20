@@ -162,9 +162,11 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
         Assert.assertEquals(4, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
         moveto=getBondPoint(panel,1);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-        Assert.assertEquals(5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        Assert.assertEquals(3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        Assert.assertEquals(3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+        Assert.assertEquals(0, panel.getChemModel().getMoleculeSet().getAtomContainer(1).getBondCount());
         restoreModelToEmpty();
     }
     

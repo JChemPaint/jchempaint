@@ -255,11 +255,12 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
         Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(oldBondCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-        //and a bond
+        //and a (terminal) bond
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y)/2);   
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        Assert.assertEquals(oldBondCount-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+        Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        Assert.assertEquals(oldAtomCount-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+        Assert.assertEquals(oldBondCount-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
         restoreModelWithBasicmol();
     }
 
@@ -272,7 +273,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         applet.button("hexagon").click();
         Point2d moveto=new Point2d(100,100);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
         applet.button("select").click();
         //double click on atom
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
