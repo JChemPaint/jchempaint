@@ -149,7 +149,7 @@ public class PeriodicTablePanel extends JPanel
 		butt = new JButton("1");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
 		panel.add(butt);
-		panel.add(createButton("H"));
+		panel.add(createButton(GT._("H")));
 		
 		butt = new JButton("2");
 		butt.setBorder(new EmptyBorder(2,2,2,2));
@@ -620,19 +620,19 @@ public class PeriodicTablePanel extends JPanel
 		JLabel label;
 		if(element != null){
 			label = new JLabel("<html><FONT SIZE=+2>"
-				+element.getName()+" ("+element.getSymbol()+")</FONT><br>"
-				+" Atomic number "+element.getAtomicNumber()
+				+element.getName()+" ("+element.getSymbol()+")</FONT><br> "
+				+GT._("Atomic number")+" "+element.getAtomicNumber()
 				+ (element.getGroup()!=null ?
-					", Group "+element.getGroup() : "")
-				+", Period "+ element.getPeriod()+"</html>");
+					", "+GT._("Group")+" "+element.getGroup() : "")
+				+", "+GT._("Period")+" "+element.getPeriod()+"</html>");
 	        label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 			pan.add(label,BorderLayout.NORTH);
 			
-			label = new JLabel("<html><FONT>"
-				+" CAS RN: "+element.getCASid()+"<br>"
-				+" Element Category: "+element.getChemicalSerie()+"<br>"
-				+" State: "+element.getPhase()+"<br>"
-				+" Electronativity: "+(element.getPaulingEneg()==null ? "undefined" : element.getPaulingEneg())+"<br>"
+			label = new JLabel("<html><FONT> "
+				+GT._("CAS RN:")+" "+element.getCASid()+"<br> "
+				+GT._("Element Category:")+" "+element.getChemicalSerie()+"<br> "
+				+GT._("State:")+" "+element.getPhase()+"<br> "
+				+GT._("Electronativity:")+" "+(element.getPaulingEneg()==null ? GT._("undefined") : element.getPaulingEneg())+"<br>"
 				+"</FONT></html>");
 			label.setMinimumSize(new Dimension(165,150));
 	        label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -640,7 +640,7 @@ public class PeriodicTablePanel extends JPanel
 		}
 		else
 		{
-			label = new JLabel("     Periodic Table of elements");
+			label = new JLabel("     "+GT._("Periodic Table of elements"));
 			label.setHorizontalTextPosition(JLabel.CENTER);
 			label.setVerticalTextPosition(JLabel.CENTER);
 			label.setOpaque(true);

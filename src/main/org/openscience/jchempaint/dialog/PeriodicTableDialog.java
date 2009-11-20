@@ -38,6 +38,7 @@ import javax.swing.JFrame;
 
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.jchempaint.GT;
 
 /**
  * Dialog that shows a periodic table. The selected symbol
@@ -63,7 +64,7 @@ public class PeriodicTableDialog extends JDialog {
     public void doInit(){
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Color.white);
-        setTitle("Choose an element...");
+        setTitle(GT._("Choose an element..."));
         
         ptp = new PeriodicTablePanel();
         ptp.addCDKChangeListener(new PTDialogChangeListener());
