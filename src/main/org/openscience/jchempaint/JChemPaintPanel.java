@@ -67,6 +67,7 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
+import org.openscience.cdk.Reaction;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
@@ -197,6 +198,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (inputAdapter.getPopupMenu(ChemModel.class) == null) {
             inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
                     this, "chemmodel", this.guistring));
+        }
+        if (inputAdapter.getPopupMenu(Reaction.class) == null) {
+            inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(
+                    this, "reaction", this.guistring));
         }
     }
 

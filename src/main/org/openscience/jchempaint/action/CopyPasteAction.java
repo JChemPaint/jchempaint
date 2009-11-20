@@ -75,6 +75,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -432,6 +433,52 @@ public class CopyPasteAction extends JCPAction{
             }
             else {
                 logger.warn("Cannot select everything in : ", object);
+            }
+        } else if (type.equals("selectReactionReactants")) {
+            IChemObject object = getSource(e);
+            if (object instanceof IReaction) {
+                IReaction reaction = (IReaction) object;
+                IAtomContainer wholeModel =
+                    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                for (IAtomContainer container :
+                    MoleculeSetManipulator.getAllAtomContainers(
+                            reaction.getReactants())) {
+                        wholeModel.add(container);
+                }
+                ShapeSelection container = new RectangleSelection();
+                for (IAtom atom : wholeModel.atoms()) {
+                    container.atoms.add(atom);
+                }
+                for (IBond bond : wholeModel.bonds()) {
+                    container.bonds.add(bond);
+                }
+                renderModel.setSelection(container);
+            }
+            else {
+                logger.warn("Cannot select reactants from : ", object);
+            }
+        } else if (type.equals("selectReactionProducts")) {
+            IChemObject object = getSource(e);
+            if (object instanceof IReaction) {
+                    IReaction reaction = (IReaction) object;
+                    IAtomContainer wholeModel =
+                        jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                for (IAtomContainer container :
+                    MoleculeSetManipulator.getAllAtomContainers(
+                            reaction.getProducts())) {
+                        wholeModel.add(container);
+                }
+                ShapeSelection container = new RectangleSelection();
+                for (IAtom atom : wholeModel.atoms()) {
+                    container.atoms.add(atom);
+                }
+                for (IBond bond : wholeModel.bonds()) {
+                    container.bonds.add(bond);
+                }
+                renderModel.setSelection(container);
+            }
+            else {
+                logger.warn("Cannot select reactants from : ", object);
             }
         }
         jcpPanel.get2DHub().updateView();

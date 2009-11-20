@@ -254,8 +254,7 @@ public class JChemPaint {
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
         JChemPaint.replaceReferencesWithClones(chemModel);
-        //if we want to have reactions, we need this
-        //JChemPaint.removeDuplicateMolecules(chemModel);
+        JChemPaint.removeDuplicateMolecules(chemModel);
 
         // check for bonds
         if (ChemModelManipulator.getBondCount(chemModel) == 0) {

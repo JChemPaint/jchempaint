@@ -295,8 +295,15 @@ public class JCPMenuTextMaker {
         entries.put("ClTooltip", GT._("Change drawing symbol to Cl"));
         entries.put("BrTooltip", GT._("Change drawing symbol to Br"));
         entries.put("ITooltip", GT._("Change drawing symbol to I"));
-
-}
+        entries.put("reaction", GT._("Reaction"));
+        entries.put("addReactantToNewReaction", GT._("Make Reactant in New Reaction"));
+        entries.put("addReactantToExistingReaction", GT._("Make Reactant in Existing Reaction"));
+        entries.put("addProductToNewReaction", GT._("Make Product in New Reaction"));
+        entries.put("addProductToExistingReaction", GT._("Make Product in Existing Reaction"));
+        entries.put("selectReactants", GT._("Select Reactants"));
+        entries.put("selectProducts", GT._("Select Products"));
+        entries.put("reactionMenuTitle", GT._("Reaction Popup Menu"));
+	}
 	
 	/**
 	 * Gives the text for an item.

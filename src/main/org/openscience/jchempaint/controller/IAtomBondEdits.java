@@ -38,9 +38,7 @@ import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
  *  be replaced by IEdit commands.
  * @author Arvid
  * @cdk.module control
- * @deprecated Use <code>IEdits</code> instead
  */
-@Deprecated
 public interface IAtomBondEdits {
     /* Editing actions for atoms */
     public IAtomContainer removeAtom(IAtom atom);
@@ -70,7 +68,6 @@ public interface IAtomBondEdits {
     public void moveToWithoutUndo(IBond bond, Point2d point);
     public void moveTo(IBond bond, Point2d point);
     public void setOrder(IBond bond, IBond.Order order);
-    public void setWedgeType(IBond bond, IBond.Stereo type);
     public void addNewBond(Point2d worldCoordinate);
     public void cycleBondValence(IBond bond);
     public void makeBondStereo(IBond bond, Direction desiredDirection);
