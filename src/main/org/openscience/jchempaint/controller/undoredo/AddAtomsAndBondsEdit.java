@@ -25,14 +25,12 @@ package org.openscience.jchempaint.controller.undoredo;
 
 import java.util.Iterator;
 
-import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -51,6 +49,8 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	
 	private IChemModelRelay chemModelRelay=null;
 
+    private IAtomContainer containerToAddTo;
+
 	/**
 	 * @param chemModel
 	 * @param undoRedoContainer
@@ -65,16 +65,17 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
-		IAtomContainer container = chemModel.getMoleculeSet().getMolecule(0);
+	    if(chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
+	        chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
-			container.addBond(bond);
+			containerToAddTo.addBond(bond);
 		}
 		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
 			IAtom atom = undoRedoContainer.getAtom(i);
-			container.addAtom(atom);
+			containerToAddTo.addAtom(atom);
+	        chemModelRelay.updateAtom(atom);
 		}
-		chemModelRelay.updateAtoms(container, container.atoms());
 	}
 
 	public void undo() {
@@ -84,8 +85,11 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		}
 		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
 			IAtom atom = undoRedoContainer.getAtom(i);
+			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 			ChemModelManipulator.getRelevantAtomContainer(chemModel, atom).removeAtom(atom);
 		}
+		if(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>1)
+		    ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
 		Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
     	while (containers.hasNext()) {
     		IAtomContainer container = (IAtomContainer)containers.next();

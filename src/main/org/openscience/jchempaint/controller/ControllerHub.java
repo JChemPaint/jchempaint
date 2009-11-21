@@ -1844,7 +1844,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 			ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, selected.getAtom(i));
 		}
-		removeEmptyContainers();
+		removeEmptyContainers(chemModel);
 	    if(undoredofactory!=null && undoredohandler!=null){
 		    IUndoRedoable undoredo = undoredofactory.getRemoveAtomsAndBondsEdit(chemModel, removed, "Cut",this);
 		    undoredohandler.postEdit(undoredo);
@@ -1853,7 +1853,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	    return removed;
 	}
 
-	private void removeEmptyContainers() {
+	public static void removeEmptyContainers(IChemModel chemModel) {
         Iterator<IAtomContainer> it = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
         while(it.hasNext()){
             IAtomContainer ac = it.next();
@@ -2167,7 +2167,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 }
             }                       
         }
-        removeEmptyContainers();
+        removeEmptyContainers(chemModel);
         IUndoRedoable undoredo = getUndoRedoFactory().
             getRemoveAtomsAndBondsEdit(chemModel, undoRedoContainer, 
             "Delete Bond", this);
