@@ -67,6 +67,7 @@ import org.openscience.jchempaint.GT;
  * @author        Egon Willighagen
  * @author        Geert Josten
  * @author        Miguel Rojas
+ * @author        Konstantin Tokarev
  */
 public class PeriodicTablePanel extends JPanel
 {
@@ -497,8 +498,429 @@ public class PeriodicTablePanel extends JPanel
 	public String getTextButton(PeriodicTableElement element, String color){
 		return element.getSymbol();
 	}
+	
+	/**
+	 * get translated name of element
+	 *
+	 * @author     Geoffrey R. Hutchison
+	 * @param atomic number of element
+	 * @return the name element to show
+	 */
+	private String elementTranslator(int element) {
+		String result;
+	    switch(element) {
+	    case 1:
+	      result = GT._("Hydrogen");
+	      break;
+	    case 2:
+    	  result = GT._("Helium");
+	      break;
+    	case 3:
+	      result = GT._("Lithium");
+	      break;
+	    case 4:
+	      result = GT._("Beryllium");
+	      break;
+	    case 5:
+	      result = GT._("Boron");
+	      break;
+	    case 6:
+	      result = GT._("Carbon");
+	      break;
+	    case 7:
+	      result = GT._("Nitrogen");
+	      break;
+	    case 8:
+	      result = GT._("Oxygen");
+	      break;
+	    case 9:
+	      result = GT._("Fluorine");
+	      break;
+	    case 10:
+ 	      result = GT._("Neon");
+	      break;
+ 	   	case 11:
+ 	      result = GT._("Sodium");
+ 	      break;
+	    case 12:
+	      result = GT._("Magnesium");
+	      break;
+	    case 13:
+	      result = GT._("Aluminum");
+	      break;
+	    case 14:
+	      result = GT._("Silicon");
+	      break;
+	    case 15:
+	      result = GT._("Phosphorus");
+	      break;
+	    case 16:
+	      result = GT._("Sulfur");
+	      break;
+	    case 17:
+ 	      result = GT._("Chlorine");
+ 	      break;
+ 	   	case 18:
+	      result = GT._("Argon");
+      	  break;
+        case 19:
+          result = GT._("Potassium");
+          break;
+        case 20:
+          result = GT._("Calcium");
+          break;
+        case 21:
+          result = GT._("Scandium");
+          break;
+        case 22:
+          result = GT._("Titanium");
+          break;
+        case 23:
+          result = GT._("Vanadium");
+          break;
+        case 24:
+          result = GT._("Chromium");
+          break;
+        case 25:
+          result = GT._("Manganese");
+          break;
+        case 26:
+          result = GT._("Iron");
+          break;
+        case 27:
+          result = GT._("Cobalt");
+          break;
+        case 28:
+          result = GT._("Nickel");
+          break;
+        case 29:
+          result = GT._("Copper");
+          break;
+        case 30:
+          result = GT._("Zinc");
+          break;
+        case 31:
+          result = GT._("Gallium");
+          break;
+        case 32:
+          result = GT._("Germanium");
+          break;
+        case 33:
+          result = GT._("Arsenic");
+          break;
+        case 34:
+          result = GT._("Selenium");
+          break;
+        case 35:
+          result = GT._("Bromine");
+          break;
+        case 36:
+          result = GT._("Krypton");
+          break;
+        case 37:
+          result = GT._("Rubidium");
+          break;
+        case 38:
+          result = GT._("Strontium");
+          break;
+        case 39:
+          result = GT._("Yttrium");
+          break;
+        case 40:
+          result = GT._("Zirconium");
+          break;
+        case 41:
+          result = GT._("Niobium");
+          break;
+        case 42:
+          result = GT._("Molybdenum");
+          break;
+        case 43:
+          result = GT._("Technetium");
+          break;
+        case 44:
+          result = GT._("Ruthenium");
+          break;
+        case 45:
+          result = GT._("Rhodium");
+          break;
+        case 46:
+          result = GT._("Palladium");
+          break;
+        case 47:
+          result = GT._("Silver");
+          break;
+        case 48:
+          result = GT._("Cadmium");
+          break;
+        case 49:
+          result = GT._("Indium");
+          break;
+        case 50:
+          result = GT._("Tin");
+          break;
+        case 51:
+          result = GT._("Antimony");
+          break;
+        case 52:
+          result = GT._("Tellurium");
+          break;
+        case 53:
+          result = GT._("Iodine");
+          break;
+        case 54:
+          result = GT._("Xenon");
+          break;
+        case 55:
+          result = GT._("Cesium");
+          break;
+        case 56:
+          result = GT._("Barium");
+          break;
+        case 57:
+          result = GT._("Lanthanum");
+          break;
+        case 58:
+          result = GT._("Cerium");
+          break;
+        case 59:
+          result = GT._("Praseodymium");
+          break;
+        case 60:
+          result = GT._("Neodymium");
+          break;
+        case 61:
+          result = GT._("Promethium");
+          break;
+        case 62:
+          result = GT._("Samarium");
+          break;
+        case 63:
+          result = GT._("Europium");
+          break;
+        case 64:
+          result = GT._("Gadolinium");
+          break;
+        case 65:
+          result = GT._("Terbium");
+          break;
+        case 66:
+          result = GT._("Dysprosium");
+          break;
+        case 67:
+          result = GT._("Holmium");
+          break;
+        case 68:
+          result = GT._("Erbium");
+          break;
+        case 69:
+          result = GT._("Thulium");
+          break;
+        case 70:
+          result = GT._("Ytterbium");
+          break;
+        case 71:
+          result = GT._("Lutetium");
+          break;
+        case 72:
+          result = GT._("Hafnium");
+          break;
+        case 73:
+          result = GT._("Tantalum");
+          break;
+        case 74:
+          result = GT._("Tungsten");
+          break;
+        case 75:
+          result = GT._("Rhenium");
+          break;
+        case 76:
+          result = GT._("Osmium");
+          break;
+        case 77:
+          result = GT._("Iridium");
+          break;
+        case 78:
+          result = GT._("Platinum");
+          break;
+        case 79:
+          result = GT._("Gold");
+          break;
+        case 80:
+          result = GT._("Mercury");
+          break;
+        case 81:
+          result = GT._("Thallium");
+          break;
+        case 82:
+          result = GT._("Lead");
+          break;
+        case 83:
+          result = GT._("Bismuth");
+          break;
+        case 84:
+          result = GT._("Polonium");
+          break;
+        case 85:
+          result = GT._("Astatine");
+          break;
+        case 86:
+          result = GT._("Radon");
+          break;
+        case 87:
+          result = GT._("Francium");
+          break;
+        case 88:
+          result = GT._("Radium");
+          break;
+        case 89:
+          result = GT._("Actinium");
+          break;
+        case 90:
+          result = GT._("Thorium");
+          break;
+        case 91:
+          result = GT._("Protactinium");
+          break;
+        case 92:
+          result = GT._("Uranium");
+          break;
+        case 93:
+          result = GT._("Neptunium");
+          break;
+        case 94:
+          result = GT._("Plutonium");
+          break;
+        case 95:
+          result = GT._("Americium");
+          break;
+        case 96:
+          result = GT._("Curium");
+          break;
+        case 97:
+          result = GT._("Berkelium");
+          break;
+        case 98:
+          result = GT._("Californium");
+          break;
+        case 99:
+          result = GT._("Einsteinium");
+          break;
+        case 100:
+          result = GT._("Fermium");
+          break;
+        case 101:
+          result = GT._("Mendelevium");
+          break;
+        case 102:
+          result = GT._("Nobelium");
+          break;
+        case 103:
+          result = GT._("Lawrencium");
+          break;
+        case 104:
+          result = GT._("Rutherfordium");
+          break;
+        case 105:
+          result = GT._("Dubnium");
+          break;
+        case 106:
+          result = GT._("Seaborgium");
+          break;
+        case 107:
+          result = GT._("Bohrium");
+          break;
+        case 108:
+          result = GT._("Hassium");
+          break;
+        case 109:
+          result = GT._("Meitnerium");
+          break;
+        case 110:
+          result = GT._("Darmstadtium");
+          break;
+        case 111:
+          result = GT._("Roentgenium");
+          break;
+        case 112:
+          result = GT._("Ununbium");
+          break;
+        case 113:
+          result = GT._("Ununtrium");
+          break;
+        case 114:
+          result = GT._("Ununquadium");
+          break;
+        case 115:
+          result = GT._("Ununpentium");
+          break;
+        case 116:
+          result = GT._("Ununhexium");
+          break;
+	    case 117:
+	      result = GT._("Ununseptium");
+	   	  break;
+	    case 118:
+	      result = GT._("Ununoctium");
+	      break;
 
+    	default:
+      	result = GT._("Unknown");
+    	}
 
+	    return result;
+	}
+	
+	/**
+	 * get translated name of element
+	 *
+	 * @author     Konstantin Tokarev
+	 * @param  chemical serie to translate
+	 * @return the String to show
+	 */
+	public String serieTranslator(String serie) {
+		if(serie.equals("Noble Gasses"))
+			return GT._("Noble Gases");
+		else if(serie.equals("Halogens"))
+			return GT._("Halogens"); 
+		else if(serie.equals("Nonmetals"))
+			return GT._("Nonmetals");
+		else if(serie.equals("Metalloids"))
+			return GT._("Metalloids");
+		else if(serie.equals("Metals"))
+			return GT._("Metals");
+		else if(serie.equals("Alkali Earth Metals"))
+			return GT._("Alkali Earth Metals");
+		else if(serie.equals("Alkali Metals"))
+			return GT._("Alkali Metals");
+		else if(serie.equals("Transition metals"))
+			return GT._("Transition metals");
+		else if(serie.equals("Lanthanides"))
+			return GT._("Lanthanides");
+		else if(serie.equals("Actinides"))
+			return GT._("Actinides");
+		else
+			return GT._("Unknown");
+	}
+
+	/**
+	 * get translated name of phase
+	 *
+	 * @author     Konstantin Tokarev
+	 * @param  phase name to translate
+	 * @return the String to show
+	 */
+	public String phaseTranslator(String serie) {
+		if(serie.equals("Gas"))
+			return GT._("Gas");
+		else if(serie.equals("Liquid"))
+			return GT._("Liquid"); 
+		else if(serie.equals("Solid"))
+			return GT._("Solid");
+		else
+			return GT._("Unknown");
+	}
+	
 	/**
 	 *  Description of the Class
 	 *
@@ -592,7 +1014,7 @@ public class PeriodicTablePanel extends JPanel
 			this.element = element;
 			setFont(new Font("Times-Roman",Font.BOLD, 15));
 			setBorder( new BevelBorder(BevelBorder.RAISED) );
-			setToolTipText(element.getName());
+			setToolTipText(elementTranslator(element.getAtomicNumber()));
 			addMouseListener(e);
 		}
 		/**
@@ -620,7 +1042,7 @@ public class PeriodicTablePanel extends JPanel
 		JLabel label;
 		if(element != null){
 			label = new JLabel("<html><FONT SIZE=+2>"
-				+element.getName()+" ("+element.getSymbol()+")</FONT><br> "
+				+elementTranslator(element.getAtomicNumber())+" ("+element.getSymbol()+")</FONT><br> "
 				+GT._("Atomic number")+" "+element.getAtomicNumber()
 				+ (element.getGroup()!=null ?
 					", "+GT._("Group")+" "+element.getGroup() : "")
@@ -630,8 +1052,8 @@ public class PeriodicTablePanel extends JPanel
 			
 			label = new JLabel("<html><FONT> "
 				+GT._("CAS RN:")+" "+element.getCASid()+"<br> "
-				+GT._("Element Category:")+" "+element.getChemicalSerie()+"<br> "
-				+GT._("State:")+" "+element.getPhase()+"<br> "
+				+GT._("Element Category:")+" "+serieTranslator(element.getChemicalSerie())+"<br> "
+				+GT._("State:")+" "+phaseTranslator(element.getPhase())+"<br> "
 				+GT._("Electronativity:")+" "+(element.getPaulingEneg()==null ? GT._("undefined") : element.getPaulingEneg())+"<br>"
 				+"</FONT></html>");
 			label.setMinimumSize(new Dimension(165,150));
