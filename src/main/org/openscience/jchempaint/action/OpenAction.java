@@ -118,7 +118,7 @@ public class OpenAction extends JCPAction {
                         }
                         jcpPanel.getChemModel().setMoleculeSet(
                                 chemModel.getMoleculeSet());
-                        // jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
+                        jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
                         jcpPanel.getRenderPanel().getRenderer()
                                 .getRenderer2DModel().setSelection(
                                         new LogicalSelection(

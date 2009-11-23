@@ -2118,7 +2118,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                     GeometryTools.getBondLengthAverage(atomContainer);
         }
         if(!averageBondModelLength.isNaN() && averageBondModelLength!=0 ) {
-           return averageBondModelLength / moleculeSet.getAtomContainerCount();
+           return averageBondModelLength / ChemModelManipulator.getAllAtomContainers(chemModel).size();
         }
         else {
           return 1.5; // some default value for an empty canvas

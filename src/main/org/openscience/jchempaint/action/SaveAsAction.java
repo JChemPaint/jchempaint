@@ -211,8 +211,7 @@ public class SaveAsAction extends JCPAction
     }
 
     protected File saveAsRXN(IChemModel model, File outFile) throws IOException, CDKException {
-        /*This needs to be reactivated once we have got reactions again
-    	if(model.getMoleculeSet()!=null && model.getMoleculeSet().getAtomContainerCount()>0){
+        if(model.getMoleculeSet()!=null && model.getMoleculeSet().getAtomContainerCount()>0){
 			String error = GT._("Problems handling data");
 			String message = GT._("{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?","RXN");
 
@@ -225,7 +224,7 @@ public class SaveAsAction extends JCPAction
 			String message = GT._("RXN can only save reactions. You have no reactions painted!");
 			JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
 			return null;
-    	}*/
+    	}
         logger.info("Saving the contents in an rxn file...");
         String fileName = outFile.toString();
         if (!fileName.endsWith(".rxn")) {
