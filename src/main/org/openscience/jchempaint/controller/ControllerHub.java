@@ -81,8 +81,14 @@ import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 /**
  * Class that will central interaction point between a mouse event throwing
  * widget (SWT or Swing) and the Controller2D modules.
- *
- * <p>FIXME: will replace the old Controller2D class.
+ * IMPORTANT: All actions in this class must adhere to the following rules:
+ * - They keep any fragments in separate Molecules in the SetOfMolecules, i. e. 
+ * if splits or merges are done, they must handle this (precondition and 
+ * postcondition: Each Molecule in SetOfMolecules is a linked graph).
+ * - The chemModel always contains a SetOfMolecules with at least one Molecule, 
+ * this can be empty. No other containers are allowed to be empty (precondition 
+ * and postcondition: SetOfMolecules.getAtomContainerCount>0, atomCount>0 for 
+ * all Molecules in SetOfMolecules where index>0).
  *
  * @cdk.svnrev  $Revision: 9162 $
  * @cdk.module  controlbasic
@@ -1861,6 +1867,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 chemModel.getMoleculeSet().removeAtomContainer(ac);
             }
         }
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
     }
 
 	//OK
