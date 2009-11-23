@@ -28,7 +28,6 @@
  */
 package org.openscience.jchempaint;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -54,7 +53,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
@@ -69,6 +67,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.font.AWTFontManager;
 import org.openscience.jchempaint.renderer.generators.AtomContainerBoundsGenerator;
+import org.openscience.jchempaint.renderer.generators.AtomContainerTitleGenerator;
 import org.openscience.jchempaint.renderer.generators.BoundsGenerator;
 import org.openscience.jchempaint.renderer.generators.ExtendedAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.ExternalHighlightGenerator;
@@ -212,6 +211,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new SelectAtomGenerator());
         generators.add(new SelectBondGenerator());
         generators.add(new MergeAtomsGenerator());
+        generators.add(new AtomContainerTitleGenerator());
         generators.add(pbg);
         return generators;
     }

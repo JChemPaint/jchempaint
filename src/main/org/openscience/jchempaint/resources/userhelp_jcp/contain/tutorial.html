@@ -33,6 +33,15 @@ on the panel) change the element (atom, bond) on which you clicked for the
 menu. Apart from these "mode changes", there are also some buttons/menu items, 
 which do a one-off action, but have no mode. Examples are "Cut" or "Generate 
 Smiles". Keeping this in mind, we now show you how to create a molecule.</p>
+<p>Another thing you should keep in mind is that JChemPaint is a "chemically aware 
+editor". This means that many things are not drawn, but assigned as properties 
+and then drawn by JChemPaint. The advantage is that import/exports to chemical 
+formats can be much richer, but the usage is sometimes not as straightforward 
+as with "direct" drawing. An example is if you want to have a title (like a name) 
+rendered next to a molecule: You do not draw a string on the canvas, but assign 
+the title to the menu and this is then rendered. Another example are reactions, 
+you do not draw an arrow, but declare molecules as products or reactants and 
+an arrow is then drawn between them.</p>
 
 <h3> Creating Molecules</h3>
 <p>When JChemPaint has been started, you automatically get an empty document.
@@ -68,7 +77,10 @@ You can also use the periodic
 table <img src="../../small-bin/element.gif"> to choose an element. With
  <img src="../../small-bin/plus_one.gif"> and
  <img src="../../small-bin/min_one.gif"> you can change the charge.</li>
+<li>If you want to have a title for your molecule right-click on any ator or bond, 
+choose "Molecule Properties" and enter the title.</li>
 </ul>
+
 Obviously the mentioned steps are only a suggestion.
 You can do them in any order. Have a look through the menus to see what is available 
 or read the <a href="referenceGuide.html">Reference Guide</a>.</p>
