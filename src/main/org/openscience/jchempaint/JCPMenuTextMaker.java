@@ -236,9 +236,9 @@ public class JCPMenuTextMaker {
 		entries.put("down_bondTooltip", GT._("Make the Bonds Stereo Down"));
 		entries.put("plusTooltip", GT._("Increase the charge on an Atom"));
 		entries.put("minusTooltip", GT._("Decrease the charge on an Atom"));
-		entries.put("eraserTooltip", GT._("Delete Atoms and Bonds"));
-		entries.put("lassoTooltip", GT._("Select Atoms and Bonds in a free-form region"));
-		entries.put("selectTooltip", GT._("Select Atoms and Bonds in a rectangular region"));
+		entries.put("eraserTooltip", GT._("Delete atoms and bonds"));
+		entries.put("lassoTooltip", GT._("Select atoms and bonds in a free-form region"));
+		entries.put("selectTooltip", GT._("Select atoms and bonds in a rectangular region"));
 		entries.put("triangleTooltip", GT._("Add a propane ring"));
 		entries.put("squareTooltip", GT._("Add a butane ring"));
 		entries.put("pentagonTooltip", GT._("Add a pentane ring"));
