@@ -24,6 +24,7 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.awt.Cursor;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -194,4 +195,5 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public void removeBondAndLoneAtoms(IBond bond);
     public IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
 
+    public void setCursor(int cursor);
 }

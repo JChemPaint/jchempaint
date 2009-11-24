@@ -31,6 +31,7 @@ package org.openscience.jchempaint;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -64,7 +65,6 @@ import javax.swing.undo.UndoManager;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
@@ -782,8 +782,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             }
         }
         if(!(newActiveModule instanceof MoveModule)){
-            this.getChemModel().setFlag(
-                CDKConstants.SHOW_MOVE_ARRAY, false);
+            this.renderPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             this.get2DHub().updateView();
         }
         this.updateStatusBar();

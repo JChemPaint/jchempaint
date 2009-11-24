@@ -20,6 +20,7 @@
 */
 package org.openscience.jchempaint.renderer;
 
+import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -32,6 +33,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.renderer.elements.ElementGroup;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
@@ -125,6 +127,8 @@ public class AtomContainerRenderer implements IRenderer {
     protected double zoom = 1.0;
 
     protected IRenderingElement cachedDiagram;
+    
+    protected RenderPanel renderPanel;
 
     /**
      * A renderer that generates diagrams using the specified
@@ -582,5 +586,16 @@ public class AtomContainerRenderer implements IRenderer {
 	public IFontManager getFontManager() {
 		return fontManager;
 	}
+	
+    public void setCursor(int cursor){
+        if(renderPanel!=null)
+            renderPanel.setCursor(new Cursor(cursor));
+    }
 
+    public int getCursor() {
+        if(renderPanel!=null)
+            return renderPanel.getCursor().getType();
+        else
+            return Cursor.DEFAULT_CURSOR;
+    }
 }

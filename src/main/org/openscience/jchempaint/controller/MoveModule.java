@@ -26,6 +26,9 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.awt.Cursor;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +40,6 @@ import java.util.Set;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -46,6 +48,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -130,10 +133,14 @@ public class MoveModule extends ControllerModuleAdapter {
             chemModelRelay.updateView();
             endMove();
             switchtowhenoutside.mouseClickedDown(worldCoord);
-            this.chemModelRelay.getIChemModel().setFlag(
-                    CDKConstants.SHOW_MOVE_ARRAY, false);
+            chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
+    
+    public void mouseMove(Point2d p){
+        AbstractSelectModule.showMouseCursor(p, this.chemModelRelay);
+    }
+
 
     public void mouseClickedUp(Point2d worldCoord) {
     	if (start2DCenter != null) {

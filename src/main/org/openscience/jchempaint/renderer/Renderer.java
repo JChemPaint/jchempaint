@@ -22,6 +22,7 @@
 package org.openscience.jchempaint.renderer;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -38,6 +39,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.renderer.elements.ArrowElement;
 import org.openscience.jchempaint.renderer.elements.ElementGroup;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
@@ -129,10 +131,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	
 	public Renderer(List<IGenerator> generators, 
 	                List<IReactionGenerator> reactionGenerators, 
-	                IFontManager fontManager) {
+	                IFontManager fontManager, RenderPanel renderPanel) {
 	    this(generators, fontManager);
         this.reactionGenerators = reactionGenerators;
         this.setup();
+        super.renderPanel = renderPanel;
 	}
 	
 	/**
@@ -310,13 +313,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         IReactionSet reactionSet = chemModel.getReactionSet();
 
         if (moleculeSet == null && reactionSet != null) {
-            return paintReactionSet(reactionSet, drawVisitor, 
-                    chemModel.getFlag(CDKConstants.SHOW_MOVE_ARRAY));
+            return paintReactionSet(reactionSet, drawVisitor);
         }
 
         if (moleculeSet != null && reactionSet == null) {
-            return paintMoleculeSet(moleculeSet, drawVisitor, 
-                    chemModel.getFlag(CDKConstants.SHOW_MOVE_ARRAY));
+            return paintMoleculeSet(moleculeSet, drawVisitor);
         }
 
         if (moleculeSet != null && reactionSet != null) {
@@ -329,7 +330,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                 diagram.add(this.generateDiagram(reaction));
             }
             diagram.add(this.generateDiagram(moleculeSet));
-            if(chemModel.getFlag(CDKConstants.SHOW_MOVE_ARRAY)){
+            if(chemModel.getFlag(CDKConstants.SHOW_MOVE_ARROW)){
                 Point2d mc=null;
                 if(rendererModel.getHighlightedAtom()!=null)
                     mc = rendererModel.getHighlightedAtom().getPoint2d();
@@ -367,8 +368,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
 	public Rectangle paintReactionSet(
-            IReactionSet reactionSet, IDrawVisitor drawVisitor, 
-            boolean moveArrows) {
+            IReactionSet reactionSet, IDrawVisitor drawVisitor) {
         // total up the bounding boxes
         Rectangle2D totalBounds = new Rectangle2D.Double();
         for (IReaction reaction : reactionSet.reactions()) {
@@ -385,33 +385,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         ElementGroup diagram = new ElementGroup();
         for (IReaction reaction : reactionSet.reactions()) {
             diagram.add(this.generateDiagram(reaction));
-        }
-        if(moveArrows){
-            Point2d mc=null;
-            if(rendererModel.getHighlightedAtom()!=null)
-                mc = rendererModel.getHighlightedAtom().getPoint2d();
-            if(rendererModel.getHighlightedBond()!=null)
-                mc = rendererModel.getHighlightedBond().get2DCenter();
-            if(rendererModel.getSelection()!=null && rendererModel
-                    .getSelection().getConnectedAtomContainer()!=null)
-                mc = new Point2d(Renderer.calculateBounds(rendererModel
-                        .getSelection().getConnectedAtomContainer()).getCenterX()
-                        ,Renderer.calculateBounds(rendererModel.getSelection()
-                                .getConnectedAtomContainer()).getCenterY());
-            if(mc!=null){
-                diagram.add(new ArrowElement(mc.x, mc.y, mc.x, mc.y+
-                        rendererModel.getBondLength()/rendererModel.getScale(),
-                        1 / rendererModel.getScale(), true, Color.gray));
-                diagram.add(new ArrowElement(mc.x, mc.y-rendererModel
-                        .getBondLength()/rendererModel.getScale(), mc.x, mc.y, 
-                        1 / rendererModel.getScale(), false, Color.gray));
-                diagram.add(new ArrowElement(mc.x, mc.y, mc.x+rendererModel
-                        .getBondLength()/rendererModel.getScale(), mc.y, 
-                        1 / rendererModel.getScale(), true, Color.gray));
-                diagram.add(new ArrowElement(mc.x-rendererModel.getBondLength()/
-                        rendererModel.getScale(),mc.y, mc.x, mc.y, 
-                        1 / rendererModel.getScale(), false, Color.gray));
-            }
         }
         this.paint(drawVisitor, diagram);
 
@@ -434,8 +407,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
 	public Rectangle paintMoleculeSet(
-            IMoleculeSet moleculeSet, IDrawVisitor drawVisitor, 
-            boolean moveArrows) {
+            IMoleculeSet moleculeSet, IDrawVisitor drawVisitor) {
         // total up the bounding boxes
         Rectangle2D totalBounds = new Rectangle2D.Double();
         for (IAtomContainer molecule : moleculeSet.molecules()) {
@@ -452,33 +424,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         ElementGroup diagram = new ElementGroup();
         for (IAtomContainer molecule : moleculeSet.molecules()) {
             diagram.add(this.generateDiagram(molecule));
-        }
-        if(moveArrows){
-            Point2d mc=null;
-            if(rendererModel.getHighlightedAtom()!=null)
-                mc = rendererModel.getHighlightedAtom().getPoint2d();
-            if(rendererModel.getHighlightedBond()!=null)
-                mc = rendererModel.getHighlightedBond().get2DCenter();
-            if(rendererModel.getSelection()!=null && rendererModel
-                    .getSelection().getConnectedAtomContainer()!=null)
-                mc = new Point2d(Renderer.calculateBounds(rendererModel
-                        .getSelection().getConnectedAtomContainer()).getCenterX(),
-                        Renderer.calculateBounds(rendererModel.getSelection()
-                                .getConnectedAtomContainer()).getCenterY());
-            if(mc!=null){
-                diagram.add(new ArrowElement(mc.x, mc.y, mc.x, mc.y+
-                        rendererModel.getBondLength()/rendererModel.getScale(), 
-                        1 / rendererModel.getScale(), true, Color.gray));
-                diagram.add(new ArrowElement(mc.x, mc.y-rendererModel
-                        .getBondLength()/rendererModel.getScale(), mc.x, mc.y, 
-                        1 / rendererModel.getScale(), false, Color.gray));
-                diagram.add(new ArrowElement(mc.x, mc.y, mc.x+rendererModel.
-                        getBondLength()/rendererModel.getScale(), mc.y, 
-                        1 / rendererModel.getScale(), true, Color.gray));
-                diagram.add(new ArrowElement(mc.x-rendererModel.getBondLength()
-                        /rendererModel.getScale(),mc.y, mc.x, mc.y, 
-                        1 / rendererModel.getScale(), false, Color.gray));
-            }
         }
         this.paint(drawVisitor, diagram);
         

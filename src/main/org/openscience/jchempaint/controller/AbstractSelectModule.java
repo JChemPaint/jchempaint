@@ -20,6 +20,7 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.awt.Cursor;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -46,7 +47,6 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     protected ShapeSelection selection;
     private Point2d startPoint;
     private String ID;
-    private boolean oldShowMoveArrows=false;
     
     public AbstractSelectModule(IChemModelRelay chemModelRelay) {
         super(chemModelRelay);
@@ -90,34 +90,28 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     }
     
     public void mouseMove(Point2d p){
+        showMouseCursor(p, this.chemModelRelay);
+    }
+
+    public static void showMouseCursor(Point2d p, IChemModelRelay chemModelRelay){
         //We look if we the user would move when clicking and show arrows then
         Rectangle2D bounds=null;
         if(chemModelRelay.getRenderer().getRenderer2DModel().getSelection()!=null 
                     && chemModelRelay.getRenderer().getRenderer2DModel()
                     .getSelection().isFilled())
-                bounds = BoundsCalculator.calculateBounds(this.chemModelRelay
+                bounds = BoundsCalculator.calculateBounds(chemModelRelay
                         .getRenderer().getRenderer2DModel().getSelection()
                         .getConnectedAtomContainer());
-        IAtom closestAtom = chemModelRelay.getClosestAtom(p);
-        IChemObject highlightedAtom = getHighlighted( p, closestAtom);
-        IBond closestBond = chemModelRelay.getClosestBond(p);
-        IChemObject highlightedBond = getHighlighted( p, closestBond);
+        IChemObject highlightedAtom = chemModelRelay.getRenderer().getRenderer2DModel().getHighlightedAtom();
+        IChemObject highlightedBond = chemModelRelay.getRenderer().getRenderer2DModel().getHighlightedBond();
         if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) 
                 || highlightedAtom!=null || highlightedBond!=null){
-            this.chemModelRelay.getIChemModel()
-                .setFlag(CDKConstants.SHOW_MOVE_ARRAY, true);
+            chemModelRelay.setCursor(Cursor.HAND_CURSOR);
         }else{
-            this.chemModelRelay.getIChemModel()
-                .setFlag(CDKConstants.SHOW_MOVE_ARRAY, false);
-        }
-        if(this.chemModelRelay.getIChemModel()
-                .getFlag(CDKConstants.SHOW_MOVE_ARRAY) != oldShowMoveArrows){
-            this.chemModelRelay.updateView();
-            oldShowMoveArrows=(Boolean)this.chemModelRelay.getIChemModel()
-            .getFlag(CDKConstants.SHOW_MOVE_ARRAY);
+            chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
-    
+
     public void mouseClickedUp(Point2d p) {
         this.chemModelRelay.select(selection);
         this.selection.reset();

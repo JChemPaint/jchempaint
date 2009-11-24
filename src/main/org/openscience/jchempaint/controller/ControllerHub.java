@@ -25,6 +25,7 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.awt.Cursor;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,6 +126,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     private UndoRedoHandler undoredohandler;
 
 	private CDKAtomTypeMatcher matcher;
+	
+	int oldMouseCursor=Cursor.DEFAULT_CURSOR;
 
 	public ControllerHub(IControllerModel controllerModel,
 		                   IRenderer renderer,
@@ -249,6 +252,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null) activeModule.mouseClickedDown(modelCoord);
+		
+		if(renderer.getCursor() == Cursor.HAND_CURSOR || renderer.getCursor() == Cursor.HAND_CURSOR){
+		    setCursor(Cursor.MOVE_CURSOR);
+	        oldMouseCursor = Cursor.HAND_CURSOR;
+		}else{
+	        oldMouseCursor = Cursor.DEFAULT_CURSOR;
+
+		}
 	}
 
 	public void mouseClickedUp(int screenX, int screenY) {
@@ -262,6 +273,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null) activeModule.mouseClickedUp(modelCoord);
+		setCursor(oldMouseCursor);
 	}
 
 	public void mouseDrag(
@@ -2214,5 +2226,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
     public IChemModel getChemModel() {
         return chemModel;
+    }
+    
+    public void setCursor(int cursor){
+        renderer.setCursor(cursor);
     }
 }
