@@ -193,7 +193,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
             containerForUndoRedo.addBond(bond);
             if (factory != null && handler != null) {
                 IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
-                (chemModelRelay.getIChemModel(), containerForUndoRedo, "Add Bond",chemModelRelay);
+                (chemModelRelay.getIChemModel(), containerForUndoRedo, null, "Add Bond",chemModelRelay);
                 handler.postEdit(undoredo);
             }
 

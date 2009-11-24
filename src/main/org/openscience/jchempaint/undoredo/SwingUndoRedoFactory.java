@@ -52,8 +52,8 @@ import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 public class SwingUndoRedoFactory implements IUndoRedoFactory {
 
 	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IChemModelRelay c2dm) {
-		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, type, c2dm);
+			IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay c2dm) {
+		return new SwingAddAtomsAndBondsEdit(chemModel, undoRedoContainer, removedAtomContainer, type, c2dm);
 	}
 	
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBonds, Map<IBond, IBond.Stereo[]> changedBondsStereo, String type, IChemModelRelay chemModelRelay){

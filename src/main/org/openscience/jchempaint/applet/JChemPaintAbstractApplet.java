@@ -620,7 +620,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         UndoRedoHandler ih= chemPaintPanel.get2DHub().getUndoRedoHandler();
         if (i!=null) {
             IUndoRedoable undoredo = i.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
-            molecule, "Paste", chemPaintPanel.get2DHub());
+            molecule, null, "Paste", chemPaintPanel.get2DHub());
             ih.postEdit(undoredo);
         }
         

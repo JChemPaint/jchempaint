@@ -50,23 +50,31 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	private IChemModelRelay chemModelRelay=null;
 
     private IAtomContainer containerToAddTo;
+    
+    private IAtomContainer removedAtomContainer;
 
 	/**
 	 * @param chemModel
 	 * @param undoRedoContainer
-	 * @param chemModelRelay The controller model; if none, set to null
+     * @param removedAtomContainer atomContainer which has been removed from setOfAtomContainers as part of the edit, if none, null.
+	 * @param chemModelRelay 
 	 */
 	public AddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IChemModelRelay chemModelRelay) {
+			IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay chemModelRelay) {
 		this.chemModel = chemModel;
 		this.undoRedoContainer = undoRedoContainer;
 		this.type = type;
 		this.chemModelRelay=chemModelRelay;
+		this.removedAtomContainer=removedAtomContainer;
 	}
 
 	public void redo() {
-	    if(chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
+	    if(containerToAddTo!=null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
 	        chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
+	    if(removedAtomContainer!=null){
+	        containerToAddTo.add(removedAtomContainer);
+	        chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
+	    }
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
 			containerToAddTo.addBond(bond);
@@ -79,14 +87,19 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void undo() {
+        if(removedAtomContainer!=null){
+            ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
+            chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
+        }
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
-			ChemModelManipulator.getRelevantAtomContainer(chemModel, bond).removeBond(bond);
+			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, bond);
+			containerToAddTo.removeBond(bond);
 		}
 		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
 			IAtom atom = undoRedoContainer.getAtom(i);
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
-			ChemModelManipulator.getRelevantAtomContainer(chemModel, atom).removeAtom(atom);
+			containerToAddTo.removeAtom(atom);
 		}
 		if(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>1)
 		    ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
@@ -95,7 +108,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
     		IAtomContainer container = (IAtomContainer)containers.next();
     		chemModelRelay.updateAtoms(container, container.atoms());
     	}
-	}
+    }
 
 	public boolean canRedo() {
 		return true;

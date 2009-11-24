@@ -441,7 +441,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
 		undoRedoContainer.addAtom(addAtomWithoutUndo(atomType, isotopeNumber, worldCoord));
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-            IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, "Add Atom", this);
+            IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, null, "Add Atom", this);
             getUndoRedoHandler().postEdit(undoredo);
         }
 		return undoRedoContainer.getAtom(0);
@@ -498,7 +498,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	        IBond newBond = atomContainer.getBond(atom, undoRedoContainer.getAtom(0));
 	        undoRedoContainer.addBond(newBond);
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-            IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, "Add Atom", this);
+            IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, null, "Add Atom", this);
             getUndoRedoHandler().postEdit(undoredo);
         }
 		return undoRedoContainer.getAtom(0);
@@ -613,7 +613,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         
 	    structureChanged();
 	    if(undoredofactory!=null && undoredohandler!=null){
-		    IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, "Add Bond",this);
+		    IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, null, "Add Bond",this);
 		    undoredohandler.postEdit(undoredo);
 	    }
 	}
@@ -678,7 +678,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         undoRedoContainer.addAtom(newAtom);
         undoRedoContainer.addBond(newBond);
 	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, "Add Stereo Bond",this);
+		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, null, "Add Stereo Bond",this);
 		    getUndoRedoHandler().postEdit(undoredo);
 	    }
 	    return newBond;
@@ -1111,7 +1111,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         updateAtoms(ring, ring.atoms());
         structureChanged();
 	    if(undoable && getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), ring.getBuilder().newAtomContainer(ring), "Ring" + " " + ringSize,this);
+		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), ring.getBuilder().newAtomContainer(ring), null, "Ring" + " " + ringSize,this);
 		    getUndoRedoHandler().postEdit(undoredo);
 	    }
 	    return ring;
@@ -1144,7 +1144,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         updateAtoms(ring, ring.atoms());
         structureChanged();
 	    if(undoable && getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), ring.getBuilder().newAtomContainer(ring), "Benzene",this);
+		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), ring.getBuilder().newAtomContainer(ring), null, "Benzene",this);
 		    getUndoRedoHandler().postEdit(undoredo);
 	    }
 	    return ring;
@@ -1330,7 +1330,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	    		undoRedoContainer.removeAtom(atom);
 	    	for(IBond bond : sharedAtoms.bonds())
 	    		undoRedoContainer.removeBond(bond);
-		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, "Ring" + " " + ringSize,this);
+		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(getIChemModel(), undoRedoContainer, null, "Ring" + " " + ringSize,this);
 		    getUndoRedoHandler().postEdit(undoredo);
 	    }
         return newRing;
@@ -1842,7 +1842,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
         moleculeSet.addAtomContainer(toPaste);
 	    if(undoredofactory!=null && undoredohandler!=null){
-		    IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(getIChemModel(), toPaste.getBuilder().newAtomContainer(toPaste), "Paste", this);
+		    IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(getIChemModel(), toPaste.getBuilder().newAtomContainer(toPaste), null, "Paste", this);
 		    undoredohandler.postEdit(undoredo);
 	    }
 	    updateAtoms(toPaste, toPaste.atoms());
@@ -1987,7 +1987,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 	    if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
-		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, "Make implicit Hs explicit", this);
+		    IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, null, "Make implicit Hs explicit", this);
 		    getUndoRedoHandler().postEdit(undoredo);
 	    }
 		structureChanged();

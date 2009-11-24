@@ -203,8 +203,10 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             newAtom = source;
 
         // if merge is set either form a bond or add and form
+        IAtomContainer removedContainer=null;
         if(merge!=null) {
                 chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
+                removedContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), merge);
                 IBond newBond = chemModelRelay.addBond( newAtom , merge, stereoForNewBond );
                 containerForUndoRedo.addBond(newBond);
         } else {
@@ -232,7 +234,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
         if (factory != null && handler != null) {
             IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
-            (chemModelRelay.getIChemModel(), containerForUndoRedo, "Add Bond",chemModelRelay);
+            (chemModelRelay.getIChemModel(), containerForUndoRedo, removedContainer, "Add Bond",chemModelRelay);
             handler.postEdit(undoredo);
         }
         chemModelRelay.updateView();

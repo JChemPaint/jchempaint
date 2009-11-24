@@ -53,7 +53,7 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
  * @cdk.module control
  */
 public interface IUndoRedoFactory {
-	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel, IAtomContainer undoRedoContainer, String type, IChemModelRelay c2dm);
+	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel, IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay c2dm);
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond,
 		IBond.Order[]> changedBonds,
 		Map<IBond, IBond.Stereo[]> changedBondsStereo, String type,

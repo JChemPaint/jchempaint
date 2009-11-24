@@ -131,7 +131,7 @@ public class AddRingModule extends ControllerModuleAdapter {
                 }
             }
             if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), newRing, "Ring" + " " + ringSize, chemModelRelay);
+                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), newRing, null, "Ring" + " " + ringSize, chemModelRelay);
                 chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
             }
             //and perform the merge
