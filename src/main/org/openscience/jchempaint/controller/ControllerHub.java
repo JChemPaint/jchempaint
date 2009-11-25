@@ -2035,16 +2035,24 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             }
         }
         
-        //Done shifting, now the actual merging.
+        List<IAtom> mergedAtoms = new ArrayList<IAtom>();
+        List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
+        List<List<IBond>> removedBondss = new ArrayList<List<IBond>>();
+        List<Map<IBond, Integer>> bondsWithReplacedAtoms = new ArrayList<Map<IBond, Integer>>();
+        List<IAtom> mergedPartnerAtoms = new ArrayList<IAtom>();
+       //Done shifting, now the actual merging.
         it = model.getMerge().keySet().iterator();
         while (it.hasNext()) {
             List<IBond> removedBonds = new ArrayList<IBond>();
-            Map<IBond, Integer> bondsWithReplacedAtoms = new HashMap<IBond, Integer>();
+            Map<IBond, Integer> bondsWithReplacedAtom = new HashMap<IBond, Integer>();
             IAtom mergedAtom = (IAtom) it.next();
+            mergedAtoms.add(mergedAtom);
             IAtom mergedPartnerAtom = model.getMerge().get(mergedAtom);
+            mergedPartnerAtoms.add(mergedPartnerAtom);
 
             IAtomContainer container = ChemModelManipulator
                     .getRelevantAtomContainer(chemModel, mergedAtom);
+            containers.add(container);
             IAtomContainer container2 = ChemModelManipulator
                     .getRelevantAtomContainer(chemModel, mergedPartnerAtom);
 
@@ -2075,6 +2083,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                     }
                 }
             }
+            removedBondss.add(removedBonds);
 
             //After the removal of redundant bonds, the actual merge is done.
             //One half of atoms in the merge map are removed and their bonds
@@ -2083,26 +2092,35 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 if (bond.contains(mergedAtom)) {
                     if (bond.getAtom(0).equals(mergedAtom)) {
                         bond.setAtom(mergedPartnerAtom, 0);
-                        bondsWithReplacedAtoms.put(bond, 0);
+                        bondsWithReplacedAtom.put(bond, 0);
                     } else {
                         bond.setAtom(mergedPartnerAtom, 1);
-                        bondsWithReplacedAtoms.put(bond, 1);
+                        bondsWithReplacedAtom.put(bond, 1);
                     }
                 }
             }
             container.removeAtom(mergedAtom);
             updateAtom(mergedPartnerAtom);
+            bondsWithReplacedAtoms.add(bondsWithReplacedAtom);
 
-            // Undo section to undo/redo the merge
-            IUndoRedoFactory factory = getUndoRedoFactory();
-            UndoRedoHandler handler = getUndoRedoHandler();
-            if (movedDistance!=null && factory != null && handler != null) {
-                IUndoRedoable undoredo = factory.getMergeMoleculesEdit(
-                        mergedAtom, container, removedBonds,
-                        bondsWithReplacedAtoms, movedDistance,
-                        mergedPartnerAtom, "Merge atom", this);
-                handler.postEdit(undoredo);
+        }
+        // Undo section to undo/redo the merge
+        IUndoRedoFactory factory = getUndoRedoFactory();
+        UndoRedoHandler handler = getUndoRedoHandler();
+        if (movedDistance!=null && factory != null && handler != null) {
+            //we look if anything has been moved which was not merged
+            IAtomContainer undoRedoContainer = getIChemModel().getBuilder().newAtomContainer();
+            undoRedoContainer.add(renderer.getRenderer2DModel().getSelection().getConnectedAtomContainer());
+            Iterator<IAtom> it2 = mergeMap.keySet().iterator();
+            while(it2.hasNext()){
+                undoRedoContainer.removeAtom(it2.next());
             }
+            IUndoRedoable moveundoredo = getUndoRedoFactory().getMoveAtomEdit(undoRedoContainer, movedDistance, "Move atom");
+            IUndoRedoable undoredo = factory.getMergeMoleculesEdit(
+                    mergedAtoms, containers, removedBondss,
+                    bondsWithReplacedAtoms, movedDistance,
+                    mergedPartnerAtoms, moveundoredo, "Move and merge atoms", this);
+            handler.postEdit(undoredo);
         }
         model.getMerge().clear();
         structureChanged();

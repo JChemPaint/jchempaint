@@ -43,51 +43,72 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	
     private static final long serialVersionUID = -4093867960954400453L;
     
-    private IAtom deletedAtom;
-    private List<IBond> deletedBonds;
-    private Map<IBond, Integer> bondsWithReplacedAtom;
+    private List<IAtom> deletedAtoms;
+    private List<List<IBond>> deletedBondss;
+    private List<Map<IBond, Integer>> bondsWithReplacedAtoms;
     private IChemModelRelay c2dm;
     private String type;
-    private IAtomContainer ac;
+    private List<IAtomContainer> ac;
     private Vector2d offset;
-    private IAtom atomwhichwasmoved;
+    private List<IAtom> mergedPartnerAtoms;
+    private IUndoRedoable moveundoredo;
     
-	public MergeMoleculesEdit(IAtom deletedAtom, IAtomContainer containerWhereAtomWasIn, List<IBond> deletedBonds, Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset, IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
-		this.deletedAtom = deletedAtom;
-		this.deletedBonds = deletedBonds;
-		this.bondsWithReplacedAtom = bondsWithReplacedAtom;
-		this.c2dm = c2dm;
-		this.atomwhichwasmoved = atomwhichwasmoved;
+	/**
+	 * @param deletedAtoms             The atoms which were deleted during the merge.
+	 * @param containerWhereAtomWasIns For each deletedAtom, the container where the atom was in.
+	 * @param deletedBondss            The bonds which were deleted to merge each individual atom.
+	 * @param bondsWithReplacedAtoms   For each atom merge, for each bond in deletedBondss, which of the atoms (0 or 1) in that bond was deletedAtom.
+	 * @param offset                   The distance by which the atoms where shifted in merge.
+	 * @param mergedPartnerAtoms       The atoms which replace deletedAtoms.
+	 * @param moveundoredo             If atoms where moved, but not merged, they go in here, maybe null.
+	 * @param type                     The string returned as presentation name.
+	 * @param chemModelRelay                     The current chemModelRelay.
+	 */
+	public MergeMoleculesEdit(List<IAtom> deletedAtoms, List<IAtomContainer> containerWhereAtomWasIns, List<List<IBond>> deletedBondss, List<Map<IBond, Integer>> bondsWithReplacedAtoms, Vector2d offset, List<IAtom> mergedPartnerAtoms, IUndoRedoable moveundoredo, String type, IChemModelRelay chemModelRelay) {
+		this.deletedAtoms = deletedAtoms;
+		this.deletedBondss = deletedBondss;
+		this.bondsWithReplacedAtoms = bondsWithReplacedAtoms;
+		this.c2dm = chemModelRelay;
+		this.mergedPartnerAtoms = mergedPartnerAtoms;
 		this.type = type;
-		this.ac= containerWhereAtomWasIn;
+		this.ac= containerWhereAtomWasIns;
 		this.offset = offset;
+		this.moveundoredo = moveundoredo;
 	}
 
 	public void redo() throws CannotRedoException {
-		ac.removeAtom(deletedAtom);
-		for(IBond bond : deletedBonds){
-			ac.removeBond(bond);
-		}
-		for(IBond bond : bondsWithReplacedAtom.keySet()){
-			bond.setAtom(atomwhichwasmoved, bondsWithReplacedAtom.get(bond));
-		}
-		deletedAtom.getPoint2d().x+=offset.x;
-		deletedAtom.getPoint2d().y+=offset.y;
-		c2dm.updateAtom(atomwhichwasmoved);
+	    for(int i=0;i<deletedAtoms.size();i++){
+    		ac.get(i).removeAtom(deletedAtoms.get(i));
+    		for(IBond bond : deletedBondss.get(i)){
+    			ac.get(i).removeBond(bond);
+    		}
+    		for(IBond bond : bondsWithReplacedAtoms.get(i).keySet()){
+    			bond.setAtom(mergedPartnerAtoms.get(i), bondsWithReplacedAtoms.get(i).get(bond));
+    		}
+    		deletedAtoms.get(i).getPoint2d().x+=offset.x;
+    		deletedAtoms.get(i).getPoint2d().y+=offset.y;
+    		c2dm.updateAtom(mergedPartnerAtoms.get(i));
+	    }
+	    if(moveundoredo!=null)
+	        moveundoredo.redo();
 	}
 
 	public void undo() throws CannotUndoException {
-		ac.addAtom(deletedAtom);
-		for(IBond bond : deletedBonds){
-			ac.addBond(bond);
-		}
-		for(IBond bond : bondsWithReplacedAtom.keySet()){
-			bond.setAtom(deletedAtom, bondsWithReplacedAtom.get(bond));
-		}
-		deletedAtom.getPoint2d().x-=offset.x;
-		deletedAtom.getPoint2d().y-=offset.y;
-		c2dm.updateAtom(deletedAtom);
-		c2dm.updateAtom(atomwhichwasmoved);
+        for(int i=0;i<deletedAtoms.size();i++){
+            ac.get(i).addAtom(deletedAtoms.get(i));
+            for(IBond bond : deletedBondss.get(i)){
+                ac.get(i).addBond(bond);
+            }
+            for(IBond bond : bondsWithReplacedAtoms.get(i).keySet()){
+                bond.setAtom(deletedAtoms.get(i), bondsWithReplacedAtoms.get(i).get(bond));
+            }
+            deletedAtoms.get(i).getPoint2d().x-=offset.x;
+            deletedAtoms.get(i).getPoint2d().y-=offset.y;
+            c2dm.updateAtom(deletedAtoms.get(i));
+            c2dm.updateAtom(mergedPartnerAtoms.get(i));
+        }
+        if(moveundoredo!=null)
+            moveundoredo.undo();
 	}
 
 	public boolean canRedo() {

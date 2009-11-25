@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.MergeMoleculesEdit;
 
 /**
@@ -47,13 +48,14 @@ import org.openscience.jchempaint.controller.undoredo.MergeMoleculesEdit;
 public class SwingMergeMoleculesEdit extends MergeMoleculesEdit implements
         UndoableEdit {
 
-    public SwingMergeMoleculesEdit(IAtom deletedAtom,
-            IAtomContainer containerWhereAtomWasIn, List<IBond> deletedBonds,
-            Map<IBond, Integer> bondsWithReplacedAtom, Vector2d offset,
-            IAtom atomwhichwasmoved, String type, IChemModelRelay c2dm) {
+    public SwingMergeMoleculesEdit(List<IAtom> deletedAtom,
+            List<IAtomContainer> containerWhereAtomWasIn, List<List<IBond>> deletedBonds,
+            List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset,
+            List<IAtom> atomwhichwasmoved, IUndoRedoable moveundoredo, String type, IChemModelRelay c2dm) {
 
         super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
-                bondsWithReplacedAtom, offset, atomwhichwasmoved, type, c2dm);
+                bondsWithReplacedAtom, offset, atomwhichwasmoved, 
+                moveundoredo, type, c2dm);
 
     }
 
