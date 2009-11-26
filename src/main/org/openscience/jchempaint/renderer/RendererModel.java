@@ -68,7 +68,7 @@ public class RendererModel implements Serializable, Cloneable {
 
     //this is used for the size of the arrowhead, might become configurable
     public static final int arrowHeadWidth = 10;
-
+    private Map<Integer, Boolean> flags = new HashMap<Integer, Boolean>();
     /**
      * The color hash is used to color substructures.
      *
@@ -940,4 +940,30 @@ public class RendererModel implements Serializable, Cloneable {
 	    return this.parameters.getNotTypeableUnderlineColor();
 	}
 
+	/**
+	 *
+	 * @param identifier
+	 * @return
+	*/
+	public boolean getFlag(int identifier) {
+	    return flags.get(identifier);
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public Map<Integer, Boolean> getFlags() {
+	    return flags;
+	}
+
+	/**
+	 *
+	 * @param identifier
+	 * @param flag
+	 */
+	public void setFlag(int identifier, boolean flag) {
+	   flags.remove(identifier);
+	   flags.put(identifier, flag);
+	}
 }

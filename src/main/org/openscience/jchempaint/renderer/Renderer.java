@@ -991,4 +991,20 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	public List<IGenerator> getGenerators(){
 	    return new ArrayList<IGenerator>(generators);
 	}
+	
+    /**
+     *
+     * @param reactionGenerator
+     */
+    public void addReactionGenerator(IReactionGenerator reactionGenerator) {
+        reactionGenerators.add(reactionGenerator);
+    }
+
+    /**
+     *
+     * @param generator
+     */
+    public void addGenerator(IGenerator generator) {
+        generators.add(generator);
+    }
 }
