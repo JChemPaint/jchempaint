@@ -49,6 +49,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -217,16 +218,19 @@ public class MoveModule extends ControllerModuleAdapter {
         double maxDistance = rModel.getHighlightDistance()/ rModel.getScale();
         maxDistance *= maxDistance; // maxDistance squared
         Map<IAtom,IAtom> mergers = new HashMap<IAtom, IAtom>();
-        IAtomContainer ac = chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer( 0 );
-        for(IAtom atom:mergeAtoms) {
-            List<DistAtom> candidates = findMergeCandidates(ac,atom);
-            Collections.sort( candidates);
-            for(DistAtom candiate:candidates) {
-                if(candiate.distSquared>maxDistance)
-                    break;
-                if(mergeAtoms.contains( candiate.atom ))
-                    continue;
-                mergers.put( atom, candiate.atom );
+        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModelRelay.getIChemModel()).iterator();
+        while (containers.hasNext()) {
+            IAtomContainer ac = (IAtomContainer)containers.next();
+            for(IAtom atom:mergeAtoms) {
+                List<DistAtom> candidates = findMergeCandidates(ac,atom);
+                Collections.sort( candidates);
+                for(DistAtom candiate:candidates) {
+                    if(candiate.distSquared>maxDistance)
+                        break;
+                    if(mergeAtoms.contains( candiate.atom ))
+                        continue;
+                    mergers.put( atom, candiate.atom );
+                }
             }
         }
         return mergers;
