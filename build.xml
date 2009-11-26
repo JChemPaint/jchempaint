@@ -357,12 +357,11 @@
       </yguard>
 
        <!-- shrink xmlcml jar-->
-       <yguard>
+       <!--yguard>
          <inoutpair in="${dist}/jar/jchempaint-applet-org_xmlcml.jar" out="${dist}/jar/shrinkout/jchempaint-applet-org_xmlcml.jar"/>
          <externalclasses>
              <fileset dir="${dist}/jar">
                 <include name="**/*.jar"/>
-                <!--exclude name="**/jchempaint-applet-org_xmlcml.jar"/-->
              </fileset>
          </externalclasses>
          <shrink logfile="shrinklogcml.xml">
@@ -381,10 +380,10 @@
                 </class>
              </keep>
          </shrink>
-      </yguard>
+      </yguard-->
 
       <!-- shrink nu.xom jar -->
-       <yguard>
+       <!--yguard>
          <inoutpair in="${dist}/jar/jchempaint-applet-nu.jar" out="${dist}/jar/shrinkout/jchempaint-applet-nu.jar"/>
          <externalclasses>
              <fileset dir="${dist}/jar">
@@ -402,7 +401,7 @@
                <class name="nu.xom.Node"  methods="public" fields="none"/>
              </keep>
          </shrink>
-      </yguard>
+      </yguard-->
 
       <move todir="${dist}/jar">
        <fileset dir="${dist}/jar/shrinkout">
