@@ -29,7 +29,12 @@
 package org.openscience.jchempaint;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -38,6 +43,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.CreateSmilesAction;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
@@ -47,6 +53,14 @@ import org.openscience.jchempaint.renderer.selection.LogicalSelection;
  */
 public abstract class AbstractJChemPaintPanel extends JPanel{
 
+    // buttons/menus are remembered in here using the string from config files as key
+    Map<String, JButton> buttons=new HashMap<String, JButton>();
+    Map<String, JMenuItem> menus=new HashMap<String, JMenuItem>();
+    Map<String, JChemPaintPopupMenu> popupmenuitems=new HashMap<String, JChemPaintPopupMenu>();
+    protected InsertTextPanel insertTextPanel = null;
+    protected JCPStatusBar statusBar;
+    protected boolean showStatusBar = true;
+    protected String guistring;
 	protected RenderPanel renderPanel;
 	private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
@@ -109,5 +123,54 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     			JOptionPane.ERROR_MESSAGE);
     	ex.printStackTrace();
     	logger.error(ex.getMessage());
+    }
+
+    /**
+     * Update the menu bars and toolbars to current language.
+     */
+    public void updateMenusWithLanguage() {
+        JCPMenuTextMaker.getInstance(guistring).init(guistring);
+        Iterator<String> it = buttons.keySet().iterator();
+        while(it.hasNext()){
+            String key = it.next();
+            JButton button = buttons.get(key);
+            button.setToolTipText(JCPMenuTextMaker.getInstance(guistring).getText(key + JCPAction.TIPSUFFIX));
+        }
+        it = menus.keySet().iterator();
+        while(it.hasNext()){
+            String key = it.next();
+            JMenuItem button = menus.get(key);
+            button.setText(JCPMenuTextMaker.getInstance(guistring).getText(key));
+        }
+        it = popupmenuitems.keySet().iterator();
+        while(it.hasNext()){
+            String key = it.next();
+            JChemPaintPopupMenu button = popupmenuitems.get(key);
+            ((JMenuItem)button.getComponent(0)).setText(JCPMenuTextMaker.getInstance(guistring).getText(key.substring(0,key.length()-5) + "MenuTitle"));
+        }
+        if(insertTextPanel!=null){
+            insertTextPanel.updateLanguage();
+        }
+        if(showStatusBar)
+            this.updateStatusBar();
+    }
+    
+
+    /**
+     * Updates the status bar to the current values
+     */
+    public void updateStatusBar() {
+        if (showStatusBar) {
+            if (this.getChemModel() != null) {
+                for (int i = 0; i < 4; i++) {
+                    String status = renderPanel.getStatus(i);
+                    statusBar.setStatus(i + 1, status);
+                }
+            } else {
+                if (statusBar != null) {
+                    statusBar.setStatus(1, "no model");
+                }
+            }
+        }
     }
 }

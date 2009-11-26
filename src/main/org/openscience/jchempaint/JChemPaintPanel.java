@@ -98,23 +98,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private File isAlreadyAFile;
     private boolean isModified = false;
     private FileFilter currentSaveFileFilter;
-    private JCPStatusBar statusBar;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
     private boolean showInsertTextField = true;
-    private InsertTextPanel insertTextPanel = null;
     private JPanel topContainer = null;
     private JPanel centerContainer = null;
     private boolean showToolBar = true;
-    private boolean showStatusBar = true;
     private boolean showMenuBar = true;
     private JMenuBar menu;
-    private String guistring;
     private JToolBar uppertoolbar;
     private JToolBar lefttoolbar;
     private JToolBar lowertoolbar;
     private JToolBar righttoolbar;
-    // buttons are remembered in here using the string from config files as key
-    Map<String, JButton> buttons=new HashMap<String, JButton>();
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
     protected JMenu atomMenu;
@@ -565,21 +559,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                                             // !((JChemPaintPanel)rootFrame.getContentPane().getComponent(0)).isEmbedded())
                                             // {
                     System.exit(0);
-                }
-            }
-        }
-    }
-
-    public void updateStatusBar() {
-        if (showStatusBar) {
-            if (this.getChemModel() != null) {
-                for (int i = 0; i < 4; i++) {
-                    String status = renderPanel.getStatus(i);
-                    statusBar.setStatus(i + 1, status);
-                }
-            } else {
-                if (statusBar != null) {
-                    statusBar.setStatus(1, "no model");
                 }
             }
         }

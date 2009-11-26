@@ -67,7 +67,6 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.InsertTextPanel;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JExternalFrame;
 import org.openscience.jchempaint.action.CreateSmilesAction;
@@ -120,10 +119,12 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     "scrollbars",
                     "true or false",
                     "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet" },
-            {
-                    "dotranslate",
+            { "dotranslate",
                     "true or false",
                     "should user interface be translated (default) or not (e. g. if you want an English-only webpage)" },
+            { "language",
+                        "language code",
+                        "a valid language code to use for ui language" },
             { "detachable", "true or false",
                     "should the applet be detacheable by a double click (default false)" },
             { "detachableeditor", "true or false",
@@ -273,6 +274,11 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             GT.setDoTranslate(false);
         }
 
+        if (getParameter("language") != null) {
+            GT.setLanguage(getParameter("language"));
+            theJcpp.updateMenusWithLanguage();
+        }
+        
         if (getParameter("debug") != null
                 && getParameter("debug").equals("true")) {
             this.debug = true;

@@ -49,6 +49,11 @@ public class JCPMenuTextMaker {
 	 * The constructor. Private since class is a singleton.
 	 */
 	private JCPMenuTextMaker(String guistring){
+	    init(guistring);
+	}
+	
+	public void init(String guistring){
+	    entries.clear();
 		entries.put("file", GT._("File"));
 		entries.put("new", GT._("New"));
 		entries.put("atomMenuTitle", GT._("Atom Popup Menu"));
@@ -315,6 +320,7 @@ public class JCPMenuTextMaker {
         entries.put("nucleosides", GT._("Nucleosides"));
         entries.put("porphyrins", GT._("Porphyrins"));
         entries.put("steroids", GT._("Steroids"));
+        entries.put("language", GT._("Language"));
     }
 	
 	/**

@@ -1,6 +1,8 @@
 package org.openscience.jchempaint;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -176,6 +178,26 @@ public class JChemPaintMenuHelper {
                 }
             });
         }
+        if(key.equals("language")){
+            final GT.Language[] languages = GT.getLanguageList();
+            for(int i=0;i<languages.length;i++){
+                final int counter=i;
+                JMenuItem jmi = new JChemPaintMenuHelper().createMenuItem(jcpPanel, languages[i].language, false);
+                jmi.addActionListener(new ActionListener(){
+
+                    public void actionPerformed(ActionEvent e) {
+                        GT.setLanguage(languages[counter].code);
+                        jcpPanel.updateMenusWithLanguage();
+                    }
+                    
+                });
+                menu.add(jmi);
+            }
+        }
+        if(menu instanceof JMenu)
+            jcpPanel.menus.put(key, (JMenu)menu);
+        else if(menu instanceof JChemPaintPopupMenu)
+            jcpPanel.popupmenuitems.put(key, (JChemPaintPopupMenu)menu);
         return menu;
     }
 
@@ -263,6 +285,7 @@ public class JChemPaintMenuHelper {
             jcpPanel.undoMenu=mi;
         if(cmd.equals("redo"))
             jcpPanel.redoMenu=mi;
+        jcpPanel.menus.put(cmd, (JMenuItem)mi);
         return mi;
     }
 

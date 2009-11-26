@@ -419,4 +419,8 @@ public class GT {
   public static void setLanguagePath(String languagePath) {
     //GT.languagePath = languagePath;
   }
+  
+  public static void setLanguage(String language){
+      getTextWrapper = new GT(language);
+  }
 }

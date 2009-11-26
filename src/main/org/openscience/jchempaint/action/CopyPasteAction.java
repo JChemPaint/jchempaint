@@ -128,16 +128,6 @@ public class CopyPasteAction extends JCPAction{
         logger.info("  type  ", type);
         logger.debug("  source ", e.getSource());
         
-        //if templates are shown, we extract the tab to show if any
-        String templatetab="";
-        if(type.indexOf("pasteTemplate")>-1){
-            if(type.indexOf("_")>-1){
-                templatetab=type.substring(type.indexOf("_")+1);
-                type="pasteTemplate";
-            }
-        }
-            
-
         RendererModel renderModel =
             jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         IChemModel chemModel = jcpPanel.getChemModel();
@@ -226,9 +216,13 @@ public class CopyPasteAction extends JCPAction{
                         LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             }
-        } else if ("pasteTemplate".equals(type)) {
+        } else if(type.indexOf("pasteTemplate")>-1){
+            //if templates are shown, we extract the tab to show if any
+            String templatetab="";
+            if(type.indexOf("_")>-1){
+                templatetab=type.substring(type.indexOf("_")+1);
+            }
             TemplateBrowser templateBrowser = new TemplateBrowser(templatetab);
-
             if(templateBrowser.getChosenmolecule()!=null){
                 //Note: flipping is a workaround for the molfile upside down
                 flipStructure(templateBrowser.getChosenmolecule());

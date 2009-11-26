@@ -155,7 +155,6 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     mols.put(allButton, cdkmol);
                     allPanel.add(allButton);
                 }
-                System.err.println(key);
                 tabbedPane.addTab(GT.getStringNoExtraction(key.replace('_', ' ')), panel );
                 if(tabToSelect.equals(key.replace('_',' '))){
                     tabbedPane.setSelectedIndex(count+1);

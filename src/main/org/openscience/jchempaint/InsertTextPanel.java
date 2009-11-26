@@ -83,6 +83,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     private JComboBox textCombo;
     private JTextComponent editor;
     private JFrame closeafter = null;
+    private JButton button = new JButton(GT._("Insert"));
 
     public InsertTextPanel(AbstractJChemPaintPanel jChemPaintPanel, JFrame closeafter) {
         super();
@@ -99,7 +100,6 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         textCombo.addActionListener(this);
         editor = (JTextComponent) textCombo.getEditor().getEditorComponent();
 
-        JButton button = new JButton(GT._("Insert"));
         button.addActionListener(this);
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -266,6 +266,11 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         while ((line = bufferedReader.readLine()) != null) data += line;
         bufferedReader.close();
         return data;
+    }
+
+    public void updateLanguage() {
+        textCombo.setToolTipText(GT._("Enter a CAS, SMILES or InChI string"));
+        button.setText(GT._("Insert"));
     }
 
 }
