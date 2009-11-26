@@ -72,6 +72,7 @@ public class SaveAsAction extends JCPAction
 
     protected IChemObjectWriter cow;
     protected static String type = null;
+    protected boolean wasCancelled = false;
 
 
     /**
@@ -137,8 +138,10 @@ public class SaveAsAction extends JCPAction
 
             IChemObject object = getSource(event);
             FileFilter currentFilter = chooser.getFileFilter();
-            if(returnVal==JFileChooser.CANCEL_OPTION)
+            if(returnVal==JFileChooser.CANCEL_OPTION){
                 ready=0;
+                wasCancelled = true;
+            }
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 if(!(currentFilter instanceof IJCPFileFilter)){
@@ -367,6 +370,15 @@ public class SaveAsAction extends JCPAction
         cow.close();
         jcpPanel.setTitle(jcpPanel.getChemModel().getID());
         return outFile;
+    }
+
+    /**
+     * Tells if the save as has been cancelled.
+     * 
+     * @return True if cancel has been used on the save as dialog, false else.
+     */
+    public boolean getWasCancelled() {
+        return wasCancelled;
     }
 }
 

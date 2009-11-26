@@ -502,8 +502,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     GT._("Unsaved data"), JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.WARNING_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
-                new SaveAction(this, false).actionPerformed(new ActionEvent(
+                SaveAction saveaction = new SaveAction(this, false);
+                saveaction.actionPerformed(new ActionEvent(
                         this, 12, ""));
+                if(saveaction.getWasCancelled())
+                    answer = JOptionPane.CANCEL_OPTION;
             }
             return answer;
         } else if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {

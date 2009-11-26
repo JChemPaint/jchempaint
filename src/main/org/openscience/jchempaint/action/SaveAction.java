@@ -47,9 +47,9 @@ public class SaveAction extends SaveAsAction
     private static final long serialVersionUID = -6748046051686998776L;
 
 
-public SaveAction(){
+    public SaveAction(){
           super();
-  }
+    }
         
 	/**
 	 *  Constructor for the SaveAsAction object
@@ -57,7 +57,7 @@ public SaveAction(){
 	 *@param  jcpPanel       Description of the Parameter
 	 *@param  isPopupAction  Description of the Parameter
 	 */
-  public SaveAction(JChemPaintPanel jcpPanel, boolean isPopupAction)
+    public SaveAction(JChemPaintPanel jcpPanel, boolean isPopupAction)
 	{
 		super(jcpPanel, isPopupAction);
 	}
@@ -71,11 +71,13 @@ public SaveAction(){
 	public void actionPerformed(ActionEvent event)
 	{
 	    if(jcpPanel.isAlreadyAFile()==null){
-	    	new SaveAsAction(jcpPanel,false).actionPerformed(event);
+	    	SaveAsAction saveasaction = new SaveAsAction(jcpPanel,false);
+	    	saveasaction.actionPerformed(event);
+	    	this.wasCancelled = saveasaction.wasCancelled;
 	    }else{
 	    	try{
 	    		org.openscience.cdk.interfaces.IChemModel model=jcpPanel.getChemModel();
-				File outFile=jcpPanel.isAlreadyAFile();
+	    		File outFile=jcpPanel.isAlreadyAFile();
 				type = JCPFileFilter.getExtension(outFile);
 				if (type.equals(JCPSaveFileFilter.mol))
 		        {
