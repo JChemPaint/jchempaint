@@ -341,7 +341,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
-        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "true").equals("true"));
+        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "false").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize"));
         validate();
     }
