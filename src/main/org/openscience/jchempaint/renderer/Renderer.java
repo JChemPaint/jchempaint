@@ -330,35 +330,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                 diagram.add(this.generateDiagram(reaction));
             }
             diagram.add(this.generateDiagram(moleculeSet));
-            if(chemModel.getFlag(CDKConstants.SHOW_MOVE_ARROW)){
-                Point2d mc=null;
-                if(rendererModel.getHighlightedAtom()!=null)
-                    mc = rendererModel.getHighlightedAtom().getPoint2d();
-                if(rendererModel.getHighlightedBond()!=null)
-                    mc = rendererModel.getHighlightedBond().get2DCenter();
-                if(rendererModel.getSelection()!=null && rendererModel
-                        .getSelection().getConnectedAtomContainer()!=null)
-                    mc = new Point2d(Renderer.calculateBounds(rendererModel
-                            .getSelection().getConnectedAtomContainer())
-                            .getCenterX(),Renderer.calculateBounds(
-                                    rendererModel.getSelection()
-                                    .getConnectedAtomContainer()).getCenterY());
-                if(mc!=null){
-                    diagram.add(new ArrowElement(mc.x, mc.y, mc.x, mc.y+
-                            rendererModel.getBondLength()/rendererModel.getScale(), 
-                            1 / rendererModel.getScale(), true, Color.gray));
-                    diagram.add(new ArrowElement(mc.x, mc.y-rendererModel
-                            .getBondLength()/rendererModel.getScale(), mc.x, 
-                            mc.y, 1 / rendererModel.getScale(), false, Color.gray));
-                    diagram.add(new ArrowElement(mc.x, mc.y, mc.x+rendererModel
-                            .getBondLength()/rendererModel.getScale(), mc.y, 
-                            1 / rendererModel.getScale(), true, Color.gray));
-                    diagram.add(new ArrowElement(mc.x-rendererModel
-                            .getBondLength()/rendererModel.getScale(), mc.y, 
-                            mc.x, mc.y, 1 / rendererModel.getScale(), false, 
-                            Color.gray));
-                }
-            }
             this.paint(drawVisitor, diagram);
 
             // the size of the painted diagram is returned
