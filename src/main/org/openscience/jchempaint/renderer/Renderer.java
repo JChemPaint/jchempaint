@@ -966,7 +966,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     /**
      *
      * @param reactionGenerator
-     */
+     */
     public void addReactionGenerator(IReactionGenerator reactionGenerator) {
         reactionGenerators.add(reactionGenerator);
     }

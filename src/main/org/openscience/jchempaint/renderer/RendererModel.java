@@ -950,20 +950,20 @@ public class RendererModel implements Serializable, Cloneable {
 	}
 
 	/**
-	 *
+     *
 	 * @return
-	 */
+     */
 	public Map<Integer, Boolean> getFlags() {
 	    return flags;
 	}
 
 	/**
-	 *
-	 * @param identifier
-	 * @param flag
+     *
+     * @param identifier
+     * @param flag
 	 */
 	public void setFlag(int identifier, boolean flag) {
-	   flags.remove(identifier);
-	   flags.put(identifier, flag);
-	}
+	    flags.remove(identifier);
+	    flags.put(identifier, flag);
+    }
 }
