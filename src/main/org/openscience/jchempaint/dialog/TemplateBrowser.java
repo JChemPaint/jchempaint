@@ -99,6 +99,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
      */
     public TemplateBrowser(String tabToSelect) {
         super((JFrame)null, GT._("Structure Templates"), true);
+        this.setName("templates");
         myPanel = new JPanel();
         getContentPane().add(myPanel);
         myPanel.setLayout(new BorderLayout());
@@ -139,6 +140,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     button.setText((String)cdkmol.getProperty(CDKConstants.TITLE));
                     button.setToolTipText((String)cdkmol.getProperty(CDKConstants.TITLE));
                     button.setFont(button.getFont().deriveFont(10f));
+                    button.setName((String)cdkmol.getProperty(CDKConstants.TITLE));
                     mols.put(button, cdkmol);
                     JButton allButton = new JButton();
                     if(icon!=null)

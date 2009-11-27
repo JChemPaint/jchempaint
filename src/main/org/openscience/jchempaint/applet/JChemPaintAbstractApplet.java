@@ -620,7 +620,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             }
         }
 
-        moleculeSet.getAtomContainer(0).add(molecule);
+        if(moleculeSet.getAtomContainer(0).getAtomCount()==0)
+            moleculeSet.getAtomContainer(0).add(molecule);
+        else
+            moleculeSet.addAtomContainer(molecule);
 
         IUndoRedoFactory i= chemPaintPanel.get2DHub().getUndoRedoFactory();
         UndoRedoHandler ih= chemPaintPanel.get2DHub().getUndoRedoHandler();

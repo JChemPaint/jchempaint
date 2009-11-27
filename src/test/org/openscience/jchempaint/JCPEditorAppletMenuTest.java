@@ -414,7 +414,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  applet.menuItem("save").click();
 			  DialogFixture dialog = applet.dialog();
 			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			  combobox.setSelectedItem(combobox.getItemAt(4));
+			  combobox.setSelectedItem(combobox.getItemAt(5));
 			  JTextComponentFixture text = dialog.textBox();
 			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
 			  if(file.exists())
@@ -538,7 +538,9 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	        applet.menuItem("cut").click();
             Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
             applet.menuItem("paste").click();
-            Assert.assertEquals(8,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
             Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
             JPopupMenuFixture popup = applet.panel("renderpanel").showPopupMenuAt(new Point((int)moveto.x,(int)moveto.y));
             popup.menuItem("cut2").click();
@@ -546,4 +548,29 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		}
 	
+	    @Test public void testMenuTemplatesAll() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+            restoreModelWithBasicmol();
+            applet.menuItem("pasteTemplate").click();
+            DialogFixture dialog = applet.dialog("templates");
+            JButtonFixture penicillinbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Penicillin")));
+            penicillinbutton.click();
+            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(18,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+	    }
+
+        @Test public void testMenuTemplatesAlkaloids() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+            restoreModelWithBasicmol();
+            applet.menuItem("alkaloids").click();
+            DialogFixture dialog = applet.dialog("templates");
+            JButtonFixture morphinebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
+            morphinebutton.click();
+            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+            applet.menuItem("alkaloids").click();
+            dialog = applet.dialog("templates");
+            morphinebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
+            morphinebutton.click();
+            Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
+        }
 }
