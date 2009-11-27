@@ -26,6 +26,8 @@ public class ReactionHub {
         reactionSet.addReaction(reaction);
         chemModel.setReactionSet(reactionSet);
         chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
         if(controllerhub.getUndoRedoFactory()!=null && controllerhub.getUndoRedoHandler()!=null){
             IUndoRedoable undoredo = controllerhub.getUndoRedoFactory().getMakeReactantOrProductInNewReactionEdit(chemModel, newContainer, oldcontainer, true, "Make Reactant in new Reaction");
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
@@ -44,6 +46,8 @@ public class ReactionHub {
         mol.setID(newContainer.getID());
         reaction.addReactant(mol);
         chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
         if(controllerhub.getUndoRedoFactory()!=null && controllerhub.getUndoRedoHandler()!=null){
             IUndoRedoable undoredo = controllerhub.getUndoRedoFactory().getMakeReactantOrProductInExistingReactionEdit(chemModel, newContainer, oldcontainer, reactionId, true, "Make Reactant in "+reactionId);
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
@@ -67,6 +71,8 @@ public class ReactionHub {
         reactionSet.addReaction(reaction);
         chemModel.setReactionSet(reactionSet);
         chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
         if(controllerhub.getUndoRedoFactory()!=null && controllerhub.getUndoRedoHandler()!=null){
             IUndoRedoable undoredo = controllerhub.getUndoRedoFactory().getMakeReactantOrProductInNewReactionEdit(chemModel, newContainer, oldcontainer, false, "Make Reactant in new Reaction");
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
@@ -85,6 +91,8 @@ public class ReactionHub {
         mol.setID(newContainer.getID());
         reaction.addProduct(mol);
         chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
         if(controllerhub.getUndoRedoFactory()!=null && controllerhub.getUndoRedoHandler()!=null){
             IUndoRedoable undoredo = controllerhub.getUndoRedoFactory().getMakeReactantOrProductInExistingReactionEdit(chemModel, newContainer, oldcontainer, reactionId, false, "Make Reactant in "+reactionId);
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
