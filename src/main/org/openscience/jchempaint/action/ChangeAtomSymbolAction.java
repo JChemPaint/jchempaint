@@ -133,9 +133,9 @@ public class ChangeAtomSymbolAction extends JCPAction
             else
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
 	        newActiveModule.setID(symbol);
-            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 	        jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
 	        jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 		}
 		if(atomsInRange!=null){
     		while(atomsInRange.hasNext()){
