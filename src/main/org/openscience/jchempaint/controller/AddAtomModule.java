@@ -158,9 +158,9 @@ public class AddAtomModule extends ControllerModuleAdapter {
         // Make new atom
         //-Clicked in empty and dragged more than hightligh distance: 
         // Make a bond of DrawBondType with two new atoms of DrawElement
-	IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
-	RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-	double dH = model.getHighlightDistance() / model.getScale();
+        IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
+        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        double dH = model.getHighlightDistance() / model.getScale();
         IAtom newAtom;
         if(newSource){
             if(chemModelRelay.getController2DModel().getDrawPseudoAtom()){
@@ -179,7 +179,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
             IAtom atom;
             if(chemModelRelay.getController2DModel().getDrawPseudoAtom()){
                 atom = chemModelRelay.addAtom("C", 12, dest );
-                atom = chemModelRelay.convertToPseudoAtom(newAtom, chemModelRelay.getController2DModel().getDrawElement());
+                atom = chemModelRelay.convertToPseudoAtom(atom, chemModelRelay.getController2DModel().getDrawElement());
             }else{
                 atom = chemModelRelay.addAtom( chemModelRelay.getController2DModel().getDrawElement(), chemModelRelay.getController2DModel().getDrawIsotopeNumber(), dest );
             }

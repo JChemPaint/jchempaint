@@ -461,7 +461,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      */
     public IAtom addAtomWithoutUndo(String atomType, 
             int isotopeNumber, Point2d worldCoord) {
-		IAtom newAtom = chemModel.getBuilder().newAtom(atomType, worldCoord);
+		IAtom newAtom;
+		if (controllerModel.getDrawPseudoAtom()) {
+		    newAtom = chemModel.getBuilder().newPseudoAtom(atomType, worldCoord);
+		} else {
+		    newAtom = chemModel.getBuilder().newAtom(atomType, worldCoord);
+		}
 		if(isotopeNumber!=0)
 		    newAtom.setMassNumber(isotopeNumber);
 		//FIXME : there should be an initial hierarchy?
@@ -517,7 +522,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, org.openscience.cdk.interfaces.IAtom, int)
      */
     public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo) {
-        IAtom newAtom = chemModel.getBuilder().newAtom(atomType);
+        IAtom newAtom;
+        if (controllerModel.getDrawPseudoAtom()) {
+            newAtom = chemModel.getBuilder().newPseudoAtom(atomType);
+        } else {
+            newAtom = chemModel.getBuilder().newAtom(atomType);
+        }
         IBond newBond = chemModel.getBuilder().newBond(atom, newAtom, CDKConstants.BONDORDER_SINGLE, stereo);
         IAtomContainer atomCon =
             ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
