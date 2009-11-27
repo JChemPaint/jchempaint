@@ -2040,7 +2040,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         List<List<IBond>> removedBondss = new ArrayList<List<IBond>>();
         List<Map<IBond, Integer>> bondsWithReplacedAtoms = new ArrayList<Map<IBond, Integer>>();
         List<IAtom> mergedPartnerAtoms = new ArrayList<IAtom>();
-       //Done shifting, now the actual merging.
+        //Done shifting, now the actual merging.
         it = model.getMerge().keySet().iterator();
         while (it.hasNext()) {
             List<IBond> removedBonds = new ArrayList<IBond>();
@@ -2055,6 +2055,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             containers.add(container);
             IAtomContainer container2 = ChemModelManipulator
                     .getRelevantAtomContainer(chemModel, mergedPartnerAtom);
+            //If the atoms are in different atom containers till now, we merge
+            //the atom containers first.
+            if(container!=container2){
+                container.add(container2);
+                chemModel.getMoleculeSet().removeAtomContainer(container2);
+            }
 
             // In the next loop we remove bonds that are redundant, that is
             // to say bonds that exist on both sides of the parts to be merged
@@ -2070,7 +2076,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                                             atom2) != null) {
                                         if (model.getMerge().get(atom).equals(
                                                 atom2)) {
-                                            System.out.println("removing ");
                                             IBond redundantBond = container
                                                     .getBond(atom, mergedAtom);
                                             container.removeBond(redundantBond);
