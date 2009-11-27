@@ -177,6 +177,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()!=yesButton){
             chosenmolecule = mols.get(e.getSource());
+            chosenmolecule.removeProperty(CDKConstants.TITLE);
         }
         this.setVisible(false);        
     }
