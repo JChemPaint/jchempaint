@@ -189,9 +189,9 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IUndoRedoFactory getUndoRedoFactory();
     public UndoRedoHandler getUndoRedoHandler();
     public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
-    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond);
+    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, boolean makePseudoAtom);
     public void setValence(IAtom atom, Integer newValence);
-    public IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start);
+    public IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start, boolean makePseudoAtom);
     public void removeBondAndLoneAtoms(IBond bond);
     public IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
 

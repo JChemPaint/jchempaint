@@ -43,10 +43,10 @@ public interface IAtomBondEdits {
     /* Editing actions for atoms */
     public IAtomContainer removeAtom(IAtom atom);
     public IAtomContainer removeAtomWithoutUndo(IAtom atom);
-    public IAtom addAtom(String element, Point2d worldcoord);
-    public IAtom addAtomWithoutUndo(String element, Point2d worldcoord);
-    public IAtom addAtom(String element, IAtom atom);
-    public IAtom addAtomWithoutUndo(String element, IAtom atom);
+    public IAtom addAtom(String element, Point2d worldcoord, boolean makePseudoAtom);
+    public IAtom addAtomWithoutUndo(String element, Point2d worldcoord, boolean makePseudoAtom);
+    public IAtom addAtom(String element, IAtom atom, boolean makePseudoAtom);
+    public IAtom addAtomWithoutUndo(String element, IAtom atom, boolean makePseudoAtom);
     public void moveToWithoutUndo(IAtom atom, Point2d point);
     public void moveTo(IAtom atom, Point2d point);
     public void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove);
@@ -68,7 +68,7 @@ public interface IAtomBondEdits {
     public void moveToWithoutUndo(IBond bond, Point2d point);
     public void moveTo(IBond bond, Point2d point);
     public void setOrder(IBond bond, IBond.Order order);
-    public void addNewBond(Point2d worldCoordinate);
+    public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom);
     public void cycleBondValence(IBond bond);
     public void makeBondStereo(IBond bond, Direction desiredDirection);
     public IBond makeNewStereoBond(IAtom atom, Direction desiredDirection);

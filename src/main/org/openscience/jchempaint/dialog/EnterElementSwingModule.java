@@ -190,7 +190,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				if(iso!=null){
 					if(closestAtom==null){
 						IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
-						addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord));
+						addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord, false));
 					    if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
 						    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, null, GT._("Add Atom"), chemModelRelay);
 						    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);

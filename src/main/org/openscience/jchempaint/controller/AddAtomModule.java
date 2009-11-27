@@ -163,12 +163,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
         double dH = model.getHighlightDistance() / model.getScale();
         IAtom newAtom;
         if(newSource){
-            if(chemModelRelay.getController2DModel().getDrawPseudoAtom()){
-                newAtom = chemModelRelay.addAtom("C", 12, start );
-                newAtom = chemModelRelay.convertToPseudoAtom(newAtom, chemModelRelay.getController2DModel().getDrawElement());
-            }else{
-                newAtom = chemModelRelay.addAtom( chemModelRelay.getController2DModel().getDrawElement(), chemModelRelay.getController2DModel().getDrawIsotopeNumber(), start );
-            }
+            newAtom = chemModelRelay.addAtom( chemModelRelay.getController2DModel().getDrawElement(), chemModelRelay.getController2DModel().getDrawIsotopeNumber(), start, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
         }else{
             newAtom = source;
         }
@@ -176,13 +171,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
             if(dest==null)
                 dest=worldCoord;
 
-            IAtom atom;
-            if(chemModelRelay.getController2DModel().getDrawPseudoAtom()){
-                atom = chemModelRelay.addAtom("C", 12, dest );
-                atom = chemModelRelay.convertToPseudoAtom(atom, chemModelRelay.getController2DModel().getDrawElement());
-            }else{
-                atom = chemModelRelay.addAtom( chemModelRelay.getController2DModel().getDrawElement(), chemModelRelay.getController2DModel().getDrawIsotopeNumber(), dest );
-            }
+            IAtom atom = chemModelRelay.addAtom( chemModelRelay.getController2DModel().getDrawElement(), chemModelRelay.getController2DModel().getDrawIsotopeNumber(), dest, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
             if(chemModelRelay.getController2DModel().getDrawIsotopeNumber()!=0)
                 atom.setMassNumber(chemModelRelay.getController2DModel().getDrawIsotopeNumber());
 

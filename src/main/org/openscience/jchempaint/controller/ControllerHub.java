@@ -429,17 +429,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.controller.IChemModelRelay#addAtom(java.lang.String, javax.vecmath.Point2d)
 	 */
-	public IAtom addAtom(String atomType, Point2d worldCoord) {
-	    return addAtom(atomType, 0, worldCoord);
+	public IAtom addAtom(String atomType, Point2d worldCoord, boolean makePseudoAtom) {
+	    return addAtom(atomType, 0, worldCoord, makePseudoAtom);
 	}
 	
 	//OK
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.controller.IChemModelRelay#addAtom(java.lang.String, int, javax.vecmath.Point2d)
 	 */
-	public IAtom addAtom(String atomType, int isotopeNumber, Point2d worldCoord) {
+	public IAtom addAtom(String atomType, int isotopeNumber, Point2d worldCoord, boolean makePseudoAtom) {
 		IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
-		undoRedoContainer.addAtom(addAtomWithoutUndo(atomType, isotopeNumber, worldCoord));
+		undoRedoContainer.addAtom(addAtomWithoutUndo(atomType, isotopeNumber, worldCoord, makePseudoAtom));
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
             IUndoRedoable undoredo = getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, undoRedoContainer, null, "Add Atom", this);
             getUndoRedoHandler().postEdit(undoredo);
@@ -451,8 +451,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, javax.vecmath.Point2d)
      */
-    public IAtom addAtomWithoutUndo(String atomType, Point2d worldCoord) {
-        return addAtomWithoutUndo(atomType, 0, worldCoord);
+    public IAtom addAtomWithoutUndo(String atomType, Point2d worldCoord, boolean makePseudoAtom) {
+        return addAtomWithoutUndo(atomType, 0, worldCoord, makePseudoAtom);
     }
     
     //OK
@@ -460,9 +460,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, int, javax.vecmath.Point2d)
      */
     public IAtom addAtomWithoutUndo(String atomType, 
-            int isotopeNumber, Point2d worldCoord) {
+            int isotopeNumber, Point2d worldCoord, boolean makePseudoAtom) {
 		IAtom newAtom;
-		if (controllerModel.getDrawPseudoAtom()) {
+		if (makePseudoAtom) {
 		    newAtom = chemModel.getBuilder().newPseudoAtom(atomType, worldCoord);
 		} else {
 		    newAtom = chemModel.getBuilder().newAtom(atomType, worldCoord);
@@ -494,9 +494,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
     //OK
-	public IAtom addAtom(String atomType, IAtom atom) {
+	public IAtom addAtom(String atomType, IAtom atom, boolean makePseudoAtom) {
 		IAtomContainer undoRedoContainer = atom.getBuilder().newAtomContainer();
-		undoRedoContainer.addAtom(addAtomWithoutUndo(atomType, atom));
+		undoRedoContainer.addAtom(addAtomWithoutUndo(atomType, atom, makePseudoAtom));
 	    IAtomContainer atomContainer =
 	        ChemModelManipulator.getRelevantAtomContainer(
 	                    getIChemModel(), undoRedoContainer.getAtom(0));
@@ -513,17 +513,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, org.openscience.cdk.interfaces.IAtom)
      */
-    public IAtom addAtomWithoutUndo(String atomType, IAtom atom) {
-        return addAtomWithoutUndo(atomType, atom, IBond.Stereo.NONE);
+    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, boolean makePseudoAtom) {
+        return addAtomWithoutUndo(atomType, atom, IBond.Stereo.NONE, makePseudoAtom);
     }
     
     //OK
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, org.openscience.cdk.interfaces.IAtom, int)
      */
-    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo) {
+    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo, boolean makePseudoAtom) {
         IAtom newAtom;
-        if (controllerModel.getDrawPseudoAtom()) {
+        if (makePseudoAtom) {
             newAtom = chemModel.getBuilder().newPseudoAtom(atomType);
         } else {
             newAtom = chemModel.getBuilder().newAtom(atomType);
@@ -599,17 +599,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     }
 
     //OK
-	public void addNewBond(Point2d worldCoordinate) {
+	public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom) {
 		IAtomContainer undoRedoContainer = 
 		    getIChemModel().getBuilder().newAtomContainer();
 		
 		// add the first atom in the new bond
 		String atomType = getController2DModel().getDrawElement();
-	    IAtom atom = addAtomWithoutUndo(atomType, worldCoordinate);
+	    IAtom atom = addAtomWithoutUndo(atomType, worldCoordinate, makePseudoAtom);
 	    undoRedoContainer.addAtom(atom);
 	    
 	    // add the second atom to this
-	    IAtom newAtom = addAtomWithoutUndo(atomType, atom);
+	    IAtom newAtom = addAtomWithoutUndo(atomType, atom, makePseudoAtom);
 	    undoRedoContainer.addAtom(newAtom);
 	    
 	    IAtomContainer atomContainer =
@@ -667,7 +667,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	//OK
     public IBond makeNewStereoBond(IAtom atom, Direction desiredDirection) {
         String atomType = getController2DModel().getDrawElement();
-        IAtom newAtom = addAtomWithoutUndo(atomType, atom);
+        IAtom newAtom = addAtomWithoutUndo(atomType, atom, controllerModel.getDrawPseudoAtom());
         IAtomContainer undoRedoContainer=getIChemModel().getBuilder().newAtomContainer();
 
         // XXX these calls would not be necessary if addAtom returned a bond
@@ -1986,7 +1986,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for(IAtom atom : containers.get(i).atoms()){
 				int hcount=atom.getHydrogenCount();
 				for(int k=0;k<hcount;k++){
-					IAtom newAtom = this.addAtomWithoutUndo("H", atom);
+					IAtom newAtom = this.addAtomWithoutUndo("H", atom, false);
 			        IAtomContainer atomContainer =
 			            ChemModelManipulator.getRelevantAtomContainer(
 			                    getIChemModel(), newAtom);
