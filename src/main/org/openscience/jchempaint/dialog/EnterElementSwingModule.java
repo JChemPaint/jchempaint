@@ -140,6 +140,9 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
 						chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newMoleculeSet());
 					chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
+					ac.getAtom(0).setPoint2d(new Point2d(0,0));
+					lastplaced = ac.getAtom(0);
+					container = ac;
 				}else{
 					container.add(ac);
 					List<IBond> connbonds=container.getConnectedBondsList(ac.getAtom(0));
