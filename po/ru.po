@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-26 13:57+0000\n"
-"PO-Revision-Date: 2009-11-22 02:12+0300\n"
+"POT-Creation-Date: 2009-11-28 12:01+0300\n"
+"PO-Revision-Date: 2009-11-28 12:19+0300\n"
 "Last-Translator: Konstantin Tokarev <annulen@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -12,14 +12,33 @@ msgstr ""
 "X-Launchpad-Export-Date: 2009-10-22 18:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
+#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:193
+msgid "MDL MOL file"
+msgstr "Файл MDL MOL"
+
+#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:197
+msgid "MDL SDF Molfile"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:201
+msgid "MDL RXN Molfile"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:205
+msgid "IUPAC Chemical Identifier"
+msgstr "Химический идентификатор IUPAC"
+
+#: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:75
+msgid "CDK source code fragment"
+msgstr "Фрагмент исходного кода CDK"
+
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:106
 msgid "Could not determine JCP version"
 msgstr "Не удалось определить версию JCP"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:110
 #, java-format
-msgid ""
-"WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
 msgstr "Для запуска JChemPaint {0} требуется Java VM версии {1} или выше"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:111
@@ -53,12 +72,8 @@ msgid "Could not determine file format"
 msgstr "Не удалось определить формат файла"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:375
-msgid ""
-"It seems you opened a mol or sdf file containing several molecules. Only the "
-"first one will be shown"
-msgstr ""
-"Похоже, что Вы открыли mol- или sdf-файл, содержащий несколько молекул."
-"Только первая будет показна"
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Похоже, что Вы открыли mol- или sdf-файл, содержащий несколько молекул.Только первая будет показна"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:379
 msgid "sdf-like file"
@@ -69,43 +84,265 @@ msgid "Cannot depict contents. Model does not have bonds."
 msgstr "Не удалось отобразить содержимое. В модели нет связей."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:561
-msgid ""
-"Not all atoms have 2D coordinates. JCP can only show full 2D specified "
-"structures. Shall we lay out the structure?"
-msgstr ""
-"Не у всех атомов есть 2D-координаты. JCP может отображать только "
-"двумерныеструктуры. Преобразовать структуру?"
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Не у всех атомов есть 2D-координаты. JCP может отображать только двумерныеструктуры. Преобразовать структуру?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:569
 msgid "Cannot display without 2D coordinates"
 msgstr "Отображение невозможно без 2D-координат"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:86
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:129
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:273
-msgid "Insert"
-msgstr "Вставить"
+#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:78
+msgid "Generated SMILES:"
+msgstr "Созданный SMILES:"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:98
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:272
-msgid "Enter a CAS, SMILES or InChI string"
-msgstr "Введите CAS, SMILES или InChI"
+#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:81
+msgid "Error while creating SMILES:"
+msgstr "Ошибка при создании SMILES:"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:153
-msgid "Could not process InChI"
+#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:84
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:75
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:351
+msgid "The content you tried to copy could not be read to any known format"
+msgstr "Содержимое, которое вы пытаетесь копировать, не может быть прочитано ни в одном из известных форматов"
+
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:351
+msgid "Could not process content"
 msgstr "Не удалось обработать InChI"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:159
-msgid "Could not load InChI subsystem"
-msgstr "Не удалось загрузить InChI подсистему"
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:97
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:148
+msgid "Please chose a file type!"
+msgstr "Пожалуйста, выберите тип файла!"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:166
-msgid "Error in reading data from PubChem"
-msgstr "Ошибка чтения даных из PubChem"
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:97
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:148
+msgid "No file type chosen"
+msgstr "Не выбран тип файла"
 
-#: src/main/org/openscience/jchempaint/InsertTextPanel.java:179
-msgid "Invalid SMILES specified"
-msgstr "Введен некорректный SMILES"
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:72
+msgid "Error loading InChI library:"
+msgstr "Ошибка при загрузке бибилотеки InChI:"
+
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:81
+msgid "Problem"
+msgstr "Проблема"
+
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:81
+msgid "You have reactions in JCP. Reactions cannot be shown as InChI!"
+msgstr "В JCP присутсвует реакция. Реакцию невозможно отобразить как InChI!"
+
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:89
+msgid "Structure"
+msgstr "Структура"
+
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:102
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:105
+msgid "InChI generation failed"
+msgstr "Не удалось создать InChI"
+
+#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:109
+msgid "Generated InChI"
+msgstr "Созданный InChI"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:109
+msgid "Nothing to save."
+msgstr "Нечего сохранить."
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
+msgid "Error while writing file"
+msgstr "Ошибка при создании SMILES:"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:218
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:226
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:255
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:261
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:319
+msgid "Problems handling data"
+msgstr "Проблема при обработке данных"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:219
+#, java-format
+msgid "{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?"
+msgstr "{0} файлы не могут содержать дополнительных молекул. Молекулы, не входящие в реакции, не будут сохранены в файле. Продолжить?"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:227
+msgid "RXN can only save reactions. You have no reactions painted!"
+msgstr "В RXN файлах можно сохранять только реакции. В документе нет реакций!"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:256
+msgid "MDL mol files can only save molecules. You have no molecules painted!"
+msgstr "В MDL MOL файлах можно сохранять только молекулы. В документе нет молекул!"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:262
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:320
+#, java-format
+msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
+msgstr "{0} файлы не могут содержать реакций. Документ содержит реакции.Их реагенты и продукты будут включены как независимые молекулы. Продолжить?"
+
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
+msgid "No reaction existing. Cannot add therefore to something!"
+msgstr "Невозможно добавить, так как в документе отсутствуют реакции. "
+
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
+#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
+msgid "No existing reactions"
+msgstr "Отображать реакции в прямоугольниках"
+
+#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:72
+msgid "An open-source editor for 2D chemical structures."
+msgstr "Редактор двумерных химических структур с открытым кодом."
+
+#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:73
+msgid "An OpenScience project."
+msgstr "Проект OpenScience."
+
+#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:74
+msgid "See 'http://jchempaint.sourceforge.net' for more information."
+msgstr "Больше информации на 'http://jchempaint.sourceforge.net'."
+
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:101
+msgid "Structure Templates"
+msgstr "Шаблоны структур"
+
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:105
+#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:96
+msgid "Cancel"
+msgstr "Отмена"
+
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:117
+msgid "All"
+msgstr "Al"
+
+#: src/main/org/openscience/jchempaint/dialog/TextViewDialog.java:114
+#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:81
+msgid "OK"
+msgstr "OK"
+
+#: src/main/org/openscience/jchempaint/dialog/PeriodicTableDialog.java:67
+msgid "Choose an element..."
+msgstr "Выберите элемент..."
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:135
+msgid "Display Preferences"
+msgstr "Настройки отображения"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:148
+msgid "Draw atom numbers"
+msgstr "Номера атомов"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:155
+msgid "Explicit carbons"
+msgstr "Символы атомов углерода"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:159
+msgid "Show explicit methyl groups"
+msgstr "Символы метильных групп"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:163
+msgid "Show explicit hydrogens"
+msgstr "Явные атомы водорода"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:167
+msgid "Show implicit hydrogens"
+msgstr "Скрытые атомы водорода"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:171
+msgid "Show aromatic ring circles"
+msgstr "Кольца в ароматических циклах"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:178
+msgid "Color atoms by element"
+msgstr "Цвета элементов"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:192
+msgid "Set fit to screen"
+msgstr "Подогнать к размеру окна"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:200
+msgid "Show atom symbols"
+msgstr "Отображать символы атомов"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:205
+msgid "Show ball atoms"
+msgstr "Показывать атомы кругами"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:210
+msgid "Show square atoms"
+msgstr "Отображать атомы квадратами"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:224
+msgid "Atom size"
+msgstr "Размер атома"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:235
+msgid "Bond width"
+msgstr "Толщина связи"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:254
+msgid "Highlight/Select diameter"
+msgstr "Диаметр выделения"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:264
+msgid "Wedge width"
+msgstr "Ширина клиновидной связи"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:279
+msgid "Background color"
+msgstr "Цвет фона"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:286
+msgid "Choose background color..."
+msgstr "Выбрать цвет фона..."
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:293
+msgid "Other Preferences"
+msgstr "Другие настройки"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:296
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:426
+msgid "Number of undoable operations"
+msgstr "Число операций для отмены"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:299
+msgid "Ask for CML settings when saving"
+msgstr "Спрашивать настройки CML при сохранении"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:426
+msgid "must be a number from 1 to 100"
+msgstr "должно быть числом от 1 до 100"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:448
+msgid "Choose Background Color"
+msgstr "Выбрать цвет фона"
+
+#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:75
+msgid "Preferences"
+msgstr "Настройки"
+
+#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:89
+msgid "Apply"
+msgstr "Применить"
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:179
+msgid "Add Functional Group"
+msgstr "Добавить функциональную группу"
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:192
+msgid "Add Atom"
+msgstr "Добавить атом"
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:199
+#, java-format
+msgid "{0} is not a valid element symbol or functional group."
+msgstr "{0} не является корректным символом элемента или функциональной группой."
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:199
+msgid "No valid input"
+msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:153
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:155
@@ -1199,308 +1436,49 @@ msgstr "не определена"
 msgid "Periodic Table of elements"
 msgstr "Периодическая система элементов"
 
-#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:179
-msgid "Add Functional Group"
-msgstr "Добавить функциональную группу"
-
-#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:192
-msgid "Add Atom"
-msgstr "Добавить атом"
-
-#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:199
-#, java-format
-msgid "{0} is not a valid element symbol or functional group."
-msgstr ""
-"{0} не является корректным символом элемента или функциональной группой."
-
-#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:199
-msgid "No valid input"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:135
-msgid "Display Preferences"
-msgstr "Настройки отображения"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:148
-msgid "Draw atom numbers"
-msgstr "Номера атомов"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:155
-msgid "Explicit carbons"
-msgstr "Символы атомов углерода"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:159
-msgid "Show explicit methyl groups"
-msgstr "Символы метильных групп"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:163
-msgid "Show explicit hydrogens"
-msgstr "Явные атомы водорода"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:167
-msgid "Show implicit hydrogens"
-msgstr "Скрытые атомы водорода"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:171
-msgid "Show aromatic ring circles"
-msgstr "Кольца в ароматических циклах"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:178
-msgid "Color atoms by element"
-msgstr "Цвета элементов"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:192
-msgid "Set fit to screen"
-msgstr "Подогнать к размеру окна"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:200
-msgid "Show atom symbols"
-msgstr "Отображать символы атомов"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:205
-msgid "Show ball atoms"
-msgstr "Показывать атомы кругами"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:210
-msgid "Show square atoms"
-msgstr "Отображать атомы квадратами"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:224
-msgid "Atom size"
-msgstr "Размер атома"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:235
-msgid "Bond width"
-msgstr "Толщина связи"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:254
-msgid "Highlight/Select diameter"
-msgstr "Диаметр выделения"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:264
-msgid "Wedge width"
-msgstr "Ширина клиновидной связи"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:279
-msgid "Background color"
-msgstr "Цвет фона"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:286
-msgid "Choose background color..."
-msgstr "Выбрать цвет фона..."
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:293
-msgid "Other Preferences"
-msgstr "Другие настройки"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:296
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:394
-msgid "Number of undoable operations"
-msgstr "Число операций для отмены"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:299
-msgid "Ask for CML settings when saving"
-msgstr "Спрашивать настройки CML при сохранении"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:394
-msgid "must be a number from 1 to 100"
-msgstr "должно быть числом от 1 до 100"
-
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:416
-msgid "Choose Background Color"
-msgstr "Выбрать цвет фона"
-
-#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:75
-msgid "Preferences"
-msgstr "Настройки"
-
-#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:81
-#: src/main/org/openscience/jchempaint/dialog/TextViewDialog.java:114
-msgid "OK"
-msgstr "OK"
-
-#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:89
-msgid "Apply"
-msgstr "Применить"
-
-#: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:96
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:105
-msgid "Cancel"
-msgstr "Отмена"
-
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:101
-msgid "Structure Templates"
-msgstr "Шаблоны структур"
-
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:117
-msgid "All"
-msgstr "Al"
-
-#: src/main/org/openscience/jchempaint/dialog/PeriodicTableDialog.java:67
-msgid "Choose an element..."
-msgstr "Выберите элемент..."
-
-#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:72
-msgid "An open-source editor for 2D chemical structures."
-msgstr "Редактор двумерных химических структур с открытым кодом."
-
-#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:73
-msgid "An OpenScience project."
-msgstr "Проект OpenScience."
-
-#: src/main/org/openscience/jchempaint/dialog/AboutDialog.java:74
-msgid "See 'http://jchempaint.sourceforge.net' for more information."
-msgstr "Больше информации на 'http://jchempaint.sourceforge.net'."
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:501
-msgid "has unsaved data. Do you want to save it?"
-msgstr "содержит несохраненные данные. Вы хотите сохранить их?"
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:502
-msgid "Unsaved data"
-msgstr "Несохраненные данные"
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:645
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:72
-msgid "Redo"
-msgstr "Повторить"
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:649
-msgid "No redo possible"
-msgstr "Нет возможности повторить действие"
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:655
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:71
-msgid "Undo"
-msgstr "Отменить"
-
-#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:659
-msgid "No undo possible"
-msgstr "Нет возможности отменить действие"
-
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:351
-msgid "The content you tried to copy could not be read to any known format"
-msgstr ""
-"Содержимое, которое вы пытаетесь копировать, не может быть прочитано ни в "
-"одном из известных форматов"
-
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:351
-msgid "Could not process content"
-msgstr "Не удалось обработать InChI"
-
-#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:78
-msgid "Generated SMILES:"
-msgstr "Созданный SMILES:"
-
-#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:81
-msgid "Error while creating SMILES:"
-msgstr "Ошибка при создании SMILES:"
-
-#: src/main/org/openscience/jchempaint/action/CreateSmilesAction.java:84
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:75
-msgid "Error"
-msgstr "Ошибка"
-
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:97
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:148
-msgid "Please chose a file type!"
-msgstr "Пожалуйста, выберите тип файла!"
-
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:97
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:148
-msgid "No file type chosen"
-msgstr "Не выбран тип файла"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:72
-msgid "Error loading InChI library:"
-msgstr "Ошибка при загрузке бибилотеки InChI:"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:81
-msgid "Problem"
-msgstr "Проблема"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:81
-msgid "You have reactions in JCP. Reactions cannot be shown as InChI!"
-msgstr "В JCP присутсвует реакция. Реакцию невозможно отобразить как InChI!"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:89
-msgid "Structure"
-msgstr "Структура"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:102
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:105
-msgid "InChI generation failed"
-msgstr "Не удалось создать InChI"
-
-#: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:109
-msgid "Generated InChI"
-msgstr "Созданный InChI"
-
-#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
-#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
-msgid "No reaction existing. Cannot add therefore to something!"
-msgstr "Невозможно добавить, так как в документе отсутствуют реакции. "
-
-#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
-#: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
-msgid "No existing reactions"
-msgstr "Отображать реакции в прямоугольниках"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:109
-msgid "Nothing to save."
-msgstr "Нечего сохранить."
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
-msgid "Error while writing file"
-msgstr "Ошибка при создании SMILES:"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:218
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:226
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:254
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:260
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:318
-msgid "Problems handling data"
-msgstr "Проблема при обработке данных"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:219
-#, fuzzy, java-format
-msgid ""
-"{0} files cannot contain extra molecules. You painted molecules outside the "
-"reaction(s), which will not be in the file. Continue?"
-msgstr ""
-"{0} файлы не могут содержать реакций. Документ содержит реакции.Их реагенты "
-"и продукты будут включены как независимые молекулы. Продолжить?"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:227
-#, fuzzy
-msgid "RXN can only save reactions. You have no reactions painted!"
-msgstr ""
-"В MDL MOL файлах можно сохранять только молекулы.В документе нет "
-"нарисованных молекул!"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:255
-msgid "MDL mol files can only save molecules. You have no molecules painted!"
-msgstr ""
-"В MDL MOL файлах можно сохранять только молекулы.В документе нет "
-"нарисованных молекул!"
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:261
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:319
-#, java-format
-msgid ""
-"{0} files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
-msgstr ""
-"{0} файлы не могут содержать реакций. Документ содержит реакции.Их реагенты "
-"и продукты будут включены как независимые молекулы. Продолжить?"
-
-#: src/main/org/openscience/jchempaint/RenderPanel.java:449
-msgid "Zoomfactor"
-msgstr "Масштаб"
-
-#: src/main/org/openscience/jchempaint/RenderPanel.java:462
-msgid "Hs implicit"
-msgstr "скрытых H"
+#: src/main/org/openscience/jchempaint/GT.java:123
+msgid "Dutch"
+msgstr "Голландский"
+
+#: src/main/org/openscience/jchempaint/GT.java:124
+msgid "American English"
+msgstr "Английский (США)"
+
+#: src/main/org/openscience/jchempaint/GT.java:125
+msgid "German"
+msgstr "Немецкий"
+
+#: src/main/org/openscience/jchempaint/GT.java:126
+msgid "Brazilian Portuguese"
+msgstr "Португальский (Бразилия)"
+
+#: src/main/org/openscience/jchempaint/GT.java:127
+msgid "Spanish"
+msgstr "Испанский"
+
+#: src/main/org/openscience/jchempaint/GT.java:128
+msgid "Arabic"
+msgstr "Арабский"
+
+#: src/main/org/openscience/jchempaint/GT.java:129
+msgid "Norwegian Bokmal"
+msgstr "Норвежский"
+
+#: src/main/org/openscience/jchempaint/GT.java:130
+msgid "Czech"
+msgstr "Чешский"
+
+#: src/main/org/openscience/jchempaint/GT.java:131
+msgid "Hungarian"
+msgstr "Венгерский"
+
+#: src/main/org/openscience/jchempaint/GT.java:132
+msgid "Thai"
+msgstr "Тайский"
+
+#: src/main/org/openscience/jchempaint/GT.java:133
+msgid "Russian"
+msgstr "Русский"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
 msgid "File"
@@ -1515,9 +1493,8 @@ msgid "Atom Popup Menu"
 msgstr "Меню атома"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:60
-#, fuzzy
 msgid "Pseudo Atom Popup Menu"
-msgstr "Меню атома"
+msgstr "Меню псевдоатома"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:61
 msgid "Open"
@@ -1558,6 +1535,16 @@ msgstr "Закрыть"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:70
 msgid "Exit"
 msgstr "Выход"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:71
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:655
+msgid "Undo"
+msgstr "Отменить"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:72
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:645
+msgid "Redo"
+msgstr "Повторить"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:73
 msgid "Select All"
@@ -1887,17 +1874,14 @@ msgid "Decrease the charge on an Atom"
 msgstr "Уменьшить заряд на атоме"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:244
-#, fuzzy
 msgid "Delete atoms and bonds"
 msgstr "Удалить атомы и связи"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:245
-#, fuzzy
 msgid "Select atoms and bonds in a free-form region"
-msgstr "Выбрать атомы и связи в прямоугольной области"
+msgstr "Выбрать атомы и связи в произвольной области"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:246
-#, fuzzy
 msgid "Select atoms and bonds in a rectangular region"
 msgstr "Выбрать атомы и связи в прямоугольной области"
 
@@ -2024,7 +2008,7 @@ msgstr "Введите элемент или группу"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:279
 msgid "Add Atom Or Change Element"
-msgstr "Добавить атом или изменить элемент"
+msgstr "Добавить/изменить атом"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:280
 msgid "Draw Bond"
@@ -2182,71 +2166,58 @@ msgstr "Стероиды"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:323
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
-#: src/main/org/openscience/jchempaint/GT.java:123
-msgid "Dutch"
-msgstr "Голландский"
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:501
+msgid "has unsaved data. Do you want to save it?"
+msgstr "содержит несохраненные данные. Вы хотите сохранить их?"
 
-#: src/main/org/openscience/jchempaint/GT.java:124
-msgid "American English"
-msgstr "Английский (США)"
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:502
+msgid "Unsaved data"
+msgstr "Несохраненные данные"
 
-#: src/main/org/openscience/jchempaint/GT.java:125
-msgid "German"
-msgstr "Немецкий"
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:649
+msgid "No redo possible"
+msgstr "Нет возможности повторить действие"
 
-#: src/main/org/openscience/jchempaint/GT.java:126
-msgid "Brazilian Portuguese"
-msgstr "Португальский (Бразилия)"
+#: src/main/org/openscience/jchempaint/JChemPaintPanel.java:659
+msgid "No undo possible"
+msgstr "Нет возможности отменить действие"
 
-#: src/main/org/openscience/jchempaint/GT.java:127
-msgid "Spanish"
-msgstr "Испанский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:86
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:129
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:273
+msgid "Insert"
+msgstr "Вставить"
 
-#: src/main/org/openscience/jchempaint/GT.java:128
-msgid "Arabic"
-msgstr "Арабский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:98
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:272
+msgid "Enter a CAS, SMILES or InChI string"
+msgstr "Введите CAS, SMILES или InChI"
 
-#: src/main/org/openscience/jchempaint/GT.java:129
-msgid "Norwegian Bokmal"
-msgstr "Норвежский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:153
+msgid "Could not process InChI"
+msgstr "Не удалось обработать InChI"
 
-#: src/main/org/openscience/jchempaint/GT.java:130
-msgid "Czech"
-msgstr "Чешский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:159
+msgid "Could not load InChI subsystem"
+msgstr "Не удалось загрузить InChI подсистему"
 
-#: src/main/org/openscience/jchempaint/GT.java:131
-msgid "Hungarian"
-msgstr "Венгерский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:166
+msgid "Error in reading data from PubChem"
+msgstr "Ошибка чтения даных из PubChem"
 
-#: src/main/org/openscience/jchempaint/GT.java:132
-msgid "Thai"
-msgstr "Тайский"
+#: src/main/org/openscience/jchempaint/InsertTextPanel.java:179
+msgid "Invalid SMILES specified"
+msgstr "Введен некорректный SMILES"
 
-#: src/main/org/openscience/jchempaint/GT.java:133
-msgid "Russian"
-msgstr "Русский"
+#: src/main/org/openscience/jchempaint/RenderPanel.java:449
+msgid "Zoomfactor"
+msgstr "Масштаб"
 
-#: src/main/org/openscience/jchempaint/io/JCPSaveFileFilter.java:75
-msgid "CDK source code fragment"
-msgstr "Фрагмент исходного кода CDK"
-
-#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:193
-msgid "MDL MOL file"
-msgstr "Файл MDL MOL"
-
-#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:197
-msgid "MDL SDF Molfile"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:201
-msgid "MDL RXN Molfile"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/io/JCPFileFilter.java:205
-msgid "IUPAC Chemical Identifier"
-msgstr "Химический идентификатор IUPAC"
+#: src/main/org/openscience/jchempaint/RenderPanel.java:462
+msgid "Hs implicit"
+msgstr "скрытых H"
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:120
 msgid "The error was:"
@@ -2274,110 +2245,76 @@ msgstr "Произошла ошибка"
 
 #~ msgid "BACKCOLOR"
 #~ msgstr "ЦВЕТ ФОНА"
-
 #~ msgid "Reload"
 #~ msgstr "Перезагрузить"
-
 #~ msgid "Click this button to go back to PeriodicTable."
 #~ msgstr "Нажмите эту кнопку, чтобы вернуться к Периодической системе"
-
 #~ msgid "Use Anti-Aliasing"
 #~ msgstr "Использовать сглаживание"
-
 #~ msgid "Show atoms in compact form"
 #~ msgstr "Отображать атомы компактно"
-
 #~ msgid "Bond length"
 #~ msgstr "Длина связи"
-
 #~ msgid "Oval Compact Atoms"
 #~ msgstr "Овальные компактные атомы"
-
 #~ msgid "Font name"
 #~ msgstr "Название шрифта"
-
 #~ msgid "Choose a Font"
 #~ msgstr "Выбрать шрифт"
-
 #~ msgid "Undo/redo stack size"
 #~ msgstr "Количество отмен и повторов"
-
 #~ msgid "Rendering Options"
 #~ msgstr "Опции отображения"
-
 #~ msgid "A radical cannot be added to this atom. Re-try with less hydrogens."
 #~ msgstr ""
 #~ "Радикал не может быть добавлен к этому атому. Попробуйте с меньшим числом "
 #~ "атомов водорода."
-
 #~ msgid "Convert to Radical"
 #~ msgstr "Преобразовать в радикал"
-
 #~ msgid "Major Plus Three"
 #~ msgstr "Преобладающий плюс три"
-
 #~ msgid "Major Plus One"
 #~ msgstr "Преобладающий плюс один"
-
 #~ msgid "Major Minus Two"
 #~ msgstr "Преобладающий минус два"
-
 #~ msgid "Major Minus Three"
 #~ msgstr "Преобладающий минус три"
-
 #~ msgid "Move Atoms and Bonds"
 #~ msgstr "Переместить атомы и связи"
-
 #~ msgid "Select Atoms and Bonds"
 #~ msgstr "Выбрать атомы и связи"
-
 #~ msgid "Ring 4"
 #~ msgstr "Четырехчленный цикл"
-
 #~ msgid "Ring 5"
 #~ msgstr "Пятичленный цикл"
-
 #~ msgid "Ring 6"
 #~ msgstr "Шестичленный цикл"
-
 #~ msgid "Ring 7"
 #~ msgstr "Семичленный цикл"
-
 #~ msgid "Ring 8"
 #~ msgstr "Восьмичленный цикл"
-
 #~ msgid "Move"
 #~ msgstr "Перемещение"
-
 #~ msgid "French"
 #~ msgstr "Французский"
-
 #~ msgid "WARNING: JChemPaint"
 #~ msgstr "ВНИМАНИЕ: JChemPaint"
-
 #~ msgid "or higher."
 #~ msgstr "или выше."
-
 #~ msgid "Valence 2"
 #~ msgstr "Валентность 2"
-
 #~ msgid "Valence 3"
 #~ msgstr "Валентность 3"
-
 #~ msgid "Valence 4"
 #~ msgstr "Валентность 4"
-
 #~ msgid "Valence 5"
 #~ msgstr "Валентность 5"
-
 #~ msgid "Valence 6"
 #~ msgstr "Валентность 6"
-
 #~ msgid "Valence 7"
 #~ msgstr "Валентность 7"
-
 #~ msgid "Valence 8"
 #~ msgstr "Валентность 8"
-
 #~ msgid "Model does not have bonds. Cannot depict contents."
 #~ msgstr "В модели отсутствуют связи. Не удается отобразить содержимое"
+
