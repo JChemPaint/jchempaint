@@ -22,8 +22,10 @@
 package org.openscience.jchempaint.renderer;
 
 import java.awt.Color;
+//import java.util.Properties;
 
 import org.openscience.jchempaint.renderer.font.IFontManager;
+import org.openscience.jchempaint.JCPPropertyHandler;
 
 /**
  * @cdk.module render
@@ -33,7 +35,8 @@ public class RenderingParameters {
     /**
      * The size on screen of a compact mode shape
      */
-    private double atomRadius = 8;
+    private double atomRadius = Double.parseDouble(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("AtomRadius", "8"));
 
     /**
      * When atoms are selected or in compact mode, they will
@@ -49,7 +52,8 @@ public class RenderingParameters {
     /**
      * The background color of the rendered image
      */
-    private Color backColor = Color.white;
+    private Color backColor = new Color(Integer.parseInt(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB()))));
     
     /**
      * The color used for underlining not typeable atoms.
@@ -69,7 +73,8 @@ public class RenderingParameters {
     /**
      * The width on screen of a bond
      */
-    private double bondWidth = 1.0;
+    private double bondWidth = Double.parseDouble(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("BondWidth", "1.0"));
 
     /**
      * The width on screen of an atom-atom mapping line
@@ -85,18 +90,21 @@ public class RenderingParameters {
     /**
      * Determines whether atoms are colored by type
      */
-    private boolean colorAtomsByType = true;
+    private boolean colorAtomsByType = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("ColorAtomsByType", "true"));
 
     /**
      * If true, atoms are displayed in a compact notation,
      * as a colored square or circle, rather than as text
      */
-    private boolean compact = false;
+    private boolean compact = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("IsCompact", "false"));
 
     /**
      * The shape of the compact mode atom.
      */
-    private AtomShape compactShape = AtomShape.SQUARE;
+    private AtomShape compactShape = JCPPropertyHandler.getInstance().getJCPProperties()
+	.getProperty("CompactShape", "square").equals("square") ? AtomShape.SQUARE : AtomShape.OVAL;
 
     /**
      * The color to draw bonds if not other color is given.
@@ -109,7 +117,8 @@ public class RenderingParameters {
 
     private Color externalHighlightColor = Color.orange;
 
-    private boolean fitToScreen = false;
+    private boolean fitToScreen = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("FitToScreen", "true"));
 
     private Color foreColor = Color.black;
 
@@ -120,14 +129,16 @@ public class RenderingParameters {
      * giving each carbon element explicitly, instead of not displaying the
      * element symbol. Example C-C-C instead of /\.
      */
-    private boolean kekuleStructure = false;
+    private boolean kekuleStructure = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("KekuleStructure", "false"));
 
 
     /**
      * The maximum distance on the screen the mouse pointer has to be to
      * highlight an element.
      */
-    private double highlightDistance = 8;
+    private double highlightDistance = Double.parseDouble(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("HighlightDistance", "8"));
 
     private boolean highlightShapeFilled = false;
 
@@ -164,7 +175,8 @@ public class RenderingParameters {
      * Determines whether rings should be drawn with a circle if they are
      * aromatic.
      */
-    private boolean showAromaticity = true;
+    private boolean showAromaticity = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("ShowAromaticity", "true"));
 
     private boolean showAromaticityInCDKStyle = false;
 
@@ -176,13 +188,16 @@ public class RenderingParameters {
      * Determines whether methyl carbons' symbols should be drawn explicit for
      * methyl carbons. Example C/\C instead of /\.
      */
-    private boolean showEndCarbons = false;
+    private boolean showEndCarbons = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("ShowEndCarbons", "false"));
 
     /** Determines whether explicit hydrogens should be drawn. */
-    private boolean showExplicitHydrogens = true;
+    private boolean showExplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("ShowExplicitHydrogens", "true"));
 
     /** Determines whether implicit hydrogens should be drawn. */
-    private boolean showImplicitHydrogens = true;
+    private boolean showImplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("ShowImplicitHydrogens", "true"));
 
     private boolean showMoleculeTitle = false;
 
@@ -192,12 +207,14 @@ public class RenderingParameters {
 
     private boolean useAntiAliasing = true;
 
-    private boolean willDrawNumbers = false;
+    private boolean willDrawNumbers = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("DrawNumbers", "false"));
 
     /**
      * The width on screen of the fat end of a wedge bond.
      */
-    private double wedgeWidth = 5.0;
+    private double wedgeWidth = Double.parseDouble(JCPPropertyHandler.getInstance()
+	.getJCPProperties().getProperty("WedgeWidth", "5.0"));
 
 
     public int getArrowHeadWidth() {
