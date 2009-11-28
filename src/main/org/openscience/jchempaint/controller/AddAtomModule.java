@@ -39,6 +39,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import org.openscience.jchempaint.GT;
 
 /**
  * Adds an atom on the given location on mouseclick
@@ -208,7 +209,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	}
 
 	public String getDrawModeString() {
-		return "Add Atom Or Change Element ("+
+		return GT._("Add Atom Or Change Element") +" ("+
 		    (chemModelRelay.getController2DModel().getDrawIsotopeNumber()==0 ? "" 
 		        : chemModelRelay.getController2DModel().getDrawIsotopeNumber())+
 		    chemModelRelay.getController2DModel().getDrawElement()+")";
