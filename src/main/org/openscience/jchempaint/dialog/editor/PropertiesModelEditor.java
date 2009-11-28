@@ -347,6 +347,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     }
 
     public void applyChanges() {
+        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+        
         model.setDrawNumbers(drawNumbers.isSelected());
         //model.setShowAtomAtomMapping(showAtomAtomMapping.isSelected());
         model.setKekuleStructure(useKekuleStructure.isSelected());
@@ -376,10 +378,40 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         //model.setFontName(currentFontName);
         model.setBackColor(currentColor);
+
+        props.setProperty("DrawNumbers",String.valueOf(drawNumbers.isSelected()));
+        //props.setProperty("ShowAtomAtomMapping",String.valueOf(showAtomAtomMapping.isSelected()));
+        props.setProperty("KekuleStructure",String.valueOf(useKekuleStructure.isSelected()));
+        props.setProperty("ShowEndCarbons",String.valueOf(showEndCarbons.isSelected()));
+        props.setProperty("ShowExplicitHydrogens",String.valueOf(showExplicitHydrogens.isSelected()));
+        props.setProperty("ShowImplicitHydrogens",String.valueOf(showImplicitHydrogens.isSelected()));
+        props.setProperty("ShowAromaticity",String.valueOf(showAromaticity.isSelected()));
+        //props.setProperty("ShowAromaticityCDKStyle",String.valueOf(showAromaticityCDKStyle.isSelected()));
+        props.setProperty("ColorAtomsByType",String.valueOf(colorAtomsByType.isSelected()));
+        //props.setProperty("UseAntiAliasing",String.valueOf(useAntiAliasing.isSelected()));
+        //props.setProperty("ShowTooltip",String.valueOf(showToolTip.isSelected()));
+        //props.setProperty("ShowReactionBoxes",String.valueOf(showReactionBoxes.isSelected()));
+        props.setProperty("IsCompact",String.valueOf(!nonCompactShape.isSelected()));
+        props.setProperty("FitToScreen",String.valueOf(isFitToScreen.isSelected()));
+
+        props.setProperty("AtomRadius",String.valueOf(atomRadius.getValue()));
+        //props.setProperty("BondLength",String.valueOf(bondLength.getValue()));
+        props.setProperty("BondWidth",String.valueOf(bondWidth.getValue()));
+        props.setProperty("HighlightDistance",String.valueOf(highlightDistance.getValue()));
+        props.setProperty("WedgeWidth",String.valueOf(wedgeWidth.getValue()));
+
+        if (compactShapeOval.isSelected()) {
+            props.setProperty("CompactShape","oval");
+        } else {
+            props.setProperty("CompactShape","square");
+        }
+
+        //props.setFontName(currentFontName);
+        props.setProperty("BackColor",String.valueOf(currentColor.getRGB()));
+                
         //the general settings
-        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         props.setProperty("askForIOSettings",
-            askForIOSettings.isSelected() ? "true" : "false"
+            String.valueOf(askForIOSettings.isSelected())
         );
 
         try{
