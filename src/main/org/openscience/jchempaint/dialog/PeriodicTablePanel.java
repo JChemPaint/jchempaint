@@ -1054,7 +1054,7 @@ public class PeriodicTablePanel extends JPanel
 				+GT._("CAS RN:")+" "+element.getCASid()+"<br> "
 				+GT._("Element Category:")+" "+serieTranslator(element.getChemicalSerie())+"<br> "
 				+GT._("State:")+" "+phaseTranslator(element.getPhase())+"<br> "
-				+GT._("Electronativity:")+" "+(element.getPaulingEneg()==null ? GT._("undefined") : element.getPaulingEneg())+"<br>"
+				+GT._("Electronegativity:")+" "+(element.getPaulingEneg()==null ? GT._("undefined") : element.getPaulingEneg())+"<br>"
 				+"</FONT></html>");
 			label.setMinimumSize(new Dimension(165,150));
 	        label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
