@@ -165,7 +165,41 @@
         <delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" />
     </target>
 
-    <target id="compile-jcp" name="compile-jcp">
+    <target id="compile-jcp" name="build-languageclasses" >
+    	<echo message="Compiling po files." />
+    	<exec dir="." executable="msgfmt">
+    		<arg line="--java2 -d po/classes -r app.i18n.Messages -l ar po/ar.po"/>
+    	</exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l cs po/cs.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l de po/de.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l es po/es.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l hu po/hu.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l nb po/nb.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l nl po/nl.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l pt_BR po/pt_BR.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l ru po/ru.po"/>
+        </exec>
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l th po/th.po"/>
+        </exec>
+    </target>
+
+   	<target id="compile-jcp" name="compile-jcp" depends="build-languageclasses" >
         <!-- TODO check if dist-all in cdk has been done-->
         <echo message="Compiling JChemPaint classes." />
         <mkdir dir="${dist-classes}" />
