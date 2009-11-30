@@ -87,7 +87,7 @@ public class PeriodicTableDialog extends JDialog {
                 PeriodicTablePanel source = (PeriodicTablePanel)event.getSource();
                 String symbol=null;
                 try {
-                     symbol = source.getSelectedElement().getSymbol();
+                     symbol = source.getSelectedElement();
                 } catch (CDKException e) {
                     throw new RuntimeException(e);
                 }

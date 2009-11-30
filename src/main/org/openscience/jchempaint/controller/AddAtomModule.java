@@ -67,7 +67,6 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	}
 
 	public void mouseClickedDown(Point2d worldCoord) {
-        System.out.println("yep");
         start = null;
         dest = null;
         source = null;
