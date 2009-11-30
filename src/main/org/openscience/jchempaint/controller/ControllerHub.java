@@ -2125,7 +2125,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         if (movedDistance!=null && factory != null && handler != null) {
             //we look if anything has been moved which was not merged
             IAtomContainer undoRedoContainer = getIChemModel().getBuilder().newAtomContainer();
-            undoRedoContainer.add(renderer.getRenderer2DModel().getSelection().getConnectedAtomContainer());
+            
+            if (renderer.getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null){
+                undoRedoContainer.add(renderer.getRenderer2DModel().getSelection().getConnectedAtomContainer());
+            }
+            
             Iterator<IAtom> it2 = mergeMap.keySet().iterator();
             while(it2.hasNext()){
                 undoRedoContainer.removeAtom(it2.next());
