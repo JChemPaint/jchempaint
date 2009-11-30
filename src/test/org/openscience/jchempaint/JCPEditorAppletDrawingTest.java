@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.vecmath.Point2d;
 
+import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JPanelFixture;
@@ -279,5 +280,25 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
         Assert.assertEquals(oldAtomCount, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
+	}
+	
+	@Test public void mergeAndUndoRedo(){
+        restoreModelWithBasicmol();
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+        applet.button("select").click();
+        Point2d startpoint=getAtomPoint(panel,0);
+        ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
+        dandd.drag(applet.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y));
+        Point2d movetopoint=getAtomPoint(panel,1);
+        dandd.drop(applet.panel("renderpanel").component(), new Point((int)movetopoint.x, (int)movetopoint.y));
+        Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        movetopoint=getAtomPoint(panel,2);
+        applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),new Point((int)movetopoint.x, (int)movetopoint.y));
+        applet.button("undo").click();
+        Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+        applet.button("redo").click();
+        Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	}
 }
