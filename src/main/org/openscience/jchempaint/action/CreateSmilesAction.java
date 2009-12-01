@@ -95,6 +95,10 @@ public class CreateSmilesAction extends JCPAction
         	IAtomContainer container = (IAtomContainer)containers.next();
         	Molecule molecule = new Molecule(container);
         	smiles += generator.createSMILES(molecule);
+            //valencies are set when creating smiles, which we don't want in jcp
+            for(int i=0;i<container.getAtomCount();i++){
+                container.getAtom(i).setValency(null);
+            }
         	if (containers.hasNext()) {
         		smiles += ".";
         	}
