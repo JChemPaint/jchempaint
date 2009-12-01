@@ -1,4 +1,3 @@
-io-formats.set
 javax/vecmath/Point2d.class
 javax/vecmath/Point2f.class
 javax/vecmath/Point3d.class
@@ -13,9 +12,7 @@ org/_3pq/jgrapht/alg/ConnectivityInspector$MyTraversalListener.class
 org/_3pq/jgrapht/DirectedGraph.class
 org/_3pq/jgrapht/Edge.class
 org/_3pq/jgrapht/edge/DefaultEdge.class
-org/_3pq/jgrapht/edge/DirectedEdge.class
 org/_3pq/jgrapht/edge/EdgeFactories$AbstractEdgeFactory.class
-org/_3pq/jgrapht/edge/EdgeFactories$DirectedEdgeFactory.class
 org/_3pq/jgrapht/edge/EdgeFactories$UndirectedEdgeFactory.class
 org/_3pq/jgrapht/EdgeFactory.class
 org/_3pq/jgrapht/edge/UndirectedEdge.class
@@ -28,7 +25,6 @@ org/_3pq/jgrapht/event/VertexSetListener.class
 org/_3pq/jgrapht/event/VertexTraversalEvent.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$ArrayListFactory.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph.class
-org/_3pq/jgrapht/graph/AbstractBaseGraph$DirectedEdgeContainer.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$DirectedSpecifics.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$Specifics.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$UndirectedEdgeContainer.class
@@ -36,7 +32,6 @@ org/_3pq/jgrapht/graph/AbstractBaseGraph$UndirectedSpecifics.class
 org/_3pq/jgrapht/graph/AbstractGraph.class
 org/_3pq/jgrapht/Graph.class
 org/_3pq/jgrapht/graph/EdgeListFactory.class
-org/_3pq/jgrapht/graph/SimpleDirectedGraph.class
 org/_3pq/jgrapht/graph/SimpleGraph.class
 org/_3pq/jgrapht/graph/Subgraph.class
 org/_3pq/jgrapht/graph/UndirectedSubgraph.class
@@ -275,6 +270,7 @@ org/openscience/jchempaint/InsertTextPanel.class
 org/openscience/jchempaint/io/JCPFileView.class
 org/openscience/jchempaint/JChemPaintMenuBar.class
 org/openscience/jchempaint/JChemPaintMenuHelper$1.class
+org/openscience/jchempaint/JChemPaintMenuHelper$2.class
 org/openscience/jchempaint/JChemPaintMenuHelper.class
 org/openscience/jchempaint/JChemPaintPanel$1.class
 org/openscience/jchempaint/JChemPaintPanel.class
@@ -289,21 +285,11 @@ org/openscience/jchempaint/renderer/AtomContainerRenderer.class
 org/openscience/jchempaint/renderer/color/CDK2DAtomColors.class
 org/openscience/jchempaint/renderer/color/IAtomColorer.class
 org/openscience/jchempaint/renderer/elements/ArrowElement.class
-org/openscience/jchempaint/renderer/elements/AtomSymbolElement.class
 org/openscience/jchempaint/renderer/elements/ElementGroup.class
-org/openscience/jchempaint/renderer/elements/GeneralPath.class
 org/openscience/jchempaint/renderer/elements/IRenderingElement.class
 org/openscience/jchempaint/renderer/elements/IRenderingVisitor.class
 org/openscience/jchempaint/renderer/elements/LineElement.class
 org/openscience/jchempaint/renderer/elements/OvalElement.class
-org/openscience/jchempaint/renderer/elements/path/Close.class
-org/openscience/jchempaint/renderer/elements/path/CubicTo.class
-org/openscience/jchempaint/renderer/elements/PathElement.class
-org/openscience/jchempaint/renderer/elements/path/LineTo.class
-org/openscience/jchempaint/renderer/elements/path/MoveTo.class
-org/openscience/jchempaint/renderer/elements/path/PathBuilder.class
-org/openscience/jchempaint/renderer/elements/path/PathElement.class
-org/openscience/jchempaint/renderer/elements/path/QuadTo.class
 org/openscience/jchempaint/renderer/elements/path/Type.class
 org/openscience/jchempaint/renderer/elements/RectangleElement.class
 org/openscience/jchempaint/renderer/elements/TextElement.class
@@ -316,6 +302,7 @@ org/openscience/jchempaint/renderer/font/AbstractFontManager.class
 org/openscience/jchempaint/renderer/font/AWTFontManager.class
 org/openscience/jchempaint/renderer/font/IFontManager.class
 org/openscience/jchempaint/renderer/font/IFontManager$FontStyle.class
+org/openscience/jchempaint/renderer/generators/AtomContainerTitleGenerator.class
 org/openscience/jchempaint/renderer/generators/BasicAtomGenerator.class
 org/openscience/jchempaint/renderer/generators/BasicBondGenerator.class
 org/openscience/jchempaint/renderer/generators/ExtendedAtomGenerator.class
@@ -345,13 +332,10 @@ org/openscience/jchempaint/renderer/selection/AbstractSelection$1.class
 org/openscience/jchempaint/renderer/selection/AbstractSelection.class
 org/openscience/jchempaint/renderer/selection/IChemObjectSelection.class
 org/openscience/jchempaint/renderer/selection/IncrementalSelection.class
-org/openscience/jchempaint/renderer/selection/LogicalSelection.class
-org/openscience/jchempaint/renderer/selection/LogicalSelection$Type.class
 org/openscience/jchempaint/renderer/selection/RectangleSelection.class
 org/openscience/jchempaint/renderer/selection/ShapeSelection.class
 org/openscience/jchempaint/renderer/selection/SingleSelection.class
 org/openscience/jchempaint/renderer/visitor/AbstractAWTDrawVisitor.class
-org/openscience/jchempaint/renderer/visitor/AWTDrawVisitor$1.class
 org/openscience/jchempaint/renderer/visitor/AWTDrawVisitor$2.class
 org/openscience/jchempaint/renderer/visitor/AWTDrawVisitor.class
 org/openscience/jchempaint/renderer/visitor/IDrawVisitor.class

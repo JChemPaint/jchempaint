@@ -1,3 +1,4 @@
+io-formats.set
 javax/vecmath/Point2d.class
 javax/vecmath/Point2f.class
 javax/vecmath/Point3d.class
@@ -16,9 +17,7 @@ org/_3pq/jgrapht/alg/ConnectivityInspector$MyTraversalListener.class
 org/_3pq/jgrapht/DirectedGraph.class
 org/_3pq/jgrapht/Edge.class
 org/_3pq/jgrapht/edge/DefaultEdge.class
-org/_3pq/jgrapht/edge/DirectedEdge.class
 org/_3pq/jgrapht/edge/EdgeFactories$AbstractEdgeFactory.class
-org/_3pq/jgrapht/edge/EdgeFactories$DirectedEdgeFactory.class
 org/_3pq/jgrapht/edge/EdgeFactories$UndirectedEdgeFactory.class
 org/_3pq/jgrapht/EdgeFactory.class
 org/_3pq/jgrapht/edge/UndirectedEdge.class
@@ -31,7 +30,6 @@ org/_3pq/jgrapht/event/VertexSetListener.class
 org/_3pq/jgrapht/event/VertexTraversalEvent.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$ArrayListFactory.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph.class
-org/_3pq/jgrapht/graph/AbstractBaseGraph$DirectedEdgeContainer.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$DirectedSpecifics.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$Specifics.class
 org/_3pq/jgrapht/graph/AbstractBaseGraph$UndirectedEdgeContainer.class
@@ -39,7 +37,6 @@ org/_3pq/jgrapht/graph/AbstractBaseGraph$UndirectedSpecifics.class
 org/_3pq/jgrapht/graph/AbstractGraph.class
 org/_3pq/jgrapht/Graph.class
 org/_3pq/jgrapht/graph/EdgeListFactory.class
-org/_3pq/jgrapht/graph/SimpleDirectedGraph.class
 org/_3pq/jgrapht/graph/SimpleGraph.class
 org/_3pq/jgrapht/graph/Subgraph.class
 org/_3pq/jgrapht/graph/UndirectedSubgraph.class
@@ -337,6 +334,7 @@ org/openscience/jchempaint/renderer/BoundsCalculator.class
 org/openscience/jchempaint/renderer/color/CDK2DAtomColors.class
 org/openscience/jchempaint/renderer/color/IAtomColorer.class
 org/openscience/jchempaint/renderer/elements/ArrowElement.class
+org/openscience/jchempaint/renderer/elements/AtomSymbolElement.class
 org/openscience/jchempaint/renderer/elements/ElementGroup.class
 org/openscience/jchempaint/renderer/elements/IRenderingElement.class
 org/openscience/jchempaint/renderer/elements/IRenderingVisitor.class
@@ -354,6 +352,7 @@ org/openscience/jchempaint/renderer/font/AbstractFontManager.class
 org/openscience/jchempaint/renderer/font/AWTFontManager.class
 org/openscience/jchempaint/renderer/font/IFontManager.class
 org/openscience/jchempaint/renderer/font/IFontManager$FontStyle.class
+org/openscience/jchempaint/renderer/generators/AtomContainerTitleGenerator.class
 org/openscience/jchempaint/renderer/generators/BasicAtomGenerator.class
 org/openscience/jchempaint/renderer/generators/BasicBondGenerator$1.class
 org/openscience/jchempaint/renderer/generators/BasicBondGenerator.class
