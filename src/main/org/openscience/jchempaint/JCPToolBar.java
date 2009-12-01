@@ -65,7 +65,7 @@ public class JCPToolBar
      *
      *@return    The toolbar value
      */
-    public static JToolBar getToolbar(JChemPaintPanel chemPaintPanel, String key, int horizontalorvertical)
+    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel, String key, int horizontalorvertical)
     {
         JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, 1);
         return maintoolbar;
@@ -102,7 +102,7 @@ public class JCPToolBar
      *@return      JButton The JButton with already added ActionListener
      */
 
-    static JButton createToolbarButton(String key, JChemPaintPanel chemPaintPanel, boolean elementtype)
+    static JButton createToolbarButton(String key, AbstractJChemPaintPanel chemPaintPanel, boolean elementtype)
     {
         JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance();
         JButton b = null;
@@ -196,7 +196,7 @@ public class JCPToolBar
      *@param  kind         String The String used to identify the toolbar
      *@return              Component The created toolbar
      */
-    public static Component createToolbar(int orientation, String kind, JChemPaintPanel chemPaintPanel, int lines)
+    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, int lines)
     {
         JToolBar toolbar2 = new JToolBar(orientation);
         String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind, chemPaintPanel.getGuistring()));

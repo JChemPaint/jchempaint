@@ -56,7 +56,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 * @param  guiString       Description of the Parameter
 	 * @param  menuDefinition  Description of the Parameter
 	 */
-	public JChemPaintMenuBar(JChemPaintPanel jcpPanel, String guiString) {
+	public JChemPaintMenuBar(AbstractJChemPaintPanel jcpPanel, String guiString) {
 		this.guiString = guiString;
 		addNormalMenuBar(jcpPanel, menuHelper.getMenuResourceString("menubar", guiString));
 		this.add(Box.createHorizontalGlue());
@@ -73,7 +73,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 * @param  menuDefinition  The feature to be added to the NormalMenuBar
 	 *      attribute
 	 */
-	private void addNormalMenuBar(JChemPaintPanel jcpPanel, String menuDefinition) {
+	private void addNormalMenuBar(AbstractJChemPaintPanel jcpPanel, String menuDefinition) {
 		String definition = menuDefinition;
 		String[] menuKeys = StringHelper.tokenize(definition);
 		for (int i = 0; i < menuKeys.length; i++) {

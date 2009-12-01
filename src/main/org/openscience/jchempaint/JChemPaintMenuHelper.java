@@ -87,7 +87,7 @@ public class JChemPaintMenuHelper {
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
      * @return           The created JMenu
      */
-    protected JComponent createMenu(JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
+    protected JComponent createMenu(AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
         logger.debug("Creating menu: ", key);
         JMenu menu = new JMenu(JCPMenuTextMaker.getInstance(jcpPanel.getGuistring()).getText(key));
         menu.setName(key);
@@ -106,7 +106,7 @@ public class JChemPaintMenuHelper {
      * @param  menu		 The menu to add the new menu to (must either be JMenu or JPopupMenu)
      * @return           The created JMenu
      */
-    protected JComponent createMenu(final JChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu) {
+    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu) {
         String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
         for (int i = 0; i < itemKeys.length; i++) {
             if (itemKeys[i].equals("-")) {
@@ -211,7 +211,7 @@ public class JChemPaintMenuHelper {
      * @param  isPopupMenu Tells if this menu will be a popup one or not
      * @return             JMenuItem The created JMenuItem
      */
-    protected JMenuItem createMenuItem(JChemPaintPanel jcpPanel, String cmd, boolean isPopupMenu) {
+    protected JMenuItem createMenuItem(AbstractJChemPaintPanel jcpPanel, String cmd, boolean isPopupMenu) {
         logger.debug("Creating menu item: ", cmd);
         boolean isCheckBox=false;
         if (cmd.endsWith("+")){
@@ -301,7 +301,7 @@ public class JChemPaintMenuHelper {
      * @param  mi   the regarding MenuItem.
      * @param  jcp  The JChemPaintPanel this menu is used for.
      */
-    private void addShortCuts(String cmd, JMenuItem mi, JChemPaintPanel jcp) {
+    private void addShortCuts(String cmd, JMenuItem mi, AbstractJChemPaintPanel jcp) {
         Properties shortCutProps = JCPPropertyHandler.getInstance().getJCPShort_Cuts();
 
         String keyString = shortCutProps.getProperty(cmd);

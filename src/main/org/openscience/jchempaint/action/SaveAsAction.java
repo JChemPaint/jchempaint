@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Properties;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -53,6 +52,7 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -89,7 +89,7 @@ public class SaveAsAction extends JCPAction
      *@param  jcpPanel       Description of the Parameter
      *@param  isPopupAction  Description of the Parameter
      */
-    public SaveAsAction(JChemPaintPanel jcpPanel, boolean isPopupAction)
+    public SaveAsAction(AbstractJChemPaintPanel jcpPanel, boolean isPopupAction)
     {
         super(jcpPanel, "", isPopupAction);
     }
@@ -205,7 +205,8 @@ public class SaveAsAction extends JCPAction
                         jcpPanel.setIsAlreadyAFile(outFile);
                         if(outFile!=null){
                             jcpPanel.getChemModel().setID(outFile.getName());
-                            jcpPanel.setTitle(outFile.getName());
+                            if(jcpPanel instanceof JChemPaintPanel)
+                                ((JChemPaintPanel)jcpPanel).setTitle(outFile.getName());
                         }
                     }
                 }
@@ -238,7 +239,8 @@ public class SaveAsAction extends JCPAction
         cow = new MDLRXNWriter(new FileWriter(outFile));
         cow.write(model.getReactionSet());
         cow.close();
-        jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+        if(jcpPanel instanceof JChemPaintPanel)
+            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }
 
@@ -281,7 +283,8 @@ public class SaveAsAction extends JCPAction
         cow.close();
         JChemPaint.flipOnReadingAndWriting(model);
 
-        jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+        if(jcpPanel instanceof JChemPaintPanel)
+            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }
 
@@ -306,7 +309,8 @@ public class SaveAsAction extends JCPAction
         cow.write(object);
         cow.close();
         sw.close();
-        jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+        if(jcpPanel instanceof JChemPaintPanel)
+            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }
 
@@ -341,7 +345,8 @@ public class SaveAsAction extends JCPAction
         }		
         cow.write(som);
         cow.close();
-        jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+        if(jcpPanel instanceof JChemPaintPanel)
+            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }
 
@@ -368,7 +373,8 @@ public class SaveAsAction extends JCPAction
             }
         }
         cow.close();
-        jcpPanel.setTitle(jcpPanel.getChemModel().getID());
+        if(jcpPanel instanceof JChemPaintPanel)
+            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
         return outFile;
     }
 

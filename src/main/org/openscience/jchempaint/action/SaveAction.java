@@ -33,7 +33,7 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPSaveFileFilter;
 
@@ -57,7 +57,7 @@ public class SaveAction extends SaveAsAction
 	 *@param  jcpPanel       Description of the Parameter
 	 *@param  isPopupAction  Description of the Parameter
 	 */
-    public SaveAction(JChemPaintPanel jcpPanel, boolean isPopupAction)
+    public SaveAction(AbstractJChemPaintPanel jcpPanel, boolean isPopupAction)
 	{
 		super(jcpPanel, isPopupAction);
 	}

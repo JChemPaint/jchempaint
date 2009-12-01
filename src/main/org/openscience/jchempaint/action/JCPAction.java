@@ -39,6 +39,7 @@ import javax.swing.JPopupMenu;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.JChemPaintMenuBar;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JChemPaintPopupMenu;
@@ -83,7 +84,7 @@ public class JCPAction extends AbstractAction
 	/**
 	 *  Description of the Field
 	 */
-	protected JChemPaintPanel jcpPanel = null;
+	protected AbstractJChemPaintPanel jcpPanel = null;
 
 	/**
 	 *  Is this popup action assiociated with a PopupMenu or not.
@@ -98,7 +99,7 @@ public class JCPAction extends AbstractAction
 	 *@param  type           Description of the Parameter
 	 *@param  isPopupAction  Description of the Parameter
 	 */
-	public JCPAction(JChemPaintPanel jcpPanel, String type, boolean isPopupAction)
+	public JCPAction(AbstractJChemPaintPanel jcpPanel, String type, boolean isPopupAction)
 	{
 		super();
 		if (this.actions == null)
@@ -121,7 +122,7 @@ public class JCPAction extends AbstractAction
 	 *@param  jcpPanel       Description of the Parameter
 	 *@param  isPopupAction  Description of the Parameter
 	 */
-	public JCPAction(JChemPaintPanel jcpPanel, boolean isPopupAction)
+	public JCPAction(AbstractJChemPaintPanel jcpPanel, boolean isPopupAction)
 	{
 		this(jcpPanel, "", isPopupAction);
 	}
@@ -132,7 +133,7 @@ public class JCPAction extends AbstractAction
 	 *
 	 *@param  jcpPanel  Description of the Parameter
 	 */
-	public JCPAction(JChemPaintPanel jcpPanel)
+	public JCPAction(AbstractJChemPaintPanel jcpPanel)
 	{
 		this(jcpPanel, false);
 	}
@@ -163,7 +164,7 @@ public class JCPAction extends AbstractAction
 	 *
 	 *@param  jcpPanel  The new jChemPaintPanel value
 	 */
-	public void setJChemPaintPanel(JChemPaintPanel jcpPanel)
+	public void setJChemPaintPanel(AbstractJChemPaintPanel jcpPanel)
 	{
 		this.jcpPanel = jcpPanel;
 	}
@@ -264,7 +265,7 @@ public class JCPAction extends AbstractAction
 	 *@param  isPopupAction  Description of the Parameter
 	 *@return                The action value
 	 */
-	public JCPAction getAction(JChemPaintPanel jcpPanel, String actionname, boolean isPopupAction)
+	public JCPAction getAction(AbstractJChemPaintPanel jcpPanel, String actionname, boolean isPopupAction)
 	{
 		// make sure logger and actions are instantiated
 		JCPAction dummy = new JCPAction(jcpPanel);
@@ -342,7 +343,7 @@ public class JCPAction extends AbstractAction
 	 *@param  actionname  Description of the Parameter
 	 *@return             The action value
 	 */
-	public JCPAction getAction(JChemPaintPanel jcpPanel, String actionname)
+	public JCPAction getAction(AbstractJChemPaintPanel jcpPanel, String actionname)
 	{
 		return getAction(jcpPanel, actionname, false);
 	}

@@ -32,8 +32,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -41,27 +39,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.undo.UndoManager;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -76,8 +63,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.action.SaveAction;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
@@ -90,30 +75,8 @@ import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
 
-    private JComponent lastActionButton;
-    private JComponent lastSecondaryButton;
-    private File currentWorkDirectory;
-    private File lastOpenedFile;
-    private FileFilter currentOpenFileFilter;
-    private File isAlreadyAFile;
-    private boolean isModified = false;
-    private FileFilter currentSaveFileFilter;
+    private static final long serialVersionUID = 7810772571955039160L;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
-    private boolean showInsertTextField = true;
-    private JPanel topContainer = null;
-    private JPanel centerContainer = null;
-    private boolean showToolBar = true;
-    private boolean showMenuBar = true;
-    private JMenuBar menu;
-    private JToolBar uppertoolbar;
-    private JToolBar lefttoolbar;
-    private JToolBar lowertoolbar;
-    private JToolBar righttoolbar;
-    protected JMenuItem undoMenu;
-    protected JMenuItem redoMenu;
-    protected JMenu atomMenu;
-    protected JMenu bondMenu;
-    private boolean debug=false;
     private String lastSelectId;
 
 	/**
@@ -165,10 +128,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         });
     }
 
-    public Container getTopLevelContainer() {
-        return this.getParent().getParent().getParent().getParent();
-    }
-
     public void setTitle(String title) {
         Container topLevelContainer = this.getTopLevelContainer();
         if (topLevelContainer instanceof JFrame) {
@@ -196,329 +155,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (inputAdapter.getPopupMenu(Reaction.class) == null) {
             inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(
                     this, "reaction", this.guistring));
-        }
-    }
-
-    /**
-     * Called to force a re-centring of the displayed structure.
-     *
-     * @param isNewChemModel
-     */
-    public void setIsNewChemModel(boolean isNewChemModel) {
-        this.renderPanel.setIsNewChemModel(isNewChemModel);
-    }
-
-    /**
-     * Helps in keeping the current action button highlighted
-     *
-     * @return The last action button used
-     */
-    public JComponent getLastActionButton() {
-        return lastActionButton;
-    }
-
-    /**
-     * Allows setting of the is modified stage (e. g. after save)
-     *
-     * @param isModified
-     *            is modified
-     */
-    public void setModified(boolean isModified) {
-        this.isModified = isModified;
-        Container c = this.getTopLevelContainer();
-        if (c instanceof JFrame) {
-            String id = renderPanel.getChemModel().getID();
-            if (isModified)
-                ((JFrame) c).setTitle(id + "*");
-            else
-                ((JFrame) c).setTitle(id);
-        }
-    }
-
-    /**
-     * Helps in keeping the current action button highlighted - needs to be set
-     * if a new action button is choosen
-     *
-     * @param actionButton
-     *            The new action button
-     */
-    public void setLastActionButton(JComponent actionButton) {
-        lastActionButton = actionButton;
-    }
-
-    /**
-     * Gets the currentWorkDirectory attribute of the JChemPaintPanel object
-     *
-     *@return The currentWorkDirectory value
-     */
-    public File getCurrentWorkDirectory() {
-        return currentWorkDirectory;
-    }
-
-    /**
-     * Sets the currentWorkDirectory attribute of the JChemPaintPanel object
-     *
-     *@param cwd
-     *            The new currentWorkDirectory value
-     */
-    public void setCurrentWorkDirectory(File cwd) {
-        this.currentWorkDirectory = cwd;
-    }
-
-    /**
-     * Gets the lastOpenedFile attribute of the JChemPaintPanel object
-     *
-     *@return The lastOpenedFile value
-     */
-    public File getLastOpenedFile() {
-        return lastOpenedFile;
-    }
-
-    /**
-     * Sets the lastOpenedFile attribute of the JChemPaintPanel object
-     *
-     *@param lof
-     *            The new lastOpenedFile value
-     */
-    public void setLastOpenedFile(File lof) {
-        this.lastOpenedFile = lof;
-    }
-
-    /**
-     * Gets the currentOpenFileFilter attribute of the JChemPaintPanel object
-     *
-     *@return The currentOpenFileFilter value
-     */
-    public FileFilter getCurrentOpenFileFilter() {
-        return currentOpenFileFilter;
-    }
-
-    /**
-     * Sets the currentOpenFileFilter attribute of the JChemPaintPanel object
-     *
-     *@param ff
-     *            The new currentOpenFileFilter value
-     */
-    public void setCurrentOpenFileFilter(FileFilter ff) {
-        this.currentOpenFileFilter = ff;
-    }
-
-    /**
-     * Gets the currentSaveFileFilter attribute of the JChemPaintPanel object
-     *
-     *@return The currentSaveFileFilter value
-     */
-    public FileFilter getCurrentSaveFileFilter() {
-        return currentSaveFileFilter;
-    }
-
-    /**
-     * Sets the currentSaveFileFilter attribute of the JChemPaintPanel object
-     *
-     *@param ff
-     *            The new currentSaveFileFilter value
-     */
-    public void setCurrentSaveFileFilter(FileFilter ff) {
-        this.currentSaveFileFilter = ff;
-    }
-
-    /**
-     * Tells if a menu is shown
-     *
-     *@return The showMenu value
-     */
-    public boolean getShowMenuBar() {
-        return showMenuBar;
-    }
-
-    /**
-     * Sets if a menu is shown
-     *
-     *@param showMenuBar
-     *            The new showMenuBar value
-     */
-    public void setShowMenuBar(boolean showMenuBar) {
-        this.showMenuBar = showMenuBar;
-        customizeView();
-    }
-
-    public void customizeView() {
-        if (showMenuBar) {
-            if (menu == null) {
-                menu = new JChemPaintMenuBar(this, this.guistring);
-            }
-            topContainer.add(menu, BorderLayout.NORTH);
-        } else {
-            topContainer.remove(menu);
-        }
-        if (showStatusBar) {
-            if (statusBar == null) {
-                statusBar = new JCPStatusBar();
-            }
-            add(statusBar, BorderLayout.SOUTH);
-        } else {
-            remove(statusBar);
-        }
-        if (showToolBar) {
-            if (uppertoolbar == null) {
-                uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL);
-            }
-            centerContainer.add(uppertoolbar, BorderLayout.NORTH);
-            if (lefttoolbar == null) {
-            	lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL);
-            }
-            centerContainer.add(lefttoolbar, BorderLayout.WEST);
-            if (righttoolbar == null) {
-            	righttoolbar = JCPToolBar.getToolbar(this, "righttoolbar", SwingConstants.VERTICAL);
-            }
-            centerContainer.add(righttoolbar, BorderLayout.EAST);
-            if (lowertoolbar == null) {
-            	lowertoolbar = JCPToolBar.getToolbar(this, "lowertoolbar", SwingConstants.HORIZONTAL);
-            }
-            centerContainer.add(lowertoolbar, BorderLayout.SOUTH);
-        } else {
-        	centerContainer.remove(uppertoolbar);
-        	centerContainer.remove(lowertoolbar);
-        	centerContainer.remove(lefttoolbar);
-        	centerContainer.remove(righttoolbar);
-        }
-        if (showInsertTextField) {
-            if (insertTextPanel == null)
-                insertTextPanel = new InsertTextPanel(this, null);
-            topContainer.add(insertTextPanel, BorderLayout.SOUTH);
-        } else {
-            topContainer.remove(insertTextPanel);
-        }
-        revalidate();
-    }
-
-    /**
-     * Tells if a status bar is shown
-     *
-     *@return The showStatusBar value
-     */
-    public boolean getShowStatusBar() {
-        return showStatusBar;
-    }
-
-    /**
-     * Sets the value of showToolbar.
-     *
-     *@param showToolBar
-     *            The value to assign showToolbar.
-     */
-    public void setShowToolBar(boolean showToolBar) {
-        setShowToolBar(showToolBar);
-    }
-
-
-    /**
-     * Returns the value of showToolbar.
-     *
-     *@return The showToolbar value
-     */
-    public boolean getShowToolBar() {
-        return showToolBar;
-    }
-
-    /**
-     * Sets if statusbar should be shown
-     *
-     *@param showStatusBar
-     *            The value to assign showStatusBar.
-     */
-    public void setShowStatusBar(boolean showStatusBar) {
-        this.showStatusBar = showStatusBar;
-        customizeView();
-    }
-
-    /**
-     * Sets the file currently used for saving this Panel.
-     *
-     *@param value
-     *            The new isAlreadyAFile value
-     */
-    public void setIsAlreadyAFile(File value) {
-        isAlreadyAFile = value;
-    }
-
-    /**
-     * Returns the file currently used for saving this Panel, null if not yet
-     * saved
-     *
-     *@return The currently used file
-     */
-    public File isAlreadyAFile() {
-        return isAlreadyAFile;
-    }
-
-    public String getGuistring() {
-        return guistring;
-    }
-
-    /**
-     * Set to indicate whether the insert text field should be used.
-     *
-     * @param showInsertTextField
-     *            true is the text entry widget is to be shown
-     */
-    public void setShowInsertTextField(boolean showInsertTextField) {
-        this.showInsertTextField = showInsertTextField;
-        customizeView();
-    }
-
-    /**
-     * Tells if the enter text field is currently shown or not.
-     *
-     * @return text field shown or not
-     */
-    public boolean getShowInsertTextField() {
-        return showInsertTextField;
-    }
-
-    public String getSVGString() {
-        return this.renderPanel.toSVG();
-    }
-
-    public Image takeSnapshot() {
-        return this.renderPanel.takeSnapshot();
-    }
-
-    /**
-     * Shows a warning if the JCPPanel has unsaved content and does save, if the
-     * user wants to do it.
-     *
-     * @return
-     *         OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
-     */
-    public int showWarning() {
-        if (isModified && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) { // TODO
-                                                                                  // &&
-                                                                                  // !getIsOpenedByViewer())
-                                                                                  // {
-            int answer = JOptionPane.showConfirmDialog(this, renderPanel
-                    .getChemModel().getID()
-                    + " " + GT._("has unsaved data. Do you want to save it?"),
-                    GT._("Unsaved data"), JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-            if (answer == JOptionPane.YES_OPTION) {
-                SaveAction saveaction = new SaveAction(this, false);
-                saveaction.actionPerformed(new ActionEvent(
-                        this, 12, ""));
-                if(saveaction.getWasCancelled())
-                    answer = JOptionPane.CANCEL_OPTION;
-            }
-            return answer;
-        } else if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            // In case of the applet we do not ask for save but put the clear
-            // into the undo stack
-            // ClearAllEdit coa = null;
-            // TODO undo redo missing coa = new
-            // ClearAllEdit(this.getChemModel(),(IMoleculeSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
-            // this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
-            return JOptionPane.YES_OPTION;
-        } else {
-            return JOptionPane.YES_OPTION;
         }
     }
 
@@ -601,22 +237,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         else
             enOrDisableMenus(bondMenu,false);
     }
-    
-    /**
-     * Enables or disables all JMenuItems in a JMenu recursivly.
-     * 
-     * @param root  The JMenu to search in.
-     * @param b     Enable or disable.
-     */
-    protected void enOrDisableMenus(JMenu root, boolean b) {
-        for(int i=0;i<root.getItemCount();i++){
-            if(root.getItem(i) instanceof JMenu){
-                this.enOrDisableMenus((JMenu)root.getItem(i), b);
-            }else if(root.getItem(i) instanceof JMenuItem){
-                ((JMenuItem)root.getItem(i)).setEnabled(b);
-            }
-        }
-    }
+
 
     public void structureChanged() {
         setModified(true);
@@ -633,31 +254,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         //if something changed in the structure, selection should be cleared
         //this is behaviour like eg in word processors, if you type, selection goes away
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
-    }
-
-    public void updateUndoRedoControls() {
-        UndoManager undoManager = renderPanel.getUndoManager();
-        JButton redoButton=buttons.get("redo");
-        JButton undoButton=buttons.get("undo");
-        if (undoManager.canRedo()) {
-            redoButton.setEnabled(true);
-            redoMenu.setEnabled(true);
-            redoButton.setToolTipText(GT._("Redo")+": "+undoManager.getRedoPresentationName());
-        } else {
-            redoButton.setEnabled(false);
-            redoMenu.setEnabled(false);
-            redoButton.setToolTipText(GT._("No redo possible"));
-        }
-
-        if (undoManager.canUndo()) {
-            undoButton.setEnabled(true);
-            undoMenu.setEnabled(true);
-            undoButton.setToolTipText(GT._("Undo")+": "+undoManager.getUndoPresentationName());
-        } else {
-            undoButton.setEnabled(false);
-            undoMenu.setEnabled(false);
-            undoButton.setToolTipText(GT._("No undo possible"));
-        }
     }
 
     public void stateChanged(EventObject event) {
@@ -699,14 +295,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.updateStatusBar();
     }
 
-    /**
-     * Tells if debug output is desired or not.
-     *
-     * @return debug output or not.
-     */
-    public boolean isDebug() {
-		return debug;
-	}
 
 	/* (non-Javadoc)
 	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
@@ -779,7 +367,4 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		return allinone;
     }
 
-    public void setLastSecondaryButton(JComponent lastSecondaryButton) {
-        this.lastSecondaryButton = lastSecondaryButton;
-    }
 }

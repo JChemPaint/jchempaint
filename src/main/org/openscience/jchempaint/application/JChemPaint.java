@@ -86,6 +86,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -197,7 +198,7 @@ public class JChemPaint {
     }
 
     public static void showInstance(File inFile, String type,
-            JChemPaintPanel jcpPanel, boolean debug) {
+            AbstractJChemPaintPanel jcpPanel, boolean debug) {
         try {
             IChemModel chemModel = JChemPaint.readFromFile(inFile, type);
 

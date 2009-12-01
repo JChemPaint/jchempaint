@@ -39,6 +39,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.dialog.editor.PropertiesModelEditor;
@@ -54,12 +55,12 @@ public class ModifyRenderOptionsDialog extends JFrame {
 	
 	private PropertiesModelEditor editor;
     private RendererModel model;
-    private JChemPaintPanel jcpPanel;
+    private AbstractJChemPaintPanel jcpPanel;
     
 	/**
 	 * Displays the Info Dialog for JChemPaint. 
 	 */
-    public ModifyRenderOptionsDialog(JChemPaintPanel jcpPanel, RendererModel model) {
+    public ModifyRenderOptionsDialog(AbstractJChemPaintPanel jcpPanel, RendererModel model) {
         super();
         this.model = model;
         this.jcpPanel=jcpPanel;
