@@ -129,7 +129,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 			IAtomContainer ac=(IAtomContainer)funcgroupsmap.get(x.toLowerCase());
 			//this means a functional group was entered
 			if(ac!=null && !x.equals("")){
-				ac=(IAtomContainer)((IAtomContainer)funcgroupsmap.get(x)).clone();
 				IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), closestAtom);
 				IAtom lastplaced=null;
 				int counter=0;
@@ -182,6 +181,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 				    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newAtomContainer(ac), null, GT._("Add Functional Group"), chemModelRelay);
 				    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
 			    }
+	            chemModelRelay.getController2DModel().setDrawElement(x);
 			}else if(x!=null && x.length()>0){
 				if(Character.isLowerCase(x.toCharArray()[0]))
 					x=Character.toUpperCase(x.charAt(0))+x.substring(1);
@@ -198,11 +198,11 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					}else{
 					    chemModelRelay.setSymbol(closestAtom, x);
 					}
+		            chemModelRelay.getController2DModel().setDrawElement(x);
 				}else{
 					JOptionPane.showMessageDialog(null, GT._("{0} is not a valid element symbol or functional group.", x), GT._("No valid input"), JOptionPane.WARNING_MESSAGE);
 				}
 			}
-			chemModelRelay.getController2DModel().setDrawElement(x);
 			chemModelRelay.updateView();				
 		}catch(Exception ex){
 			ex.printStackTrace();
