@@ -45,13 +45,13 @@ public class HelpAction extends JCPAction
 	{
 		if (type.equals("tutorial"))
 		{
-			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/contain/tutorial.html").setVisible(true);
+			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/contain/tutorial.html").setVisible(true);
 		} else if (type.equals("feedback"))
         {
-            new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/contain/feedback.html").setVisible(true);
+            new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/contain/feedback.html").setVisible(true);
         } else
 		{
-			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/jcp.html").setVisible(true);
+			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/jcp.html").setVisible(true);
 		}
 	}
 }
