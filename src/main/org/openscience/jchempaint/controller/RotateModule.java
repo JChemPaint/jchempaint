@@ -47,17 +47,17 @@ import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
  */
 public class RotateModule extends ControllerModuleAdapter {
 
-    private static ILoggingTool logger =
+    protected static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(RotateModule.class);
 
     private double rotationAngle;
-    private boolean selectionMade = false;
-    private IChemObjectSelection selection;
-    private Point2d rotationCenter;
-    private Point2d[] startCoordsRelativeToRotationCenter;
-    private Map<IAtom, Point2d[]> atomCoordsMap;
-    private boolean rotationPerformed;
-    private String ID;
+    protected boolean selectionMade = false;
+    protected IChemObjectSelection selection;
+    protected Point2d rotationCenter;
+    protected Point2d[] startCoordsRelativeToRotationCenter;
+    protected Map<IAtom, Point2d[]> atomCoordsMap;
+    protected boolean rotationPerformed;
+    protected String ID;
 
     /**
      * Constructor 
