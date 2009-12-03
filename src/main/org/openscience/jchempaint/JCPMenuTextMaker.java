@@ -258,7 +258,7 @@ public class JCPMenuTextMaker {
             entries.put("newTooltip", GT._("Create new file"));
         entries.put("openTooltip", GT._("Open existing file"));
         entries.put("saveTooltip", GT._("Save current file"));
-        entries.put("printTooltip", GT._("Print current file"));			entries.put("newTooltip", GT._("Create new file"));
+        entries.put("printTooltip", GT._("Print current file"));
 		entries.put("redoTooltip", GT._("Redo Action"));
 		entries.put("saveAsTooltip", GT._("Save to a file"));
 		entries.put("undoTooltip", GT._("Undo Action"));
@@ -267,6 +267,7 @@ public class JCPMenuTextMaker {
 		entries.put("undefined_bondTooltip", GT._("Stereo up or stereo down bond"));
 		entries.put("undefined_stereo_bondTooltip", GT._("Any stereo bond"));
 		entries.put("rotateTooltip", GT._("Rotate selection"));
+        entries.put("rotate3dTooltip", GT._("Rotate selection in space"));
 		entries.put("cutTooltip", GT._("Cut selection"));
 		entries.put("copyTooltip", GT._("Copy selection to clipboard"));
 		entries.put("pasteTooltip", GT._("Paste from clipboard"));
