@@ -1,6 +1,7 @@
 HEAD
 ----
 New features:
+* Quasi-3D rotation tool
 
 Fixes:
 
