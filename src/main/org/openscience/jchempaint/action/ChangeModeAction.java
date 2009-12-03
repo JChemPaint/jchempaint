@@ -36,6 +36,7 @@ import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.controller.RotateModule;
+import org.openscience.jchempaint.controller.Rotate3DModule;
 import org.openscience.jchempaint.controller.SelectLassoModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 
@@ -82,6 +83,8 @@ public class ChangeModeAction extends JCPAction {
             hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("rotate")) {
         	newActiveModule=new RotateModule(hub);
+        } else if (type.equals("rotate3d")) {
+        	newActiveModule=new Rotate3DModule(hub);
         }
         if(newActiveModule!=null){
 	        newActiveModule.setID(type);
