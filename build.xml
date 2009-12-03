@@ -630,6 +630,33 @@
             </test>
 	    </junit>
 	</target>
+
+    <target id="dist-jars" name="dist-jars" depends="compile-jcp">
+        <mkdir dir="${dist}/alljars" />
+        <copy todir="${dist}/alljars">
+            <fileset dir="${cdk.dist}/jar">
+              <include name="*.jar" />
+            </fileset>
+        </copy>
+        <jar jarfile="${dist}/alljars/cdk-jchempaint.jar">
+            <fileset dir="${dist-classes}">
+                <include name="**/*" />
+            </fileset>
+        </jar>
+        <copy todir="${dist}/alljars">
+            <fileset dir="${cdk.lib}">
+              <include name="*.jar" />
+            </fileset>
+        </copy>
+        <copy todir="${dist}/alljars">
+            <fileset dir="${lib}">
+              <include name="*.jar" />
+            </fileset>
+        </copy>
+        <zip destfile="${dist}/jchempaint-lib-${jcp.version}.zip">
+              <zipfileset dir="${dist}/alljars" includes="*.jar"/>
+        </zip>
+    </target>
 </project>
 
 
