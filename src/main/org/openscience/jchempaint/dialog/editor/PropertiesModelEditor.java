@@ -5,6 +5,7 @@
  *  $Revision: 7634 $
  *
  *  Copyright (C) 1997-2008 Stefan Kuhn
+ *  Some portions Copyright (C) 2009 Konstantin Tokarev
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -36,6 +37,7 @@ import java.util.Properties;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,8 +48,12 @@ import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -123,6 +129,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JCheckBox askForIOSettings;
 
     private JTextField undoStackSize;
+
+    private JComboBox lookAndFeel;
 
     public PropertiesModelEditor(JFrame frame) {
         super(true);
@@ -297,6 +305,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         askForIOSettings = new JCheckBox();
         addField(GT._("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
+		
+        String [] lookAndFeels = {GT._("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
+		lookAndFeel = new JComboBox(lookAndFeels);
+		addField(GT._("Look and feel"), lookAndFeel, otherOptionsPanel);
     }
 
     public void setModel(RendererModel model) {
@@ -342,7 +354,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //the general settings
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("askForIOSettings", "false").equals("true"));
-        undoStackSize.setText(props.getProperty("General.UndoStackSize"));
+        undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
+        lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
         validate();
     }
 
@@ -420,11 +433,48 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 throw new Exception("wrong number");
             props.setProperty("General.UndoStackSize",
                     undoStackSize.getText());
-            JCPPropertyHandler.getInstance().saveProperties();
         }
         catch(Exception ex){
             JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
+
+        String lnfName="";
+		try {
+			switch(lookAndFeel.getSelectedIndex()) {
+				case 0: lnfName = UIManager.getSystemLookAndFeelClassName(); break; // System
+				case 1: lnfName = UIManager.getCrossPlatformLookAndFeelClassName(); break; // Metal
+                case 2: lnfName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; break; // Nimbus
+				case 3: lnfName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel"; break; // Motif
+				case 4: lnfName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel"; break; // GTK
+                case 5: lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel"; break; // Windows
+			    default: lnfName = "";
+		    }
+			UIManager.setLookAndFeel(lnfName);
+            SwingUtilities.updateComponentTreeUI(frame);
+            frame.pack();
+            // Apply to all instances of JChemPaint
+            for (JFrame f : JChemPaint.frameList) {
+                SwingUtilities.updateComponentTreeUI(f);
+                f.pack();
+            }
+            props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
+            props.setProperty("LookAndFeelClass", lnfName);
+		}
+        catch (UnsupportedLookAndFeelException e) {
+		    JOptionPane.showMessageDialog(this, GT._("Look&feel")+" \""+lookAndFeel.getSelectedItem()+"\" "+GT._("is not supported on this platform"),GT._("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
+        }
+        catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, GT._("Class not found:")+" "+ lnfName);
+        }
+        catch (InstantiationException e) {
+        // handle exception
+		    JOptionPane.showMessageDialog(this, GT._("Instantiation Exception:")+" "+ lnfName);
+        }
+        catch (IllegalAccessException e) {
+            JOptionPane.showMessageDialog(this, GT._("Illegal Access: ") + lnfName);
+        }
+
+        JCPPropertyHandler.getInstance().saveProperties();
     }
 
     /**

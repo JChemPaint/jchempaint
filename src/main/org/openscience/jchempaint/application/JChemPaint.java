@@ -5,6 +5,7 @@
  *  $Revision: 7634 $
  *
  *  Copyright (C) 1997-2008 Stefan Kuhn
+ *  Some portions Copyright (C) 2009 Konstantin Tokarev
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -41,10 +42,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.SwingUtilities;
 import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
@@ -97,6 +102,7 @@ import org.openscience.jchempaint.io.JCPFileFilter;
 public class JChemPaint {
 
     public static int instancecounter = 1;
+	public static List<JFrame> frameList = new ArrayList<JFrame>();
 
     @SuppressWarnings("static-access")
     public static void main(String[] args) {
@@ -165,6 +171,16 @@ public class JChemPaint {
             if (line.hasOption("d")) {
                 debug = true;
             }
+            
+            // Set Look&Feel
+            Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+            try {
+                UIManager.setLookAndFeel(props.getProperty("LookAndFeelClass"));
+            } catch (Throwable e)  {
+                String sys = UIManager.getSystemLookAndFeelClassName();
+                UIManager.setLookAndFeel(sys);
+                props.setProperty("LookAndFeelClass", sys);
+            }
 
             // Process command line arguments
             String modelFilename = "";
@@ -189,12 +205,17 @@ public class JChemPaint {
     }
 
     public static void showEmptyInstance(boolean debug) {
-        IChemModel chemModel = DefaultChemObjectBuilder.getInstance()
-                .newChemModel();
+        IChemModel chemModel = emptyModel();
+        showInstance(chemModel, GT._("Untitled") + "_"
+                + (instancecounter++), debug);
+    }
+    
+    public static IChemModel emptyModel() {
+        IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newChemModel();
         chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
         chemModel.getMoleculeSet().addAtomContainer(
                 chemModel.getBuilder().newMolecule());
-        showInstance(chemModel, GT._("Untitled-") + (instancecounter++), debug);
+        return chemModel;
     }
 
     public static void showInstance(File inFile, String type,
@@ -628,7 +649,7 @@ public class JChemPaint {
 
     public static JChemPaintPanel showInstance(IChemModel chemModel,
             String title, boolean debug) {
-        JFrame f = new JFrame(title);
+        JFrame f = new JFrame(title + " - JChemPaint");
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -642,6 +663,7 @@ public class JChemPaint {
         int h2 = (f.getHeight() / 2);
         f.setLocation(point.x - w2, point.y - h2);
         f.setVisible(true);
+		frameList.add(f);
         return p;
     }
 
