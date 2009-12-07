@@ -308,7 +308,7 @@ public class CopyPasteAction extends JCPAction{
                         toPaste.getAtom(i).setValency(null);
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                     if (content.indexOf("INChI")>-1 || content.indexOf("InChI")>-1) { // handle it as an InChI
                         try {
                             StringReader sr = new StringReader(content);
