@@ -278,6 +278,7 @@
                 </patternset>
                 </class>
                 <class name="org.openscience.cdk.tools.LoggingTool" methods="public" fields="none" />
+                <class name="org.openscience.cdk.tools.ILoggingTool" methods="public" fields="none" />
                 <class name="org.openscience.cdk.interfaces.IChemObjectBuilder" methods="public" fields="none" />
                 <class name="org.openscience.cdk.controller.IControllerModel" methods="public" fields="none" />
                 <class name="org.openscience.cdk.controller.IChemModelRelay" methods="public" fields="none" />
