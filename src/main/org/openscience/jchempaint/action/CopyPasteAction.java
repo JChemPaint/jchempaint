@@ -224,17 +224,12 @@ public class CopyPasteAction extends JCPAction{
             }
             TemplateBrowser templateBrowser = new TemplateBrowser(templatetab);
             if(templateBrowser.getChosenmolecule()!=null){
-                //Note: flipping is a workaround for the molfile upside down
-                flipStructure(templateBrowser.getChosenmolecule());
                 scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
                 jcpPanel.getRenderPanel().setZoomWide(true);
                 jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
-
-
             }
         } else if ("paste".equals(type)) {
-            boolean flip=false;
             handleSystemClipboard(sysClip);
             Transferable transfer = sysClip.getContents( null );
             ISimpleChemObjectReader reader = null;
@@ -256,7 +251,6 @@ public class CopyPasteAction extends JCPAction{
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
-                    flip=true;
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -342,8 +336,6 @@ public class CopyPasteAction extends JCPAction{
                 jcpPanel.getRenderPanel().setZoomWide(true);
                 jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
 
-                if (flip)
-                   flipStructure(toPaste);
                 scaleStructure(toPaste);
                 insertStructure(toPaste, renderModel);
 
@@ -478,22 +470,6 @@ public class CopyPasteAction extends JCPAction{
         jcpPanel.get2DHub().updateView();
         jcpPanel.updateStatusBar();
 
-    }
-
-
-    /**
-     * A workaround for reading structure from file, these tend to get
-     * in upside down
-     * TODO remove when obsolete.
-     * 
-     * @param topaste
-     */
-    private void flipStructure (IMolecule topaste)  {
-        for (IAtom atom : topaste.atoms()) {
-            if (atom.getPoint2d()!=null) {
-                atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
-            }
-        }
     }
 
     /**

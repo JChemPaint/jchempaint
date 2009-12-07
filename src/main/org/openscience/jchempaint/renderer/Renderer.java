@@ -914,15 +914,10 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         try {
             this.transform = new AffineTransform();
             this.transform.translate(this.drawCenter.x, this.drawCenter.y);
+            this.transform.scale(1,-1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
             this.transform.scale(this.scale, this.scale);
             this.transform.scale(this.zoom, this.zoom);
             this.transform.translate(-this.modelCenter.x, -this.modelCenter.y);
-//            System.err.println(String.format(
-//                    "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
-//                    this.drawCenter,
-//                    this.scale,
-//                    this.zoom,
-//                    this.modelCenter));
         } catch (NullPointerException npe) {
             // one of the drawCenter or modelCenter points have not been set!
             System.err.println(String.format(

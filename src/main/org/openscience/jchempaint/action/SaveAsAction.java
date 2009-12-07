@@ -272,16 +272,8 @@ public class SaveAsAction extends JCPAction
         }
         outFile=new File(fileName);
         cow = new MDLWriter(new FileWriter(outFile));
-        //since the 2d/3d question is not relevant for jcp, 
-        //we do not ask for io settings
-        /*if (cow != null && askIOSettings())
-        {
-            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
-        }*/
-        JChemPaint.flipOnReadingAndWriting(model);
         cow.write(model);
         cow.close();
-        JChemPaint.flipOnReadingAndWriting(model);
 
         if(jcpPanel instanceof JChemPaintPanel)
             ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());

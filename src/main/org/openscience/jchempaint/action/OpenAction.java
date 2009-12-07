@@ -127,9 +127,6 @@ public class OpenAction extends JCPAction {
                         // the newly opened file should nicely fit the screen
                         jcpPanel.getRenderPanel().setFitToScreen(true);
 
-                        // quick fix upside down mol files
-                        // jcpPanel.get2DHub().flip(true);
-
                         jcpPanel.getRenderPanel().update(
                                 jcpPanel.getRenderPanel().getGraphics());
 

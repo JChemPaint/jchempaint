@@ -243,7 +243,6 @@ public class JChemPaint {
         ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url,
                 type);
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
-        flipOnReadingAndWriting(chemModel);
         JChemPaint.cleanUpChemModel(chemModel);
 
         return chemModel;
@@ -668,14 +667,4 @@ public class JChemPaint {
     }
 
 
-    public static void flipOnReadingAndWriting (IChemModel chemModel) {
-        // flip needed due to difference between Java and chem coordinates
-        if (chemModel.getMoleculeSet()!=null && chemModel.getMoleculeSet().getAtomContainer(0)!=null)
-            for (IAtom atom : chemModel.getMoleculeSet().getAtomContainer(0).atoms()) {
-                if (atom.getPoint2d()!=null) {
-                    atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
-                }
-             }
-
-    }
 }
