@@ -64,7 +64,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
         super();
         this.model = model;
         this.jcpPanel=jcpPanel;
-        editor = new PropertiesModelEditor(this);
+        editor = new PropertiesModelEditor(this, jcpPanel.getGuistring());
         createDialog();
         pack();
         setVisible(true);
