@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -25,7 +25,7 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
-import org.openscience.jchempaint.action.CopyPasteAction;
+//import org.openscience.jchempaint.action.CopyPasteAction;
 import org.openscience.jchempaint.action.JCPAction;
 
 
