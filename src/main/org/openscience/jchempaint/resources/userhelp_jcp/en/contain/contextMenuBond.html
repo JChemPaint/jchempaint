@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+<title>The Bond Menu</title>
+<link rel="stylesheet" type="text/css" href="../jcp.css" title="Style">
+</head>
+<body bgcolor="#ffffff">
+
+<div class="navheader">
+  <table width="100%">
+   <tr>
+    <th align="center" colspan="3">The Bond Menu</th>
+   </tr>
+   <tr>
+    <td align="left" width="20%"><a href="contextMenuAtom.html">Prev</a>&nbsp;</td>
+     <th align="center" width="60%">&nbsp;</th>
+     <td align="right" width="20%">&nbsp;<a href="menuTools.html">Next</a></td>
+     </tr>
+  </table>
+  <hr>
+</div>
+
+<h2>The Bond Menu</h2>
+
+<p>The Bond menu exist as a menu in the main menu and as a context menu, which 
+is available when clicking on a bond. Both are identical except the select/cut/
+copy/delete/properties items at the end of the context menu. Both menus set the 
+drawing mode (see <a href="tutorial.html">Tutorial</a> for an explanation of modes). 
+They both also change some atoms directly, the difference is the main menu does 
+this on selection, the context menu on the item on which you clicked.
+
+<h3>Single</h3>
+     <p>Sets the selection or bond clicked on to a bond of bond order single. 
+     Puts JChemPaint in the single bond mode, which is the standard mode for
+     building up chemical structures. If selected you can click on a point on
+     the document and you'll create a single bond at this point. If you alreday 
+     have atoms in your drawing, there are several ways to draw bonds in this mode:
+      <ul>
+       <li>Directly click on an atom: A bond with default length will be drawn at a reasonable angle.</li>
+       <li>Drag from an atom: A bond with default length will be drawn at the angle to drag to.</li>
+       <li>Drag from an atom to another atom: A bond with default length will be drawn at the angle to drag to.</li>
+     </ul>
+     Multiple clicking on an
+     existing bond will cycle its bond order between the values 1, 2, 3 and 4.</p>
+
+<h3>Stereo Up</h3>
+      <p>Sets the selection or bond clicked on to stereo up (filled wedge) bond. 
+      Sets JChemPaint in a mode which enables you to either draw filled wedge bonds the same way as single 
+     bonds or change an existing bond into a filled
+     wedge - the standard symbol to indicate that the atom at the thick
+     end is above the 2D plane. Furthermore, multiple clicking on an
+     existing bond will change it to a filled wedge and if it already has this
+     shape it will toggle between the two possible orientations.</p>
+ 
+<h3>Stereo Down</h3>
+      <p>Sets the selection or bond clicked on to stereo down (dashed wedge) bond. 
+      Sets JChemPaint in a mode which enables you to either draw dashed wedge bonds the same way as single 
+     bonds or change an existing bond into a dashed
+     wedge - the standard symbol indicating that the atom at the thin end
+     is below the 2D plane. While selected, a click on an existing
+     bond will change it to a dashed wedge and if it already has this shape it
+     will toggle between the two possible orientations.</p>
+
+<h3>Undefined Stereo</h3>
+     <p>Sets the selection or bond clicked on to an undefined stereo bond (zigzag bond). 
+      Sets JChemPaint in a mode which enables you to either draw zigzag wedge bonds the same way as single 
+     bonds or change an existing bond into a zigzag
+     wedge - this is sometimes used to indicating that the atom at the thick end 
+     is above or below the 2D plane. Note the latest IUPAC recommendation discourages 
+     using this, but recommends using the wiggly bond instead. While selected, a click on an existing
+     bond will change it to a zigzag wedge and if it already has this shape it
+     will toggle between the two possible orientations.</p>
+ 
+ <h3>Undefined E/Z</h3>
+     <p>Sets the selection or bond clicked on to an undefined E/Z bond (wiggly bond). 
+      Sets JChemPaint in a mode which enables you to either draw wiggly bonds the same way as single 
+     bonds or change an existing bond into a wiggly bond - this can indicate either 
+     up or down or undefined E/Z configuration. Note the latest IUPAC recommendation 
+     encourages using this for all undefined cases. While selected, a click on an existing
+     bond will change it to a wiggly wedge.</p>
+     
+<h3>Context Menu only items</h3>     
+     
+<p>The following menu items only exist in the context menu. They do not switch the mode.</p>
+
+<h3>Cut</h3>
+ <p>Removes the bond clicked on from the drawing and puts it 
+     into the system clipboard. Paste can be used to use it again.</p>
+
+<h3>Copy</h3>
+ <p>Copies the bond clicked on into the system clipboard. Paste 
+     can be used to use it again. JChemPaint uses several formats (SMILES, mol, CML, 
+     SVG) so you should also be able to paste it into other programs (depending on 
+     abilities of the program).</p>
+
+<h3>Delete</h3>
+ <p>Removes the bond clicked on from the drawing. It is 
+ like cut without using the clipboard.</p>
+
+<h3>Select</h3>
+ <p>Selects and marks the bond clicked on, so that it can be deleted, etc.</p>
+
+<h3>Select All</h3>
+ <p>Selects and marks all atoms and bonds in the molecule, so that it can be rotated,
+ moved, deleted, etc.</p>
+ 
+<h3>Reaction</h3>
+ <p>Contains submenus for <a href="reactions.html">drawing reactions</a>.</p>
+
+<h3>Properties</h3>
+ <p>Here you can directly set teh order of the bond clicked on.</p>
+
+<h3>Molecule Properties</h3>
+ <p>Here you can directly set properties (title which will be rendered below the 
+ molecule) of the molecule the bond is in.</p>
+
+
+<div class="navfooter"><hr>
+ <table width="100%">
+  <tr>
+   <td align="left" width="40%"><a href="contextMenuAtom.html">Prev</a>&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Home</a></td>
+   <td align="right" width="40%"><a href="menuTools.html">Next</a></td>
+  </tr>
+  <tr>
+   <td align="left" width="40%">&nbsp;</td>
+   <td align="center" width="20%"><a href="menu.html">Up</a></td>
+   <td align="right" width="40%">&nbsp;</td>
+  </tr>
+ </table>
+</div>
+
+
+</body>
+</html>
