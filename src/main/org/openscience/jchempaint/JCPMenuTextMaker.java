@@ -43,12 +43,12 @@ import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
  */
 public class JCPMenuTextMaker {
 	private static JCPMenuTextMaker instance=null;
-	private Map<String,String> entries=new HashMap<String,String>();
+	protected Map<String,String> entries=new HashMap<String,String>();
 	
 	/**
-	 * The constructor. Private since class is a singleton.
+	 * The constructor. Protected since class is a singleton.
 	 */
-	private JCPMenuTextMaker(String guistring){
+	protected JCPMenuTextMaker(String guistring){
 	    init(guistring);
 	}
 	
@@ -118,7 +118,7 @@ public class JCPMenuTextMaker {
 		entries.put("enterelement", GT._("Custom"));
 		entries.put("isotopeChange", GT._("Isotopes"));
 		entries.put("convertToRadical", GT._("Add Electron Pair"));
-                entries.put("convertFromRadical", GT._("Remove Electron Pair"));
+		entries.put("convertFromRadical", GT._("Remove Electron Pair"));
 		entries.put("showChemObjectProperties", GT._("Properties"));
 		entries.put("showACProperties", GT._("Molecule Properties"));
 		entries.put("makeNormal", GT._("Convert to Regular Atom"));
