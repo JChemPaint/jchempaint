@@ -485,7 +485,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 .newAtomContainer();
         ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
         rendererModel.setExternalSelectedPart(ac);
-        getTheJcpp().repaint();
+        theJcpp.get2DHub().updateView();
     }
 
     /**
