@@ -43,9 +43,9 @@ public class RectangleSelection extends ShapeSelection {
     public IRenderingElement generate(Color color) {
         return new RectangleElement(
                 this.rectangle.getMinX(),
-                this.rectangle.getMinY(),
-                this.rectangle.getMaxX(),
                 this.rectangle.getMaxY(),
+                this.rectangle.getMaxX(),
+                this.rectangle.getMinY(),
                 color);
     }
         
