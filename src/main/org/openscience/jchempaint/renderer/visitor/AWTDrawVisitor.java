@@ -179,11 +179,11 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         int[] max = 
             this.transformPoint(oval.x + oval.radius, oval.y + oval.radius);
         int w = max[0] - min[0];
-        int h = max[1] - min[1];
+        int h = min[1] - max[1];
         if (oval.fill) {
-            this.g.fillOval(min[0], min[1], w, h);
+            this.g.fillOval(min[0], max[1], w, h);
         } else {
-            this.g.drawOval(min[0], min[1], w, h);
+            this.g.drawOval(min[0], max[1], w, h);
         }
     }
 
