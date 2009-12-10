@@ -288,14 +288,14 @@ public class JChemPaint {
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
         JChemPaint.replaceReferencesWithClones(chemModel);
-        JChemPaint.removeDuplicateMolecules(chemModel);
 
-        // check for bonds
-        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
+        // check the model is not completely empty
+        if (ChemModelManipulator.getBondCount(chemModel) == 0 &&
+            ChemModelManipulator.getAtomCount(chemModel) == 0) {
             throw new CDKException(
-                    "Model does not have bonds. Cannot depict contents.");
+                    "Structure does not have bonds or atoms. Cannot depict structure.");
         }
-
+        JChemPaint.removeDuplicateMolecules(chemModel);
         JChemPaint.checkCoordinates(chemModel);
         JChemPaint.removeEmptyMolecules(chemModel);
 
@@ -552,12 +552,6 @@ public class JChemPaint {
                     i++;
                 }
             }
-        }
-
-        // check for bonds
-        if (ChemModelManipulator.getBondCount(chemModel) == 0) {
-            throw new CDKException(GT
-                    ._("Cannot depict contents. Model does not have bonds."));
         }
     }
 
