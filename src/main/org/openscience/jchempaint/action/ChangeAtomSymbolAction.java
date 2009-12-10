@@ -137,24 +137,30 @@ public class ChangeAtomSymbolAction extends JCPAction
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
             jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);        
         }
-        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-        if(atomsInRange!=null){
-            while(atomsInRange.hasNext()){
-                IAtom atom = atomsInRange.next();
-                jcpPanel.get2DHub().setSymbol(atom,symbol);
-                //TODO still needed? should this go in hub?
-                // configure the atom, so that the atomic number matches the symbol
-                try
-                {
-                    IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
-                } catch (Exception exception)
-                {
-                    logger.error("Error while configuring atom");
-                    logger.debug(exception);
+
+        
+        
+        if(symbol!=null && symbol.length()>0){
+
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+            if(atomsInRange!=null){
+                while(atomsInRange.hasNext()){
+                    IAtom atom = atomsInRange.next();
+                    jcpPanel.get2DHub().setSymbol(atom,symbol);
+                    //TODO still needed? should this go in hub?
+                    // configure the atom, so that the atomic number matches the symbol
+                    try
+                    {
+                        IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+                    } catch (Exception exception)
+                    {
+                        logger.error("Error while configuring atom");
+                        logger.debug(exception);
+                    }
                 }
             }
+            jcpPanel.get2DHub().updateView();
         }
-        jcpPanel.get2DHub().updateView();
     }
 
 
