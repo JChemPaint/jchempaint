@@ -75,7 +75,6 @@ public class WaitDialog extends JFrame  {
      * This static method hides the wait dialog.
      */
     public static void hideDialog()   {
-        System.out.println("setting visible false");
         if (dlg.isVisible())
             dlg.setVisible(false);
     }
