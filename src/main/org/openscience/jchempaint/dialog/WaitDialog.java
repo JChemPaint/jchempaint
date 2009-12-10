@@ -64,7 +64,9 @@ public class WaitDialog extends JFrame  {
     public static void showDialog() {
         dlg.setSize(300, 70);
         dlg.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width/2-dlg.getSize().width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2-dlg.getSize().height/2);
-        dlg.setVisible(true);
+
+        if (!dlg.isVisible())
+            dlg.setVisible(true);
         dlg.paint(dlg.getGraphics());
     }
 
@@ -73,6 +75,8 @@ public class WaitDialog extends JFrame  {
      * This static method hides the wait dialog.
      */
     public static void hideDialog()   {
-        dlg.setVisible(false);
+        System.out.println("setting visible false");
+        if (dlg.isVisible())
+            dlg.setVisible(false);
     }
 }
