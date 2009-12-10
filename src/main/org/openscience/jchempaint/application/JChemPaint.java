@@ -49,8 +49,6 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.swing.SwingUtilities;
-import javax.vecmath.Point2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -97,6 +95,7 @@ import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.dialog.WaitDialog;
+import org.openscience.jchempaint.inchi.StdInChIReader;
 import org.openscience.jchempaint.io.JCPFileFilter;
 
 public class JChemPaint {
@@ -236,11 +235,29 @@ public class JChemPaint {
 
     public static IChemModel readFromFileReader(URL fileURL, String url,
             String type) throws CDKException {
-        ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url,
-                type);
-        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
-        JChemPaint.cleanUpChemModel(chemModel);
 
+        IChemModel chemModel = null;
+        WaitDialog.showDialog();
+
+
+        // InChI workaround - guessing for InChI results into an INChIReader 
+        // (this does not work, we'd need an INChIPlainTextReader..)
+        // Instead here we use STDInChIReader, to be consistent throughout JCP
+        // using the nestedVm based classes.
+        try {
+            if(url.endsWith("txt")) {
+                chemModel = StdInChIReader.readInChI(fileURL);
+            }
+            else {
+                ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url,type);
+                chemModel = JChemPaint.getChemModelFromReader(cor);
+            }
+            JChemPaint.cleanUpChemModel(chemModel);
+
+        }
+        finally {
+            WaitDialog.hideDialog();
+        }
         return chemModel;
     }
 

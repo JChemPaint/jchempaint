@@ -48,30 +48,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
-import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
-
-import net.sf.jniinchi.INCHI_RET;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.inchi.InChIToStructure;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
-import org.openscience.jchempaint.controller.ControllerHub;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
+import org.openscience.jchempaint.inchi.StdInChIParser;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's
@@ -79,6 +63,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
  */
 public class InsertTextPanel extends JPanel implements ActionListener {
 
+    private static final long serialVersionUID = -5329451371043240706L;
     private AbstractJChemPaintPanel jChemPaintPanel;
     private JComboBox textCombo;
     private JTextComponent editor;
@@ -146,16 +131,13 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         if (text.startsWith("InChI")) { // handle it as an InChI
             try {
-                InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
-                InChIToStructure inchiToStructure = inchiFactory.getInChIToStructure(text,jChemPaintPanel.getChemModel().getBuilder());
-                INCHI_RET status = inchiToStructure.getReturnStatus();
-                if (status != INCHI_RET.OKAY) {
-                  JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Could not process InChI"));
-                  return null;
-                }
-                IAtomContainer atomContainer = inchiToStructure.getAtomContainer();
+
+                StdInChIParser parser = new StdInChIParser();
+                IAtomContainer atomContainer = parser.parseInchi(text);
                 molecule = atomContainer.getBuilder().newMolecule(atomContainer);
-            } catch (CDKException e2) {
+                
+                
+            } catch (Exception e2) {
                 JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Could not load InChI subsystem"));
                 return null;
             }

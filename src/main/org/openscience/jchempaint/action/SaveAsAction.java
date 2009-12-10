@@ -30,6 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,8 +42,11 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
@@ -57,6 +61,7 @@ import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.inchi.StdInChIGenerator;
 import org.openscience.jchempaint.io.IJCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.io.JCPSaveFileFilter;
@@ -172,6 +177,9 @@ public class SaveAsAction extends JCPAction
                                 if (type.equals(JCPSaveFileFilter.mol))
                                 {
                                     outFile = saveAsMol(model, outFile);
+                                } else if (type.equals(JCPSaveFileFilter.inchi))
+                                {
+                                    outFile = saveAsInChI(model, outFile);
                                 } else if (type.equals(JCPSaveFileFilter.cml))
                                 {
                                     outFile = saveAsCML2(model, outFile);
@@ -306,6 +314,39 @@ public class SaveAsAction extends JCPAction
         return outFile;
     }
 
+    
+    
+    protected File saveAsInChI(IChemObject object, File outFile) throws Exception
+    {
+        logger.info("Saving the contents in an InChI textfile...");
+        String fileName = outFile.toString();
+        if (!fileName.endsWith(".txt")) {
+            fileName += ".txt";
+            outFile = new File(fileName);
+        }
+        BufferedWriter out = new BufferedWriter(new FileWriter(outFile));
+        StdInChIGenerator inchiGen = new StdInChIGenerator();
+
+        String eol=System.getProperty("line.separator");
+        if (object instanceof IChemModel) {
+            IMoleculeSet mSet = ((IChemModel) object).getMoleculeSet();
+            for (IAtomContainer atc : mSet.atomContainers()) {
+                out.write(inchiGen.generateInchi(atc).getInChI()+eol);
+                out.write(inchiGen.generateInchi(atc).getAuxInfo()+eol);
+                out.write(inchiGen.generateInchi(atc).getKey()+eol);
+            }
+        }
+        else if (object instanceof IAtomContainer) {
+            IAtomContainer atc = (IAtomContainer) object;
+            out.write(inchiGen.generateInchi(atc).getInChI()+eol);
+            out.write(inchiGen.generateInchi(atc).getAuxInfo()+eol);
+            out.write(inchiGen.generateInchi(atc).getKey()+eol);
+        }
+        out.close();
+        return outFile;
+    }
+    
+    
     protected File saveAsSMILES(IChemModel model, File outFile) throws Exception
     {
         

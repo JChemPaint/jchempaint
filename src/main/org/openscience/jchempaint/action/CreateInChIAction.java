@@ -1,10 +1,5 @@
 /*
- *  $RCSfile$
- *  $Author: egonw $
- *  $Date: 2007-01-04 17:26:00 +0000 (Thu, 04 Jan 2007) $
- *  $Revision: 7634 $
- *
- *  Copyright (C) 1997-2008 Christoph Steinbeck, Stefan Kuhn
+ *  Copyright (C) 1997-2009 Christoph Steinbeck, Stefan Kuhn, Mark Rijnbeek
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -32,87 +27,72 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 
-import net.sf.jniinchi.INCHI_RET;
-
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.inchi.InChIGenerator;
-import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
+import org.openscience.jchempaint.dialog.WaitDialog;
+import org.openscience.jchempaint.inchi.InChI;
+import org.openscience.jchempaint.inchi.StdInChIGenerator;
 
 /**
- * Creates an InChI from the current model
- *
+ * Creates InChI(s) from the current model, to be displayed to user
+ * in pop out window.
+ * 
  * @cdk.module jchempaint
- * @author     Sam Adams
+ * @author Mark Rijnbeek
  */
-public class CreateInChIAction extends JCPAction
-{
+public class CreateInChIAction extends JCPAction {
 
-	private static final long serialVersionUID = -4886982931009753347L;
-	
-	TextViewDialog dialog = null;
-	JFrame frame = null;
+    private static final long serialVersionUID = -4886982931009753347L;
 
-	public void actionPerformed(ActionEvent e)
-	{
-		logger.debug("Trying to create InChI: ", type);
-		
-		if (dialog == null)
-		{
-			dialog = new TextViewDialog(frame, "InChI", null, false, 40, 2);
-		}
-        
-        InChIGeneratorFactory factory = null;
-        try {
-            factory = InChIGeneratorFactory.getInstance();
-        } catch (CDKException cdke) {
-            String message = GT._("Error loading InChI library:")+" " + cdke.getMessage();
-            logger.error(message);
-            logger.debug(cdke);
-            dialog.setMessage(GT._("Error"), message);
+    TextViewDialog dialog = null;
+    JFrame frame = null;
+
+    public void actionPerformed(ActionEvent e) {
+        logger.debug("Trying to create InChI: ", type);
+        WaitDialog.showDialog();
+
+
+        if (dialog == null) {
+            dialog = new TextViewDialog(frame, "InChI", null, false, 40, 2);
         }
-        
-        if (factory != null) {
-            ChemModel model = (ChemModel) jcpPanel.getChemModel();
-            if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
-            	dialog.setMessage(GT._("Problem"), GT._("You have reactions in JCP. Reactions cannot be shown as InChI!"));
-            }else{
-            	StringBuffer dialogText=new StringBuffer();
-            	int i=0;
-            	String eol = System.getProperty("line.separator");
-				for(IAtomContainer container : model.getMoleculeSet().molecules())
-				{
-	                if (model.getMoleculeSet().getAtomContainerCount() > 1) {
-	                    dialogText.append(GT._("Structure")+" #" + (i+1) + eol);
-	                }
-	                try {
-	                    InChIGenerator inchiGen = factory.getInChIGenerator(container);
-	                    INCHI_RET ret = inchiGen.getReturnStatus();
-	                    String inchi = inchiGen.getInchi();
-	                    String auxinfo = inchiGen.getAuxInfo();
-	                    String message = inchiGen.getMessage();
-	                    if (ret == INCHI_RET.OKAY) {
-	                        dialogText.append(inchi + eol + auxinfo + eol + eol);
-	                    } else if (ret == INCHI_RET.WARNING) {
-	                        dialogText.append(inchi + eol + auxinfo + eol + "Warning: " + message + eol + eol);
-	                    } else {
-	                        dialogText.append(GT._("InChI generation failed")+" (" + ret.toString() + ")" + eol + message + eol + eol);
-	                    }
-	                } catch (CDKException cdke) {
-	                    dialogText.append(GT._("InChI generation failed")+": " + cdke.getMessage() + eol + eol);
-	                }
-	                i++;
-	            }
-	            dialog.setMessage(GT._("Generated InChI")+":", dialogText.toString());
+
+        ChemModel model = (ChemModel) jcpPanel.getChemModel();
+        if (model.getReactionSet() != null
+                && model.getReactionSet().getReactionCount() > 0) {
+            dialog.setMessage(
+                    GT._("Problem"),
+                    GT._("You have reactions in JCP. Reactions cannot be shown as InChI!"));
+        } else {
+            StringBuffer dialogText = new StringBuffer();
+            int i = 0;
+            String eol = System.getProperty("line.separator");
+            for (IAtomContainer container : model.getMoleculeSet()
+                    .molecules()) {
+                if (model.getMoleculeSet().getAtomContainerCount() > 1) {
+                    dialogText.append(GT._("Structure") + " #" + (i + 1)
+                            + eol);
+                }
+                try {
+                    InChI inchi = new StdInChIGenerator().generateInchi(container);
+                    dialogText.append(inchi.getInChI() + eol);
+                    dialogText.append(inchi.getAuxInfo()+ eol);
+                    dialogText.append(inchi.getKey() + eol);
+                    
+                } catch (Exception cdke) {
+                    dialogText.append(GT._("InChI generation failed")
+                            + ": " + cdke.getMessage() + eol + eol);
+                }
+                i++;
             }
-	            
+            dialog.setMessage(GT._("InChI generation") + ":", dialogText
+                    .toString());
         }
-        
-        
-		dialog.setVisible(true);
-	}
-}
 
+        WaitDialog.hideDialog();
+        dialog.setVisible(true);
+
+    }
+
+}

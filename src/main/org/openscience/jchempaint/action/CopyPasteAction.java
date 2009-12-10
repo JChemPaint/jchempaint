@@ -85,6 +85,7 @@ import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.controller.RemoveModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
+import org.openscience.jchempaint.inchi.StdInChIParser;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -282,54 +283,39 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
 
-            //we just try smiles and inchi if no reader is found for content
+            //Attempt SMILES or InChI if no reader is found for content.
             if (toPaste == null &&
                     supported(transfer, DataFlavor.stringFlavor)) {
                 try{
-                    SmilesParser sp = new SmilesParser(
-                            DefaultChemObjectBuilder.getInstance());
-                    toPaste = sp.parseSmiles(
-                            ((String) transfer.getTransferData(
-                                    DataFlavor.stringFlavor)).trim());
-
-                    IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
-                    for(int i=0;i<mols.getAtomContainerCount();i++)
-                    {
-                        StructureDiagramGenerator sdg =
-                            new StructureDiagramGenerator((IMolecule)mols.getMolecule(i));
-
-                        sdg.setTemplateHandler(
-                                new TemplateHandler(toPaste.getBuilder())
-                        );
-                        sdg.generateCoordinates();
+                    if (content.toLowerCase().indexOf("inchi")>-1 ) { 
+                        toPaste = (IMolecule) new StdInChIParser().parseInchi(content);
                     }
-                    //for some reason, smilesparser sets valencies, which we don't want in jcp
-                    for(int i=0;i<toPaste.getAtomCount();i++){
-                        toPaste.getAtom(i).setValency(null);
+                    else {    
+                        SmilesParser sp = new SmilesParser(
+                                DefaultChemObjectBuilder.getInstance());
+                        toPaste = sp.parseSmiles(
+                                ((String) transfer.getTransferData(
+                                        DataFlavor.stringFlavor)).trim());
+
+                        IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
+                        for(int i=0;i<mols.getAtomContainerCount();i++)
+                        {
+                            StructureDiagramGenerator sdg =
+                                new StructureDiagramGenerator((IMolecule)mols.getMolecule(i));
+
+                            sdg.setTemplateHandler(
+                                    new TemplateHandler(toPaste.getBuilder())
+                            );
+                            sdg.generateCoordinates();
+                        }
+                        //SMILES parser sets valencies, unset
+                        for(int i=0;i<toPaste.getAtomCount();i++){
+                            toPaste.getAtom(i).setValency(null);
+                        }
                     }
                 } catch (Exception ex) {
-                    //ex.printStackTrace();
-                    if (content.indexOf("INChI")>-1 || content.indexOf("InChI")>-1) { // handle it as an InChI
-                        try {
-                            StringReader sr = new StringReader(content);
-                            INChIPlainTextReader inchireader = new INChIPlainTextReader(sr);
-                            IChemFile mol = DefaultChemObjectBuilder.getInstance().newChemFile();
-                            toPaste = ((IChemFile) inchireader.read(mol)).getChemSequence(0).getChemModel(0).getMoleculeSet().getMolecule(0);
-                            IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
-                            for(int i=0;i<mols.getAtomContainerCount();i++)
-                            {
-                                StructureDiagramGenerator sdg =
-                                    new StructureDiagramGenerator((IMolecule)mols.getMolecule(i));
-
-                                sdg.setTemplateHandler(
-                                        new TemplateHandler(toPaste.getBuilder())
-                                );
-                                sdg.generateCoordinates();
-                            }
-                        } catch (Exception e2) {
-                            jcpPanel.announceError(e2);
-                        }        			
-                    }
+                    jcpPanel.announceError(ex);
+                    ex.printStackTrace();
                 }
             }
             if (toPaste != null) {

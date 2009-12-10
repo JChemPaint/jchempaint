@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
 	<classpathentry kind="lib" path="libutil/batik.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cdk"/>
+	<classpathentry kind="lib" path="lib/inchi-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

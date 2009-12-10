@@ -52,7 +52,7 @@ public class WaitDialog extends JFrame  {
         this.setResizable(false);
         
         this.setTitle("Please wait - JChemPaint busy");
-        jLabel1.setText("Processing in background, please wait...");
+        jLabel1.setText("Processing in background or loading library...");
         jLabel1.setFont(new Font("Tahoma", 1, 13));
         this.getContentPane().add(jLabel1, null);
     }
