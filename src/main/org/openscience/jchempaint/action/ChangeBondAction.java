@@ -45,11 +45,11 @@ import org.openscience.jchempaint.controller.AddBondDragModule;
 public class ChangeBondAction extends JCPAction
 {
 
-	private static final long serialVersionUID = -8502905723573311893L;
+    private static final long serialVersionUID = -8502905723573311893L;
 
-	public void actionPerformed(ActionEvent event)
-	{
-	    //first switch mode
+    public void actionPerformed(ActionEvent event)
+    {
+        //first switch mode
         AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
         if(type.equals("down_bond")){
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
@@ -63,50 +63,59 @@ public class ChangeBondAction extends JCPAction
         newActiveModule.setID(type);
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         //then handle selection or highlight if there is one
-		logger.debug("About to change atom type of relevant atom!");
-		IChemObject object = getSource(event);
-		logger.debug("Source of call: ", object);
+        logger.debug("About to change atom type of relevant atom!");
+        IChemObject object = getSource(event);
+        logger.debug("Source of call: ", object);
         Iterator<IBond> bondsInRange = null;
-		if (object == null){
-			//this means the main menu was used
-			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
-			        && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-				bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().bonds().iterator();
-		}else if (object instanceof IBond)
-		{
-			List<IBond> bonds = new ArrayList<IBond>();
-			bonds.add((IBond) object);
-			bondsInRange = bonds.iterator();
-		} else
-		{
-			List<IBond> bonds = new ArrayList<IBond>();
-			bonds.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedBond());
-			bondsInRange = bonds.iterator();
-		}
-		if(bondsInRange==null)
-			return;
-		String s = event.getActionCommand();
-		String type = s.substring(s.indexOf("@") + 1);
-		while(bondsInRange.hasNext()){
-			IBond bond = bondsInRange.next();
-			if(type.equals("bond")){
-				bond.setStereo(IBond.Stereo.NONE);
-				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("down_bond")){
-				bond.setStereo(IBond.Stereo.DOWN);
-				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("up_bond")){
-				bond.setStereo(IBond.Stereo.UP);
-				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("undefined_bond")){
-				bond.setStereo(IBond.Stereo.UP_OR_DOWN);
-				bond.setOrder(IBond.Order.SINGLE);
-			}else if(type.equals("undefined_stereo_bond")){
-				bond.setStereo(IBond.Stereo.E_OR_Z);
-				bond.setOrder(IBond.Order.SINGLE);
-			}
-		}
-		jcpPanel.get2DHub().updateView();
-	}
+        if (object == null){
+            //this means the main menu was used
+            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
+                    && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().bonds().iterator();
+        }else if (object instanceof IBond)
+        {
+            List<IBond> bonds = new ArrayList<IBond>();
+            bonds.add((IBond) object);
+            bondsInRange = bonds.iterator();
+        } else
+        {
+            List<IBond> bonds = new ArrayList<IBond>();
+            bonds.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedBond());
+            bondsInRange = bonds.iterator();
+        }
+        if(bondsInRange==null)
+            return;
+        String s = event.getActionCommand();
+        String type = s.substring(s.indexOf("@") + 1);
+        while(bondsInRange.hasNext()){
+            IBond bond = bondsInRange.next();
+            if(type.equals("bond")){
+                bond.setStereo(IBond.Stereo.NONE);
+                bond.setOrder(IBond.Order.SINGLE);
+            }else if(type.equals("double_bond")){
+                bond.setStereo(IBond.Stereo.NONE);
+                bond.setOrder(IBond.Order.DOUBLE);
+            }else if(type.equals("triple_bond")){
+                bond.setStereo(IBond.Stereo.NONE);
+                bond.setOrder(IBond.Order.TRIPLE);
+            }else if(type.equals("quad_bond")){
+                bond.setStereo(IBond.Stereo.NONE);
+                bond.setOrder(IBond.Order.QUADRUPLE);
+            }else if(type.equals("down_bond")){
+                bond.setStereo(IBond.Stereo.DOWN);
+                bond.setOrder(IBond.Order.SINGLE);
+            }else if(type.equals("up_bond")){
+                bond.setStereo(IBond.Stereo.UP);
+                bond.setOrder(IBond.Order.SINGLE);
+            }else if(type.equals("undefined_bond")){
+                bond.setStereo(IBond.Stereo.UP_OR_DOWN);
+                bond.setOrder(IBond.Order.SINGLE);
+            }else if(type.equals("undefined_stereo_bond")){
+                bond.setStereo(IBond.Stereo.E_OR_Z);
+                bond.setOrder(IBond.Order.SINGLE);
+            }
+        }
+        jcpPanel.get2DHub().updateView();
+    }
 }
 

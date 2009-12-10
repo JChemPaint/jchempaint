@@ -57,7 +57,7 @@ public class JCPMenuTextMaker {
 		entries.put("file", GT._("File"));
 		entries.put("new", GT._("New"));
 		entries.put("atomMenuTitle", GT._("Atom Popup Menu"));
-        entries.put("pseudoMenuTitle", GT._("Pseudo Atom Popup Menu"));
+                entries.put("pseudoMenuTitle", GT._("Pseudo Atom Popup Menu"));
 		entries.put("open", GT._("Open"));
 		entries.put("saveAs", GT._("Save As..."));
 		entries.put("view", GT._("View"));
@@ -83,7 +83,10 @@ public class JCPMenuTextMaker {
 		entries.put("templates", GT._("Templates"));
 		entries.put("radical", GT._("Radical"));
 		entries.put("bond", GT._("Single"));
-		entries.put("down_bond", GT._("Stereo Down"));
+                entries.put("double_bond", GT._("Double"));
+                entries.put("triple_bond", GT._("Triple"));
+                entries.put("quad_bond", GT._("Quadruple"));
+                entries.put("down_bond", GT._("Stereo Down"));
 		entries.put("up_bond", GT._("Stereo Up"));
 		entries.put("undefined_bond", GT._("Undefined Stereo"));
 		entries.put("undefined_stereo_bond", GT._("Undefined E/Z"));
@@ -274,7 +277,7 @@ public class JCPMenuTextMaker {
 		entries.put("flipVerticalTooltip", GT._("Flip vertical"));
 		entries.put("flipHorizontalTooltip", GT._("Flip horizontal"));
 		entries.put("pasteTemplateTooltip", GT._("Choose from complex templates"));
-		entries.put("bondMenuTitle", GT._("Bond Popup Menu"));
+		entries.put("bondMenuTitle", GT._(" Menu"));
 		entries.put("chemmodelMenuTitle", GT._("ChemModel Popup Menu"));
 		entries.put("Enter Element or Group", GT._("Enter Element or Group"));
 		entries.put("Add Atom Or Change Element", GT._("Add Atom Or Change Element"));
