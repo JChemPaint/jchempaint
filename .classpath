@@ -7,12 +7,12 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="po/classes"/>
 	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/fest-reflect-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-1.2a2.jar"/>
-	<classpathentry kind="lib" path="lib/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
 	<classpathentry kind="lib" path="libutil/batik.jar"/>
+	<classpathentry kind="lib" path="libdevel/fest-assert-1.1.jar"/>
+	<classpathentry kind="lib" path="libdevel/fest-reflect-1.1.jar"/>
+	<classpathentry kind="lib" path="libdevel/fest-swing-1.2a2.jar"/>
+	<classpathentry kind="lib" path="libdevel/fest-util-1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cdk"/>
 	<classpathentry kind="lib" path="lib/inchi-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
