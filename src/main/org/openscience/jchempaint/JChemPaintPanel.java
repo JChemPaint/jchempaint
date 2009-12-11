@@ -126,12 +126,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 JChemPaintPanel.this.get2DHub().updateView();
             }            
         });
+		if (gui.equals("stable")) {
+			setAppTitle(" - JChemPaint");
+		}
     }
 
     public void setTitle(String title) {
         Container topLevelContainer = this.getTopLevelContainer();
         if (topLevelContainer instanceof JFrame) {
-            ((JFrame) topLevelContainer).setTitle(title);
+            ((JFrame) topLevelContainer).setTitle(title + appTitle);
         }
     }
 

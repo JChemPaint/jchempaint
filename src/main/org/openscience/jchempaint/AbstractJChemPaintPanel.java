@@ -31,6 +31,8 @@ package org.openscience.jchempaint;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Image;
+import java.awt.image.*;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -103,6 +105,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     protected JComponent lastSecondaryButton;
 	private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
+    protected static String appTitle = "";
 
 	/**
 	 * 
@@ -234,6 +237,28 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 
     public Image takeSnapshot() {
         return this.renderPanel.takeSnapshot();
+    }
+
+    public Image takeTransparentSnapshot() {
+        Image snapshot = takeSnapshot();
+        ImageFilter filter = new RGBImageFilter() {
+            // Alpha bits are set to opaque
+            public int markerRGB =
+                renderPanel.getRenderer().getRenderer2DModel().getBackColor().getRGB() | 0xFF000000;
+
+            public final int filterRGB(int x, int y, int rgb) {
+                if ( ( rgb | 0xFF000000 ) == markerRGB ) {
+                    // Mark the alpha bits as zero - transparent
+                    return 0x00FFFFFF & rgb;
+                } else {
+                    // nothing to do
+                    return rgb;
+                }
+            }
+        };
+        
+        ImageProducer ip = new FilteredImageSource(snapshot.getSource(), filter);
+        return Toolkit.getDefaultToolkit().createImage(ip);
     }
 
     /**
@@ -573,6 +598,14 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         }
     }
 
+    public static String getAppTitle() {
+        return appTitle;
+    }
+
+    public void setAppTitle(String title) {
+        appTitle = title;
+    }
+
     /**
      * Allows setting of the is modified stage (e. g. after save)
      *
@@ -584,10 +617,18 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         Container c = this.getTopLevelContainer();
         if (c instanceof JFrame) {
             String id = renderPanel.getChemModel().getID();
+            //String title = ((JFrame) c).getTitle();
             if (isModified)
-                ((JFrame) c).setTitle(id + "*");
+                ((JFrame) c).setTitle('*' + id + this.getAppTitle());
             else
-                ((JFrame) c).setTitle(id);
+                ((JFrame) c).setTitle(id + this.getAppTitle());
+/*            
+            if (title == null) {
+                title = renderPanel.getChemModel().getID();
+            }
+            if (title.charAt(0) == '*') {
+                title = title.substring(1);
+            }*/
         }
     }
 }
