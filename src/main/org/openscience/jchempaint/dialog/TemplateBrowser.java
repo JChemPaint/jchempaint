@@ -108,7 +108,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         JPanel bottomPanel =new JPanel();
         bottomPanel.add(yesButton);
         myPanel.add(bottomPanel, BorderLayout.SOUTH); 
-        tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane(JTabbedPane.LEFT, JTabbedPane.WRAP_TAB_LAYOUT);
         Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
         Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
