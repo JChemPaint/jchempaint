@@ -39,6 +39,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.ControllerHub;
 
 /**
@@ -67,19 +68,19 @@ public class ChemObjectPropertyDialog extends JFrame {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle("Properties");
+        setTitle(GT._("Properties"));
         getContentPane().add("Center",editor);
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
-        JButton ok = new JButton("OK");
+        JButton ok = new JButton(GT._("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
             }}
         );
         buttonPanel.add( ok );
-        JButton cancel = new JButton("Cancel");
+        JButton cancel = new JButton(GT._("Cancel"));
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeFrame();
@@ -99,7 +100,7 @@ public class ChemObjectPropertyDialog extends JFrame {
 	        hub.updateView();
 	        closeFrame();
     	}else{
-    		JOptionPane.showInternalMessageDialog(this,"You did not provide necessary information", "Incomplete Information", JOptionPane.WARNING_MESSAGE, null);
+    		JOptionPane.showInternalMessageDialog(this,GT._("You did not provide necessary information"), GT._("Incomplete Information"), JOptionPane.WARNING_MESSAGE, null);
     	}
     }
 

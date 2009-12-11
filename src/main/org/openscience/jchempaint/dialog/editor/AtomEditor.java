@@ -44,6 +44,8 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -70,13 +72,13 @@ public class AtomEditor extends ChemObjectEditor {
     private void constructPanel() {
         symbolField = new JTextField(4);
         symbolField.getDocument().addDocumentListener(new MyDocumentListener(this));
-        addField("Symbol", symbolField, this);
+        addField(GT._("Symbol"), symbolField, this);
         hCountField = new JSpinner(new SpinnerNumberModel());
-        addField("H Count", hCountField, this);
+        addField(GT._("H Count"), hCountField, this);
         formalChargeField = new JSpinner(new SpinnerNumberModel());
-        addField("Formal Charge", formalChargeField, this);
+        addField(GT._("Formal Charge"), formalChargeField, this);
         isotopeField = new JSpinner(new SpinnerNumberModel());
-        addField("Isotope number", isotopeField, this);
+        addField(GT._("Isotope number"), isotopeField, this);
     }
     
     public void setChemObject(IChemObject object) {

@@ -33,6 +33,8 @@ import javax.swing.JTextField;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 
+import org.openscience.jchempaint.GT;
+
 /**
  */
 public class PseudoAtomEditor extends ChemObjectEditor {
@@ -48,7 +50,7 @@ public class PseudoAtomEditor extends ChemObjectEditor {
     
     private void constructPanel() {
         labelField = new JTextField(20);
-        addField("Label", labelField, this);
+        addField(GT._("Label"), labelField, this);
     }
     
     public void setChemObject(IChemObject object) {

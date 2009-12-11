@@ -469,7 +469,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 props.setProperty("LookAndFeelClass", lnfName);
 		    }
             catch (UnsupportedLookAndFeelException e) {
-	    	    JOptionPane.showMessageDialog(this, GT._("Look&feel")+" \""+lookAndFeel.getSelectedItem()+"\" "+GT._("is not supported on this platform"),GT._("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
+	    	    JOptionPane.showMessageDialog(this, GT._("Look and feel")+" \""+lookAndFeel.getSelectedItem()+"\" "+GT._("is not supported on this platform"),GT._("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
             }
             catch (ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(this, GT._("Class not found:")+" "+ lnfName);

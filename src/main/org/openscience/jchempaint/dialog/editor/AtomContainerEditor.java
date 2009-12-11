@@ -34,6 +34,8 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import org.openscience.jchempaint.GT;
+
 /**
  */
 public class AtomContainerEditor extends ChemObjectEditor {
@@ -49,7 +51,7 @@ public class AtomContainerEditor extends ChemObjectEditor {
     
     private void constructPanel() {
         titleField = new JTextField(30);
-        addField("Title", titleField, this);
+        addField(GT._("Title"), titleField, this);
     }
     
     public void setChemObject(IChemObject object) {

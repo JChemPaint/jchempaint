@@ -33,6 +33,8 @@ import javax.swing.JComboBox;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IBond.Order;
+
+import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -51,9 +53,9 @@ public class BondEditor extends ChemObjectEditor {
     }
     
     private void constructPanel() {
-    	String[] orderString = { Order.SINGLE.toString(), Order.DOUBLE.toString(), Order.TRIPLE.toString(), Order.QUADRUPLE.toString() };
+    	String[] orderString = { GT._("Single"), GT._("Double"), GT._("Triple"), GT._("Quadruple") };
         orderField = new JComboBox(orderString);
-        addField("Order", orderField, this);
+        addField(GT._("Bond order"), orderField, this);
     }
     
     public void setChemObject(IChemObject object) {

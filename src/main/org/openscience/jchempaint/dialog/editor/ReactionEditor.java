@@ -34,6 +34,8 @@ import javax.swing.JTextField;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IReaction;
 
+import org.openscience.jchempaint.GT;
+
 /**
  */
 public class ReactionEditor extends ChemObjectEditor {
@@ -55,17 +57,17 @@ public class ReactionEditor extends ChemObjectEditor {
     
     private void constructPanel() {
         idField = new JTextField(40);
-        addField("Reaction ID", idField, this);
+        addField(GT._("Reaction ID"), idField, this);
         // the options given next should match the order in the Reaction class!
         String[] options = {
-            "", "Forward", "Backward", "Bidirectional"
+            "", GT._("Forward"), GT._("Backward"), GT._("Bidirectional")
         };
         directionField = new JComboBox(options);
-        addField("Direction", directionField, this);
+        addField(GT._("Direction"), directionField, this);
         solventField = new JTextField(40);
-        addField("Solvent", solventField, this);
+        addField(GT._("Solvent"), solventField, this);
         tempField = new JTextField(10);
-        addField("Temperature", tempField, this);
+        addField(GT._("Temperature"), tempField, this);
     }
     
     public void setChemObject(IChemObject object) {
