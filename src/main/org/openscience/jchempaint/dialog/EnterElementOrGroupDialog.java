@@ -25,7 +25,9 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- */package org.openscience.jchempaint.dialog;
+ */
+
+package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -44,6 +46,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import org.openscience.jchempaint.GT;
 
 public class EnterElementOrGroupDialog extends JDialog implements ActionListener {
 	
@@ -89,10 +93,10 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
         super(frame, title, true);
 
         //Create and initialize the buttons.
-        JButton cancelButton = new JButton("Cancel");
+        JButton cancelButton = new JButton(GT._("Cancel"));
         cancelButton.addActionListener(this);
         //
-        final JButton setButton = new JButton("Ok");
+        final JButton setButton = new JButton(GT._("OK"));
         setButton.setName("ok");
         setButton.setActionCommand("Set");
         setButton.addActionListener(this);

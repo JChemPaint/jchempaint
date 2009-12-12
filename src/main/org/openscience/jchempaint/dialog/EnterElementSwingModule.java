@@ -124,7 +124,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
         	funcGroupsKeys[h]=(String)it.next();
         	h++;
         }
-		String x=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol or choose/enter a functional group abbrivation:", "Enter element", funcGroupsKeys, "","");
+		String x=EnterElementOrGroupDialog.showDialog(null,null, GT._("Enter an element symbol or choose/enter a functional group abbrivation:"), GT._("Enter element"), funcGroupsKeys, "","");
 		try{
 			IAtomContainer ac=(IAtomContainer)funcgroupsmap.get(x.toLowerCase());
 			//this means a functional group was entered
