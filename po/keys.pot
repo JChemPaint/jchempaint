@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-11 11:51+0300\n"
+"POT-Creation-Date: 2009-12-12 13:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,6 +156,23 @@ msgstr ""
 msgid "Generated InChI"
 msgstr ""
 
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:109
+msgid "Enter an element symbol:"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:109
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:127
+msgid "Enter element"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:118
+msgid "No valid element symbol entered"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:118
+msgid "Invalid symbol"
+msgstr ""
+
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:109
 msgid "Nothing to save."
 msgstr ""
@@ -222,6 +239,7 @@ msgid "Structure Templates"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:106
+#: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:96
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:83
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:97
 msgid "Cancel"
@@ -232,6 +250,7 @@ msgid "All"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/TextViewDialog.java:114
+#: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:99
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:76
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:82
 msgid "OK"
@@ -455,6 +474,10 @@ msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:90
 msgid "Apply"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:127
+msgid "Enter an element symbol or choose/enter a functional group abbrivation:"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:181
