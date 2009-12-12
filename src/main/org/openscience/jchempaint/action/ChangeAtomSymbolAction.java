@@ -47,7 +47,7 @@ import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.dialog.EnterElementOrGroupDialog;
 import org.openscience.jchempaint.dialog.EnterElementSwingModule;
 import org.openscience.jchempaint.dialog.PeriodicTableDialog;
-
+import org.openscience.jchempaint.GT;
 
 /**
  * changes the atom symbol
@@ -106,7 +106,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
             if(atomsInRange!=null){
                 String[] funcGroupsKeys=new String[0];
-                symbol=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol:", "Enter element", funcGroupsKeys, "","");
+                symbol=EnterElementOrGroupDialog.showDialog(null,null, GT._("Enter an element symbol:"), GT._("Enter element"), funcGroupsKeys, "","");
                 if(symbol!=null && symbol.length()>0){
                     if(Character.isLowerCase(symbol.toCharArray()[0]))
                         symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
@@ -115,7 +115,7 @@ public class ChangeAtomSymbolAction extends JCPAction
                         ifa = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
                         IIsotope iso=ifa.getMajorIsotope(symbol);
                         if(iso==null){
-                            JOptionPane.showMessageDialog(jcpPanel, "No valid element symbol entered", "Invalid symbol", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(jcpPanel, GT._("No valid element symbol entered"), GT._("Invalid symbol"), JOptionPane.WARNING_MESSAGE);
                             return;
                         }
                     } catch (IOException e) {
