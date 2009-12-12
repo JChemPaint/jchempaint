@@ -310,7 +310,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         askForIOSettings = new JCheckBox();
         addField(GT._("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
-		if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
+		if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             String [] lookAndFeels = {GT._("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
 		    lookAndFeel = new JComboBox(lookAndFeels);
 		    addField(GT._("Look and feel"), lookAndFeel, otherOptionsPanel);
@@ -361,7 +361,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("askForIOSettings", "false").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
-        if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
+        if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
         }
         validate();
@@ -445,7 +445,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         catch(Exception ex){
             JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
-        if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
+        if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             String lnfName="";
 	    	try {
 		    	switch(lookAndFeel.getSelectedIndex()) {
