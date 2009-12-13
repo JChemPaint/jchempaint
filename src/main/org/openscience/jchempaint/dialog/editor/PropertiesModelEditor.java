@@ -30,6 +30,7 @@
 package org.openscience.jchempaint.dialog.editor;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
@@ -53,6 +54,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.JCPPropertyHandler;
@@ -461,9 +463,14 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 SwingUtilities.updateComponentTreeUI(frame);
                 frame.pack();
                 // Apply to all instances of JChemPaint
-                for (JFrame f : JChemPaint.frameList) {
-                    SwingUtilities.updateComponentTreeUI(f);
-                    f.pack();
+                //for (JFrame f : JChemPaint.frameList) {
+                for (int i = 0; i < JChemPaintPanel.instances.size(); i++) {
+                    Container c = JChemPaintPanel.instances.get(i).getTopLevelContainer();
+                    if (c instanceof JFrame) {
+                        JFrame f = (JFrame) c;
+                        SwingUtilities.updateComponentTreeUI(f);
+                        f.pack();
+                    }
                 }
                 props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
                 props.setProperty("LookAndFeelClass", lnfName);
