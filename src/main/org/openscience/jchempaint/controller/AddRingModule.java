@@ -48,6 +48,7 @@ public class AddRingModule extends ControllerModuleAdapter {
     private boolean addingBenzene = false;
     private String ID;
     private RingPlacer ringPlacer = new RingPlacer();
+    private static long drawTime = 0;
     
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
             boolean addingBenzene) {
@@ -153,6 +154,9 @@ public class AddRingModule extends ControllerModuleAdapter {
 	}
     
     public void mouseMove(Point2d worldCoord) {
+        if ((System.nanoTime() - drawTime) < 4000000) {
+            return;
+        }
         this.chemModelRelay.clearPhantoms();
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
@@ -186,7 +190,8 @@ public class AddRingModule extends ControllerModuleAdapter {
         } else if (singleSelection instanceof IBond) {
             this.addRingToBond((IBond) singleSelection,true);
         }
-        this.chemModelRelay.updateView();        
+        this.chemModelRelay.updateView();
+        drawTime = System.nanoTime();       
     }
 
     public String getDrawModeString() {
