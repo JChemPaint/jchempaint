@@ -29,9 +29,9 @@ copy/delete/properties items at the end of the context menu. Both menus set the
 drawing mode (see <a href="tutorial.html">Tutorial</a> for an explanation of modes). 
 They both also change some atoms directly, the difference is the main menu does 
 this on selection, the context menu on the item on which you clicked.
-
+<p>
 <h3>Single</h3>
-     <p>Sets the selection or bond clicked on to a bond of bond order single. 
+     Sets the selection or bond clicked on to a bond of bond order single. 
      Puts JChemPaint in the single bond mode, which is the standard mode for
      building up chemical structures. If selected you can click on a point on
      the document and you'll create a single bond at this point. If you alreday 
@@ -43,27 +43,29 @@ this on selection, the context menu on the item on which you clicked.
      </ul>
      Multiple clicking on an
      existing bond will cycle its bond order between the values 1, 2, 3 and 4.</p>
-
+<h3>Double,Triple,Quadruple</h3>
+     Sets the selection or bond clicked on to a bond of order double, triple or quadruple. 
+<p>
 <h3>Stereo Up</h3>
-      <p>Sets the selection or bond clicked on to stereo up (filled wedge) bond. 
+     Sets the selection or bond clicked on to stereo up (filled wedge) bond. 
       Sets JChemPaint in a mode which enables you to either draw filled wedge bonds the same way as single 
      bonds or change an existing bond into a filled
      wedge - the standard symbol to indicate that the atom at the thick
      end is above the 2D plane. Furthermore, multiple clicking on an
      existing bond will change it to a filled wedge and if it already has this
      shape it will toggle between the two possible orientations.</p>
- 
+<p> 
 <h3>Stereo Down</h3>
-      <p>Sets the selection or bond clicked on to stereo down (dashed wedge) bond. 
+     Sets the selection or bond clicked on to stereo down (dashed wedge) bond. 
       Sets JChemPaint in a mode which enables you to either draw dashed wedge bonds the same way as single 
      bonds or change an existing bond into a dashed
      wedge - the standard symbol indicating that the atom at the thin end
      is below the 2D plane. While selected, a click on an existing
      bond will change it to a dashed wedge and if it already has this shape it
      will toggle between the two possible orientations.</p>
-
+<p>
 <h3>Undefined Stereo</h3>
-     <p>Sets the selection or bond clicked on to an undefined stereo bond (zigzag bond). 
+    Sets the selection or bond clicked on to an undefined stereo bond (zigzag bond). 
       Sets JChemPaint in a mode which enables you to either draw zigzag wedge bonds the same way as single 
      bonds or change an existing bond into a zigzag
      wedge - this is sometimes used to indicating that the atom at the thick end 
@@ -71,48 +73,48 @@ this on selection, the context menu on the item on which you clicked.
      using this, but recommends using the wiggly bond instead. While selected, a click on an existing
      bond will change it to a zigzag wedge and if it already has this shape it
      will toggle between the two possible orientations.</p>
- 
+<p> 
  <h3>Undefined E/Z</h3>
-     <p>Sets the selection or bond clicked on to an undefined E/Z bond (wiggly bond). 
+     Sets the selection or bond clicked on to an undefined E/Z bond (wiggly bond). 
       Sets JChemPaint in a mode which enables you to either draw wiggly bonds the same way as single 
      bonds or change an existing bond into a wiggly bond - this can indicate either 
      up or down or undefined E/Z configuration. Note the latest IUPAC recommendation 
      encourages using this for all undefined cases. While selected, a click on an existing
      bond will change it to a wiggly wedge.</p>
-     
+
 <h3>Context Menu only items</h3>     
      
 <p>The following menu items only exist in the context menu. They do not switch the mode.</p>
-
+<p>
 <h3>Cut</h3>
- <p>Removes the bond clicked on from the drawing and puts it 
+ Removes the bond clicked on from the drawing and puts it 
      into the system clipboard. Paste can be used to use it again.</p>
-
+<p>
 <h3>Copy</h3>
- <p>Copies the bond clicked on into the system clipboard. Paste 
+ Copies the bond clicked on into the system clipboard. Paste 
      can be used to use it again. JChemPaint uses several formats (SMILES, mol, CML, 
      SVG) so you should also be able to paste it into other programs (depending on 
      abilities of the program).</p>
-
+<p>
 <h3>Delete</h3>
- <p>Removes the bond clicked on from the drawing. It is 
+ Removes the bond clicked on from the drawing. It is 
  like cut without using the clipboard.</p>
-
+<p>
 <h3>Select</h3>
- <p>Selects and marks the bond clicked on, so that it can be deleted, etc.</p>
-
+ Selects and marks the bond clicked on, so that it can be deleted, etc.</p>
+<p>
 <h3>Select All</h3>
- <p>Selects and marks all atoms and bonds in the molecule, so that it can be rotated,
+ Selects and marks all atoms and bonds in the molecule, so that it can be rotated,
  moved, deleted, etc.</p>
- 
+ <p>
 <h3>Reaction</h3>
- <p>Contains submenus for <a href="reactions.html">drawing reactions</a>.</p>
-
+ Contains submenus for <a href="reactions.html">drawing reactions</a>.</p>
+<p>
 <h3>Properties</h3>
- <p>Here you can directly set teh order of the bond clicked on.</p>
-
+ Here you can directly set teh order of the bond clicked on.</p>
+<p>
 <h3>Molecule Properties</h3>
- <p>Here you can directly set properties (title which will be rendered below the 
+ Here you can directly set properties (title which will be rendered below the 
  molecule) of the molecule the bond is in.</p>
 
 
