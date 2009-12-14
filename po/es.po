@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-11 11:51+0300\n"
-"PO-Revision-Date: 2009-12-11 21:54+0100\n"
+"PO-Revision-Date: 2009-12-14 21:28+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -150,6 +150,23 @@ msgstr "Ha fallado la creación del código InChI"
 msgid "Generated InChI"
 msgstr "Código InChI generado"
 
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:109
+msgid "Enter an element symbol:"
+msgstr "Escriba el símbolo de un elemento:"
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:109
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:127
+msgid "Enter element"
+msgstr "Escriba un elemento"
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:118
+msgid "No valid element symbol entered"
+msgstr "Falta un símbolo de elemento válido"
+
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:118
+msgid "Invalid symbol"
+msgstr "Símbolo incorrecto"
+
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:109
 msgid "Nothing to save."
 msgstr "No hay nada que grabar."
@@ -212,6 +229,7 @@ msgid "Structure Templates"
 msgstr "Plantillas de estructura"
 
 #: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:106
+#: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:96
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:83
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:97
 msgid "Cancel"
@@ -222,6 +240,7 @@ msgid "All"
 msgstr "Todo"
 
 #: src/main/org/openscience/jchempaint/dialog/TextViewDialog.java:114
+#: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:99
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:76
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:82
 msgid "OK"
@@ -446,6 +465,10 @@ msgstr "Preferencias"
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:90
 msgid "Apply"
 msgstr "Aplicar"
+
+#: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:127
+msgid "Enter an element symbol or choose/enter a functional group abbreviation:"
+msgstr "Escriba el símbolo de un elemento o bien elija o escriba una abreviatura de un grupo funcional:"
 
 #: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:181
 msgid "Add Functional Group"
