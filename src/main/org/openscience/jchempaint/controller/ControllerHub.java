@@ -801,18 +801,27 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     }
 
     //OK
-    public void setOrder(IBond bond, Order order) {
+    public void changeBond(IBond bond, Order order, Stereo stereo) {
         Map<IBond, IBond.Order[]> changedBonds= new HashMap<IBond, IBond.Order[]>();
         changedBonds.put(bond,new Order[]{order,bond.getOrder()});
+
+        Map<IBond, IBond.Stereo[]> changedStereo= new HashMap<IBond, IBond.Stereo[]>();
+        changedStereo.put(bond,new Stereo[]{stereo,bond.getStereo()});
+
+        
         bond.setOrder(order);
+        bond.setStereo(stereo);
+
         updateAtom(bond.getAtom(0));
         updateAtom(bond.getAtom(1));
         structurePropertiesChanged();
+
         if(getUndoRedoFactory()!=null && getUndoRedoHandler()!=null){
             IUndoRedoable undoredo =
-                getUndoRedoFactory().getAdjustBondOrdersEdit(changedBonds, 
-                        new HashMap<IBond, IBond.Stereo[]>(),
-                        "Changed Bond Order to "+order,
+                getUndoRedoFactory().getAdjustBondOrdersEdit(
+                        changedBonds, 
+                        changedStereo,
+                        "Changed Bond Order/Stereo to "+order+"/"+stereo,
                         this
                 );
             getUndoRedoHandler().postEdit(undoredo);
@@ -2268,4 +2277,5 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     public void setCursor(int cursor){
         renderer.setCursor(cursor);
     }
+
 }

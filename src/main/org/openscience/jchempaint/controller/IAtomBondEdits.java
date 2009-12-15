@@ -67,7 +67,7 @@ public interface IAtomBondEdits {
     public void removeBond(IBond bond);
     public void moveToWithoutUndo(IBond bond, Point2d point);
     public void moveTo(IBond bond, Point2d point);
-    public void setOrder(IBond bond, IBond.Order order);
+    public void changeBond(IBond bond, IBond.Order order, IBond.Stereo stereo);
     public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom);
     public void cycleBondValence(IBond bond);
     public void makeBondStereo(IBond bond, Direction desiredDirection);
