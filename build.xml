@@ -166,7 +166,7 @@
         <delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" />
     </target>
 
-    <target id="compile-jcp" name="build-languageclasses" >
+    <target id="build-languageclasses" name="build-languageclasses" >
     	<echo message="Compiling po files." />
     	<exec dir="." executable="msgfmt">
     		<arg line="--java2 -d po/classes -r app.i18n.Messages -l ar po/ar.po"/>
