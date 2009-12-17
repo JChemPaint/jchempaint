@@ -98,7 +98,7 @@ public class BoundsCalculator {
     public static Rectangle2D calculateBounds(IAtomContainer ac) {
         // this is essential, otherwise a rectangle
         // of (+INF, -INF, +INF, -INF) is returned!
-        if (ac.getAtomCount() == 0) {
+        if (ac==null || ac.getAtomCount() == 0) {
             return new Rectangle2D.Double();
         } else if (ac.getAtomCount() == 1) {
             Point2d p = ac.getAtom(0).getPoint2d();

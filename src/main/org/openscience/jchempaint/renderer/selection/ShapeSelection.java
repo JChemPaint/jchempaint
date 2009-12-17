@@ -30,6 +30,7 @@ import java.util.Set;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -52,9 +53,17 @@ public abstract class ShapeSelection implements IncrementalSelection {
     public abstract boolean contains(Point2d p);
     
     public abstract void addPoint(Point2d p);
-    
+
     public abstract boolean isEmpty();
     
+    public void addAtom(IAtom atom) {
+        atoms.add(atom);
+    }
+
+    public void addBond(IBond bond) {
+        bonds.add(bond);
+    }
+
     /**
      * Call this after the drawing has finished
      */
@@ -103,23 +112,17 @@ public abstract class ShapeSelection implements IncrementalSelection {
      * @see org.openscience.cdk.renderer.ISelection#getConnectedAtomContainer()
      */
     public IAtomContainer getConnectedAtomContainer() {
-        // you should really have used the isFilled method...
-        if (atoms.size() == 0) return null;
         
-        IAtomContainer ac = atoms.get(0).getBuilder().newAtomContainer();
-        for (IAtom atom : atoms) {
-            ac.addAtom(atom);
+        IAtomContainer ac = new AtomContainer();
+        if (atoms.size() != 0) {
+           ac = atoms.get(0).getBuilder().newAtomContainer();
+           for (IAtom atom : atoms) {
+              ac.addAtom(atom);
+           }
         }
         
         for (IBond bond : bonds) {
-            boolean addBond = true;
-            for (IAtom atom : bond.atoms()) {
-                if (!ac.contains(atom)) addBond = false;
-            }
-            
-            if (addBond) {
-                ac.addBond(bond);
-            }
+           ac.addBond(bond);
         }
         
         return ac;

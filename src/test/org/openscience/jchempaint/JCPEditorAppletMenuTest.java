@@ -414,7 +414,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  applet.menuItem("save").click();
 			  DialogFixture dialog = applet.dialog();
 			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			  combobox.setSelectedItem(combobox.getItemAt(5));
+			  combobox.setSelectedItem(combobox.getItemAt(6));
 			  JTextComponentFixture text = dialog.textBox();
 			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
 			  if(file.exists())
@@ -573,4 +573,5 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
             Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
         }
+
 }

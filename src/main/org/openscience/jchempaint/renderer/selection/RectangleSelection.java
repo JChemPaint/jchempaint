@@ -35,6 +35,8 @@ import org.openscience.jchempaint.renderer.elements.RectangleElement;
 public class RectangleSelection extends ShapeSelection {
     
     private Rectangle2D rectangle;
+    double startX=0;
+    double startY=0;
    
     public RectangleSelection() {
         this.rectangle = new Rectangle2D.Double();
@@ -53,19 +55,47 @@ public class RectangleSelection extends ShapeSelection {
         return this.rectangle.contains(p.x, p.y);
     }
 
+    // x will be the smallest x around (the base..)
+    // and negative width is not allowed 
+    // adding points always works, but setRect goes wrong. 
+    // .. the x is actually p.x 
+    
     public void addPoint(Point2d p) {
-    	if (rectangle.getHeight() == 0 && rectangle.getWidth() == 0) {
-            rectangle = new Rectangle2D.Double(p.x, p.y, 1, 1);
-        } else {
+        if (rectangle.getHeight() == 0 && rectangle.getWidth() == 0) {
+            rectangle = new Rectangle2D.Double(p.x, p.y, 0.1, 0.1);
+            startX=p.x;
+            startY=p.y;
+        } 
+
+        else {
             if (rectangle.contains(new Point2D.Double(p.x, p.y))) {
+                double width=0, height=0;
                 double x = rectangle.getX();
+                if (x == startX) {
+                    width=p.x - x;
+                }
+                else {
+                    x=p.x;
+                    width=Math.abs(startX-p.x);
+                }
+                
                 double y = rectangle.getY();
-                rectangle.setRect(x, y, p.x - x, p.y - y);
+                if (y == startY) {
+                    height=p.y - y;
+                }
+                else {
+                    y=p.y;
+                    height=Math.abs(startY-p.y);
+                }
+                rectangle.setRect(x, y, width, height);
+
             } else {
                 rectangle.add(new Point2D.Double(p.x, p.y));
             }
+            
         }
     }
+
 
     public boolean isEmpty() {
         return this.rectangle.isEmpty();

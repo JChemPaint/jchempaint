@@ -62,18 +62,8 @@ public class SelectAtomGenerator implements IGenerator {
                 for (IAtom atom : selectedAC.atoms()) {
                     Point2d p = atom.getPoint2d();
                     IRenderingElement element;
-                    switch (shape) {
-                        case SQUARE:
-                            element =
-                                new RectangleElement(
-                                    p.x - r, p.y - r, d, d, true,
-                                    selectionColor);
-                            break;
-                        case OVAL:
-                        default:
-                            element = new OvalElement(
-                                            p.x, p.y, d, false, selectionColor);
-                    }
+                    element = new OvalElement(
+                          p.x, p.y, d, false, selectionColor);
                     selectionElements.add(element);
                 }
             }

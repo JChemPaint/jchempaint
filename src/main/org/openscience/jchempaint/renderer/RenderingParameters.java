@@ -159,7 +159,7 @@ public class RenderingParameters {
      */
     private double scale = 1.0;
 
-    private Color selectedPartColor = Color.lightGray;
+    private Color selectedPartColor = new Color(00,153, 204); //Color.lightGray;
 
     /**
      * The shape to display over selected atoms

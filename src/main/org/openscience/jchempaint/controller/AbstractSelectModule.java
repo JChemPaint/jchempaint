@@ -62,7 +62,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         IChemObject highlightedAtom = getHighlighted( p, closestAtom);
         IBond closestBond = chemModelRelay.getClosestBond(p);
         IChemObject highlightedBond = getHighlighted( p, closestBond);
-        //in case the user either starts dragging inside the currrent selection
+        //in case the user either starts dragging inside the current selection
         //or in highlight distance to an atom, we switch to move mode, else
         //we start a new selection
         if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) 
@@ -76,12 +76,19 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                 		(int)this.chemModelRelay.getRenderer().toScreenCoordinates(p.x, p.y).y);
         }else{
 	        this.selection.clear();
-	        this.chemModelRelay.getRenderer()
-	                           .getRenderer2DModel()
-	                           .setSelection(this.selection);
-	        startPoint=p;
         }
+
+        if (highlightedAtom!=null ) {
+            selection.addAtom((IAtom)highlightedAtom);
+        }
+        if (highlightedBond!=null) {
+            selection.addBond((IBond)highlightedBond);
+        }
+
+        this.chemModelRelay.getRenderer().getRenderer2DModel().setSelection(this.selection);
+        startPoint=p;
     }
+        
     
     public void mouseDrag(Point2d from, Point2d to) {
         this.selection.addPoint(to);
@@ -94,14 +101,20 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     }
 
     public static void showMouseCursor(Point2d p, IChemModelRelay chemModelRelay){
+        
         //We look if we the user would move when clicking and show arrows then
         Rectangle2D bounds=null;
         if(chemModelRelay.getRenderer().getRenderer2DModel().getSelection()!=null 
                     && chemModelRelay.getRenderer().getRenderer2DModel()
                     .getSelection().isFilled())
+            try {
                 bounds = BoundsCalculator.calculateBounds(chemModelRelay
                         .getRenderer().getRenderer2DModel().getSelection()
                         .getConnectedAtomContainer());
+            } catch (NullPointerException e) {
+                
+                bounds=null;
+            }
         IChemObject highlightedAtom = chemModelRelay.getRenderer().getRenderer2DModel().getHighlightedAtom();
         IChemObject highlightedBond = chemModelRelay.getRenderer().getRenderer2DModel().getHighlightedBond();
         if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) 
@@ -113,21 +126,22 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     }
 
     public void mouseClickedUp(Point2d p) {
+
         this.chemModelRelay.select(selection);
         this.selection.reset();
         if(p.equals(startPoint)){
             IAtom closestAtom = chemModelRelay.getClosestAtom(p);
             IBond closestBond = chemModelRelay.getClosestBond(p);
-        	IChemObject singleSelection = getHighlighted( p,
+            IChemObject singleSelection = getHighlighted( p,
                     closestAtom,
                     closestBond );
-        	if(singleSelection instanceof IAtom){
-        		IChemObjectSelection selection = new SingleSelection<IAtom>((IAtom)singleSelection);
-        		this.chemModelRelay.select(selection);
-        	}else if(singleSelection instanceof IBond){
-        		IChemObjectSelection selection = new SingleSelection<IBond>((IBond)singleSelection);
-            	this.chemModelRelay.select(selection);
-        	}
+            if(singleSelection instanceof IAtom){
+                IChemObjectSelection selection = new SingleSelection<IAtom>((IAtom)singleSelection);
+                this.chemModelRelay.select(selection);
+            }else if(singleSelection instanceof IBond){
+                IChemObjectSelection selection = new SingleSelection<IBond>((IBond)singleSelection);
+                this.chemModelRelay.select(selection);
+            }
         }
         this.chemModelRelay.updateView();
     }
