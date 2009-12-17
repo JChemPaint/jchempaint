@@ -295,6 +295,8 @@ public class JCPMenuTextMaker {
 		entries.put("Cycle Symbol", GT._("Cyclic change of symbol"));
 		entries.put("Delete", GT._("Delete"));
 		entries.put("Move", GT._("Move"));
+        entries.put("Rotate", GT._("Rotate"));
+        entries.put("Rotate in space", GT._("Rotate in space"));
 		entries.put("Benzene", GT._("Benzene"));
 		entries.put("Select in Free Form", GT._("Select in Free Form"));
 		entries.put("Select Square", GT._("Select Rectangle"));

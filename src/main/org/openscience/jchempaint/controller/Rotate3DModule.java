@@ -93,4 +93,8 @@ public class Rotate3DModule extends RotateModule {
         }
         chemModelRelay.updateView();
     }
+    
+    public String getDrawModeString() {
+        return "Rotate in space";
+    }
 }
