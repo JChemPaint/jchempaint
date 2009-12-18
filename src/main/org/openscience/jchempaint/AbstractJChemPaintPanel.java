@@ -99,7 +99,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     protected JMenu atomMenu;
     protected JMenu bondMenu;
     protected boolean debug=false;
-    protected boolean isModified = false;
+    protected boolean modified = false;
     private File isAlreadyAFile;
     private File lastOpenedFile;
     protected JComponent lastSecondaryButton;
@@ -491,7 +491,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      *         OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
      */
     public int showWarning() {
-        if (isModified && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) { // TODO
+        if (modified && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) { // TODO
                                                                                   // &&
                                                                                   // !getIsOpenedByViewer())
                                                                                   // {
@@ -613,7 +613,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      *            is modified
      */
     public void setModified(boolean isModified) {
-        this.isModified = isModified;
+        this.modified = isModified;
         Container c = this.getTopLevelContainer();
         if (c instanceof JFrame) {
             String id = renderPanel.getChemModel().getID();
@@ -630,5 +630,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
                 title = title.substring(1);
             }*/
         }
+    }
+
+    public boolean isModified() {
+        return modified;
     }
 }
