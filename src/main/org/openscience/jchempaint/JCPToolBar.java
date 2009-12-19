@@ -157,6 +157,7 @@ public class JCPToolBar
         }
         try
         {
+            // TODO: use getMenuTextMaker?
             String tip = JCPMenuTextMaker.getInstance("applet").getText(key + JCPAction.TIPSUFFIX);
             if (tip != null)
             {

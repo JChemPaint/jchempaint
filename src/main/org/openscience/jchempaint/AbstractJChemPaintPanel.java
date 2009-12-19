@@ -106,6 +106,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
     protected static String appTitle = "";
+    protected JCPMenuTextMaker menuTextMaker = null;
 
 	/**
 	 * 
@@ -170,24 +171,24 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      * Update the menu bars and toolbars to current language.
      */
     public void updateMenusWithLanguage() {
-        JCPMenuTextMaker.getInstance(guistring).init(guistring);
+        menuTextMaker.init(guistring);
         Iterator<String> it = buttons.keySet().iterator();
         while(it.hasNext()){
             String key = it.next();
             JButton button = buttons.get(key);
-            button.setToolTipText(JCPMenuTextMaker.getInstance(guistring).getText(key + JCPAction.TIPSUFFIX));
+            button.setToolTipText(menuTextMaker.getText(key + JCPAction.TIPSUFFIX));
         }
         it = menus.keySet().iterator();
         while(it.hasNext()){
             String key = it.next();
             JMenuItem button = menus.get(key);
-            button.setText(JCPMenuTextMaker.getInstance(guistring).getText(key));
+            button.setText(menuTextMaker.getText(key));
         }
         it = popupmenuitems.keySet().iterator();
         while(it.hasNext()){
             String key = it.next();
             JChemPaintPopupMenu button = popupmenuitems.get(key);
-            ((JMenuItem)button.getComponent(0)).setText(JCPMenuTextMaker.getInstance(guistring).getText(key.substring(0,key.length()-5) + "MenuTitle"));
+            ((JMenuItem)button.getComponent(0)).setText(menuTextMaker.getText(key.substring(0,key.length()-5) + "MenuTitle"));
         }
         if(insertTextPanel!=null){
             insertTextPanel.updateLanguage();
@@ -634,5 +635,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 
     public boolean isModified() {
         return modified;
+    }
+
+    public JCPMenuTextMaker getMenuTextMaker() {
+        return menuTextMaker;
     }
 }

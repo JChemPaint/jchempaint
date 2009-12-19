@@ -5,6 +5,7 @@
  *  $Revision: 7634 $
  *
  *  Copyright (C) 1997-2008 Stefan Kuhn
+ *  Some portions Copyright (C) 2009 Konstantin Tokarev
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -49,6 +50,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.TransferHandler;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -78,6 +80,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private static final long serialVersionUID = 7810772571955039160L;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
     private String lastSelectId;
+    TransferHandler th;
+
+    public JChemPaintPanel() {
+    }
 
 	/**
      * Builds a JCPPanel with a certain model and a certain gui
@@ -89,16 +95,25 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug) {
         this.guistring = gui;
+        menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
-        this.setLayout(new BorderLayout());
-        topContainer = new JPanel(new BorderLayout());
-        topContainer.setLayout(new BorderLayout());
-        this.add(topContainer, BorderLayout.NORTH);
         try {
 			renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
 		} catch (IOException e) {
 			announceError(e);
 		}
+		if (gui.equals("stable")) {
+			setAppTitle(" - JChemPaint");
+		}
+        init();        
+    }
+
+    protected void init() {
+        this.setLayout(new BorderLayout());
+        topContainer = new JPanel(new BorderLayout());
+        topContainer.setLayout(new BorderLayout());
+        this.add(topContainer, BorderLayout.NORTH);
+
         renderPanel.getHub().addChangeModeListener(this);
         renderPanel.setName("renderpanel");
         centerContainer=new JPanel();
@@ -126,11 +141,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 JChemPaintPanel.this.get2DHub().updateView();
             }            
         });
-		if (gui.equals("stable")) {
-			setAppTitle(" - JChemPaint");
-		}
+        th = renderPanel.getTransferHandler();
     }
-
+    
     public void setTitle(String title) {
         Container topLevelContainer = this.getTopLevelContainer();
         if (topLevelContainer instanceof JFrame) {
@@ -369,5 +382,53 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		}
 		return allinone;
     }
+    
+    /**
+     * Drag&Drop support
+     *
+     *@author Konstantin Tokarev
+     *
+     */
+    /*private TransferHandler handler = new TransferHandler() {
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                return false;
+            }
 
+            if (copyItem.isSelected()) {
+                boolean copySupported = (COPY & support.getSourceDropActions()) == COPY;
+
+                if (!copySupported) {
+                    return false;
+                }
+
+                support.setDropAction(COPY);
+            }
+
+            return true;
+        }
+
+        public boolean importData(TransferHandler.TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+            
+            Transferable t = support.getTransferable();
+
+            try {
+                java.util.List<File> l =
+                    (java.util.List<File>)t.getTransferData(DataFlavor.javaFileListFlavor);
+
+                for (File f : l) {
+                    new Doc(f);
+                }
+            } catch (UnsupportedFlavorException e) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
+
+            return true;
+        }
+    };*/
 }
