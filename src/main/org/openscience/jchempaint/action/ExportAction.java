@@ -106,8 +106,8 @@ public class ExportAction extends SaveAsAction {
                     outFile = new File(fileName);
                 }
                 if (outFile.exists()) {
-                    String message = "File already exists. Do you want to overwrite it?";
-                    String title = "File already exists";
+                    String message = GT._("File already exists. Do you want to overwrite it?");
+                    String title = GT._("File already exists");
                     int value = JOptionPane.showConfirmDialog(jcpPanel, message,
                             title, JOptionPane.YES_NO_OPTION);
                     if (value == JOptionPane.NO_OPTION) {
@@ -122,10 +122,10 @@ public class ExportAction extends SaveAsAction {
                     	writer.append(svg);
                     	writer.flush();
                         JOptionPane.showMessageDialog(jcpPanel,
-                                "Exported image to " + outFile);
+                                GT._("Exported image to") + " " + outFile);
                         return;
                     } catch (IOException e) {
-                        String error = "Problem exporting to svg";
+                        String error = GT._("Problem exporting to svg");
                         JOptionPane.showMessageDialog(jcpPanel, error);
                         return;
                     }
@@ -146,20 +146,20 @@ public class ExportAction extends SaveAsAction {
                                 outFile);
                         if (succeeded) {
                             JOptionPane.showMessageDialog(jcpPanel,
-                                    "Exported image to " + outFile);
+                                    GT._("Exported image to")+ " " + outFile);
                             return;
                         } else {
                             // no writer of type imageIOType found
                             ImageIO.write(image, "PNG", outFile);
                             JOptionPane.showMessageDialog(jcpPanel,
-                                    "Exported image to " + outFile+
-                                    " as PNG, since "+type+" could not be written");
+                                    GT._("Exported image to")+ " " + outFile+
+                                    " " + GT._("as PNG, since")+ " "+type+" "+GT._("could not be written"));
                             return;
                         }
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
                         JOptionPane.showMessageDialog(jcpPanel,
-                                "Problem exporting image");
+                                GT._("Problem exporting image"));
                     }
                 }
             }
