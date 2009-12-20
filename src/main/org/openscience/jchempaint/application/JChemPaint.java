@@ -201,7 +201,7 @@ public class JChemPaint {
 
     public static void showEmptyInstance(boolean debug) {
         IChemModel chemModel = emptyModel();
-        showInstance(chemModel, GT._("Untitled") + "_"
+        showInstance(chemModel, GT._("Untitled") + " "
                 + (instancecounter++), debug);
     }
     
