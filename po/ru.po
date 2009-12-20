@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-19 03:38+0300\n"
-"PO-Revision-Date: 2009-12-19 03:50+0300\n"
+"POT-Creation-Date: 2009-12-20 12:13+0300\n"
+"PO-Revision-Date: 2009-12-20 12:15+0300\n"
 "Last-Translator: Konstantin Tokarev <annulen@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgstr "Файл не существует"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:204
 msgid "Untitled"
-msgstr "Безымянный"
+msgstr "Без имени"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:398
 msgid "Could not determine file format"
@@ -122,6 +122,8 @@ msgid "File already exists. Do you want to overwrite it?"
 msgstr "Файл уже существует. Вы хотите перезаписать его?"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
 msgid "File already exists"
 msgstr "Файл уже существует"
 
@@ -187,6 +189,21 @@ msgstr "Неправильный символ"
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:114
 msgid "Nothing to save."
 msgstr "Нечего сохранить."
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
+msgid "File"
+msgstr "Файл"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+msgid "already exists. Do you want to overwrite it?"
+msgstr "уже существует. Вы хотите перезаписать его?"
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
+msgid "Cannot save file in this format:"
+msgstr "Не удалось сохранить файл в этом формате:"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:205
 msgid "Error while writing file"
@@ -1490,7 +1507,7 @@ msgstr "Мейтнерий"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:806
 msgid "Darmstadtium"
-msgstr ""
+msgstr "Дармштадтий"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:809
 msgid "Roentgenium"
@@ -1532,48 +1549,48 @@ msgstr "неизвестно"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:849
 msgid "Noble Gases"
-msgstr "благородные газы"
+msgstr "Благородные газы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:851
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:129
 msgid "Halogens"
-msgstr "галогены"
+msgstr "Галогены"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:853
 msgid "Nonmetals"
-msgstr "неметаллы"
+msgstr "Неметаллы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:855
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:135
 msgid "Metalloids"
-msgstr "металлоиды"
+msgstr "Металлоиды"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:857
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:134
 msgid "Metals"
-msgstr "металлы"
+msgstr "Металлы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:859
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:132
 msgid "Alkali Earth Metals"
-msgstr "щелочноземельные металлы"
+msgstr "Щелочноземельные металлы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:861
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:131
 msgid "Alkali Metals"
-msgstr "щелочные металы"
+msgstr "Щелочные металы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:863
 msgid "Transition metals"
-msgstr "переходные металлы"
+msgstr "Переходные металлы"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:865
 msgid "Lanthanides"
-msgstr "лантаниды"
+msgstr "Лантаниды"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:867
 msgid "Actinides"
-msgstr "актиниды"
+msgstr "Актиниды"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:881
 msgid "Gas"
@@ -1666,10 +1683,6 @@ msgstr "Тайский"
 #: src/main/org/openscience/jchempaint/GT.java:133
 msgid "Russian"
 msgstr "Русский"
-
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
-msgid "File"
-msgstr "Файл"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:58
 msgid "New"
@@ -1994,7 +2007,7 @@ msgstr "Валентность {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:232
 msgid "Variable Attachment Point *"
-msgstr ""
+msgstr "Точка возможного присоединения *"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:233
 msgid "R"

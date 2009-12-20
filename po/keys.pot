@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-19 03:38+0300\n"
+"POT-Creation-Date: 2009-12-20 12:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,6 +131,8 @@ msgid "File already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
 msgid "File already exists"
 msgstr ""
 
@@ -195,6 +197,21 @@ msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:114
 msgid "Nothing to save."
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
+msgid "File"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+msgid "already exists. Do you want to overwrite it?"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
+msgid "Cannot save file in this format:"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:205
@@ -1679,10 +1696,6 @@ msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:133
 msgid "Russian"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
-msgid "File"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:58
