@@ -156,11 +156,11 @@ public class SaveAsAction extends JCPAction
                     type = ((IJCPFileFilter) currentFilter).getType();
                     File outFile = chooser.getSelectedFile();
                     if(outFile.exists()){
-                        ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
+                        ready=JOptionPane.showConfirmDialog((Component)null,GT._("File")+" "+outFile.getName()+" "+GT._("already exists. Do you want to overwrite it?"),GT._("File already exists"),JOptionPane.YES_NO_OPTION);
                     }else{
                         try{
                             if(new File(outFile.getCanonicalFile()+"."+type).exists()){
-                                ready=JOptionPane.showConfirmDialog((Component)null,"File "+outFile.getName()+" already exists. Do you want to overwrite it?","File already exists",JOptionPane.YES_NO_OPTION);
+                                ready=JOptionPane.showConfirmDialog((Component)null,GT._("File")+" "+outFile.getName()+" "+GT._("already exists. Do you want to overwrite it?"),GT._("File already exists"),JOptionPane.YES_NO_OPTION);
                             }
                         }catch(Throwable ex){
                             jcpPanel.announceError(ex);
@@ -194,7 +194,7 @@ public class SaveAsAction extends JCPAction
                                     outFile = saveAsRXN(model, outFile);
                                 } else
                                 {
-                                    String error = "Cannot save file in this format: " + type;
+                                    String error = GT._("Cannot save file in this format:") + " " + type;
                                     logger.error(error);
                                     JOptionPane.showMessageDialog(jcpPanel, error);
                                     return;
