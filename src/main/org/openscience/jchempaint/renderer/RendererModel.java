@@ -628,17 +628,14 @@ public class RendererModel implements Serializable, Cloneable {
      * selected). Otherwise, the atom is colored black.
      */
     public Color getAtomColor(IAtom atom, Color defaultColor) {
-        // logger.debug("Getting atom front color for " + atom.toString());
         if (atom == null) {
             return defaultColor;
         }
 
         Color atomColor = defaultColor;
         if (this.parameters.isColorAtomsByType()) {
-            // logger.debug("Coloring atom by type");
             atomColor = colorer.getAtomColor(atom);
         }
-        // logger.debug("Color: " + atomColor.toString());
         return atomColor;
     }
 

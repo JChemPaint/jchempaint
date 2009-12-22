@@ -1,9 +1,6 @@
-/* $RCSfile$
- * $Author$
- * $Date$
- * $Revision$
- *
+/* 
  * Copyright (C) 1997-2007  Egon Willighagen <egonw@users.sf.net>
+ *               2009       Mark Rijnbeek
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -27,25 +24,60 @@ package org.openscience.jchempaint.renderer.color;
 import org.openscience.cdk.interfaces.IAtom;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Gives a short table of atom colors for 2D display.
- *
- * @cdk.module render
- * @cdk.githash
+ * 
  */
 public class CDK2DAtomColors implements IAtomColorer, java.io.Serializable {
 
     private static final long serialVersionUID = 6712994043820219426L;
-    
-    private final static Color HYDROGEN       = Color.black;
-    private final static Color CARBON         = Color.black;
-    private final static Color NITROGEN       = Color.blue;
-    private final static Color OXYGEN         = Color.red;
-    private final static Color PHOSPHORUS     = Color.green.darker();
-    private final static Color SULPHUR        = Color.yellow.darker();
 
-    private final static Color DEFAULT        = Color.black;
+    private final static Color DEFAULT        = new Color(255,20,147);
+
+    private static Map<String,Color> colorMap;
+    
+    /*
+     * Color map with RasMol/Chime Color RGB Values
+     * http://www.umass.edu/microbio/rasmol/rascolor.htm
+     * Excepted H and C (too light)
+     */
+    static {
+       colorMap = new HashMap<String,Color>(); 
+
+       colorMap.put("C" , new Color(144,144,144 ));
+       colorMap.put("H" , new Color(144,144,144 ));
+       colorMap.put("O" , new Color(240,0,0     ));
+       colorMap.put("H" , new Color(255,255,255 ));
+       colorMap.put("N" , new Color(143,143,255 ));
+       colorMap.put("S" , new Color(255,200,50  ));
+       colorMap.put("Cl", new Color(0,255,0     ));
+       colorMap.put("B" , new Color(0,255,0     ));
+       colorMap.put("P" , new Color(255,165,0   ));
+       colorMap.put("Fe", new Color(255,165,0   ));
+       colorMap.put("Ba", new Color(255,165,0   ));
+       colorMap.put("Na", new Color(0,0,255     ));
+       colorMap.put("Mg", new Color(34,139,34   ));
+       colorMap.put("Zn", new Color(165,42,42   ));
+       colorMap.put("Cu", new Color(165,42,42   ));
+       colorMap.put("Ni", new Color(165,42,42   ));
+       colorMap.put("Br", new Color(165,42,42   ));
+       colorMap.put("Ca", new Color(128,128,144 ));
+       colorMap.put("Mn", new Color(128,128,144 ));
+       colorMap.put("Al", new Color(128,128,144 ));
+       colorMap.put("Ti", new Color(128,128,144 ));
+       colorMap.put("Cr", new Color(128,128,144 ));
+       colorMap.put("Ag", new Color(128,128,144 ));
+       colorMap.put("F" , new Color(218,165,32  ));
+       colorMap.put("Si", new Color(218,165,32  ));
+       colorMap.put("Au", new Color(218,165,32  ));
+       colorMap.put("I" , new Color(160,32,240  ));
+       colorMap.put("Li", new Color(178,34,34   ));
+       colorMap.put("He", new Color(255,192,203 ));
+       
+    }
     
     /**
      * Returns the CDK 2D color for the given atom's element.
@@ -55,7 +87,7 @@ public class CDK2DAtomColors implements IAtomColorer, java.io.Serializable {
     public Color getAtomColor(IAtom a) {
         return getAtomColor(a, DEFAULT);
     }
-    
+
     /**
      * Returns the CDK 2D color for the given atom's element, or
      * defaults to the given color if no color is defined.
@@ -66,32 +98,9 @@ public class CDK2DAtomColors implements IAtomColorer, java.io.Serializable {
      */
     public Color getAtomColor(IAtom atom, Color defaultColor) {
         Color color = defaultColor;
-        int atomnumber = 0;
-        if(atom.getAtomicNumber()!=null)
-            atomnumber = atom.getAtomicNumber();
-        if (atomnumber != 0) {
-            switch (atomnumber) {
-                case 1:    color = CDK2DAtomColors.HYDROGEN; break;
-                case 6:    color = CDK2DAtomColors.CARBON; break;
-                case 7:    color = CDK2DAtomColors.NITROGEN; break;
-                case 8:    color = CDK2DAtomColors.OXYGEN; break;
-                case 15:   color = CDK2DAtomColors.PHOSPHORUS; break;
-                case 16:   color = CDK2DAtomColors.SULPHUR; break;
-            }
-        } else {
-            String symbol = atom.getSymbol();
-            if (symbol.equals("N")) {
-                color = CDK2DAtomColors.NITROGEN;
-            }
-            if (symbol.equals("O")) {
-                color = CDK2DAtomColors.OXYGEN;
-            }
-            if (symbol.equals("P")) {
-                color = CDK2DAtomColors.PHOSPHORUS;
-            }
-            if (symbol.equals("S")) {
-                color = CDK2DAtomColors.SULPHUR;
-            }
+        String symbol = atom.getSymbol();
+        if(colorMap.containsKey(symbol)) {
+            color = colorMap.get(symbol);
         }
         return color;
     }
