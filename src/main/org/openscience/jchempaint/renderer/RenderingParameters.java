@@ -113,7 +113,7 @@ public class RenderingParameters {
 
     private String fontName = "Arial";
 
-    private IFontManager.FontStyle fontStyle = IFontManager.FontStyle.NORMAL;
+    private IFontManager.FontStyle fontStyle = IFontManager.FontStyle.BOLD;
 
     private Color externalHighlightColor = Color.orange;
 
