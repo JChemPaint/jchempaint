@@ -41,8 +41,8 @@ public class RasmolColors implements IAtomColorer, java.io.Serializable {
     private static Map<String,Color> colorMap;
     
     /*
-     * Color map with RasMol/Chime Color RGB Values
-     * Excepted H and C (too light)
+     * Color map with RasMol/Chime Color RGB Values.
+     * Excepted H and C (too light).
      */
     static {
        colorMap = new HashMap<String,Color>(); 
@@ -80,7 +80,7 @@ public class RasmolColors implements IAtomColorer, java.io.Serializable {
     }
     
     /**
-     * Returns the CDK 2D color for the given atom's element.
+     * Returns the Rasmol color for the given atom's element.
      *
      * @param atom         IAtom to get a color for
      */
@@ -89,7 +89,7 @@ public class RasmolColors implements IAtomColorer, java.io.Serializable {
     }
 
     /**
-     * Returns the CDK 2D color for the given atom's element, or
+     * Returns the Rasmol color for the given atom's element, or
      * defaults to the given color if no color is defined.
      *
      * @param atom         IAtom to get a color for
