@@ -18,12 +18,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
-
-/**
- * Atom coloring following RasMol/Chime Color scheme     
- * http://www.umass.edu/microbio/rasmol/rascolor.htm 
- *   
- */
 package org.openscience.jchempaint.renderer.color;
 
 import java.awt.Color;
@@ -32,6 +26,11 @@ import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
 
+/**
+ * Atom coloring following RasMol/Chime Color scheme     
+ * http://www.umass.edu/microbio/rasmol/rascolor.htm 
+ *   
+ */
 public class RasmolColors implements IAtomColorer, java.io.Serializable {
 
     private static final long serialVersionUID = 2588969984094169759L;
@@ -50,7 +49,6 @@ public class RasmolColors implements IAtomColorer, java.io.Serializable {
        colorMap.put("C" , new Color(144,144,144 ));
        colorMap.put("H" , new Color(144,144,144 ));
        colorMap.put("O" , new Color(240,0,0     ));
-       colorMap.put("H" , new Color(255,255,255 ));
        colorMap.put("N" , new Color(143,143,255 ));
        colorMap.put("S" , new Color(255,200,50  ));
        colorMap.put("Cl", new Color(0,255,0     ));
