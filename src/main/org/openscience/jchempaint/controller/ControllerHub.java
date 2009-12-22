@@ -1753,7 +1753,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         HashMap<IAtom, Point2d[]> atomCoordsMap = new HashMap<IAtom, Point2d[]>();
         RendererModel renderModel = renderer.getRenderer2DModel();
         IAtomContainer toflip;
-        if (renderModel.getSelection().getConnectedAtomContainer()!=null) {
+        if (renderModel.getSelection().getConnectedAtomContainer()!=null &&
+            renderModel.getSelection().getConnectedAtomContainer().getAtomCount()!=0   ) {
             toflip = renderModel.getSelection().getConnectedAtomContainer();
         }else{
             List<IAtomContainer> toflipall = ChemModelManipulator.getAllAtomContainers(chemModel);
