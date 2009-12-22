@@ -114,7 +114,9 @@ public class BasicAtomGenerator implements IGenerator {
 	    double d = 2 * r;
 	    if (model.getCompactShape() == AtomShape.SQUARE) {
     	    return new RectangleElement(
-    	            p.x - r, p.y - r, d, d, true, getColorForAtom(atom, model));
+    	            //p.x - r, p.y - r, d, d, true, getColorForAtom(atom, model));
+    	            //with upside down fix: 
+                    p.x - r, p.y + r, d, -1*d, true, getColorForAtom(atom, model));
 	    } else {
 	        return new OvalElement(
 	                p.x, p.y, r, true, getColorForAtom(atom, model));
