@@ -42,6 +42,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.jchempaint.renderer.color.CDK2DAtomColors;
 import org.openscience.jchempaint.renderer.color.IAtomColorer;
+import org.openscience.jchempaint.renderer.color.RasmolColors;
 import org.openscience.jchempaint.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
@@ -79,7 +80,7 @@ public class RendererModel implements Serializable, Cloneable {
 
     private Map<IAtom, String> toolTipTextMap = new HashMap<IAtom, String>();
 
-    private IAtomColorer colorer = new CDK2DAtomColors();
+    private IAtomColorer colorer = new RasmolColors();
 
     private IAtom highlightedAtom = null;
 
