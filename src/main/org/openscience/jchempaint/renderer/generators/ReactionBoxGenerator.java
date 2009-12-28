@@ -46,9 +46,9 @@ public class ReactionBoxGenerator implements IReactionGenerator {
         
         ElementGroup diagram = new ElementGroup();
         diagram.add(new RectangleElement(totalBounds.getMinX()-d,
-                                    totalBounds.getMinY()-d,
-                                    totalBounds.getMaxX()+d,
                                     totalBounds.getMaxY()+d,
+                                    totalBounds.getMaxX()+d,
+                                    totalBounds.getMinY()-d,
                                     model.getForeColor()));
         if (reaction.getID() != null) {
         	diagram.add(new TextElement((totalBounds.getMinX()

@@ -56,7 +56,7 @@ public class AtomContainerTitleGenerator implements IGenerator {
         double maxY = totalBounds.getMaxY();
         Color c = model.getForeColor();
         diagram.add(new TextElement(
-                        (minX+maxX)/2, maxY+d, (String)ac.getProperty(CDKConstants.TITLE), c));
+                        (minX+maxX)/2, minY-d, (String)ac.getProperty(CDKConstants.TITLE), c));
         return diagram;
     }
     

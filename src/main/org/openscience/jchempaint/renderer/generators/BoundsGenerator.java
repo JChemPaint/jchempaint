@@ -60,9 +60,9 @@ public class BoundsGenerator implements IReactionGenerator {
     public IRenderingElement generate(IMolecule molecule, RendererModel model) {
         Rectangle2D bounds = Renderer.calculateBounds(molecule);
         return new RectangleElement(bounds.getMinX(),
-                bounds.getMinY(),
-                bounds.getMaxX(),
                 bounds.getMaxY(),
+                bounds.getMaxX(),
+                bounds.getMinY(),
                 model.getBoundsColor());
     }
     
@@ -71,9 +71,9 @@ public class BoundsGenerator implements IReactionGenerator {
         Rectangle2D totalBounds = Renderer.calculateBounds(moleculeSet);
         
         return new RectangleElement(totalBounds.getMinX(),
-                                    totalBounds.getMinY(),
-                                    totalBounds.getMaxX(),
                                     totalBounds.getMaxY(),
+                                    totalBounds.getMaxX(),
+                                    totalBounds.getMinY(),
                                     model.getBoundsColor());
     }
 

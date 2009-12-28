@@ -61,9 +61,9 @@ public class ProductsBoxGenerator implements IReactionGenerator {
         
         ElementGroup diagram = new ElementGroup();
         diagram.add(new RectangleElement(totalBounds.getMinX()-DISTANCE,
-                                    totalBounds.getMinY()-DISTANCE,
-                                    totalBounds.getMaxX()+DISTANCE,
                                     totalBounds.getMaxY()+DISTANCE,
+                                    totalBounds.getMaxX()+DISTANCE,
+                                    totalBounds.getMinY()-DISTANCE,
                                     model.getForeColor()));
         diagram.add(new TextElement((totalBounds.getMinX()+totalBounds.getMaxX())/2, totalBounds.getMinY()-DISTANCE, "Products", model.getForeColor()));
         return diagram;
