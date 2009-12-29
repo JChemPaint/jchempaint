@@ -55,6 +55,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.inchi.StdInChIParser;
 
 /**
@@ -115,7 +116,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             IMolecule molecule = getMolecule();
             if (molecule == null)
                 return;
-            JChemPaintAbstractApplet.generateModel(jChemPaintPanel, molecule, true, false);
+            JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
             if (closeafter != null)
                 closeafter.setVisible(false);
         }

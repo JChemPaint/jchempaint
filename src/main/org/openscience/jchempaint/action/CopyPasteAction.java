@@ -80,6 +80,7 @@ import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.controller.RemoveModule;
@@ -499,7 +500,7 @@ public class CopyPasteAction extends JCPAction{
         //somehow, in case of single atoms, there are no coordinates
         if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
-        JChemPaintAbstractApplet.generateModel(jcpPanel, toPaste, false,true);
+        JChemPaint.generateModel(jcpPanel, toPaste, false,true);
         jcpPanel.get2DHub().fireStructureChangedEvent();
         
         //We select the inserted structure
