@@ -664,7 +664,7 @@
         </zip>
     </target>
 	
-    <target name="javadoc" depends="compile-jcp">
+    <target name="javadoc" depends="build-applet">
         <mkdir dir="${javadoc.dir}" />
         <javac srcdir="${src}/util" destdir="${javadoc.dir}" optimize="${optimization}"
                 nowarn="${nowarn}"
@@ -680,7 +680,7 @@
                 </fileset>
             	<pathelement location="${dist-classes}"/>
             </classpath>
-        	<include name="**/JCPParmasTaglet.java"/>
+        	<include name="**/JCPParamsTaglet.java"/>
         </javac>
         <javadoc destdir="${javadoc.dir}"
                  author="true" version="true" use="true"
