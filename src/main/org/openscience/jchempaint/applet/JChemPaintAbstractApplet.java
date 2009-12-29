@@ -81,7 +81,9 @@ import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**
- * An abstract class for JCP applets, doing parameter parsing
+ * An abstract class for JCP applets, doing parameter parsing.
+ * 
+ * @jcp.params
  * 
  */
 public abstract class JChemPaintAbstractApplet extends JApplet {

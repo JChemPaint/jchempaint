@@ -664,8 +664,24 @@
         </zip>
     </target>
 	
-    <target name="javadoc">
+    <target name="javadoc" depends="compile-jcp">
         <mkdir dir="${javadoc.dir}" />
+        <javac srcdir="${src}/util" destdir="${javadoc.dir}" optimize="${optimization}"
+                nowarn="${nowarn}"
+                debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
+            <classpath>
+                <fileset dir="${cdk.lib}" >
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                </fileset>
+                <fileset dir="${cdk.dist}/jar">
+                </fileset>
+                <fileset dir="${lib}">
+                </fileset>
+            	<pathelement location="${dist-classes}"/>
+            </classpath>
+        	<include name="**/JCPParmasTaglet.java"/>
+        </javac>
         <javadoc destdir="${javadoc.dir}"
                  author="true" version="true" use="true"
                  public="true"
@@ -680,6 +696,7 @@
                 <fileset dir="${lib}">
                 </fileset>
             </classpath>
+        	<taglet name="JCPParamsTaglet" path="${cdk.lib}/jar/xom-1.1.jar:${javadoc.dir}:${dist-classes}" />
             <packageset dir="${src}/main" defaultexcludes="yes">
                 <include name="org/openscience/jchempaint/**" />
             </packageset>
