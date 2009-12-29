@@ -87,7 +87,6 @@ public class TemplateImagesMaker {
      * @throws SVGGraphics2DIOException 
      */
     private static String getMolSvg(IAtomContainer cdkmol, int width, int height) throws UnsupportedEncodingException, SVGGraphics2DIOException {
-        flipOnReadingAndWriting(cdkmol);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         List<IGenerator> generators = new ArrayList<IGenerator>();
         generators.add(new BasicBondGenerator());
@@ -135,14 +134,4 @@ public class TemplateImagesMaker {
         }
         return (sb.toString());
       }
-    
-    public static void flipOnReadingAndWriting (IAtomContainer chemModel) {
-        // flip needed due to difference between Java and chem coordinates
-            for (IAtom atom : chemModel.atoms()) {
-                if (atom.getPoint2d()!=null) {
-                    atom.setPoint2d(new Point2d(atom.getPoint2d().x,atom.getPoint2d().y*-1));
-                }
-             }
-
-    }
 }

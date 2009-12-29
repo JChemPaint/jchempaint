@@ -13,6 +13,7 @@
 	<property name="cdk.metainf" value="${cdk.dir}/src/META-INF" />
     <property name="src" value="src" />
     <property name="lib" value="lib" />
+	<property name="javadoc.dir" value="javadoc" />
     <property name="devellib" value="libdevel" />
 	<property name="dist" value="dist" />
     <property name="dist-classes" value="${dist}/classes" />
@@ -25,6 +26,7 @@
 
     <target id="clean" name="clean" description="Removes compiled stuff.">
         <delete dir="${dist}" />
+    	<delete dir="${javadoc.dir}" />
     </target>
 
 	<target id="dist" name="dist" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
@@ -660,6 +662,28 @@
         <zip destfile="${dist}/jchempaint-lib-${jcp.version}.zip">
               <zipfileset dir="${dist}/alljars" includes="*.jar"/>
         </zip>
+    </target>
+	
+    <target name="javadoc">
+        <mkdir dir="${javadoc.dir}" />
+        <javadoc destdir="${javadoc.dir}"
+                 author="true" version="true" use="true"
+                 public="true"
+                 windowtitle="JChemPaint API">
+            <classpath>
+                <fileset dir="${cdk.lib}" >
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                </fileset>
+                <fileset dir="${cdk.dist}/jar">
+                </fileset>
+                <fileset dir="${lib}">
+                </fileset>
+            </classpath>
+            <packageset dir="${src}/main" defaultexcludes="yes">
+                <include name="org/openscience/jchempaint/**" />
+            </packageset>
+        </javadoc>
     </target>
 </project>
 
