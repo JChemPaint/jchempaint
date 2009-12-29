@@ -94,7 +94,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
             + "for more information";
 
-    private static String[][] paramInfo = {
+    public static String[][] paramInfo = {
             { "background", "color",
                     "Background color as integer or hex starting with #" },
             { "atomNumbersVisible", "true or false",

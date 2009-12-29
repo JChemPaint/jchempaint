@@ -18,7 +18,7 @@
  */
 import java.util.Map;
 
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 
 import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
@@ -76,7 +76,6 @@ public class JCPParamsTaglet implements Taglet {
     }
 
     public String toString(Tag tag) {
-        new JChemPaintEditorApplet();
         return expand(tag);
     }
 
@@ -93,7 +92,7 @@ public class JCPParamsTaglet implements Taglet {
     }
 
     private String expand(Tag tag) {
-        String[][] params = new JChemPaintEditorApplet().getParameterInfo();
+        String[][] params = JChemPaintAbstractApplet.paramInfo;
         StringBuffer value = new StringBuffer();
         value.append("</DL></DT></DD><br><br>The following applet params can be used:<br>");
         for(int i=0;i<params.length;i++){
