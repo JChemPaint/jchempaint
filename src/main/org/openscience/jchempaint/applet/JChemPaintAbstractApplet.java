@@ -134,11 +134,19 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             { "debug", "true or false",
                     "switches on debug output (default false)" } };
 
+    /**
+     * Gives basic information about the applet.
+     * @see java.applet.Applet#getAppletInfo()
+     */
     @Override
     public String getAppletInfo() {
         return appletInfo;
     }
 
+    /**
+     * Gives informations about applet params.
+     * @see java.applet.Applet#getParameterInfo()
+     */
     @Override
     public String[][] getParameterInfo() {
         return paramInfo;
@@ -219,6 +227,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
     }
 
+    /**
+     * NOT FOR USE FROM JavaScript.
+     */
     @Override
     public void start() {
         RendererModel rendererModel = theJcpp.get2DHub().getRenderer()
@@ -312,11 +323,17 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
     }
 
+    /**
+     * NOT FOR USE FROM JavaScript.
+     */
     @Override
     public void init() {
         prepareExternalFrame();
     }
 
+    /**
+     * NOT FOR USE FROM JavaScript.
+     */
     @Override
     public void stop() {
     }
@@ -324,7 +341,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     /**
      * @return Returns the theJcpp.
      */
-    public AbstractJChemPaintPanel getTheJcpp() {
+    private AbstractJChemPaintPanel getTheJcpp() {
         return theJcpp;
     }
 
@@ -332,7 +349,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * @param theJcpp
      *            The theJcpp to set.
      */
-    public void setTheJcpp(AbstractJChemPaintPanel theJcpp) {
+    protected void setTheJcpp(AbstractJChemPaintPanel theJcpp) {
         this.theJcpp = theJcpp;
     }
 
@@ -437,7 +454,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     }
 
     /**
-     * Sets a mol file in the applet
+     * This method sets a new structure in the editor and removes the old one.
      * 
      * @param mol
      * @throws Exception
