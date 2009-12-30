@@ -2,6 +2,7 @@ HEAD
 ----
 New features:
 * Quasi-3D rotation tool
+* The javadoc for JChemPaintAbstractApplet contains applet parameter documentation
 
 Fixes:
 
