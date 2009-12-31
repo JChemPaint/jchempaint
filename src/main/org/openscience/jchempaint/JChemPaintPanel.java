@@ -40,6 +40,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
@@ -50,7 +51,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.TransferHandler;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -80,7 +80,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private static final long serialVersionUID = 7810772571955039160L;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
     private String lastSelectId;
-    TransferHandler th;
+    private JCPTransferHandler handler;
 
     public JChemPaintPanel() {
     }
@@ -141,7 +141,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 JChemPaintPanel.this.get2DHub().updateView();
             }            
         });
-        th = renderPanel.getTransferHandler();
+        handler = new JCPTransferHandler(this);
+        renderPanel.setTransferHandler(handler);
     }
     
     public void setTitle(String title) {
@@ -383,52 +384,5 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		return allinone;
     }
     
-    /**
-     * Drag&Drop support
-     *
-     *@author Konstantin Tokarev
-     *
-     */
-    /*private TransferHandler handler = new TransferHandler() {
-        public boolean canImport(TransferHandler.TransferSupport support) {
-            if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                return false;
-            }
-
-            if (copyItem.isSelected()) {
-                boolean copySupported = (COPY & support.getSourceDropActions()) == COPY;
-
-                if (!copySupported) {
-                    return false;
-                }
-
-                support.setDropAction(COPY);
-            }
-
-            return true;
-        }
-
-        public boolean importData(TransferHandler.TransferSupport support) {
-            if (!canImport(support)) {
-                return false;
-            }
-            
-            Transferable t = support.getTransferable();
-
-            try {
-                java.util.List<File> l =
-                    (java.util.List<File>)t.getTransferData(DataFlavor.javaFileListFlavor);
-
-                for (File f : l) {
-                    new Doc(f);
-                }
-            } catch (UnsupportedFlavorException e) {
-                return false;
-            } catch (IOException e) {
-                return false;
-            }
-
-            return true;
-        }
-    };*/
+    
 }
