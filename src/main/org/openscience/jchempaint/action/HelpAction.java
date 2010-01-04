@@ -29,8 +29,11 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.net.URL;
 
 import org.openscience.jchempaint.dialog.HelpDialog;
+import org.openscience.jchempaint.GT;
 
 /**
  * Pops up the help.
@@ -43,15 +46,22 @@ public class HelpAction extends JCPAction
 
 	public void actionPerformed(ActionEvent e)
 	{
+        
+        String helpRoot = "org/openscience/jchempaint/resources/userhelp_jcp/";
+        String language = GT.getLanguage();
+        URL helpURL = HelpDialog.class.getClassLoader().getResource(helpRoot + language + "/jcp.html");
+        if (helpURL == null) {
+            language = "en_US";
+        }
 		if (type.equals("tutorial"))
 		{
-			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/contain/tutorial.html").setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/tutorial.html").setVisible(true);
 		} else if (type.equals("feedback"))
         {
-            new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/contain/feedback.html").setVisible(true);
+            new HelpDialog(null, helpRoot+language+"/contain/feedback.html").setVisible(true);
         } else
 		{
-			new HelpDialog(null, "org/openscience/jchempaint/resources/userhelp_jcp/en/jcp.html").setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/jcp.html").setVisible(true);
 		}
 	}
 }
