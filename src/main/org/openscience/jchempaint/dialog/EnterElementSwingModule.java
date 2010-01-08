@@ -56,7 +56,6 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.ControllerModuleAdapter;
 import org.openscience.jchempaint.controller.IChemModelRelay;
-import org.openscience.jchempaint.controller.IControllerModel;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
@@ -170,7 +169,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 					ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
 					IRingSet ringset=new SSSRFinder(container).findSSSR();
 					for(IAtomContainer ring:ringset.atomContainers()){
-						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength() / chemModelRelay.getRenderer().getRenderer2DModel().getScale());
+						ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength() / chemModelRelay.getRenderer().getRenderer2DModel().getScale(), RingPlacer.jcpAngles);
 					}
 					lastplaced=container.getAtom(counter);
 					counter++;

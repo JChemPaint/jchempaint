@@ -24,6 +24,9 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -172,7 +175,9 @@ public class AddRingModule extends ControllerModuleAdapter {
                 ring.getBond(4).setOrder(IBond.Order.DOUBLE);
             }
             double bondLength = ((ControllerHub)this.chemModelRelay).calculateAverageBondLength(this.chemModelRelay.getIChemModel().getMoleculeSet());
-            ringPlacer.placeRing(ring, worldCoord, bondLength);
+            
+            ringPlacer.placeRing(ring, worldCoord, bondLength, RingPlacer.jcpAngles);
+            
             for(IAtom atom : ring.atoms())
                 this.chemModelRelay.addPhantomAtom(atom);
             for(IBond atom : ring.bonds())

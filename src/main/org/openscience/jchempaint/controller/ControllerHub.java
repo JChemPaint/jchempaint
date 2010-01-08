@@ -1113,7 +1113,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     public IRing addRing(int ringSize, Point2d worldcoord, boolean undoable) {
         IRing ring = chemModel.getBuilder().newRing(ringSize, "C");
         double bondLength = calculateAverageBondLength(chemModel.getMoleculeSet());
-        ringPlacer.placeRing(ring, worldcoord, bondLength);
+        ringPlacer.placeRing(ring, worldcoord, bondLength, RingPlacer.jcpAngles);
         IMoleculeSet set = chemModel.getMoleculeSet();
 
         // the molecule set should not be null, but just in case...
@@ -1145,7 +1145,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         makeRingAromatic(ring);
 
         double bondLength = calculateAverageBondLength(chemModel.getMoleculeSet());
-        ringPlacer.placeRing(ring, worldcoord, bondLength);
+        ringPlacer.placeRing(ring, worldcoord, bondLength,RingPlacer.jcpAngles);
         IMoleculeSet set = chemModel.getMoleculeSet();
 
         // the molecule set should not be null, but just in case...
@@ -1255,7 +1255,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
              */
             bondLength = calculateAverageBondLength(chemModel.getMoleculeSet());
             Point2d ringCenter = new Point2d(atom.getPoint2d());
-            ringPlacer.placeRing(newRing, ringCenter, bondLength);
+            ringPlacer.placeRing(newRing, ringCenter, bondLength,RingPlacer.jcpAngles);
         } else {
             bondLength = GeometryTools.getBondLengthAverage(sourceContainer);
             Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms, chemModel);
