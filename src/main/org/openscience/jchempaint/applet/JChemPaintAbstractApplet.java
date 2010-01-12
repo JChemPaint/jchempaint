@@ -232,14 +232,14 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      */
     @Override
     public void start() {
+        // Parameter parsing goes here
+        loadModelFromParam();
         RendererModel rendererModel = theJcpp.get2DHub().getRenderer()
                 .getRenderer2DModel();
         IChemModel chemModel = theJcpp.getChemModel();
         IControllerModel controllerModel = theJcpp.get2DHub()
                 .getController2DModel();
 
-        // Parameter parsing goes here
-        loadModelFromParam();
         String atomNumbers = getParameter("atomNumbersVisible");
         if (atomNumbers != null) {
             if (atomNumbers.equals("true"))

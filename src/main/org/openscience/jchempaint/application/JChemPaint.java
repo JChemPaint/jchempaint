@@ -674,9 +674,9 @@ public class JChemPaint {
                     // frame.pack();
                     // frame.show();
 
-                    IMoleculeSet set = chemModel.getMoleculeSet();
                     WaitDialog.showDialog();
-                    chemModel.setMoleculeSet(generate2dCoordinates(set));
+                    List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
+                    generate2dCoordinates(acs);
                     WaitDialog.hideDialog();
                     return;
                 }
@@ -709,11 +709,10 @@ public class JChemPaint {
      * @param molecules
      * @throws Exception
      */
-    private static IMoleculeSet generate2dCoordinates(IMoleculeSet molecules) {
-        IMoleculeSet molSet2Dcalculated = new MoleculeSet();
+    private static void generate2dCoordinates(List<IAtomContainer> molecules) {
         StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-        for (int atIdx = 0; atIdx < molecules.getAtomContainerCount(); atIdx++) {
-            IAtomContainer mol = molecules.getAtomContainer(atIdx);
+        for (int atIdx = 0; atIdx < molecules.size(); atIdx++) {
+            IAtomContainer mol = molecules.get(atIdx);
             sdg.setMolecule(mol.getBuilder().newMolecule(mol));
             try {
                 sdg.generateCoordinates();
@@ -721,9 +720,10 @@ public class JChemPaint {
                 e.printStackTrace();
             }
             IAtomContainer ac = sdg.getMolecule();
-            molSet2Dcalculated.addAtomContainer(ac);
+            for(int i=0;i<ac.getAtomCount();i++){
+                mol.getAtom(i).setPoint2d(ac.getAtom(i).getPoint2d());
+            }
         }
-        return molSet2Dcalculated;
     }
 
     public static JChemPaintPanel showInstance(IChemModel chemModel,
