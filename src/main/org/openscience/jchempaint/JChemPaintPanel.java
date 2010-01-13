@@ -33,6 +33,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -47,16 +49,19 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.undo.UndoManager;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.Reaction;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
@@ -65,6 +70,9 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.action.SaveAction;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
@@ -88,17 +96,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	/**
      * Builds a JCPPanel with a certain model and a certain gui
      *
-     * @param chemModel
-     *            The model
-     * @param gui
-     *            The gui string
+     * @param chemModel   The model
+     * @param gui         The gui configuration string
+     * @param debug       Should we be in debug mode?
+     * @param applet      If this panel is to be in an applet, pass the applet here, else null.
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug) {
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet) {
+        GT.setLanguage(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.language"));
         this.guistring = gui;
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
         try {
-			renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug);
+			renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug, false, applet);
 		} catch (IOException e) {
 			announceError(e);
 		}
@@ -144,7 +153,21 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         handler = new JCPTransferHandler(this);
         renderPanel.setTransferHandler(handler);
     }
-    
+
+    /**
+     * Gets the top level container (JFrame, Applet) of this panel.
+     * 
+     * @return The top level container.
+     */
+    public Container getTopLevelContainer() {
+        return this.getParent().getParent().getParent().getParent();
+    }
+
+    /**
+     * If this panel is in a JFrame, sets the title of the JFrame.
+     * 
+     * @param title The title to set.
+     */
     public void setTitle(String title) {
         Container topLevelContainer = this.getTopLevelContainer();
         if (topLevelContainer instanceof JFrame) {
@@ -152,6 +175,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
     }
 
+    /**
+     * Installs popup menus for this panel.
+     * 
+     * @param inputAdapter The SwingPopupModule to use for the popup menus.
+     */
     public void setupPopupMenus(SwingPopupModule inputAdapter) {
         if (inputAdapter.getPopupMenu(PseudoAtom.class) == null) {
             inputAdapter.setPopupMenu(PseudoAtom.class,
@@ -169,11 +197,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
                     this, "chemmodel", this.guistring));
         }
-        if (inputAdapter.getPopupMenu(Reaction.class) == null) {
+        /*if (inputAdapter.getPopupMenu(Reaction.class) == null) {
             inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(
                     this, "reaction", this.guistring));
-        }
+        }*/
     }
+
 
     /**
      * Class for closing jcp
@@ -191,14 +220,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
          *            Description of the Parameter
          */
         public void windowClosing(WindowEvent e) {
-            // JFrame rootFrame = (JFrame) e.getSource();
-            /*
-             * TODO if (rootFrame.getContentPane().getComponent(0) instanceof
-             * JChemPaintEditorPanel) { JChemPaintEditorPanel panel =
-             * (JChemPaintEditorPanel)
-             * rootFrame.getContentPane().getComponent(0);
-             * panel.fireChange(JChemPaintEditorPanel.JCP_CLOSING); }
-             */
             int clear = ((JChemPaintPanel) ((JFrame) e.getSource())
                     .getContentPane().getComponents()[0]).showWarning();
             if (JOptionPane.CANCEL_OPTION != clear) {
@@ -234,11 +255,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#coordinatesChanged()
+     */
     public void coordinatesChanged() {
         setModified(true);
         updateStatusBar();
     }
 
+    /* (non-Javadoc)
+     * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#selectionChanged()
+     */
     public void selectionChanged() {
         updateStatusBar();
         if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
@@ -255,16 +282,22 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             enOrDisableMenus(bondMenu,false);
     }
 
-
+    /* (non-Javadoc)
+     * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#structureChanged()
+     */
     public void structureChanged() {
         setModified(true);
         updateStatusBar();
         //if something changed in the structure, selection should be cleared
         //this is behaviour like eg in word processors, if you type, selection goes away
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
+        updateUndoRedoControls();
         this.get2DHub().updateView();
     }
 
+    /* (non-Javadoc)
+     * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#structurePropertiesChanged()
+     */
     public void structurePropertiesChanged() {
         setModified(true);
         updateStatusBar();
@@ -273,16 +306,22 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
     }
 
+    /* (non-Javadoc)
+     * @see org.openscience.cdk.event.ICDKChangeListener#stateChanged(java.util.EventObject)
+     */
     public void stateChanged(EventObject event) {
     	updateUndoRedoControls();
     }
 
-    public void zoomFactorChanged(EventObject event) {
-    }
-
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+     */
     public void keyPressed(KeyEvent arg0) {
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+     */
     public void keyReleased(KeyEvent arg0) {
         RendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
@@ -305,9 +344,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+     */
     public void keyTyped(KeyEvent arg0) {
     }
 
+    /* (non-Javadoc)
+     * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#zoomChanged()
+     */
     public void zoomChanged() {
         this.updateStatusBar();
     }
@@ -375,6 +420,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.updateStatusBar();
 	}
 	
+    /**
+     * Gets all atomcontainers of a chemodel in one AtomContainer.
+     * 
+     * @param chemModel The chemodel
+     * @return The result.
+     */
     public static IAtomContainer getAllAtomContainersInOne(IChemModel chemModel){
 		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
 		IAtomContainer allinone=chemModel.getBuilder().newAtomContainer();
@@ -383,6 +434,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		}
 		return allinone;
     }
-    
-    
+
+    /**
+     * Sets the lastSecondaryButton attribute. Only to be used once from JCPToolBar.
+     * 
+     * @param lastSecondaryButton The lastSecondaryButton.
+     */
+    public void setLastSecondaryButton(JComponent lastSecondaryButton) {
+        this.lastSecondaryButton = lastSecondaryButton;
+    }
 }

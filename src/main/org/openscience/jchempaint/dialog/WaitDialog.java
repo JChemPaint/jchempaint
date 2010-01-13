@@ -1,14 +1,11 @@
 package org.openscience.jchempaint.dialog;
 
-import javax.swing.JFrame;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Toolkit;
 
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-
-import java.awt.Font;
-import java.net.URL;
 
 /**
  * This class is used to display the Wait Dialog. This Dialog is displayed
@@ -20,7 +17,7 @@ import java.net.URL;
  * @since 1.0
  * @version 1.0
  */
-public class WaitDialog extends JFrame  {
+public class WaitDialog extends JDialog  {
     /**
      * 
      */

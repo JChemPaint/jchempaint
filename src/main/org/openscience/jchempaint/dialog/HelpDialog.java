@@ -68,9 +68,9 @@ public class HelpDialog extends JDialog implements HyperlinkListener
 	 *@param  fr        Description of the Parameter
 	 *@param  helpfile  Description of the Parameter
 	 */
-	public HelpDialog(JFrame fr, String helpfile)
+	public HelpDialog(JFrame fr, String helpfile, String title)
 	{
-		super(fr, "JChemPaint Help", false);
+		super(fr, title , false);
 
 		try
 		{

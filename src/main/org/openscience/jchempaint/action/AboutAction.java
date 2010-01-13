@@ -28,8 +28,12 @@
  */
 package org.openscience.jchempaint.action;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.AboutDialog;
 
 /**
@@ -43,7 +47,8 @@ public class AboutAction extends JCPAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		AboutDialog ad = new AboutDialog(jcpPanel.getGuistring());
+	    Frame frame = JOptionPane.getFrameForComponent(jcpPanel);
+		AboutDialog ad = new AboutDialog(frame, jcpPanel.getGuistring());
 		ad.pack();
 		ad.setVisible(true);
 	}

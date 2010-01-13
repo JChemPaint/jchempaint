@@ -1,12 +1,11 @@
 package org.openscience.jchempaint;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-//import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -25,7 +24,6 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
-//import org.openscience.jchempaint.action.CopyPasteAction;
 import org.openscience.jchempaint.action.JCPAction;
 
 
@@ -142,10 +140,15 @@ public class JChemPaintMenuHelper {
 
                 public void menuSelected(MenuEvent arg0) {
                     menu.removeAll();
-                    if((jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled() && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()==1)
-                            || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom()!=null){
+                    if((SwingPopupModule.lastAtomPopupedFor!=null && SwingPopupModule.lastAtomPopupedFor.getSymbol()!=null)
+                            || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0){
                         try {
-                            IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom()!=null ? jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom().getSymbol() : jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol());
+                            String symbol;
+                            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
+                                symbol = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol();
+                            else
+                                symbol = SwingPopupModule.lastAtomPopupedFor.getSymbol();
+                            IIsotope[] isotopes = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(symbol);
                             for(int i=0;i<isotopes.length;i++){
                                 String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
                                 JMenuItem mi = new JMenuItem(cmd);
@@ -178,24 +181,20 @@ public class JChemPaintMenuHelper {
                 }
             });
         }
-        if(key.equals("language")){
-            final GT.Language[] languages = GT.getLanguageList();
-            for(int i=0;i<languages.length;i++){
-                final int counter=i;
-                JMenuItem jmi = new JChemPaintMenuHelper().createMenuItem(jcpPanel, languages[i].language, false);
-                jmi.addActionListener(new ActionListener(){
-
-                    public void actionPerformed(ActionEvent e) {
-                        GT.setLanguage(languages[counter].code);
-                        jcpPanel.updateMenusWithLanguage();
-                    }
-                    
-                });
-                menu.add(jmi);
-            }
+        //we make large menus two columns
+        JPopupMenu p;
+        if(menu instanceof JMenu)
+            p = ((JMenu)menu).getPopupMenu();
+        else
+            p = (JChemPaintPopupMenu)menu;
+        if(p.getComponents().length>30){
+            Dimension d = p.getPreferredSize();
+            d = new Dimension((int)(d.width * 2.5), (int)(d.height * 0.7));
+            p.setPreferredSize(d);
+            p.setLayout(new FlowLayout());
         }
         if(menu instanceof JMenu)
-            jcpPanel.menus.put(key, (JMenu)menu);
+            jcpPanel.menus.add((JMenu)menu);
         else if(menu instanceof JChemPaintPopupMenu)
             jcpPanel.popupmenuitems.put(key, (JChemPaintPopupMenu)menu);
         return menu;
@@ -285,7 +284,7 @@ public class JChemPaintMenuHelper {
             jcpPanel.undoMenu=mi;
         if(cmd.equals("redo"))
             jcpPanel.redoMenu=mi;
-        jcpPanel.menus.put(cmd, (JMenuItem)mi);
+        jcpPanel.menus.add((JMenuItem)mi);
         return mi;
     }
 

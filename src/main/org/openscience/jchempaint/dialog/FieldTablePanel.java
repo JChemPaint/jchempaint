@@ -51,7 +51,7 @@ public class FieldTablePanel extends JPanel {
 	
 	protected int rows;
 
-    private JTabbedPane tabbedPane;
+    protected JTabbedPane tabbedPane;
     
     /**
      * Constructor for field table panel.

@@ -1,10 +1,28 @@
 HEAD
 ----
+
+3.2
+---
 New features:
 * Quasi-3D rotation tool
 * The javadoc for JChemPaintAbstractApplet contains applet parameter documentation
 
 Fixes:
+
+3.0.1
+-----
+New features:
+* Interaction with tables and spectrum applet (see hightlightTable and spectrumRenderer applet parameters)
+
+Fixes:
+* Tooltips parameter in applet works
+* (Virtually) Complete tranlations for Polish, Hungarian, Spanish, Czech
+* Cancel in Enter Element dialog created empty elements
+* All properties in the preferences dialog are stored in file system
+* Undo/Redo buttons active after drawing a ring (trac #58)
+* Phenyl rings no longer aromatic. Since aromaticity was not considered anywhere else, this lead to wrong H counts (trac #60)
+* Large menus (transition metals only right now) are now two columns to fit on screen (trac #47)
+* Certain functions (cleanup, open/save cml) failed in the applet due to problems with shrinking
 
 3.1
 ---
@@ -14,4 +32,4 @@ New features:
 3.0
 ---
 New features:
-* The is is a completely reworked version of JCP. It is much more user friendly 
+* The is is a completely reworked version of JCP. It is much more user friendly >>>>>>> .merge-right.r15293

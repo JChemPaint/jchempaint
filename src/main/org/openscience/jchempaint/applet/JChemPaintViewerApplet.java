@@ -28,11 +28,17 @@
  */
 package org.openscience.jchempaint.applet;
 
+import java.applet.Applet;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.openscience.cdk.ChemModel;
 import org.openscience.jchempaint.JChemPaintViewerPanel;
 
 public class JChemPaintViewerApplet extends JChemPaintAbstractApplet{
 	
+    int oldnumber=-1;
+    
 	public void init() {
 		boolean fitToScreen = false;
 		String scrollbarParam = this.getParameter("scrollbars"); 
@@ -41,10 +47,44 @@ public class JChemPaintViewerApplet extends JChemPaintAbstractApplet{
 		}
 		JChemPaintViewerPanel p
 		    = new JChemPaintViewerPanel(
-		            new ChemModel(), getWidth(), getHeight(), fitToScreen, debug);	
+		            new ChemModel(), getWidth(), getHeight(), fitToScreen, debug, this);	
 		setTheJcpp(p);
 		this.add(p);
 		super.init();
 	}
 
+
+	  /**
+	   * Handles interaction with a peak table
+	   * @param atomNumber atom number of peaks highlighted in table
+	   */
+	  public void highlightPeakInTable(int atomNumber) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException{
+	    if(getParameter("highlightTable")==null || getParameter("highlightTable").equals("false"))
+	      return;
+	    
+
+	    Class[] paratypes={new Applet().getClass()};
+	    Class jso = Class.forName("netscape.javascript.JSObject");
+	    Method getWindowMethod=jso.getMethod("getWindow", paratypes);
+	    Object win=getWindowMethod.invoke(jso, new Object[] {this});
+	    Class[] paratypes2={new String("").getClass()};
+	    Method evalMethod=jso.getMethod("eval", paratypes2);
+	    Class[] paratypes3={new String("").getClass(),new Object().getClass()};
+	    Method setMemberMethod=jso.getMethod("setMember", paratypes3);
+
+	    if(oldnumber!=-1){
+	        Object tr = evalMethod.invoke(win,new Object[]{"document.getElementById(\"tableid"+oldnumber+"\").style"});
+	        if((oldnumber+1)%2==0)
+	            setMemberMethod.invoke(tr, new Object[]{"backgroundColor","#D3D3D3"});
+	        else
+	            setMemberMethod.invoke(tr, new Object[]{"backgroundColor","white"});
+	    }
+	    Object tr = evalMethod.invoke(win,new Object[]{"document.getElementById(\"tableid"+atomNumber+"\").style"});
+	    if(tr==null){
+	        oldnumber=-1;
+	    }else{
+	        setMemberMethod.invoke(tr, new Object[]{"backgroundColor","#FF6600"});
+	        oldnumber=atomNumber;
+	    }
+	  }
 }

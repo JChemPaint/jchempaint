@@ -70,6 +70,7 @@ import org.openscience.cdk.tools.manipulator.BondManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
@@ -128,27 +129,28 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     private CDKAtomTypeMatcher matcher;
 
     int oldMouseCursor=Cursor.DEFAULT_CURSOR;
-
-    public ControllerHub(IControllerModel controllerModel,
-            IRenderer renderer,
-            IChemModel chemModel,
-            IViewEventRelay eventRelay,
-            UndoRedoHandler undoredohandler,
-            IUndoRedoFactory undoredofactory) {
-        this.controllerModel = controllerModel;
-        this.renderer = renderer;
-        this.chemModel = chemModel;
-        this.eventRelay = eventRelay;
-        this.phantoms = chemModel.getBuilder().newAtomContainer();
-        this.undoredofactory=undoredofactory;
-        this.undoredohandler=undoredohandler;
-
+	public ControllerHub(IControllerModel controllerModel,
+		                   IRenderer renderer,
+		                   IChemModel chemModel,
+		                   IViewEventRelay eventRelay,
+		                   UndoRedoHandler undoredohandler,
+		                   IUndoRedoFactory undoredofactory,
+		                   boolean isViewer,
+		                   JChemPaintAbstractApplet applet) {
+		this.controllerModel = controllerModel;
+		this.renderer = renderer;
+		this.chemModel = chemModel;
+		this.eventRelay = eventRelay;
+		this.phantoms = chemModel.getBuilder().newAtomContainer();
+		this.undoredofactory=undoredofactory;
+		this.undoredohandler=undoredohandler;
         generalModules = new ArrayList<IControllerModule>();
-
-        registerGeneralControllerModule(new HighlightModule(this));
-        registerGeneralControllerModule(new ZoomModule(this));
-        matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
-    }
+		if(!isViewer){
+            registerGeneralControllerModule(new ZoomModule(this));
+		}
+	    registerGeneralControllerModule(new HighlightModule(this, applet));
+		matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
+	}
 
     public IControllerModel getController2DModel() {
         return controllerModel;
@@ -1142,8 +1144,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         ring.getBond(0).setOrder(IBond.Order.DOUBLE);
         ring.getBond(2).setOrder(IBond.Order.DOUBLE);
         ring.getBond(4).setOrder(IBond.Order.DOUBLE);
-        makeRingAromatic(ring);
-
+        
         double bondLength = calculateAverageBondLength(chemModel.getMoleculeSet());
         ringPlacer.placeRing(ring, worldcoord, bondLength,RingPlacer.jcpAngles);
         IMoleculeSet set = chemModel.getMoleculeSet();
@@ -1245,8 +1246,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
         newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
         newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
-        makeRingAromatic(newRing);
-
+        
         double bondLength;
         if (sourceContainer.getBondCount() == 0) {
             /*
@@ -1303,13 +1303,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
         structureChanged();
         return newRing;
-    }
-
-    private void makeRingAromatic(IRing newRing) {
-        for (IAtom atom : newRing.atoms())
-            atom.setFlag(CDKConstants.ISAROMATIC, true);
-        for (IBond bond : newRing.bonds())
-            bond.setFlag(CDKConstants.ISAROMATIC, true);
     }
 
     //OK
@@ -1552,7 +1545,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
         // construct a new Ring that contains the highlighted bond an its two atoms
         IRing newRing = createAttachRing(sharedAtoms, 6, "C", phantom);
-        makeRingAromatic(newRing);
         ringPlacer.placeFusedRing(newRing, sharedAtoms, sharedAtomsCenter,
                 ringCenterVector, bondLength);
         if (sourceContainer.getMaximumBondOrder(bond.getAtom(0)) == IBond.Order.SINGLE &&

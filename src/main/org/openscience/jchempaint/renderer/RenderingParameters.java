@@ -115,7 +115,7 @@ public class RenderingParameters {
 
     private IFontManager.FontStyle fontStyle = IFontManager.FontStyle.BOLD;
 
-    private Color externalHighlightColor = Color.orange;
+    private Color externalHighlightColor = Color.RED;
 
     private boolean fitToScreen = Boolean.parseBoolean(JCPPropertyHandler.getInstance()
 	.getJCPProperties().getProperty("FitToScreen", "true"));

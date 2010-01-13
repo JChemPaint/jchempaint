@@ -196,7 +196,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
                         textElement.text, textElement.x, textElement.y, g, 
                         rendererModel.getZoomFactor());
         
-        this.g.setColor(this.rendererModel.getBackColor());
+        this.g.setColor(textElement.backColor!=null ? textElement.backColor : this.rendererModel.getBackColor());
         this.g.fill(textBounds);
         this.g.setColor(textElement.color);
         this.g.drawString(textElement.text, p.x, p.y);
@@ -473,7 +473,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         Rectangle2D textBounds = 
             this.getTextBounds(textGroup.text, textGroup.x, textGroup.y, g, 
                     rendererModel.getZoomFactor());
-        this.g.setColor(this.rendererModel.getBackColor());
+        this.g.setColor(textGroup.backColor!=null ? textGroup.backColor : this.rendererModel.getBackColor());
         this.g.fill(textBounds);
         this.g.setColor(textGroup.color);
         this.g.drawString(textGroup.text, p.x, p.y);
@@ -538,7 +538,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             //we need the bounds at the actual positions
             childBounds = getTextBounds(child.text, cx, cy, g
                     , rendererModel.getZoomFactor());
-            this.g.setColor(this.rendererModel.getBackColor());
+            this.g.setColor(textGroup.backColor!=null ? textGroup.backColor : this.rendererModel.getBackColor());
             Rectangle2D childBackground = new Rectangle2D.Double(cx,
                     cy - childBounds.getHeight(), childBounds.getWidth(), 
                     childBounds.getHeight());

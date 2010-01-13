@@ -108,6 +108,7 @@ public class JChemPaint {
 
     public static int instancecounter = 1;
 	public static List<JFrame> frameList = new ArrayList<JFrame>();
+    public final static String GUI_APPLICATION="application";
 
     @SuppressWarnings("static-access")
     public static void main(String[] args) {
@@ -164,7 +165,7 @@ public class JChemPaint {
                         .println("The -D options are as follows (defaults in parathesis):");
                 System.out.println("  cdk.debugging     [true|false] (false)");
                 System.out.println("  cdk.debug.stdout  [true|false] (false)");
-                System.out.println("  user.language     [ar|cs|de|en|es|hu|nb|nl|pt|ru|th] (en)");
+                System.out.println("  user.language     [ar|cs|de|en|es|hu|nb|nl|pl|pt|ru|th] (en)");
 
                 System.exit(0);
             }
@@ -732,7 +733,7 @@ public class JChemPaint {
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        JChemPaintPanel p = new JChemPaintPanel(chemModel, "stable", debug);
+        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null);
         f.setPreferredSize(new Dimension(1000, 500));
         f.add(p);
         f.pack();

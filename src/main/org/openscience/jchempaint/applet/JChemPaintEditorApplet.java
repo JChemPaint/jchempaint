@@ -38,7 +38,7 @@ public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
 		IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newChemModel();
 		chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
 		chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newMolecule());
-		JChemPaintPanel p = new JChemPaintPanel(chemModel,GUI_APPLET,debug);
+		JChemPaintPanel p = new JChemPaintPanel(chemModel,GUI_APPLET,debug,this);
 		p.setName("appletframe");
 		p.setShowInsertTextField(false);
 		p.setShowStatusBar(false);

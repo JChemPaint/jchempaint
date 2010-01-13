@@ -57,6 +57,11 @@ public class TextGroupElement extends TextElement {
 
     public final List<Child> children;
     
+    public TextGroupElement(double x, double y, String text, Color color, Color backColor) {
+        super(x, y, text, color, backColor);
+        this.children = new ArrayList<Child>();
+    }
+    
     public TextGroupElement(double x, double y, String text, Color color) {
         super(x, y, text, color);
         this.children = new ArrayList<Child>();

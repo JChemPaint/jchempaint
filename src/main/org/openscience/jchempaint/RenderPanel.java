@@ -56,6 +56,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.ControllerModel;
 import org.openscience.jchempaint.controller.IViewEventRelay;
@@ -87,6 +88,7 @@ import org.openscience.jchempaint.renderer.generators.ReactionPlusGenerator;
 import org.openscience.jchempaint.renderer.generators.RingGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
+import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
@@ -120,9 +122,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     boolean isFirstDrawing = true;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
-            boolean fitToScreen, boolean debug) throws IOException {
+            boolean fitToScreen, boolean debug, boolean isViewer, JChemPaintAbstractApplet applet) throws IOException {
         this.debug = debug;
-        this.setupMachinery(chemModel, fitToScreen);
+        this.setupMachinery(chemModel, fitToScreen, isViewer, applet);
         this.setupPanel(width, height);
         this.fitToScreen = fitToScreen;
         int limit = Integer.parseInt(JCPPropertyHandler.getInstance()
@@ -151,7 +153,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return hub;
     }
 
-    private void setupMachinery(IChemModel chemModel, boolean fitToScreen)
+    private void setupMachinery(IChemModel chemModel, boolean fitToScreen, 
+            boolean isViewer, JChemPaintAbstractApplet applet)
             throws IOException {
         // setup the Renderer and the controller 'model'
 
@@ -169,7 +172,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         undoredohandler.addIUndoListener(this);
         // connect the Renderer to the Hub
         this.hub = new ControllerHub(controllerModel, renderer, chemModel,
-                this, undoredohandler, new SwingUndoRedoFactory());
+                this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
         pbg.setControllerHub(hub);
 
         // connect mouse events from Panel to the Hub
@@ -212,6 +215,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new SelectBondGenerator());
         generators.add(new MergeAtomsGenerator());
         generators.add(new AtomContainerTitleGenerator());
+        generators.add(new TooltipGenerator());
         generators.add(pbg);
         return generators;
     }

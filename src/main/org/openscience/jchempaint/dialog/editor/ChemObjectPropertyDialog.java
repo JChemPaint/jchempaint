@@ -31,11 +31,12 @@ package org.openscience.jchempaint.dialog.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -46,7 +47,7 @@ import org.openscience.jchempaint.controller.ControllerHub;
   * Simple Dialog that shows the loaded dictionaries.
   * 
   */
-public class ChemObjectPropertyDialog extends JFrame {
+public class ChemObjectPropertyDialog extends JDialog {
 
 	private static final long serialVersionUID = 1850053536210317644L;
 	
@@ -56,8 +57,8 @@ public class ChemObjectPropertyDialog extends JFrame {
 	/**
 	 * Displays the Info Dialog for JChemPaint. 
 	 */
-    public ChemObjectPropertyDialog(ControllerHub hub, ChemObjectEditor editor) {
-        super("IChemObject Props Dialog");
+    public ChemObjectPropertyDialog(Frame frame, ControllerHub hub, ChemObjectEditor editor) {
+        super(frame,"IChemObject Props Dialog");
         this.editor = editor;
         this.hub=hub;
         createDialog();

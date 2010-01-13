@@ -49,7 +49,7 @@ public class ModifySettingsAction extends JCPAction
 		RendererModel renderModel = 
 		    jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 		ModifyRenderOptionsDialog frame =
-				new ModifyRenderOptionsDialog(jcpPanel,renderModel);
+				new ModifyRenderOptionsDialog(jcpPanel,renderModel,0);
 		frame.setVisible(true);
 	}
 }

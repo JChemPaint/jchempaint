@@ -41,7 +41,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 
 	private static final long serialVersionUID = -8358165408129203644L;
 
-	private String guiString = "stable";
+	private String guiString;
     
     private JChemPaintMenuHelper menuHelper=new JChemPaintMenuHelper();
     

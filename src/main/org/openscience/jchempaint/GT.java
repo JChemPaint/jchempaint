@@ -120,17 +120,18 @@ public class GT {
     boolean wasTranslating = doTranslate;
     doTranslate = false;
     languageList = new Language[] {
-      new Language("nl",    GT._("Dutch"),                    true),
       new Language("en_US", GT._("American English"),         true), // global default for "en" will be "en_US"
-      new Language("de",    GT._("German"),                   true),
-      new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
-      new Language("es",    GT._("Spanish"),                  true),
       new Language("ar",    GT._("Arabic"),                   true),
-      new Language("nb",    GT._("Norwegian Bokmal"),         true),
+      new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
       new Language("cs",    GT._("Czech"),                    true),
+      new Language("nl",    GT._("Dutch"),                    true),
+      new Language("de",    GT._("German"),                   true),
       new Language("hu",    GT._("Hungarian"),                true),
-      new Language("th",    GT._("Thai"),                     true),
+      new Language("nb",    GT._("Norwegian Bokmal"),         true),
+      new Language("pl",    GT._("Polish"),                     true),
       new Language("ru",    GT._("Russian"),                  true),
+      new Language("es",    GT._("Spanish"),                  true),
+      new Language("th",    GT._("Thai"),                     true),
     };
     doTranslate = wasTranslating;
     return languageList;

@@ -31,12 +31,22 @@ public class TextElement implements IRenderingElement {
 	public final double y;
 	public final String text;
 	public final Color color;
+	public final Color backColor;
 
-	public TextElement(double x, double y, String text, Color color) {
+    public TextElement(double x, double y, String text, Color color, Color backColor) {
+        this.backColor = backColor;
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+    }
+
+    public TextElement(double x, double y, String text, Color color) {
 		this.x = x;
 		this.y = y;
 		this.text = text;
 		this.color = color;
+		this.backColor = null;
 	}
 
 	public void accept(IRenderingVisitor v) {

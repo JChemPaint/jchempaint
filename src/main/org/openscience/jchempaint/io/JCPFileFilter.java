@@ -117,7 +117,6 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.smi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.inchi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.sdf));
-		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rxn));
 		JCPFileFilter molFilter = new JCPFileFilter(JCPFileFilter.mol);
 		//molFilter.addType(JCPFileFilter.mol);
 		chooser.addChoosableFileFilter(molFilter);

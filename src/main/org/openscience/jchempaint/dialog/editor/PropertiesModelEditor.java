@@ -35,11 +35,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,17 +50,17 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.BoxLayout;
-import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.JCPPropertyHandler;
+import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
+import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.RenderingParameters;
 
@@ -93,7 +95,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     //private JCheckBox showReactionBoxes;
 
-    private JCheckBox useAntiAliasing;
+    //private JCheckBox useAntiAliasing;
 
     private JCheckBox isFitToScreen;
 
@@ -127,20 +129,30 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private Color currentColor;
 
-    private JFrame frame;
+    private JDialog frame;
+    
+    private AbstractJChemPaintPanel jcpPanel;
 
     private RendererModel model;
 
     private JCheckBox askForIOSettings;
 
     private JTextField undoStackSize;
+    
+    private JComboBox language;
 
     private JComboBox lookAndFeel;
 
-    public PropertiesModelEditor(JFrame frame, String gui) {
+    private GT.Language[] gtlanguages = GT.getLanguageList();
+    
+    private int tabtoshow;
+
+    public PropertiesModelEditor(JDialog frame, AbstractJChemPaintPanel jcpPanel, int tabtoshow, String gui) {
         super(true);
         this.frame = frame;
 		this.guistring = gui;
+        this.jcpPanel = jcpPanel;
+        this.tabtoshow = tabtoshow;
         constructPanel();
     }
 
@@ -303,7 +315,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 		options1.add(chooseColorButton);
 		addField("", new JLabel(" "), options1);
         //addField("", chooseColorButton, options2);
-
+		
         JPanel otherOptionsPanel = this.addTab(GT._("Other Preferences"));
         
         undoStackSize = new JTextField();
@@ -317,6 +329,19 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 		    lookAndFeel = new JComboBox(lookAndFeels);
 		    addField(GT._("Look and feel"), lookAndFeel, otherOptionsPanel);
         }
+
+        String[] languagesstrings = new String[gtlanguages.length];
+        for(int i=0;i<gtlanguages.length;i++){
+            languagesstrings[i] = gtlanguages[i].language;
+        }
+        language = new JComboBox(languagesstrings);
+        for(int i=0;i<languagesstrings.length;i++){
+            if(gtlanguages[i].code.equals(GT.getLanguage()))
+                language.setSelectedIndex(i);
+        }
+        addField(GT._("User Interface Language"), language, otherOptionsPanel);
+        
+        this.tabbedPane.setSelectedIndex(tabtoshow);
     }
 
     public void setModel(RendererModel model) {
@@ -366,10 +391,11 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
         }
+        language.setSelectedItem(props.getProperty("General.language"));
         validate();
     }
 
-    public void applyChanges() {
+    public void applyChanges(boolean close) {
         Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
         
         model.setDrawNumbers(drawNumbers.isSelected());
@@ -401,6 +427,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         //model.setFontName(currentFontName);
         model.setBackColor(currentColor);
+        GT.setLanguage(gtlanguages[language.getSelectedIndex()].code);
+        jcpPanel.updateMenusWithLanguage();
+        updateLanguge();
+
 
         props.setProperty("DrawNumbers",String.valueOf(drawNumbers.isSelected()));
         //props.setProperty("ShowAtomAtomMapping",String.valueOf(showAtomAtomMapping.isSelected()));
@@ -443,8 +473,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 throw new Exception("wrong number");
             props.setProperty("General.UndoStackSize",
                     undoStackSize.getText());
-        }
-        catch(Exception ex){
+            //TODO here apply to current app
+        }catch(Exception ex){
             JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
@@ -491,6 +521,29 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
 
         JCPPropertyHandler.getInstance().saveProperties();
+        boolean languagechanged = false;
+        for(int i=0;i<gtlanguages.length;i++){
+            if(gtlanguages[i].language.equals((String)language.getSelectedItem())){
+                if(!props.getProperty("General.language").equals(gtlanguages[i].code)){
+                    props.setProperty("General.language", gtlanguages[i].code);
+                    languagechanged = true;
+                }
+            }
+        }
+        JCPPropertyHandler.getInstance().saveProperties();
+        if(languagechanged && !close){
+            //we need to rediplay the dialog to change its language
+            this.getParent().getParent().getParent().getParent().setVisible(false);
+            RendererModel renderModel = 
+                jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+            ModifyRenderOptionsDialog frame =
+                    new ModifyRenderOptionsDialog(jcpPanel,renderModel, 1);
+            frame.setVisible(true);
+        }
+    }
+
+    private void updateLanguge() {
+        // TODO here the language of the editor window needs to be updated
     }
 
     /**

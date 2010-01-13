@@ -36,7 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
@@ -49,22 +49,25 @@ import org.openscience.jchempaint.renderer.RendererModel;
   * Simple Dialog that shows the loaded dictionaries..
   *
   */
-public class ModifyRenderOptionsDialog extends JFrame {
+public class ModifyRenderOptionsDialog extends JDialog {
 
 	private static final long serialVersionUID = -7228371698429720333L;
 	
 	private PropertiesModelEditor editor;
     private RendererModel model;
     private AbstractJChemPaintPanel jcpPanel;
+    private int tabtoshow;
     
 	/**
 	 * Displays the Info Dialog for JChemPaint. 
+	 * @param tabtoshow Which tab is to be displayed?
 	 */
-    public ModifyRenderOptionsDialog(AbstractJChemPaintPanel jcpPanel, RendererModel model) {
+    public ModifyRenderOptionsDialog(AbstractJChemPaintPanel jcpPanel, RendererModel model, int tabtoshow) {
         super();
         this.model = model;
         this.jcpPanel=jcpPanel;
-        editor = new PropertiesModelEditor(this, jcpPanel.getGuistring());
+        this.tabtoshow = tabtoshow;
+        editor = new PropertiesModelEditor(this, jcpPanel, tabtoshow,jcpPanel.getGuistring());
         createDialog();
         pack();
         setVisible(true);
@@ -90,7 +93,7 @@ public class ModifyRenderOptionsDialog extends JFrame {
         JButton apply = new JButton(GT._("Apply"));
         apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ApplyPressed();
+                ApplyPressed(false);
             }}
         );
         buttonPanel.add( apply );
@@ -107,13 +110,13 @@ public class ModifyRenderOptionsDialog extends JFrame {
         validate();
     }
     
-    private  void ApplyPressed() {
+    private  void ApplyPressed(boolean close) {
         // apply new settings
-        editor.applyChanges();
+        editor.applyChanges(close);
         jcpPanel.get2DHub().updateView();
     }
     private  void OKPressed() {
-        ApplyPressed();
+        ApplyPressed(true);
         closeFrame();
     }
 

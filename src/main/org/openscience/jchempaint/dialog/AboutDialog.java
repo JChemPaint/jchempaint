@@ -30,11 +30,12 @@ package org.openscience.jchempaint.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Frame;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
@@ -53,7 +54,7 @@ import org.openscience.jchempaint.action.JCPAction;
  *
  * @cdk.created       27. April 2005
  */
-public class AboutDialog extends JFrame {
+public class AboutDialog extends JDialog {
 
 	private static final long serialVersionUID = 8890609574363086221L;
 	
@@ -61,8 +62,8 @@ public class AboutDialog extends JFrame {
 	        LoggingToolFactory.createLoggingTool(AboutDialog.class);
 
 	/** Displays the About Dialog for JChemPaint.  */
-	public AboutDialog(String guistring) {
-		super(JCPMenuTextMaker.getInstance(guistring).getText("about"));
+	public AboutDialog(Frame owner, String guistring) {
+		super(owner, JCPMenuTextMaker.getInstance(guistring).getText("about"));
 		doInit();
 	}
 

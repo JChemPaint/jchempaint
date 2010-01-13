@@ -31,6 +31,7 @@ package org.openscience.jchempaint.applet;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
+import javax.swing.JComponent;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
@@ -102,23 +104,19 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             { "load", "url", "URL of the chemical data" },
             { "compact", "true or false",
                     "compact means elements shown as dots, no figures etc. (default false)" },
-            {
-                    "tooltips",
+            { "tooltips",
                     "string like 'atomumber|test|atomnumber|text'",
                     "the texts will be used as tooltips for the respective atoms (leave out if none required" },
             { "impliciths", "true or false",
                     "the implicit hs will be added from start (default true)" },
-            {
-                    "spectrumRenderer",
+            { "spectrumRenderer",
                     "string",
-                    "TODO name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom" },
-            {
-                    "hightlightTable",
+                    "name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom" },
+            { "hightlightTable",
                     "true or false",
-                    "TODO if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableid$atomnumber (default false)" },
+                    "if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableidX, where X=atomnumber starting with 0 (default false)" },
             { "smiles", "string", "a structure to load as smiles" },
-            {
-                    "scrollbars",
+            { "scrollbars",
                     "true or false",
                     "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet" },
             { "dotranslate",
@@ -271,7 +269,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     .getAllAtomContainers(chemModel).iterator();
 
             while (containers.hasNext()) {
-                container.add(containers.next());
+                IAtomContainer ac=containers.next();
+                container.add(ac);
             }
 
             while (st.hasMoreTokens()) {
@@ -493,7 +492,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * A method for highlighting atoms from JavaScript
      * 
      * @param atom
-     *            The atom number (starting with 0)
+     *            The atom number (starting with 0), -1 sets empty selection.
      */
     public void selectAtom(int atom) {
         RendererModel rendererModel = theJcpp.get2DHub().getRenderer()
@@ -502,9 +501,13 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         rendererModel.setExternalHighlightColor(Color.RED);
         IAtomContainer ac = chemModel.getMoleculeSet().getBuilder()
                 .newAtomContainer();
-        ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
-        rendererModel.setExternalSelectedPart(ac);
-        theJcpp.get2DHub().updateView();
+        if(atom!=-1){
+            ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
+            rendererModel.setExternalSelectedPart(ac);
+        }else{
+            rendererModel.setExternalSelectedPart(null);
+        }
+        getTheJcpp().get2DHub().updateView();
     }
 
     /**
@@ -566,7 +569,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     }
                     if (e.getButton() == 1 && e.getClickCount() == 2 && applet instanceof JChemPaintViewerApplet)
                         if (!getJexf().isShowing()) {
-                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug);
+                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug,JChemPaintAbstractApplet.this);
                             p.setName("appletframe");
                             p.setShowInsertTextField(false);
                             p.setShowStatusBar(false);

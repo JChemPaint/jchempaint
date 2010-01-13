@@ -33,6 +33,7 @@ import java.util.Hashtable;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -52,6 +53,8 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	private RenderPanel rendererPanel;
 	
 	private String ID;
+	
+	public static IAtom lastAtomPopupedFor = null;
 
 	public SwingPopupModule(RenderPanel renderer,IChemModelRelay chemModelRelay) {
 		super(chemModelRelay);
@@ -125,6 +128,8 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		
 		if (objectInRange == null)
 			objectInRange = chemModelRelay.getIChemModel();
+		if (objectInRange instanceof IAtom)
+		    lastAtomPopupedFor = (IAtom)objectInRange;
 		
 		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
 		if (popupMenu != null) {

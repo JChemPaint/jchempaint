@@ -28,7 +28,10 @@
  */
 package org.openscience.jchempaint.action;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JOptionPane;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -58,7 +61,7 @@ public class EditAtomContainerPropsAction extends JCPAction {
 			relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Bond)object);
 		editor.setChemObject(relevantContainer);
 		ChemObjectPropertyDialog frame =
-			new ChemObjectPropertyDialog(jcpPanel.get2DHub(), editor);
+			new ChemObjectPropertyDialog(JOptionPane.getFrameForComponent(editor), jcpPanel.get2DHub(), editor);
 		frame.pack();
 		frame.setVisible(true);
 	}
