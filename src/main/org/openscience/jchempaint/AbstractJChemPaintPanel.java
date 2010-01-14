@@ -5,6 +5,7 @@
  *  $Revision: 7634 $
  *
  *  Copyright (C) 2008 Stefan Kuhn
+ *  Some portions Copyright (C) 2009 Konstantin Tokarev
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -405,7 +406,8 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      *            The value to assign showToolbar.
      */
     public void setShowToolBar(boolean showToolBar) {
-        setShowToolBar(showToolBar);
+        this.showToolBar = showToolBar;
+        customizeView();
     }
     
     public void customizeView() {
@@ -429,7 +431,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             if (uppertoolbar == null) {
                 uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL);
             }
-            centerContainer.add(uppertoolbar, BorderLayout.NORTH);
+            topContainer.add(uppertoolbar, BorderLayout.SOUTH);
             if (lefttoolbar == null) {
                 lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL);
             }
@@ -443,7 +445,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             }
             centerContainer.add(lowertoolbar, BorderLayout.SOUTH);
         } else {
-            centerContainer.remove(uppertoolbar);
+            topContainer.remove(uppertoolbar);
             centerContainer.remove(lowertoolbar);
             centerContainer.remove(lefttoolbar);
             centerContainer.remove(righttoolbar);
@@ -451,9 +453,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         if (showInsertTextField) {
             if (insertTextPanel == null)
                 insertTextPanel = new InsertTextPanel(this, null);
-            topContainer.add(insertTextPanel, BorderLayout.SOUTH);
+            centerContainer.add(insertTextPanel, BorderLayout.NORTH);
         } else {
-            topContainer.remove(insertTextPanel);
+            centerContainer.remove(insertTextPanel);
         }
         revalidate();
     }
