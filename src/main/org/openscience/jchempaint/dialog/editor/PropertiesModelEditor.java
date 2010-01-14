@@ -328,6 +328,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             String [] lookAndFeels = {GT._("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
 		    lookAndFeel = new JComboBox(lookAndFeels);
 		    addField(GT._("Look and feel"), lookAndFeel, otherOptionsPanel);
+            addField("", new JSeparator(), otherOptionsPanel);
         }
 
         String[] languagesstrings = new String[gtlanguages.length];
