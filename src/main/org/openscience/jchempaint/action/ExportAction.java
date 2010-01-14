@@ -125,7 +125,7 @@ public class ExportAction extends SaveAsAction {
                                 GT._("Exported image to") + " " + outFile);
                         return;
                     } catch (IOException e) {
-                        String error = GT._("Problem exporting to svg");
+                        String error = GT._("Problem exporting to SVG");
                         JOptionPane.showMessageDialog(jcpPanel, error);
                         return;
                     }
