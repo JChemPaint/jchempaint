@@ -184,6 +184,10 @@ public class JChemPaint {
                 props.setProperty("LookAndFeelClass", sys);
             }
 
+            // Language
+            props.setProperty("General.language", System.getProperty("user.language", "en"));
+            //System.out.println(System.getProperty("user.language", "en"));
+
             // Process command line arguments
             String modelFilename = "";
             args = line.getArgs();
@@ -734,7 +738,7 @@ public class JChemPaint {
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null);
-        f.setPreferredSize(new Dimension(1000, 500));
+        f.setPreferredSize(new Dimension(800, 494));    //1.618
         f.add(p);
         f.pack();
         Point point = GraphicsEnvironment.getLocalGraphicsEnvironment()
