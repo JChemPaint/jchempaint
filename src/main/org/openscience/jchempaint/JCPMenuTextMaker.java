@@ -120,8 +120,10 @@ public class JCPMenuTextMaker {
         entries.put("periodictable", GT._("Periodic Table"));
         entries.put("enterelement", GT._("Custom"));
         entries.put("isotopeChange", GT._("Isotopes"));
-        entries.put("convertToRadical", GT._("Add Electron Pair"));
-        entries.put("convertFromRadical", GT._("Remove Electron Pair"));
+        entries.put("convertToRadical", GT._("Add Single Electron"));
+        entries.put("Add Single Electron", GT._("Add Single Electron"));
+        entries.put("convertFromRadical", GT._("Remove Single Electron"));
+        entries.put("Remove Single Electron", GT._("Remove Single Electron"));
         entries.put("showChemObjectProperties", GT._("Properties"));
         entries.put("showACProperties", GT._("Molecule Properties"));
         entries.put("makeNormal", GT._("Convert to Regular Atom"));
@@ -231,7 +233,7 @@ public class JCPMenuTextMaker {
         entries.put("symbolPo", GT._("Po"));
         entries.put("pseudoStar", GT._("Variable Attachment Point *"));
         entries.put("pseudoR", GT._("R"));	
-        entries.put("pseudoRX", GT._("R.."));	
+        entries.put("pseudoRX", GT._("Other..."));	
         entries.put("pseudoR1", GT._("R1"));	
         entries.put("pseudoR2", GT._("R2"));	
         entries.put("pseudoR3", GT._("R3"));	
