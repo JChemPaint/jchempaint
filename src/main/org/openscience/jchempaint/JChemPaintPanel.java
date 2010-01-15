@@ -111,7 +111,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		} catch (IOException e) {
 			announceError(e);
 		}
-		if (gui.equals("stable")) {
+		if (gui.equals("application")) {
 			setAppTitle(" - JChemPaint");
 		}
         init();        
