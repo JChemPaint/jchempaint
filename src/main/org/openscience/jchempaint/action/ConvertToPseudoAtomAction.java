@@ -72,8 +72,11 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 		if(atomsInRange==null)
 			return;
 		String x = type;
-		if(type.equals("RX"))
+		if(type.equals("RX")) {
 		    x = JOptionPane.showInputDialog("Enter label", "R");
+            if (x == null)
+                x = "R";
+        }
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
         	if(type.equals("normal")){
