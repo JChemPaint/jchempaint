@@ -312,6 +312,7 @@ public class JCPMenuTextMaker {
         entries.put("ClTooltip", GT._("Change drawing symbol to {0}", "Cl"));
         entries.put("BrTooltip", GT._("Change drawing symbol to {0}", "Br"));
         entries.put("ITooltip", GT._("Change drawing symbol to {0}", "I"));
+        entries.put("enterRTooltip", GT._("Draw any functional group"));
         entries.put("reaction", GT._("Reaction"));
         entries.put("addReactantToNewReaction", GT._("Make Reactant in New Reaction"));
         entries.put("addReactantToExistingReaction", GT._("Make Reactant in Existing Reaction"));

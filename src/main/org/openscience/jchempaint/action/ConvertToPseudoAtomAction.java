@@ -41,6 +41,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.GT;
 ;
 
 /**
@@ -73,7 +74,7 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 			return;
 		String x = type;
 		if(type.equals("RX")) {
-		    x = JOptionPane.showInputDialog("Enter label", "R");
+		    x = JOptionPane.showInputDialog(GT._("Enter label"), "R");
             if (x == null)
                 x = "R";
         }
