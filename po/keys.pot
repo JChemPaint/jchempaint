@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-15 02:09+0300\n"
+"POT-Creation-Date: 2010-01-19 00:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,6 +96,11 @@ msgstr ""
 msgid "Cannot display without 2D coordinates"
 msgstr ""
 
+#: src/main/org/openscience/jchempaint/action/ConvertToPseudoAtomAction.java:77
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:137
+msgid "Enter label"
+msgstr ""
+
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:59
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:62
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:68
@@ -141,30 +146,34 @@ msgid "File already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:162
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:169
 msgid "File already exists"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:125
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:149
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:155
-msgid "Exported image to"
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:126
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:150
+#, java-format
+msgid "Exported image to {0}"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:128
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:129
 msgid "Problem exporting to SVG"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:156
+msgid "Exported image to"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:157
 msgid "as PNG, since"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:156
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:157
 msgid "could not be written"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:162
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:165
 msgid "Problem exporting image"
 msgstr ""
 
@@ -208,50 +217,45 @@ msgstr ""
 msgid "Nothing to save."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
-msgid "File"
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:161
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:168
+#, java-format
+msgid "File {0} already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
-msgid "already exists. Do you want to overwrite it?"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:203
 msgid "Cannot save file in this format:"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:205
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:211
 msgid "Error while writing file"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:227
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:235
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:264
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:233
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:241
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:270
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:355
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:276
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:361
 msgid "Problems handling data"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:228
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:234
 #, java-format
 msgid ""
 "{0} files cannot contain extra molecules. You painted molecules outside the "
 "reaction(s), which will not be in the file. Continue?"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:236
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:242
 msgid "RXN can only save reactions. You have no reactions painted!"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:265
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:271
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:271
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:356
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:277
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:362
 #, java-format
 msgid ""
 "{0} files cannot contain reactions. Your have reaction(s) painted. The "
@@ -1710,6 +1714,10 @@ msgstr ""
 msgid "Thai"
 msgstr ""
 
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
+msgid "File"
+msgstr ""
+
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:58
 msgid "New"
 msgstr ""
@@ -2307,78 +2315,82 @@ msgid "Change drawing symbol to {0}"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:315
-msgid "Reaction"
+msgid "Draw any functional group"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:316
-msgid "Make Reactant in New Reaction"
+msgid "Reaction"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:317
-msgid "Make Reactant in Existing Reaction"
+msgid "Make Reactant in New Reaction"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:318
-msgid "Make Product in New Reaction"
+msgid "Make Reactant in Existing Reaction"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:319
-msgid "Make Product in Existing Reaction"
+msgid "Make Product in New Reaction"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:320
-msgid "Select Reactants"
+msgid "Make Product in Existing Reaction"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:321
-msgid "Select Products"
+msgid "Select Reactants"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:322
-msgid "Reaction Popup Menu"
+msgid "Select Products"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:323
-msgid "Alkaloids"
+msgid "Reaction Popup Menu"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:324
-msgid "Beta Lactams"
+msgid "Alkaloids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:325
-msgid "Carbohydrates"
+msgid "Beta Lactams"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:326
-msgid "Inositols"
+msgid "Carbohydrates"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:327
-msgid "Lipids"
+msgid "Inositols"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:328
-msgid "Miscellaneous"
+msgid "Lipids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:329
-msgid "Nucleosides"
+msgid "Miscellaneous"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
-msgid "Porphyrins"
+msgid "Nucleosides"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
-msgid "Steroids"
+msgid "Porphyrins"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
-msgid "PAHs"
+msgid "Steroids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
+msgid "PAHs"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
 msgid "Language"
 msgstr ""
 
