@@ -150,20 +150,18 @@ public class SaveAsAction extends JCPAction
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 if(!(currentFilter instanceof IJCPFileFilter)){
-                    JOptionPane.showMessageDialog(jcpPanel, GT._("Please chose a file type!"), GT._("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(jcpPanel, GT._("Please choose a file type!"), GT._("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }else{
                     type = ((IJCPFileFilter) currentFilter).getType();
                     File outFile = chooser.getSelectedFile();
                     if(outFile.exists()){
-                        //ready=JOptionPane.showConfirmDialog((Component)null,GT._("File")+" "+outFile.getName()+" "+GT._("already exists. Do you want to overwrite it?"),GT._("File already exists"),JOptionPane.YES_NO_OPTION);
                         ready=JOptionPane.showConfirmDialog((Component)null,
                         GT._("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
                         GT._("File already exists"),JOptionPane.YES_NO_OPTION);
                     }else{
                         try{
                             if(new File(outFile.getCanonicalFile()+"."+type).exists()){
-//                                ready=JOptionPane.showConfirmDialog((Component)null,GT._("File")+" "+outFile.getName()+" "+GT._("already exists. Do you want to overwrite it?"),GT._("File already exists"),JOptionPane.YES_NO_OPTION);
                                 ready=JOptionPane.showConfirmDialog((Component)null,
                                 GT._("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
                                 GT._("File already exists"),JOptionPane.YES_NO_OPTION);
