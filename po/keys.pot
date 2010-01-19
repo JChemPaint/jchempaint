@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-19 00:18+0300\n"
+"POT-Creation-Date: 2010-01-19 13:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,7 +132,6 @@ msgid "Could not process content"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:97
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:153
 msgid "Please chose a file type!"
 msgstr ""
 
@@ -146,34 +145,27 @@ msgid "File already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:162
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:169
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:161
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:167
 msgid "File already exists"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:126
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:150
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:125
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:149
 #, java-format
 msgid "Exported image to {0}"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:129
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:128
 msgid "Problem exporting to SVG"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:156
-msgid "Exported image to"
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:155
+#, java-format
+msgid "Exported image to {0} as PNG, since {1} could not be written"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:157
-msgid "as PNG, since"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:157
-msgid "could not be written"
-msgstr ""
-
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:165
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
 msgstr ""
 
@@ -217,45 +209,49 @@ msgstr ""
 msgid "Nothing to save."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:161
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:168
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:153
+msgid "Please choose a file type!"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:160
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:166
 #, java-format
 msgid "File {0} already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:203
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:201
 msgid "Cannot save file in this format:"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:211
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:209
 msgid "Error while writing file"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:233
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:241
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:270
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:276
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:361
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:231
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:239
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:268
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:274
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:359
 msgid "Problems handling data"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:234
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:232
 #, java-format
 msgid ""
 "{0} files cannot contain extra molecules. You painted molecules outside the "
 "reaction(s), which will not be in the file. Continue?"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:242
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:240
 msgid "RXN can only save reactions. You have no reactions painted!"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:271
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:269
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:277
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:362
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:275
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:360
 #, java-format
 msgid ""
 "{0} files cannot contain reactions. Your have reaction(s) painted. The "
@@ -284,18 +280,18 @@ msgstr ""
 msgid "See 'http://jchempaint.sourceforge.net' for more information."
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:101
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:103
 msgid "Structure Templates"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:106
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:108
 #: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:96
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:84
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:100
 msgid "Cancel"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:118
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:124
 msgid "All"
 msgstr ""
 
