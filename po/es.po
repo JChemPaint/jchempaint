@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-07 13:34+0000\n"
-"PO-Revision-Date: 2010-01-16 18:04+0100\n"
+"PO-Revision-Date: 2010-01-19 21:31+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -90,6 +90,11 @@ msgstr "Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estruc
 msgid "Cannot display without 2D coordinates"
 msgstr "No es posible trazar sin coordenadas 2D."
 
+#: src/main/org/openscience/jchempaint/action/ConvertToPseudoAtomAction.java:77
+#: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:137
+msgid "Enter label"
+msgstr "Escriba una etiqueta"
+
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:59
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:62
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:68
@@ -121,7 +126,6 @@ msgid "Could not process content"
 msgstr "Imposible procesar el contenido"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:97
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:153
 msgid "Please chose a file type!"
 msgstr "Debe elegir un tipo de archivo"
 
@@ -135,29 +139,25 @@ msgid "File already exists. Do you want to overwrite it?"
 msgstr "El archivo ya existe. ¿Quiere sustituirlo?"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:161
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:167
 msgid "File already exists"
 msgstr "El archivo ya existe"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:125
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:149
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:155
-msgid "Exported image to"
-msgstr "Imagen exportada a"
+#, java-format
+msgid "Exported image to {0}"
+msgstr "Imagen exportada a {0}"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:128
 msgid "Problem exporting to SVG"
 msgstr "Problema al exportar a SVG"
 
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:156
-msgid "as PNG, since"
-msgstr "como PNG, puesto que"
-
-#: src/main/org/openscience/jchempaint/action/ExportAction.java:156
-#, fuzzy
-msgid "could not be written"
-msgstr "no se pudo escribir"
+#: src/main/org/openscience/jchempaint/action/ExportAction.java:155
+#, java-format
+msgid "Exported image to {0} as PNG, since {1} could not be written"
+msgstr "La imagen se ha exportado a {0} en formato PNG, puesto que no se pudo escribir {1}"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
@@ -203,48 +203,47 @@ msgstr "Símbolo incorrecto"
 msgid "Nothing to save."
 msgstr "No hay nada que guardar."
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
-msgid "File"
-msgstr "Archivo"
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:153
+msgid "Please choose a file type!"
+msgstr "Elija un tipo de archivo"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:159
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:163
-msgid "already exists. Do you want to overwrite it?"
-msgstr "ya existe. ¿Quiere sustituirlo?"
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:160
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:166
+#, java-format
+msgid "File {0} already exists. Do you want to overwrite it?"
+msgstr "El archivo {0} ya existe. ¿Quiere sustituirlo?"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:197
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:201
 msgid "Cannot save file in this format:"
 msgstr "No es posible guardar con este formato:"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:205
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:209
 msgid "Error while writing file"
 msgstr "Error al grabar archivo"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:227
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:235
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:264
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:270
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:355
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:231
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:239
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:268
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:274
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:359
 msgid "Problems handling data"
 msgstr "Problemas al gestionar los datos"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:228
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:232
 #, java-format
 msgid "{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?"
 msgstr "{0} archivos no pueden contener moléculas adicionales. Pintaste moléculas fuera de la(s) reacción(es), las cuales estarán en el archivo. ¿Continuar?"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:236
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:240
 msgid "RXN can only save reactions. You have no reactions painted!"
 msgstr "RXN solamente puede guardar reacciones. No tienes reacciones pintadas!"
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:265
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:269
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
 msgstr "Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula dibujada."
 
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:271
-#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:356
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:275
+#: src/main/org/openscience/jchempaint/action/SaveAsAction.java:360
 #, java-format
 msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
 msgstr "Los archivos {0} no pueden contener reacciones, y se han dibujado reacciones. Sus reactantes y productos se incluirán como moléculas independientes. ¿Desea continuar?"
@@ -271,18 +270,18 @@ msgstr "Un proyecto de OpenScience"
 msgid "See 'http://jchempaint.sourceforge.net' for more information."
 msgstr "Visite 'http://jchempaint.sourceforge.net' para más información."
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:101
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:103
 msgid "Structure Templates"
 msgstr "Plantillas de estructura"
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:106
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:108
 #: src/main/org/openscience/jchempaint/dialog/EnterElementOrGroupDialog.java:96
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:84
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:100
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:118
+#: src/main/org/openscience/jchempaint/dialog/TemplateBrowser.java:124
 msgid "All"
 msgstr "Todos"
 
@@ -1701,6 +1700,10 @@ msgstr "Español"
 msgid "Thai"
 msgstr "Thai"
 
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
+msgid "File"
+msgstr "Archivo"
+
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:58
 msgid "New"
 msgstr "Nuevo"
@@ -2298,79 +2301,83 @@ msgid "Change drawing symbol to {0}"
 msgstr "Cambiar el símbolo de dibujo a {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:315
+msgid "Draw any functional group"
+msgstr "Dibujar cualquier grupo funcional"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:316
 msgid "Reaction"
 msgstr "Reacción"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:316
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:317
 msgid "Make Reactant in New Reaction"
 msgstr "Hacer reactante en Nueva Reacción"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:317
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:318
 msgid "Make Reactant in Existing Reaction"
 msgstr "Hacer Reactante en Reacción Existente"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:318
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:319
 msgid "Make Product in New Reaction"
 msgstr "Hacer Producto en Nueva Reacción"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:319
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:320
 msgid "Make Product in Existing Reaction"
 msgstr "Hacer Producto en Reacción Existente"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:320
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:321
 msgid "Select Reactants"
 msgstr "Seleccionar Reactantes"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:321
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:322
 msgid "Select Products"
 msgstr "Seleccionar Productos"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:322
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:323
 msgid "Reaction Popup Menu"
 msgstr "Menú contextual de reacción"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:323
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:324
 msgid "Alkaloids"
 msgstr "Alcaloides"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:324
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:325
 msgid "Beta Lactams"
 msgstr "Beta-lactámicos"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:325
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:326
 msgid "Carbohydrates"
 msgstr "Carbohidratos"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:326
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:327
 msgid "Inositols"
 msgstr "Inositoles"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:327
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:328
 msgid "Lipids"
 msgstr "Lípidos"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:328
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:329
 msgid "Miscellaneous"
 msgstr "Varios"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:329
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
 msgid "Nucleosides"
 msgstr "Nucleósidos"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
 msgid "Porphyrins"
 msgstr "Porfirinas"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
 msgid "Steroids"
 msgstr "Esteroides"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
 #, fuzzy
 msgid "PAHs"
 msgstr "PAH"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
 msgid "Language"
 msgstr "Idioma"
 
