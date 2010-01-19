@@ -49,6 +49,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
@@ -112,10 +114,14 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
         Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
+        
         JPanel allPanel = new JPanel();
-        GridLayout experimentLayout = new GridLayout(0,8);
-        allPanel.setLayout(experimentLayout);
-        tabbedPane.addTab(GT._("All"), allPanel );
+        GridLayout allLayout = new GridLayout(0,6);
+        GridLayout experimentLayout = new GridLayout(0,6);
+        allPanel.setLayout(allLayout);
+        JScrollPane scrollPane = new JScrollPane(allPanel,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tabbedPane.addTab(GT._("All"), scrollPane );
         try{
             createTemplatesMaps(entriesMol, entriesMolName, entriesIcon, true);
             myPanel.add( tabbedPane, BorderLayout.CENTER );
@@ -156,6 +162,9 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     allButton.setFont(allButton.getFont().deriveFont(10f));
                     mols.put(allButton, cdkmol);
                     allPanel.add(allButton);
+                    scrollPane.setPreferredSize(new Dimension(allPanel.getPreferredSize().width
+                            +scrollPane.getVerticalScrollBar().getPreferredSize().width,360));
+                    
                 }
                 tabbedPane.addTab(GT.getStringNoExtraction(key.replace('_', ' ')), panel );
                 if(tabToSelect.equals(key.replace('_',' '))){
