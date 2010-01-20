@@ -388,6 +388,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 buttons.get("periodictable").setBackground(Color.GRAY);
                 lastSecondaryButton = buttons.get("periodictable");
             }
+        } else if (actionid.equals("RX")) {
+            this.buttons.get("enterR").setBackground(Color.GRAY);
+            lastSecondaryButton = this.buttons.get("enterR");
         }
         if(JCPToolBar.getToolbarResourceString("lowertoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
             //the newActiveModule should always be an AddAtomModule, but we still check

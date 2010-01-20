@@ -137,10 +137,11 @@ public class ChangeAtomSymbolAction extends JCPAction
 		        symbol = JOptionPane.showInputDialog(GT._("Enter label"), "R");
                 if (symbol == null)
                     symbol = "R";
+                newActiveModule.setID("RX");
             } else {
-                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);  
-            }
-            newActiveModule.setID(symbol);
+                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
+                newActiveModule.setID(symbol);
+            }            
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);                  
         }
