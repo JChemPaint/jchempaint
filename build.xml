@@ -735,6 +735,45 @@
     	</java>
     	<delete file="${dist}/ExtractCoprightInfo.class"></delete>
     </target>
+	       
+    <target name="processTemplates">
+        <mkdir dir="${dist}"/>
+        <javac srcdir="${src}/util" destdir="${dist}" optimize="${optimization}"
+                nowarn="${nowarn}"
+                debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
+            <classpath>
+                <fileset dir="${cdk.lib}" >
+                </fileset>
+                <fileset dir="libutil" >
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                </fileset>
+                <fileset dir="${cdk.dist}/jar">
+                </fileset>
+                <fileset dir="${lib}">
+                </fileset>
+                <pathelement location="${dist-classes}"/>
+            </classpath>
+            <include name="**/TemplateImagesMaker.java"/>
+        </javac>
+        <java classname="TemplateImagesMaker" fork="true">
+            <classpath>
+                <fileset dir="${cdk.lib}" >
+                </fileset>
+                <fileset dir="libutil" >
+                </fileset>
+                <fileset dir="${cdk.devellib}">
+                </fileset>
+                <fileset dir="${cdk.dist}/jar">
+                </fileset>
+                <fileset dir="${lib}">
+                </fileset>
+                <pathelement location="${dist-classes}"/>
+                <pathelement location="${dist}"/>
+            </classpath>
+        </java>
+        <delete file="${dist}/TemplateImagesMaker.java"></delete>      
+    </target>
 </project>
 
 
