@@ -655,7 +655,7 @@
         </copy>
         <jar jarfile="${dist}/alljars/cdk-jchempaint.jar">
             <fileset dir="${dist-classes}">
-                <include name="**/*" />
+                <include name="org/openscience/jchempaint/**/*" />
             </fileset>
         </jar>
         <copy todir="${dist}/alljars">
