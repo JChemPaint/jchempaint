@@ -238,7 +238,9 @@ public class JCPMenuTextMaker {
         entries.put("pseudoR2", GT._("R2"));	
         entries.put("pseudoR3", GT._("R3"));	
         entries.put("pseudoR4", GT._("R4"));	
-        entries.put("bondTooltip", GT._("Draw Bonds and Atoms"));
+        entries.put("bondToolTooltip", GT._("Draw Bonds and Atoms"));
+        entries.put("double_bondToolTooltip", GT._("Draw Double Bonds"));
+        entries.put("triple_bondToolTooltip", GT._("Draw Triple Bonds"));
         entries.put("cyclesymbolTooltip", GT._("Change the Atom's Symbol"));
         entries.put("periodictableTooltip", GT._("Select new drawing symbol from periodic table"));
         entries.put("enterelementTooltip", GT._("Enter an element symbol via keyboard"));
@@ -284,6 +286,9 @@ public class JCPMenuTextMaker {
         entries.put("Enter Element or Group", GT._("Enter Element or Group"));
         entries.put("Add Atom Or Change Element", GT._("Add Atom Or Change Element"));
         entries.put("Draw Bond", GT._("Draw Bond"));
+        entries.put("Draw Double Bond", GT._("Draw Double Bond"));
+        entries.put("Draw Triple Bond", GT._("Draw Triple Bond"));
+        entries.put("Draw Quadruple Bond", GT._("Draw Quadruple Bond"));
         entries.put("Ring 3", GT._("Ring {0}","3"));
         entries.put("Ring 4", GT._("Ring {0}","4"));
         entries.put("Ring 5", GT._("Ring {0}","5"));
