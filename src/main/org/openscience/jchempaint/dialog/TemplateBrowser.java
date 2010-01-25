@@ -220,7 +220,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                             }else if(restname.indexOf("/")>-1 && withsubdirs){
                                 if(entry.getName().indexOf(".mol")>-1){
                                     InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
-                                    MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
+                                    MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.RELAXED);
                                     IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
                                     entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
                                     entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
