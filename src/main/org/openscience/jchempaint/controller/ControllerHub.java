@@ -523,14 +523,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java.lang.String, org.openscience.cdk.interfaces.IAtom, int)
      */
-    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo, boolean makePseudoAtom) {
+    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo, Order order, boolean makePseudoAtom) {
         IAtom newAtom;
         if (makePseudoAtom) {
             newAtom = chemModel.getBuilder().newPseudoAtom(atomType);
         } else {
             newAtom = chemModel.getBuilder().newAtom(atomType);
         }
-        IBond newBond = chemModel.getBuilder().newBond(atom, newAtom, CDKConstants.BONDORDER_SINGLE, stereo);
+        IBond newBond;
+        if (order == IBond.Order.DOUBLE) {
+            newBond = chemModel.getBuilder().newBond(atom, newAtom, CDKConstants.BONDORDER_DOUBLE, stereo);
+        } else if (order == IBond.Order.TRIPLE) {
+            newBond = chemModel.getBuilder().newBond(atom, newAtom, CDKConstants.BONDORDER_TRIPLE, stereo);
+        } else {
+            newBond = chemModel.getBuilder().newBond(atom, newAtom, CDKConstants.BONDORDER_SINGLE, stereo);
+        }
+            
         IAtomContainer atomCon =
             ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
         if (atomCon == null) {
@@ -600,6 +608,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         return newAtom;
     }
 
+    public IAtom addAtomWithoutUndo(String atomType, IAtom atom, IBond.Stereo stereo, boolean makePseudoAtom) {
+        return addAtomWithoutUndo(atomType, atom, stereo, IBond.Order.SINGLE, makePseudoAtom);
+    }
+
     //OK
     public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom) {
         IAtomContainer undoRedoContainer = 
@@ -632,6 +644,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
     //OK
     public void cycleBondValence(IBond bond) {
+        cycleBondValence(bond, IBond.Order.SINGLE);
+    }
+    
+    public void cycleBondValence(IBond bond, IBond.Order order) {
         IBond.Order[] orders=new IBond.Order[2];
         IBond.Stereo[] stereos=new IBond.Stereo[2];
         orders[1]=bond.getOrder();
@@ -639,14 +655,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         // special case : reset stereo bonds
         if (bond.getStereo() != IBond.Stereo.NONE) {
             bond.setStereo(IBond.Stereo.NONE);
+            bond.setOrder(order);
         }else{
-            // cycle the bond order up to maxOrder
-            IBond.Order maxOrder = getController2DModel().getMaxOrder();
-            if (BondManipulator.isLowerOrder(bond.getOrder(), maxOrder)) {
-                BondManipulator.increaseBondOrder(bond);
+            if (order == IBond.Order.SINGLE) {
+                // cycle the bond order up to maxOrder
+                IBond.Order maxOrder = getController2DModel().getMaxOrder();
+                if (BondManipulator.isLowerOrder(bond.getOrder(), maxOrder)) {
+                    BondManipulator.increaseBondOrder(bond);
+                } else {
+                    bond.setOrder(IBond.Order.SINGLE);
+                }
             } else {
-                bond.setOrder(IBond.Order.SINGLE);
-            }
+                if (bond.getOrder() != order) {
+                    bond.setOrder(order);
+                } else {
+                    bond.setOrder(IBond.Order.SINGLE);
+                }
+            }                
         }
         orders[0]=bond.getOrder();
         stereos[0]=bond.getStereo();
@@ -756,9 +781,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addBond(org.openscience.cdk.interfaces.IAtom, org.openscience.cdk.interfaces.IAtom, int)
      */
-    public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo) {
+    public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo, IBond.Order order) {
         IBond newBond = chemModel.getBuilder().newBond(fromAtom, toAtom, 
-                CDKConstants.BONDORDER_SINGLE, stereo);
+                order, stereo);
         IAtomContainer fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, fromAtom);
         IAtomContainer toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, toAtom);
         //we need to check if this merges two atomconainers or not
@@ -773,12 +798,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         return newBond;
     }
 
+    public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo) {
+        return addBond(fromAtom, toAtom, stereo, IBond.Order.SINGLE);
+    }
+
     //OK
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#addBond(org.openscience.cdk.interfaces.IAtom, org.openscience.cdk.interfaces.IAtom)
      */
     public IBond addBond(IAtom fromAtom, IAtom toAtom) {
-        return addBond(fromAtom, toAtom, IBond.Stereo.NONE);
+        return addBond(fromAtom, toAtom, IBond.Stereo.NONE, IBond.Order.SINGLE);
     }
 
     //OK

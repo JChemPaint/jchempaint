@@ -50,8 +50,13 @@ public class ChangeBondAction extends JCPAction
 
     public void actionPerformed(ActionEvent event)
     {
+        
+        String s = event.getActionCommand();
+        String type = s.substring(s.indexOf("@") + 1);
+        
         //first switch mode
-        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
+        //AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
+        AddBondDragModule newActiveModule = null;
         if(type.equals("down_bond")){
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
         }else if(type.equals("up_bond")){
@@ -60,16 +65,30 @@ public class ChangeBondAction extends JCPAction
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.UP_OR_DOWN, true);
         }else if(type.equals("undefined_stereo_bond")){
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.E_OR_Z, true);
+        }else if(type.equals("bondTool")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
+        }else if(type.equals("double_bondTool")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Order.DOUBLE, true);
+        }else if(type.equals("triple_bondTool")){
+            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Order.TRIPLE, true);
         }
-        newActiveModule.setID(type);
-        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 
+        if (newActiveModule != null) { // null means that menu was used => don't change module            
+            newActiveModule.setID(type);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+        }
+        
+        // xxxTool -> xxx
+        int l = type.length();
+        if (type.substring(l-4,l).equals("Tool"))
+            type = type.substring(0,l-4);
+        
         //then handle selection or highlight if there is one
         IChemObject object = getSource(event);
         Iterator<IBond> bondsInRange = null;
 
         if (object == null){
-            //this means the main menu was used
+            //this means the main menu or toolbar was used
             if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
                     && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
                 bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().bonds().iterator();
@@ -87,8 +106,7 @@ public class ChangeBondAction extends JCPAction
 
         if(bondsInRange==null)
             return;
-        String s = event.getActionCommand();
-        String type = s.substring(s.indexOf("@") + 1);
+            
         while(bondsInRange.hasNext()){
             IBond bond = bondsInRange.next();
 
