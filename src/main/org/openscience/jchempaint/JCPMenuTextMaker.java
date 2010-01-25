@@ -327,6 +327,7 @@ public class JCPMenuTextMaker {
         entries.put("selectProducts", GT._("Select Products"));
         entries.put("reactionMenuTitle", GT._("Reaction Popup Menu"));
         entries.put("alkaloids", GT._("Alkaloids"));
+        entries.put("amino_acids", GT._("Amino Acids"));
         entries.put("beta_lactams", GT._("Beta Lactams"));
         entries.put("carbohydrates", GT._("Carbohydrates"));
         entries.put("inositols", GT._("Inositols"));
