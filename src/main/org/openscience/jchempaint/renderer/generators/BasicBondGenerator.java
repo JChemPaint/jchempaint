@@ -251,6 +251,10 @@ public class BasicBondGenerator implements IGenerator {
 
 	public IRenderingElement generateRingElements(
 	        IBond bond, IRing ring, RendererModel model) {
+        // TODO: check for bold bond
+        if (isBetweenTwoWedges(bond, ring)) {
+            System.out.println("fixme: draw bold bond in the ring!");
+        }
 		if (isSingle(bond) && isStereoBond(bond)) {
 			return generateStereoElement(bond, model);
 		} else if (isDouble(bond)) {
@@ -272,7 +276,11 @@ public class BasicBondGenerator implements IGenerator {
 		Point2d a = bond.getAtom(0).getPoint2d();
 		Point2d b = bond.getAtom(1).getPoint2d();
 
-		// the proportion to move in towards the ring center
+        //double bondDistance = model.getBondDistance() / model.getScale();
+        //double[] out = generateDistanceData(a, b, dist);
+
+        // the proportion to move in towards the ring center
+        // FIXME: distance must be standard
 		final double DIST = 0.15;
 
 		Point2d w = new Point2d();
@@ -340,6 +348,16 @@ public class BasicBondGenerator implements IGenerator {
 				&& bond.getStereo() != (IBond.Stereo)CDKConstants.UNSET
                                 && bond.getStereo() != IBond.Stereo.E_Z_BY_COORDINATES;	
 	}
+
+    public boolean isBetweenTwoWedges(IBond bond, IRing ring) {
+        IBond bond0 = ring.getNextBond(bond, bond.getAtom(0));
+        IBond bond1 = ring.getNextBond(bond, bond.getAtom(1));
+        if (bond0.getStereo() == IBond.Stereo.UP
+          && bond1.getStereo() == IBond.Stereo.UP_INVERTED)
+            return true;
+        else
+            return false;
+    }
 
 	public boolean bindsHydrogen(IBond bond) {
 		for (int i = 0; i < bond.getAtomCount(); i++) {
