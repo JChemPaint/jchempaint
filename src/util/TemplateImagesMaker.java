@@ -58,7 +58,7 @@ public class TemplateImagesMaker {
                 for(int k=0;k<dir.list().length;k++){
                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
                         System.err.println(dir.listFiles()[k].getAbsolutePath());
-                        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
+                        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
                         IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
                         String inputstr = getMolSvg(cdkmol, 100, 100);
                         ImageTranscoder imageTranscoder = new JPEGTranscoder();
