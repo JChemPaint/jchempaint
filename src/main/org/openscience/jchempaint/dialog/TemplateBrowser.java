@@ -164,6 +164,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     allPanel.add(allButton);
                     scrollPane.setPreferredSize(new Dimension(allPanel.getPreferredSize().width
                             +scrollPane.getVerticalScrollBar().getPreferredSize().width,360));
+                    scrollPane.getVerticalScrollBar().setUnitIncrement(16);
                     
                 }
                 tabbedPane.addTab(GT.getStringNoExtraction(key.replace('_', ' ')), panel );
