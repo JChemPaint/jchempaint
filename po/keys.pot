@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 02:53+0300\n"
+"POT-Creation-Date: 2010-01-25 14:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2371,42 +2371,46 @@ msgid "Alkaloids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
-msgid "Beta Lactams"
+msgid "Amino Acids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
-msgid "Carbohydrates"
+msgid "Beta Lactams"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
-msgid "Inositols"
+msgid "Carbohydrates"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
-msgid "Lipids"
+msgid "Inositols"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
-msgid "Miscellaneous"
+msgid "Lipids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:335
-msgid "Nucleosides"
+msgid "Miscellaneous"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:336
-msgid "Porphyrins"
+msgid "Nucleosides"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:337
-msgid "Steroids"
+msgid "Porphyrins"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
-msgid "PAHs"
+msgid "Steroids"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
+msgid "PAHs"
+msgstr ""
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:340
 msgid "Language"
 msgstr ""
 
@@ -2433,11 +2437,11 @@ msgstr ""
 msgid "Invalid SMILES specified"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:453
+#: src/main/org/openscience/jchempaint/RenderPanel.java:459
 msgid "Zoomfactor"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:466
+#: src/main/org/openscience/jchempaint/RenderPanel.java:472
 msgid "Hs implicit"
 msgstr ""
 

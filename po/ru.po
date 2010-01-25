@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 02:53+0300\n"
-"PO-Revision-Date: 2010-01-25 02:54+0300\n"
+"POT-Creation-Date: 2010-01-25 14:55+0300\n"
+"PO-Revision-Date: 2010-01-25 14:56+0300\n"
 "Last-Translator: Konstantin Tokarev <annulen@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2358,42 +2358,46 @@ msgid "Alkaloids"
 msgstr "Алкалоиды"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
+msgid "Amino Acids"
+msgstr "Аминокислоты"
+
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
 msgid "Beta Lactams"
 msgstr "Бета лактамы"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
 msgid "Carbohydrates"
 msgstr "Углеводы"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
 msgid "Inositols"
 msgstr "Инозитолы"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
 msgid "Lipids"
 msgstr "Липиды"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:335
 msgid "Miscellaneous"
 msgstr "Разное"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:335
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:336
 msgid "Nucleosides"
 msgstr "Нуклеозиды"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:336
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:337
 msgid "Porphyrins"
 msgstr "Порфирины"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:337
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
 msgid "Steroids"
 msgstr "Стероиды"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
 msgid "PAHs"
 msgstr "Полиароматика"
 
-#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
+#: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:340
 msgid "Language"
 msgstr "Язык"
 
@@ -2420,11 +2424,11 @@ msgstr "Ошибка чтения даных из PubChem"
 msgid "Invalid SMILES specified"
 msgstr "Введен некорректный SMILES"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:453
+#: src/main/org/openscience/jchempaint/RenderPanel.java:459
 msgid "Zoomfactor"
 msgstr "Масштаб"
 
-#: src/main/org/openscience/jchempaint/RenderPanel.java:466
+#: src/main/org/openscience/jchempaint/RenderPanel.java:472
 msgid "Hs implicit"
 msgstr "скрытых H"
 
