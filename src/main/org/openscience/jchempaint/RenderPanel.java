@@ -59,6 +59,7 @@ import org.openscience.jchempaint.action.ZoomAction;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.ControllerModel;
+import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.IViewEventRelay;
 import org.openscience.jchempaint.controller.PhantomBondGenerator;
 import org.openscience.jchempaint.controller.SwingMouseEventRelay;
@@ -395,8 +396,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         String status = "";
         if (position == 0) {
             // depict editing mode
-            String mode = hub.getActiveDrawModule().getDrawModeString();
-            status = JCPMenuTextMaker.getInstance("applet").getText(mode);
+            IControllerModule activeDrawModule = hub.getActiveDrawModule();
+            if (activeDrawModule == null) {
+                return "";
+            } else {
+                String mode = activeDrawModule.getDrawModeString();
+                status = JCPMenuTextMaker.getInstance("applet").getText(mode);
+            }
         } else if (position == 1) {
             // depict bruto formula
             IChemModel chemModel = hub.getIChemModel();
