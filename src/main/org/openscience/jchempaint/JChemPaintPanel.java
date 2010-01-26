@@ -261,6 +261,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     public void coordinatesChanged() {
         setModified(true);
         updateStatusBar();
+        //move focus
+        this.requestFocusInWindow();
     }
 
     /* (non-Javadoc)
@@ -280,6 +282,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             enOrDisableMenus(bondMenu,true);
         else
             enOrDisableMenus(bondMenu,false);
+        //move focus
+        this.requestFocusInWindow();
     }
 
     /* (non-Javadoc)
@@ -293,6 +297,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
         updateUndoRedoControls();
         this.get2DHub().updateView();
+        //move focus
+        //renderPanel.requestFocusInWindow();
+        this.requestFocusInWindow();
     }
 
     /* (non-Javadoc)
@@ -304,6 +311,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         //if something changed in the structure, selection should be cleared
         //this is behaviour like eg in word processors, if you type, selection goes away
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
+        //move focus
+        this.requestFocusInWindow();
     }
 
     /* (non-Javadoc)
@@ -311,6 +320,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void stateChanged(EventObject event) {
     	updateUndoRedoControls();
+        //move focus
+        this.requestFocusInWindow();
     }
 
     /* (non-Javadoc)
@@ -328,9 +339,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (model.getHighlightedAtom() != null) {
             try {
                 IAtom closestAtom = model.getHighlightedAtom();
-                char x = arg0.getKeyChar();
+                char x = arg0.getKeyChar();                
                 if (Character.isLowerCase(x))
                     x = Character.toUpperCase(x);
+                System.out.println(x);
                 IsotopeFactory ifa;
                 ifa = IsotopeFactory.getInstance(closestAtom.getBuilder());
                 IIsotope iso = ifa.getMajorIsotope(Character.toString(x));
@@ -355,6 +367,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void zoomChanged() {
         this.updateStatusBar();
+        //move focus
+        this.requestFocusInWindow();
     }
 
 
@@ -362,8 +376,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
 	 */
 	public void modeChanged(IControllerModule newActiveModule) {
+        //move focus
+        this.requestFocusInWindow();
 	    //we set the old button to inactive colour
-        if (this.getLastActionButton() != null)
+        if (this.getLastActionButton() != null )
             this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
         if (this.lastSecondaryButton != null)
             this.lastSecondaryButton.setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
