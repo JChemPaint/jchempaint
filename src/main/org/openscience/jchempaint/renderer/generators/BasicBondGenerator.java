@@ -137,6 +137,11 @@ public class BasicBondGenerator implements IGenerator {
 		}
 	}
 
+	public double getWidthForWedge(RendererModel model) {
+		double scale = model.getScale();
+        return model.getWedgeWidth() / scale;		
+	}    
+
 	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
 		ElementGroup group = new ElementGroup();
 		this.ringSet = this.getRingSet(ac);
@@ -216,6 +221,13 @@ public class BasicBondGenerator implements IGenerator {
 		}
 	}
 
+    private IRenderingElement generateBoldBondElement(IBond bond, RendererModel model) {
+        Point2d p1 = bond.getAtom(0).getPoint2d();
+		Point2d p2 = bond.getAtom(1).getPoint2d();
+        return new LineElement(p1.x, p1.y, p2.x, p2.y,
+            getWidthForWedge(model), getColorForBond(bond, model));
+    }
+
 	private void createLines(Point2d p1, Point2d p2, double width, double dist,
 	        Color c, ElementGroup group) {
 	    double[] out = generateDistanceData(p1, p2, dist);
@@ -251,9 +263,18 @@ public class BasicBondGenerator implements IGenerator {
 
 	public IRenderingElement generateRingElements(
 	        IBond bond, IRing ring, RendererModel model) {
-        // TODO: check for bold bond
-        if (isBetweenTwoWedges(bond, ring)) {
-            System.out.println("fixme: draw bold bond in the ring!");
+        // check for bold bond
+        if (isBetweenTwoWedges(bond, ring) && !isTriple(bond)) {
+            if (isSingle(bond)) {
+                return generateBoldBondElement(bond, model);
+            } else {
+                ElementGroup pair = new ElementGroup();
+                IRenderingElement e1 = generateInnerElement(bond, ring, model, true);
+                IRenderingElement e2 = generateBoldBondElement(bond, model);
+                pair.add(e1);
+			    pair.add(e2);
+                return pair;
+            }
         }
 		if (isSingle(bond) && isStereoBond(bond)) {
 			return generateStereoElement(bond, model);
@@ -261,7 +282,7 @@ public class BasicBondGenerator implements IGenerator {
 			ElementGroup pair = new ElementGroup();
 			IRenderingElement e1 = generateBondElement(
 			        bond, IBond.Order.SINGLE, model);
-			IRenderingElement e2 = generateInnerElement(bond, ring, model);
+			IRenderingElement e2 = generateInnerElement(bond, ring, model, false);
 			pair.add(e1);
 			pair.add(e2);
 			return pair;
@@ -271,7 +292,7 @@ public class BasicBondGenerator implements IGenerator {
 	}
 
 	public LineElement generateInnerElement(
-	        IBond bond, IRing ring, RendererModel model) {
+	        IBond bond, IRing ring, RendererModel model, boolean isBold) {
 		Point2d center = GeometryTools.get2DCenter(ring);
 		Point2d a = bond.getAtom(0).getPoint2d();
 		Point2d b = bond.getAtom(1).getPoint2d();
@@ -281,7 +302,11 @@ public class BasicBondGenerator implements IGenerator {
 
         // the proportion to move in towards the ring center
         // FIXME: distance must be standard
-		final double DIST = 0.15;
+        double DIST;
+        if (!isBold)
+		    DIST = 0.15;
+        else
+            DIST = 0.25;
 
 		Point2d w = new Point2d();
 		w.interpolate(a, center, DIST);
@@ -335,6 +360,10 @@ public class BasicBondGenerator implements IGenerator {
         }
     }
 
+	public boolean isTriple(IBond bond) {
+		return bond.getOrder() == IBond.Order.TRIPLE;
+	}
+    
 	public boolean isDouble(IBond bond) {
 		return bond.getOrder() == IBond.Order.DOUBLE;
 	}
