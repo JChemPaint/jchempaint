@@ -200,7 +200,10 @@ public class JCPToolBar
     public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, int lines)
     {
         JToolBar toolbar2 = new JToolBar(orientation);
-        String[] toolKeys = StringHelper.tokenize(getToolbarResourceString(kind, chemPaintPanel.getGuistring()));
+        String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
+        if (resource_string == null)
+            return null;
+        String[] toolKeys = StringHelper.tokenize(resource_string);
         JButton button = null;
         Box box=null;
         int counter=0;

@@ -431,19 +431,27 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             if (uppertoolbar == null) {
                 uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL);
             }
-            topContainer.add(uppertoolbar, BorderLayout.SOUTH);
+            if (uppertoolbar != null) {
+                topContainer.add(uppertoolbar, BorderLayout.SOUTH);
+            }
             if (lefttoolbar == null) {
                 lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL);
             }
-            centerContainer.add(lefttoolbar, BorderLayout.WEST);
+            if (lefttoolbar != null) {
+                centerContainer.add(lefttoolbar, BorderLayout.WEST);
+            }
             if (righttoolbar == null) {
                 righttoolbar = JCPToolBar.getToolbar(this, "righttoolbar", SwingConstants.VERTICAL);
             }
-            centerContainer.add(righttoolbar, BorderLayout.EAST);
+            if (righttoolbar != null) {
+                centerContainer.add(righttoolbar, BorderLayout.EAST);
+            }
             if (lowertoolbar == null) {
                 lowertoolbar = JCPToolBar.getToolbar(this, "lowertoolbar", SwingConstants.HORIZONTAL);
             }
-            centerContainer.add(lowertoolbar, BorderLayout.SOUTH);
+            if (lowertoolbar != null) {
+                centerContainer.add(lowertoolbar, BorderLayout.SOUTH);
+            }
         } else {
             topContainer.remove(uppertoolbar);
             centerContainer.remove(lowertoolbar);
