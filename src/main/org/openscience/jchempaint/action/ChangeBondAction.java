@@ -5,6 +5,7 @@
  *  $Revision: 7634 $
  *
  *  Copyright (C) 1997-2008 Egon Willighagen, Stefan Kuhn
+ *  Some portions Copyright (C) 2009 Konstantin Tokarev
  *
  *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
@@ -55,7 +56,6 @@ public class ChangeBondAction extends JCPAction
         String type = s.substring(s.indexOf("@") + 1);
         
         //first switch mode
-        //AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
         AddBondDragModule newActiveModule = null;
         if(type.equals("down_bond")){
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
