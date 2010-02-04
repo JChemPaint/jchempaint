@@ -190,7 +190,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IUndoRedoFactory getUndoRedoFactory();
     public UndoRedoHandler getUndoRedoHandler();
     public IBond addBond(IAtom fromAtom, IAtom toAtom, Stereo stereo, Order order);
-    //public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
+    public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
     //public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, boolean makePseudoAtom);
     public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom,
         Stereo stereo, Order order, boolean makePseudoAtom);
