@@ -179,7 +179,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         chemModelRelay.updateView();
     }
 
-	public static Point2d roundAngle(Point2d s,Point2d d, double bondLenght) {
+	public static Point2d roundAngle(Point2d s,Point2d d, double bondLength) {
 
         Vector2d v = new Vector2d();
         v.sub( d, s );
@@ -187,8 +187,8 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         double deg = Math.toDegrees( rad );
         deg = Math.round( deg/15)*15;
         rad = Math.toRadians( deg );
-        v.x = bondLenght*Math.cos( rad );
-        v.y = bondLenght*Math.sin( rad );
+        v.x = bondLength*Math.cos( rad );
+        v.y = bondLength*Math.sin( rad );
         Point2d result = new Point2d();
         result.add( s, v );
         return result;
