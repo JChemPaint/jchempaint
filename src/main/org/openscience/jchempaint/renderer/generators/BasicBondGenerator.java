@@ -290,7 +290,12 @@ public class BasicBondGenerator implements IGenerator {
 			return generateBondElement(bond, model);
 		}
 	}
-
+    
+    public LineElement generateInnerElement(
+            IBond bond, IRing ring, RendererModel model) {
+        generateInnerElement(bond, ring, model, false);
+    }
+    
 	public LineElement generateInnerElement(
 	        IBond bond, IRing ring, RendererModel model, boolean isBold) {
 		Point2d center = GeometryTools.get2DCenter(ring);
