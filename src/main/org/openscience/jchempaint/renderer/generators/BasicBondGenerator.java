@@ -293,7 +293,7 @@ public class BasicBondGenerator implements IGenerator {
     
     public LineElement generateInnerElement(
             IBond bond, IRing ring, RendererModel model) {
-        generateInnerElement(bond, ring, model, false);
+        return generateInnerElement(bond, ring, model, false);
     }
     
 	public LineElement generateInnerElement(
