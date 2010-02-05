@@ -453,7 +453,7 @@
       </move>
       <delete dir="${dist}/jar/shrinkout"/>
       
-      <!--signjar destDir=""
+      <signjar destDir=""
             alias="${certificatealias}"
             storepass="${keystorepassphrase}"
             preservelastmodified="true">
@@ -462,7 +462,7 @@
                     <includesfile name="${growing_classpath}"/>
                 </fileset>
             </path>
-      </signjar-->
+      </signjar>
       
       <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
