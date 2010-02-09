@@ -426,11 +426,13 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             model.setCompactShape(RenderingParameters.AtomShape.SQUARE);
         }
 
-        //model.setFontName(currentFontName);
         model.setBackColor(currentColor);
-        GT.setLanguage(gtlanguages[language.getSelectedIndex()].code);
-        jcpPanel.updateMenusWithLanguage();
-        updateLanguge();
+        
+        if(language.getSelectedIndex()!=-1) {
+        	GT.setLanguage(gtlanguages[language.getSelectedIndex()].code);
+        	jcpPanel.updateMenusWithLanguage();
+        	updateLanguge();
+        }
 
 
         props.setProperty("DrawNumbers",String.valueOf(drawNumbers.isSelected()));
@@ -525,7 +527,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         boolean languagechanged = false;
         for(int i=0;i<gtlanguages.length;i++){
             if(gtlanguages[i].language.equals((String)language.getSelectedItem())){
-                if(!props.getProperty("General.language").equals(gtlanguages[i].code)){
+                if(props.getProperty("General.language")==null || 
+                  !props.getProperty("General.language").equals(gtlanguages[i].code)){
                     props.setProperty("General.language", gtlanguages[i].code);
                     languagechanged = true;
                 }
