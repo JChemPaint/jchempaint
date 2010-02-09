@@ -56,7 +56,7 @@ public class ChangeBondAction extends JCPAction
         String type = s.substring(s.indexOf("@") + 1);
         
         //first switch mode
-        AddBondDragModule newActiveModule = null;
+        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);;
         if(type.equals("down_bond")){
             newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
         }else if(type.equals("up_bond")){

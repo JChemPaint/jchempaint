@@ -234,7 +234,7 @@ public class RotateModule extends ControllerModuleAdapter {
      * with the old and the new coordinates
      */
     public void mouseClickedUp(Point2d worldCoord) {
-        if(rotationPerformed && atomCoordsMap!=null) {
+        if(rotationPerformed && atomCoordsMap!=null && selection.getConnectedAtomContainer()!=null) {
             logger.debug("posting undo/redo for rotation");
 
             /* Keep new coordinates for the sake of possible undo/redo */

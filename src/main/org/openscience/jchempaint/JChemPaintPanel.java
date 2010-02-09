@@ -405,7 +405,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 buttons.get("periodictable").setBackground(Color.GRAY);
                 lastSecondaryButton = buttons.get("periodictable");
             }
-        } else if (actionid.equals("RX")) {
+        } else if (actionid!=null && actionid.equals("RX")) {
             this.buttons.get("enterR").setBackground(Color.GRAY);
             lastSecondaryButton = this.buttons.get("enterR");
         }
