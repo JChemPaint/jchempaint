@@ -413,8 +413,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             //the newActiveModule should always be an AddAtomModule, but we still check
             if(newActiveModule instanceof AddAtomModule){
                 if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.NONE)){
-                    this.buttons.get("bond").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("bond");
+                    this.buttons.get("bondTool").setBackground(Color.GRAY);
+                    lastSecondaryButton = this.buttons.get("bondTool");
                 }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.UP)){
                     this.buttons.get("up_bond").setBackground(Color.GRAY);
                     lastSecondaryButton = this.buttons.get("up_bond");
@@ -429,8 +429,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     lastSecondaryButton = this.buttons.get("undefined_stereo_bond");
                 }
             }else{
-                this.buttons.get("bond").setBackground(Color.GRAY);
-                lastSecondaryButton = this.buttons.get("bond");
+                this.buttons.get("bondTool").setBackground(Color.GRAY);
+                lastSecondaryButton = this.buttons.get("bondTool");
             }
         }
         if(!(newActiveModule instanceof MoveModule)){

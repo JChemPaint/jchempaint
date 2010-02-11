@@ -44,6 +44,7 @@ public class AbstractAppletTest {
         applet.show();
         JPanelFixture jcppanel=applet.panel("appletframe");
         panel = (JChemPaintPanel)jcppanel.target;
+        viewer.setSize(700,700);
     }
     
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {

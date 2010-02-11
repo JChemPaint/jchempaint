@@ -552,10 +552,10 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             restoreModelWithBasicmol();
             applet.menuItem("pasteTemplate").click();
             DialogFixture dialog = applet.dialog("templates");
-            JButtonFixture penicillinbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Penicillin")));
-            penicillinbutton.click();
+            JButtonFixture morphineButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
+            morphineButton.click();
             Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(18,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
 	    }
 
         @Test public void testMenuTemplatesAlkaloids() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {

@@ -21,17 +21,18 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), movetopint, MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		applet.button("select").click();
-		movetopint=new Point(110,110);	
+		movetopint=new Point(80,80);	
 		applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),movetopint);
 		applet.panel("renderpanel").robot.pressMouse(MouseButton.LEFT_BUTTON);
-		movetopint=new Point(90,90);	
+		movetopint=new Point(85,85); //little fix by MR, do small initial drag first 	
+		applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),movetopint);
+		movetopint=new Point(120,120);	
 		applet.panel("renderpanel").robot.moveMouse(applet.panel("renderpanel").component(),movetopint);
 		applet.panel("renderpanel").robot.releaseMouse(MouseButton.LEFT_BUTTON);
 		Assert.assertEquals(1, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
 		restoreModelToEmpty();
 	}
 	
-    
     @Test public void testMove() throws InterruptedException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -82,16 +83,15 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
 	@Test public void testBug2858663(){
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("bond").click();
+        applet.button("bondTool").click();
         applet.click();
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
         restoreModelToEmpty();
 	}
 	
-	/*
-	 * @cdk.bug 2859344 /6
-	 */
+	
+	// @cdk.bug 2859344 /6
 	@Test public void overwriteStereo(){
 	    JPanelFixture jcppanel=applet.panel("appletframe");
 	    JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -128,9 +128,8 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
         genericStereoBondTest(IBond.Stereo.UP_OR_DOWN);
     }
 
-    /*
-     * @cdk.bug 2859344 /7
-     */
+    
+    //@cdk.bug 2859344 /7
     @Test public void testUndefinedEzBond(){
         genericStereoBondTest(IBond.Stereo.E_OR_Z);
     }
@@ -138,13 +137,12 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
     @Test public void testNoneBond(){
         genericStereoBondTest(IBond.Stereo.NONE);
     }
-    /*
-     * @cdk.bug 2860015
-     */
+
+     //@cdk.bug 2860015
     @Test public void testBug2860015(){
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("bond").click();
+        applet.button("bondTool").click();
         applet.click();
         applet.click();
         applet.click();
@@ -170,12 +168,9 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
         restoreModelToEmpty();
     }
     
-    /**
-	 * This is a test for overwriting of stereo bonds. Any stereo bond
-	 * must overwrite all others and flip itself. 
-	 * 
-	 * @param directionToTest
-	 */
+     
+	// This is a test for overwriting of stereo bonds. Any stereo bond
+	//  must overwrite all others and flip itself. 
 	private void genericStereoBondTest(IBond.Stereo directionToTest){
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -209,7 +204,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
         if(directionToTest==IBond.Stereo.E_OR_Z)
             applet.button("undefined_stereo_bond").click();
         if(directionToTest==IBond.Stereo.NONE)
-            applet.button("bond").click();
+            applet.button("bondTool").click();
         for(int i=0;i<5;i++){
             boolean self=false;
             if(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(i).getStereo()==directionToTest)
@@ -259,5 +254,4 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest{
         Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(8).getStereo());
         restoreModelToEmpty();
 	}
-
 }
