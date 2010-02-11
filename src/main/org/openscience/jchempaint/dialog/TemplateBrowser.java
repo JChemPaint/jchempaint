@@ -168,7 +168,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     
                 }
                 tabbedPane.addTab(GT.getStringNoExtraction(key.replace('_', ' ')), panel );
-                if(tabToSelect.equals(key.replace('_',' '))){
+                if(tabToSelect.equals(key)){
                     tabbedPane.setSelectedIndex(count+1);
                 }
                 count++;
@@ -244,7 +244,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                             if(withsubdirs){
                                 for(int k=0;k<dir.list().length;k++){
                                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
-                                        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.STRICT);
+                                        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
                                         IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
                                         entriesMol.get(dir.getName()).add(cdkmol);
                                         entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));

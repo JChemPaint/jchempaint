@@ -50,6 +50,7 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -68,6 +69,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 import org.openscience.cdk.tools.manipulator.BondManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
@@ -2299,5 +2301,36 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     public void setCursor(int cursor){
         renderer.setCursor(cursor);
     }
-
+    
+    /**
+     * Tells the molecular formula of the model. This includes all fragments 
+     * currently displayed and all their implicit and explicit Hs.
+     * 
+     * @return The formula.
+     */
+    public String getFormula(){
+        IMolecularFormula wholeModel = getIChemModel().getBuilder()
+            .newMolecularFormula();
+        Iterator<IAtomContainer> containers = ChemModelManipulator
+            .getAllAtomContainers(chemModel).iterator();
+        int implicitHs = 0;
+        while (containers.hasNext()) {
+            for (IAtom atom : containers.next().atoms()) {
+                wholeModel.addIsotope(atom);
+                if (atom.getHydrogenCount() != null) {
+                    implicitHs += atom.getHydrogenCount();
+                }
+            }
+        }
+        try {
+            if (implicitHs > 0)
+                wholeModel.addIsotope(IsotopeFactory.getInstance(
+                        wholeModel.getBuilder()).getMajorIsotope(1),
+                        implicitHs);
+        } catch (IOException e) {
+        // do nothing
+        }
+        return MolecularFormulaManipulator.getHTML(
+            wholeModel, true, false);
+    }
 }

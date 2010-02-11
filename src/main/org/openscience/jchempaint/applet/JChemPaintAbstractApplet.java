@@ -45,17 +45,18 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
-import javax.swing.JComponent;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -67,6 +68,7 @@ import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -526,6 +528,48 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     public void makeHydrogensImplicit() {
         getTheJcpp().get2DHub().makeAllExplicitImplicit();
         getTheJcpp().repaint();
+    }
+    
+    /**
+     * Tells the mass of the model. This includes all fragments 
+     * currently displayed and all their implicit and explicit Hs. 
+     * Masses of elements are those of natural abundance. Isotopes are not considered.
+     * 
+     * @return
+     */
+    public double getMolMass(){
+        IMolecularFormula wholeModel = theJcpp.get2DHub().getIChemModel().getBuilder()
+            .newMolecularFormula();
+        Iterator<IAtomContainer> containers = ChemModelManipulator
+            .getAllAtomContainers(theJcpp.get2DHub().getIChemModel()).iterator();
+        int implicitHs = 0;
+        while (containers.hasNext()) {
+            for (IAtom atom : containers.next().atoms()) {
+                wholeModel.addIsotope(atom);
+                if (atom.getHydrogenCount() != null) {
+                    implicitHs += atom.getHydrogenCount();
+                }
+            }
+        }
+        try {
+            if (implicitHs > 0)
+                wholeModel.addIsotope(IsotopeFactory.getInstance(
+                        wholeModel.getBuilder()).getMajorIsotope(1),
+                        implicitHs);
+        } catch (IOException e) {
+        // do nothing
+        }
+        return MolecularFormulaManipulator.getNaturalExactMass(wholeModel);
+    }
+
+    /**
+     * Tells the molecular formula of the model. This includes all fragments 
+     * currently displayed and all their implicit and explicit Hs.
+     * 
+     * @return The formula.
+     */
+    public String getMolFormula(){
+        return theJcpp.get2DHub().getFormula();
     }
 
     /**

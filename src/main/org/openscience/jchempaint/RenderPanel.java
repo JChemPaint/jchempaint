@@ -408,31 +408,17 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             IChemModel chemModel = hub.getIChemModel();
             IMoleculeSet molecules = chemModel.getMoleculeSet();
             if (molecules != null && molecules.getAtomContainerCount() > 0) {
-                IMolecularFormula wholeModel = hub.getIChemModel().getBuilder()
-                        .newMolecularFormula();
                 Iterator<IAtomContainer> containers = ChemModelManipulator
                         .getAllAtomContainers(chemModel).iterator();
                 int implicitHs = 0;
                 while (containers.hasNext()) {
                     for (IAtom atom : containers.next().atoms()) {
-                        wholeModel.addIsotope(atom);
                         if (atom.getHydrogenCount() != null) {
                             implicitHs += atom.getHydrogenCount();
                         }
                     }
                 }
-                try {
-                    if (implicitHs > 0)
-                        wholeModel.addIsotope(IsotopeFactory.getInstance(
-                                wholeModel.getBuilder()).getMajorIsotope(1),
-                                implicitHs);
-                } catch (IOException e) {
-                    // do nothing
-                }
-                String formula = MolecularFormulaManipulator.getHTML(
-                        wholeModel, true, false);
-
-                status = makeStatusBarString(formula, implicitHs);
+                status = makeStatusBarString(hub.getFormula(), implicitHs);
             }
         } else if (position == 2) {
             // depict brutto formula of the selected molecule or part of

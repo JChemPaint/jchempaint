@@ -335,6 +335,7 @@ public class JCPMenuTextMaker {
         entries.put("miscellaneous", GT._("Miscellaneous"));
         entries.put("nucleosides", GT._("Nucleosides"));
         entries.put("porphyrins", GT._("Porphyrins"));
+        entries.put("protecting_groups", GT._("Protecting Groups"));
         entries.put("steroids", GT._("Steroids"));
         entries.put("pahs", GT._("PAHs"));
         entries.put("language", GT._("Language"));

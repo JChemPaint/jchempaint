@@ -165,7 +165,8 @@ public class JChemPaint {
                         .println("The -D options are as follows (defaults in parathesis):");
                 System.out.println("  cdk.debugging     [true|false] (false)");
                 System.out.println("  cdk.debug.stdout  [true|false] (false)");
-                System.out.println("  user.language     [ar|cs|de|en|es|hu|nb|nl|pl|pt|ru|th] (en)");
+                System.out.println("  user.language     [ar|ca|cs|de|en|es|hu|nb|nl|pl|pt|ru|th] (en)");
+                System.out.println("  user.language     [ar|ca|cs|de|hu|nb|nl|pl|pt_BR|ru|th] (EN)");
 
                 System.exit(0);
             }
