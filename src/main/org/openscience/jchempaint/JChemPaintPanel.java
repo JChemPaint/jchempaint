@@ -182,26 +182,14 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param inputAdapter The SwingPopupModule to use for the popup menus.
      */
     public void setupPopupMenus(SwingPopupModule inputAdapter) {
-        if (inputAdapter.getPopupMenu(PseudoAtom.class) == null) {
-            inputAdapter.setPopupMenu(PseudoAtom.class,
-                    new JChemPaintPopupMenu(this, "pseudo", this.guistring));
-        }
-        if (inputAdapter.getPopupMenu(Atom.class) == null) {
-            inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this,
-                    "atom", this.guistring));
-        }
-        if (inputAdapter.getPopupMenu(Bond.class) == null) {
-            inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this,
-                    "bond", this.guistring));
-        }
-        if (inputAdapter.getPopupMenu(ChemModel.class) == null) {
-            inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
-                    this, "chemmodel", this.guistring));
-        }
-        /*if (inputAdapter.getPopupMenu(Reaction.class) == null) {
-            inputAdapter.setPopupMenu(Reaction.class, new JChemPaintPopupMenu(
-                    this, "reaction", this.guistring));
-        }*/
+    	inputAdapter.setPopupMenu(PseudoAtom.class,
+    			new JChemPaintPopupMenu(this, "pseudo", this.guistring));
+    	inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this,
+    			"atom", this.guistring));
+    	inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this,
+    			"bond", this.guistring));
+    	inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
+    			this, "chemmodel", this.guistring));
     }
 
 
