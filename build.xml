@@ -24,6 +24,12 @@
 	<property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
 	<property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
 
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="libdevel/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
+
     <target id="clean" name="clean" description="Removes compiled stuff.">
         <delete dir="${dist}" />
     	<delete dir="${javadoc.dir}" />
@@ -171,38 +177,41 @@
         <delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" />
     </target>
 
+    <target id="build-pot-pos" name="build-pot-pos" >
+    	<exec dir="." executable="xgettext">
+    	   <arg line="-kGT._ -o po/keys.pot $$(find src/main -name &quot;*.java&quot;)"/>
+    	</exec>
+        <foreach target="msgmerge" param="file">
+           <fileset dir="po" casesensitive="yes">
+             <include name="**/*.po"/>
+           </fileset>
+        </foreach>
+    </target>
+    	
+	<target id="msgmerge" name="msgmerge">
+        <exec dir="." executable="msgmerge">
+            <arg line="-U ${file} po/keys.pot"/>
+        </exec>
+    </target>
+
+    <target id="msgfmt" name="msgfmt">
+        <propertyregex property="filename"
+                  input="${file}"
+                  regexp="[.]*/po/([^\.]*)\.po"
+                  select="\1"
+                  casesensitive="false" />
+        <exec dir="." executable="msgfmt">
+            <arg line="--java2 -d po/classes -r app.i18n.Messages -l ${filename} po/${filename}.po"/>
+        </exec>
+    </target>
+
     <target id="build-languageclasses" name="build-languageclasses" >
     	<echo message="Compiling po files." />
-    	<exec dir="." executable="msgfmt">
-    		<arg line="--java2 -d po/classes -r app.i18n.Messages -l ar po/ar.po"/>
-    	</exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l cs po/cs.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l de po/de.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l es po/es.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l hu po/hu.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l nb po/nb.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l nl po/nl.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l pt_BR po/pt_BR.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l ru po/ru.po"/>
-        </exec>
-        <exec dir="." executable="msgfmt">
-            <arg line="--java2 -d po/classes -r app.i18n.Messages -l th po/th.po"/>
-        </exec>
+        <foreach target="msgfmt" param="file">
+           <fileset dir="po" casesensitive="yes">
+             <include name="**/*.po"/>
+           </fileset>
+        </foreach>
     </target>
 
    	<target id="compile-jcp" name="compile-jcp" depends="build-languageclasses, makelicenseinfo" >
