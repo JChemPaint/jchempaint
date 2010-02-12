@@ -174,6 +174,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IAtomContainer deleteFragment(IAtomContainer toDelete);
     public void cleanup();
     public void flip(boolean horizontal);
+    public void invertStereoInSelection();
     /**
      * Adjusts all bond orders to fit valency
      */
