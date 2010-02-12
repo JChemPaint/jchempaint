@@ -1822,6 +1822,27 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
     }
 
+    public void invertStereoInSelection() {
+        IAtomContainer toflip;
+        RendererModel renderModel = renderer.getRenderer2DModel();
+        if (renderModel.getSelection().getConnectedAtomContainer()!=null &&
+            renderModel.getSelection().getConnectedAtomContainer().getAtomCount()!=0   ) {
+            toflip = renderModel.getSelection().getConnectedAtomContainer();
+        } else
+            return;
+            
+        for(IBond bond : toflip.bonds()){
+            if(bond.getStereo()==IBond.Stereo.UP)
+                bond.setStereo(IBond.Stereo.DOWN);
+            else if(bond.getStereo()==IBond.Stereo.DOWN)
+                bond.setStereo(IBond.Stereo.UP);
+            else if(bond.getStereo()==IBond.Stereo.UP_INVERTED)
+                bond.setStereo(IBond.Stereo.DOWN_INVERTED);
+            else if(bond.getStereo()==IBond.Stereo.DOWN_INVERTED)
+                bond.setStereo(IBond.Stereo.UP_INVERTED);
+        }
+    }
+
     public void setEventHandler(IChemModelEventRelayHandler handler) {
         this.changeHandler = handler;
     }
