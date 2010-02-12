@@ -26,7 +26,7 @@ msgstr "JCP version konnte nicht bestimmt werden"
 #, java-format
 msgid ""
 "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
-msgstr "JChemPaint {0} muss auf einer Java VM version {1} oder höher."
+msgstr "Achtung: JChemPaint {0} benötigt eine Java VM version {1} oder höher."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:124
 #, java-format
@@ -51,9 +51,8 @@ msgid "File does not exist"
 msgstr "Datei existiert nicht"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:216
-#, fuzzy
 msgid "Untitled"
-msgstr "Unbenannt-"
+msgstr "Unbenannt"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:410
 msgid "Could not determine file format"
@@ -1230,9 +1229,8 @@ msgid "OK"
 msgstr "OK"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomContainerEditor.java:54
-#, fuzzy
 msgid "Title"
-msgstr "Datei"
+msgstr "Titel"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:60
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:85
@@ -1241,52 +1239,46 @@ msgstr "Einfach"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:60
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:86
-#, fuzzy
 msgid "Double"
-msgstr "Problem"
+msgstr "Zweifach"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:60
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:87
-#, fuzzy
 msgid "Triple"
-msgstr "Datei"
+msgstr "Dreifach"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:60
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:88
 msgid "Quadruple"
-msgstr ""
+msgstr "Vierfach"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:61
-#, fuzzy
 msgid "None"
-msgstr "Neon"
+msgstr "Keine"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:61
-#, fuzzy
 msgid "Up"
-msgstr "U"
+msgstr "Einwärts"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:61
 msgid "Down"
-msgstr ""
+msgstr "Auswärts"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:61
 msgid "Up or Down"
-msgstr ""
+msgstr "Aus- oder einwärts"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:61
 msgid "E or Z"
-msgstr ""
+msgstr "E oder Z"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:64
-#, fuzzy
 msgid "Bond order"
-msgstr "Bindungsweite"
+msgstr "Bindungsordnung"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/BondEditor.java:67
-#, fuzzy
 msgid "Bond stereo"
-msgstr "Irgendeine Stereobindung"
+msgstr "Stereoeigenschaft"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:161
 msgid "Display Preferences"
@@ -1375,12 +1367,12 @@ msgstr "Beim speichern nach CML Einstellungen fragen"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:328
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:330
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
 msgid "Look and feel"
-msgstr ""
+msgstr "Look and feel"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:343
 msgid "User Interface Language"
@@ -1392,23 +1384,23 @@ msgstr "muss Zahl zwischen 1 und 100 sein"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
 msgid "is not supported on this platform"
-msgstr ""
+msgstr "wird auf dieser Platform nicht unterstützt"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
 msgid "Unsupported look&feel"
-msgstr ""
+msgstr "Nicht-unterstütztes Look&Feel"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:515
 msgid "Class not found:"
-msgstr ""
+msgstr "Klasse nicht gefunden"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:519
 msgid "Instantiation Exception:"
-msgstr ""
+msgstr "Ausnahme beim Instanziieren"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:522
 msgid "Illegal Access: "
-msgstr ""
+msgstr "Illegal Access:"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:571
 msgid "Choose Background Color"
@@ -1421,66 +1413,59 @@ msgstr "Eigenschaften"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:104
 msgid "You did not provide necessary information"
-msgstr ""
+msgstr "Sie haben nötige Informationen weggelassen"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:104
 msgid "Incomplete Information"
-msgstr ""
+msgstr "Unvollständige Information"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PseudoAtomEditor.java:53
 msgid "Label"
-msgstr ""
+msgstr "Bezeichner"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:60
-#, fuzzy
 msgid "Reaction ID"
-msgstr "Reaktion"
+msgstr "Reaktions-ID"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:63
 msgid "Forward"
-msgstr ""
+msgstr "Vorwärts"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:63
 msgid "Backward"
-msgstr ""
+msgstr "Rückwärts"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:63
 msgid "Bidirectional"
-msgstr ""
+msgstr "Bidirektional"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:66
-#, fuzzy
 msgid "Direction"
-msgstr "Reaktion"
+msgstr "Richtung"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:68
-#, fuzzy
 msgid "Solvent"
-msgstr "Silber"
+msgstr "Lösungsmittel"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ReactionEditor.java:70
-#, fuzzy
 msgid "Temperature"
-msgstr "Vorlagen"
+msgstr "Temperatur"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:75
 msgid "Symbol"
-msgstr ""
+msgstr "Symbol"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:77
-#, fuzzy
 msgid "H Count"
-msgstr "Ausschneiden"
+msgstr "H-Anzahl"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:79
-#, fuzzy
 msgid "Formal Charge"
-msgstr "Ladung vermindern"
+msgstr "Ladung"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:81
-#, fuzzy
 msgid "Isotope number"
-msgstr "Atomnummer"
+msgstr "Isotopennummer"
 
 #: src/main/org/openscience/jchempaint/dialog/ModifyRenderOptionsDialog.java:79
 msgid "Preferences"
@@ -1542,9 +1527,8 @@ msgstr "Ungültiges Symbol"
 
 #: src/main/org/openscience/jchempaint/action/ChangeAtomSymbolAction.java:137
 #: src/main/org/openscience/jchempaint/action/ConvertToPseudoAtomAction.java:77
-#, fuzzy
 msgid "Enter label"
-msgstr "Elementsymbol über die Tastatur eingeben"
+msgstr "Bezeichner eingeben"
 
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:59
 #: src/main/org/openscience/jchempaint/action/HelpAction.java:62
@@ -1578,35 +1562,33 @@ msgid "No file type chosen"
 msgstr "Dein Dateityp gewählt"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:109
-#, fuzzy
 msgid "File already exists. Do you want to overwrite it?"
-msgstr "wurde geändert und noch nicht gespeichert. Wollen Sie speichern?"
+msgstr "Datei existiert schon. Wollen Sie sie überschreiben?"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:110
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:161
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:167
-#, fuzzy
 msgid "File already exists"
-msgstr "Datei existiert nicht"
+msgstr "Datei existiert schon"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:125
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:149
 #, java-format
 msgid "Exported image to {0}"
-msgstr ""
+msgstr "Bild nach {0} exportiert"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:128
 msgid "Problem exporting to SVG"
-msgstr ""
+msgstr "Probleme beim Erstellen des SVG"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:155
 #, java-format
 msgid "Exported image to {0} as PNG, since {1} could not be written"
-msgstr ""
+msgstr "Bild nach {0} als PNG exportiert, da {1} nicht erstellt werden konnte"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
-msgstr ""
+msgstr "Probleme beim Erstellen des Bildes"
 
 #: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:65
 msgid "Problem"
@@ -1627,9 +1609,8 @@ msgid "InChI generation failed"
 msgstr "InChi-Erstellung hat nicht funktioniert"
 
 #: src/main/org/openscience/jchempaint/action/CreateInChIAction.java:89
-#, fuzzy
 msgid "InChI generation"
-msgstr "InChi-Erstellung hat nicht funktioniert"
+msgstr "InChi-Erstellung"
 
 #: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
 #: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
@@ -1647,19 +1628,18 @@ msgid "Nothing to save."
 msgstr "Nichts zu speichern"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:153
-#, fuzzy
 msgid "Please choose a file type!"
 msgstr "Bitte Dateityp wählen"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:160
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:166
-#, fuzzy, java-format
+#, java-format
 msgid "File {0} already exists. Do you want to overwrite it?"
-msgstr "wurde geändert und noch nicht gespeichert. Wollen Sie speichern?"
+msgstr "Datei {0} existiert schon. Wollen Sie sie überschreiben?"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:201
 msgid "Cannot save file in this format:"
-msgstr ""
+msgstr "Kann Datei nicht in diesem Format speichern:"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:209
 msgid "Error while writing file"
@@ -1965,13 +1945,11 @@ msgstr "Isotope"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:123
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:124
-#, fuzzy
 msgid "Add Single Electron"
 msgstr "Ungepaartes Elektron hinzufügen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:125
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:126
-#, fuzzy
 msgid "Remove Single Electron"
 msgstr "Ungepaartes Elektron entfernen"
 
@@ -2051,7 +2029,7 @@ msgstr "R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:236
 msgid "Other..."
-msgstr ""
+msgstr "Andere..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:237
 msgid "R1"
@@ -2074,14 +2052,12 @@ msgid "Draw Bonds and Atoms"
 msgstr "Atome und Bindungen zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:242
-#, fuzzy
 msgid "Draw Double Bonds"
-msgstr "Bindung zeichnen"
+msgstr "Doppelbindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:243
-#, fuzzy
 msgid "Draw Triple Bonds"
-msgstr "Bindung zeichnen"
+msgstr "Dreifachbindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:244
 msgid "Change the Atom's Symbol"
@@ -2208,9 +2184,8 @@ msgid "Rotate selection"
 msgstr "Auswahl drehen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:277
-#, fuzzy
 msgid "Rotate selection in space"
-msgstr "Auswahl drehen"
+msgstr "Auswahl räumlich drehen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:278
 msgid "Cut selection"
@@ -2237,7 +2212,6 @@ msgid "Choose from complex templates"
 msgstr "Aus komplizierten Vorlagen wählen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:284
-#, fuzzy
 msgid " Menu"
 msgstr "Menüleiste"
 
@@ -2254,19 +2228,16 @@ msgid "Draw Bond"
 msgstr "Bindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:289
-#, fuzzy
 msgid "Draw Double Bond"
-msgstr "Bindung zeichnen"
+msgstr "Doppelbindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:290
-#, fuzzy
 msgid "Draw Triple Bond"
-msgstr "Bindung zeichnen"
+msgstr "Dreifachbindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:291
-#, fuzzy
 msgid "Draw Quadruple Bond"
-msgstr "Bindung zeichnen"
+msgstr "Vierfachbindung zeichnen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:292
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:293
@@ -2303,13 +2274,12 @@ msgid "Move"
 msgstr "Bewegen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:305
-#, fuzzy
 msgid "Rotate"
-msgstr "Zustand:"
+msgstr "Drehen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:306
 msgid "Rotate in space"
-msgstr ""
+msgstr "Räumlich drehen"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:307
 msgid "Benzene"
@@ -2338,9 +2308,8 @@ msgid "Change drawing symbol to {0}"
 msgstr "Benutztes Symbol ändern nach {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:320
-#, fuzzy
 msgid "Draw any functional group"
-msgstr "Funktionale Gruppe hinzufügen"
+msgstr "Zeichnen Sie eine funktionale Gruppe"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:321
 msgid "Reaction"
@@ -2379,9 +2348,8 @@ msgid "Alkaloids"
 msgstr "Alkaloide"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
-#, fuzzy
 msgid "Amino Acids"
-msgstr "Actinide"
+msgstr "Aminosäuren"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
 msgid "Beta Lactams"
@@ -2412,22 +2380,20 @@ msgid "Porphyrins"
 msgstr "Porphyrine"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
-#, fuzzy
 msgid "Protecting Groups"
-msgstr "Protactinium"
+msgstr "Schutzgruppe"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
 msgid "Steroids"
 msgstr "Steroide"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:340
-#, fuzzy
 msgid "PAHs"
-msgstr "As"
+msgstr "PAHs"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:341
 msgid "Language"
-msgstr ""
+msgstr "Sprache"
 
 #: src/main/org/openscience/jchempaint/GT.java:123
 msgid "American English"
@@ -2443,7 +2409,7 @@ msgstr "Brazilian Portuguese"
 
 #: src/main/org/openscience/jchempaint/GT.java:126
 msgid "Catalan"
-msgstr ""
+msgstr "Catalan"
 
 #: src/main/org/openscience/jchempaint/GT.java:127
 msgid "Czech"
