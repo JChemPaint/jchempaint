@@ -40,12 +40,15 @@ import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 
 public class Rotate3DModule extends RotateModule {
 
     private double rotationAnglePhi;
     private double rotationAnglePsi;
+    private boolean horizontalFlip;
+    private boolean verticalFlip;
 
     /**
      * Constructor 
@@ -54,6 +57,8 @@ public class Rotate3DModule extends RotateModule {
     public Rotate3DModule(IChemModelRelay chemModelRelay) {
         super(chemModelRelay);
         logger.debug("constructor");
+        horizontalFlip = false;
+        verticalFlip = false;
     }
     
     /**
@@ -90,9 +95,47 @@ public class Rotate3DModule extends RotateModule {
                 selection.getConnectedAtomContainer().getAtom(i).setPoint2d(
                         newCoords);
             }
+
+            if ((cosinePhi < 0) && (!horizontalFlip)) {
+                horizontalFlip = true;
+                chemModelRelay.invertStereoInSelection();
+            }
+            if ((cosinePhi >= 0) && (horizontalFlip)) {
+                horizontalFlip = false;
+                chemModelRelay.invertStereoInSelection();
+            }
+            if ((cosinePsi < 0) && (!verticalFlip)) {
+                verticalFlip = true;
+                chemModelRelay.invertStereoInSelection();
+            }
+            if ((cosinePsi >= 0) && (verticalFlip)) {
+                verticalFlip = false;
+                chemModelRelay.invertStereoInSelection();
+            }
         }
         chemModelRelay.updateView();
     }
+
+   /* public void invertStereoInSelection() {
+        IAtomContainer toflip;
+        RendererModel renderModel = renderer.getRenderer2DModel();
+        if (renderModel.getSelection().getConnectedAtomContainer()!=null &&
+            renderModel.getSelection().getConnectedAtomContainer().getAtomCount()!=0   ) {
+            toflip = renderModel.getSelection().getConnectedAtomContainer();
+        } else
+            return;
+            
+        for(IBond bond : toflip.bonds()){
+            if(bond.getStereo()==IBond.Stereo.UP)
+                bond.setStereo(IBond.Stereo.DOWN);
+            else if(bond.getStereo()==IBond.Stereo.DOWN)
+                bond.setStereo(IBond.Stereo.UP);
+            else if(bond.getStereo()==IBond.Stereo.UP_INVERTED)
+                bond.setStereo(IBond.Stereo.DOWN_INVERTED);
+            else if(bond.getStereo()==IBond.Stereo.DOWN_INVERTED)
+                bond.setStereo(IBond.Stereo.UP_INVERTED);
+        }
+    }*/
     
     public String getDrawModeString() {
         return "Rotate in space";
