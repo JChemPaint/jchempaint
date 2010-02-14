@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-12 09:25+0000\n"
-"PO-Revision-Date: 2010-02-06 00:07+0100\n"
+"PO-Revision-Date: 2010-02-14 23:41+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +26,8 @@ msgstr "No se ha podido determinar la versión de JCP"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:123
 #, java-format
-msgid ""
-"WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
-msgstr ""
-"Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina "
-"Virtual de Java {1} o superior."
+msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+msgstr "Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina Virtual de Java {1} o superior."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:124
 #, java-format
@@ -63,24 +60,16 @@ msgid "Could not determine file format"
 msgstr "No se ha podido determinar el formato del archivo"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:421
-msgid ""
-"It seems you opened a mol or sdf file containing several molecules. Only the "
-"first one will be shown"
-msgstr ""
-"Al parecer, se ha abierto un archivo mol o sdf que contiene varias "
-"moléculas. Sólo se mostrará la primera."
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Al parecer, se ha abierto un archivo mol o sdf que contiene varias moléculas. Sólo se mostrará la primera."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:425
 msgid "sdf-like file"
 msgstr "Archivo similar a sdf"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:668
-msgid ""
-"Not all atoms have 2D coordinates. JCP can only show full 2D specified "
-"structures. Shall we lay out the structure?"
-msgstr ""
-"Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras "
-"con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:676
 msgid "Cannot display without 2D coordinates"
@@ -1505,8 +1494,7 @@ msgstr "Visite http://jchempaint.sourceforge.net para más información."
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:330
 msgid "The content you tried to copy could not be read to any known format"
-msgstr ""
-"El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
+msgstr "El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:330
 msgid "Could not process content"
@@ -1587,9 +1575,7 @@ msgstr "Problema al exportar a SVG"
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:155
 #, java-format
 msgid "Exported image to {0} as PNG, since {1} could not be written"
-msgstr ""
-"La imagen se ha exportado a {0} en formato PNG, puesto que no se pudo "
-"escribir {1}"
+msgstr "La imagen se ha exportado a {0} en formato PNG, puesto que no se pudo escribir {1}"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
@@ -1657,35 +1643,22 @@ msgstr "Problemas al gestionar los datos"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:232
 #, java-format
-msgid ""
-"{0} files cannot contain extra molecules. You painted molecules outside the "
-"reaction(s), which will not be in the file. Continue?"
-msgstr ""
-"Los archivos {0} no pueden contener moléculas adicionales. Se han dibujado "
-"moléculas fuera de la(s) reacción(es), que no se incluirán en el archivo. "
-"¿Desea continuar?"
+msgid "{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?"
+msgstr "Los archivos {0} no pueden contener moléculas adicionales. Se han dibujado moléculas fuera de la(s) reacción(es), que no se incluirán en el archivo. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:240
 msgid "RXN can only save reactions. You have no reactions painted!"
-msgstr ""
-"RXN solamente puede guardar reacciones, y no hay ninguna reacción dibujada."
+msgstr "RXN solamente puede guardar reacciones, y no hay ninguna reacción dibujada."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:269
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
-msgstr ""
-"Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula "
-"dibujada."
+msgstr "Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula dibujada."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:275
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:360
 #, java-format
-msgid ""
-"{0} files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
-msgstr ""
-"Los archivos {0} no pueden contener reacciones, y se han dibujado "
-"reacciones. Sus reactantes y productos se incluirán como moléculas "
-"independientes. ¿Desea continuar?"
+msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
+msgstr "Los archivos {0} no pueden contener reacciones, y se han dibujado reacciones. Sus reactantes y productos se incluirán como moléculas independientes. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:445
 msgid "Zoomfactor"
@@ -2383,9 +2356,8 @@ msgid "Porphyrins"
 msgstr "Porfirinas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
-#, fuzzy
 msgid "Protecting Groups"
-msgstr "Protactinio"
+msgstr "Grupos protectores"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
 msgid "Steroids"
@@ -2413,7 +2385,7 @@ msgstr "Português do Brasil"
 
 #: src/main/org/openscience/jchempaint/GT.java:126
 msgid "Catalan"
-msgstr ""
+msgstr "Català"
 
 #: src/main/org/openscience/jchempaint/GT.java:127
 msgid "Czech"
@@ -2510,3 +2482,4 @@ msgstr "No es posible rehacer"
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:618
 msgid "No undo possible"
 msgstr "No es posible deshacer"
+
