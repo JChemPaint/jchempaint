@@ -9,9 +9,13 @@ import javax.vecmath.Point2d;
 import junit.framework.Assert;
 
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.JButtonFixture;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 
 public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
 
@@ -20,7 +24,7 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     @BeforeClass public static void setUp() {
         AbstractAppletTest.setUp();
     }
-    
+
     @Test public void testUndo() throws CloneNotSupportedException{
         //These should be models.add((IChemModel)panel.getChemModel());
         //but due to a bug in cdk, clone changes the model
@@ -84,4 +88,37 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         }
     }
 
+    /**
+     * Tests bug fixed for JChempaint trac Ticket #79 (new defect):
+     * Undo/redo when pasting templates works partly.
+     */
+    @Test public void testUndoTemplates() throws CloneNotSupportedException{
+    	applet.menuItem("new").click();
+        models.add((IChemModel)panel.getChemModel());
+        applet.menuItem("pasteTemplate").click();
+        DialogFixture dialog = applet.dialog("templates");
+        JButtonFixture templateButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Cysteine")));
+        templateButton.click();
+        Assert.assertEquals(7,totalAtomCount());
+        Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        
+        applet.menuItem("pasteTemplate").click();
+        dialog = applet.dialog("templates");
+        templateButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Leucine")));
+        templateButton.click();
+        Assert.assertEquals(16,totalAtomCount());
+        Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+
+        applet.button("undo").click();
+        Assert.assertEquals(7,totalAtomCount());
+        Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+    }
+
+	private int totalAtomCount () {
+        int totalAtomCount=0;
+        for(IAtomContainer atc: panel.getChemModel().getMoleculeSet().atomContainers()) {
+        	totalAtomCount+=atc.getAtomCount();
+        }
+        return totalAtomCount;
+	}
 }

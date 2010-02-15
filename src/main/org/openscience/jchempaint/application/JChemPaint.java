@@ -528,7 +528,6 @@ public class JChemPaint {
     public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) {
         if (molecule == null) return;
 
-        // get relevant bits from active model
         IChemModel chemModel = chemPaintPanel.getChemModel();
         IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet == null) {
@@ -537,25 +536,32 @@ public class JChemPaint {
         
         // On copy & paste on top of an existing drawn structure, prevent the
         // pasted section to be drawn exactly on top or to far away from the 
-        // original by shifting it to a fixed position next to it. 
-        if (shiftPasted && moleculeSet.getAtomContainer(0)!=null && moleculeSet.getAtomContainer(0).getAtomCount()!=0) {
-            // where is the right border of the current structure?
-            double maxXCurr = Double.NEGATIVE_INFINITY;
-            for (IAtom atom : moleculeSet.getAtomContainer(0).atoms()) {
-                if(atom.getPoint2d().x>maxXCurr)
-                    maxXCurr = atom.getPoint2d().x;
-            }
-            // where is the left border of the pasted structure?
+        // original by shifting it to a fixed position next to it.
+
+        if (shiftPasted) {
+        	double maxXCurr = Double.NEGATIVE_INFINITY;
             double minXPaste = Double.POSITIVE_INFINITY;
-            for (IAtom atom : molecule.atoms()) {
-                if(atom.getPoint2d().x<minXPaste)
-                    minXPaste = atom.getPoint2d().x;
+
+        	for (IAtomContainer atc : moleculeSet.atomContainers()) {
+            	// Detect  the right border of the current structure..
+            	for (IAtom atom : atc.atoms()) {
+	                if(atom.getPoint2d().x>maxXCurr)
+	                    maxXCurr = atom.getPoint2d().x;
+	            }
+	            // Detect the left border of the pasted structure..
+	            for (IAtom atom : molecule.atoms()) {
+	                if(atom.getPoint2d().x<minXPaste)
+	                    minXPaste = atom.getPoint2d().x;
+	            }
             }
-            // shift the pasted structure to be nicely next to the existing one.
-            final int MARGIN=1;
-            final double SHIFT = maxXCurr - minXPaste; 
-            for (IAtom atom : molecule.atoms()) {
-                atom.setPoint2d(new Point2d (atom.getPoint2d().x+MARGIN+SHIFT, atom.getPoint2d().y ));
+
+            if (maxXCurr != Double.NEGATIVE_INFINITY && minXPaste != Double.POSITIVE_INFINITY) { 
+		        // Shift the pasted structure to be nicely next to the existing one.
+		        final int MARGIN=1;
+		        final double SHIFT = maxXCurr - minXPaste;
+		        for (IAtom atom : molecule.atoms()) {
+		            atom.setPoint2d(new Point2d (atom.getPoint2d().x+MARGIN+SHIFT, atom.getPoint2d().y ));
+		        }
             }
         }
 
@@ -577,16 +583,15 @@ public class JChemPaint {
         else
             moleculeSet.addAtomContainer(molecule);
 
-        IUndoRedoFactory i= chemPaintPanel.get2DHub().getUndoRedoFactory();
-        UndoRedoHandler ih= chemPaintPanel.get2DHub().getUndoRedoHandler();
-        if (i!=null) {
-            IUndoRedoable undoredo = i.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
+        IUndoRedoFactory undoRedoFactory= chemPaintPanel.get2DHub().getUndoRedoFactory();
+        UndoRedoHandler undoRedoHandler= chemPaintPanel.get2DHub().getUndoRedoHandler();
+        
+        if (undoRedoFactory!=null) {
+            IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
             molecule, null, "Paste", chemPaintPanel.get2DHub());
-            ih.postEdit(undoredo);
+            undoRedoHandler.postEdit(undoredo);
         }
         
-        //moleculeSet.addMolecule(molecule); // don't create another atom container...
-        ControllerHub.avoidOverlap(chemModel);
         chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
         chemPaintPanel.get2DHub().updateView();
     }

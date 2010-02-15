@@ -28,7 +28,6 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -62,7 +61,6 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
-import org.openscience.cdk.io.INChIPlainTextReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLWriter;
@@ -79,7 +77,6 @@ import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.MoveModule;
@@ -481,7 +478,8 @@ public class CopyPasteAction extends JCPAction{
      * @param renderModel The current renderer model.
      */
     private void insertStructure(IMolecule toPaste, RendererModel renderModel) {
-        //add implicit hs
+
+    	//add implicit hs
         if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){
             try {
                 AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(toPaste);
@@ -497,21 +495,21 @@ public class CopyPasteAction extends JCPAction{
                 toPaste.getAtom(i).setValency(null);
             }
         }
+
         //somehow, in case of single atoms, there are no coordinates
         if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
+
         JChemPaint.generateModel(jcpPanel, toPaste, false,true);
         jcpPanel.get2DHub().fireStructureChangedEvent();
-        
-        //We select the inserted structure
-        IChemObjectSelection selection
-        = new LogicalSelection(LogicalSelection.Type.ALL);
 
+        //We select the inserted structure
+        IChemObjectSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         selection.select(ChemModelManipulator.newChemModel(toPaste));
         renderModel.setSelection(selection);
-        SelectSquareModule succusorModule = new SelectSquareModule(jcpPanel.get2DHub());
-        succusorModule.setID("select");
-        MoveModule newActiveModule = new MoveModule(jcpPanel.get2DHub(), succusorModule);
+        SelectSquareModule successorModule = new SelectSquareModule(jcpPanel.get2DHub());
+        successorModule.setID("select");
+        MoveModule newActiveModule = new MoveModule(jcpPanel.get2DHub(), successorModule);
         newActiveModule.setID("move");
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);        
     }

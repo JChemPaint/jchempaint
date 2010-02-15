@@ -23,7 +23,13 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -91,16 +97,25 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
             ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
             chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
         }
-		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
-			IBond bond = undoRedoContainer.getBond(i);
+
+        IBond[] bonds = new IBond[undoRedoContainer.getBondCount()];
+        int idx=0;
+        for (IBond bond : undoRedoContainer.bonds())
+			bonds[idx++]=bond;
+        for (IBond bond : bonds){
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, bond);
 			containerToAddTo.removeBond(bond);
 		}
-		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
-			IAtom atom = undoRedoContainer.getAtom(i);
+		
+		IAtom[] atoms = new IAtom[undoRedoContainer.getAtomCount()];
+		idx=0;
+		for (IAtom atom : undoRedoContainer.atoms())
+			atoms[idx++]=atom;
+        for (IAtom atom : atoms){
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 			containerToAddTo.removeAtom(atom);
 		}
+		
 		if(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>1)
 		    ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
 		Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
