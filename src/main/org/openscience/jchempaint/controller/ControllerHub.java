@@ -2259,17 +2259,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         changeModeListeners.remove(listener);
     }
 
-    //OK TODO this could do with less partitioning
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.IChemModelRelay#removeBondAndLoneAtoms(org.openscience.cdk.interfaces.IBond)
      */
     public void removeBondAndLoneAtoms(IBond bondToRemove) {
+
+    	IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel,bondToRemove.getAtom(0));
         IAtomContainer undoRedoContainer = chemModel.getBuilder().newAtomContainer();
-        removeBondWithoutUndo(bondToRemove);
         undoRedoContainer.addBond(bondToRemove);
-        IAtomContainer container = 
-            ChemModelManipulator.getRelevantAtomContainer(chemModel, 
-                    bondToRemove.getAtom(0));
+
+        removeBondWithoutUndo(bondToRemove);
+
         if (container != null) {
             for(int i=0;i<2;i++){
                 if(container.getConnectedAtomsCount(bondToRemove.getAtom(i))==0){
