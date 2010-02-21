@@ -98,7 +98,7 @@ import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 public class RenderPanel extends JPanel implements IViewEventRelay,
         IUndoListener {
 
-    private Renderer renderer;
+    protected Renderer renderer;
 
     private boolean isNewChemModel;
 
@@ -272,7 +272,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
     }
 
-    private boolean isValidChemModel(IChemModel chemModel) {
+    protected boolean isValidChemModel(IChemModel chemModel) {
         return chemModel != null
                 && (chemModel.getMoleculeSet() != null || chemModel
                         .getReactionSet() != null);
