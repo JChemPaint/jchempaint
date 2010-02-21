@@ -73,6 +73,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
@@ -91,9 +92,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private JCPTransferHandler handler;
 
     /**
-     * Builds a JCPPanel with a certain model and a certain gui
+     * Builds a JCPPanel with a certain model. GUI is that of the application.
+     * 
+     * @param chemModel The model to display.
+     */
+    public JChemPaintPanel(IChemModel chemModel) {
+        this(chemModel, JChemPaint.GUI_APPLICATION, false, null);
+    }
+
+    /**
+     * Builds a JCPPanel with a certain model and a certain gui.
      *
-     * @param chemModel   The model
+     * @param chemModel   The model to display.
      * @param gui         The gui configuration string
      * @param debug       Should we be in debug mode?
      * @param applet      If this panel is to be in an applet, pass the applet here, else null.
