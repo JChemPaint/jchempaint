@@ -8,6 +8,7 @@ New features:
 * The javadoc for JChemPaintAbstractApplet contains applet parameter documentation
 * Enhanced template list
 * More public applet methods (see http://www.ebi.ac.uk/steinbeck-srv/jchempaint-nightly/javadoc/org/openscience/jchempaint/applet/JChemPaintAbstractApplet.html)
+* Cross platform drag&drop support for molecule files
 
 3.1
 ---
