@@ -90,10 +90,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     private String lastSelectId;
     private JCPTransferHandler handler;
 
-    public JChemPaintPanel() {
-    }
-
-	/**
+    /**
      * Builds a JCPPanel with a certain model and a certain gui
      *
      * @param chemModel   The model
