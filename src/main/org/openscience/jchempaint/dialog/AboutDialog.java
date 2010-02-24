@@ -68,7 +68,7 @@ public class AboutDialog extends JDialog {
 	}
 
 	public void doInit() {
-		String version = JCPPropertyHandler.getInstance().getVersion();
+		String version = JCPPropertyHandler.getInstance(true).getVersion();
 		String s1 = "JChemPaint " + version + "\n";
 		s1 += GT._("An open-source editor for 2D chemical structures.");
 		String s2 = GT._("An OpenScience project.")+"\n";
@@ -80,7 +80,7 @@ public class AboutDialog extends JDialog {
 		JLabel label1 = new JLabel();
 
 		try {
-			JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance();
+			JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
 			URL url = jcpph.getResource("jcplogo" + JCPAction.imageSuffix);
 			ImageIcon icon = new ImageIcon(url);
 			//ImageIcon icon = new ImageIcon(../resources/);

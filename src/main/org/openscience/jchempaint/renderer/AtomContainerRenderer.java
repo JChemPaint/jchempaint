@@ -112,7 +112,7 @@ public class AtomContainerRenderer implements IRenderer {
 	/**
 	 * The renderer model is final as it is not intended to be replaced.
 	 */
-    protected final RendererModel rendererModel = new RendererModel();
+    protected final RendererModel rendererModel;
 
     protected List<IGenerator> generators;
 	
@@ -138,8 +138,11 @@ public class AtomContainerRenderer implements IRenderer {
      *            a list of classes that implement the IGenerator interface
      * @param fontManager
      *            a class that manages mappings between zoom and font sizes
+	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-	public AtomContainerRenderer(List<IGenerator> generators, IFontManager fontManager) {
+	public AtomContainerRenderer(List<IGenerator> generators, 
+	        IFontManager fontManager, boolean useUserSettings) {
+	    rendererModel = new RendererModel(useUserSettings);
 	    this.generators = generators;
         this.fontManager = fontManager;
 	}

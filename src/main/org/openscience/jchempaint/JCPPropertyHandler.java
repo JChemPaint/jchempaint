@@ -64,6 +64,9 @@ public class JCPPropertyHandler
 	private ResourceBundle resources;
 	private Properties shortCutProps;
 
+    private boolean useUserSettings;
+	private static boolean oldUseUserSettings;
+
 
 	/**
 	 *  Constructor for the JCPPropertyHandler object
@@ -81,15 +84,27 @@ public class JCPPropertyHandler
 
 
 	/**
-	 *  Gets the instance attribute of the JCPPropertyHandler class
-	 *
-	 *@return    The instance value
+	 * Constructor for the JCPPropertyHandler.
+	 * 
+	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
 	 */
-	public static JCPPropertyHandler getInstance()
+	public JCPPropertyHandler(boolean useUserSettings) {
+        this.useUserSettings = useUserSettings;
+    }
+
+
+    /**
+	 *  Gets the instance attribute of the JCPPropertyHandler class.
+	 *
+     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
+	 * @return    The instance value.
+	 */
+	public static JCPPropertyHandler getInstance(boolean useUserSettings)
 	{
-		if (jcpPropsHandler == null)
+		if (jcpPropsHandler == null || oldUseUserSettings!=useUserSettings)
 		{
-			jcpPropsHandler = new JCPPropertyHandler();
+			jcpPropsHandler = new JCPPropertyHandler(useUserSettings);
+			oldUseUserSettings = useUserSettings;
 		}
 		return jcpPropsHandler;
 	}
@@ -104,12 +119,12 @@ public class JCPPropertyHandler
 	{
 		if (currentProperties == null)
 		{
-			reloadProperties();
+			reloadProperties(useUserSettings);
 		}
 		return currentProperties;
 	}
 
-	public void reloadProperties()
+	public void reloadProperties(boolean useUserSettings)
 	{
 		Properties applicationProps = null;
 		Properties defaultProps = null;
@@ -127,21 +142,23 @@ public class JCPPropertyHandler
 			logger.debug(exception);
 		}
 
-		try
-		{
-			// set up real properties
-			applicationProps = new Properties(defaultProps);
-			FileInputStream appStream = new FileInputStream(getUserPropsFile());
-			applicationProps.load(appStream);
-			appStream.close();
-			logger.info("Loaded user properties from file");
-		} catch (FileNotFoundException exception)
-		{
-			logger.warn("User does not have localized properties in ");
-		} catch (Exception exception)
-		{
-			logger.error("There was a problem retrieving the user properties from file");
-			logger.debug(exception);
+        applicationProps = new Properties(defaultProps);
+		if(useUserSettings){
+    		try
+    		{
+    			// set up real properties
+    			FileInputStream appStream = new FileInputStream(getUserPropsFile());
+    			applicationProps.load(appStream);
+    			appStream.close();
+    			logger.info("Loaded user properties from file");
+    		} catch (FileNotFoundException exception)
+    		{
+    			logger.warn("User does not have localized properties in ");
+    		} catch (Exception exception)
+    		{
+    			logger.error("There was a problem retrieving the user properties from file");
+    			logger.debug(exception);
+    		}
 		}
 		currentProperties = applicationProps;
 	}

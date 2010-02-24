@@ -124,15 +124,17 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            a list of classes that implement the IGenerator interface
      * @param fontManager
      *            a class that manages mappings between zoom and font sizes
+	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-	public Renderer(List<IGenerator> generators, IFontManager fontManager) {
-        super(generators, fontManager);
+	public Renderer(List<IGenerator> generators, IFontManager fontManager,
+	        boolean useUserSettings) {
+        super(generators, fontManager, useUserSettings);
     }
 	
 	public Renderer(List<IGenerator> generators, 
 	                List<IReactionGenerator> reactionGenerators, 
-	                IFontManager fontManager, RenderPanel renderPanel) {
-	    this(generators, fontManager);
+	                IFontManager fontManager, RenderPanel renderPanel, boolean useUserSettings) {
+	    this(generators, fontManager, useUserSettings);
         this.reactionGenerators = reactionGenerators;
         this.setup();
         super.renderPanel = renderPanel;

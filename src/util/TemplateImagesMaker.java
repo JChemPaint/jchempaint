@@ -91,7 +91,7 @@ public class TemplateImagesMaker {
         List<IGenerator> generators = new ArrayList<IGenerator>();
         generators.add(new BasicBondGenerator());
         generators.add(new BasicAtomGenerator());
-        Renderer renderer = new Renderer(generators,new AWTFontManager());
+        Renderer renderer = new Renderer(generators,new AWTFontManager(), false);
         RendererModel r2dm = renderer.getRenderer2DModel();
         r2dm.setDrawNumbers(false);
         r2dm.setBackColor(Color.LIGHT_GRAY);

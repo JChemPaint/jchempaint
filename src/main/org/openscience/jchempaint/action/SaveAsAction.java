@@ -257,7 +257,7 @@ public class SaveAsAction extends JCPAction
     }
 
     private boolean askIOSettings() {
-        return JCPPropertyHandler.getInstance().getJCPProperties()
+        return JCPPropertyHandler.getInstance(true).getJCPProperties()
         .getProperty("askForIOSettings", "false").equals("true");
     }
 

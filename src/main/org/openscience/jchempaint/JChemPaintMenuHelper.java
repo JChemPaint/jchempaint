@@ -68,7 +68,7 @@ public class JChemPaintMenuHelper {
     protected String getMenuResourceString(String key, String guiString) {
         String str;
         try {
-            str = JCPPropertyHandler.getInstance().getGUIDefinition(guiString).getString(key);
+            str = JCPPropertyHandler.getInstance(true).getGUIDefinition(guiString).getString(key);
         } catch (MissingResourceException mre) {
             str = null;
         }
@@ -237,7 +237,7 @@ public class JChemPaintMenuHelper {
         else {
             mi = new JMenuItem(translation);
         }
-        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance();
+        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
         URL url = jcpph.getResource(cmd + JCPAction.imageSuffix);
         if (url != null)
         {
@@ -262,7 +262,7 @@ public class JChemPaintMenuHelper {
             mi.setName(cmd);
         usedKeys.add(cmd);
         logger.debug("Created new menu item...");
-        String astr = JCPPropertyHandler.getInstance().getResourceString(cmd + JCPAction.actionSuffix);
+        String astr = JCPPropertyHandler.getInstance(true).getResourceString(cmd + JCPAction.actionSuffix);
         if (astr == null) {
             astr = cmd;
         }
@@ -301,7 +301,7 @@ public class JChemPaintMenuHelper {
      * @param  jcp  The JChemPaintPanel this menu is used for.
      */
     private void addShortCuts(String cmd, JMenuItem mi, AbstractJChemPaintPanel jcp) {
-        Properties shortCutProps = JCPPropertyHandler.getInstance().getJCPShort_Cuts();
+        Properties shortCutProps = JCPPropertyHandler.getInstance(true).getJCPShort_Cuts();
 
         String keyString = shortCutProps.getProperty(cmd);
         if (keyString != null) {

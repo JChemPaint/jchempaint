@@ -109,7 +109,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param applet      If this panel is to be in an applet, pass the applet here, else null.
      */
     public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet) {
-        GT.setLanguage(JCPPropertyHandler.getInstance().getJCPProperties().getProperty("General.language"));
+        GT.setLanguage(JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("General.language"));
         this.guistring = gui;
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
@@ -120,7 +120,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		}
 		if (gui.equals("application")) {
 			setAppTitle(" - "+
-            JCPPropertyHandler.getInstance().getJCPProperties().getProperty("Title"));
+            JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("Title"));
 		}
         init();        
     }

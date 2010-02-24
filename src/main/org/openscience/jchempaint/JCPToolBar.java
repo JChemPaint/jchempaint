@@ -83,7 +83,7 @@ public class JCPToolBar
         String str;
         try
         {
-            str = JCPPropertyHandler.getInstance().getGUIDefinition(guistring).getString(key);
+            str = JCPPropertyHandler.getInstance(true).getGUIDefinition(guistring).getString(key);
         } catch (MissingResourceException mre)
         {
             mre.printStackTrace();
@@ -104,7 +104,7 @@ public class JCPToolBar
 
     static JButton createToolbarButton(String key, AbstractJChemPaintPanel chemPaintPanel, boolean elementtype)
     {
-        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance();
+        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
         JButton b = null;
 
         /*if(!elementtype){ */

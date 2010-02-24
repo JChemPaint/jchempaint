@@ -386,7 +386,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             color.setBackground(currentColor);
         }
         //the general settings
-        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+        Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("askForIOSettings", "false").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
@@ -397,7 +397,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     }
 
     public void applyChanges(boolean close) {
-        Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+        Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
         
         model.setDrawNumbers(drawNumbers.isSelected());
         //model.setShowAtomAtomMapping(showAtomAtomMapping.isSelected());
@@ -523,7 +523,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             }
         }
 
-        JCPPropertyHandler.getInstance().saveProperties();
+        JCPPropertyHandler.getInstance(true).saveProperties();
         boolean languagechanged = false;
         for(int i=0;i<gtlanguages.length;i++){
             if(gtlanguages[i].language.equals((String)language.getSelectedItem())){
@@ -534,7 +534,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 }
             }
         }
-        JCPPropertyHandler.getInstance().saveProperties();
+        JCPPropertyHandler.getInstance(true).saveProperties();
         if(languagechanged && !close){
             //we need to rediplay the dialog to change its language
             this.getParent().getParent().getParent().getParent().setVisible(false);

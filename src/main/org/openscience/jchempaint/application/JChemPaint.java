@@ -118,7 +118,7 @@ public class JChemPaint {
             Package self = Package.getPackage("org.openscience.jchempaint");
             String version = GT._("Could not determine JCP version");
             if (self != null)
-                version = JCPPropertyHandler.getInstance().getVersion();
+                version = JCPPropertyHandler.getInstance(true).getVersion();
             if (vers.compareTo(requiredJVM) < 0) {
                 System.err.println(GT._("WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher.", new String[]{version, requiredJVM}));
                 System.err.println(GT._("Your JVM version is {0}", vers));
@@ -176,7 +176,7 @@ public class JChemPaint {
             }
             
             // Set Look&Feel
-            Properties props = JCPPropertyHandler.getInstance().getJCPProperties();
+            Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
             try {
                 UIManager.setLookAndFeel(props.getProperty("LookAndFeelClass"));
             } catch (Throwable e)  {

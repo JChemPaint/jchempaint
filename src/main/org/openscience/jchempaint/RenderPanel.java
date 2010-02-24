@@ -128,7 +128,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.setupMachinery(chemModel, fitToScreen, isViewer, applet);
         this.setupPanel(width, height);
         this.fitToScreen = fitToScreen;
-        int limit = Integer.parseInt(JCPPropertyHandler.getInstance()
+        int limit = Integer.parseInt(JCPPropertyHandler.getInstance(true)
                 .getJCPProperties().getProperty("General.UndoStackSize"));
         undoManager.setLimit(limit);
     }
@@ -161,7 +161,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
         if (this.renderer == null) {
             this.renderer = new Renderer(makeGenerators(chemModel),
-                    makeReactionGenerators(), new AWTFontManager(), this);
+                    makeReactionGenerators(), new AWTFontManager(), this, true);
             // any specific rendering settings defaults should go here
             this.renderer.getRenderer2DModel().setShowEndCarbons(false);
             this.renderer.getRenderer2DModel().setShowAromaticity(false);

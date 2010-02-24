@@ -94,11 +94,22 @@ public class RendererModel implements Serializable, Cloneable {
 
 	private Map<IAtom, IAtom> merge=new HashMap<IAtom, IAtom>();
 
-    public RendererModel() {
-        this.parameters = new RenderingParameters();
+    /**
+     * Constructor for the RendererModel.
+     * 
+     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
+     */
+    public RendererModel(boolean useUserSettings) {
+        this.parameters = new RenderingParameters(useUserSettings);
     }
 
-    public RendererModel(RenderingParameters parameters) {
+    /**
+     * Constructor for the RendererModel.
+     * 
+     * @param parameters
+     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
+     */
+    public RendererModel(RenderingParameters parameters, boolean useUserSettings) {
         this.parameters = parameters;
     }
     
