@@ -72,9 +72,10 @@ public class HighlightModule extends ControllerModuleAdapter {
             prevHighlightBond = null;
             model.setHighlightedBond(null);
             try {
-                highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getMolecule(0).getAtomNumber(atom));
+                if(chemModelRelay.getIChemModel().getMoleculeSet()!=null && chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>0)
+                    highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getMolecule(0).getAtomNumber(atom));
             } catch (Exception e) {
-                //jcpApplet.getTheJcpp().announceError(e);
+                e.printStackTrace();
             }
             highlightPeakInSpectrumApplet(atom);
             chemModelRelay.updateView();
