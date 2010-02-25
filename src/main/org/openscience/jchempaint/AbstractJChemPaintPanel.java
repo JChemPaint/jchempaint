@@ -240,7 +240,10 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     }
     
     public Container getTopLevelContainer() {
-        return this.getParent().getParent().getParent().getParent();
+        Container parent = this.getParent();
+        while(parent.getParent()!=null)
+            parent = parent.getParent();
+        return parent;
     }
 
     public String getSVGString() {
