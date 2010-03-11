@@ -635,11 +635,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
     public static Rectangle2D calculateBounds(IMoleculeSet moleculeSet) {
-        Rectangle2D totalBounds = new Rectangle2D.Double();
+        Rectangle2D totalBounds = null;
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
             Rectangle2D acBounds = Renderer.calculateBounds(ac);
-            if (totalBounds.isEmpty()) {
+            if (totalBounds==null) {
                 totalBounds = acBounds;
             } else {
                 Rectangle2D.union(totalBounds, acBounds, totalBounds);

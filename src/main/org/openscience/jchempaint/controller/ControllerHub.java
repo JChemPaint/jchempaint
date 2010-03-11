@@ -1056,20 +1056,33 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         if(chemModel.getReactionSet()!=null){
             for(IReaction reaction : chemModel.getReactionSet().reactions()){
                 usedBounds = null;
+                double gap=0;
+                double centerY=0;
                 for (IAtomContainer container :
                     ReactionManipulator.getAllAtomContainers(reaction)) {
                     // now move it so that they don't overlap
                     Rectangle2D bounds = BoundsCalculator.calculateBounds(container);
                     if (usedBounds != null) {
-                        double bondLength = GeometryTools.getBondLengthAverage(container);
+                        if(gap==0){
+                            gap = GeometryTools.getBondLengthAverage(container);
+                        }
                         Rectangle2D shiftedBounds =
                             GeometryTools.shiftContainer(
-                                    container, bounds, usedBounds, bondLength);
+                                    container, bounds, usedBounds, gap*2);
+                        double yshift=centerY - bounds.getCenterY();
+                        Vector2d shift = new Vector2d(0.0, yshift);
+                        GeometryTools.translate2D(container, shift);
                         usedBounds = usedBounds.createUnion(shiftedBounds);
                     } else {
                         usedBounds = bounds;
+                        centerY = bounds.getCenterY();
                     }
                 } 
+                //we shift the products an extra bit to make a larget gap between products and reactants
+                for(IAtomContainer container : reaction.getProducts().atomContainers()){
+                    Vector2d shift = new Vector2d(gap*2, 0.0);
+                    GeometryTools.translate2D(container, shift);
+                }
             }
         }
         //TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
