@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-12 09:25+0000\n"
-"PO-Revision-Date: 2010-01-25 14:56+0300\n"
+"PO-Revision-Date: 2010-03-12 02:12+0300\n"
 "Last-Translator: Konstantin Tokarev <annulen@yandex.ru>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,8 +23,7 @@ msgstr "Не удалось определить версию JCP"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:123
 #, java-format
-msgid ""
-"WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
 msgstr "Для запуска JChemPaint {0} требуется Java VM версии {1} или выше"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:124
@@ -58,24 +57,16 @@ msgid "Could not determine file format"
 msgstr "Не удалось определить формат файла"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:421
-msgid ""
-"It seems you opened a mol or sdf file containing several molecules. Only the "
-"first one will be shown"
-msgstr ""
-"Похоже, что Вы открыли mol- или sdf-файл, содержащий несколько молекул."
-"Только первая будет показна"
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Похоже, что Вы открыли mol- или sdf-файл, содержащий несколько молекул.Только первая будет показна"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:425
 msgid "sdf-like file"
 msgstr "sdf-файл"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:668
-msgid ""
-"Not all atoms have 2D coordinates. JCP can only show full 2D specified "
-"structures. Shall we lay out the structure?"
-msgstr ""
-"Не у всех атомов есть 2D-координаты. JCP может отображать только "
-"двумерныеструктуры. Преобразовать структуру?"
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Не у всех атомов есть 2D-координаты. JCP может отображать только двумерныеструктуры. Преобразовать структуру?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:676
 msgid "Cannot display without 2D coordinates"
@@ -1207,8 +1198,7 @@ msgstr "Добавить атом"
 #: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:202
 #, java-format
 msgid "{0} is not a valid element symbol or functional group."
-msgstr ""
-"{0} не является корректным символом элемента или функциональной группой."
+msgstr "{0} не является корректным символом элемента или функциональной группой."
 
 #: src/main/org/openscience/jchempaint/dialog/EnterElementSwingModule.java:202
 msgid "No valid input"
@@ -1501,9 +1491,7 @@ msgstr "Больше информации на 'http://jchempaint.sourceforge.ne
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:330
 msgid "The content you tried to copy could not be read to any known format"
-msgstr ""
-"Содержимое, которое вы пытаетесь копировать, не может быть прочитано ни в "
-"одном из известных форматов"
+msgstr "Содержимое, которое вы пытаетесь копировать, не может быть прочитано ни в одном из известных форматов"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:330
 msgid "Could not process content"
@@ -1584,9 +1572,7 @@ msgstr "Проблема при экспорте в SVG"
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:155
 #, java-format
 msgid "Exported image to {0} as PNG, since {1} could not be written"
-msgstr ""
-"Изображение было экспортировано в {0} как PNG, так как не удалось записать "
-"{1}"
+msgstr "Изображение было экспортировано в {0} как PNG, так как не удалось записать {1}"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
@@ -1654,12 +1640,8 @@ msgstr "Проблема при обработке данных"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:232
 #, java-format
-msgid ""
-"{0} files cannot contain extra molecules. You painted molecules outside the "
-"reaction(s), which will not be in the file. Continue?"
-msgstr ""
-"{0} файлы не могут содержать дополнительных молекул. Молекулы, не входящие в "
-"реакции, не будут сохранены в файле. Продолжить?"
+msgid "{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?"
+msgstr "{0} файлы не могут содержать дополнительных молекул. Молекулы, не входящие в реакции, не будут сохранены в файле. Продолжить?"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:240
 msgid "RXN can only save reactions. You have no reactions painted!"
@@ -1667,18 +1649,13 @@ msgstr "В RXN файлах можно сохранять только реак�
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:269
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
-msgstr ""
-"В MDL MOL файлах можно сохранять только молекулы. В документе нет молекул!"
+msgstr "В MDL MOL файлах можно сохранять только молекулы. В документе нет молекул!"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:275
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:360
 #, java-format
-msgid ""
-"{0} files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
-msgstr ""
-"{0} файлы не могут содержать реакций. Документ содержит реакции.Их реагенты "
-"и продукты будут включены как независимые молекулы. Продолжить?"
+msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
+msgstr "{0} файлы не могут содержать реакций. Документ содержит реакции.Их реагенты и продукты будут включены как независимые молекулы. Продолжить?"
 
 #: src/main/org/openscience/jchempaint/RenderPanel.java:445
 msgid "Zoomfactor"
@@ -2376,9 +2353,8 @@ msgid "Porphyrins"
 msgstr "Порфирины"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
-#, fuzzy
 msgid "Protecting Groups"
-msgstr "Протактиний"
+msgstr "Защитные группы"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
 msgid "Steroids"
@@ -2506,170 +2482,116 @@ msgstr "Нет возможности отменить действие"
 
 #~ msgid "Exported image to"
 #~ msgstr "Изображение экспортировано в"
-
 #~ msgid "as PNG, since"
 #~ msgstr "как PNG, так как"
-
 #~ msgid "could not be written"
 #~ msgstr "не может быть записан"
-
 #~ msgid "already exists. Do you want to overwrite it?"
 #~ msgstr "уже существует. Вы хотите перезаписать его?"
-
 #~ msgid "R.."
 #~ msgstr "R.."
-
 #~ msgid "Could not process InChI"
 #~ msgstr "Не удалось обработать InChI"
-
 #~ msgid "Error loading InChI library:"
 #~ msgstr "Ошибка при загрузке бибилотеки InChI:"
-
 #~ msgid "Generated InChI"
 #~ msgstr "Созданный InChI"
-
 #~ msgid "Bond Popup Menu"
 #~ msgstr "Меню связи"
-
 #~ msgid "Cannot depict contents. Model does not have bonds."
 #~ msgstr "Не удалось отобразить содержимое. В модели нет связей."
-
 #~ msgid "Electronativity:"
 #~ msgstr "Электроотрицательность:"
-
 #~ msgid "Change drawing symbol to C"
 #~ msgstr "Сменить символ на C"
-
 #~ msgid "Change drawing symbol to H"
 #~ msgstr "Сменить символ на H"
-
 #~ msgid "Change drawing symbol to O"
 #~ msgstr "Сменить символ на O"
-
 #~ msgid "Change drawing symbol to N"
 #~ msgstr "Сменить символ на N"
-
 #~ msgid "Change drawing symbol to P"
 #~ msgstr "Сменить символ на P"
-
 #~ msgid "Change drawing symbol to S"
 #~ msgstr "Сменить символ на S"
-
 #~ msgid "Change drawing symbol to F"
 #~ msgstr "Сменить символ на F"
-
 #~ msgid "Change drawing symbol to Cl"
 #~ msgstr "Сменить символ на Cl"
-
 #~ msgid "Change drawing symbol to Br"
 #~ msgstr "Сменить символ на Br"
-
 #~ msgid "Change drawing symbol to I"
 #~ msgstr "Сменить символ на I"
-
 #~ msgid "WARNING: JChemPaint"
 #~ msgstr "ВНИМАНИЕ: JChemPaint"
-
 #~ msgid "or higher."
 #~ msgstr "или выше."
-
 #~ msgid "Use Anti-Aliasing"
 #~ msgstr "Использовать сглаживание"
-
 #~ msgid "Show atoms in compact form"
 #~ msgstr "Отображать атомы компактно"
-
 #~ msgid "Oval Compact Atoms"
 #~ msgstr "Овальные компактные атомы"
-
 #~ msgid "BACKCOLOR"
 #~ msgstr "ЦВЕТ ФОНА"
-
 #~ msgid "Undo/redo stack size"
 #~ msgstr "Количество отмен и повторов"
-
 #~ msgid "Major Plus Three"
 #~ msgstr "Преобладающий плюс три"
-
 #~ msgid "Major Plus One"
 #~ msgstr "Преобладающий плюс один"
-
 #~ msgid "Major Minus Two"
 #~ msgstr "Преобладающий минус два"
-
 #~ msgid "Major Minus Three"
 #~ msgstr "Преобладающий минус три"
-
 #~ msgid "Valence 2"
 #~ msgstr "Валентность 2"
-
 #~ msgid "Valence 3"
 #~ msgstr "Валентность 3"
-
 #~ msgid "Valence 4"
 #~ msgstr "Валентность 4"
-
 #~ msgid "Valence 5"
 #~ msgstr "Валентность 5"
-
 #~ msgid "Valence 6"
 #~ msgstr "Валентность 6"
-
 #~ msgid "Valence 7"
 #~ msgstr "Валентность 7"
-
 #~ msgid "Valence 8"
 #~ msgstr "Валентность 8"
-
 #~ msgid "Select Atoms and Bonds"
 #~ msgstr "Выбрать атомы и связи"
-
 #~ msgid "Ring 4"
 #~ msgstr "Четырехчленный цикл"
-
 #~ msgid "Ring 5"
 #~ msgstr "Пятичленный цикл"
-
 #~ msgid "Ring 6"
 #~ msgstr "Шестичленный цикл"
-
 #~ msgid "Ring 7"
 #~ msgstr "Семичленный цикл"
-
 #~ msgid "Ring 8"
 #~ msgstr "Восьмичленный цикл"
-
 #~ msgid "Model does not have bonds. Cannot depict contents."
 #~ msgstr "В модели отсутствуют связи. Не удается отобразить содержимое"
-
 #~ msgid "Bond length"
 #~ msgstr "Длина связи"
-
 #~ msgid "Font name"
 #~ msgstr "Название шрифта"
-
 #~ msgid "Choose a Font"
 #~ msgstr "Выбрать шрифт"
-
 #~ msgid "Rendering Options"
 #~ msgstr "Опции отображения"
-
 #~ msgid "A radical cannot be added to this atom. Re-try with less hydrogens."
 #~ msgstr ""
 #~ "Радикал не может быть добавлен к этому атому. Попробуйте с меньшим числом "
 #~ "атомов водорода."
-
 #~ msgid "Convert to Radical"
 #~ msgstr "Преобразовать в радикал"
-
 #~ msgid "Move Atoms and Bonds"
 #~ msgstr "Переместить атомы и связи"
-
 #~ msgid "French"
 #~ msgstr "Французский"
-
 #~ msgid "Click this button to go back to PeriodicTable."
 #~ msgstr "Нажмите эту кнопку, чтобы вернуться к Периодической системе"
-
 #~ msgid "Reload"
 #~ msgstr "Перезагрузить"
+
