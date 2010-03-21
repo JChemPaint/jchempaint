@@ -36,13 +36,14 @@ public class JChemPaintMenuHelper {
     private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JChemPaintMenuHelper.class);
     private JCPAction jcpaction;
-    private static List<String> usedKeys = new ArrayList<String>();
+    private static List<String> usedKeys;
 
 
     /**
      * Constructor for JChemPaintMenuHelper
      */
     public JChemPaintMenuHelper(){
+        usedKeys = new ArrayList<String>();
     }
 
 
