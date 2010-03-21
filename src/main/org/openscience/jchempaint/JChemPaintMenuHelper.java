@@ -141,8 +141,12 @@ public class JChemPaintMenuHelper {
 
                 public void menuSelected(MenuEvent arg0) {
                     menu.removeAll();
+                    //the following condition is nasty, but necessary, since depending on if model and/or selection
+                    //is empty, various commands return null
                     if((SwingPopupModule.lastAtomPopupedFor!=null && SwingPopupModule.lastAtomPopupedFor.getSymbol()!=null)
-                            || jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0){
+                            || (jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && 
+                                    jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null &&
+                                    jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)){
                         try {
                             String symbol;
                             if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)

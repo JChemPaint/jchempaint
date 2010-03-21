@@ -57,6 +57,11 @@ public class AbstractAppletTest {
         return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x,atom.getPoint2d().y);
     }    
     
+    protected Point2d getAtomPoint(JChemPaintPanel panel, int atomnumber, int acnumber){
+        IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(acnumber).getAtom(atomnumber);
+        return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x,atom.getPoint2d().y);
+    }    
+
     protected void restoreModelToEmpty(){
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;

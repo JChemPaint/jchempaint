@@ -39,35 +39,35 @@ public class RenderingParameters {
      */
     public RenderingParameters(boolean useUserSettings){
         atomRadius = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("AtomRadius", "8"));
+                .getJCPProperties().getProperty("AtomRadius"));
         backColor = new Color(Integer.parseInt(JCPPropertyHandler.getInstance(useUserSettings)
                 .getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB()))));
         bondWidth = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("BondWidth", "1.0"));
+                .getJCPProperties().getProperty("BondWidth"));
         compactShape = JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
-                .getProperty("CompactShape", "square").equals("square") ? AtomShape.SQUARE : AtomShape.OVAL;
+                .getProperty("CompactShape").equals("square") ? AtomShape.SQUARE : AtomShape.OVAL;
         compact = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("IsCompact", "false"));
+                .getJCPProperties().getProperty("IsCompact"));
         colorAtomsByType = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ColorAtomsByType", "true"));
+                .getJCPProperties().getProperty("ColorAtomsByType"));
         showImplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowImplicitHydrogens", "true"));
+                .getJCPProperties().getProperty("ShowImplicitHydrogens"));
         willDrawNumbers = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("DrawNumbers", "false"));
+                .getJCPProperties().getProperty("DrawNumbers"));
         kekuleStructure = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("KekuleStructure", "false"));
+                .getJCPProperties().getProperty("KekuleStructure"));
         showEndCarbons = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowEndCarbons", "false"));
+                .getJCPProperties().getProperty("ShowEndCarbons"));
         showExplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowExplicitHydrogens", "true"));
+                .getJCPProperties().getProperty("ShowExplicitHydrogens"));
         highlightDistance = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("HighlightDistance", "8"));
+                .getJCPProperties().getProperty("HighlightDistance"));
         fitToScreen = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("FitToScreen", "true"));
+                .getJCPProperties().getProperty("FitToScreen"));
         showAromaticity = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowAromaticity", "true"));
+                .getJCPProperties().getProperty("ShowAromaticity"));
         wedgeWidth = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("WedgeWidth", "5.0"));
+                .getJCPProperties().getProperty("WedgeWidth"));
     }
     
     /**

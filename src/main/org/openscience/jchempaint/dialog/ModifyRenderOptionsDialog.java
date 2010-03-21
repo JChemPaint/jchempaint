@@ -83,6 +83,7 @@ public class ModifyRenderOptionsDialog extends JDialog {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
         JButton ok = new JButton(GT._("OK"));
+        ok.setName("ok");
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
@@ -91,6 +92,7 @@ public class ModifyRenderOptionsDialog extends JDialog {
         buttonPanel.add( ok );
         getRootPane().setDefaultButton(ok);
         JButton apply = new JButton(GT._("Apply"));
+        apply.setName("apply");
         apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ApplyPressed(false);
@@ -98,6 +100,7 @@ public class ModifyRenderOptionsDialog extends JDialog {
         );
         buttonPanel.add( apply );
         JButton cancel = new JButton(GT._("Cancel"));
+        cancel.setName("cancel");
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeFrame();

@@ -135,6 +135,8 @@ public class JCPPropertyHandler
 			defaultProps = new Properties();
 			defaultProps.load(defaultStream);
 			defaultStream.close();
+			//the language setting is not in default file, but taken from platform settings
+			defaultProps.setProperty("General.language",GT.getLanguage());
 			logger.info("Loaded properties from jar");
 		} catch (Exception exception)
 		{

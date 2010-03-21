@@ -23,6 +23,13 @@
 
 	<property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
 	<property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+    	<pathelement location="${devellib}/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
+	
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	  <classpath>

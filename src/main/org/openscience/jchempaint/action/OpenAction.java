@@ -133,6 +133,7 @@ public class OpenAction extends JCPAction {
                         // enable zooming by removing constraint
                         jcpPanel.getRenderPanel().setFitToScreen(false);
 
+                        jcpPanel.setIsAlreadyAFile(chooser.getSelectedFile());
                     
                     
                     } catch (Exception e1) {

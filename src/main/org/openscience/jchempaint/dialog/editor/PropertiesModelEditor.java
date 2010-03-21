@@ -336,6 +336,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             languagesstrings[i] = gtlanguages[i].language;
         }
         language = new JComboBox(languagesstrings);
+        language.setName("language");
         for(int i=0;i<languagesstrings.length;i++){
             if(gtlanguages[i].code.equals(GT.getLanguage()))
                 language.setSelectedIndex(i);
@@ -387,7 +388,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
         //the general settings
         Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
-        askForIOSettings.setSelected(props.getProperty("askForIOSettings", "false").equals("true"));
+        askForIOSettings.setSelected(props.getProperty("General.askForIOSettings").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
@@ -434,7 +435,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         	updateLanguge();
         }
 
-
         props.setProperty("DrawNumbers",String.valueOf(drawNumbers.isSelected()));
         //props.setProperty("ShowAtomAtomMapping",String.valueOf(showAtomAtomMapping.isSelected()));
         props.setProperty("KekuleStructure",String.valueOf(useKekuleStructure.isSelected()));
@@ -466,7 +466,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         props.setProperty("BackColor",String.valueOf(currentColor.getRGB()));
                 
         //the general settings
-        props.setProperty("askForIOSettings",
+        props.setProperty("General.askForIOSettings",
             String.valueOf(askForIOSettings.isSelected())
         );
 

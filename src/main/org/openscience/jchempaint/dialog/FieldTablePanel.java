@@ -62,6 +62,7 @@ public class FieldTablePanel extends JPanel {
         if(hasTabs){
             setLayout(new BorderLayout());
             tabbedPane = new JTabbedPane();
+            tabbedPane.setName("tabs");
             add( tabbedPane, BorderLayout.CENTER );
         }else{
             setLayout(new GridBagLayout());

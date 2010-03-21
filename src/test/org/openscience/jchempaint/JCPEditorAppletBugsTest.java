@@ -1,22 +1,32 @@
 package org.openscience.jchempaint;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.JComboBox;
+import javax.swing.text.JTextComponent;
 import javax.vecmath.Point2d;
 
 import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.matcher.JTextComponentMatcher;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.fixture.JPopupMenuFixture;
+import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.io.MDLReader;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 
@@ -423,5 +433,154 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 		Assert.assertEquals(12, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount() );
 
 	}
+	
+	@Test public void testBug70() throws FileNotFoundException, CDKException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        applet.click();
+        Point2d point = getAtomPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
+        applet.menuItem("showACProperties2").click();
+        DialogFixture dialog = applet.dialog();
+        JTextComponent textfield = dialog.robot.finder().find(JTextComponentMatcher.withName("Title"));
+        textfield.setText("aaa");
+        JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+        okbutton.click();
+        applet.menuItem("save").click();
+        dialog = applet.dialog();
+        JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        combobox.setSelectedItem(combobox.getItemAt(5));
+        JTextComponentFixture text = dialog.textBox();
+        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+        if(file.exists())
+            file.delete();
+        text.setText(file.toString());
+        JButtonFixture savebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+        savebutton.click();
+        MDLReader reader = new MDLReader(new FileInputStream(file));
+        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+        Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
+        restoreModelToEmpty();
+	}
 
+	@Test public void testBug77() throws FileNotFoundException, CDKException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        applet.click();
+        applet.menuItem("saveAs").click();
+        DialogFixture dialog = applet.dialog();
+        JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        combobox.setSelectedItem(combobox.getItemAt(5));
+        JTextComponentFixture text = dialog.textBox();
+        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
+        if(file.exists())
+            file.delete();
+        text.setText(file.toString());
+        JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+        okbutton.click();
+        //not the bug, but still worth testing
+        MDLReader reader = new MDLReader(new FileInputStream(file));
+        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
+        applet.menuItem("new").click();
+        applet.button("hexagon").click();
+        applet.click();
+        applet.button("bond").click();
+        Point2d moveto=getAtomPoint(panel,0);    
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x,(int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        applet.menuItem("saveAs").click();
+        dialog = applet.dialog();
+        combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        combobox.setSelectedItem(combobox.getItemAt(5));
+        text = dialog.textBox();
+        file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
+        if(file.exists())
+            file.delete();
+        text.setText(file.toString());
+        okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+        okbutton.click();
+        //not the bug, but still worth testing
+        reader = new MDLReader(new FileInputStream(file));
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
+        //ok, now the critical bits - open mol1
+        file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
+        applet.menuItem("open").click();
+        dialog = applet.dialog();
+        text = dialog.textBox();
+        text.setText(file.toString());
+        okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+        okbutton.click();
+        //"save as" mol1
+        file.delete();
+        applet.menuItem("saveAs").click();
+        dialog = applet.dialog();
+        combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        combobox.setSelectedItem(combobox.getItemAt(5));
+        text = dialog.textBox();
+        text.setText(file.toString());
+        okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+        okbutton.click();
+        //open mol2
+        file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
+        applet.menuItem("open").click();
+        dialog = applet.dialog();
+        text = dialog.textBox();
+        text.setText(file.toString());
+        okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+        okbutton.click();
+        //save should write to mol2, ie mol1=6 atoms, mol2=7atoms
+        applet.menuItem("save").click();
+        file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
+        reader = new MDLReader(new FileInputStream(file));
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+        Assert.assertEquals(6, mol.getAtomCount());
+        file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
+        reader = new MDLReader(new FileInputStream(file));
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+        Assert.assertEquals(7, mol.getAtomCount());
+        restoreModelToEmpty();
+	}
+
+    @Test public void testBug65() {
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        applet.click();
+        applet.button("eraser").click();
+        Point2d point = getBondPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
+        point = getBondPoint(panel,2);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals(6, panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount());
+        Assert.assertEquals(4, panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount());
+        restoreModelToEmpty();
+    }
+
+    @Test public void testBug75() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        applet.button("hexagon").click();
+        applet.click();
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100), MouseButton.LEFT_BUTTON,1);
+        applet.button("eraser").click();
+        Point2d moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        moveto=getAtomPoint(panel,0,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        Assert.assertEquals("C1CCCCC1", panel.getSmiles());
+        restoreModelToEmpty();
+    }
 }

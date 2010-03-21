@@ -8,14 +8,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
 import javax.vecmath.Point2d;
 
 import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.NameMatcher;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
+import org.fest.swing.fixture.JTabbedPaneFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
 import org.junit.Test;
@@ -587,5 +591,31 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
             Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
         }
-
+        
+        @Test public void testSwitchLanguage(){
+            applet.menuItem("options").click();
+            DialogFixture dialog = applet.dialog();
+            JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
+            tabs.robot.click(tabs.component(), new Point(200,10), MouseButton.LEFT_BUTTON,1);
+            JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
+            for(int i=0;i<combobox.getItemCount();i++){
+                if(((String)combobox.getItemAt(i)).equals("German")){
+                    combobox.setSelectedItem(combobox.getItemAt(i));
+                    break;
+                }
+            }
+            JButtonFixture applybutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
+            applybutton.click();
+            Assert.assertEquals("Neu", applet.menuItem("new").component().getText());
+            for(int i=0;i<combobox.getItemCount();i++){
+                if(((String)combobox.getItemAt(i)).equals("American English")){
+                    combobox.setSelectedItem(combobox.getItemAt(i));
+                    break;
+                }
+            }
+            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("ok",true)));
+            okbutton.click();
+            Assert.assertFalse(dialog.component().isShowing());
+            Assert.assertEquals("New", applet.menuItem("new").component().getText());
+        }
 }

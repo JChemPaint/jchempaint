@@ -15,6 +15,13 @@ New features:
 New features:
 * Reactions can be edited, open and saved.
 
+3.0-HEAD
+--------
+Fixes:
+* The molecule title was not written to MDL files (but read from), now both ways work (trac #70)
+* In certain situations open/save as/save confused file names (trac #77)
+* Touching the isotopes menu gave exceptions if empty model or no selectio (trac #64)
+
 3.0.1
 -----
 New features:
