@@ -93,7 +93,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     //private JCheckBox showToolTip;
 
-    //private JCheckBox showReactionBoxes;
+    private JCheckBox showReactionBoxes;
 
     //private JCheckBox useAntiAliasing;
 
@@ -211,8 +211,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //showToolTip = new JCheckBox();
         //addField(GT._("Show tooltips"), showToolTip);
 
-        //showReactionBoxes = new JCheckBox();
-        //addField(GT._("Show boxes around reactions"), showReactionBoxes);
+        showReactionBoxes = new JCheckBox(GT._("Show boxes around reactions"));
+        options1.add(showReactionBoxes);
 
 
         isFitToScreen = new JCheckBox(GT._("Set fit to screen"));
@@ -359,7 +359,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         colorAtomsByType.setSelected(model.getColorAtomsByType());
         //useAntiAliasing.setSelected(model.getUseAntiAliasing());
         //showToolTip.setSelected(model.getShowTooltip());
-        //showReactionBoxes.setSelected(model.getShowReactionBoxes());
+        showReactionBoxes.setSelected(model.getShowReactionBoxes());
         isFitToScreen.setSelected(model.isFitToScreen());
 
         atomRadius.setValue((int)model.getAtomRadius());
@@ -411,7 +411,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         model.setColorAtomsByType(colorAtomsByType.isSelected());
         //model.setUseAntiAliasing(useAntiAliasing.isSelected());
         //model.setShowTooltip(showToolTip.isSelected());
-        //model.setShowReactionBoxes(showReactionBoxes.isSelected());
+        model.setShowReactionBoxes(showReactionBoxes.isSelected());
         model.setIsCompact(!nonCompactShape.isSelected());
         model.setFitToScreen(isFitToScreen.isSelected());
 
@@ -446,7 +446,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         props.setProperty("ColorAtomsByType",String.valueOf(colorAtomsByType.isSelected()));
         //props.setProperty("UseAntiAliasing",String.valueOf(useAntiAliasing.isSelected()));
         //props.setProperty("ShowTooltip",String.valueOf(showToolTip.isSelected()));
-        //props.setProperty("ShowReactionBoxes",String.valueOf(showReactionBoxes.isSelected()));
+        props.setProperty("ShowReactionBoxes",String.valueOf(showReactionBoxes.isSelected()));
         props.setProperty("IsCompact",String.valueOf(!nonCompactShape.isSelected()));
         props.setProperty("FitToScreen",String.valueOf(isFitToScreen.isSelected()));
 
@@ -476,7 +476,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 throw new Exception("wrong number");
             props.setProperty("General.UndoStackSize",
                     undoStackSize.getText());
-            //TODO here apply to current app
+            jcpPanel.getRenderPanel().getUndoManager().setLimit(size);
         }catch(Exception ex){
             JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }

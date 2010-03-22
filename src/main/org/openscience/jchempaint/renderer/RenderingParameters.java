@@ -68,6 +68,8 @@ public class RenderingParameters {
                 .getJCPProperties().getProperty("ShowAromaticity"));
         wedgeWidth = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
                 .getJCPProperties().getProperty("WedgeWidth"));
+        showReactionBoxes = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                .getJCPProperties().getProperty("ShowReactionBoxes"));
     }
     
     /**
@@ -226,7 +228,7 @@ public class RenderingParameters {
 
     private boolean showMoleculeTitle = false;
 
-    private boolean showReactionBoxes = true;
+    private boolean showReactionBoxes = false;
 
     private boolean showTooltip = false;
 
