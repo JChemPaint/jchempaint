@@ -95,6 +95,7 @@ import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
+import org.openscience.jchempaint.JChemPaintMenuHelper;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
@@ -739,7 +740,8 @@ public class JChemPaint {
 
     public static JChemPaintPanel showInstance(IChemModel chemModel,
             String title, boolean debug) {
-        JFrame f = new JFrame(title + " - JChemPaint");
+        JFrame f = new JFrame(title + " - "+
+                new JChemPaintMenuHelper().getMenuResourceString("Title", GUI_APPLICATION));
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

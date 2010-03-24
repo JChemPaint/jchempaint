@@ -120,7 +120,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 		}
 		if (gui.equals("application")) {
 			setAppTitle(" - "+
-            JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("Title"));
+			        new JChemPaintMenuHelper().getMenuResourceString("Title", guistring));
 		}
         init();        
     }

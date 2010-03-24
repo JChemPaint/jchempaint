@@ -66,7 +66,7 @@ public class JChemPaintMenuHelper {
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
      * @return      	 The resource string
      */
-    protected String getMenuResourceString(String key, String guiString) {
+    public String getMenuResourceString(String key, String guiString) {
         String str;
         try {
             str = JCPPropertyHandler.getInstance(true).getGUIDefinition(guiString).getString(key);
