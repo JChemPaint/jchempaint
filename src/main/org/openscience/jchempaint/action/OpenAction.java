@@ -94,11 +94,12 @@ public class OpenAction extends JCPAction {
                 if (clear == JOptionPane.YES_OPTION) {
                     try {
                         IChemModel chemModel = null;
+                    	jcpPanel.get2DHub().unsetRGroupHandler();
                             chemModel = JChemPaint
                                     .readFromFileReader(chooser
                                             .getSelectedFile().toURI().toURL(),
                                             chooser.getSelectedFile().toURI()
-                                                    .toString(), type);
+                                                    .toString(), type, jcpPanel);
                         if (jcpPanel.get2DHub().getUndoRedoFactory() != null
                                 && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
                             IUndoRedoable undoredo = jcpPanel.get2DHub()

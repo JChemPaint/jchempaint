@@ -101,6 +101,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     protected JMenuItem redoMenu;
     protected JMenu atomMenu;
     protected JMenu bondMenu;
+    protected JMenu rgroupMenu;
     protected boolean debug=false;
     protected boolean modified = false;
     private File isAlreadyAFile;
@@ -492,7 +493,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     }
     
     /**
-     * Enables or disables all JMenuItems in a JMenu recursivly.
+     * Enables or disables all JMenuItems in a JMenu.
      * 
      * @param root  The JMenu to search in.
      * @param b     Enable or disable.
@@ -500,7 +501,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     protected void enOrDisableMenus(JMenu root, boolean b) {
         for(int i=0;i<root.getItemCount();i++){
             if(root.getItem(i) instanceof JMenu){
-                this.enOrDisableMenus((JMenu)root.getItem(i), b);
+                ((JMenu)root.getItem(i)).setEnabled(b);
             }else if(root.getItem(i) instanceof JMenuItem){
                 ((JMenuItem)root.getItem(i)).setEnabled(b);
             }
@@ -646,13 +647,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
                 ((JFrame) c).setTitle('*' + id + this.getAppTitle());
             else
                 ((JFrame) c).setTitle(id + this.getAppTitle());
-/*            
-            if (title == null) {
-                title = renderPanel.getChemModel().getID();
-            }
-            if (title.charAt(0) == '*') {
-                title = title.substring(1);
-            }*/
         }
     }
 
@@ -663,4 +657,5 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     public JCPMenuTextMaker getMenuTextMaker() {
         return menuTextMaker;
     }
+
 }

@@ -32,6 +32,7 @@ public class TextElement implements IRenderingElement {
 	public final String text;
 	public final Color color;
 	public final Color backColor;
+	public final Double extraZoom;
 
     public TextElement(double x, double y, String text, Color color, Color backColor) {
         this.backColor = backColor;
@@ -39,6 +40,7 @@ public class TextElement implements IRenderingElement {
         this.y = y;
         this.text = text;
         this.color = color;
+        this.extraZoom=null;
     }
 
     public TextElement(double x, double y, String text, Color color) {
@@ -47,7 +49,17 @@ public class TextElement implements IRenderingElement {
 		this.text = text;
 		this.color = color;
 		this.backColor = null;
-	}
+        this.extraZoom=null;
+    }
+
+    public TextElement(double x, double y, String text, Color color, double extraZoom) {
+		this.x = x;
+		this.y = y;
+		this.text = text;
+		this.color = color;
+		this.backColor = null;
+        this.extraZoom=extraZoom;
+    }
 
 	public void accept(IRenderingVisitor v) {
 		v.visit(this);

@@ -39,6 +39,7 @@ import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.GT;
@@ -72,12 +73,22 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 		}
 		if(atomsInRange==null)
 			return;
-		String x = type;
+		String label = type;
 		if(type.equals("RX")) {
-		    x = JOptionPane.showInputDialog(GT._("Enter label"), "R");
-            if (x == null)
-                x = "R";
+			boolean inputOkay=false;
+			do {
+			    label = JOptionPane.showInputDialog(GT._("Enter label"), "R");
+	            if (label == null)
+	            	return;
+	            if(label.startsWith("R") && label.length()>1 && !RGroupQuery.isValidRgroupQueryLabel(label))
+					JOptionPane.showMessageDialog(null, GT._("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
+	            else
+	            	inputOkay=true;
+			}
+			while (!inputOkay);
         }
+
+		range:
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
         	if(type.equals("normal")){
@@ -86,31 +97,19 @@ public class ConvertToPseudoAtomAction extends JCPAction {
                 normal.setSymbol("C");
                 jcpPanel.get2DHub().replaceAtom(normal,pseudo);
         	}else {
-        		setTo(atom,x);
-        	}
+        		jcpPanel.get2DHub().convertToPseudoAtom(atom,label);
+                AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+                if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+                    newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+                else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+                    newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+                newActiveModule.setID(label);
+                jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(true);
+                jcpPanel.get2DHub().getController2DModel().setDrawElement(label);
+                jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);        	}
         }
         jcpPanel.get2DHub().updateView();
     }
 	
-	/**
-	 * Converts atom to a pseudo atom with label and sets active draw module to 
-	 * AddAtomModule drawing pseudo atoms with label.
-	 * 
-	 * @param atom  The atom to convert.
-	 * @param label The label to use.
-	 */
-	private void setTo(IAtom atom, String label){	    
-        jcpPanel.get2DHub().convertToPseudoAtom(atom,label);
-        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
-        if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
-            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
-        else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
-            newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
-        newActiveModule.setID(label);
-        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-        jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(true);
-        jcpPanel.get2DHub().getController2DModel().setDrawElement(label);
-        jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
-
-	}
 }

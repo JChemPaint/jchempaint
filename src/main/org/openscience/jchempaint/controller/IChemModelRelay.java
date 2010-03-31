@@ -44,6 +44,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
+import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 /**
  * @cdk.module control
@@ -201,4 +202,9 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
 
     public void setCursor(int cursor);
+    public IChemModel getChemModel();
+    public RGroupHandler getRGroupHandler();
+	public void setRGroupHandler(RGroupHandler rGroupHandler);
+	public void unsetRGroupHandler();
+
 }

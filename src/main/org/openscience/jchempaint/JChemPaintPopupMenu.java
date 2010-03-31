@@ -67,7 +67,10 @@ public class JChemPaintPopupMenu extends JPopupMenu
 		titleMenuItem.setArmed(false);
 		this.add(titleMenuItem);
 		this.addSeparator();
+		this.setLabel(type);
 		menuHelper.createMenu(jcpPanel, type + "popup", true, guiString, this);
 	}
+	
+	
 }
 

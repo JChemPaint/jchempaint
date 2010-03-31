@@ -31,9 +31,13 @@ package org.openscience.jchempaint;
 import java.awt.Rectangle;
 import java.util.Hashtable;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.MenuElement;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -81,7 +85,6 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		SwingPopupModule.popupMenus.put(someClass.getName(), jchemPaintPopupMenu);
 	}
 
-
 	/**
 	 *  Returns the popup menu for this IChemObject if it is set, and null
 	 *  otherwise.
@@ -89,12 +92,30 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@param  someClass  Description of the Parameter
 	 *@return             The popupMenu value
 	 */
-	public JChemPaintPopupMenu getPopupMenu(Class classSearched) {
+	public JChemPaintPopupMenu getPopupMenu(Class classSearched,IChemObject objectInRange) {
 		logger.debug("Searching popup for: ", classSearched.getName());
         while (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());
             if (SwingPopupModule.popupMenus.containsKey(classSearched.getName())) {
-                return (JChemPaintPopupMenu) SwingPopupModule.popupMenus.get(classSearched.getName());
+            	JChemPaintPopupMenu pop =(JChemPaintPopupMenu) SwingPopupModule.popupMenus.get(classSearched.getName());
+            	
+            	//R-Group handling: pop up is conditional, only valid for atoms/bond in certain positions
+            	for(int x=0; x<pop.getComponentCount(); x++) {
+            		if (pop.getComponent(x).getName()!=null && pop.getComponent(x).getName().equals("rgroupBondMenu")) {
+            			pop.getComponent(x).setEnabled(false);
+            			if(chemModelRelay.getRGroupHandler()!=null && objectInRange instanceof IBond) {
+                			pop.getComponent(x).setEnabled(chemModelRelay.getRGroupHandler().isRGroupRootBond((IBond)objectInRange));
+            			}
+            		}
+            		if (pop.getComponent(x).getName()!=null && pop.getComponent(x).getName().equals("rgroupAtomMenu")) {
+           				pop.getComponent(x).setEnabled(false);
+            			if(chemModelRelay.getRGroupHandler()!=null && objectInRange instanceof IAtom) {
+                			pop.getComponent(x).setEnabled(chemModelRelay.getRGroupHandler().isAtomPartOfSubstitute((IAtom)objectInRange));
+            			}
+            		}
+            	}
+            	return pop;
+            	
             } else {
                 logger.debug("  recursing into super class");
                 classSearched = classSearched.getSuperclass();
@@ -131,7 +152,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		if (objectInRange instanceof IAtom)
 		    lastAtomPopupedFor = (IAtom)objectInRange;
 		
-		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass());
+		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass(), objectInRange);
 		if (popupMenu != null) {
 			popupMenu.setSource(objectInRange);
 			logger.debug("Set popup menu source to: ", objectInRange);
@@ -140,8 +161,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 			logger.warn("Popup menu is null! Could not set source!");
 		}
 	}
-
-
+	
 	public String getID() {
 		return ID;
 	}

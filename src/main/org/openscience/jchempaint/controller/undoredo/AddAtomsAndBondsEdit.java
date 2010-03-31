@@ -75,12 +75,16 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
-	    if(containerToAddTo!=null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
+
+		if(containerToAddTo!=null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
 	        chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
-	    if(removedAtomContainer!=null){
-	        containerToAddTo.add(removedAtomContainer);
-	        chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
-	    }
+	    
+		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
+		//if(removedAtomContainer!=null){
+	    //    containerToAddTo.add(removedAtomContainer);
+	    //    chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
+	    //}
+
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
 			containerToAddTo.addBond(bond);
@@ -93,10 +97,12 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void undo() {
-        if(removedAtomContainer!=null){
-            ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
-            chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
-        }
+
+		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
+		//if(removedAtomContainer!=null){
+        //    ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
+        //    chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
+        //}
 
         IBond[] bonds = new IBond[undoRedoContainer.getBondCount()];
         int idx=0;

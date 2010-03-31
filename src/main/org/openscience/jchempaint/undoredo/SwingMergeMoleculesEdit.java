@@ -49,13 +49,13 @@ public class SwingMergeMoleculesEdit extends MergeMoleculesEdit implements
         UndoableEdit {
 
     public SwingMergeMoleculesEdit(List<IAtom> deletedAtom,
-            List<IAtomContainer> containerWhereAtomWasIn, List<List<IBond>> deletedBonds,
+            List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBonds,
             List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset,
-            List<IAtom> atomwhichwasmoved, IUndoRedoable moveundoredo, String type, IChemModelRelay c2dm) {
+            List<IAtom> atomwhichwasmoved, IUndoRedoable moveundoredo, Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newRgrpHash, String type, IChemModelRelay c2dm) {
 
-        super(deletedAtom, containerWhereAtomWasIn, deletedBonds,
+        super(deletedAtom, containers, droppedContainers, deletedBonds,
                 bondsWithReplacedAtom, offset, atomwhichwasmoved, 
-                moveundoredo, type, c2dm);
+                moveundoredo, oldRgrpHash, newRgrpHash, type, c2dm);
 
     }
 

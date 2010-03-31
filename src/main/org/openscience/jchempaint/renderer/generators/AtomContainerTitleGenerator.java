@@ -44,8 +44,10 @@ public class AtomContainerTitleGenerator implements IGenerator {
     public AtomContainerTitleGenerator() {}
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
-        if(ac.getProperty(CDKConstants.TITLE)==null)
-            return null;
+    	
+        if(ac==null ||ac.getProperty(CDKConstants.TITLE)==null|| (ac.getAtomCount()==0 && ac.getBondCount()==0))
+        	return null;
+        
         double d = model.getBondLength() / model.getScale()/2;
         Rectangle2D totalBounds = Renderer.calculateBounds(ac);
         
@@ -54,9 +56,9 @@ public class AtomContainerTitleGenerator implements IGenerator {
         double minY = totalBounds.getMinY();
         double maxX = totalBounds.getMaxX();
         double maxY = totalBounds.getMaxY();
-        Color c = model.getForeColor();
+        Color c = Color.GRAY;
         diagram.add(new TextElement(
-                        (minX+maxX)/2, minY-d, (String)ac.getProperty(CDKConstants.TITLE), c));
+                        (minX+maxX)/2, minY-d, (String)ac.getProperty(CDKConstants.TITLE), c,0.8));
         return diagram;
     }
     

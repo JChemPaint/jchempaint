@@ -42,25 +42,23 @@ import javax.swing.filechooser.FileFilter;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
-import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IChemSequence;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLRXNWriter;
 import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
+import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.inchi.StdInChIGenerator;
 import org.openscience.jchempaint.io.IJCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
@@ -264,6 +262,7 @@ public class SaveAsAction extends JCPAction
     protected File saveAsMol(IChemModel model, File outFile) throws Exception
     {
         logger.info("Saving the contents in a MDL molfile file...");
+        
         if(model.getMoleculeSet()==null || model.getMoleculeSet().getAtomContainerCount()==0){
             String error = GT._("Problems handling data");
             String message = GT._("MDL mol files can only save molecules. You have no molecules painted!");
@@ -277,14 +276,54 @@ public class SaveAsAction extends JCPAction
             if(answer == JOptionPane.NO_OPTION)
                 return null;
         }
+        boolean saveAsRgrpQuery=false;
+   	    IRGroupQuery rGroupQuery = null;
+		  if(jcpPanel.get2DHub().getRGroupHandler()!=null)
+			  rGroupQuery= jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery();
+
+        if(rGroupQuery!=null){
+            String error = GT._("Please choose a file type!");
+            String message = GT._("Would you like to save the drawing as an R-group Query File? (RGFile = extended MOLfile)");
+            int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
+            if(answer == JOptionPane.YES_OPTION)
+            	saveAsRgrpQuery=true;
+        }
+        
         String fileName = outFile.toString();
         if (!fileName.endsWith(".mol")) {
             fileName += ".mol";
             outFile = new File(fileName);
         }
         outFile=new File(fileName);
-        cow = new MDLWriter(new FileWriter(outFile));
-        cow.write(model);
+        
+        if(saveAsRgrpQuery) {
+        	cow = new RGroupQueryWriter(new FileWriter(outFile));
+        	
+        	boolean problem=false;
+        	String message="";
+        	jcpPanel.get2DHub().getRGroupHandler().cleanUpRGroup(jcpPanel.get2DHub().getChemModel().getMoleculeSet());
+
+        	if(!rGroupQuery.areRootAtomsDefined()) {
+                message = GT._("The R-group Query is not valid: there are substitutes that have no corresponding atom in the root structure.");
+                problem=true;
+        	}
+        	if(!rGroupQuery.areSubstituentsDefined()) {
+                message = GT._("The R-group Query is not valid: the root structure has R# definitions for which no substitutes are defined.");
+				problem=true;
+        	}
+        	if (problem) {
+                String error = GT._("Could not save file");
+				JOptionPane.showMessageDialog(jcpPanel, message, GT._(error), JOptionPane.INFORMATION_MESSAGE);
+                return null;
+        	}
+
+        	cow.write(rGroupQuery);
+        }
+        else {
+        	cow = new MDLWriter(new FileWriter(outFile));
+            cow.write(model);
+        }
+        	
         cow.close();
 
         if(jcpPanel instanceof JChemPaintPanel)

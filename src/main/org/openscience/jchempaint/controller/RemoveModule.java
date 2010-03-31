@@ -50,16 +50,14 @@ public class RemoveModule extends ControllerModuleAdapter {
 	}
 	
 	public void mouseClickedDown(Point2d worldCoordinate) {
-	    
 	    IAtomContainer selectedAC = getSelectedAtomContainer( worldCoordinate );
 	    if(selectedAC == null)
 	        return;
 	    for(IAtom atom:selectedAC.atoms()) {
 	        chemModelRelay.removeAtom(atom);
-
 	    }
 	    for(IBond bond:selectedAC.bonds()) {
-	        chemModelRelay.removeBondAndLoneAtoms( bond );
+	    	chemModelRelay.removeBondAndLoneAtoms( bond );
 	    }
 	    setSelection( AbstractSelection.EMPTY_SELECTION );
 	}

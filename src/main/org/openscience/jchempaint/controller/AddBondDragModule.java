@@ -196,6 +196,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
+    	System.out.println("mouseClickedUp addbonddragmod");
         chemModelRelay.clearPhantoms();
         if(isBond) return;
 

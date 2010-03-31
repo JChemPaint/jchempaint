@@ -146,10 +146,9 @@ public class BasicBondGenerator implements IGenerator {
 		ElementGroup group = new ElementGroup();
 		this.ringSet = this.getRingSet(ac);
 
-                //Sort the ringSet consistently to ensure consistent rendering.
-                //If this is omitted, the bonds may 'tremble'.
-                ringSet.sortAtomContainers(new AtomContainerComparatorBy2DCenter());
-
+        //Sort the ringSet consistently to ensure consistent rendering.
+        //If this is omitted, the bonds may 'tremble'.
+        ringSet.sortAtomContainers(new AtomContainerComparatorBy2DCenter());
                 
 		for (IBond bond : ac.bonds()) {
 			group.add(this.generate(bond, model));

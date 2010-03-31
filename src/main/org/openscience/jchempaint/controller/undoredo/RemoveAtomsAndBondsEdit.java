@@ -25,6 +25,7 @@ package org.openscience.jchempaint.controller.undoredo;
 
 import java.util.Iterator;
 
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -80,6 +81,14 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 		IMoleculeSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
+		if (chemModelRelay.getRGroupHandler()!=null) {
+			try {
+				chemModelRelay.getRGroupHandler().adjustAtomContainers(moleculeSet);
+			} catch (CDKException e) {
+				e.printStackTrace();
+				chemModelRelay.unsetRGroupHandler();
+			}
+		}
 	}
 
 	public void undo() {
@@ -96,6 +105,14 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 		IMoleculeSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
+		if (chemModelRelay.getRGroupHandler()!=null) {
+			try {
+				chemModelRelay.getRGroupHandler().adjustAtomContainers(moleculeSet);
+			} catch (CDKException e) {
+				chemModelRelay.unsetRGroupHandler();
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public boolean canRedo() {

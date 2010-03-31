@@ -189,57 +189,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         setup();
     }
 
-    /**
-     * Determine the overlap of the diagram with the screen, and shift (if
-     * necessary) the diagram draw center. It returns a rectangle only because
-     * that is a convenient class to hold the four parameters calculated, but it
-     * is not a rectangle representing an area...
-     *
-     * @param screenBounds
-     *            the bounds of the screen
-     * @param diagramBounds
-     *            the bounds of the diagram
-     * @return the shape that the screen should be
-     */
-    public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
-        int screenMaxX  = screenBounds.x + screenBounds.width;
-        int screenMaxY  = screenBounds.y + screenBounds.height;
-        int diagramMaxX = diagramBounds.x + diagramBounds.width;
-        int diagramMaxY = diagramBounds.y + diagramBounds.height;
-
-        int leftOverlap   = screenBounds.x - diagramBounds.x;
-        int rightOverlap  = diagramMaxX - screenMaxX;
-        int topOverlap    = screenBounds.y - diagramBounds.y;
-        int bottomOverlap = diagramMaxY - screenMaxY;
-
-        int dx = 0;
-        int dy = 0;
-        int w = screenBounds.width;
-        int h = screenBounds.height;
-
-        if (leftOverlap > 0) {
-            dx = leftOverlap;
-        }
-
-        if (rightOverlap > 0) {
-            w += rightOverlap;
-        }
-
-        if (topOverlap > 0) {
-            dy = topOverlap;
-        }
-
-        if (bottomOverlap > 0) {
-            h += bottomOverlap;
-        }
-
-        if (dx != 0 || dy != 0) {
-            this.shiftDrawCenter(dx, dy);
-        }
-
-        return new Rectangle(dx, dy, w, h);
-    }
-
 	/**
 	 * Set the scale for an IChemModel. It calculates the average bond length of
 	 * the model and calculates the multiplication factor to transform this

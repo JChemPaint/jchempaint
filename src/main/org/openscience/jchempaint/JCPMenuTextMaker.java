@@ -107,7 +107,8 @@ public class JCPMenuTextMaker {
         entries.put("createSMILES", GT._("Create SMILES"));
         entries.put("createInChI", GT._("Create InChI"));
         entries.put("help", GT._("Help"));
-        entries.put("tutorial", GT._("Tutorial"));
+        entries.put("tutorial", GT._("Basic Tutorial"));
+        entries.put("rgpTutorial", GT._("R-group Tutorial"));
         entries.put("feedback", GT._("Report Feedback"));
         entries.put("license", GT._("License"));
         entries.put("about", GT._("About"));
@@ -339,6 +340,19 @@ public class JCPMenuTextMaker {
         entries.put("steroids", GT._("Steroids"));
         entries.put("pahs", GT._("PAHs"));
         entries.put("language", GT._("Language"));
+        entries.put("rgroup", GT._("R-groups"));
+        entries.put("rgroupMenu", GT._("R-groups"));
+        entries.put("rgroupAtomMenu", GT._("R-group attachment"));
+        entries.put("rgroupBondMenu", GT._("R-group attachment"));
+        entries.put("setRoot", GT._("Define as Root Structure"));
+        entries.put("setSubstitute", GT._("Define as Substituent"));
+        entries.put("setAtomApoAction1", GT._("Set as first attachment point"));
+        entries.put("setAtomApoAction2", GT._("Set as second attachment point"));
+        entries.put("setBondApoAction1", GT._("Set as bond for first attachment point"));
+        entries.put("setBondApoAction2", GT._("Set as bond for second attachment point"));
+        entries.put("rgpAdvanced", GT._("Advanced R-group logic"));
+        entries.put("rgpGenerate", GT._("Generate possible configurations (sdf) "));
+        entries.put("clearRgroup", GT._("Remove R-group aspects"));
     }
 
     /**

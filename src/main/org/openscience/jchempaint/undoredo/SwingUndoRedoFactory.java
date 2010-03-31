@@ -41,9 +41,13 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.cdk.isomorphism.matchers.RGroup;
+import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.RGroupEdit;
+import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 /**
  * A class returning Swing-Implementations of all the undo-redo edits
@@ -120,8 +124,10 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 		return new SwingMakeReactantInExistingReactionEdit(chemModel, newContainer, oldcontainer, s, reactantOrProduct, type);
 	}
 
-	public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containerWhereAtomWasIn, List<List<IBond>> deletedBonds, List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset, List<IAtom> atomwhichwasmoved, IUndoRedoable moveundoredo, String type, IChemModelRelay c2dm) {
-		return new SwingMergeMoleculesEdit( deletedAtom, containerWhereAtomWasIn, deletedBonds, bondsWithReplacedAtom, offset, atomwhichwasmoved, moveundoredo, type, c2dm);
+	public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, 
+			List<List<IBond>> deletedBonds, List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset, List<IAtom> atomwhichwasmoved, 
+			IUndoRedoable moveundoredo, Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newRgrpHash, String type, IChemModelRelay c2dm) {
+		return new SwingMergeMoleculesEdit( deletedAtom, containers, droppedContainers, deletedBonds, bondsWithReplacedAtom, offset, atomwhichwasmoved, moveundoredo, oldRgrpHash, newRgrpHash, type, c2dm);
 	}
 
 	public IUndoRedoable getChangeHydrogenCountEdit(
@@ -140,5 +146,16 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 			IChemModelRelay chemModelRelay) {
 		return new SwingChangeValenceEdit(atomInRange, formerValence, valence, 
 				text, chemModelRelay);
+	}
+
+	public IUndoRedoable getRGroupEdit(String type, boolean isNewRGroup,IChemModelRelay hub, RGroupHandler rgrpHandler
+	        , Map<IAtom,IAtomContainer> existingAtomDistr, Map<IBond,IAtomContainer> existingBondDistr
+	        , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints,Map<RGroup, Map<Integer,IAtom>> existingRGroupApo
+	        , Map<Integer,RGroupList> rgroupLists, IAtomContainer userSelection)
+	{
+		return new SwingRGroupEdit(type,isNewRGroup,hub, rgrpHandler
+		        , existingAtomDistr, existingBondDistr, existingRoot, existingRootAttachmentPoints 
+		        , existingRGroupApo , rgroupLists,userSelection);
+
 	}
 }

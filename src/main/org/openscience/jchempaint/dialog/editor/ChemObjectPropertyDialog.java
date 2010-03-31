@@ -96,12 +96,16 @@ public class ChemObjectPropertyDialog extends JDialog {
     
     private  void OKPressed() {
     	if(editor.getMayclose()){
-	        // apply new settings
-	        editor.applyChanges();
-	        hub.updateView();
-	        closeFrame();
+    		try {
+    			editor.applyChanges();
+    			hub.updateView();
+    			closeFrame();     			
+    		}
+    		catch (Exception e) {
+        		JOptionPane.showMessageDialog(this,e.getMessage(), GT._("A problem has occurred"), JOptionPane.WARNING_MESSAGE, null);
+    		}
     	}else{
-    		JOptionPane.showInternalMessageDialog(this,GT._("You did not provide necessary information"), GT._("Incomplete Information"), JOptionPane.WARNING_MESSAGE, null);
+    		JOptionPane.showMessageDialog(this,GT._("You did not provide necessary information"), GT._("Incomplete Information"), JOptionPane.WARNING_MESSAGE, null);
     	}
     }
 

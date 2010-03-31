@@ -199,7 +199,10 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         this.g.setColor(textElement.backColor!=null ? textElement.backColor : this.rendererModel.getBackColor());
         this.g.fill(textBounds);
         this.g.setColor(textElement.color);
+        if (textElement.extraZoom!=null)
+        	this.g.setFont(new Font (this.g.getFont().getName(), 1, (int)(this.g.getFont().getSize()*textElement.extraZoom))) ;
         this.g.drawString(textElement.text, p.x, p.y);
+        
     }
     
     public void visit(WedgeLineElement wedge) {

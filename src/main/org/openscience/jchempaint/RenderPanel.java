@@ -47,11 +47,9 @@ import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
@@ -81,6 +79,7 @@ import org.openscience.jchempaint.renderer.generators.LonePairGenerator;
 import org.openscience.jchempaint.renderer.generators.MappingGenerator;
 import org.openscience.jchempaint.renderer.generators.MergeAtomsGenerator;
 import org.openscience.jchempaint.renderer.generators.ProductsBoxGenerator;
+import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.jchempaint.renderer.generators.RadicalGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactantsBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionArrowGenerator;
@@ -205,6 +204,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
         }
+        generators.add(new RGroupGenerator());
         generators.add(new RingGenerator());
         generators.add(new ExtendedAtomGenerator());
         generators.add(new LonePairGenerator());
@@ -243,6 +243,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (isValidChemModel(chemModel)) {
             Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
             Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
+            bounds.height *=1.1;
+            bounds.width *=1.1;
             Image image = GraphicsEnvironment.getLocalGraphicsEnvironment()
                     .getScreenDevices()[0].getDefaultConfiguration()
                     .createCompatibleImage(bounds.width, bounds.height);
@@ -336,13 +338,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
         }
-        // for (IBond b :
-        // chemModel.getMoleculeSet().getAtomContainer(0).bonds()){
-        // System.out.println("bond "+b.getOrder()+" aromatic "+b.getFlag(CDKConstants.ISAROMATIC));
-        // }
-        // System.out.println("atoms : "+chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount());
-        // System.out.println("bonds : "+chemModel.getMoleculeSet().getAtomContainer(0).getBondCount());
-        // System.out.println("-----------------------");
 
         Rectangle diagram = renderer.calculateDiagramBounds(chemModel);
         isNewChemModel = false;
@@ -475,8 +470,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
 
-        int screenMaxX = screenBounds.x + screenBounds.width;
-        int screenMaxY = screenBounds.y + screenBounds.height;
+    	final int LABEL_MARGIN=50; // prevents text or labels from dropping off screen
+        int screenMaxX = screenBounds.x + screenBounds.width-LABEL_MARGIN;
+        int screenMaxY = screenBounds.y + screenBounds.height-LABEL_MARGIN;
         int diagramMaxX = diagramBounds.x + diagramBounds.width;
         int diagramMaxY = diagramBounds.y + diagramBounds.height;
         int leftOverlap = screenBounds.x - diagramBounds.x;

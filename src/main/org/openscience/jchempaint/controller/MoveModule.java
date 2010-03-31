@@ -27,8 +27,6 @@
 package org.openscience.jchempaint.controller;
 
 import java.awt.Cursor;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,8 +48,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -73,6 +69,7 @@ public class MoveModule extends ControllerModuleAdapter {
     private Set<IAtom> atomsToMove;
     
     private Point2d start2DCenter;
+    private Point2d end2DCenter;
     
     private String ID;
 
@@ -157,7 +154,15 @@ public class MoveModule extends ControllerModuleAdapter {
                                           .getRenderer2DModel().getMerge();
             // Do the merge of atoms
             if (!mergeMap.isEmpty()) {
-                chemModelRelay.mergeMolecules(end);
+                try {
+					chemModelRelay.mergeMolecules(end);
+				} catch (RuntimeException e) {
+					//move things back, merge is not allowed
+		            Vector2d d = new Vector2d();
+		            d.sub(start2DCenter,end2DCenter);
+					chemModelRelay.moveBy(atomsToMove, d, null);
+		            chemModelRelay.updateView();
+				}
             }else {
                 chemModelRelay.moveBy(atomsToMove, null, end);
             }
@@ -174,6 +179,7 @@ public class MoveModule extends ControllerModuleAdapter {
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
         if (chemModelRelay != null && offset != null) {
 
+        	end2DCenter = worldCoordTo;
             Point2d atomCoord = new Point2d();
             atomCoord.add(worldCoordTo, offset);
 

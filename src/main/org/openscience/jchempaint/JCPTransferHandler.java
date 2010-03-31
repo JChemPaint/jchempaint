@@ -135,7 +135,7 @@ public class JCPTransferHandler extends TransferHandler {
                 if (clear == JOptionPane.YES_OPTION) {
                     try {
                         IChemModel chemModel = null;
-                            chemModel = JChemPaint.readFromFile(f, null);
+                            chemModel = JChemPaint.readFromFile(f, null, jcpPanel);
                         if (jcpPanel.get2DHub().getUndoRedoFactory() != null
                                 && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
                             IUndoRedoable undoredo = jcpPanel.get2DHub()

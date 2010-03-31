@@ -28,10 +28,12 @@
  */
 package org.openscience.jchempaint.dialog.editor;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 
 import org.openscience.jchempaint.GT;
 
@@ -64,8 +66,14 @@ public class PseudoAtomEditor extends ChemObjectEditor {
     }
 	
     public void applyChanges() {
-        IPseudoAtom atom = (IPseudoAtom)source;
-        atom.setLabel(labelField.getText());
+    	String label=labelField.getText();
+    	if (label!=null && label.startsWith("R")&&label.length()>1 && !RGroupQuery.isValidRgroupQueryLabel(label) ) {
+    		JOptionPane.showMessageDialog(null, GT._("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
+		}
+    	else {
+    		IPseudoAtom atom = (IPseudoAtom)source;
+    		atom.setLabel(labelField.getText());
+    	}
     }
 }
 

@@ -82,6 +82,7 @@ import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
@@ -266,19 +267,21 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void selectionChanged() {
         updateStatusBar();
-        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
-        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
-        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
-            enOrDisableMenus(atomMenu,true);
-        else
-            enOrDisableMenus(atomMenu,false);
-        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
-        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null 
-        		&& this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getBondCount()>0)
-            enOrDisableMenus(bondMenu,true);
-        else
-            enOrDisableMenus(bondMenu,false);
-        //move focus
+        
+        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null) {
+        	IChemObjectSelection selection = this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
+
+        	if (selection.getConnectedAtomContainer()!=null && selection.getConnectedAtomContainer().getAtomCount()>0)
+                enOrDisableMenus(atomMenu,true);
+            else
+                enOrDisableMenus(atomMenu,false);
+
+        	if (selection.getConnectedAtomContainer()!=null && selection.getConnectedAtomContainer().getBondCount()>0)
+                enOrDisableMenus(bondMenu,true);
+            else
+                enOrDisableMenus(bondMenu,false);
+
+        }
         this.requestFocusInWindow();
     }
 

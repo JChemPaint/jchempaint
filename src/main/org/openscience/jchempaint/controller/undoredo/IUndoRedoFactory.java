@@ -43,7 +43,10 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.cdk.isomorphism.matchers.RGroup;
+import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 /**
  * This interface needs to be implemented in an application to return instances of classes 
@@ -72,9 +75,19 @@ public interface IUndoRedoFactory {
 	public IUndoRedoable getMakeReactantOrProductInExistingReactionEdit(
 			IChemModel chemModel, IAtomContainer newContainer,
 			IAtomContainer oldcontainer, String s, boolean reactantOrProduct, String string);
-	public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containerWhereAtomWasIn, List<List<IBond>> deletedBonds, List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset, List<IAtom> atomwhichwasmoved, IUndoRedoable moveundoredo, String type, IChemModelRelay c2dm);
+	public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containers, 
+			List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBonds, 
+			List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset, List<IAtom> atomwhichwasmoved, 
+			IUndoRedoable moveundoredo, 
+			Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newGrgpHash, 
+			String type, IChemModelRelay c2dm);
 	public IUndoRedoable getChangeHydrogenCountEdit(Map<IAtom, Integer[]> atomHydrogenCountsMap, String type);
 	public IUndoRedoable getLoadNewModelEdit(IChemModel chemModel, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type);
 	public IUndoRedoable getChangeValenceEdit(IAtom atomInRange, Integer formerValence,
 			Integer valence, String text, IChemModelRelay chemModelRelay);
+	public IUndoRedoable getRGroupEdit(String type, boolean isNewRGroup,IChemModelRelay hub,RGroupHandler rgrpHandler
+	        , Map<IAtom,IAtomContainer> existingAtomDistr, Map<IBond,IAtomContainer> existingBondDistr
+	        , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints, Map<RGroup, Map<Integer,IAtom>> existingRGroupApo
+	        , Map<Integer,RGroupList> rgroupLists,IAtomContainer userSelection);
+
 }

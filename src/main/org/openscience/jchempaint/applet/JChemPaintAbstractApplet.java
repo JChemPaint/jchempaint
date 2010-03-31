@@ -168,7 +168,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             theJcpp.announceError(exception);
         }
         if (fileURL != null)
-            loadModelFromUrl(fileURL);
+            loadModelFromUrl(fileURL, theJcpp);
         if (smiles != null)
             loadModelFromSmiles(smiles);
     }
@@ -217,10 +217,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * 
      * @param fileURL
      */
-    public void loadModelFromUrl(URL fileURL) {
+    public void loadModelFromUrl(URL fileURL, AbstractJChemPaintPanel panel) {
         try {
             IChemModel chemModel = JChemPaint.readFromFileReader(fileURL,
-                    fileURL.toString(), null);
+                    fileURL.toString(), null, panel);
             theJcpp.setChemModel(chemModel);
         } catch (Exception exception) {
             theJcpp.announceError(exception);
@@ -462,9 +462,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      */
     public void setMolFile(String mol) throws CDKException {
         
-        ISimpleChemObjectReader cor = new MDLV2000Reader(new StringReader(mol), Mode.RELAXED);
-        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
-        JChemPaint.cleanUpChemModel(chemModel);
+        ISimpleChemObjectReader cor = new MDLV2000Reader(new StringReader(mol), Mode.RELAXED); //TODO assess R-group?
+        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor, theJcpp);
+        JChemPaint.cleanUpChemModel(chemModel,true);
         theJcpp.setChemModel(chemModel);
         theJcpp.get2DHub().updateView();
         // the newly opened file should nicely fit the screen

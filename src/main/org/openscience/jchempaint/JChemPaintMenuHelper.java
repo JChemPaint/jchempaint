@@ -131,6 +131,7 @@ public class JChemPaintMenuHelper {
             jcpPanel.bondMenu=(JMenu)menu;
             jcpPanel.enOrDisableMenus((JMenu)menu, false);
         }
+
         if(key.equals("isotopeChange")){
             ((JMenu)menu).addMenuListener(new MenuListener(){
                 public void menuCanceled(MenuEvent arg0) {

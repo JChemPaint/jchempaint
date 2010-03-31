@@ -132,20 +132,12 @@ public class ChangeAtomSymbolAction extends JCPAction
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
-            if(symbol.equals("RX")) {
-                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(true);        
-		        symbol = JOptionPane.showInputDialog(GT._("Enter label"), "R");
-                if (symbol == null)
-                    symbol = "R";
-                newActiveModule.setID("RX");
-            } else {
-                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
-                newActiveModule.setID(symbol);
-            }            
+
+            jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
+            newActiveModule.setID(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);                  
         }
-
         
         
         if(symbol!=null && symbol.length()>0){

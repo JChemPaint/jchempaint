@@ -33,6 +33,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -48,7 +49,9 @@ import javax.swing.JTabbedPane;
 public class FieldTablePanel extends JPanel {
         
 	private static final long serialVersionUID = -697566299504877020L;
-	
+
+	protected static final int DEF_INSET=10;
+
 	protected int rows;
 
     protected JTabbedPane tabbedPane;
@@ -91,12 +94,14 @@ public class FieldTablePanel extends JPanel {
      * @param labelText The text in left column.
      * @param component The control to add.
      * @param panel     The panel to add to. This must be either a panel you got from addTab or null if in no tab mode.
+     * @param inset     Spacing distance between objects on the panel 
      */
-    public void addField(String labelText, JComponent component, JPanel panel) {
+    public void addField(String labelText, JComponent component, JPanel panel, int inset) {
         if(panel==null)
             panel=this;
         rows++;
         GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(inset,inset,inset,inset);
         JLabel label = new JLabel("", JLabel.TRAILING);
         if (labelText != null && labelText.length() > 0) {
             label = new JLabel(labelText + ": ", JLabel.TRAILING);
@@ -112,6 +117,11 @@ public class FieldTablePanel extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(component, constraints);
     }
+    
+    public void addField(String labelText, JComponent component, JPanel panel) {
+    	addField(labelText, component, panel, 0);
+    }
+
     
     /**
      * Adds a new JComponent to the 2 column table layout. The JLabel

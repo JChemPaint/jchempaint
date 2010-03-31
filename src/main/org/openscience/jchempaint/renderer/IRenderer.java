@@ -22,7 +22,12 @@
  */
 package org.openscience.jchempaint.renderer;
 
+import java.util.List;
+
 import javax.vecmath.Point2d;
+
+import org.openscience.jchempaint.RenderPanel;
+import org.openscience.jchempaint.renderer.generators.IGenerator;
 
 /**
  * Interface that all 2D renderers implement.
@@ -86,4 +91,13 @@ public interface IRenderer {
 	 * @return One of the constants from java.awt.Cursor.
 	 */
 	public int getCursor();
+
+	/**
+	 * Return the list of generators for the Renderer
+	 * @return
+	 */
+	public List<IGenerator> getGenerators();
+
+    public RenderPanel getRenderPanel();
+
 }

@@ -56,6 +56,7 @@ public class NewAction extends JCPAction {
         if (jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)) {
             int clear = jcpPanel.showWarning();
             if (clear == JOptionPane.YES_OPTION) {
+            	jcpPanel.get2DHub().unsetRGroupHandler();
                 jcpPanel.get2DHub().zap();
                 jcpPanel.get2DHub().updateView();
                 jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()

@@ -84,9 +84,12 @@ import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
+import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -104,6 +107,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.inchi.StdInChIReader;
 import org.openscience.jchempaint.io.JCPFileFilter;
+import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 public class JChemPaint {
 
@@ -229,7 +233,7 @@ public class JChemPaint {
     public static void showInstance(File inFile, String type,
             AbstractJChemPaintPanel jcpPanel, boolean debug) {
         try {
-            IChemModel chemModel = JChemPaint.readFromFile(inFile, type);
+            IChemModel chemModel = JChemPaint.readFromFile(inFile, type, jcpPanel);
 
             String name = inFile.getName();
             JChemPaintPanel p = JChemPaint.showInstance(chemModel, name, debug);
@@ -246,8 +250,30 @@ public class JChemPaint {
         }
     }
 
+    public static JChemPaintPanel showInstance(IChemModel chemModel,
+            String title, boolean debug) {
+        JFrame f = new JFrame(title + " - JChemPaint");
+        chemModel.setID(title);
+        f.addWindowListener(new JChemPaintPanel.AppCloser());
+        f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null);
+        p.updateStatusBar();
+        f.setPreferredSize(new Dimension(800, 494));    //1.618
+        f.add(p);
+        f.pack();
+        Point point = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getCenterPoint();
+        int w2 = (f.getWidth() / 2);
+        int h2 = (f.getHeight() / 2);
+        f.setLocation(point.x - w2, point.y - h2);
+        f.setVisible(true);
+		frameList.add(f);
+        return p;
+    }
+
+    
     public static IChemModel readFromFileReader(URL fileURL, String url,
-            String type) throws CDKException {
+            String type, AbstractJChemPaintPanel panel) throws CDKException {
 
         IChemModel chemModel = null;
         WaitDialog.showDialog();
@@ -258,14 +284,18 @@ public class JChemPaint {
         // Instead here we use STDInChIReader, to be consistent throughout JCP
         // using the nestedVm based classes.
         try {
+        	ISimpleChemObjectReader cor=null;
             if(url.endsWith("txt")) {
                 chemModel = StdInChIReader.readInChI(fileURL);
             }
             else {
-                ISimpleChemObjectReader cor = JChemPaint.createReader(fileURL, url,type);
-                chemModel = JChemPaint.getChemModelFromReader(cor);
+                cor = JChemPaint.createReader(fileURL, url,type);
+                chemModel = JChemPaint.getChemModelFromReader(cor,panel);
             }
-            JChemPaint.cleanUpChemModel(chemModel);
+            boolean avoidOverlap=true;
+            if (cor instanceof RGroupQueryReader)
+            	avoidOverlap=false;
+            JChemPaint.cleanUpChemModel(chemModel, avoidOverlap);
 
         }
         finally {
@@ -274,9 +304,8 @@ public class JChemPaint {
         return chemModel;
     }
 
-    public static IChemModel readFromFile(File file, String type)
+    public static IChemModel readFromFile(File file, String type, AbstractJChemPaintPanel panel)
             throws CDKException, FileNotFoundException {
-        Reader reader = new FileReader(file);
         String url = file.toURI().toString();
         ISimpleChemObjectReader cor = null;
         try {
@@ -291,13 +320,17 @@ public class JChemPaint {
         else
             cor.setReader(new FileReader(file)); // hack
 
-        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor);
-        JChemPaint.cleanUpChemModel(chemModel);
+        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor,panel);
+        boolean avoidOverlap=true;
+        if (cor instanceof RGroupQueryReader)
+        	avoidOverlap=false;
+
+        JChemPaint.cleanUpChemModel(chemModel, avoidOverlap);
 
         return chemModel;
     }
 
-    public static void cleanUpChemModel(IChemModel chemModel)
+    public static void cleanUpChemModel(IChemModel chemModel, boolean avoidOverlap)
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
         JChemPaint.replaceReferencesWithClones(chemModel);
@@ -312,7 +345,9 @@ public class JChemPaint {
         JChemPaint.checkCoordinates(chemModel);
         JChemPaint.removeEmptyMolecules(chemModel);
 
-        ControllerHub.avoidOverlap(chemModel);
+        if (avoidOverlap) {
+            ControllerHub.avoidOverlap(chemModel);
+		}
         
         //We update implicit Hs in any case
         CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
@@ -437,9 +472,10 @@ public class JChemPaint {
         return cor;
     }
 
-    public static IChemModel getChemModelFromReader(ISimpleChemObjectReader cor)
+    public static IChemModel getChemModelFromReader(ISimpleChemObjectReader cor,AbstractJChemPaintPanel panel)
             throws CDKException {
-        String error = null;
+    	panel.get2DHub().setRGroupHandler(null);
+    	String error = null;
         ChemModel chemModel = null;
         IChemFile chemFile = null;
         if (cor.accepts(IChemFile.class) && chemModel==null) {
@@ -506,6 +542,23 @@ public class JChemPaint {
                     }
         }
 
+        // RGroupQuery reading
+        if (cor.accepts(RGroupQuery.class) && chemModel==null) {
+        	IRGroupQuery rgroupQuery = (RGroupQuery) cor.read(new RGroupQuery());
+        	if(rgroupQuery!=null ) 
+        		try{
+        			chemModel = new ChemModel();
+        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery);
+        			panel.get2DHub().setRGroupHandler(rgHandler);
+        			chemModel.setMoleculeSet(rgHandler.getMoleculeSet(chemModel));
+        			rgHandler.layoutRgroup();
+        			
+        		} catch (Exception exception) {
+        			error = "Error while reading file: " + exception.getMessage();
+        			exception.printStackTrace();
+        		}
+        }
+        
         if (error != null) {
             throw new CDKException(error);
         }
@@ -514,17 +567,18 @@ public class JChemPaint {
             chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
         }
 
-	//for some reason, smilesparser sets valencies, which we don't want in jcp
+	    //SmilesParser sets valencies, switch off by default.
         if(cor instanceof SMILESReader){
         	IAtomContainer allinone = JChemPaintPanel.getAllAtomContainersInOne(chemModel);
    	        for(int k=0;k<allinone.getAtomCount();k++){
    	        	allinone.getAtom(k).setValency(null);
     		}
         }
-
         return chemModel;
     }
 
+
+    
 
     public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) {
         if (molecule == null) return;
@@ -736,28 +790,6 @@ public class JChemPaint {
                 mol.getAtom(i).setPoint2d(ac.getAtom(i).getPoint2d());
             }
         }
-    }
-
-    public static JChemPaintPanel showInstance(IChemModel chemModel,
-            String title, boolean debug) {
-        JFrame f = new JFrame(title + " - "+
-                new JChemPaintMenuHelper().getMenuResourceString("Title", GUI_APPLICATION));
-        chemModel.setID(title);
-        f.addWindowListener(new JChemPaintPanel.AppCloser());
-        f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null);
-        p.updateStatusBar();
-        f.setPreferredSize(new Dimension(800, 494));    //1.618
-        f.add(p);
-        f.pack();
-        Point point = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .getCenterPoint();
-        int w2 = (f.getWidth() / 2);
-        int h2 = (f.getHeight() / 2);
-        f.setLocation(point.x - w2, point.y - h2);
-        f.setVisible(true);
-		frameList.add(f);
-        return p;
     }
 
 
