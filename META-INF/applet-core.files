@@ -51,11 +51,6 @@ org/_3pq/jgrapht/traverse/CrossComponentIterator$Specifics.class
 org/_3pq/jgrapht/traverse/CrossComponentIterator$UndirectedSpecifics.class
 org/_3pq/jgrapht/traverse/GraphIterator.class
 org/_3pq/jgrapht/UndirectedGraph.class
-org/apache/commons/cli/CommandLineParser.class
-org/apache/commons/cli/ParseException.class
-org/apache/commons/cli/Parser.class
-org/apache/commons/cli/PosixParser.class
-org/apache/commons/cli/UnrecognizedOptionException.class
 org/openscience/cdk/Atom.class
 org/openscience/cdk/AtomContainer$1.class
 org/openscience/cdk/AtomContainer$2.class
