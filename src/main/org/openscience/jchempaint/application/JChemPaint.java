@@ -80,14 +80,17 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.io.CMLReader;
+import org.openscience.cdk.io.FormatFactory;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.RGroupQueryReader;
-import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.io.SMILESReader;
-import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.io.formats.CMLFormat;
+import org.openscience.cdk.io.formats.IChemFormat;
+import org.openscience.cdk.io.formats.MDLV2000Format;
+import org.openscience.cdk.io.formats.RGroupQueryFormat;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -98,7 +101,6 @@ import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
-import org.openscience.jchempaint.JChemPaintMenuHelper;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
@@ -192,7 +194,6 @@ public class JChemPaint {
 
             // Language
             props.setProperty("General.language", System.getProperty("user.language", "en"));
-            //System.out.println(System.getProperty("user.language", "en"));
 
             // Process command line arguments
             String modelFilename = "";
@@ -304,6 +305,15 @@ public class JChemPaint {
         return chemModel;
     }
 
+    /**
+     * Read an IChemModel from a given file.
+     * @param file
+     * @param type
+     * @param panel
+     * @return
+     * @throws CDKException
+     * @throws FileNotFoundException
+     */
     public static IChemModel readFromFile(File file, String type, AbstractJChemPaintPanel panel)
             throws CDKException, FileNotFoundException {
         String url = file.toURI().toString();
@@ -330,6 +340,12 @@ public class JChemPaint {
         return chemModel;
     }
 
+    /**
+     * Clean up chemical model ,removing duplicates empty molecules etc
+     * @param chemModel
+     * @param avoidOverlap
+     * @throws CDKException
+     */
     public static void cleanUpChemModel(IChemModel chemModel, boolean avoidOverlap)
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
@@ -374,6 +390,11 @@ public class JChemPaint {
        }
     }
 
+    /**
+     * Private helper method to construct a reader from a URL.
+     * @param url
+     * @return
+     */
     private static Reader getReader(URL url) {
         InputStreamReader reader = null;
         try {
@@ -387,66 +408,90 @@ public class JChemPaint {
 
     }
 
-    private static ISimpleChemObjectReader createReader(URL url,
-            String urlString, String type) throws CDKException {
-        if (type == null) {
+    /**
+     * Creates a reader for a given URL, guessing the file type
+     * using the various IChemFormats. 
+     * @param url
+     * @param urlString
+     * @param type
+     * @return
+     * @throws CDKException
+     */
+    private static ISimpleChemObjectReader createReader(URL url,String urlString, String type) throws CDKException {
+
+    	if (type == null) {
             type = "mol";
         }
 
         ISimpleChemObjectReader cor = null;
 
-        /*
-         * Have the ReaderFactory determine the file format
-         */
-        cor = new MDLV2000Reader(getReader(url), Mode.RELAXED);
         try {
-            ReaderFactory factory = new ReaderFactory();
-            cor = factory.createReader(getReader(url));
-            // this is a workaround for bug #2698194, since it works with url
-            // only
-            if (cor instanceof CMLReader) {
-                cor = new CMLReader(urlString);
-            }
-        } catch (IOException ioExc) {
-            // we do nothing right now and hope it still works
+
+        	/* ReaderFactory.createReader was used before to find the right reader, but this
+        	 * created problems (when applet shrunk with Yguard) because of the classloader 
+        	 * used in the ReaderFactory, runtime errors. 
+        	 * Instead, we avoid ReaderFactory and pick the right reader below ourselves. */
+        	
+        	Reader input = new BufferedReader(getReader(url));
+        	FormatFactory formatFactory = new FormatFactory(8192);
+        	IChemFormat format=formatFactory.guessFormat(input);
+        	
+        	if (format!=null) {
+	        	if (format instanceof RGroupQueryFormat ) {
+	                cor = new RGroupQueryReader();
+		        	cor.setReader(input);
+	        	}
+	        	else if (format instanceof CMLFormat ) {
+	        		cor = new CMLReader(urlString);
+		        	cor.setReader(url.openStream());
+	        	}
+	        	else if (format instanceof MDLV2000Format ) { 
+	                cor = new MDLV2000Reader(getReader(url));
+		        	cor.setReader(input);
+	        	}
+	        	// SMILES format is never guessed :(
+	        	//else if (format instanceof SMILESFormat ) { 
+	        	//	cor = new SMILESReader(getReader(url));
+		        //	cor.setReader(input);
+	        	//}
+	        	//InChI format is never guessed :(
+	        	//else if (format instanceof INChIPlainTextFormat ) {
+	        	//	cor = new INChIPlainTextReader(getReader(url));
+		        // 	cor.setReader(input);
+	        	//}
+        	}
         } catch (Exception exc) {
-            // we do nothing right now and hope it still works
+            exc.printStackTrace();
         }
+
+        
         if (cor == null) {
             // try to determine from user's guess
-            if (type.equals(JCPFileFilter.cml)
-                    || type.equals(JCPFileFilter.xml)) {
-                // this is a workaround for bug #2698194, since it works with
-                // url only
+            if (type.equals(JCPFileFilter.cml)|| type.equals(JCPFileFilter.xml)) {
                 cor = new CMLReader(urlString);
+
             } else if (type.equals(JCPFileFilter.sdf)) {
-                cor = new MDLV2000Reader(getReader(url));// TODO once merged,
-                                                         // egons new reader
-                                                         // needs to be used
-                                                         // here
+                cor = new MDLV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.mol)) {
                 cor = new MDLV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.inchi)) {
                 try {
                     cor = new INChIReader(new URL(urlString).openStream());
-                } catch (MalformedURLException e) {
-                    // These should not happen, since URL is built from a file
-                    // before
-                } catch (IOException e) {
-                    // These should not happen, since URL is built from a file
-                    // before
+                } catch (Exception e) {
+                	e.printStackTrace();
                 }
             } else if (type.equals(JCPFileFilter.rxn)) {
                 cor = new MDLRXNV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.smi)) {
                 cor = new SMILESReader(getReader(url));
             }
+
         }
         if (cor == null) {
             throw new CDKException(GT._("Could not determine file format"));
         }
-        // this takes care of files called .mol, but having several, sdf-style
-        // entries
+
+        // Take care of files called .mol, but having several, sdf-style entries
         if (cor instanceof MDLV2000Reader) {
             try {
                 BufferedReader in = new BufferedReader(getReader(url));
@@ -466,12 +511,21 @@ public class JChemPaint {
             } catch (IOException ex) {
                 // we do nothing - firstly if IO does not work, we should not
                 // get here, secondly, if only this does not work, don't worry
+            	ex.printStackTrace();
             }
         }
-
         return cor;
     }
 
+
+    
+    /**
+     * Returns an IChemModel, using the reader provided (picked).
+     * @param cor
+     * @param panel
+     * @return
+     * @throws CDKException
+     */
     public static IChemModel getChemModelFromReader(ISimpleChemObjectReader cor,AbstractJChemPaintPanel panel)
             throws CDKException {
     	panel.get2DHub().setRGroupHandler(null);
