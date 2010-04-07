@@ -26,7 +26,7 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     }
 
     @Test public void testUndo() throws CloneNotSupportedException{
-        //These should be models.add((IChemModel)panel.getChemModel());
+        //These should be models.add((IChemModel)panel.getChemModel().clone());
         //but due to a bug in cdk, clone changes the model
         //without the clone, the test is not of much use, since it tests
         //(for my understanding) the model against itself.
