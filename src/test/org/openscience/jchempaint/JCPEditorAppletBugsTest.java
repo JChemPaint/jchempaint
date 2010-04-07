@@ -30,6 +30,8 @@ import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 
+	private static int SAVE_AS_MOL_COMBOBOX_POS=6;
+
 	@Test
 	public void testSquareSelectSingleAtom() {
 		JPanelFixture jcppanel = applet.panel("appletframe");
@@ -433,7 +435,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 		Assert.assertEquals(12, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount() );
 
 	}
-	
+
 	@Test public void testBug70() throws FileNotFoundException, CDKException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -441,7 +443,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.click();
         Point2d point = getAtomPoint(panel,0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
-        applet.menuItem("showACProperties2").click();
+        applet.menuItem("showACProperties").click();
         DialogFixture dialog = applet.dialog();
         JTextComponent textfield = dialog.robot.finder().find(JTextComponentMatcher.withName("Title"));
         textfield.setText("aaa");
@@ -450,7 +452,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("save").click();
         dialog = applet.dialog();
         JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-        combobox.setSelectedItem(combobox.getItemAt(5));
+        combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
         File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
         if(file.exists())
@@ -472,7 +474,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("saveAs").click();
         DialogFixture dialog = applet.dialog();
         JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-        combobox.setSelectedItem(combobox.getItemAt(5));
+        combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
         File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
         if(file.exists())
@@ -488,13 +490,13 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("new").click();
         applet.button("hexagon").click();
         applet.click();
-        applet.button("bond").click();
+        applet.button("bondTool").click();
         Point2d moveto=getAtomPoint(panel,0);    
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x,(int)moveto.y), MouseButton.LEFT_BUTTON,1);
         applet.menuItem("saveAs").click();
         dialog = applet.dialog();
         combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-        combobox.setSelectedItem(combobox.getItemAt(5));
+        combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         text = dialog.textBox();
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
         if(file.exists())
@@ -520,7 +522,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("saveAs").click();
         dialog = applet.dialog();
         combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-        combobox.setSelectedItem(combobox.getItemAt(5));
+        combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         text = dialog.textBox();
         text.setText(file.toString());
         okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
@@ -556,8 +558,14 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
         point = getBondPoint(panel,2);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals(6, panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount());
-        Assert.assertEquals(4, panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount());
+
+        int atomCount=0, bondCount=0;
+		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
+			atomCount+=atc.getAtomCount();
+			bondCount+=atc.getBondCount();
+		}
+		Assert.assertEquals(6, atomCount);
+        Assert.assertEquals(4, bondCount);
         restoreModelToEmpty();
     }
 

@@ -35,7 +35,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
-import java.io.StringBufferInputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -45,6 +45,7 @@ import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.ChemFile;
+import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -64,7 +65,10 @@ import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
+import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
+import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -90,11 +94,10 @@ import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 /**
  * Action to copy/paste structures.
- *
- * @cdk.bug    1288449
  */
 public class CopyPasteAction extends JCPAction{
 
@@ -182,7 +185,6 @@ public class CopyPasteAction extends JCPAction{
                     sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(chemModel)),null);
                 }
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         } else if ("eraser".equals(type)) {
@@ -235,21 +237,33 @@ public class CopyPasteAction extends JCPAction{
             String content=null;
             
             if (supported(transfer, molFlavor) ) {
-                try {
-                    StringBufferInputStream sbis = (StringBufferInputStream) transfer.getTransferData(molFlavor);
-                    int x;
-                    StringBuffer sb = new StringBuffer();
+                StringBuffer sb = new StringBuffer();
+            	try {
+                    //StringBufferInputStream sbis=null;
+					//sbis = (StringBufferInputStream) transfer.getTransferData(molFlavor);
+
+                    StringReader sbis=null;
+					sbis = (StringReader) transfer.getTransferData(molFlavor);
+
+            		
+            		int x;
                     while((x=sbis.read())!=-1){
                         sb.append((char)x);
                     }
                     reader = new MDLReader(new StringReader(sb.toString()));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+				} catch (UnsupportedFlavorException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+            	} catch (Exception e1) {
+                	reader = new RGroupQueryReader(new StringReader(sb.toString()));
                 }
+
             } else if (supported(transfer, DataFlavor.stringFlavor) ) {
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
+                    System.out.println(reader.getClass());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -261,6 +275,7 @@ public class CopyPasteAction extends JCPAction{
             }
 
             IMolecule toPaste = null;
+            boolean rgrpQuery=false;
             if (reader != null) {
                 IMolecule readMolecule =
                     chemModel.getBuilder().newMolecule();
@@ -275,14 +290,24 @@ public class CopyPasteAction extends JCPAction{
                             toPaste.add(ac);
 
                         }
-                    }
+                	} else if (reader.accepts(RGroupQuery.class)) {
+	        			rgrpQuery=true;
+                		IRGroupQuery rgroupQuery = (RGroupQuery) reader.read(new RGroupQuery());
+	        			chemModel = new ChemModel();
+	        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery);
+	        			this.jcpPanel.get2DHub().setRGroupHandler(rgHandler);
+	        			chemModel.setMoleculeSet(rgHandler.getMoleculeSet(chemModel));
+	        			rgHandler.layoutRgroup();
+	        			
+                	}
+
                 } catch (CDKException e1) {
                     e1.printStackTrace();
                 }
             }
 
             //Attempt SMILES or InChI if no reader is found for content.
-            if (toPaste == null &&
+            if(rgrpQuery!=true && toPaste == null &&
                     supported(transfer, DataFlavor.stringFlavor)) {
                 try{
                     if (content.toLowerCase().indexOf("inchi")>-1 ) { 
@@ -316,16 +341,22 @@ public class CopyPasteAction extends JCPAction{
                     ex.printStackTrace();
                 }
             }
-            if (toPaste != null) {
+            
+            if (toPaste != null || rgrpQuery==true) {
                 jcpPanel.getRenderPanel().setZoomWide(true);
                 jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
-
-                scaleStructure(toPaste);
-                insertStructure(toPaste, renderModel);
-
-            }else{
+                if ( rgrpQuery==true) {
+                	this.jcpPanel.setChemModel(chemModel);
+                }
+                else {
+                	scaleStructure(toPaste);
+                	insertStructure(toPaste, renderModel);
+                }
+            }
+            else{
                 JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
+
         } else if (type.equals("cut")) {
             handleSystemClipboard(sysClip);
             IAtom atomInRange = null;
@@ -373,9 +404,11 @@ public class CopyPasteAction extends JCPAction{
             MoveModule newActiveModule = new MoveModule(hub, succusorModule);
             newActiveModule.setID("move");
             hub.setActiveDrawModule(newActiveModule);
+
         } else if (type.equals("selectFromChemObject")) {
-            // FIXME: implement for others than Reaction, Atom, Bond
-            IChemObject object = getSource(e);
+
+        	// FIXME: implement for others than Reaction, Atom, Bond
+        	IChemObject object = getSource(e);
             if (object instanceof IAtom) {
                 SingleSelection<IAtom> container = new SingleSelection<IAtom>((IAtom)object);
                 renderModel.setSelection(container);
@@ -585,15 +618,15 @@ public class CopyPasteAction extends JCPAction{
 
         public synchronized Object getTransferData (DataFlavor parFlavor)	throws UnsupportedFlavorException {
             if (parFlavor.equals (molFlavor)) {
-                return new StringBufferInputStream(mol);
+                return new StringReader(mol);
             } else if (parFlavor.equals (smilesFlavor)) {
-                return new StringBufferInputStream(smiles);
+                return new StringReader(smiles);
             } else if(parFlavor.equals(DataFlavor.stringFlavor)) {
                 return mol;
             } else if(parFlavor.equals(cmlFlavor)) {
-                return new StringBufferInputStream(cml);
+                return new StringReader(cml);
             } else if(parFlavor.equals(svgFlavor)) {
-                return new StringBufferInputStream(svg);
+                return new StringReader(svg);
             } else {
                 throw new UnsupportedFlavorException (parFlavor);
             }

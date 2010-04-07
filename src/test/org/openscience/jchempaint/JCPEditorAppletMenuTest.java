@@ -547,20 +547,10 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
             Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
             JPopupMenuFixture popup = applet.panel("renderpanel").showPopupMenuAt(new Point((int)moveto.x,(int)moveto.y));
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            popup.menuItem("cut2").click();
+            //try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
+            popup.menuItem("cut").click();
             Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            //try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
             Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
             Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
             Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
@@ -576,22 +566,6 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
 	    }
 
-        @Test public void testMenuTemplatesAlkaloids() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-            restoreModelWithBasicmol();
-            applet.menuItem("alkaloids").click();
-            DialogFixture dialog = applet.dialog("templates");
-            JButtonFixture morphinebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
-            morphinebutton.click();
-            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
-            applet.menuItem("alkaloids").click();
-            dialog = applet.dialog("templates");
-            morphinebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
-            morphinebutton.click();
-            Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
-        }
-        
         @Test public void testSwitchLanguage(){
             applet.menuItem("options").click();
             DialogFixture dialog = applet.dialog();
@@ -600,22 +574,29 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
             for(int i=0;i<combobox.getItemCount();i++){
                 if(((String)combobox.getItemAt(i)).equals("German")){
-                    combobox.setSelectedItem(combobox.getItemAt(i));
+                    combobox.setSelectedIndex(i);
                     break;
                 }
             }
             JButtonFixture applybutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
             applybutton.click();
             Assert.assertEquals("Neu", applet.menuItem("new").component().getText());
+            
             for(int i=0;i<combobox.getItemCount();i++){
                 if(((String)combobox.getItemAt(i)).equals("American English")){
-                    combobox.setSelectedItem(combobox.getItemAt(i));
+                    combobox.setSelectedIndex(i);
+                    System.out.println("set USA");
                     break;
                 }
             }
-            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("ok",true)));
+
+            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
             okbutton.click();
+            
             Assert.assertFalse(dialog.component().isShowing());
-            Assert.assertEquals("New", applet.menuItem("new").component().getText());
+            Assert.assertEquals("New", applet.menuItem("new").component().getText()); // fails in test only?
         }
+
+
+
 }

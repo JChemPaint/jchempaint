@@ -37,6 +37,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
@@ -62,7 +63,10 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.RGroupQueryReader;
+import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -355,21 +359,29 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     }
 
     /**
-     * Gives a mol file of the current molecules in the editor (not reactions)
+     * Gives a mol file of the current molecules in the editor (not reactions).
+     * RGroup queries are also saved as .mol files by convention.
      * 
      * @return The mol file
      * @throws CDKException
      */
     public String getMolFile() throws CDKException {
+
         StringWriter sw = new StringWriter();
-        MDLWriter mdlwriter = new MDLWriter(sw);
-        // mdlwriter.dontWriteAromatic();
-        org.openscience.cdk.interfaces.IChemModel som = theJcpp
-                .getChemModel();
-        mdlwriter.write(som);
+        org.openscience.cdk.interfaces.IChemModel som = theJcpp.getChemModel();
+
+    	if (theJcpp.get2DHub().getRGroupHandler()!=null) {
+    		RGroupQueryWriter rgw = new RGroupQueryWriter (sw);
+    		rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
+    	}
+    	else {
+            MDLWriter mdlwriter = new MDLWriter(sw);
+            mdlwriter.write(som);
+    	}
         return (sw.toString());
     }
 
+    
     /**
      * Gives a smiles of the current editor content
      * 
@@ -461,18 +473,29 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      * @throws Exception
      */
     public void setMolFile(String mol) throws CDKException {
-        
-        ISimpleChemObjectReader cor = new MDLV2000Reader(new StringReader(mol), Mode.RELAXED); //TODO assess R-group?
-        IChemModel chemModel = JChemPaint.getChemModelFromReader(cor, theJcpp);
-        JChemPaint.cleanUpChemModel(chemModel,true);
-        theJcpp.setChemModel(chemModel);
+       
+    	ISimpleChemObjectReader cor=null;
+    	IChemModel chemModel = null;
+
+    	if (mol.contains("$RGP")) {
+    		cor= new RGroupQueryReader(new StringReader(mol)); 
+    		chemModel=JChemPaint.getChemModelFromReader(cor, theJcpp);
+    	}
+    	else {
+    		cor= new MDLV2000Reader(new StringReader(mol), Mode.RELAXED); 
+    		chemModel=JChemPaint.getChemModelFromReader(cor, theJcpp);
+    		JChemPaint.cleanUpChemModel(chemModel,true);
+    	}
+
+    	theJcpp.setChemModel(chemModel);
         theJcpp.get2DHub().updateView();
+
         // the newly opened file should nicely fit the screen
         theJcpp.getRenderPanel().setFitToScreen(true);
-        theJcpp.getRenderPanel().update(
-                theJcpp.getRenderPanel().getGraphics());
-        // enable zooming by removing constraint
+        theJcpp.getRenderPanel().update(theJcpp.getRenderPanel().getGraphics());
+        // ..enable zooming by removing constraint again
         theJcpp.getRenderPanel().setFitToScreen(false);
+
     }
 
     /**
