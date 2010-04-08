@@ -240,6 +240,7 @@ public class JCPMenuTextMaker {
         entries.put("pseudoR3", GT._("R3"));	
         entries.put("pseudoR4", GT._("R4"));	
         entries.put("bondToolTooltip", GT._("Draw Bonds and Atoms"));
+        entries.put("reactionArrowTooltip", GT._("Makes a Reaction by Drawing a Reaction Arrow"));
         entries.put("double_bondToolTooltip", GT._("Draw Double Bonds"));
         entries.put("triple_bondToolTooltip", GT._("Draw Triple Bonds"));
         entries.put("cyclesymbolTooltip", GT._("Change the Atom's Symbol"));
