@@ -301,21 +301,24 @@ public class BasicBondGenerator implements IGenerator {
 		Point2d a = bond.getAtom(0).getPoint2d();
 		Point2d b = bond.getAtom(1).getPoint2d();
 
-        //double bondDistance = model.getBondDistance() / model.getScale();
-        //double[] out = generateDistanceData(a, b, dist);
-
-        // the proportion to move in towards the ring center
-        // FIXME: distance must be standard
-        double DIST;
+        double distance;
         if (!isBold)
-		    DIST = 0.15;
+		    distance = 0.15;
         else
-            DIST = 0.25;
+            distance = 0.25;
 
+        // Track ticket #63
+        // Correct distance for larger rings (like annulene) that have a ring center far away:
+        try {
+			distance=distance*(b.distance(a)/center.distance(a));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
 		Point2d w = new Point2d();
-		w.interpolate(a, center, DIST);
+		w.interpolate(a, center, distance);
 		Point2d u = new Point2d();
-		u.interpolate(b, center, DIST);
+		u.interpolate(b, center, distance);
 
 		double alpha = 0.2;
 		Point2d ww = new Point2d();
