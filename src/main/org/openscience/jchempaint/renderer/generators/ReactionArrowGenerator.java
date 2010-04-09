@@ -48,7 +48,7 @@ public class ReactionArrowGenerator implements IReactionGenerator {
         return new ArrowElement(totalBoundsReactants.getMaxX() + d,
                                 totalBoundsReactants.getCenterY(), 
                                 totalBoundsProducts.getMinX() - d, 
-                                totalBoundsReactants.getCenterY(),
+                                totalBoundsProducts.getCenterY(),
                                 1 / model.getScale(),true,model.getForeColor());
 	}
 }
