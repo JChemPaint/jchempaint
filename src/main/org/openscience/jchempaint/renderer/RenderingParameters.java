@@ -86,7 +86,7 @@ public class RenderingParameters {
     /**
      * The width of an arrow head
      */
-    private int arrowHeadWidth = 10;
+    private int arrowHeadWidth = 20;
 
     /**
      * The background color of the rendered image

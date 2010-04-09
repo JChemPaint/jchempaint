@@ -24,7 +24,6 @@ package org.openscience.jchempaint.renderer.visitor;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -40,7 +39,11 @@ import java.util.Map;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.elements.ArrowElement;
 import org.openscience.jchempaint.renderer.elements.AtomSymbolElement;
@@ -113,37 +116,42 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             this.g.setStroke(stroke);
             strokeMap.put(w, stroke);
         }
-        
         this.g.setColor(line.color);
         int[] a = this.transformPoint(line.x1, line.y1);
         int[] b = this.transformPoint(line.x2, line.y2);
         this.g.drawLine(a[0], a[1], b[0], b[1]);
-        double aW = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
-        if(line.y1==line.y2){
-            if(line.direction){
-    	        int[] c = this.transformPoint(line.x1-aW, line.y1-aW);
-    	        int[] d = this.transformPoint(line.x1-aW, line.y1+aW);
-    	        this.g.drawLine(a[0], a[1], c[0], c[1]);
-    	        this.g.drawLine(a[0], a[1], d[0], d[1]);
-            }else{
-    	        int[] c = this.transformPoint(line.x2+aW, line.y2-aW);
-    	        int[] d = this.transformPoint(line.x2+aW, line.y2+aW);
-    	        this.g.drawLine(b[0], b[1], c[0], c[1]);
-    	        this.g.drawLine(b[0], b[1], d[0], d[1]);
-            }
-        }else{
-            if(line.direction){
-                int[] c = this.transformPoint(line.x1-aW, line.y1-aW);
-                int[] d = this.transformPoint(line.x1+aW, line.y1-aW);
-                this.g.drawLine(a[0], a[1], c[0], c[1]);
-                this.g.drawLine(a[0], a[1], d[0], d[1]);
-            }else{
-                int[] c = this.transformPoint(line.x2-aW, line.y2+aW);
-                int[] d = this.transformPoint(line.x2+aW, line.y2+aW);
-                this.g.drawLine(b[0], b[1], c[0], c[1]);
-                this.g.drawLine(b[0], b[1], d[0], d[1]);
-            }
-        }
+        double arrowWidth = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
+        double lenghtOfArrow = Math.sqrt(Math.pow(Math.abs(line.x1 - line.x2),2) + Math.pow(Math.abs(line.y1 - line.y2),2));
+        double fractionOfHead = arrowWidth/lenghtOfArrow;
+        //headpoint is a line on the arrow arrowWidth away from end
+        Point2d headPoint = new Point2d();
+        if(line.x1<line.x2)
+            headPoint.x = line.x1 + (line.x2-line.x1)*(fractionOfHead);
+        else
+            headPoint.x = line.x2 + (line.x1-line.x2)*(1-fractionOfHead);
+        if(line.y1<line.y2)
+            headPoint.y = line.y1 + (line.y2-line.y1)*(fractionOfHead);
+        else
+            headPoint.y = line.y2 + (line.y1-line.y2)*(1-fractionOfHead);
+        //rotate headpoint in both directions to get end points of arrow
+        double relativex = headPoint.x - line.x1;
+        double relativey = headPoint.y - line.y1;
+        double angle = Math.PI/6;
+        double costheta = Math.cos(angle);
+        double sintheta = Math.sin(angle);
+        Point2d firstArrowPoint = new Point2d();
+        firstArrowPoint.x = relativex * costheta - relativey * sintheta + line.x1;
+        firstArrowPoint.y = relativex * sintheta + relativey * costheta + line.y1;
+        int[] firstArrowPointCoords = this.transformPoint(firstArrowPoint.x, firstArrowPoint.y);
+        this.g.drawLine(a[0], a[1], firstArrowPointCoords[0], firstArrowPointCoords[1]);
+        angle = -Math.PI/6;
+        costheta = Math.cos(angle);
+        sintheta = Math.sin(angle);
+        Point2d secondArrowPoint = new Point2d();
+        secondArrowPoint.x = relativex * costheta - relativey * sintheta + line.x1;
+        secondArrowPoint.y = relativex * sintheta + relativey * costheta + line.y1;
+        int[] secondArrowPointCoords = this.transformPoint(secondArrowPoint.x, secondArrowPoint.y);
+        this.g.drawLine(a[0], a[1], secondArrowPointCoords[0], secondArrowPointCoords[1]);
         this.g.setStroke(savedStroke);
     }
     

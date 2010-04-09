@@ -78,14 +78,20 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 
 	public void redo() {
 		chemModel.getMoleculeSet().removeAtomContainer(movedContainer);
+		if(chemModel.getReactionSet()==null)
+		    chemModel.setReactionSet(chemModel.getBuilder().newReactionSet());
 		IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID);
+		if(reaction==null){
+		    reaction = chemModel.getBuilder().newReaction();
+		    reaction.setID(reactionID);
+	        chemModel.getReactionSet().addReaction(reaction);
+		}
 		IMolecule mol=chemModel.getBuilder().newMolecule(movedContainer);
 		mol.setID(movedContainer.getID());
 		if(reactantOrProduct)
 			reaction.addReactant(mol);
 		else
 			reaction.addProduct(mol);
-		chemModel.getReactionSet().addReaction(reaction);
 		chemModel.getMoleculeSet().removeAtomContainer(oldContainer);
 	}
 
@@ -98,6 +104,7 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 			reactantsorproducts = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID).getReactants();
 		else
 			reactantsorproducts = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID).getProducts();
+		IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID);
 		int count=0;
 		for(IAtomContainer mol : reactantsorproducts.atomContainers()){
 			if(mol.getID().equals(movedContainer.getID())){
@@ -106,6 +113,10 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 			}
 			count++;
 		}
+		if(reaction.getReactantCount()==0 && reaction.getProductCount()==0)
+		    chemModel.getReactionSet().removeReaction(reaction);
+		if(chemModel.getReactionSet().getReactionCount()==0)
+		    chemModel.setReactionSet(null);
 	}
 
 	public boolean canRedo() {

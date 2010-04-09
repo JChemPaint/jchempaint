@@ -27,6 +27,7 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
@@ -57,10 +58,13 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
     
     @Override
     public void mouseClickedUp(Point2d worldCoord) {
+        //first, we get rid of the phantom arrow
+        chemModelRelay.setPhantomArrow(null, null);
+        chemModelRelay.updateView();
         //for each molecule, we need to look if the majority of 
         // its atoms are to the left or right or on the arrow
         IMoleculeSet moleculeSet = super.chemModelRelay.getChemModel().getMoleculeSet();
-        if(moleculeSet.getAtomContainerCount()==0)
+        if(moleculeSet.getAtomContainerCount()==0 || (moleculeSet.getAtomContainerCount()==1 && moleculeSet.getAtomContainer(0).getAtomCount()==0))
             return;
         //calculate a second point on the perpendicular through start point
         double angle = Math.PI/2;
@@ -107,18 +111,30 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
                 else
                     leftend++;
             }
+            IAtomContainer newContainer;
+            try {
+                newContainer = (IAtomContainer) moleculeSet.getAtomContainer(i).clone();
+                if(moleculeSet.getAtomContainer(i).getID()!=null)
+                    newContainer.setID(moleculeSet.getAtomContainer(i).getID());
+                else
+                    newContainer.setID("ac"+System.currentTimeMillis());
+            } catch (CloneNotSupportedException e) {
+                logger.error("Could not clone IAtomContainer: ", e.getMessage());
+                logger.debug(e);
+                return;
+            }
+
             if(left>right){
                 //is a reactant
-                ReactionHub.makeReactantInExistingReaction((ControllerHub)super.chemModelRelay, reaction.getID(), moleculeSet.getAtomContainer(i), moleculeSet.getAtomContainer(i));
+                ReactionHub.makeReactantInExistingReaction((ControllerHub)super.chemModelRelay, reaction.getID(), newContainer, moleculeSet.getAtomContainer(i));
             } if(rightend>leftend){
                 //is a product
-                ReactionHub.makeProductInExistingReaction((ControllerHub)super.chemModelRelay, reaction.getID(), moleculeSet.getAtomContainer(i), moleculeSet.getAtomContainer(i));
+                ReactionHub.makeProductInExistingReaction((ControllerHub)super.chemModelRelay, reaction.getID(), newContainer, moleculeSet.getAtomContainer(i));
             } else {
                 //is a catalyst
                 //TODO catalysts in general
             }
         }
-        chemModelRelay.setPhantomArrow(null, null);
     }
     
     /**
