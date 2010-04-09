@@ -24,14 +24,23 @@
 
 
 <h3> Creating Reactions</h3>
-<p>Due to the "chemically aware" nature of JChemPaint, for drawing a reaction 
-you do not draw decorations like arrows etc., but draw the components and then 
-declare them part of a reaction. So you first draw all reactants and products, 
+<p>There are two ways to draw reactions in JChempaint:
+<ul><li>You can chose <img src="../../../small-bin/reactionArrow.gif"> and draw 
+the reaction arrow. All molecules to the left of that arrow become reactants, 
+eyerything to the right products and everything on the arrow catalysts in a new 
+reaction. This illustration shows what is meant with "left", "right" and "on": 
+<br></br><img src="../../../large-bin/reactionPositions.gif"><br>Note the whole 
+drawing panel is devided in these three sectors and all molecules not already 
+part of a reaction become part of the new reaction.</br></li>
+<li>You can also declare components part of a new or existing reaction. So you 
+first draw all reactants and products, 
 best from left to right. Then right click on the first reactant, chose "Reaction
 ->Make Reactant in new reaction". Right click on any other reactant and chose 
 "Reaction->Make Reactant in existing reaction". Right click on any product 
 and chose "Product->Make Product in existing reaction". The reaction will then 
-be rendered with + and arrows as appropriate. If you want to layout structures 
+be rendered with + and arrows as appropriate. In this way, you can also add 
+molecules to a reaction.</li></ul></p>
+<p>If you want to layout the reaction 
 cleanly, just do "Tools->Clean Up" - this will layout molecules straight from 
 left to right.</p>
 <p>You can have multiple reactions in one drawing, for this choose "Reaction->
