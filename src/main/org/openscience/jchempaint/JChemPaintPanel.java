@@ -395,7 +395,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             this.setLastActionButton(newActionButton);
             newActionButton.setBackground(Color.GRAY);
         }
-        if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
+        if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1 && !newActiveModule.getID().equals("reactionArrow")){
             if(this.buttons.get(this.get2DHub().getController2DModel().getDrawElement())!=null){
                 this.buttons.get(this.get2DHub().getController2DModel().getDrawElement()).setBackground(Color.GRAY);
                 lastSecondaryButton = this.buttons.get(this.get2DHub().getController2DModel().getDrawElement());
