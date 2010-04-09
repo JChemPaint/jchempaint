@@ -579,8 +579,17 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         if (reactants == null || products == null) return null;
 
         // determine the bounds of everything in the reaction
-        Rectangle2D reactantsBounds = Renderer.calculateBounds(reactants);
-        return reactantsBounds.createUnion(Renderer.calculateBounds(products));
+        if(reaction.getProducts().getAtomContainerCount()>0){
+            Rectangle2D reactantsBounds = Renderer.calculateBounds(reactants);
+            if(reaction.getReactantCount()>0)
+                return reactantsBounds.createUnion(Renderer.calculateBounds(products));
+            else
+                return reactantsBounds;
+        } else if (reaction.getReactantCount()>0){
+            return Renderer.calculateBounds(reactants);
+        } else {
+            return null;
+        }
     }
 
     public static Rectangle2D calculateBounds(IMoleculeSet moleculeSet) {

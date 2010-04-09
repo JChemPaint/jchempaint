@@ -136,6 +136,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private static RGroupHandler rGroupHandler;
 
 	int oldMouseCursor = Cursor.DEFAULT_CURSOR;
+	
+	private Point2d phantomArrowStart = null;
+	
+	private Point2d phantomArrowEnd = null;
 
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
 			IChemModel chemModel, IViewEventRelay eventRelay,
@@ -2700,5 +2704,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 	}
+
+    public void setPhantomArrow(Point2d start, Point2d end) {
+        this.phantomArrowStart=start;
+        this.phantomArrowEnd=end;
+    }
+
+    public Point2d[] getPhantomArrow() {
+        return new Point2d[]{phantomArrowStart, phantomArrowEnd};
+    }
 }
 

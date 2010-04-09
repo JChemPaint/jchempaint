@@ -115,6 +115,21 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param atom atom to add as phantom
      */
     public void addPhantomAtom(IAtom atom);
+    
+    /**
+     * Sets a phantom = temporary arrow, e. g. for reaction drawing.
+     * 
+     * @param start The start point.
+     * @param end   The end point (if startt and end are null, no arrow is drawn).
+     */
+    public void setPhantomArrow(Point2d start, Point2d end);
+    
+    /**
+     * Gets start and end for a phantom arrow.
+     * 
+     * @return [0]=start, [1]=end. Can be null, nothing to be done then.
+     */
+    public Point2d[] getPhantomArrow();
     /**
      * Adds an temporary bond which might be cleared later, when the final
      * bond is added. Controllers can use this to draw temporary bonds, for

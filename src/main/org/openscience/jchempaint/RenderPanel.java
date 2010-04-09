@@ -59,6 +59,7 @@ import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.ControllerModel;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.IViewEventRelay;
+import org.openscience.jchempaint.controller.PhantomArrowGenerator;
 import org.openscience.jchempaint.controller.PhantomBondGenerator;
 import org.openscience.jchempaint.controller.SwingMouseEventRelay;
 import org.openscience.jchempaint.controller.undoredo.IUndoListener;
@@ -118,6 +119,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private boolean debug = false;
 
     private PhantomBondGenerator pbg = new PhantomBondGenerator();
+    
+    private PhantomArrowGenerator pag = new PhantomArrowGenerator();
 
     boolean isFirstDrawing = true;
 
@@ -174,6 +177,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.hub = new ControllerHub(controllerModel, renderer, chemModel,
                 this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
         pbg.setControllerHub(hub);
+        pag.setControllerHub(hub);
 
         // connect mouse events from Panel to the Hub
         this.mouseEventRelay = new SwingMouseEventRelay(this.hub);
@@ -218,6 +222,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new AtomContainerTitleGenerator());
         generators.add(new TooltipGenerator());
         generators.add(pbg);
+        generators.add(pag);
         return generators;
     }
 
