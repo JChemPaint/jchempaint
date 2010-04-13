@@ -1,6 +1,9 @@
 HEAD
 ----
 
+New features:
+* Reaction arrow tool for comfortable drawing of reactions
+
 3.1.1
 ---
 New features:
