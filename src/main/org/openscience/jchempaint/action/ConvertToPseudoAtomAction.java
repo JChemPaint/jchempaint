@@ -39,6 +39,7 @@ import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.AddBondDragModule;
@@ -93,7 +94,7 @@ public class ConvertToPseudoAtomAction extends JCPAction {
             IAtom atom = atomsInRange.next();
         	if(type.equals("normal")){
                 PseudoAtom pseudo = (PseudoAtom)atom;
-                IAtom normal = pseudo.getBuilder().newAtom(pseudo);
+                IAtom normal = pseudo.getBuilder().newInstance(IPseudoAtom.class,pseudo);
                 normal.setSymbol("C");
                 jcpPanel.get2DHub().replaceAtom(normal,pseudo);
         	}else {

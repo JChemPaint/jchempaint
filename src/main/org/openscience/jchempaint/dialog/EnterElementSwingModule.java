@@ -46,6 +46,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.layout.AtomPlacer;
@@ -136,7 +137,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 counter=1;
                 if(container==null){
                     if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
-                        chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newMoleculeSet());
+                        chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newInstance(IMoleculeSet.class));
                     chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
                     ac.getAtom(0).setPoint2d(new Point2d(0,0));
                     lastplaced = ac.getAtom(0);
@@ -157,8 +158,8 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 }
                 AtomPlacer ap=new AtomPlacer();
                 while(lastplaced!=null){
-                    IAtomContainer placedNeighbours=ac.getBuilder().newAtomContainer();
-                    IAtomContainer unplacedNeighbours=ac.getBuilder().newAtomContainer();
+                    IAtomContainer placedNeighbours=ac.getBuilder().newInstance(IAtomContainer.class);
+                    IAtomContainer unplacedNeighbours=ac.getBuilder().newInstance(IAtomContainer.class);
                     List<IAtom> l=container.getConnectedAtomsList(lastplaced);
                     for(int i=0;i<l.size();i++){
                         if(l.get(i).getPoint2d()!=null)
@@ -177,7 +178,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                         lastplaced=null;
                 }
                 if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newAtomContainer(ac), null, GT._("Add Functional Group"), chemModelRelay);
+                    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newInstance(IAtomContainer.class,ac), null, GT._("Add Functional Group"), chemModelRelay);
                     chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
                 }
                 chemModelRelay.getController2DModel().setDrawElement(x);
@@ -188,7 +189,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 IIsotope iso=ifa.getMajorIsotope(x);
                 if(iso!=null){
                     if(closestAtom==null){
-                        IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
+                        IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
                         addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord, false));
                         if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
                             IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, null, GT._("Add Atom"), chemModelRelay);

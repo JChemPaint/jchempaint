@@ -66,7 +66,7 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 		if(closestAtom != null && closestAtom.getPoint2d().distance(worldCoord) < dH)
 			endAtom = chemModelRelay.getClosestAtom(worldCoord);
 		if(endAtom!=null && startAtom!=null){
-			IMapping mapping = startAtom.getBuilder().newMapping(startAtom, endAtom);
+			IMapping mapping = startAtom.getBuilder().newInstance(IMapping.class,startAtom, endAtom);
 			// ok, now figure out if they are in one reaction
 			IReaction reaction1 = ChemModelManipulator.getRelevantReaction(chemModelRelay.getIChemModel(), startAtom);
 			IReaction reaction2 = ChemModelManipulator.getRelevantReaction(chemModelRelay.getIChemModel(), endAtom);

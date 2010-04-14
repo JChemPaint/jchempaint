@@ -212,10 +212,10 @@ public class JChemPaint {
     }
     
     public static IChemModel emptyModel() {
-        IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newChemModel();
-        chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
+        IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+        chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
         chemModel.getMoleculeSet().addAtomContainer(
-                chemModel.getBuilder().newMolecule());
+                chemModel.getBuilder().newInstance(IAtomContainer.class));
         return chemModel;
     }
 
@@ -693,7 +693,7 @@ public class JChemPaint {
         StructureDiagramGenerator sdg = new StructureDiagramGenerator();
         for (int atIdx = 0; atIdx < molecules.size(); atIdx++) {
             IAtomContainer mol = molecules.get(atIdx);
-            sdg.setMolecule(mol.getBuilder().newMolecule(mol));
+            sdg.setMolecule(mol.getBuilder().newInstance(IMolecule.class,mol));
             try {
                 sdg.generateCoordinates();
             } catch (Exception e) {

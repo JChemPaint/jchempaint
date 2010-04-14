@@ -15,8 +15,11 @@ import org.junit.BeforeClass;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -65,10 +68,10 @@ public class AbstractAppletTest {
     protected void restoreModelToEmpty(){
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        IChemModel basic = DefaultChemObjectBuilder.getInstance().newChemModel();
-        basic.setMoleculeSet(basic.getBuilder().newMoleculeSet());
+        IChemModel basic = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+        basic.setMoleculeSet(basic.getBuilder().newInstance(IMoleculeSet.class));
         basic.getMoleculeSet().addAtomContainer(
-                basic.getBuilder().newMolecule());
+                basic.getBuilder().newInstance(IMolecule.class));
         panel.setChemModel(basic);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
@@ -84,7 +87,7 @@ public class AbstractAppletTest {
         MDLV2000Reader reader = new MDLV2000Reader(ins);
         IChemModel basic;
         try {
-            basic = (IChemModel) reader.read(DefaultChemObjectBuilder.getInstance().newChemModel());
+            basic = (IChemModel) reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class));
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(basic.getMoleculeSet().getAtomContainer(0));
             CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(basic.getMoleculeSet().getAtomContainer(0)
                     .getBuilder());

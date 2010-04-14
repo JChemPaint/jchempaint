@@ -44,7 +44,7 @@ public class MultiSelection<T extends IChemObject> extends AbstractSelection {
 		if (!selection.isEmpty()) {
 			for (T value : selection) {
 				if (atomContainer == null)
-					atomContainer = value.getBuilder().newAtomContainer();
+					atomContainer = value.getBuilder().newInstance(IAtomContainer.class);
 				addToAtomContainer(atomContainer, value);
 			}
 		}

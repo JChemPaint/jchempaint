@@ -88,10 +88,10 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         IReactionSet reactionSet = super.chemModelRelay.getChemModel().getReactionSet();
         if (reactionSet == null)
         {
-            reactionSet = super.chemModelRelay.getChemModel().getBuilder().newReactionSet();
+            reactionSet = super.chemModelRelay.getChemModel().getBuilder().newInstance(IReactionSet.class);
             super.chemModelRelay.getChemModel().setReactionSet(reactionSet);
         }
-        IReaction reaction = moleculeSet.getBuilder().newReaction();
+        IReaction reaction = moleculeSet.getBuilder().newInstance(IReaction.class);
         reactionSet.addReaction(reaction);
         reaction.setID("reaction-" + System.currentTimeMillis());
         for(int i=moleculeSet.getAtomContainerCount()-1;i>=0;i--){

@@ -30,6 +30,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLReader;
@@ -307,7 +308,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         Assert.assertEquals("*", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
         Assert.assertEquals("*",panel.get2DHub().getActiveDrawModule().getID());
-        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
+        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newInstance(IAtom.class,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
         normal.setSymbol("C");
         panel.get2DHub().replaceAtom(normal,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
 	}
@@ -321,7 +322,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
         Assert.assertEquals("R",panel.get2DHub().getActiveDrawModule().getID());
-        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
+        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newInstance(IAtom.class,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
         normal.setSymbol("C");
         panel.get2DHub().replaceAtom(normal,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
 	}
@@ -427,7 +428,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 			  okbutton.click();
 			  MDLReader reader = new MDLReader(new FileInputStream(file));
-			  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newMolecule());
+			  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
 			  JPanelFixture jcppanel=applet.panel("appletframe");
 			  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());

@@ -120,7 +120,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             source =  (IAtom) getHighlighted(worldCoord, closestAtom);
 
             if(source == null) {
-                source = getBuilder().newAtom( chemModelRelay.getController2DModel().getDrawElement(), start );
+                source = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), start );
                 newSource = true;
             }
             else {
@@ -164,15 +164,15 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             dest = null;
         }else if (merge != null) {
             // set bond
-            chemModelRelay.addPhantomBond( getBuilder().newBond(source,merge, orderForNewBond, stereoForNewBond) );
+            chemModelRelay.addPhantomBond( getBuilder().newInstance(IBond.class,source,merge, orderForNewBond, stereoForNewBond) );
             dest = null;
             //we also remember the merge atom in the merges in the rendererModel,
             //in case an application uses these.
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,merge);
         }else {
             dest = roundAngle( start, worldCoordTo, bondLength );
-            IAtom atom = getBuilder().newAtom( chemModelRelay.getController2DModel().getDrawElement(), dest );
-            IBond bond = getBuilder().newBond( source,atom, orderForNewBond, stereoForNewBond );
+            IAtom atom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
+            IBond bond = getBuilder().newInstance(IBond.class, source,atom, orderForNewBond, stereoForNewBond );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }
@@ -201,7 +201,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
         IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
         UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-        IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
+        IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
         
         IAtom newAtom;
         if(newSource) {

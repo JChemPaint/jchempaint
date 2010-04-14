@@ -168,7 +168,7 @@ public class AddRingModule extends ControllerModuleAdapter {
 
         if (singleSelection == null) {
             //we build a phantom ring
-            IRing ring = this.chemModelRelay.getIChemModel().getBuilder().newRing(ringSize, "C");
+            IRing ring = this.chemModelRelay.getIChemModel().getBuilder().newInstance(IRing.class,ringSize, "C");
             if (addingBenzene) {
                 ring.getBond(0).setOrder(IBond.Order.DOUBLE);
                 ring.getBond(2).setOrder(IBond.Order.DOUBLE);

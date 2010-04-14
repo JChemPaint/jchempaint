@@ -44,7 +44,7 @@ public class SingleSelection<T extends IChemObject> extends AbstractSelection
 	}
 
 	public IAtomContainer getConnectedAtomContainer() {
-		IAtomContainer ac = selection.getBuilder().newAtomContainer();
+		IAtomContainer ac = selection.getBuilder().newInstance(IAtomContainer.class);
 		addToAtomContainer(ac, selection);
 		return ac;
 	}

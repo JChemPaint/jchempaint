@@ -115,7 +115,7 @@ public abstract class ShapeSelection implements IncrementalSelection {
         
         IAtomContainer ac = new AtomContainer();
         if (atoms.size() != 0) {
-           ac = atoms.get(0).getBuilder().newAtomContainer();
+           ac = atoms.get(0).getBuilder().newInstance(IAtomContainer.class);
            for (IAtom atom : atoms) {
               ac.addAtom(atom);
            }

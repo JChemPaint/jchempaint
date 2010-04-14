@@ -58,7 +58,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			IAtomContainer undoRedoContainer, String type, IChemModelRelay chemModelRelay) {
 		this.chemModel = chemModel;
 		this.undoRedoContainer = undoRedoContainer;
-		this.container = chemModel.getBuilder().newAtomContainer();
+		this.container = chemModel.getBuilder().newInstance(IAtomContainer.class);
     	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
     	while (containers.hasNext()) {
     		container.add((IAtomContainer)containers.next());
@@ -77,7 +77,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.removeAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IMolecule molecule = container.getBuilder().newMolecule(container);
+		IMolecule molecule = container.getBuilder().newInstance(IMolecule.class,container);
 		IMoleculeSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
@@ -101,7 +101,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.addAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IMolecule molecule = container.getBuilder().newMolecule(container);
+		IMolecule molecule = container.getBuilder().newInstance(IMolecule.class,container);
 		IMoleculeSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);

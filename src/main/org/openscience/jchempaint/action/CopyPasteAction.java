@@ -147,7 +147,7 @@ public class CopyPasteAction extends JCPAction{
             }
             if (atomInRange != null) {
                 IAtomContainer tocopyclone =
-                    atomInRange.getBuilder().newAtomContainer();
+                    atomInRange.getBuilder().newInstance(IAtomContainer.class);
                 try {
                     tocopyclone.addAtom((IAtom) atomInRange.clone());
                     addToClipboard(sysClip, tocopyclone);
@@ -159,11 +159,11 @@ public class CopyPasteAction extends JCPAction{
                 IBond bond = renderModel.getHighlightedBond();
                 if (bond != null) {
                     IAtomContainer tocopyclone =
-                        bond.getBuilder().newAtomContainer();
+                        bond.getBuilder().newInstance(IAtomContainer.class);
                     try {
                         tocopyclone.addAtom((IAtom) bond.getAtom(0).clone());
                         tocopyclone.addAtom((IAtom) bond.getAtom(1).clone());
-                        tocopyclone.addBond(bond.getBuilder().newBond(tocopyclone.getAtom(0), tocopyclone.getAtom(1), bond.getOrder()));
+                        tocopyclone.addBond(bond.getBuilder().newInstance(IBond.class,tocopyclone.getAtom(0), tocopyclone.getAtom(1), bond.getOrder()));
                         addToClipboard(sysClip, tocopyclone);
                     } catch (CloneNotSupportedException e1) {
                         e1.printStackTrace();
@@ -180,7 +180,7 @@ public class CopyPasteAction extends JCPAction{
             try {
                 if(renderModel.getSelection().getConnectedAtomContainer()!=null){
                     SmilesGenerator sg=new SmilesGenerator();
-                    sysClip.setContents(new SmilesSelection(sg.createSMILES(renderModel.getSelection().getConnectedAtomContainer().getBuilder().newMolecule(renderModel.getSelection().getConnectedAtomContainer()))),null);
+                    sysClip.setContents(new SmilesSelection(sg.createSMILES(renderModel.getSelection().getConnectedAtomContainer().getBuilder().newInstance(IMolecule.class,renderModel.getSelection().getConnectedAtomContainer()))),null);
                 }else{
                     sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(chemModel)),null);
                 }
@@ -278,7 +278,7 @@ public class CopyPasteAction extends JCPAction{
             boolean rgrpQuery=false;
             if (reader != null) {
                 IMolecule readMolecule =
-                    chemModel.getBuilder().newMolecule();
+                    chemModel.getBuilder().newInstance(IMolecule.class);
                 try {
                     if (reader.accepts(Molecule.class)) {
                         toPaste = (IMolecule) reader.read(readMolecule);
@@ -374,7 +374,7 @@ public class CopyPasteAction extends JCPAction{
                 bondInRange = renderModel.getHighlightedBond();
             }
             IAtomContainer tocopyclone =
-                jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                jcpPanel.getChemModel().getBuilder().newInstance(IAtomContainer.class);
             if (atomInRange != null) {
                 tocopyclone.addAtom(atomInRange);
                 jcpPanel.get2DHub().removeAtom(atomInRange);
@@ -419,7 +419,7 @@ public class CopyPasteAction extends JCPAction{
             }
             else if (object instanceof IReaction) {
                 IAtomContainer wholeModel =
-                    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                    jcpPanel.getChemModel().getBuilder().newInstance(IAtomContainer.class);
                 for (IAtomContainer container :
                     ReactionManipulator.getAllAtomContainers(
                             (IReaction)object)) {
@@ -442,7 +442,7 @@ public class CopyPasteAction extends JCPAction{
             if (object instanceof IReaction) {
                 IReaction reaction = (IReaction) object;
                 IAtomContainer wholeModel =
-                    jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                    jcpPanel.getChemModel().getBuilder().newInstance(IAtomContainer.class);
                 for (IAtomContainer container :
                     MoleculeSetManipulator.getAllAtomContainers(
                             reaction.getReactants())) {
@@ -465,7 +465,7 @@ public class CopyPasteAction extends JCPAction{
             if (object instanceof IReaction) {
                     IReaction reaction = (IReaction) object;
                     IAtomContainer wholeModel =
-                        jcpPanel.getChemModel().getBuilder().newAtomContainer();
+                        jcpPanel.getChemModel().getBuilder().newInstance(IAtomContainer.class);
                 for (IAtomContainer container :
                     MoleculeSetManipulator.getAllAtomContainers(
                             reaction.getProducts())) {
@@ -575,7 +575,7 @@ public class CopyPasteAction extends JCPAction{
 
         @SuppressWarnings("unchecked")
         public JcpSelection(IAtomContainer tocopy1) throws Exception {
-            IMolecule tocopy= tocopy1.getBuilder().newMolecule(tocopy1);
+            IMolecule tocopy= tocopy1.getBuilder().newInstance(IMolecule.class,tocopy1);
             // MDL mol output
             StringWriter sw = new StringWriter();
             new MDLWriter(sw).writeMolecule(tocopy);

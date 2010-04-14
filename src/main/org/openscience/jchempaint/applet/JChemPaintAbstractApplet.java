@@ -197,9 +197,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 	mol.getAtom(i).setValency(null);
                 }
                 IChemModel chemModel = DefaultChemObjectBuilder.getInstance()
-                        .newChemModel();
+                        .newInstance(IChemModel.class);
                 chemModel.setMoleculeSet(DefaultChemObjectBuilder.getInstance()
-                        .newMoleculeSet());
+                        .newInstance(IMoleculeSet.class));
                 chemModel.getMoleculeSet().addAtomContainer(mol);
                 theJcpp.setChemModel(chemModel);
             } catch (Exception exception) {
@@ -270,7 +270,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             StringTokenizer st = new StringTokenizer(getParameter("tooltips"),
                     "|");
             IAtomContainer container = theJcpp.getChemModel().getBuilder()
-                    .newAtomContainer();
+                    .newInstance(IAtomContainer.class);
             Iterator<IAtomContainer> containers = ChemModelManipulator
                     .getAllAtomContainers(chemModel).iterator();
 
@@ -433,7 +433,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(newmol
                 .toString()));
         IMolecule cdkmol = (IMolecule) reader.read(DefaultChemObjectBuilder
-                .getInstance().newMolecule());
+                .getInstance().newInstance(IAtomContainer.class));
         JChemPaint.generateModel(theJcpp, cdkmol, false,false);
         theJcpp.get2DHub().updateView();
         // the newly opened file should nicely fit the screen
@@ -525,7 +525,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         IChemModel chemModel = theJcpp.getChemModel();
         rendererModel.setExternalHighlightColor(Color.RED);
         IAtomContainer ac = chemModel.getMoleculeSet().getBuilder()
-                .newAtomContainer();
+                .newInstance(IAtomContainer.class);
         if(atom!=-1){
             ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
             rendererModel.setExternalSelectedPart(ac);
@@ -562,7 +562,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      */
     public double getMolMass(){
         IMolecularFormula wholeModel = theJcpp.get2DHub().getIChemModel().getBuilder()
-            .newMolecularFormula();
+            .newInstance(IMolecularFormula.class);
         Iterator<IAtomContainer> containers = ChemModelManipulator
             .getAllAtomContainers(theJcpp.get2DHub().getIChemModel()).iterator();
         int implicitHs = 0;

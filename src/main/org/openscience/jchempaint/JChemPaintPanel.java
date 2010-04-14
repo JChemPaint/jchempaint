@@ -446,7 +446,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public static IAtomContainer getAllAtomContainersInOne(IChemModel chemModel){
 		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
-		IAtomContainer allinone=chemModel.getBuilder().newAtomContainer();
+		IAtomContainer allinone=chemModel.getBuilder().newInstance(IAtomContainer.class);
 		for(int i=0;i<acs.size();i++){
 			allinone.add(acs.get(i));
 		}

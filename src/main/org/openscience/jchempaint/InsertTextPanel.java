@@ -135,7 +135,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
                 StdInChIParser parser = new StdInChIParser();
                 IAtomContainer atomContainer = parser.parseInchi(text);
-                molecule = atomContainer.getBuilder().newMolecule(atomContainer);
+                molecule = atomContainer.getBuilder().newInstance(IMolecule.class,atomContainer);
                 
                 
             } catch (Exception e2) {

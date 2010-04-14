@@ -413,7 +413,7 @@ public class SaveAsAction extends JCPAction
             cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
         }
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-        IMoleculeSet som = model.getBuilder().newMoleculeSet();
+        IMoleculeSet som = model.getBuilder().newInstance(IMoleculeSet.class);
         while (containers.hasNext()) {
             //Clone() is here because the SMILESWriter sets valencies and we don't
             //want these changes visible

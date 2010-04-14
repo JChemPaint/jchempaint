@@ -91,7 +91,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	
 	        if(source == null) {
 	            source = chemModelRelay.getIChemModel().getBuilder().
-	            	newAtom( chemModelRelay.getController2DModel().
+	            	newInstance(IAtom.class, chemModelRelay.getController2DModel().
 	            	getDrawElement(), start );
 	            if(chemModelRelay.getController2DModel().getDrawIsotopeNumber()!=0)
 	                source.setMassNumber(chemModelRelay.getController2DModel().getDrawIsotopeNumber());
@@ -131,15 +131,15 @@ public class AddAtomModule extends ControllerModuleAdapter {
         }else if (merge != null) {
             // set bond
             chemModelRelay.addPhantomBond( chemModelRelay.getIChemModel()
-            		.getBuilder().newBond(source,merge) );
+            		.getBuilder().newInstance(IBond.class,source,merge) );
             dest = null;
 
         }else {
             dest = AddBondDragModule.roundAngle(start, worldCoordTo, bondLength );
             IAtom atom = chemModelRelay.getIChemModel().getBuilder().
-            	newAtom( chemModelRelay.getController2DModel().getDrawElement(), dest );
+            	newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
             IBond bond = chemModelRelay.getIChemModel().getBuilder().
-            	newBond( source, atom, IBond.Order.SINGLE, stereoForNewBond );
+            	newInstance(IBond.class, source, atom, IBond.Order.SINGLE, stereoForNewBond );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }
@@ -177,7 +177,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
             IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
             UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-            IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newAtomContainer();
+            IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
             IBond bond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond);
             containerForUndoRedo.addBond(bond);
             if (factory != null && handler != null) {
