@@ -271,7 +271,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             return paintMoleculeSet(moleculeSet, drawVisitor);
         }
 
-        if (moleculeSet != null && reactionSet != null) {
+        if (moleculeSet != null && moleculeSet.getAtomContainerCount()>0 && reactionSet != null) {
             Rectangle2D totalBounds = Renderer.calculateBounds(reactionSet);
             totalBounds = totalBounds.createUnion(
                     Renderer.calculateBounds(moleculeSet));

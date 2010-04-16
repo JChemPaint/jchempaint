@@ -215,7 +215,7 @@ public class JChemPaint {
         IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
         chemModel.getMoleculeSet().addAtomContainer(
-                chemModel.getBuilder().newInstance(IAtomContainer.class));
+                chemModel.getBuilder().newInstance(IMolecule.class));
         return chemModel;
     }
 
