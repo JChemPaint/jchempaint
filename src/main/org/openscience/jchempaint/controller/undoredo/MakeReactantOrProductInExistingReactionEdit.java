@@ -94,6 +94,8 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 		else
 			reaction.addProduct(mol);
 		chemModel.getMoleculeSet().removeAtomContainer(oldContainer);
+        if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IMolecule.class));
 	}
 
 	public void undo() {
