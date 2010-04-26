@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-16 14:51+0400\n"
-"PO-Revision-Date: 2010-04-16 23:41+0100\n"
+"PO-Revision-Date: 2010-04-26 19:57+0100\n"
 "Last-Translator: Angel Herráez <aherraez@users.sourceforge.net>\n"
 "Language-Team: CDK developers <cdk-jchempaint@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -36,12 +36,8 @@ msgid "Could not determine file format"
 msgstr "No se ha podido determinar el formato del archivo"
 
 #: src/main/org/openscience/jchempaint/io/FileHandler.java:124
-msgid ""
-"It seems you opened a mol or sdf file containing several molecules. Only the "
-"first one will be shown"
-msgstr ""
-"Al parecer, se ha abierto un archivo mol o sdf que contiene varias "
-"moléculas. Sólo se mostrará la primera."
+msgid "It seems you opened a mol or sdf file containing several molecules. Only the first one will be shown"
+msgstr "Al parecer, se ha abierto un archivo mol o sdf que contiene varias moléculas. Sólo se mostrará la primera."
 
 #: src/main/org/openscience/jchempaint/io/FileHandler.java:128
 msgid "sdf-like file"
@@ -53,16 +49,16 @@ msgstr "fragmento de código fuente de CDK"
 
 #: src/main/org/openscience/jchempaint/rgroups/RGroupHandler.java:342
 msgid "This operation is not allowed in the R-Group configuration."
-msgstr ""
+msgstr "Esta operación no está permitida en la configuración del grupo R."
 
 #: src/main/org/openscience/jchempaint/rgroups/RGroupHandler.java:342
 #: src/main/org/openscience/jchempaint/rgroups/RGroupHandler.java:431
 msgid "R-Group alert"
-msgstr ""
+msgstr "Alerta de grupo R"
 
 #: src/main/org/openscience/jchempaint/rgroups/RGroupHandler.java:431
 msgid "This operation would irreversibly remove the R-Group query. Continue?"
-msgstr ""
+msgstr "Esta operación eliminará la consulta de grupo R de forma irreversible. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:114
 msgid "Could not determine JCP version"
@@ -70,11 +66,8 @@ msgstr "No se ha podido determinar la versión de JCP"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:118
 #, java-format
-msgid ""
-"WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
-msgstr ""
-"Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina "
-"Virtual de Java {1} o superior."
+msgid "WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher."
+msgstr "Advertencia: JChemPaint {0} debe ejecutarse con una versión de Máquina Virtual de Java {1} o superior."
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:119
 #, java-format
@@ -103,12 +96,8 @@ msgid "Untitled"
 msgstr "Sin título"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:642
-msgid ""
-"Not all atoms have 2D coordinates. JCP can only show full 2D specified "
-"structures. Shall we lay out the structure?"
-msgstr ""
-"Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras "
-"con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
+msgid "Not all atoms have 2D coordinates. JCP can only show full 2D specified structures. Shall we lay out the structure?"
+msgstr "Algunos átomos no tienen coordenadas 2D. JCP sólo puede mostrar estructuras con la especificación 2D completa. ¿Debe intentarse mostrar la estructura?"
 
 #: src/main/org/openscience/jchempaint/application/JChemPaint.java:650
 msgid "Cannot display without 2D coordinates"
@@ -116,45 +105,45 @@ msgstr "No es posible trazar sin coordenadas 2D."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:95
 msgid "You have not selected any atoms or bonds."
-msgstr ""
+msgstr "No se ha seleccionado ningún átomo o enlace."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:115
 msgid "Please define an R-group (root and substituents) first."
-msgstr ""
+msgstr "Defina antes un grupo R (raiz y sustituyentes)."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:136
 #, java-format
 msgid "There was an error generating the configurations {0}"
-msgstr ""
+msgstr "Ha habido un error al generar las configuraciones {0}."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:145
 msgid "Please define an R-group (root and substituent) first."
-msgstr ""
+msgstr "Defina antes un grupo R (raiz y sustituyente)."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:166
 msgid "There is no R-group defined"
-msgstr ""
+msgstr "No se ha definido ningún grupo R"
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:259
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:312
 msgid "Please do not make a fragmented selection."
-msgstr ""
+msgstr "No haga una selección fragmentada."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:306
 msgid "Please define a root structure first."
-msgstr ""
+msgstr "Defina primero una estructura raíz."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:336
 msgid "There are no numbered R-atoms in the root structure to refer to."
-msgstr ""
+msgstr "No hay átomos R numerados a los que referirse en la estructura raíz."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:345
 msgid "Enter an R-group number "
-msgstr ""
+msgstr "Escriba el número de un grupo R"
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:351
 msgid "The number you entered has no corresponding R-group in the root."
-msgstr ""
+msgstr "El número introducido carece del correspondiente grupo R en la raíz."
 
 #: src/main/org/openscience/jchempaint/action/RGroupAction.java:355
 #: src/main/org/openscience/jchempaint/action/ConvertToPseudoAtomAction.java:85
@@ -163,6 +152,8 @@ msgid ""
 "This is not a valid R-group label.\n"
 "Please label in range R1 .. R32"
 msgstr ""
+"No es una etiqueta de gruupo R válida.\n"
+"Escriba una etiqueta del intervalo R1 a R32"
 
 #: src/main/org/openscience/jchempaint/action/ConvertToPseudoAtomAction.java:81
 msgid "Enter label"
@@ -193,8 +184,7 @@ msgstr "Error"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
 msgid "The content you tried to copy could not be read to any known format"
-msgstr ""
-"El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
+msgstr "El contenido que ha intentado copiar no se ajusta a ningún formato conocido"
 
 #: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
 msgid "Could not process content"
@@ -232,9 +222,7 @@ msgstr "Problema al exportar a SVG"
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:155
 #, java-format
 msgid "Exported image to {0} as PNG, since {1} could not be written"
-msgstr ""
-"La imagen se ha exportado a {0} en formato PNG, puesto que no se pudo "
-"escribir {1}"
+msgstr "La imagen se ha exportado a {0} en formato PNG, puesto que no se pudo escribir {1}"
 
 #: src/main/org/openscience/jchempaint/action/ExportAction.java:162
 msgid "Problem exporting image"
@@ -309,58 +297,38 @@ msgstr "Problemas al gestionar los datos"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:230
 #, java-format
-msgid ""
-"{0} files cannot contain extra molecules. You painted molecules outside the "
-"reaction(s), which will not be in the file. Continue?"
-msgstr ""
-"Los archivos {0} no pueden contener moléculas adicionales. Se han dibujado "
-"moléculas fuera de la(s) reacción(es), que no se incluirán en el archivo. "
-"¿Desea continuar?"
+msgid "{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?"
+msgstr "Los archivos {0} no pueden contener moléculas adicionales. Se han dibujado moléculas fuera de la(s) reacción(es), que no se incluirán en el archivo. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:238
 msgid "RXN can only save reactions. You have no reactions painted!"
-msgstr ""
-"RXN solamente puede guardar reacciones, y no hay ninguna reacción dibujada."
+msgstr "RXN solamente puede guardar reacciones, y no hay ninguna reacción dibujada."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:268
 msgid "MDL mol files can only save molecules. You have no molecules painted!"
-msgstr ""
-"Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula "
-"dibujada."
+msgstr "Los archivos mol de MDL sólo admiten moléculas, y no hay ninguna molécula dibujada."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:274
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:399
 #, java-format
-msgid ""
-"{0} files cannot contain reactions. Your have reaction(s) painted. The "
-"reactants/products of these will be included as separate molecules. Continue?"
-msgstr ""
-"Los archivos {0} no pueden contener reacciones, y se han dibujado "
-"reacciones. Sus reactantes y productos se incluirán como moléculas "
-"independientes. ¿Desea continuar?"
+msgid "{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?"
+msgstr "Los archivos {0} no pueden contener reacciones, y se han dibujado reacciones. Sus reactantes y productos se incluirán como moléculas independientes. ¿Desea continuar?"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:286
-msgid ""
-"Would you like to save the drawing as an R-group Query File? (RGFile = "
-"extended MOLfile)"
-msgstr ""
+msgid "Would you like to save the drawing as an R-group Query File? (RGFile = extended MOLfile)"
+msgstr "¿Quiere guardar el dibujo como archivo de consulta de grupos R? (archivo RGF = archivo MOL extendido)"
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:307
-msgid ""
-"The R-group Query is not valid: there are substitutes that have no "
-"corresponding atom in the root structure."
-msgstr ""
+msgid "The R-group Query is not valid: there are substitutes that have no corresponding atom in the root structure."
+msgstr "La consulta de grupo R no es correcta: hay sustitutos que carecen del correspondiente átomo en la estructura raíz."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:311
-msgid ""
-"The R-group Query is not valid: the root structure has R# definitions for "
-"which no substitutes are defined."
-msgstr ""
+msgid "The R-group Query is not valid: the root structure has R# definitions for which no substitutes are defined."
+msgstr "La consulta de grupo R no es correcta: la estructura raíz tiene R# definiciones para las cuales no se han indicado sustitutos."
 
 #: src/main/org/openscience/jchempaint/action/SaveAsAction.java:315
-#, fuzzy
 msgid "Could not save file"
-msgstr "No se ha podido determinar el formato del archivo"
+msgstr "No se ha podido guardar el archivo"
 
 #: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:108
 #: src/main/org/openscience/jchempaint/action/CreateReactionAction.java:144
@@ -526,9 +494,8 @@ msgid "Color atoms by element"
 msgstr "Colorear los átomos según el elemento"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:214
-#, fuzzy
 msgid "Show boxes around reactions"
-msgstr "No hay reacciones"
+msgstr "Mostra recuadros alrededor de las reacciones"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:218
 msgid "Set fit to screen"
@@ -642,33 +609,31 @@ msgstr "Número de isótopo"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:76
 msgid "Occurrence"
-msgstr ""
+msgstr "Instancia"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:78
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:115
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:162
-#, fuzzy
 msgid "True"
-msgstr "Te"
+msgstr "Verdadero"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:78
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:115
-#, fuzzy
 msgid "False"
-msgstr "Archivo"
+msgstr "Falso"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:81
 msgid "Rest H"
-msgstr ""
+msgstr "Resto de H"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:94
 msgid "If R"
-msgstr ""
+msgstr "Si R"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:141
-#, fuzzy, java-format
+#, java-format
 msgid "Invalid occurrence specified for {0}"
-msgstr "Se ha indicado un código SMILES no válido"
+msgstr "Se ha indicado una instancia no válida para {0}"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/AtomContainerEditor.java:55
 msgid "Title"
@@ -681,7 +646,7 @@ msgstr "Propiedades"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:105
 msgid "A problem has occurred"
-msgstr ""
+msgstr "Ha habido un problema"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/ChemObjectPropertyDialog.java:108
 msgid "You did not provide necessary information"
@@ -2060,14 +2025,12 @@ msgid "Help"
 msgstr "Ayuda"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:110
-#, fuzzy
 msgid "Basic Tutorial"
-msgstr "Manual de JChemPaint"
+msgstr "Guía básica"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:111
-#, fuzzy
 msgid "R-group Tutorial"
-msgstr "Manual de JChemPaint"
+msgstr "Guía de grupos R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:112
 msgid "Report Feedback"
@@ -2226,9 +2189,8 @@ msgid "Draw Bonds and Atoms"
 msgstr "Dibujar enlaces y átomos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:243
-#, fuzzy
 msgid "Makes a Reaction by Drawing a Reaction Arrow"
-msgstr "Hacer reactante en reacción nueva"
+msgstr "Crea una reacción dibujando una flecha de reacción"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:244
 msgid "Draw Double Bonds"
@@ -2581,52 +2543,49 @@ msgstr "Idioma"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:344
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:345
-#, fuzzy
 msgid "R-groups"
-msgstr "Grupo"
+msgstr "Grupos R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:346
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:347
 msgid "R-group attachment"
-msgstr ""
+msgstr "Unión de grupo R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:348
-#, fuzzy
 msgid "Define as Root Structure"
-msgstr "Reajustar la estructura"
+msgstr "Definir como estructura raíz"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:349
 msgid "Define as Substituent"
-msgstr ""
+msgstr "Definir como sustituyente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:350
-#, fuzzy
 msgid "Set as first attachment point"
-msgstr "Punto de unión variable *"
+msgstr "Definir como primer punto de unión"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:351
 msgid "Set as second attachment point"
-msgstr ""
+msgstr "Definir como segundo punto de unión"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:352
 msgid "Set as bond for first attachment point"
-msgstr ""
+msgstr "Definir como enlace para el primer punto de unión"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:353
 msgid "Set as bond for second attachment point"
-msgstr ""
+msgstr "Definir como enlace para el segundo punto de unión"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:354
 msgid "Advanced R-group logic"
-msgstr ""
+msgstr "Lógica de grupo R avanzada"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:355
 msgid "Generate possible configurations (sdf) "
-msgstr ""
+msgstr "Generar las posibles configuraciones (sdf)"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:356
 msgid "Remove R-group aspects"
-msgstr ""
+msgstr "Eliminar aspectos de grupo R"
 
 #: src/main/org/openscience/jchempaint/InsertTextPanel.java:72
 #: src/main/org/openscience/jchempaint/InsertTextPanel.java:115
@@ -2698,3 +2657,4 @@ msgstr "No es posible rehacer"
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:622
 msgid "No undo possible"
 msgstr "No es posible deshacer"
+
