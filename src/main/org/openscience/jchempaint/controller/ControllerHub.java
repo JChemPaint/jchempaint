@@ -1164,6 +1164,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                     if (usedBounds != null) {
                         if(gap==0){
                             gap = GeometryTools.getBondLengthAverage(container);
+                            if(Double.isNaN(gap))
+                                gap = 1.5;
                         }
                         Rectangle2D shiftedBounds =
                             GeometryTools.shiftContainer(
