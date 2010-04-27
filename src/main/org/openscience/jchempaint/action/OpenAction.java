@@ -136,6 +136,11 @@ public class OpenAction extends JCPAction {
 
                         jcpPanel.setIsAlreadyAFile(chooser.getSelectedFile());
                     
+                        //in case this is an application, we set the file name as title
+                        if (jcpPanel.getGuistring().equals(
+                                JChemPaint.GUI_APPLICATION))
+                            ((JChemPaintPanel)jcpPanel).setTitle(chooser
+                                    .getSelectedFile().getName());
                     
                     } catch (Exception e1) {
                         // TODO Auto-generated catch block
