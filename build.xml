@@ -1,5 +1,5 @@
 <project name="JCPCDK" default="dist" basedir=".">
-	
+    
     <property file="ant.properties"/>
 
     <property name="jcp.version" value="3.1.2" />
@@ -10,39 +10,39 @@
     <property name="cdk.dist" value="${cdk.dir}/dist" />
     <property name="cdk.lib" value="${cdk.dir}/jar" />
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />
-	<property name="cdk.metainf" value="${cdk.dir}/src/META-INF" />
+    <property name="cdk.metainf" value="${cdk.dir}/src/META-INF" />
     <property name="src" value="src" />
     <property name="lib" value="lib" />
-	<property name="javadoc.dir" value="javadoc" />
+    <property name="javadoc.dir" value="javadoc" />
     <property name="devellib" value="libdevel" />
-	<property name="dist" value="dist" />
+    <property name="dist" value="dist" />
     <property name="dist-classes" value="${dist}/classes" />
-	<property name="dist-test" value="${dist}/test" />
-	<property name="metainf" value="META-INF" />
-	<property name="po-classes" value="po/classes" />
+    <property name="dist-test" value="${dist}/test" />
+    <property name="metainf" value="META-INF" />
+    <property name="po-classes" value="po/classes" />
 
-	<property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
-	<property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
-	
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-	  <classpath>
-    	<pathelement location="${devellib}/ant-contrib-0.6.jar"/>
-	  </classpath>
-	</taskdef>
-	
+    <property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
+    <property name="growing_classpath" value="${dist}/applet-jars-list.files"/>
+    
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+      <classpath>
+        <pathelement location="${devellib}/ant-contrib-0.6.jar"/>
+      </classpath>
+    </taskdef>
+    
 
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-	  <classpath>
-	    <pathelement location="libdevel/ant-contrib-0.6.jar"/>
-	  </classpath>
-	</taskdef>
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+      <classpath>
+        <pathelement location="libdevel/ant-contrib-0.6.jar"/>
+      </classpath>
+    </taskdef>
 
     <target id="clean" name="clean" description="Removes compiled stuff.">
         <delete dir="${dist}" />
-    	<delete dir="${javadoc.dir}" />
+        <delete dir="${javadoc.dir}" />
     </target>
 
-	<target id="dist" name="dist" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
+    <target id="dist" name="dist" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
             description="Builds the JChemPaint application">
         <jar jarfile="${dist}/jchempaint-${jcp.version}.jar">
             <manifest>
@@ -61,7 +61,7 @@
             </fileset>
             <fileset dir="${cdk.dir}/doc">
                 <include name="lgpl.license" />
-            </fileset>        	
+            </fileset>          
             <fileset dir=".">
                 <include name="lib-licenses.txt" />
             </fileset>          
@@ -71,52 +71,52 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
-            	<includesfile name="${cdk.metainf}/builder3d.libdepends"/>
-            	<includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
-            	<includesfile name="${cdk.metainf}/charges.libdepends"/>
-            	<includesfile name="${cdk.metainf}/control.libdepends"/>
+                <includesfile name="${cdk.metainf}/builder3d.libdepends"/>
+                <includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
+                <includesfile name="${cdk.metainf}/charges.libdepends"/>
+                <includesfile name="${cdk.metainf}/control.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
-            	<includesfile name="${cdk.metainf}/datadebug.libdepends"/>
-            	<includesfile name="${cdk.metainf}/dict.libdepends"/>
-            	<includesfile name="${cdk.metainf}/diff.libdepends"/>
+                <includesfile name="${cdk.metainf}/datadebug.libdepends"/>
+                <includesfile name="${cdk.metainf}/dict.libdepends"/>
+                <includesfile name="${cdk.metainf}/diff.libdepends"/>
                 <includesfile name="${cdk.metainf}/extra.libdepends"/>
-            	<includesfile name="${cdk.metainf}/forcefield.libdepends"/>
-            	<includesfile name="${cdk.metainf}/formula.libdepends"/>
-            	<!--includesfile name="${cdk.metainf}/inchi.libdepends"/-->
-            	<includesfile name="${cdk.metainf}/interfaces.libdepends"/>
+                <includesfile name="${cdk.metainf}/forcefield.libdepends"/>
+                <includesfile name="${cdk.metainf}/formula.libdepends"/>
+                <!--includesfile name="${cdk.metainf}/inchi.libdepends"/-->
+                <includesfile name="${cdk.metainf}/interfaces.libdepends"/>
                 <includesfile name="${cdk.metainf}/io.libdepends"/>
-            	<includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
-            	<includesfile name="${cdk.metainf}/libiocml.libdepends"/>
-            	<includesfile name="${cdk.metainf}/libiomd.libdepends"/>
-            	<includesfile name="${cdk.metainf}/nonotify.libdepends"/>
-            	<includesfile name="${cdk.metainf}/pcore.libdepends"/>
-            	<includesfile name="${cdk.metainf}/pdb.libdepends"/>
-            	<includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qm.libdepends"/>
+                <includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
+                <includesfile name="${cdk.metainf}/libiocml.libdepends"/>
+                <includesfile name="${cdk.metainf}/libiomd.libdepends"/>
+                <includesfile name="${cdk.metainf}/nonotify.libdepends"/>
+                <includesfile name="${cdk.metainf}/pcore.libdepends"/>
+                <includesfile name="${cdk.metainf}/pdb.libdepends"/>
+                <includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
+                <includesfile name="${cdk.metainf}/qm.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsar.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qsaratomic.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qsarbond.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qsarcml.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qsarmolecular.libdepends"/>
-            	<includesfile name="${cdk.metainf}/qsarprotein.libdepends"/>
-            	<includesfile name="${cdk.metainf}/reaction.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsaratomic.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsarbond.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsarcml.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsarmolecular.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsarprotein.libdepends"/>
+                <includesfile name="${cdk.metainf}/reaction.libdepends"/>
                 <includesfile name="${cdk.metainf}/render.libdepends"/>
-            	<includesfile name="${cdk.metainf}/sdg.libdepends"/>
-            	<includesfile name="${cdk.metainf}/smarts.libdepends"/>
-            	<includesfile name="${cdk.metainf}/smiles.libdepends"/>
+                <includesfile name="${cdk.metainf}/sdg.libdepends"/>
+                <includesfile name="${cdk.metainf}/smarts.libdepends"/>
+                <includesfile name="${cdk.metainf}/smiles.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
             </fileset>
         </unjar>
         <unjar dest="${dist-classes}">
             <fileset dir="${lib}">
-            	<include name="**/*" />
+                <include name="**/*" />
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
      </target>
 
     <target id="unjar-cdkjars" name="unjar-cdkjars">
-	 <unjar dest="${dist-classes}">
+     <unjar dest="${dist-classes}">
             <fileset dir="${cdk.dist}/jar">
                 <include name="cdk-atomtype.jar"/>
                 <!--include name="cdk-builder3d.jar"/>
@@ -124,7 +124,7 @@
                 <include name="cdk-charges.jar"/>
                 <include name="cdk-control.jar"/>
                 <include name="cdk-core.jar"/>
-            	<include name="cdk-log4j.jar"/>
+                <include name="cdk-log4j.jar"/>
                 <!--include name="cdk-datadebug.jar"/-->
                 <include name="cdk-data.jar"/>
                 <include name="cdk-dict.jar"/>
@@ -136,8 +136,8 @@
                 <include name="cdk-inchi.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-io.jar"/>
-            	<include name="cdk-ionpot.jar"/>
-            	<include name="cdk-isomorphism.jar"/>
+                <include name="cdk-ionpot.jar"/>
+                <include name="cdk-isomorphism.jar"/>
                 <include name="cdk-libiocml.jar"/>
                 <include name="cdk-libiomd.jar"/>
                 <include name="cdk-nonotify.jar"/>
@@ -173,8 +173,8 @@
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
-    	<delete dir="${dist-classes}/org/openscience/cdk/renderer" />
-    	<delete dir="${dist-classes}/org/openscience/cdk/controller" />
+        <delete dir="${dist-classes}/org/openscience/cdk/renderer" />
+        <delete dir="${dist-classes}/org/openscience/cdk/controller" />
         <delete>
            <fileset dir="${dist-classes}" includes="*" excludes="io-formats.set"/>
         </delete>
@@ -185,17 +185,17 @@
     </target>
 
     <target id="build-pot-pos" name="build-pot-pos" >
-    	<exec dir="." executable="xgettext">
-    	   <arg line="-kGT._ -o po/keys.pot $$(find src/main -name &quot;*.java&quot;)"/>
-    	</exec>
+        <exec dir="." executable="xgettext">
+           <arg line="-kGT._ -o po/keys.pot $$(find src/main -name &quot;*.java&quot;)"/>
+        </exec>
         <foreach target="msgmerge" param="file">
            <fileset dir="po" casesensitive="yes">
              <include name="**/*.po"/>
            </fileset>
         </foreach>
     </target>
-    	
-	<target id="msgmerge" name="msgmerge">
+        
+    <target id="msgmerge" name="msgmerge">
         <exec dir="." executable="msgmerge">
             <arg line="-U ${file} po/keys.pot"/>
         </exec>
@@ -213,7 +213,7 @@
     </target>
 
     <target id="build-languageclasses" name="build-languageclasses" >
-    	<echo message="Compiling po files." />
+        <echo message="Compiling po files." />
         <foreach target="msgfmt" param="file">
            <fileset dir="po" casesensitive="yes">
              <include name="**/*.po"/>
@@ -221,7 +221,7 @@
         </foreach>
     </target>
 
-   	<target id="compile-jcp" name="compile-jcp" depends="build-languageclasses, makelicenseinfo" >
+    <target id="compile-jcp" name="compile-jcp" depends="build-languageclasses, makelicenseinfo" >
         <!-- TODO check if dist-all in cdk has been done-->
         <echo message="Compiling JChemPaint classes." />
         <mkdir dir="${dist-classes}" />
@@ -242,14 +242,14 @@
          </javac>
         <copy file="lib-licenses.txt" todir="${src}/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
         <copy file="${cdk.dir}/doc/lgpl.license" todir="${src}/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
-    	<copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
-   		<replace file="${dist-classes}/org/openscience/jchempaint/resources/JChemPaintResources.properties" token="@@@" value="${jcp.version}"/>
-   		<replace file="${dist-classes}/org/openscience/jchempaint/resources/userhelp_jcp/license.html" token="@@@" value="${jcp.version}"/>
+        <copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+        <replace file="${dist-classes}/org/openscience/jchempaint/resources/JChemPaintResources.properties" token="@@@" value="${jcp.version}"/>
+        <replace file="${dist-classes}/org/openscience/jchempaint/resources/userhelp_jcp/license.html" token="@@@" value="${jcp.version}"/>
         <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
         <delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
-    	<copy todir="${dist-classes}">
-    	    <fileset dir="${po-classes}"/>
-    	</copy>
+        <copy todir="${dist-classes}">
+            <fileset dir="${po-classes}"/>
+        </copy>
     </target>
 
 
@@ -483,7 +483,7 @@
       <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
             <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
-      	    <zipfileset dir="." includes="lib-licenses.txt"/>
+            <zipfileset dir="." includes="lib-licenses.txt"/>
       </zip>
     </target>
 
@@ -492,8 +492,8 @@
     <target id="dist-applet" name="dist-applet" depends="build-applet" description="Builds the JChemPaint applet jar files with jarindex">
         <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
-        	<zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
-        	<zipfileset dir="." includes="lib-licenses.txt"/>
+            <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
+            <zipfileset dir="." includes="lib-licenses.txt"/>
         </zip>
     </target>
 
@@ -511,23 +511,23 @@
         <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
             <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
-        	<zipfileset dir="." includes="lib-licenses.txt"/>
+            <zipfileset dir="." includes="lib-licenses.txt"/>
         </zip>
     </target>
-	
     
-	<target id="build-applet" name="build-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars" description="Builds the JChemPaint applet jar files with jarindex">
-		<manifest file="MANIFEST.MF">
-		    <attribute name="Built-By" value="${user.name}"/>
-		    <section name="common">
+    
+    <target id="build-applet" name="build-applet" depends="compile-jcp, unjar-libjars, unjar-cdkjars" description="Builds the JChemPaint applet jar files with jarindex">
+        <manifest file="MANIFEST.MF">
+            <attribute name="Built-By" value="${user.name}"/>
+            <section name="common">
                 <attribute name="Specification-Title" value="JChemPaint"/>
                 <attribute name="Specification-Version" value="1.0"/>
                 <attribute name="Specification-Vendor" value="The CDK Project"/>
                 <attribute name="Implementation-Title" value="org.openscience.cdk"/>
                 <attribute name="Implementation-Version" value="${jcp.version}"/>
                 <attribute name="Implementation-Vendor" value="The CDK Project"/>
-		    </section>
-		</manifest>
+            </section>
+        </manifest>
         <!-- At first jars are packed from file lists -->
         <!-- The file lists are generated from tomcat access log files with unpacked class files (and without jar files) -->
         <!-- cat apache/jakarta-tomcat-5.0.28/logs/localhost_access_log.2005-04-27.txt | awk -v classdir="/jcpapplet/classes/" '$9 != 404 && substr($7,0,length(classdir)) == classdir { print substr($7,length(classdir)+1) }' | sort -->
@@ -593,7 +593,7 @@
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience.jar" includepattern="org/openscience/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_3pq.jar" includepattern="org/_3pq/**"/>
-	<jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
+    <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_apache.jar" includepattern="org/apache/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_w3c.jar" includepattern="org/w3c/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_jaxen.jar" includepattern="org/jaxen/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_xmlcml.jar" includepattern="org/xmlcml/**"/>
@@ -615,9 +615,9 @@
              <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-templates.jar jchempaint-applet-others.jar" />
         </exec>
     </target>
-	
-	<target id="test-applet" name="test-applet">
-		<mkdir dir="${dist-test}" />
+    
+    <target id="test-applet" name="test-applet">
+        <mkdir dir="${dist-test}" />
         <javac srcdir="${src}/test" destdir="${dist-test}" optimize="${optimization}"
                 nowarn="${nowarn}"
                 debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
@@ -636,10 +636,10 @@
                 </fileset>
             </classpath>
         </javac>
-		<copy todir="${dist-test}/data">
-			<fileset dir="${src}/test/data"/>
-		</copy>
-	    <junit forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no">
+        <copy todir="${dist-test}/data">
+            <fileset dir="${src}/test/data"/>
+        </copy>
+        <junit forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no">
             <classpath>
                 <fileset dir="${dist}/jar/">
                         <include name="*.jar" />
@@ -659,8 +659,8 @@
                 haltonfailure="no">
                 <formatter type="brief" />
             </test>
-	    </junit>
-	</target>
+        </junit>
+    </target>
 
     <target id="dist-jars" name="dist-jars" depends="compile-jcp">
         <mkdir dir="${dist}/alljars" />
@@ -688,7 +688,7 @@
               <zipfileset dir="${dist}/alljars" includes="*.jar"/>
         </zip>
     </target>
-	
+    
     <target name="javadoc" depends="build-applet">
         <mkdir dir="${javadoc.dir}" />
         <javac srcdir="${src}/util" destdir="${javadoc.dir}" optimize="${optimization}"
@@ -703,9 +703,9 @@
                 </fileset>
                 <fileset dir="${lib}">
                 </fileset>
-            	<pathelement location="${dist-classes}"/>
+                <pathelement location="${dist-classes}"/>
             </classpath>
-        	<include name="**/JCPParamsTaglet.java"/>
+            <include name="**/JCPParamsTaglet.java"/>
         </javac>
         <javadoc destdir="${javadoc.dir}"
                  author="true" version="true" use="true"
@@ -721,15 +721,15 @@
                 <fileset dir="${lib}">
                 </fileset>
             </classpath>
-        	<taglet name="JCPParamsTaglet" path="${cdk.lib}/jar/xom-1.1.jar:${javadoc.dir}:${dist-classes}" />
+            <taglet name="JCPParamsTaglet" path="${cdk.lib}/jar/xom-1.1.jar:${javadoc.dir}:${dist-classes}" />
             <packageset dir="${src}/main" defaultexcludes="yes">
                 <include name="org/openscience/jchempaint/**" />
             </packageset>
         </javadoc>
     </target>
-	   
+       
     <target name="makelicenseinfo">
-    	<mkdir dir="${dist}"/>
+        <mkdir dir="${dist}"/>
         <javac srcdir="${src}/util" destdir="${dist}" optimize="${optimization}"
                 nowarn="${nowarn}"
                 debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
@@ -746,12 +746,12 @@
             </classpath>
             <include name="**/ExtractCoprightInfo.java"/>
         </javac>
-    	<java classname="ExtractCoprightInfo" classpath="${dist}">
-    		<arg value="${cdk.lib}"/>
-    	</java>
-    	<delete file="${dist}/ExtractCoprightInfo.class"></delete>
+        <java classname="ExtractCoprightInfo" classpath="${dist}">
+            <arg value="${cdk.lib}"/>
+        </java>
+        <delete file="${dist}/ExtractCoprightInfo.class"></delete>
     </target>
-	       
+           
     <target name="processTemplates">
         <mkdir dir="${dist}"/>
         <javac srcdir="${src}/util" destdir="${dist}" optimize="${optimization}"
@@ -789,6 +789,31 @@
             </classpath>
         </java>
         <delete file="${dist}/TemplateImagesMaker.java"></delete>      
+    </target>
+    
+    <target name="generateHelp">
+        <mkdir dir="${dist}"/>
+        <javac srcdir="${src}/util" destdir="${dist}" optimize="${optimization}"
+                nowarn="${nowarn}"
+                debug="${debug}" deprecation="${deprecation}" target="1.5" source="1.5">
+            <classpath>
+                <fileset dir="libutil" >
+                    <include name="html.jar"/>
+                </fileset>
+                <pathelement location="${dist-classes}"/>
+            </classpath>
+            <include name="**/HtmlExample.java"/>
+        </javac>
+        <java classname="HtmlExample" fork="true">
+            <classpath>
+                <fileset dir="libutil" >
+                    <include name="html.jar"/>
+                </fileset>
+                <pathelement location="${dist-classes}"/>
+                <pathelement location="${dist}"/>
+            </classpath>
+        </java>
+        <delete file="${dist}/HtmlExample.class"></delete>
     </target>
 </project>
 
