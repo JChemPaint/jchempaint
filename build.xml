@@ -809,6 +809,7 @@
                 <fileset dir="libutil" >
                     <include name="html.jar"/>
                 </fileset>
+                <fileset dir="${cdk.dist}/jar"/>
                 <pathelement location="${dist-classes}"/>
                 <pathelement location="${dist}"/>
             </classpath>
