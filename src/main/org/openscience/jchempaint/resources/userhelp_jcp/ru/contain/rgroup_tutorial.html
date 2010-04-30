@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+<title> Rgroup Query Tutorial</title>
+<link rel="stylesheet" type="text/css" href="../jcp.css" title="Style">
+</head>
+<body bgcolor="#ffffff">
+
+<div class="navheader">
+  <table width="100%">
+   <tr>
+    <th align="center" colspan="3">Rgroup Query Tutorial</th>
+   </tr>
+   <tr>
+    <td align="left" width="20%"><a href="tutorial.html">Prev</a>&nbsp;</td>
+     <th align="center" width="60%">&nbsp;</th>
+     <td align="right" width="20%">&nbsp;<a href="referenceGuide.html">Next</a></td>
+     </tr>
+  </table>
+  <hr>
+</div>
+
+<h1>Rgroup Query Tutorial</h1>
+<h3>Introduction</h3>
+<p>
+	JChemPaint allows you to draw, save and retrieve "Rgroup queries".
+	Rgroup queries are defined by the Symyx RGfile format, more details for which can be found 
+    in the "CTfile Formats" manual downloadable from www.symyx.com.
+	<br><br>
+	In essence, an Rgroup query allows you to define multiple molecules in one data structure 
+	by combining different substituent attachments with one root structure (or scaffold).
+	A JChemPaint screenshot may help to clarify this:
+	<br><br>   
+    <img src="../../../large-bin/rgroup.png">
+    <br><br>   
+    This (simple) example contains a root structure with one Rgroup labeled "R1" in pink. 
+    For R1, three substituents are defined and drawn under the root structure. Three possible molecules
+	can thus be derived by substituting R1 with one of these.<br> 
+	The substituents are to be attached to the root by replacing R1 with the substituent atom marked with an asterisk. 
+	It will connect to the root using the bond that is also marked with an asterisk.
+	<br><br>
+    Using the "R-groups" menu, you can let JChemPaint generate the possible configurations for any Rgroup query
+	and save these to an SDF file. 
+	For the example above, this would result in the following configurations (BioClipse screenshot):
+    <br><br>   
+    <img src="../../../large-bin/rgroup-config.png">
+    <br><br><br>   
+    <br><br>   
+
+<h3> Drawing R-groups</h3>
+	 To draw R-groups, the following JChemPaint menus are relevant
+     <ul>
+     	<li>"R-groups" (from the main menu bar or by right clicking the canvas)</li>     
+        <li>"R-group attachment" in the <span style="font-style:italic">bond</span> popup menu (by right clicking a bond)</li>     
+        <li>"R-group attachment" in the <span style="font-style:italic">atom</span> popup menu (by right clicking a bond)</li>     
+	</ul>
+    This section will explain how to create Rgroups using the aforementioned menus.
+	<br><br>
+
+<h4> Define the root</h4>
+	The suggested way to construct Rgroup queries is to first draw all the structures you need, and then assign Rgroup aspects
+	to these. Going back the earlier example, you would first draw the four structures that make up the query. The R1 atom is a so 
+	called "pseudo atom". To draw it, you can draw it as a normal (say Carbon) atom first, and then right click it and from the 
+	atom menu pick Pseudo Atoms->R1.
+	<br>
+	Next, use a selection tool to select the entire structure that is intended to become the root structure. With the selection made,
+	right click the canvas and pick R-groups->Define as Root Structure. See the picture below for an illustration.
+	<br><br>   
+	<img src="../../../large-bin/rdemo1.png">
+	<br><br><br>   
+
+<h4> Define the substituents</h4>
+	Once a root structure has been chosen, the remaining structures in the drawing are subsequently flagged as "Not in R-Group".
+	To continue, select each structure that is to become a substituent, and choose  R-groups->Define as Substituent. JChemPaint
+	will then prompt you to "Enter an R-group number". In our example, we'll enter 1. In general, you can pick any number 
+	that corresponds to an R1...R32 atom in your root structure. In this way, you link the substituent to the specific Rgroup
+	of your choice.
+	<br><br>
+	JChemPaint will randomly pick a "connection point" atom on a newly declared substituent and flag this atom with an
+	asterisk. Potentially, if your Rgroup atom has multiple bonds connecting it to the root, it will pick a second 
+	attachment point and flag this with a double quote. The asterisk and quote on the substituent correspond to the
+	similarly flagged bonds on the root. The RGfile format allows for two attachment point/bonds to be identified per Rgroup, not more.
+	<br><br>
+	You are allowed to change the attachment atom(s) in the substituents and the attachment bond(s) in the root. For example,
+	to make another atom in a substituent the attachment point, select it and right click it. From the atom popup menu, select 
+	R-Group attachment->Set as first attachment point (or Set as second attachment point).
+	Similarly, you can pick a bond in the root structure that connects to an R-atom and right click it to define its attachment
+	using the bond popup menu.
+
+<h4>Advanced Rgroup logic </h4>
+    With the Rgroup query in place, the RGfile format allows you to define some more advanced logic on top of it.
+	With JChemPaint this can be done using menu option R-groups->Advanced R-group logic.  
+	For each group you can indicate:
+	<ul>
+		<li>Occurrence: the occurrence value determines the number of times that a member of that an Rgroup must appear in the retrieved
+            structures. It can be relevant for more elaborate queries, for instance when you have multiple pseudo atoms 
+            labeled R1 in your root structure and want to specify the substitution occurrence.<br>
+			Allowed values are:
+		  <ul>
+		  	<li>n: exactly n</li>
+            <li>n - m: n through m</li>
+            <li>< n: fewer than n</li>
+
+		  </ul>
+		   The default is ">0". Any non-contradictory combination of the preceding values is also allowed; for example: "1,3-7,9,>11".
+		</li>
+        <li>RestH: with RestH set to true, only hydrogen atoms are permitted at the unsatisfied Rgroup sites of retrieved structures. If RestH is set to false (the default),
+        unsatisfied Rgroup sites can be filled by hydrogen atoms or other molecule fragments.
+		This becomes relevant when you allow the occurrence for a certain group to be lower than the total amount of R-atoms you have drawn for that group.
+		</li>
+        <li>If..Then: you can define dependencies between Rgroups. If a root structure contains for example R2 and R10, you can make the condition
+		IF R2 THEN R10 (or the other way around). So if a substituent for R2 occurs in a retrieved structure, then it must
+		also have a substituent for R11.</li>
+	</ul>
+<h4>Saving Rgroups</h4>
+When you save the drawing, choose the "MDL MOL file" format as the file type. There is no exclusive file extension reserved for RGfiles.
+<br>
+JChemPaint will prompt you if you want to retain the RGroup information. Choose Yes; if you do not, the drawing will be saved as a regular
+MOL file instead of an RGroup query (extended) MOL file.
+<h4>Generating configurations</h4>
+To confirm the correctness of you RGroup query specification, you can let JChemPaint/CDK generate all its possible configurations into an SDfile.
+This can be done with menu option R-groups->Generate possible configurations. You can use a tool like BioClipse to browse the content of the 
+SDfile.
+
+</p>
+<br><br><br><br><br><br><br><br>
+
+<div class="navfooter"><hr>
+ <table width="100%">
+  <tr>
+   <td align="left" width="40%"><a href="aboutJCP.html">Prev</a>&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Home</a></td>
+   <td align="right" width="40%"><a href="referenceGuide.html">Next</a></td>
+  </tr>
+  <tr>
+   <td align="left" width="40%">&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Up</a></td>
+   <td align="right" width="40%">&nbsp;</td>
+  </tr>
+ </table>
+</div>
+
+
+</body>
+</html>

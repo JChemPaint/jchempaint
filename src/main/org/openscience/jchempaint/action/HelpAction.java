@@ -57,15 +57,15 @@ public class HelpAction extends JCPAction
 		
 		if (type.equals("tutorial"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/tutorial.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/tutorial_frame.html", GT._("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("rgpTutorial"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/rgroup_tutorial.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/rgroup_tutorial_frame.html", GT._("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("feedback"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/feedback.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/feedback_frame.html", GT._("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("license"))
 		{
@@ -73,7 +73,7 @@ public class HelpAction extends JCPAction
 		} 
 		else
 		{
-			new HelpDialog(null, helpRoot+language+"/jcp.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/jcp_frame.html", GT._("JChemPaint Help")).setVisible(true);
 		}
 	}
 }
