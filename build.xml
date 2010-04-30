@@ -215,9 +215,11 @@
     <target id="build-languageclasses" name="build-languageclasses" >
         <echo message="Compiling po files." />
         <foreach target="msgfmt" param="file">
-           <fileset dir="po" casesensitive="yes">
-             <include name="**/*.po"/>
-           </fileset>
+          <path>
+            <fileset dir="po" casesensitive="yes">
+              <include name="**/*.po"/>
+            </fileset>
+          </path>
         </foreach>
     </target>
 
