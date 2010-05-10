@@ -37,6 +37,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
@@ -61,6 +62,8 @@ public class AtomEditor extends ChemObjectEditor {
     JSpinner   isotopeField;
     IChemModelRelay hub;
     int majorIsotopeNumber;
+    JTextField commentField;
+
     
 	public AtomEditor(IChemModelRelay hub) {
         super(false);
@@ -70,7 +73,7 @@ public class AtomEditor extends ChemObjectEditor {
 	}
     
     private void constructPanel() {
-        symbolField = new JTextField(4);
+    	symbolField = new JTextField(4);
         symbolField.getDocument().addDocumentListener(new MyDocumentListener(this));
         addField(GT._("Symbol"), symbolField, this);
         hCountField = new JSpinner(new SpinnerNumberModel());
@@ -79,6 +82,8 @@ public class AtomEditor extends ChemObjectEditor {
         addField(GT._("Formal Charge"), formalChargeField, this);
         isotopeField = new JSpinner(new SpinnerNumberModel());
         addField(GT._("Isotope number"), isotopeField, this);
+        commentField = new JTextField(16);
+        addField(GT._("Comment"), commentField, this);
     }
     
     public void setChemObject(IChemObject object) {
@@ -89,6 +94,9 @@ public class AtomEditor extends ChemObjectEditor {
             symbolField.setText(atom.getSymbol());
             hCountField.setValue(new Integer(atom.getHydrogenCount()==null ? 0 : atom.getHydrogenCount()));
             formalChargeField.setValue(new Integer(atom.getFormalCharge()));
+            if(atom.getProperty(CDKConstants.COMMENT)!=null)
+            	commentField.setText((String)(atom.getProperty(CDKConstants.COMMENT)));
+            
             try {
                 IIsotope isotope = 
                     IsotopeFactory
@@ -125,8 +133,8 @@ public class AtomEditor extends ChemObjectEditor {
 	            pseudo.setHydrogenCount(((Integer)hCountField.getValue()).intValue());
 	            pseudo.setFormalCharge(((Integer)formalChargeField.getValue()).intValue());
 	            pseudo.setMassNumber(majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue());
-	            hub.replaceAtom(pseudo, atom);
 	        }
+
         }catch(IOException ex){
         	if(atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
         		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
@@ -137,6 +145,9 @@ public class AtomEditor extends ChemObjectEditor {
         	if(atom.getMassNumber()!=majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue())
         		hub.setMassNumber(atom,majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue());
         	logger.error("IOException when trying to test element symbol");
+        }
+        finally {
+        	atom.setProperty(CDKConstants.COMMENT, commentField.getText());
         }
     }
     

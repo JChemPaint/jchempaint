@@ -263,7 +263,7 @@ public class CopyPasteAction extends JCPAction{
                 try {
                     content = (String) transfer.getTransferData(DataFlavor.stringFlavor);
                     reader = new ReaderFactory().createReader(new StringReader(content));
-                    System.out.println(reader.getClass());
+                    //System.out.println(reader.getClass());
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

@@ -545,28 +545,41 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
                     cy = y;
                     break;
             }
-            //for deleting background of child
-            //we need the bounds at the actual positions
-            childBounds = getTextBounds(child.text, cx, cy, g
-                    , rendererModel.getZoomFactor());
-            this.g.setColor(textGroup.backColor!=null ? textGroup.backColor : this.rendererModel.getBackColor());
-            Rectangle2D childBackground = new Rectangle2D.Double(cx,
-                    cy - childBounds.getHeight(), childBounds.getWidth(), 
-                    childBounds.getHeight());
-            this.g.fill(childBackground);
-            this.g.setColor(textGroup.color);
-            //write child
-            this.g.drawString(child.text, cx, cy);
-            if (child.subscript != null) {
-                int scx = (int)(cx + (childBounds.getWidth() * 0.75));
-                int scy = (int)(cy + (childBounds.getHeight() / 3));
-                Font f = this.g.getFont();   // TODO : move to font manager
-                Font subscriptFont = f.deriveFont(f.getStyle(), f.getSize() - 2);
-                this.g.setFont(subscriptFont);
-                this.g.setColor(textGroup.color);
-                //write subscript
-                this.g.drawString(child.subscript, scx, scy);
-            } 
+
+            if (child.isComment) {
+	            this.g.setColor(Color.BLACK);
+                Font f = this.g.getFont();
+	            Font commentFont = f.deriveFont(f.getStyle(), f.getSize()/2);
+                this.g.setFont(commentFont);
+                cx = x1;
+                cy = y2 + oH/2;
+                this.g.drawString(child.text, cx, cy);
+            }
+            else {
+                //for deleting background of child
+                //we need the bounds at the actual positions
+                childBounds = getTextBounds(child.text, cx, cy, g
+                        , rendererModel.getZoomFactor());
+                this.g.setColor(textGroup.backColor!=null ? textGroup.backColor : this.rendererModel.getBackColor());
+                Rectangle2D childBackground = new Rectangle2D.Double(cx,
+                        cy - childBounds.getHeight(), childBounds.getWidth(), 
+                        childBounds.getHeight());
+                this.g.fill(childBackground);
+
+            	this.g.setColor(textGroup.color);
+	            //write child
+	            this.g.drawString(child.text, cx, cy);
+	            if (child.subscript != null) {
+	                int scx = (int)(cx + (childBounds.getWidth() * 0.75));
+	                int scy = (int)(cy + (childBounds.getHeight() / 3));
+	                Font f = this.g.getFont();   // TODO : move to font manager
+	                Font subscriptFont = f.deriveFont(f.getStyle(), f.getSize() - 2);
+	                this.g.setFont(subscriptFont);
+	                this.g.setColor(textGroup.color);
+	                //write subscript
+	                this.g.drawString(child.subscript, scx, scy);
+	            }
+            }
         }
         if(textGroup.isNotTypeableUnderlined){
             this.g.setColor(Color.RED);

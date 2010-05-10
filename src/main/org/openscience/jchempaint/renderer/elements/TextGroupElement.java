@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class TextGroupElement extends TextElement {
     
-    public enum Position { NW, SW, SE, NE, S, N, W, E }; 
+    public enum Position { NW, SW, SE, NE, N, W, E, S }; 
     
     public class Child {
         
@@ -36,18 +36,31 @@ public class TextGroupElement extends TextElement {
         public final String subscript;
         
         public final Position position;
+
+        public final Boolean isComment;
+
         
         public Child(String text, Position position) {
             this.text = text;
             this.position = position;
             this.subscript = null;
+            this.isComment = false;
         }
         
         public Child(String text, String subscript, Position position) {
             this.text = text;
             this.position = position;
             this.subscript = subscript;
+            this.isComment = false;
         }
+
+        public Child(String text, Position position, Boolean isComment) {
+            this.text = text;
+            this.position = position;
+            this.subscript = null;
+            this.isComment = isComment;
+        }
+
         
     }
     
@@ -73,6 +86,10 @@ public class TextGroupElement extends TextElement {
     
     public void addChild(String text, String subscript, Position position) {
         this.children.add(new Child(text, subscript, position));
+    }
+
+    public void addChild(String text, Position position, Boolean isComment) {
+        this.children.add(new Child(text, position, isComment));
     }
 
     public void accept(IRenderingVisitor v) {

@@ -162,6 +162,12 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
             Position position = getNextPosition(unused);
             textGroup.addChild(valencyString, position);
         }
+    
+        if(atom.getProperty(CDKConstants.COMMENT)!=null){
+            //Position position = getNextPosition(unused);
+            textGroup.addChild((String)atom.getProperty(CDKConstants.COMMENT),Position.S,true);
+        }
+
     }
     
     private Position getNextPosition(Stack<Position> unused) {

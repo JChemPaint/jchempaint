@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="libdevel/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/inchi-1.0.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cdk"/>
+	<classpathentry kind="lib" path="libutil/html.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
