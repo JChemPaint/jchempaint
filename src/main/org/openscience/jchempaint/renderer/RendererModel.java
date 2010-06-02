@@ -93,8 +93,19 @@ public class RendererModel implements Serializable, Cloneable {
     private IChemObjectSelection selection;
 
 	private Map<IAtom, IAtom> merge=new HashMap<IAtom, IAtom>();
+	
+	private boolean recalculationRequiredForSSSR=true;
 
-    /**
+
+    public boolean isRecalculationRequiredForSSSR() {
+		return recalculationRequiredForSSSR;
+	}
+
+	public void setRecalculationRequiredForSSSR(boolean recalculationRequiredForSSSR) {
+		this.recalculationRequiredForSSSR = recalculationRequiredForSSSR;
+	}
+
+	/**
      * Constructor for the RendererModel.
      * 
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?

@@ -31,6 +31,7 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
@@ -62,6 +63,9 @@ public class UndoAction extends JCPAction
         	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
         jcpPanel.updateUndoRedoControls();
         jcpPanel.updateStatusBar();
+        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        renderModel.setRecalculationRequiredForSSSR(true);
+
         jcpPanel.get2DHub().updateView();
 	}
 

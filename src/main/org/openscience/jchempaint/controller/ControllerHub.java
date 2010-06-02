@@ -2031,6 +2031,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					.getSelection());
 		if (changeHandler != null)
 			changeHandler.structureChanged();
+
+		RendererModel renderModel = renderer.getRenderer2DModel();
+		renderModel.setRecalculationRequiredForSSSR(true);
+
 	}
 
 	public void fireZoomEvent() {

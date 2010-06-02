@@ -44,7 +44,7 @@ public class HighlightBondGenerator extends BasicBondGenerator
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         IBond bond = model.getHighlightedBond();
         if (bond != null && shouldHighlight(bond, model)) {
-            super.ringSet = super.getRingSet(ac);
+            super.ringSet = super.getRingSet(ac,model);
             
             double r = model.getHighlightDistance() / model.getScale();
             r /= 2.0;

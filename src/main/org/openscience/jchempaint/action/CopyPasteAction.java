@@ -130,8 +130,7 @@ public class CopyPasteAction extends JCPAction{
         logger.info("  type  ", type);
         logger.debug("  source ", e.getSource());
         
-        RendererModel renderModel =
-            jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         IChemModel chemModel = jcpPanel.getChemModel();
         Clipboard sysClip = jcpPanel.getToolkit().getSystemClipboard();
 
@@ -485,6 +484,7 @@ public class CopyPasteAction extends JCPAction{
             }
         }
         jcpPanel.get2DHub().updateView();
+        renderModel.setRecalculationRequiredForSSSR(true);
         jcpPanel.updateStatusBar();
 
     }

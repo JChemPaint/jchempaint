@@ -51,7 +51,7 @@ import org.openscience.jchempaint.renderer.elements.WedgeLineElement.Direction;
  * @cdk.module renderbasic
  */
 public class BasicBondGenerator implements IGenerator {
-
+	
 	private static ILoggingTool logger = LoggingToolFactory
 			.createLoggingTool(BasicBondGenerator.class);
 
@@ -79,25 +79,32 @@ public class BasicBondGenerator implements IGenerator {
 		this.overrideBondWidth = bondWidth;
 	}
 
-	protected IRingSet getRingSet(final IAtomContainer atomContainer) {
-
-		IRingSet ringSet = atomContainer.getBuilder().newInstance(
-				IRingSet.class);
-		try {
-			IMoleculeSet molecules = ConnectivityChecker
-					.partitionIntoMolecules(atomContainer);
-			for (IAtomContainer mol : molecules.molecules()) {
-				SSSRFinder sssrf = new SSSRFinder(mol);
-				ringSet.add(sssrf.findSSSR());
+	protected IRingSet getRingSet(final IAtomContainer atomContainer,RendererModel renderModel) {
+		if(renderModel.isRecalculationRequiredForSSSR() || this.ringSet==null) {
+			System.out.println("recalc SSSR");
+			renderModel.setRecalculationRequiredForSSSR(false);
+			IRingSet ringSet = atomContainer.getBuilder().newInstance(
+					IRingSet.class);
+			try {
+				IMoleculeSet molecules = ConnectivityChecker
+						.partitionIntoMolecules(atomContainer);
+				for (IAtomContainer mol : molecules.molecules()) {
+					SSSRFinder sssrf = new SSSRFinder(mol);
+					ringSet.add(sssrf.findSSSR());
+				}
+	
+				return ringSet;
+			} catch (Exception exception) {
+				logger.warn("Could not partition molecule: "
+						+ exception.getMessage());
+				logger.debug(exception);
+				return ringSet;
 			}
-
-			return ringSet;
-		} catch (Exception exception) {
-			logger.warn("Could not partition molecule: "
-					+ exception.getMessage());
-			logger.debug(exception);
-			return ringSet;
 		}
+		else {
+			return this.ringSet;
+		}
+			
 	}
 
 	/**
@@ -150,7 +157,7 @@ public class BasicBondGenerator implements IGenerator {
 
 	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
 		ElementGroup group = new ElementGroup();
-		this.ringSet = this.getRingSet(ac);
+		this.ringSet = this.getRingSet(ac,model);
 
 		// Sort the ringSet consistently to ensure consistent rendering.
 		// If this is omitted, the bonds may 'tremble'.

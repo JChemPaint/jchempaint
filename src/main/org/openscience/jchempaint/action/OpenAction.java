@@ -44,6 +44,7 @@ import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
+import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**
@@ -135,6 +136,9 @@ public class OpenAction extends JCPAction {
                         jcpPanel.getRenderPanel().setFitToScreen(false);
 
                         jcpPanel.setIsAlreadyAFile(chooser.getSelectedFile());
+                        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+                        renderModel.setRecalculationRequiredForSSSR(true);
+
                     
                         //in case this is an application, we set the file name as title
                         if (jcpPanel.getGuistring().equals(

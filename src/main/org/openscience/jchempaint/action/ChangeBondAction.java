@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.renderer.RendererModel;
 
 
 /**
@@ -143,7 +144,11 @@ public class ChangeBondAction extends JCPAction
             
             
         }
+        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        renderModel.setRecalculationRequiredForSSSR(true);
+
         jcpPanel.get2DHub().updateView();
+
     }
 }
 
