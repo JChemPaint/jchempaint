@@ -2,27 +2,25 @@
  *                2008-2009  Arvid Berg <goglepox@users.sf.net>
  *                     2009  Stefan Kuhn <shk3@users.sf.net>
  *                     2009  Egon Willighagen <egonw@users.sf.net>
-*
-*  Contact: cdk-devel@list.sourceforge.net
-*
-*  This program is free software; you can redistribute it and/or
-*  modify it under the terms of the GNU Lesser General Public License
-*  as published by the Free Software Foundation; either version 2.1
-*  of the License, or (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU Lesser General Public License for more details.
-*
-*  You should have received a copy of the GNU Lesser General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+ *
+ *  Contact: cdk-devel@list.sourceforge.net
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public License
+ *  as published by the Free Software Foundation; either version 2.1
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 package org.openscience.jchempaint.renderer;
 
-import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -31,7 +29,6 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -40,12 +37,12 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.RenderPanel;
-import org.openscience.jchempaint.renderer.elements.ArrowElement;
 import org.openscience.jchempaint.renderer.elements.ElementGroup;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
+import org.openscience.jchempaint.renderer.generators.IReactionSetGenerator;
 import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
 
 /**
@@ -111,11 +108,12 @@ import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
  */
 public class Renderer extends AtomContainerRenderer implements IRenderer {
 
-	/**
-	 * Generators specific to reactions
-	 */
-	private List<IReactionGenerator> reactionGenerators;
-	
+    /**
+     * Generators specific to reactions
+     */
+    private List<IReactionGenerator> reactionGenerators;
+    private List<IReactionSetGenerator> reactionSetGenerators;
+
     /**
      * A renderer that generates diagrams using the specified
      * generators and manages fonts with the supplied font manager.
@@ -124,57 +122,58 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            a list of classes that implement the IGenerator interface
      * @param fontManager
      *            a class that manages mappings between zoom and font sizes
-	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
+     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-	public Renderer(List<IGenerator> generators, IFontManager fontManager,
-	        boolean useUserSettings) {
+    public Renderer(List<IGenerator> generators, IFontManager fontManager,
+            boolean useUserSettings) {
         super(generators, fontManager, useUserSettings);
     }
-	
-	public Renderer(List<IGenerator> generators, 
-	                List<IReactionGenerator> reactionGenerators, 
-	                IFontManager fontManager, RenderPanel renderPanel, boolean useUserSettings) {
-	    this(generators, fontManager, useUserSettings);
+
+    public Renderer(List<IGenerator> generators,
+            List<IReactionGenerator> reactionGenerators,
+            IFontManager fontManager, RenderPanel renderPanel, boolean useUserSettings) {
+        this(generators, fontManager, useUserSettings);
         this.reactionGenerators = reactionGenerators;
+        this.reactionSetGenerators = new ArrayList<IReactionSetGenerator>();
         this.setup();
         super.renderPanel = renderPanel;
-	}
-	
-	/**
-	 * Setup the transformations necessary to draw this Chem Model.
-	 *
-	 * @param chemModel
-	 * @param screen
-	 */
-	public void setup(IChemModel chemModel, Rectangle screen) {
-	    this.setScale(chemModel);
-	    Rectangle2D bounds = Renderer.calculateBounds(chemModel);
-	    this.modelCenter = new Point2d(bounds.getCenterX(), bounds.getCenterY());
-	    this.drawCenter = new Point2d(screen.getCenterX(), screen.getCenterY());
-	    this.setup();
-	}
+    }
 
-	/**
-	 * Setup the transformations necessary to draw this Reaction Set.
-	 *
-	 * @param reactionSet
-	 * @param screen
-	 */
-	public void setup(IReactionSet reactionSet, Rectangle screen) {
-	    this.setScale(reactionSet);
-	    Rectangle2D bounds = Renderer.calculateBounds(reactionSet);
+    /**
+     * Setup the transformations necessary to draw this Chem Model.
+     *
+     * @param chemModel
+     * @param screen
+     */
+    public void setup(IChemModel chemModel, Rectangle screen) {
+        this.setScale(chemModel);
+        Rectangle2D bounds = Renderer.calculateBounds(chemModel);
         this.modelCenter = new Point2d(bounds.getCenterX(), bounds.getCenterY());
         this.drawCenter = new Point2d(screen.getCenterX(), screen.getCenterY());
         this.setup();
-	}
+    }
 
-	/**
-	 * Setup the transformations necessary to draw this Reaction.
-	 *
-	 * @param reaction
-	 * @param screen
-	 */
-	public void setup(IReaction reaction, Rectangle screen) {
+    /**
+     * Setup the transformations necessary to draw this Reaction Set.
+     *
+     * @param reactionSet
+     * @param screen
+     */
+    public void setup(IReactionSet reactionSet, Rectangle screen) {
+        this.setScale(reactionSet);
+        Rectangle2D bounds = Renderer.calculateBounds(reactionSet);
+        this.modelCenter = new Point2d(bounds.getCenterX(), bounds.getCenterY());
+        this.drawCenter = new Point2d(screen.getCenterX(), screen.getCenterY());
+        this.setup();
+    }
+
+    /**
+     * Setup the transformations necessary to draw this Reaction.
+     *
+     * @param reaction
+     * @param screen
+     */
+    public void setup(IReaction reaction, Rectangle screen) {
         this.setScale(reaction);
         Rectangle2D bounds = Renderer.calculateBounds(reaction);
         this.modelCenter = new Point2d(bounds.getCenterX(), bounds.getCenterY());
@@ -189,29 +188,29 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         setup();
     }
 
-	/**
-	 * Set the scale for an IChemModel. It calculates the average bond length of
-	 * the model and calculates the multiplication factor to transform this
-	 * to the bond length that is set in the RendererModel.
-	 *
-	 * @param chemModel
-	 */
-	public void setScale(IChemModel chemModel) {
-	    double bondLength = Renderer.calculateAverageBondLength(chemModel);
-	    this.scale = this.calculateScaleForBondLength(bondLength);
-
-	    // store the scale so that other components can access it
-	    this.rendererModel.setScale(scale);
-	}
-
-	/**
-	 * Set the scale for an IReactionSet. It calculates the average bond length
-	 * of the model and calculates the multiplication factor to transform this
+    /**
+     * Set the scale for an IChemModel. It calculates the average bond length of
+     * the model and calculates the multiplication factor to transform this
      * to the bond length that is set in the RendererModel.
      *
-	 * @param reactionSet
-	 */
-	public void setScale(IReactionSet reactionSet) {
+     * @param chemModel
+     */
+    public void setScale(IChemModel chemModel) {
+        double bondLength = Renderer.calculateAverageBondLength(chemModel);
+        this.scale = this.calculateScaleForBondLength(bondLength);
+
+        // store the scale so that other components can access it
+        this.rendererModel.setScale(scale);
+    }
+
+    /**
+     * Set the scale for an IReactionSet. It calculates the average bond length
+     * of the model and calculates the multiplication factor to transform this
+     * to the bond length that is set in the RendererModel.
+     *
+     * @param reactionSet
+     */
+    public void setScale(IReactionSet reactionSet) {
         double bondLength = Renderer.calculateAverageBondLength(reactionSet);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
@@ -271,7 +270,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             return paintMoleculeSet(moleculeSet, drawVisitor);
         }
 
-        if (moleculeSet != null && moleculeSet.getAtomContainerCount()>0 && reactionSet != null) {
+        if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0 && reactionSet != null) {
             Rectangle2D totalBounds = Renderer.calculateBounds(reactionSet);
             totalBounds = totalBounds.createUnion(
                     Renderer.calculateBounds(moleculeSet));
@@ -281,6 +280,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                 diagram.add(this.generateDiagram(reaction));
             }
             diagram.add(this.generateDiagram(moleculeSet));
+            diagram.add(this.generateDiagram(reactionSet));
             this.paint(drawVisitor, diagram);
 
             // the size of the painted diagram is returned
@@ -289,7 +289,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         return new Rectangle(0, 0, 0, 0);
     }
 
-	public Rectangle paintReactionSet(
+    public Rectangle paintReactionSet(
             IReactionSet reactionSet, IDrawVisitor drawVisitor) {
         // total up the bounding boxes
         Rectangle2D totalBounds = new Rectangle2D.Double();
@@ -308,14 +308,15 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         for (IReaction reaction : reactionSet.reactions()) {
             diagram.add(this.generateDiagram(reaction));
         }
+        diagram.add(this.generateDiagram(reactionSet));
         this.paint(drawVisitor, diagram);
 
         // the size of the painted diagram is returned
         return this.convertToDiagramBounds(totalBounds);
     }
 
-	public Rectangle paintReaction(
-	        IReaction reaction, IDrawVisitor drawVisitor) {
+    public Rectangle paintReaction(
+            IReaction reaction, IDrawVisitor drawVisitor) {
 
         // calculate the bounds
         Rectangle2D modelBounds = Renderer.calculateBounds(reaction);
@@ -328,7 +329,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         return this.convertToDiagramBounds(modelBounds);
     }
 
-	public Rectangle paintMoleculeSet(
+    public Rectangle paintMoleculeSet(
             IMoleculeSet moleculeSet, IDrawVisitor drawVisitor) {
         // total up the bounding boxes
         Rectangle2D totalBounds = new Rectangle2D.Double();
@@ -348,11 +349,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             diagram.add(this.generateDiagram(molecule));
         }
         this.paint(drawVisitor, diagram);
-        
+
         return this.convertToDiagramBounds(totalBounds);
     }
 
-	/**
+    /**
      * Paint a ChemModel.
      *
      * @param chemModel
@@ -419,24 +420,25 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         for (IReaction reaction : reactionSet.reactions()) {
             diagram.add(this.generateDiagram(reaction));
         }
+        diagram.add(this.generateDiagram(reactionSet));
 
         // paint them all
         this.paint(drawVisitor, diagram);
     }
 
     /**
-	 * Paint a reaction.
-	 *
-	 * @param reaction the reaction to paint
-	 * @param drawVisitor the visitor that does the drawing
-	 * @param bounds the bounds on the screen
-	 * @param resetCenter
-	 *     if true, set the draw center to be the center of bounds
-	 */
-	public void paintReaction(IReaction reaction, IDrawVisitor drawVisitor,
+     * Paint a reaction.
+     *
+     * @param reaction the reaction to paint
+     * @param drawVisitor the visitor that does the drawing
+     * @param bounds the bounds on the screen
+     * @param resetCenter
+     *     if true, set the draw center to be the center of bounds
+     */
+    public void paintReaction(IReaction reaction, IDrawVisitor drawVisitor,
             Rectangle2D bounds, boolean resetCenter) {
 
-	    // calculate the bounds
+        // calculate the bounds
         Rectangle2D modelBounds = Renderer.calculateBounds(reaction);
 
         this.setupTransformToFit(bounds, modelBounds,
@@ -449,7 +451,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.paint(drawVisitor, diagram);
     }
 
-	/**
+    /**
      * Paint a set of molecules.
      *
      * @param reaction the reaction to paint
@@ -493,12 +495,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
     /**
-	 * Given a chem model, calculates the bounding rectangle in screen space.
-	 *
-	 * @param model the model to draw.
-	 * @return a rectangle in screen space.
-	 */
-	public Rectangle calculateDiagramBounds(IChemModel model) {
+     * Given a chem model, calculates the bounding rectangle in screen space.
+     *
+     * @param model the model to draw.
+     * @return a rectangle in screen space.
+     */
+    public Rectangle calculateDiagramBounds(IChemModel model) {
         IMoleculeSet moleculeSet = model.getMoleculeSet();
         IReactionSet reactionSet = model.getReactionSet();
         if ((moleculeSet == null && reactionSet == null)) {
@@ -525,22 +527,22 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
     }
 
-	public Rectangle calculateDiagramBounds(IReactionSet reactionSet) {
+    public Rectangle calculateDiagramBounds(IReactionSet reactionSet) {
         return this.calculateScreenBounds(
                 Renderer.calculateBounds(reactionSet));
-	}
+    }
 
-	public Rectangle calculateDiagramBounds(IReaction reaction) {
+    public Rectangle calculateDiagramBounds(IReaction reaction) {
         return this.calculateScreenBounds(
                 Renderer.calculateBounds(reaction));
-	}
+    }
 
-	public Rectangle calculateDiagramBounds(IMoleculeSet moleculeSet) {
-	    return this.calculateScreenBounds(
-	               Renderer.calculateBounds(moleculeSet));
-	}
+    public Rectangle calculateDiagramBounds(IMoleculeSet moleculeSet) {
+        return this.calculateScreenBounds(
+                Renderer.calculateBounds(moleculeSet));
+    }
 
-	public static Rectangle2D calculateBounds(IChemModel chemModel) {
+    public static Rectangle2D calculateBounds(IChemModel chemModel) {
         IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
         IReactionSet reactionSet = chemModel.getReactionSet();
         Rectangle2D totalBounds = null;
@@ -576,16 +578,19 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         // get the participants in the reaction
         IMoleculeSet reactants = reaction.getReactants();
         IMoleculeSet products = reaction.getProducts();
-        if (reactants == null || products == null) return null;
+        if (reactants == null || products == null) {
+            return null;
+        }
 
         // determine the bounds of everything in the reaction
-        if(reaction.getProducts().getAtomContainerCount()>0){
+        if (reaction.getProducts().getAtomContainerCount() > 0) {
             Rectangle2D reactantsBounds = Renderer.calculateBounds(products);
-            if(reaction.getReactantCount()>0)
+            if (reaction.getReactantCount() > 0) {
                 return reactantsBounds.createUnion(Renderer.calculateBounds(reactants));
-            else
+            } else {
                 return reactantsBounds;
-        } else if (reaction.getReactantCount()>0){
+            }
+        } else if (reaction.getReactantCount() > 0) {
             return Renderer.calculateBounds(reactants);
         } else {
             return null;
@@ -597,7 +602,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
             Rectangle2D acBounds = Renderer.calculateBounds(ac);
-            if (totalBounds==null) {
+            if (totalBounds == null) {
                 totalBounds = acBounds;
             } else {
                 Rectangle2D.union(totalBounds, acBounds, totalBounds);
@@ -630,7 +635,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         double averageBondModelLength = 0.0;
         for (IReaction reaction : reactionSet.reactions()) {
             averageBondModelLength +=
-                Renderer.calculateAverageBondLength(reaction);
+                    Renderer.calculateAverageBondLength(reaction);
         }
         return averageBondModelLength / reactionSet.getReactionCount();
     }
@@ -641,16 +646,16 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         double reactantAverage = 0.0;
         if (reactants != null) {
             reactantAverage =
-                Renderer.calculateAverageBondLength(reactants) /
-                reactants.getAtomContainerCount();
+                    Renderer.calculateAverageBondLength(reactants)
+                    / reactants.getAtomContainerCount();
         }
 
         IMoleculeSet products = reaction.getProducts();
         double productAverage = 0.0;
         if (products != null) {
             productAverage =
-                Renderer.calculateAverageBondLength(products) /
-                products.getAtomContainerCount();
+                    Renderer.calculateAverageBondLength(products)
+                    / products.getAtomContainerCount();
         }
 
         if (productAverage == 0.0 && reactantAverage == 0.0) {
@@ -664,30 +669,30 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         double averageBondModelLength = 0.0;
         for (IAtomContainer atomContainer : moleculeSet.molecules()) {
             averageBondModelLength +=
-                GeometryTools.getBondLengthAverage(atomContainer);
+                    GeometryTools.getBondLengthAverage(atomContainer);
         }
         return averageBondModelLength / moleculeSet.getAtomContainerCount();
     }
 
     public RendererModel getRenderer2DModel() {
-		return this.rendererModel;
-	}
+        return this.rendererModel;
+    }
 
-	public void setModelCenter(double x, double y) {
-	    this.modelCenter = new Point2d(x, y);
-	    setup();
-	}
+    public void setModelCenter(double x, double y) {
+        this.modelCenter = new Point2d(x, y);
+        setup();
+    }
 
-	public void setDrawCenter(double x, double y) {
+    public void setDrawCenter(double x, double y) {
         this.drawCenter = new Point2d(x, y);
         setup();
     }
 
-	public void setZoom(double z) {
-	    getRenderer2DModel().setZoomFactor( z );
-	    zoom = z;
-	    setup();
-	}
+    public void setZoom(double z) {
+        getRenderer2DModel().setZoomFactor(z);
+        zoom = z;
+        setup();
+    }
 
     /**
      * Move the draw center by dx and dy.
@@ -697,12 +702,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param dy
      *            the y shift
      */
-	public void shiftDrawCenter(double dx, double dy) {
-	    this.drawCenter.set(this.drawCenter.x + dx, this.drawCenter.y + dy);
-	    setup();
-	}
+    public void shiftDrawCenter(double dx, double dy) {
+        this.drawCenter.set(this.drawCenter.x + dx, this.drawCenter.y + dy);
+        setup();
+    }
 
-	public Point2d getDrawCenter() {
+    public Point2d getDrawCenter() {
         return drawCenter;
     }
 
@@ -718,14 +723,14 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param drawBounds
      */
     public void setZoomToFit(double drawWidth,
-                             double drawHeight,
-                             double diagramWidth,
-                             double diagramHeight) {
+            double drawHeight,
+            double diagramWidth,
+            double diagramHeight) {
 
         double m = this.rendererModel.getMargin();
 
         // determine the zoom needed to fit the diagram to the screen
-        double widthRatio  = drawWidth  / (diagramWidth  + (2 * m));
+        double widthRatio = drawWidth / (diagramWidth + (2 * m));
         double heightRatio = drawHeight / (diagramHeight + (2 * m));
 
         this.zoom = Math.min(widthRatio, heightRatio);
@@ -745,33 +750,35 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param diagram
      *            the IRenderingElement tree to render
      */
-	private void paint(IDrawVisitor drawVisitor,
-	                   IRenderingElement diagram) {
-	    if (diagram == null) return;
+    private void paint(IDrawVisitor drawVisitor,
+            IRenderingElement diagram) {
+        if (diagram == null) {
+            return;
+        }
 
-	    // cache the diagram for quick-redraw
-	    this.cachedDiagram = diagram;
+        // cache the diagram for quick-redraw
+        this.cachedDiagram = diagram;
 
-	    this.fontManager.setFontName(this.rendererModel.getFontName());
-	    this.fontManager.setFontStyle(this.rendererModel.getFontStyle());
+        this.fontManager.setFontName(this.rendererModel.getFontName());
+        this.fontManager.setFontStyle(this.rendererModel.getFontStyle());
 
-	    drawVisitor.setFontManager(this.fontManager);
-	    drawVisitor.setTransform(this.transform);
-	    drawVisitor.setRendererModel(this.rendererModel);
-	    diagram.accept(drawVisitor);
-	}
+        drawVisitor.setFontManager(this.fontManager);
+        drawVisitor.setTransform(this.transform);
+        drawVisitor.setRendererModel(this.rendererModel);
+        diagram.accept(drawVisitor);
+    }
 
-	/**
-	 * Set the transform for a non-fit to screen paint.
-	 *
-	 * @param modelBounds
+    /**
+     * Set the transform for a non-fit to screen paint.
+     *
+     * @param modelBounds
      *            the bounding box of the model
-	 */
-	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    this.zoom = this.rendererModel.getZoomFactor();
+     */
+    private void setupTransformNatural(Rectangle2D modelBounds) {
+        this.zoom = this.rendererModel.getZoomFactor();
         this.fontManager.setFontForZoom(zoom);
         this.setup();
-	}
+    }
 
     /**
      * Sets the transformation needed to draw the model on the canvas when
@@ -787,12 +794,14 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            if true, model center will be set to the modelBounds center
      *            and the scale will be re-calculated
      */
-	private void setupTransformToFit(Rectangle2D screenBounds,
-	                            Rectangle2D modelBounds,
-	                            double bondLength,
-	                            boolean reset) {
+    private void setupTransformToFit(Rectangle2D screenBounds,
+            Rectangle2D modelBounds,
+            double bondLength,
+            boolean reset) {
 
-	    if (screenBounds == null) return;
+        if (screenBounds == null) {
+            return;
+        }
 
         this.setDrawCenter(
                 screenBounds.getCenterX(), screenBounds.getCenterY());
@@ -807,36 +816,36 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
         this.setZoomToFit(drawWidth, drawHeight, diagramWidth, diagramHeight);
 
-	    // this controls whether editing a molecule causes it to re-center
-	    // with each change or not
-	    if (reset || rendererModel.isFitToScreen()) {
+        // this controls whether editing a molecule causes it to re-center
+        // with each change or not
+        if (reset || rendererModel.isFitToScreen()) {
             this.setModelCenter(
                     modelBounds.getCenterX(), modelBounds.getCenterY());
         }
 
-	    // set the scale in the renderer model for the generators
-	    if (reset) {
-	        this.rendererModel.setScale(scale);
-	    }
+        // set the scale in the renderer model for the generators
+        if (reset) {
+            this.rendererModel.setScale(scale);
+        }
 
-	    this.setup();
-	}
+        this.setup();
+    }
 
-	/**
-	 * Given a bond length for a model, calculate the scale that will transform
-	 * this length to the on screen bond length in RendererModel.
-	 *
-	 * @param modelBondLength
-	 * @param reset
-	 * @return
-	 */
-	private double calculateScaleForBondLength(double modelBondLength) {
-	    if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
+    /**
+     * Given a bond length for a model, calculate the scale that will transform
+     * this length to the on screen bond length in RendererModel.
+     *
+     * @param modelBondLength
+     * @param reset
+     * @return
+     */
+    private double calculateScaleForBondLength(double modelBondLength) {
+        if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
             return Renderer.DEFAULT_SCALE;
         } else {
             return this.rendererModel.getBondLength() / modelBondLength;
         }
-	}
+    }
 
     /**
      * Calculate the bounds of the diagram on screen, given the current scale,
@@ -846,8 +855,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            the bounds in model space of the chem object
      * @return the bounds in screen space of the drawn diagram
      */
-	private Rectangle convertToDiagramBounds(Rectangle2D modelBounds) {
-	    double cx = modelBounds.getCenterX();
+    private Rectangle convertToDiagramBounds(Rectangle2D modelBounds) {
+        double cx = modelBounds.getCenterX();
         double cy = modelBounds.getCenterY();
         double mw = modelBounds.getWidth();
         double mh = modelBounds.getHeight();
@@ -856,7 +865,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
         // special case for 0 or 1 atoms
         if (mw == 0 && mh == 0) {
-            return new Rectangle((int)mc.x, (int)mc.y, 0, 0);
+            return new Rectangle((int) mc.x, (int) mc.y, 0, 0);
         }
 
         double margin = this.rendererModel.getMargin();
@@ -866,45 +875,54 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         int y = (int) (mc.y - h / 2);
 
         return new Rectangle(x, y, w, h);
-	}
+    }
 
-	private void setup() {
+    private void setup() {
 
         // set the transform
         try {
             this.transform = new AffineTransform();
             this.transform.translate(this.drawCenter.x, this.drawCenter.y);
-            this.transform.scale(1,-1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
+            this.transform.scale(1, -1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
             this.transform.scale(this.scale, this.scale);
             this.transform.scale(this.zoom, this.zoom);
             this.transform.translate(-this.modelCenter.x, -this.modelCenter.y);
         } catch (NullPointerException npe) {
             // one of the drawCenter or modelCenter points have not been set!
             System.err.println(String.format(
-                    "null pointer when setting transform: " +
-                    "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
+                    "null pointer when setting transform: "
+                    + "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
                     this.drawCenter,
                     this.scale,
                     this.zoom,
                     this.modelCenter));
         }
-	}
+    }
+
+    private IRenderingElement generateDiagram(IReactionSet reactionSet) {
+        ElementGroup diagram = new ElementGroup();
+
+        for (IReactionSetGenerator generator : this.reactionSetGenerators) {
+            diagram.add(generator.generate(reactionSet, rendererModel));
+        }
+        return diagram;
+    }
 
     private IRenderingElement generateDiagram(IReaction reaction) {
-	    ElementGroup diagram = new ElementGroup();
-	    
-	    for (IReactionGenerator generator : this.reactionGenerators) {
-	        diagram.add(generator.generate(reaction, rendererModel));
-	    }
+        ElementGroup diagram = new ElementGroup();
 
-	    diagram.add(generateDiagram(reaction.getReactants()));
-	    diagram.add(generateDiagram(reaction.getProducts()));
+        for (IReactionGenerator generator : this.reactionGenerators) {
+            diagram.add(generator.generate(reaction, rendererModel));
+        }
 
-	    return diagram;
-	}
+        diagram.add(generateDiagram(reaction.getReactants()));
+        diagram.add(generateDiagram(reaction.getProducts()));
 
-	private IRenderingElement generateDiagram(IMoleculeSet moleculeSet) {
-	    ElementGroup diagram = new ElementGroup();
+        return diagram;
+    }
+
+    private IRenderingElement generateDiagram(IMoleculeSet moleculeSet) {
+        ElementGroup diagram = new ElementGroup();
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
             for (IGenerator generator : this.generators) {
@@ -912,12 +930,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             }
         }
         return diagram;
-	}
+    }
 
-	public List<IGenerator> getGenerators(){
-	    return new ArrayList<IGenerator>(generators);
-	}
-	
+    public List<IGenerator> getGenerators() {
+        return new ArrayList<IGenerator>(generators);
+    }
+
     /**
      *
      * @param reactionGenerator
@@ -932,5 +950,13 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      */
     public void addGenerator(IGenerator generator) {
         generators.add(generator);
+    }
+
+    /**
+     *
+     * @param reactionSetGenerator
+     */
+    public void addReactionSetGenerator(IReactionSetGenerator reactionSetGenerator) {
+        reactionSetGenerators.add(reactionSetGenerator);
     }
 }
