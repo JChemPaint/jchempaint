@@ -84,6 +84,7 @@ public class Rotate3DModule extends RotateModule {
             double cosinePsi = java.lang.Math.cos(rotationAnglePsi);
             double sinePsi = java.lang.Math.sin(rotationAnglePsi);
             
+            IAtomContainer atc = selection.getConnectedAtomContainer();
             for (int i = 0; i < startCoordsRelativeToRotationCenter.length; i++) {
                 double newX = startCoordsRelativeToRotationCenter[i].x*cosinePhi
                         + startCoordsRelativeToRotationCenter[i].y*sinePhi*sinePsi; 
@@ -92,8 +93,7 @@ public class Rotate3DModule extends RotateModule {
                 Point2d newCoords = new Point2d(newX + rotationCenter.x, newY
                         + rotationCenter.y);
 
-                selection.getConnectedAtomContainer().getAtom(i).setPoint2d(
-                        newCoords);
+                atc.getAtom(i).setPoint2d(newCoords);
             }
 
             if ((cosinePhi < 0) && (!horizontalFlip)) {
@@ -116,26 +116,6 @@ public class Rotate3DModule extends RotateModule {
         chemModelRelay.updateView();
     }
 
-   /* public void invertStereoInSelection() {
-        IAtomContainer toflip;
-        RendererModel renderModel = renderer.getRenderer2DModel();
-        if (renderModel.getSelection().getConnectedAtomContainer()!=null &&
-            renderModel.getSelection().getConnectedAtomContainer().getAtomCount()!=0   ) {
-            toflip = renderModel.getSelection().getConnectedAtomContainer();
-        } else
-            return;
-            
-        for(IBond bond : toflip.bonds()){
-            if(bond.getStereo()==IBond.Stereo.UP)
-                bond.setStereo(IBond.Stereo.DOWN);
-            else if(bond.getStereo()==IBond.Stereo.DOWN)
-                bond.setStereo(IBond.Stereo.UP);
-            else if(bond.getStereo()==IBond.Stereo.UP_INVERTED)
-                bond.setStereo(IBond.Stereo.DOWN_INVERTED);
-            else if(bond.getStereo()==IBond.Stereo.DOWN_INVERTED)
-                bond.setStereo(IBond.Stereo.UP_INVERTED);
-        }
-    }*/
     
     public String getDrawModeString() {
         return "Rotate in space";

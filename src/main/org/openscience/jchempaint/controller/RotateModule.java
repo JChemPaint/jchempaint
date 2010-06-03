@@ -165,7 +165,6 @@ public class RotateModule extends ControllerModuleAdapter {
      * On mouse drag, actual rotation around the center is done
      */
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
-
         if (selectionMade) {
             rotationPerformed=true;
             /*
@@ -213,6 +212,7 @@ public class RotateModule extends ControllerModuleAdapter {
              */
             double cosine = java.lang.Math.cos(rotationAngle);
             double sine = java.lang.Math.sin(rotationAngle);
+            IAtomContainer atc = selection.getConnectedAtomContainer();
             for (int i = 0; i < startCoordsRelativeToRotationCenter.length; i++) {
                 double newX = (startCoordsRelativeToRotationCenter[i].x * cosine)
                         - (startCoordsRelativeToRotationCenter[i].y * sine);
@@ -222,8 +222,7 @@ public class RotateModule extends ControllerModuleAdapter {
                 Point2d newCoords = new Point2d(newX + rotationCenter.x, newY
                         + rotationCenter.y);
 
-                selection.getConnectedAtomContainer().getAtom(i).setPoint2d(
-                        newCoords);
+                atc.getAtom(i).setPoint2d(newCoords);
             }
         }
         chemModelRelay.updateView();
