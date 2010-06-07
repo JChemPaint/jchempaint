@@ -1,0 +1,6 @@
+Download the yguard.jar file from http://www.yworks.com/en/downloads.html#yGuard.
+Put the file yguard.jar in this directory.
+You can then invoke the 'shrink' task in the build.xml.
+It's not allowed to include the yguard.jar file in the JCP distribution directly.
+
+

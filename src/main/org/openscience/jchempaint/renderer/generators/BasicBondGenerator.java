@@ -80,9 +80,9 @@ public class BasicBondGenerator implements IGenerator {
 	}
 
 	protected IRingSet getRingSet(final IAtomContainer atomContainer,RendererModel renderModel) {
-		if(renderModel.isRecalculationRequiredForSSSR() || this.ringSet==null) {
-			System.out.println("recalc SSSR");
-			renderModel.setRecalculationRequiredForSSSR(false);
+		//if(renderModel.isRecalculationRequiredForSSSR() || this.ringSet==null) {
+		//	System.out.println("recalc SSSR");
+		//	renderModel.setRecalculationRequiredForSSSR(false);
 			IRingSet ringSet = atomContainer.getBuilder().newInstance(
 					IRingSet.class);
 			try {
@@ -100,10 +100,10 @@ public class BasicBondGenerator implements IGenerator {
 				logger.debug(exception);
 				return ringSet;
 			}
-		}
-		else {
-			return this.ringSet;
-		}
+		//}
+		//else {
+		//	return this.ringSet;
+		//}
 			
 	}
 
