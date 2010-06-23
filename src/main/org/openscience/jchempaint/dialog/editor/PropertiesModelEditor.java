@@ -496,7 +496,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 SwingUtilities.updateComponentTreeUI(frame);
                 frame.pack();
                 // Apply to all instances of JChemPaint
-                //for (JFrame f : JChemPaint.frameList) {
                 for (int i = 0; i < JChemPaintPanel.instances.size(); i++) {
                     Container c = JChemPaintPanel.instances.get(i).getTopLevelContainer();
                     if (c instanceof JFrame) {
