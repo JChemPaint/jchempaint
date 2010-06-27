@@ -202,6 +202,7 @@
     </target>
 
     <target id="msgfmt" name="msgfmt">
+        <mkdir dir="po/classes" />
         <propertyregex property="filename"
                   input="${file}"
                   regexp="[.]*/po/([^\.]*)\.po"
