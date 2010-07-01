@@ -43,6 +43,10 @@ public class SelectBondGenerator extends BasicBondGenerator {
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         Color selectionColor = model.getSelectedPartColor();
         IChemObjectSelection selection = model.getSelection();
+        return generate(selection, selectionColor, model);
+    }
+    
+    protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, RendererModel model){
 
         ElementGroup selectionElements = new ElementGroup();
         if(selection==null)

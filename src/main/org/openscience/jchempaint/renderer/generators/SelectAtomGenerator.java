@@ -28,11 +28,9 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.jchempaint.renderer.elements.ElementGroup;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.OvalElement;
-import org.openscience.jchempaint.renderer.elements.RectangleElement;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 
@@ -47,12 +45,15 @@ public class SelectAtomGenerator implements IGenerator {
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         Color selectionColor = model.getSelectedPartColor();
-        AtomShape shape = model.getSelectionShape();
         IChemObjectSelection selection = model.getSelection();
+        return generate(selection, selectionColor, model);
+    }
+    
+    protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, RendererModel model){
         ElementGroup selectionElements = new ElementGroup();
 
         if(selection==null)
-        	return selectionElements;
+            return selectionElements;
         if (this.autoUpdateSelection || selection.isFilled()) {
             double r = model.getSelectionRadius() / model.getScale();
 
@@ -70,10 +71,10 @@ public class SelectAtomGenerator implements IGenerator {
         }
 
         if (selection instanceof IncrementalSelection) {
-			IncrementalSelection sel = (IncrementalSelection) selection;
-			if (!sel.isFinished())
-				selectionElements.add(sel.generate(selectionColor));
-		}
+            IncrementalSelection sel = (IncrementalSelection) selection;
+            if (!sel.isFinished())
+                selectionElements.add(sel.generate(selectionColor));
+        }
         return selectionElements;
     }
 
