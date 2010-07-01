@@ -250,21 +250,29 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         double distance = vertexB.distance(vertexA);
         double gapFactor = 0.1;
         double gap = distance * gapFactor;
-        double numberOfCircles = distance / gap;
-        int diameter = (int)(rendererModel.getBondLength()*rendererModel.getZoomFactor()/numberOfCircles)+1;
+        double numberOfCircles = distance*5;
+        
+        int diameter = (int)(rendererModel.getBondLength()*rendererModel.getZoomFactor()*1.2*gapFactor)+2;
         double d = 0;
         double rad=BondTools.giveAngleBothMethods(new Point2d(wedge.x1,wedge.y1), new Point2d(wedge.x1+100,wedge.y1), new Point2d(wedge.x2,wedge.y2), true);
         int degrees=(int)(360*(rad/(2*Math.PI)));
-        // draw by interpolating along the imiginary straight line
+        // draw by interpolating along the imaginary straight line
         for (int i = 0; i < numberOfCircles; i++) {
             Point2d p1 = new Point2d();
             p1.interpolate(vertexA, vertexB, d);
+            Point2d p2 = new Point2d();
+            p2.interpolate(vertexA, vertexB, d+1/numberOfCircles);
+            
             int[] p1T = this.transformPoint(p1.x, p1.y);
-            this.g.drawArc(p1T[0]-diameter, p1T[1]-diameter/2, diameter, diameter, i % 2 == 0 ? 360-degrees : 360-degrees+180, 180);//i % 2 == 0 ? degrees : (degrees+180)%360, 180);
+            int[] p2T = this.transformPoint(p2.x, p2.y);
+            int wh = (int) (new Point2d(p1T[0],p1T[1]).distance(new Point2d(p2T[0],p2T[1])));
+
+            this.g.drawArc(p1T[0]-diameter, p1T[1]-diameter/2, wh,wh, i % 2 == 0 ? degrees : (degrees+180)%360, 180);
+
             if (distance * (d + gapFactor) >= distance) {
                 break;
             } else {
-                d += gapFactor;
+                d += 1/numberOfCircles;
             }
         }
         this.g.setStroke(storedStroke);
