@@ -3,6 +3,7 @@ HEAD
 
 New features:
 * Reaction arrow tool for comfortable drawing of reactions
+* New applet parameter "mol" accepting string with MOL file
 
 3.1.1
 ---

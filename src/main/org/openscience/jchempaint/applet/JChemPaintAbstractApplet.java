@@ -122,6 +122,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     "true or false",
                     "if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableidX, where X=atomnumber starting with 0 (default false)" },
             { "smiles", "string", "a structure to load as smiles" },
+            { "mol", "string", "a structure to load as MOL V2000" },
             { "scrollbars",
                     "true or false",
                     "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet" },
@@ -162,12 +163,14 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     protected void loadModelFromParam() {
         URL fileURL = null;
         String smiles = null;
+        String mol = null;
         try {
             URL documentBase = getDocumentBase();
             String load = getParameter("load");
             if (load != null)
                 fileURL = new URL(documentBase, load);
             smiles = getParameter("smiles");
+            mol = getParameter("mol");
         } catch (Exception exception) {
             theJcpp.announceError(exception);
         }
@@ -175,6 +178,13 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             loadModelFromUrl(fileURL, theJcpp);
         if (smiles != null)
             loadModelFromSmiles(smiles);
+        if (mol != null) {
+            try {
+                setMolFileWithReplace(mol);
+            } catch (Exception exception) {
+                theJcpp.announceError(exception);
+            }
+        }
     }
 
     /**
@@ -426,8 +436,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         int e = 0;
         while ((e = mol.indexOf("\\n", s)) >= 0) {
             newmol.append(mol.substring(s, e));
-            newmol.append(System.getProperty("file.separator"));
-            s = e + 1;
+            newmol.append(System.getProperty("line.separator"));
+            s = e + 2;
         }
         newmol.append(mol.substring(s));
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(newmol
@@ -460,8 +470,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         int e = 0;
         while ((e = mol.indexOf("\\n", s)) >= 0) {
             newmol.append(mol.substring(s, e));
-            newmol.append(System.getProperty("file.separator"));
-            s = e + 1;
+            newmol.append(System.getProperty("line.separator"));
+            s = e + 2;
         }
         setMolFile(newmol.toString());
     }
