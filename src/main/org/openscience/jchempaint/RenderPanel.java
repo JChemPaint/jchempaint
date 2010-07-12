@@ -71,7 +71,8 @@ import org.openscience.jchempaint.renderer.generators.AtomContainerBoundsGenerat
 import org.openscience.jchempaint.renderer.generators.AtomContainerTitleGenerator;
 import org.openscience.jchempaint.renderer.generators.BoundsGenerator;
 import org.openscience.jchempaint.renderer.generators.ExtendedAtomGenerator;
-import org.openscience.jchempaint.renderer.generators.ExternalHighlightGenerator;
+import org.openscience.jchempaint.renderer.generators.ExternalHighlightAtomGenerator;
+import org.openscience.jchempaint.renderer.generators.ExternalHighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
@@ -213,7 +214,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new ExtendedAtomGenerator());
         generators.add(new LonePairGenerator());
         generators.add(new RadicalGenerator());
-        generators.add(new ExternalHighlightGenerator());
+        generators.add(new ExternalHighlightAtomGenerator());
+        generators.add(new ExternalHighlightBondGenerator());
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
         generators.add(new SelectAtomGenerator());
