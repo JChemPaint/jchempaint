@@ -98,7 +98,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param chemModel The model to display.
      */
     public JChemPaintPanel(IChemModel chemModel) {
-        this(chemModel, JChemPaint.GUI_APPLICATION, false, null);
+        this(chemModel, JChemPaint.GUI_APPLICATION, false, null, new ArrayList<String>());
     }
 
     /**
@@ -108,10 +108,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param gui         The gui configuration string
      * @param debug       Should we be in debug mode?
      * @param applet      If this panel is to be in an applet, pass the applet here, else null.
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet) {
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet, List<String> blacklist) {
         GT.setLanguage(JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("General.language"));
         this.guistring = gui;
+        this.blacklist = blacklist;
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
         try {
@@ -143,7 +145,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         updateUndoRedoControls();
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel,
                 renderPanel.getHub());
-        setupPopupMenus(inputAdapter);
+        setupPopupMenus(inputAdapter, blacklist);
         renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
         renderPanel.getHub().setEventHandler(this);
         renderPanel.getRenderer().getRenderer2DModel().addCDKChangeListener(
@@ -188,16 +190,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * Installs popup menus for this panel.
      * 
      * @param inputAdapter The SwingPopupModule to use for the popup menus.
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      */
-    public void setupPopupMenus(SwingPopupModule inputAdapter) {
+    public void setupPopupMenus(SwingPopupModule inputAdapter, List<String> blacklist) {
     	inputAdapter.setPopupMenu(PseudoAtom.class,
-    			new JChemPaintPopupMenu(this, "pseudo", this.guistring));
+    			new JChemPaintPopupMenu(this, "pseudo", this.guistring, blacklist));
     	inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this,
-    			"atom", this.guistring));
+    			"atom", this.guistring, blacklist));
     	inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this,
-    			"bond", this.guistring));
+    			"bond", this.guistring, blacklist));
     	inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
-    			this, "chemmodel", this.guistring));
+    			this, "chemmodel", this.guistring, blacklist));
     }
 
 

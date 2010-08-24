@@ -111,6 +111,8 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
     protected static String appTitle = "";
     protected JCPMenuTextMaker menuTextMaker = null;
+    protected List<String> blacklist;
+
 
 	/**
 	 * Gets the RenderPanel in this panel.
@@ -417,7 +419,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     public void customizeView() {
         if (showMenuBar) {
             if (menu == null) {
-                menu = new JChemPaintMenuBar(this, this.guistring);
+                menu = new JChemPaintMenuBar(this, this.guistring, blacklist);
             }
             topContainer.add(menu, BorderLayout.NORTH);
         } else {
@@ -433,25 +435,25 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         }
         if (showToolBar) {
             if (uppertoolbar == null) {
-                uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL);
+                uppertoolbar = JCPToolBar.getToolbar(this, "uppertoolbar", SwingConstants.HORIZONTAL, blacklist);
             }
             if (uppertoolbar != null) {
                 topContainer.add(uppertoolbar, BorderLayout.SOUTH);
             }
             if (lefttoolbar == null) {
-                lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL);
+                lefttoolbar = JCPToolBar.getToolbar(this, "lefttoolbar", SwingConstants.VERTICAL, blacklist);
             }
             if (lefttoolbar != null) {
                 centerContainer.add(lefttoolbar, BorderLayout.WEST);
             }
             if (righttoolbar == null) {
-                righttoolbar = JCPToolBar.getToolbar(this, "righttoolbar", SwingConstants.VERTICAL);
+                righttoolbar = JCPToolBar.getToolbar(this, "righttoolbar", SwingConstants.VERTICAL, blacklist);
             }
             if (righttoolbar != null) {
                 centerContainer.add(righttoolbar, BorderLayout.EAST);
             }
             if (lowertoolbar == null) {
-                lowertoolbar = JCPToolBar.getToolbar(this, "lowertoolbar", SwingConstants.HORIZONTAL);
+                lowertoolbar = JCPToolBar.getToolbar(this, "lowertoolbar", SwingConstants.HORIZONTAL, blacklist);
             }
             if (lowertoolbar != null) {
                 centerContainer.add(lowertoolbar, BorderLayout.SOUTH);

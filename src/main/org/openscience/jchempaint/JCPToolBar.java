@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.net.URL;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import javax.swing.Box;
@@ -63,11 +64,12 @@ public class JCPToolBar
     /**
      *  Gets the toolbar attribute of the MainContainerPanel object
      *
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      *@return    The toolbar value
      */
-    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel, String key, int horizontalorvertical)
+    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel, String key, int horizontalorvertical, List<String> blacklist)
     {
-        JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, 1);
+        JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, blacklist, 1);
         return maintoolbar;
     }
 
@@ -195,9 +197,10 @@ public class JCPToolBar
      *
      *@param  orientation  int The orientation of the toolbar
      *@param  kind         String The String used to identify the toolbar
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      *@return              Component The created toolbar
      */
-    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, int lines)
+    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines)
     {
         JToolBar toolbar2 = new JToolBar(orientation);
         String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
@@ -221,7 +224,7 @@ public class JCPToolBar
                 }
                 counter=0;
             } 
-            else
+            else if(!blacklist.contains(toolKeys[i]))
             {
                 if(counter % lines==0){
                     if(box!=null)

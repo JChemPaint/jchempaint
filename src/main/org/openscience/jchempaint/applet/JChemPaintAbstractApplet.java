@@ -31,27 +31,26 @@ package org.openscience.jchempaint.applet;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
-import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -66,9 +65,7 @@ import org.openscience.cdk.io.MDLWriter;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -77,13 +74,10 @@ import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JExternalFrame;
+import org.openscience.jchempaint.StringHelper;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IControllerModel;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -98,7 +92,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     private AbstractJChemPaintPanel theJcpp = null;
     private JExternalFrame jexf;
     protected boolean debug = false;
-
+    protected List<String> blacklist = new ArrayList<String>();
+    
     private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
             + "for more information";
 
@@ -139,6 +134,16 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             { "debug", "true or false",
                     "switches on debug output (default false)" } };
 
+    static{
+        //TODO descriptions need to be added to paraminfos like "$feature", "on or off", "$description"
+    	String resource = "org.openscience.jchempaint.resources.features";
+        ResourceBundle featuresDefinition = ResourceBundle.getBundle(resource, Locale.getDefault());
+        Iterator<String> featuresit = featuresDefinition.keySet().iterator();
+        while(featuresit.hasNext()){
+        	String feature = featuresit.next();
+        }
+    }
+    
     /**
      * Gives basic information about the applet.
      * @see java.applet.Applet#getAppletInfo()
@@ -343,6 +348,19 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      */
     @Override
     public void init() {
+        String resource = "org.openscience.jchempaint.resources.features";
+        ResourceBundle featuresDefinition = ResourceBundle.getBundle(resource, Locale.getDefault());
+        Iterator<String> featuresit = featuresDefinition.keySet().iterator();
+        while(featuresit.hasNext()){
+        	String feature = featuresit.next();
+        	if (getParameter(feature) != null
+                    && getParameter(feature).equals("off")) {
+        		String[] members = StringHelper.tokenize(featuresDefinition.getString(feature));
+        		for(int i=0;i<members.length;i++){
+        			blacklist.add(members[i]);
+        		}
+        	}
+        }
         prepareExternalFrame();
     }
 
@@ -646,7 +664,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     }
                     if (e.getButton() == 1 && e.getClickCount() == 2 && applet instanceof JChemPaintViewerApplet)
                         if (!getJexf().isShowing()) {
-                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug,JChemPaintAbstractApplet.this);
+                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug,JChemPaintAbstractApplet.this, blacklist);
                             p.setName("appletframe");
                             p.setShowInsertTextField(false);
                             p.setShowStatusBar(false);

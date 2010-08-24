@@ -84,13 +84,14 @@ public class JChemPaintMenuHelper {
      * @param  jcpPanel  Description of the Parameter
      * @param  isPopup   Tells if this menu will be a popup one or not
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      * @return           The created JMenu
      */
-    protected JComponent createMenu(AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString) {
+    protected JComponent createMenu(AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, List<String> blacklist) {
         logger.debug("Creating menu: ", key);
         JMenu menu = new JMenu(jcpPanel.getMenuTextMaker().getText(key));
         menu.setName(key);
-        return createMenu(jcpPanel, key, isPopup, guiString, menu);
+        return createMenu(jcpPanel, key, isPopup, guiString, menu, blacklist);
     }
 
 
@@ -103,25 +104,28 @@ public class JChemPaintMenuHelper {
      * @param  isPopup   Tells if this menu will be a popup one or not
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
      * @param  menu		 The menu to add the new menu to (must either be JMenu or JPopupMenu)
+  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
      * @return           The created JMenu
      */
-    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu) {
+    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu, List<String> blacklist) {
         String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
         for (int i = 0; i < itemKeys.length; i++) {
-            if (itemKeys[i].equals("-")) {
-                if(menu instanceof JMenu)
-                    ((JMenu)menu).addSeparator();
-                else
-                    ((JPopupMenu)menu).addSeparator();
-            }
-            else if (itemKeys[i].startsWith("@")) {
-                JComponent me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString);
-                menu.add(me);
-            }
-            else {
-                JMenuItem mi = createMenuItem(jcpPanel, itemKeys[i], isPopup);
-                menu.add(mi);
-            }
+        	if (!blacklist.contains(itemKeys[i]) && !blacklist.contains(itemKeys[i].substring(1))){
+	            if (itemKeys[i].equals("-")) {
+	                if(menu instanceof JMenu)
+	                    ((JMenu)menu).addSeparator();
+	                else
+	                    ((JPopupMenu)menu).addSeparator();
+	            }
+	            else if (itemKeys[i].startsWith("@")) {
+	                JComponent me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString, blacklist);
+	                menu.add(me);
+	            }
+	            else {
+	                JMenuItem mi = createMenuItem(jcpPanel, itemKeys[i], isPopup);
+	                menu.add(mi);
+	            }
+        	}
         }
         if(key.equals("atomMenu")){
             jcpPanel.atomMenu=(JMenu)menu;

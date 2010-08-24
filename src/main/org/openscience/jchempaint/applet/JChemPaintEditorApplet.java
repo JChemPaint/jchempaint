@@ -38,16 +38,16 @@ import org.openscience.jchempaint.JChemPaintPanel;
 public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
 	public static final String GUI_APPLET="applet";
 	public void init() {
+		super.init();
 		IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
 		chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IMolecule.class));
-		JChemPaintPanel p = new JChemPaintPanel(chemModel,GUI_APPLET,debug,this);
+		JChemPaintPanel p = new JChemPaintPanel(chemModel,GUI_APPLET,debug,this, this.blacklist);
 		p.setName("appletframe");
 		p.setShowInsertTextField(false);
 		p.setShowStatusBar(false);
 		setTheJcpp(p);
 		this.add(p);
-		super.init();
 	}
 
 }
