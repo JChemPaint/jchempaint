@@ -144,7 +144,10 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         	String feature = featuresit.next();
         	infos.add(Arrays.asList(feature,"on or off","switches on or off the ui elements of this feature (default on)"));
         }
-        paramInfo = infos.toArray(paramInfo);
+        paramInfo = new String[infos.size()][3];
+        for(int i=0;i<infos.size();i++){
+        	paramInfo[i]=infos.get(i).toArray(new String[3]);
+        }
     }
     
     /**
