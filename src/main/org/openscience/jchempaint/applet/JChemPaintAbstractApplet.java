@@ -40,6 +40,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +83,8 @@ import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 /**
  * An abstract class for JCP applets, doing parameter parsing.
  * 
@@ -97,51 +100,53 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
             + "for more information";
 
-    public static String[][] paramInfo = {
-            { "background", "color",
-                    "Background color as integer or hex starting with #" },
-            { "atomNumbersVisible", "true or false",
-                    "should atom numbers be shown" },
-            { "load", "url", "URL of the chemical data" },
-            { "compact", "true or false",
-                    "compact means elements shown as dots, no figures etc. (default false)" },
-            { "tooltips",
-                    "string like 'atomumber|test|atomnumber|text'",
-                    "the texts will be used as tooltips for the respective atoms (leave out if none required" },
-            { "impliciths", "true or false",
-                    "the implicit hs will be added from start (default true)" },
-            { "spectrumRenderer",
-                    "string",
-                    "name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom" },
-            { "hightlightTable",
-                    "true or false",
-                    "if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableidX, where X=atomnumber starting with 0 (default false)" },
-            { "smiles", "string", "a structure to load as smiles" },
-            { "mol", "string", "a structure to load as MOL V2000" },
-            { "scrollbars",
-                    "true or false",
-                    "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet" },
-            { "dotranslate",
-                    "true or false",
-                    "should user interface be translated (default) or not (e. g. if you want an English-only webpage)" },
-            { "language",
-                        "language code",
-                        "a valid language code to use for ui language" },
-            { "detachable", "true or false",
-                    "should the applet be detacheable by a double click (default false)" },
-            { "detachableeditor", "true or false",
-                    "should the applet be detacheable as an editor by a double click (default false), only for viewer" },
-            { "debug", "true or false",
-                    "switches on debug output (default false)" } };
-
+    public static String[][] paramInfo;
+    
     static{
-        //TODO descriptions need to be added to paraminfos like "$feature", "on or off", "$description"
+    	List<List<String>> infos = new ArrayList<List<String>>();
+    	infos.add(Arrays.asList("background", "color",
+                     "Background color as integer or hex starting with #"));
+    	infos.add(Arrays.asList("atomNumbersVisible", "true or false",
+                     "should atom numbers be shown"));
+    	infos.add(Arrays.asList("load", "url", "URL of the chemical data"));
+    	infos.add(Arrays.asList("compact", "true or false",
+                     "compact means elements shown as dots, no figures etc. (default false)" ));
+    	infos.add(Arrays.asList("tooltips",
+                     "string like 'atomumber|test|atomnumber|text'",
+                     "the texts will be used as tooltips for the respective atoms (leave out if none required"));
+    	infos.add(Arrays.asList("impliciths", "true or false",
+                     "the implicit hs will be added from start (default true)"));
+    	infos.add(Arrays.asList("spectrumRenderer",
+                     "string",
+                     "name of a spectrum applet (see subproject in NMRShiftDB) where peaks should be highlighted when hovering over atom"));
+    	infos.add(Arrays.asList("hightlightTable",
+                     "true or false",
+                     "if true peaks in a table will be highlighted when hovering over atom, ids are assumed to be tableidX, where X=atomnumber starting with 0 (default false)" ));
+    	infos.add(Arrays.asList("smiles", "string", "a structure to load as smiles"));
+    	infos.add(Arrays.asList("mol", "string", "a structure to load as MOL V2000"));
+    	infos.add(Arrays.asList("scrollbars",
+                     "true or false",
+                     "if the molecule is too big to be displayed in normal size, shall scrollbars be used (default) or the molecule be resized - only for viewer applet"));
+    	infos.add(Arrays.asList("dotranslate",
+                     "true or false",
+                     "should user interface be translated (default) or not (e. g. if you want an English-only webpage)"));
+    	infos.add(Arrays.asList("language",
+                         "language code",
+                         "a valid language code to use for ui language"));
+    	infos.add(Arrays.asList("detachable", "true or false",
+                     "should the applet be detacheable by a double click (default false)"));
+    	infos.add(Arrays.asList("detachableeditor", "true or false",
+                     "should the applet be detacheable as an editor by a double click (default false), only for viewer"));
+    	infos.add(Arrays.asList("debug", "true or false",
+                     "switches on debug output (default false)"));
     	String resource = "org.openscience.jchempaint.resources.features";
         ResourceBundle featuresDefinition = ResourceBundle.getBundle(resource, Locale.getDefault());
         Iterator<String> featuresit = featuresDefinition.keySet().iterator();
         while(featuresit.hasNext()){
         	String feature = featuresit.next();
+        	infos.add(Arrays.asList(feature,"on or off","switches on or off the ui elements of this feature (default on)"));
         }
+        paramInfo = infos.toArray(paramInfo);
     }
     
     /**
