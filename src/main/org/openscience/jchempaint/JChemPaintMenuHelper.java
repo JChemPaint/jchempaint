@@ -114,7 +114,6 @@ public class JChemPaintMenuHelper {
     	}
 
     	String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
-        System.out.println(key);
         for (int i = 0; i < itemKeys.length; i++) {
         	if (!blacklist.contains(itemKeys[i]) && !blacklist.contains(itemKeys[i].substring(1))){
 	            if (itemKeys[i].equals("-")) {
