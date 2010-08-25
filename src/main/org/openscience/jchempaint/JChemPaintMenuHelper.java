@@ -108,7 +108,13 @@ public class JChemPaintMenuHelper {
      * @return           The created JMenu
      */
     protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu, List<String> blacklist) {
-        String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
+    	// Blacklist entire menu
+    	if (blacklist.contains(key)){
+    		return null;
+    	}
+
+    	String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
+        System.out.println(key);
         for (int i = 0; i < itemKeys.length; i++) {
         	if (!blacklist.contains(itemKeys[i]) && !blacklist.contains(itemKeys[i].substring(1))){
 	            if (itemKeys[i].equals("-")) {
