@@ -96,7 +96,7 @@ public class BondEditor extends ChemObjectEditor {
         }
 
         Stereo stereo=null;
-        if(order!=Order.SINGLE) {
+        if(order!=Order.SINGLE || stereoField==null) {
             stereo=Stereo.NONE;
         }
         else
