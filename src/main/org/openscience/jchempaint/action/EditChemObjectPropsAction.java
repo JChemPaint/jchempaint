@@ -66,7 +66,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			editor = new ReactionEditor();
 		}
 		else if (object instanceof org.openscience.cdk.interfaces.IBond) {
-			editor = new BondEditor(jcpPanel.get2DHub());
+			editor = new BondEditor(jcpPanel.get2DHub(), jcpPanel.getBlacklist());
 		}
 		
 		if (editor != null) {

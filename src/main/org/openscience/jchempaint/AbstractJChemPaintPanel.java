@@ -115,6 +115,15 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 
 
 	/**
+	 * The blacklist is a list of all elements which should not be shown.
+	 * 
+	 * @return The blacklist.
+	 */
+	public List<String> getBlacklist() {
+		return blacklist;
+	}
+
+	/**
 	 * Gets the RenderPanel in this panel.
 	 * 
 	 * @return The RenderPanel.

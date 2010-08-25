@@ -361,6 +361,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         	String feature = featuresit.next();
         	if (getParameter(feature) != null
                     && getParameter(feature).equals("off")) {
+        		blacklist.add(feature);
         		String[] members = StringHelper.tokenize(featuresDefinition.getString(feature));
         		for(int i=0;i<members.length;i++){
         			blacklist.add(members[i]);
