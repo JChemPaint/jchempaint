@@ -50,9 +50,11 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -153,14 +155,18 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             try {
                 molecule = smilesParser.parseSmiles(text);
-                //for some reason, smilesparser sets valencies, which we don't want in jcp
-                for(int i=0;i<molecule.getAtomCount();i++){
-                	molecule.getAtom(i).setValency(null);
-                }
-
             } catch (InvalidSmilesException e1) {
                 JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Invalid SMILES specified"));
                 return null;
+            }
+            try {
+				molecule = new DeduceBondSystemTool().fixAromaticBondOrders(molecule);
+			} catch (CDKException e) {
+				e.printStackTrace();//we do nothing if this fails
+			}
+            //for some reason, smilesparser sets valencies, which we don't want in jcp
+            for(int i=0;i<molecule.getAtomCount();i++){
+            	molecule.getAtom(i).setValency(null);
             }
         }
 
