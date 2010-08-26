@@ -67,6 +67,7 @@ import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -213,6 +214,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 sdg.setMolecule(mol);
                 sdg.generateCoordinates(new Vector2d(0, 1));
                 mol = sdg.getMolecule();
+                mol = new DeduceBondSystemTool().fixAromaticBondOrders(mol);
                 //for some reason, smilesparser sets valencies, which we don't want in jcp
                 for(int i=0;i<mol.getAtomCount();i++){
                 	mol.getAtom(i).setValency(null);
