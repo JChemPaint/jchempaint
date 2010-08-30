@@ -247,6 +247,7 @@ public class JCPMenuTextMaker {
         entries.put("periodictableTooltip", GT._("Select new drawing symbol from periodic table"));
         entries.put("enterelementTooltip", GT._("Enter an element symbol via keyboard"));
         entries.put("up_bondTooltip", GT._("Make the Bonds Stereo Up"));
+        entries.put("chainTooltip", GT._("Draw a chain"));
         entries.put("down_bondTooltip", GT._("Make the Bonds Stereo Down"));
         entries.put("plusTooltip", GT._("Increase the charge on an Atom"));
         entries.put("minusTooltip", GT._("Decrease the charge on an Atom"));

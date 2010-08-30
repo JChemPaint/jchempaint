@@ -138,7 +138,20 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param bond bond to add as phantom
      */
     public void addPhantomBond(IBond bond);
-    /**
+	/**
+	 * Replaces the phantom bonds/atoms with this atomcontainer.
+	 * 
+	 * @param phantoms The new phantoms
+	 */
+	public void setPhantoms(IAtomContainer phantoms);
+	/**
+	 * Sets a text to be rendered as a phantom at a certain position.
+	 * 
+	 * @param text The text.
+	 * @param position The position.
+	 */
+	public void setPhantomText(String text, Point2d position);
+	/**
      * Returns an IAtomContainer containing all phantom atoms and bonds.
      */
     public IAtomContainer getPhantoms();

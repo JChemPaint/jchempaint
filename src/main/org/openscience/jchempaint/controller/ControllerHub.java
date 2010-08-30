@@ -73,7 +73,6 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
-import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -141,6 +140,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private Point2d phantomArrowStart = null;
 	
 	private Point2d phantomArrowEnd = null;
+	
+	private Point2d phantomTextPosition = null;
+	
+	private String phantomText = null;
 
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
 			IChemModel chemModel, IViewEventRelay eventRelay,
@@ -1811,6 +1814,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void clearPhantoms() {
 		this.phantoms.removeAllElements();
 	}
+	
+	@Override
+	public void setPhantoms(IAtomContainer phantoms) {
+		this.phantoms = phantoms;
+		
+	}
 
 	public IAtomContainer getPhantoms() {
 		return this.phantoms;
@@ -2720,5 +2729,19 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     public Point2d[] getPhantomArrow() {
         return new Point2d[]{phantomArrowStart, phantomArrowEnd};
     }
+
+	@Override
+	public void setPhantomText(String text, Point2d position) {
+		this.phantomText = text;
+		this.phantomTextPosition = position;
+	}
+
+	public Point2d getPhantomTextPosition() {
+		return phantomTextPosition;
+	}
+
+	public String getPhantomText() {
+		return phantomText;
+	}
 }
 

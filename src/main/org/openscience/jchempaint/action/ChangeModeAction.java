@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 
 import org.openscience.jchempaint.controller.AddRingModule;
 import org.openscience.jchempaint.controller.AtomAtomMappingModule;
+import org.openscience.jchempaint.controller.ChainModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.ReactionArrowModule;
@@ -87,6 +88,8 @@ public class ChangeModeAction extends JCPAction {
         	newActiveModule=new Rotate3DModule(hub);
         } else if (type.equals("reactionArrow")) {
             newActiveModule=new ReactionArrowModule(hub);
+        } else if (type.equals("chain")) {
+            newActiveModule=new ChainModule(hub);
         }
         if(newActiveModule!=null){
 	        newActiveModule.setID(type);
