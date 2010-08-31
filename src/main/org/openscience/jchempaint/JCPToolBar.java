@@ -239,7 +239,7 @@ public class JCPToolBar
                 if (button != null)
                 {
                     box.add(button);
-                    if (toolKeys[i].equals("bond"))
+                    if (toolKeys[i].equals("bondTool"))
                     {
                         //button.setBackground(Color.GRAY);
                         button.setBackground(new Color(238,238,238)); 
