@@ -4,13 +4,14 @@ HEAD
 New features:
 * Reaction arrow tool for comfortable drawing of reactions
 * New applet parameter "mol" accepting string with MOL file
-* Featuers (=groups of ui elements) can be switched on and off in the applet params (trac #83)
+* Features (=groups of ui elements) can be switched on and off in the applet params (trac #83)
+* A chain drawing tool has been added
 
 Fixes:
 * The molecule title was not written to MDL files (but read from), now both ways work (trac #70)
 * In certain situations open/save as/save confused file names (trac #77)
 * Touching the isotopes menu gave exceptions if empty model or no selectio (trac #64)
-
+* c1ccccc1 is no pasted correctly (#84/109)
 
 3.1.1
 ---
