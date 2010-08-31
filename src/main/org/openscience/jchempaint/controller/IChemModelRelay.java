@@ -24,7 +24,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.awt.Cursor;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -35,10 +34,9 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IRing;
-import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -199,7 +197,14 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @return The new bond.
      */
     public IRing addPhenyl(IBond bond, boolean phantom);
-    public void addFragment(IAtomContainer toPaste);
+    /**
+     * Adds a fragment to the chemmodel.
+     * 
+     * @param toPaste The fragment to add.
+     * @param moleculeToAddTo If null, a new molecule in the setOfMolecules will be made, if not null, it will be added to moleculeToAddTo.
+     * @param toRemove If not null, this atomcontainer will be added to moleculeToAddTo as well and removed from chemmodel (this is needed if a merge happens).
+     */
+    public void addFragment(IAtomContainer toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
     public IAtomContainer deleteFragment(IAtomContainer toDelete);
     public void cleanup();
     public void flip(boolean horizontal);

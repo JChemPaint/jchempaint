@@ -2104,16 +2104,25 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public void addFragment(IAtomContainer toPaste) {
+	public void addFragment(IAtomContainer toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove) {
 		IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
-		if (moleculeSet == null) {
-			moleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
+		if(moleculeToAddTo==null){
+			if (moleculeSet == null) {
+				moleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
+			}
+			moleculeSet.addAtomContainer(toPaste);
+			moleculeToAddTo = toPaste;
+		}else{
+			moleculeToAddTo.add(toPaste);
 		}
-		moleculeSet.addAtomContainer(toPaste);
+		if(toRemove!=null){
+			moleculeToAddTo.add(toRemove);
+			moleculeSet.removeAtomContainer(toRemove);
+		}
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(
 					getIChemModel(), toPaste.getBuilder().newInstance(IAtomContainer.class,
-							toPaste), null, "Paste", this);
+							toPaste), toRemove, "Paste", this);
 			undoredohandler.postEdit(undoredo);
 		}
 		updateAtoms(toPaste, toPaste.atoms());
@@ -2162,7 +2171,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		if (chemModel.getMoleculeSet().getAtomContainerCount() == 0)
 			chemModel.getMoleculeSet().addAtomContainer(
-					chemModel.getBuilder().newInstance(IAtomContainer.class));
+					chemModel.getBuilder().newInstance(IMolecule.class));
 	}
 
 	// OK

@@ -32,6 +32,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
 
 /**
@@ -154,25 +155,31 @@ public class ChainModule extends ControllerModuleAdapter {
             chemModelRelay.setPhantomText(""+phantoms.getAtomCount(), worldCoordTo);
             IAtom closestAtom = chemModelRelay.getClosestAtom(phantoms.getAtom(phantoms.getAtomCount()-1));
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
-            merge =  (IAtom) getHighlighted(worldCoordTo, closestAtom);
-            if(merge!=null)
-            	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,closestAtom);
-
+            merge =  (IAtom) getHighlighted(phantoms.getAtom(phantoms.getAtomCount()-1).getPoint2d(), closestAtom);
+            if(merge!=null){
+            	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,phantoms.getAtom(phantoms.getAtomCount()-1));
+            	chemModelRelay.getPhantoms().getConnectedBondsList(phantoms.getAtom(phantoms.getAtomCount()-1)).get(0).setAtom(merge,1);
+            	phantoms.removeAtom(phantoms.getAtomCount()-1);
+            }
         }
         chemModelRelay.updateView();
     }
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-    	if(source!=null)
+    	if(source!=null){
     		chemModelRelay.getPhantoms().removeAtom(0);
+    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source), ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge));
+    	}else{
+    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge), null);
+    	}
         if(merge!=null){
-        	chemModelRelay.getPhantoms().getConnectedBondsList(merge).get(0).setAtom(chemModelRelay.getRenderer().getRenderer2DModel().getMerge().get(merge),1);
-        	chemModelRelay.getPhantoms().removeAtom(merge);
+        	chemModelRelay.updateAtom(merge);
         }
-    	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()));
+		chemModelRelay.updateAtom(source);
         chemModelRelay.clearPhantoms();
         chemModelRelay.setPhantomText(null, null);
+        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
     }
 
     public String getDrawModeString() {
