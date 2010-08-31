@@ -98,9 +98,6 @@ public class ChainModule extends ControllerModuleAdapter {
 
 	@Override
     public void mouseDrag( Point2d worldCoordFrom, Point2d worldCoordTo ) {
-        IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
-        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
-        merge =  (IAtom) getHighlighted(worldCoordTo, closestAtom);
         chemModelRelay.clearPhantoms();
         //how many bonds do we want?
         double distance = start.distance(worldCoordTo);
@@ -122,22 +119,27 @@ public class ChainModule extends ControllerModuleAdapter {
         		phantoms.addBond(getBuilder().newInstance(IBond.class, startAtom, nextAtom, IBond.Order.SINGLE));
         		startAtom = nextAtom;
         	}
-        	Vector2d normal = 
-                new Vector2d(start.y - worldCoordTo.y, start.x - worldCoordTo.x);
-            normal.normalize();
-            normal.scale(bondLength);
-            Point2d start2 = new Point2d(start);
-            start2.add(normal);
-            Point2d worldCoordTo2 = new Point2d(worldCoordTo);
-            worldCoordTo2.sub(new Vector2d(normal.x*-1, normal.y*-1));
-            //System.err.println("normal "+normal);
-            //System.err.println("start "+start);
-            //System.err.println("start2 "+start2);
-            //System.err.println("worldCoordTo "+worldCoordTo);
-            //System.err.println("worldCoordTo2 "+worldCoordTo2);
-            //System.err.println(phantoms.getAtomCount()+"___");
+            //calculate a second point on the perpendicular through start point
+            double angle = Math.PI / 2;
+            double costheta = Math.cos(angle);
+            double sintheta = Math.sin(angle);
+            Point2d point = new Point2d(worldCoordTo);
+            Point2d center = new Point2d(start);
+            double relativex = point.x - center.x;
+            double relativey = point.y - center.y;
+            Point2d start2 = new Point2d();
+            start2.x = relativex * costheta - relativey * sintheta + center.x;
+            start2.y = relativex * sintheta + relativey * costheta + center.y;
+            //scale that
+            start2.x = start.x + (start2.x-start.x)/numberofbonds;
+            start2.y = start.y + (start2.y-start.y)/numberofbonds;
+            Point2d worldCoordTo2 = new Point2d();
+            worldCoordTo2.x = relativex * costheta - relativey * sintheta + point.x;
+            worldCoordTo2.y = relativex * sintheta + relativey * costheta + point.y;
+            //scale that
+            worldCoordTo2.x = worldCoordTo.x + (worldCoordTo2.x-worldCoordTo.x)/numberofbonds;
+            worldCoordTo2.y = worldCoordTo.y + (worldCoordTo2.y-worldCoordTo.y)/numberofbonds;
             for(int i=1;i<phantoms.getAtomCount();i++){
-            	//System.err.println("dost "+1.0/phantoms.getAtomCount()*i);
         		Point2d p1 = new Point2d();
             	if(i % 2 == 1){
             		//atoms on line2
@@ -147,10 +149,15 @@ public class ChainModule extends ControllerModuleAdapter {
                     p1.interpolate(start, worldCoordTo, 1.0/phantoms.getAtomCount()*i);
             	}
         		phantoms.getAtom(i).setPoint2d(p1);
-            	//System.err.println("Atom "+i+" "+phantoms.getAtom(i).getPoint2d());
             }
             chemModelRelay.setPhantoms(phantoms);
             chemModelRelay.setPhantomText(""+phantoms.getAtomCount(), worldCoordTo);
+            IAtom closestAtom = chemModelRelay.getClosestAtom(phantoms.getAtom(phantoms.getAtomCount()-1));
+            chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
+            merge =  (IAtom) getHighlighted(worldCoordTo, closestAtom);
+            if(merge!=null)
+            	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,closestAtom);
+
         }
         chemModelRelay.updateView();
     }
@@ -159,6 +166,10 @@ public class ChainModule extends ControllerModuleAdapter {
     public void mouseClickedUp( Point2d worldCoord ) {
     	if(source!=null)
     		chemModelRelay.getPhantoms().removeAtom(0);
+        if(merge!=null){
+        	chemModelRelay.getPhantoms().getConnectedBondsList(merge).get(0).setAtom(chemModelRelay.getRenderer().getRenderer2DModel().getMerge().get(merge),1);
+        	chemModelRelay.getPhantoms().removeAtom(merge);
+        }
     	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()));
         chemModelRelay.clearPhantoms();
         chemModelRelay.setPhantomText(null, null);
