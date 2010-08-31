@@ -1,6 +1,7 @@
 /* $Revision$ $Author$ $Date$
  * 
- * Copyright (C) 2004-2007  Egon Willighagen <egonw@users.sf.net>
+ * Copyright (C) 2009 Stefan Kuhn  <shk3@users.sf.net>
+ * Copyright (C) 2010 Conni Wagner  <conni75@users.sf.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -24,11 +25,9 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.Taglet;
 
 /**
- * Taglet that expands @cdk.bug tag into a weblink to CDK's
- * SourceForge bug track system. It's typically used as:
- * <pre>
- *   @cdk.bug 1095690
- * </pre>
+ * Taglet that expands @param tag into a list of 
+ * parameters taken from the paramInfo field of the 
+ * class. Is supposed to be used in applet classes.
  */
 public class JCPParamsTaglet implements Taglet {
     
