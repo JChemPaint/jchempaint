@@ -136,7 +136,7 @@ public class BasicAtomGenerator implements IGenerator {
 				atom.getPoint2d().y,
 				text,
 				atom.getFormalCharge(),
-				atom.getHydrogenCount(),
+				atom.getImplicitHydrogenCount(),
 				alignment, getColorForAtom(atom, model));
 	}
 

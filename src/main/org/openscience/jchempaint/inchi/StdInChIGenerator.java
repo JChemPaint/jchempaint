@@ -39,7 +39,7 @@ import java.util.List;
 import org.iupac.StdInChI;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.MDLV2000Writer;
 
 /**
  * Generates InChI data using a C->Java conversion of the InChI command 
@@ -130,7 +130,7 @@ public class StdInChIGenerator extends StdInChITool {
         try {
 
             StringWriter writer = new StringWriter();
-            MDLWriter mdlWriter = new MDLWriter(writer);
+            MDLV2000Writer mdlWriter = new MDLV2000Writer(writer);
             
             mdlWriter.write(atc);
             String mdl = writer.toString();

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-16 14:51+0400\n"
+"POT-Creation-Date: 2010-06-27 02:36+0400\n"
 "PO-Revision-Date: 2010-04-16 09:51+0000\n"
 "Last-Translator: Egon Willighagen <Unknown>\n"
 "Language-Team: \n"
@@ -162,14 +162,13 @@ msgstr ""
 msgid "Enter label"
 msgstr "Verander element..."
 
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:60
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:64
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:68
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:76
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:70
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:74
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:82
 msgid "JChemPaint Help"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:72
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:78
 msgid "JChemPaint License"
 msgstr ""
 
@@ -185,11 +184,11 @@ msgstr "Fout tijdens genereren van SMILES:"
 msgid "Error"
 msgstr "Fout"
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:356
 msgid "The content you tried to copy could not be read to any known format"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:356
 #, fuzzy
 msgid "Could not process content"
 msgstr "Kon de InChI niet verwerken"
@@ -597,7 +596,7 @@ msgid "System"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:330
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "Look and feel"
 msgstr ""
 
@@ -609,48 +608,53 @@ msgstr ""
 msgid "must be a number from 1 to 100"
 msgstr "Moet een nummer zijn tussen 1 en 100"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "is not supported on this platform"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "Unsupported look&feel"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:515
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:514
 msgid "Class not found:"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:519
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:518
 msgid "Instantiation Exception:"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:522
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:521
 msgid "Illegal Access: "
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:571
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:570
 msgid "Choose Background Color"
 msgstr "Kies een achtergrondkleur"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:75
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:78
 msgid "Symbol"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:77
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:80
 #, fuzzy
 msgid "H Count"
 msgstr "Knippen"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:79
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:82
 #, fuzzy
 msgid "Formal Charge"
 msgstr "Verlaag lading"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:81
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:84
 #, fuzzy
 msgid "Isotope number"
 msgstr "Teken atoomnummers"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:86
+#, fuzzy
+msgid "Comment"
+msgstr "Veelvoorkomende Elementen..."
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:76
 msgid "Occurrence"
@@ -1864,23 +1868,24 @@ msgid "Catalan"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:127
+#, fuzzy
+msgid "Chinese"
+msgstr "Afsluiten"
+
+#: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Czech"
 msgstr ""
 
-#: src/main/org/openscience/jchempaint/GT.java:128
+#: src/main/org/openscience/jchempaint/GT.java:129
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: src/main/org/openscience/jchempaint/GT.java:129
+#: src/main/org/openscience/jchempaint/GT.java:130
 msgid "German"
 msgstr "Duits"
 
-#: src/main/org/openscience/jchempaint/GT.java:130
-msgid "Hungarian"
-msgstr ""
-
 #: src/main/org/openscience/jchempaint/GT.java:131
-msgid "Norwegian Bokmal"
+msgid "Hungarian"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:132

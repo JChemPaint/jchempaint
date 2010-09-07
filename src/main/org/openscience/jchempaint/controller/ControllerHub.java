@@ -1002,8 +1002,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 							atomHydrogenCountsMap.put(atom, new Integer[] {
 									type.getFormalNeighbourCount()
 											- connectedAtomCount,
-									atom.getHydrogenCount() });
-							atom.setHydrogenCount(type
+									atom.getImplicitHydrogenCount() });
+							atom.setImplicitHydrogenCount(type
 									.getFormalNeighbourCount()
 									- connectedAtomCount);
 						}
@@ -2217,24 +2217,24 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	private void updateAtom(IAtomContainer container, IAtom atom) {
 		if (this.getController2DModel().getAutoUpdateImplicitHydrogens()) {
-			atom.setHydrogenCount(0);
+			atom.setImplicitHydrogenCount(0);
 			try {
 				IAtomType type = matcher.findMatchingAtomType(container, atom);
 				if (type != null) {
 					Integer neighbourCount = type.getFormalNeighbourCount();
 					if (neighbourCount != null) {
-						atom.setHydrogenCount(neighbourCount
+						atom.setImplicitHydrogenCount(neighbourCount
 								- container.getConnectedAtomsCount(atom));
 					}
 					// for some reason, the neighbour count takes into account
 					// only
 					// one single electron
 					if (container.getConnectedSingleElectronsCount(atom) > 1
-							&& atom.getHydrogenCount()
+							&& atom.getImplicitHydrogenCount()
 									- container
 											.getConnectedSingleElectronsCount(atom)
 									+ 1 > -1)
-						atom.setHydrogenCount(atom.getHydrogenCount()
+						atom.setImplicitHydrogenCount(atom.getImplicitHydrogenCount()
 								- container
 										.getConnectedSingleElectronsCount(atom)
 								+ 1);
@@ -2266,9 +2266,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 							.get(i)
 							.getConnectedAtomsList(atom)
 							.get(0)
-							.setHydrogenCount(
+							.setImplicitHydrogenCount(
 									containers.get(i).getConnectedAtomsList(
-											atom).get(0).getHydrogenCount() + 1);
+											atom).get(0).getImplicitHydrogenCount() + 1);
 				}
 			}
 			containers.get(i).remove(removeatoms);
@@ -2291,7 +2291,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				.getAllAtomContainers(chemModel);
 		for (int i = 0; i < containers.size(); i++) {
 			for (IAtom atom : containers.get(i).atoms()) {
-				int hcount = atom.getHydrogenCount();
+				int hcount = atom.getImplicitHydrogenCount();
 				for (int k = 0; k < hcount; k++) {
 					IAtom newAtom = this.addAtomWithoutUndo("H", atom, false);
 					IAtomContainer atomContainer = ChemModelManipulator
@@ -2312,17 +2312,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public void setHydrogenCount(IAtom atom, int intValue) {
+	public void setImplicitHydrogenCount(IAtom atom, int intValue) {
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			HashMap<IAtom, Integer[]> atomhydrogenmap = new HashMap<IAtom, Integer[]>();
 			atomhydrogenmap.put(atom, new Integer[] { intValue,
-					atom.getHydrogenCount() });
+					atom.getImplicitHydrogenCount() });
 			IUndoRedoable undoredo = getUndoRedoFactory()
 					.getChangeHydrogenCountEdit(atomhydrogenmap,
 							"Change hydrogen count to " + intValue);
 			getUndoRedoHandler().postEdit(undoredo);
 		}
-		atom.setHydrogenCount(intValue);
+		atom.setImplicitHydrogenCount(intValue);
 		structureChanged();
 	}
 
@@ -2668,8 +2668,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		while (containers.hasNext()) {
 			for (IAtom atom : containers.next().atoms()) {
 				wholeModel.addIsotope(atom);
-				if (atom.getHydrogenCount() != null) {
-					implicitHs += atom.getHydrogenCount();
+				if (atom.getImplicitHydrogenCount() != null) {
+					implicitHs += atom.getImplicitHydrogenCount();
 				}
 			}
 		}

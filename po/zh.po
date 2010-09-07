@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-16 14:51+0400\n"
+"POT-Creation-Date: 2010-06-27 02:36+0400\n"
 "PO-Revision-Date: 2010-04-16 12:51+1000\n"
 "Last-Translator: Yun Wang <wangyun1019@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,14 +162,13 @@ msgstr ""
 msgid "Enter label"
 msgstr "插入标签"
 
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:60
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:64
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:68
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:76
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:70
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:74
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:82
 msgid "JChemPaint Help"
 msgstr "JChemPaint帮助"
 
-#: src/main/org/openscience/jchempaint/action/HelpAction.java:72
+#: src/main/org/openscience/jchempaint/action/HelpAction.java:78
 msgid "JChemPaint License"
 msgstr "JChemPaint许可信息"
 
@@ -185,11 +184,11 @@ msgstr "创建SMILES文件时产生错误"
 msgid "Error"
 msgstr "错误"
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:356
 msgid "The content you tried to copy could not be read to any known format"
 msgstr "不能打开文件"
 
-#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:357
+#: src/main/org/openscience/jchempaint/action/CopyPasteAction.java:356
 msgid "Could not process content"
 msgstr "不能处理所包含内容"
 
@@ -570,7 +569,7 @@ msgid "System"
 msgstr "系统"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:330
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "Look and feel"
 msgstr "外观"
 
@@ -582,45 +581,50 @@ msgstr "选择语言"
 msgid "must be a number from 1 to 100"
 msgstr "必须为1到100"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "is not supported on this platform"
 msgstr "不支持此操作"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:512
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:511
 msgid "Unsupported look&feel"
 msgstr "不支持此外观"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:515
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:514
 msgid "Class not found:"
 msgstr "无法找到"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:519
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:518
 msgid "Instantiation Exception:"
 msgstr "实例异常"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:522
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:521
 msgid "Illegal Access: "
 msgstr "非法输入"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:571
+#: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:570
 msgid "Choose Background Color"
 msgstr "选择背景色"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:75
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:78
 msgid "Symbol"
 msgstr "符号"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:77
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:80
 msgid "H Count"
 msgstr "H Count"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:79
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:82
 msgid "Formal Charge"
 msgstr "规范管理"
 
-#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:81
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:84
 msgid "Isotope number"
 msgstr "同位素个数"
+
+#: src/main/org/openscience/jchempaint/dialog/editor/AtomEditor.java:86
+#, fuzzy
+msgid "Comment"
+msgstr "常见元素"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/RGroupEditor.java:76
 msgid "Occurrence"
@@ -1807,24 +1811,25 @@ msgid "Catalan"
 msgstr "加泰罗尼亚语"
 
 #: src/main/org/openscience/jchempaint/GT.java:127
+#, fuzzy
+msgid "Chinese"
+msgstr "氯"
+
+#: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Czech"
 msgstr "捷克语"
 
-#: src/main/org/openscience/jchempaint/GT.java:128
+#: src/main/org/openscience/jchempaint/GT.java:129
 msgid "Dutch"
 msgstr "荷兰语"
 
-#: src/main/org/openscience/jchempaint/GT.java:129
+#: src/main/org/openscience/jchempaint/GT.java:130
 msgid "German"
 msgstr "德语"
 
-#: src/main/org/openscience/jchempaint/GT.java:130
+#: src/main/org/openscience/jchempaint/GT.java:131
 msgid "Hungarian"
 msgstr "匈牙利语"
-
-#: src/main/org/openscience/jchempaint/GT.java:131
-msgid "Norwegian Bokmal"
-msgstr "挪威博尔马克语"
 
 #: src/main/org/openscience/jchempaint/GT.java:132
 msgid "Polish"
@@ -2680,3 +2685,6 @@ msgstr "不能重做"
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:622
 msgid "No undo possible"
 msgstr "不能撤销"
+
+#~ msgid "Norwegian Bokmal"
+#~ msgstr "挪威博尔马克语"

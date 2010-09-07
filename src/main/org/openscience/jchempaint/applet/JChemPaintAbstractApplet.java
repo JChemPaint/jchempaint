@@ -62,7 +62,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
@@ -412,7 +412,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     		rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
     	}
     	else {
-            MDLWriter mdlwriter = new MDLWriter(sw);
+            MDLV2000Writer mdlwriter = new MDLV2000Writer(sw);
             mdlwriter.write(som);
     	}
         return (sw.toString());
@@ -606,8 +606,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         while (containers.hasNext()) {
             for (IAtom atom : containers.next().atoms()) {
                 wholeModel.addIsotope(atom);
-                if (atom.getHydrogenCount() != null) {
-                    implicitHs += atom.getHydrogenCount();
+                if (atom.getImplicitHydrogenCount() != null) {
+                    implicitHs += atom.getImplicitHydrogenCount();
                 }
             }
         }

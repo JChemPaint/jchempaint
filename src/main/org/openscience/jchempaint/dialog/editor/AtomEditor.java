@@ -92,7 +92,7 @@ public class AtomEditor extends ChemObjectEditor {
             // update table contents
             IAtom atom = (IAtom)source;
             symbolField.setText(atom.getSymbol());
-            hCountField.setValue(new Integer(atom.getHydrogenCount()==null ? 0 : atom.getHydrogenCount()));
+            hCountField.setValue(new Integer(atom.getImplicitHydrogenCount()==null ? 0 : atom.getImplicitHydrogenCount()));
             formalChargeField.setValue(new Integer(atom.getFormalCharge()));
             if(atom.getProperty(CDKConstants.COMMENT)!=null)
             	commentField.setText((String)(atom.getProperty(CDKConstants.COMMENT)));
@@ -119,8 +119,8 @@ public class AtomEditor extends ChemObjectEditor {
         IAtom atom = (IAtom)source;
         try{
 	        if(IsotopeFactory.getInstance(atom.getBuilder()).getElement(symbolField.getText())!=null){
-	        	if(atom.getHydrogenCount()==null || atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
-	        		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
+	        	if(atom.getImplicitHydrogenCount()==null || atom.getImplicitHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
+	        		hub.setImplicitHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
 	        	if(atom.getFormalCharge()==null || atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
 	        		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
 	        	if(!atom.getSymbol().equals(symbolField.getText()))
@@ -130,14 +130,14 @@ public class AtomEditor extends ChemObjectEditor {
 	        }else{
 	            PseudoAtom pseudo = new PseudoAtom(atom);
 	            pseudo.setLabel(symbolField.getText());
-	            pseudo.setHydrogenCount(((Integer)hCountField.getValue()).intValue());
+	            pseudo.setImplicitHydrogenCount(((Integer)hCountField.getValue()).intValue());
 	            pseudo.setFormalCharge(((Integer)formalChargeField.getValue()).intValue());
 	            pseudo.setMassNumber(majorIsotopeNumber+((Integer)isotopeField.getValue()).intValue());
 	        }
 
         }catch(IOException ex){
-        	if(atom.getHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
-        		hub.setHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
+        	if(atom.getImplicitHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
+        		hub.setImplicitHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
         	if(atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())
         		hub.setCharge(atom,((Integer)formalChargeField.getValue()).intValue());
         	if(!atom.getSymbol().equals(symbolField.getText()))

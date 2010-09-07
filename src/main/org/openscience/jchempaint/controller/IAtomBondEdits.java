@@ -53,7 +53,7 @@ public interface IAtomBondEdits {
     public void setSymbol(IAtom atom, String symbol);
     public void setCharge(IAtom atom, int charge);
     public void setMassNumber(IAtom atom, int charge);
-    public void setHydrogenCount(IAtom atom, int intValue);
+    public void setImplicitHydrogenCount(IAtom atom, int intValue);
     public void replaceAtom(IAtom atomnew, IAtom atomold);
     public void addSingleElectron(IAtom atom);
     public void removeSingleElectron(IAtom atom);

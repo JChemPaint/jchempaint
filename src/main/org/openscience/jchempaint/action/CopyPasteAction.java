@@ -64,7 +64,7 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
-import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
@@ -580,7 +580,7 @@ public class CopyPasteAction extends JCPAction{
             IMolecule tocopy= tocopy1.getBuilder().newInstance(IMolecule.class,tocopy1);
             // MDL mol output
             StringWriter sw = new StringWriter();
-            new MDLWriter(sw).writeMolecule(tocopy);
+            new MDLV2000Writer(sw).writeMolecule(tocopy);
             this.mol=sw.toString();
             SmilesGenerator sg=new SmilesGenerator();
             smiles = sg.createSMILES(tocopy);

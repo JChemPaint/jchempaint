@@ -67,7 +67,7 @@ public class ChangeHydrogenCountEdit implements IUndoRedoable {
             IAtom atom = it.next();
             Integer[] counts = atomHydrogenCountsMap.get(atom);
             atom.setNotification(false);
-            atom.setHydrogenCount(counts[0]);
+            atom.setImplicitHydrogenCount(counts[0]);
             atom.setNotification(true);
         }
     }
@@ -78,7 +78,7 @@ public class ChangeHydrogenCountEdit implements IUndoRedoable {
         while (it.hasNext()) {
             IAtom atom = (IAtom) it.next();
             Integer[] counts = atomHydrogenCountsMap.get(atom);
-            atom.setHydrogenCount(counts[1]);
+            atom.setImplicitHydrogenCount(counts[1]);
         }
     }
 

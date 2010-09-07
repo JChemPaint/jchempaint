@@ -49,7 +49,7 @@ import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLRXNWriter;
-import org.openscience.cdk.io.MDLWriter;
+import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
@@ -320,7 +320,7 @@ public class SaveAsAction extends JCPAction
         	cow.write(rGroupQuery);
         }
         else {
-        	cow = new MDLWriter(new FileWriter(outFile));
+        	cow = new MDLV2000Writer(new FileWriter(outFile));
             cow.write(model);
         }
         	

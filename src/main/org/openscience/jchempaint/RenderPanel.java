@@ -420,8 +420,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 int implicitHs = 0;
                 while (containers.hasNext()) {
                     for (IAtom atom : containers.next().atoms()) {
-                        if (atom.getHydrogenCount() != null) {
-                            implicitHs += atom.getHydrogenCount();
+                        if (atom.getImplicitHydrogenCount() != null) {
+                            implicitHs += atom.getImplicitHydrogenCount();
                         }
                     }
                 }
@@ -438,8 +438,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 if (ac != null) {
                     int implicitHs = 0;
                     for (IAtom atom : ac.atoms()) {
-                        if (atom.getHydrogenCount() != null) {
-                            implicitHs += atom.getHydrogenCount();
+                        if (atom.getImplicitHydrogenCount() != null) {
+                            implicitHs += atom.getImplicitHydrogenCount();
                         }
                     }
                     String formula = MolecularFormulaManipulator

@@ -1,7 +1,8 @@
-HEAD
+3.1.3
 ----
 
 New features:
+* R-groups
 * Reaction arrow tool for comfortable drawing of reactions
 * New applet parameter "mol" accepting string with MOL file
 * Features (=groups of ui elements) can be switched on and off in the applet params (trac #83)

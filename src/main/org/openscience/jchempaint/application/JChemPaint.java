@@ -366,7 +366,7 @@ public class JChemPaint {
                        if (type != null &&
                            type.getFormalNeighbourCount() != null) {
                            int connectedAtomCount = container.getConnectedAtomsCount(atom);
-                           atom.setHydrogenCount(
+                           atom.setImplicitHydrogenCount(
                                type.getFormalNeighbourCount() - connectedAtomCount
                            );
                        }
