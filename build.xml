@@ -2,7 +2,7 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.1.2" />
+    <property name="jcp.version" value="3.1.3" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
@@ -320,6 +320,7 @@
                 <class name="org.openscience.jchempaint.applet.JChemPaintAbstractApplet" methods="public" fields="none" />
                 <class name="org.openscience.jchempaint.applet.JChemPaintViewerApplet"   methods="public" fields="none" />
                 <class name="org.openscience.jchempaint.applet.JChemPaintEditorApplet"   methods="public" fields="none" />
+                <class name="org.openscience.cdk.io.formats.RGroupQueryFormat"  methods="public" fields="none" />
              </keep>
          </shrink>
       </yguard>
@@ -477,7 +478,7 @@
       </move>
       <delete dir="${dist}/jar/shrinkout"/>
       
-      <!--signjar destDir=""
+      <signjar destDir=""
             alias="${certificatealias}"
             storepass="${keystorepassphrase}"
             preservelastmodified="true">
@@ -486,7 +487,7 @@
                     <includesfile name="${growing_classpath}"/>
                 </fileset>
             </path>
-      </signjar-->
+      </signjar>
       
       <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>

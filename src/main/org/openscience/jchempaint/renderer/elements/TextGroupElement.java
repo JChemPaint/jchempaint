@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class TextGroupElement extends TextElement {
     
-    public enum Position { NW, SW, SE, NE, N, W, E, S }; 
+    public enum Position { NW, SW, SE, NE, S, N, W, E }; 
     
     public class Child {
         
