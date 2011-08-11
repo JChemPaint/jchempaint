@@ -979,6 +979,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		try {
 			IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
 		} catch (Exception exception) {
+			atom.setMassNumber(null);
 			exception.printStackTrace();
 		}
 		updateAtom(atom);

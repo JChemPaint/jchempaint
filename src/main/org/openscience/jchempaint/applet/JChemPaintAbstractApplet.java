@@ -325,8 +325,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             this.debug = true;
         }
 
-        if (getParameter("impliciths") != null
-                && getParameter("impliciths").equals("true")) {
+        if ( (getParameter("impliciths") == null) ||
+        	 (getParameter("impliciths") != null && getParameter("impliciths").equals("true")) 
+           ) {
             controllerModel.setAutoUpdateImplicitHydrogens(true);
             rendererModel.setShowImplicitHydrogens(true);
             rendererModel.setShowEndCarbons(true);

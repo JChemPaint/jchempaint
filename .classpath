@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="libdevel/fest-swing-1.2a2.jar"/>
 	<classpathentry kind="lib" path="libdevel/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/inchi-1.0.2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/cdk"/>
 	<classpathentry kind="lib" path="libutil/html.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cdk_jcp"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

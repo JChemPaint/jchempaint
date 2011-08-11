@@ -109,7 +109,12 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
             textGroup.addChild(number, position);
         }
         
-        if (model.getShowImplicitHydrogens()) {
+        if (
+             (model.getShowImplicitHydrogens() && !invisibleCarbon(atom, ac, model))
+             ||
+             // Always show implicit hydrogens on end carbons
+             (atom.getSymbol().equals("C") && model.getShowEndCarbons() && ac.getConnectedBondsList(atom).size() == 1)
+            ) {
         	if(atom.getImplicitHydrogenCount()!=null){
 	            int nH = atom.getImplicitHydrogenCount();
 	            if (nH > 0) {

@@ -57,7 +57,7 @@ public class SelectAtomGenerator implements IGenerator {
         if (this.autoUpdateSelection || selection.isFilled()) {
             double r = model.getSelectionRadius() / model.getScale();
 
-            double d = 2 * r;
+            double d = 4 * r;
             IAtomContainer selectedAC = selection.getConnectedAtomContainer();
             if (selectedAC != null) {
                 for (IAtom atom : selectedAC.atoms()) {
