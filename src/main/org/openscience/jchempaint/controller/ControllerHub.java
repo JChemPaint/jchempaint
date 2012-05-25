@@ -959,7 +959,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-	// OK
+	/**
+	 * Change the Atom Symbol to the given element symbol, setting also its massNumber.
+	 * If an exception happens, the massNumber is set to null.
+	 * @see org.openscience.jchempaint.controller.IAtomBondEdits#setSymbol(org.openscience.cdk.interfaces.IAtom, java.lang.String)
+	 */
 	public void setSymbol(IAtom atom, String symbol) {
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			IUndoRedoable undoredo = getUndoRedoFactory()
@@ -977,6 +981,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		// configure the atom, so that the atomic number matches the symbol
 		try {
+			atom.setMassNumber(null);
 			IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
 		} catch (Exception exception) {
 			atom.setMassNumber(null);
