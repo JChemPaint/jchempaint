@@ -79,23 +79,6 @@ public interface IRenderer {
      */
 	public void shiftDrawCenter(double screenX, double screenY);
 
-	/**
-	 * Sets the mouse cursor shown on the renderPanel.
-	 * 
-	 * @param cursor One of the constants from java.awt.Cursor.
-	 */
-	public void setCursor(int cursor);
-	/**
-	 * Tells the mouse cursor shown on the renderPanel.
-	 * 
-	 * @return One of the constants from java.awt.Cursor.
-	 */
-	public int getCursor();
-
-	/**
-	 * Return the list of generators for the Renderer
-	 * @return
-	 */
 	public List<IGenerator> getGenerators();
 
     public RenderPanel getRenderPanel();
