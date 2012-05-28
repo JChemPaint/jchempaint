@@ -73,6 +73,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -111,7 +112,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	private IRenderer renderer;
 
-	private IViewEventRelay eventRelay;
+	private RenderPanel eventRelay;
 
 	private List<IControllerModule> generalModules;
 
@@ -146,7 +147,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private String phantomText = null;
 
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
-			IChemModel chemModel, IViewEventRelay eventRelay,
+			IChemModel chemModel, RenderPanel eventRelay,
 			UndoRedoHandler undoredohandler, IUndoRedoFactory undoredofactory,
 			boolean isViewer, JChemPaintAbstractApplet applet) {
 		this.controllerModel = controllerModel;
@@ -272,8 +273,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (activeModule != null)
 			activeModule.mouseClickedDown(modelCoord);
 
-		if (renderer.getCursor() == Cursor.HAND_CURSOR
-				|| renderer.getCursor() == Cursor.HAND_CURSOR) {
+		if (getCursor() == Cursor.HAND_CURSOR
+				|| getCursor() == Cursor.HAND_CURSOR) {
 			setCursor(Cursor.MOVE_CURSOR);
 			oldMouseCursor = Cursor.HAND_CURSOR;
 		} else {
@@ -2655,8 +2656,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return chemModel;
 	}
 
+	/**
+	 * Sets the mouse cursor shown on the renderPanel.
+	 * 
+	 * @param cursor One of the constants from java.awt.Cursor.
+	 */
 	public void setCursor(int cursor) {
-		renderer.setCursor(cursor);
+		eventRelay.setCursor(new Cursor(cursor));
+	}
+
+	/**
+	 * Tells the mouse cursor shown on the renderPanel.
+	 * 
+	 * @return One of the constants from java.awt.Cursor.
+	 */
+	public int getCursor() {
+		return eventRelay.getCursor().getType();
 	}
 
 	/**
