@@ -28,13 +28,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainer;import org.openscience.cdk.AtomContainerSet;
+
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 
 /**
  * Class to read an InChI file which expected to be some text file
@@ -56,7 +57,7 @@ public class StdInChIReader {
 
         IChemModel chemModel = new ChemModel();
         try {
-            IMoleculeSet moleculeSet = new MoleculeSet();
+            IAtomContainerSet moleculeSet = new AtomContainerSet();
             chemModel.setMoleculeSet(moleculeSet);
             StdInChIParser parser = new StdInChIParser();
 

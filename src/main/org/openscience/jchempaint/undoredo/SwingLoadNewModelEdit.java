@@ -31,7 +31,7 @@ package org.openscience.jchempaint.undoredo;
 import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.controller.undoredo.LoadNewModelEdit;
 
@@ -41,7 +41,7 @@ import org.openscience.jchempaint.controller.undoredo.LoadNewModelEdit;
  */
 public class SwingLoadNewModelEdit extends LoadNewModelEdit implements UndoableEdit{
 	public SwingLoadNewModelEdit(IChemModel chemModel,
-			IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom,
+			IAtomContainerSet oldsom, IReactionSet oldsor, IAtomContainerSet newsom,
 			IReactionSet newsor, String type) {
 		super(chemModel, oldsom, oldsor, newsom, newsor, type);
 	}

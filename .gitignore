@@ -1,2 +1,5 @@
 bin
 ant.properties
+t
+*.orig
+*.rej

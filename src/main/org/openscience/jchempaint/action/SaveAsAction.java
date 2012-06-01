@@ -44,7 +44,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
 import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
@@ -372,7 +372,7 @@ public class SaveAsAction extends JCPAction
 
         String eol=System.getProperty("line.separator");
         if (object instanceof IChemModel) {
-            IMoleculeSet mSet = ((IChemModel) object).getMoleculeSet();
+            IAtomContainerSet mSet = ((IChemModel) object).getMoleculeSet();
             for (IAtomContainer atc : mSet.atomContainers()) {
                 out.write(inchiGen.generateInchi(atc).getInChI()+eol);
                 out.write(inchiGen.generateInchi(atc).getAuxInfo()+eol);
@@ -413,7 +413,7 @@ public class SaveAsAction extends JCPAction
             cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
         }
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-        IMoleculeSet som = model.getBuilder().newInstance(IMoleculeSet.class);
+        IAtomContainerSet som = model.getBuilder().newInstance(IAtomContainerSet.class);
         while (containers.hasNext()) {
             //Clone() is here because the SMILESWriter sets valencies and we don't
             //want these changes visible

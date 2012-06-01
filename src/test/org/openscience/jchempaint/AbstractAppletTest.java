@@ -18,8 +18,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -69,9 +68,9 @@ public class AbstractAppletTest {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         IChemModel basic = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
-        basic.setMoleculeSet(basic.getBuilder().newInstance(IMoleculeSet.class));
+        basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
         basic.getMoleculeSet().addAtomContainer(
-                basic.getBuilder().newInstance(IMolecule.class));
+                basic.getBuilder().newInstance(IAtomContainer.class));
         panel.setChemModel(basic);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);

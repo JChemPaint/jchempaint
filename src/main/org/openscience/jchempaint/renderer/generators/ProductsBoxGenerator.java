@@ -49,7 +49,7 @@ public class ProductsBoxGenerator implements IReactionGenerator {
 	    	return new ElementGroup();
 		DISTANCE = model.getBondLength() / model.getScale() / 2;
         Rectangle2D totalBounds = null;
-        for (IAtomContainer molecule : reaction.getProducts().molecules()) {
+        for (IAtomContainer molecule : reaction.getProducts().atomContainers()) {
             Rectangle2D bounds = Renderer.calculateBounds(molecule);
             if (totalBounds == null) {
                 totalBounds = bounds;

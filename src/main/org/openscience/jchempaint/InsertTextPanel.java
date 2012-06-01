@@ -53,7 +53,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smiles.DeduceBondSystemTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
@@ -115,7 +114,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         String actionCommand = actionEvent.getActionCommand();
         if (actionCommand.equals("comboBoxEdited")
                 || actionCommand.equals(GT._("Insert"))) {
-            IMolecule molecule = getMolecule();
+            IAtomContainer molecule = getMolecule();
             if (molecule == null)
                 return;
             JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
@@ -124,9 +123,9 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         }
     }
 
-    private IMolecule getMolecule() {
+    private IAtomContainer getMolecule() {
 
-        IMolecule molecule;
+        IAtomContainer molecule;
         String text = (String) textCombo.getSelectedItem();
         text = text.trim(); // clean up extra white space
 
@@ -137,7 +136,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
                 StdInChIParser parser = new StdInChIParser();
                 IAtomContainer atomContainer = parser.parseInchi(text);
-                molecule = atomContainer.getBuilder().newInstance(IMolecule.class,atomContainer);
+                molecule = atomContainer.getBuilder().newInstance(IAtomContainer.class,atomContainer);
                 
                 
             } catch (Exception e2) {
@@ -195,7 +194,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         return true;
     }
 
-    private IMolecule getMoleculeFromCAS(String cas) throws IOException {
+    private IAtomContainer getMoleculeFromCAS(String cas) throws IOException {
         String firstURL = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pccompound&term=" + cas;
         String data = getDataFromURL(firstURL);
 
@@ -235,7 +234,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         // got the canonical SMILES, lets get the molecule
         SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         try {
-        	IMolecule mol=smilesParser.parseSmiles(smiles);
+        	IAtomContainer mol=smilesParser.parseSmiles(smiles);
             //for some reason, smilesparser sets valencies, which we don't want in jcp
             for(int i=0;i<mol.getAtomCount();i++){
             	mol.getAtom(i).setValency(null);

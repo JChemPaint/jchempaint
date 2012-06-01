@@ -31,7 +31,7 @@ package org.openscience.jchempaint.undoredo;
 import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.controller.undoredo.ClearAllEdit;
 
@@ -41,7 +41,7 @@ import org.openscience.jchempaint.controller.undoredo.ClearAllEdit;
  */
 public class SwingClearAllEdit extends ClearAllEdit implements UndoableEdit{
 
-	public SwingClearAllEdit(IChemModel chemModel, IMoleculeSet som, IReactionSet sor, String type) {
+	public SwingClearAllEdit(IChemModel chemModel, IAtomContainerSet som, IReactionSet sor, String type) {
 		super(chemModel, som, sor, type);
 	}
 

@@ -31,7 +31,6 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
@@ -58,7 +57,7 @@ public class RGroupEdit implements IUndoRedoable {
     private Map<IAtom, Map<Integer, IBond>> redoRootAttachmentPoints;
     private Map<Integer,RGroupList> redoRgroupLists =null;
     private Map<RGroup, Map<Integer,IAtom>> redoRGroupApo=null;
-    private IMolecule userSelection;
+    private IAtomContainer userSelection;
 	
 	public RGroupEdit(String _type
 			        , boolean _isNewRgrp
@@ -84,7 +83,7 @@ public class RGroupEdit implements IUndoRedoable {
 		this.existingBondDistr=_existingBondDistr;
 	    this.existingRgroupLists=_existingRgroupLists;
 	    this.redoRootStructure=rgrpHandler.getrGroupQuery().getRootStructure();
-		this.userSelection=(IMolecule)_userSelection;
+		this.userSelection=(IAtomContainer)_userSelection;
 		if (_existingRgroupLists!=null) {
 			redoRgroupLists = new HashMap<Integer,RGroupList>();
 			for (Iterator<Integer> itr=rgrpHandler.getrGroupQuery().getRGroupDefinitions().keySet().iterator(); itr.hasNext();) {

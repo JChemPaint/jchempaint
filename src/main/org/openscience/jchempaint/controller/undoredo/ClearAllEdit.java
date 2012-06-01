@@ -24,7 +24,7 @@
 package org.openscience.jchempaint.controller.undoredo;
 
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 
 /**
@@ -36,11 +36,11 @@ public class ClearAllEdit implements IUndoRedoable {
     private static final long serialVersionUID = -9022673628051651034L;
     
     private IChemModel chemModel;
-	private IMoleculeSet som;
+	private IAtomContainerSet som;
 	private IReactionSet sor;
 	private String type;
 
-	public ClearAllEdit(IChemModel chemModel, IMoleculeSet som, IReactionSet sor, String type) {
+	public ClearAllEdit(IChemModel chemModel, IAtomContainerSet som, IReactionSet sor, String type) {
 		this.chemModel = chemModel;
 		this.som=som;
 		this.sor=sor;
