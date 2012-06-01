@@ -39,6 +39,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
@@ -63,7 +64,6 @@ import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
@@ -1235,7 +1235,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public static void generateNewCoordinates(IAtomContainer container) {
-		IChemObjectBuilder builder = NoNotificationChemObjectBuilder
+		IChemObjectBuilder builder = DefaultChemObjectBuilder
 				.getInstance();
 
 		if (diagramGenerator == null) {
