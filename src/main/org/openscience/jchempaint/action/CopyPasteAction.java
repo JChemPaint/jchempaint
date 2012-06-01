@@ -207,6 +207,7 @@ public class CopyPasteAction extends JCPAction{
             }
             if (atomInRange != null) {
                 jcpPanel.get2DHub().removeAtom(atomInRange);
+                renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 jcpPanel.get2DHub().removeBond(bondInRange);
             } else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
@@ -379,6 +380,7 @@ public class CopyPasteAction extends JCPAction{
             if (atomInRange != null) {
                 tocopyclone.addAtom(atomInRange);
                 jcpPanel.get2DHub().removeAtom(atomInRange);
+                renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 tocopyclone.addBond(bondInRange);
                 jcpPanel.get2DHub().removeBond(bondInRange);
