@@ -611,8 +611,6 @@ public class RendererModel implements Serializable, Cloneable {
             this.highlightedAtom = highlightedAtom;
             fireChange();
         }
-        else
-            this.highlightedAtom = null;
     }
 
     /**
