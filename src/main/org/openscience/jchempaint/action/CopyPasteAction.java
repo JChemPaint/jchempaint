@@ -535,7 +535,12 @@ public class CopyPasteAction extends JCPAction{
         if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
 
-        JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+        try {
+            JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+        } catch (CDKException e) {
+			e.printStackTrace();
+        	return;
+        }
         jcpPanel.get2DHub().fireStructureChangedEvent();
 
         //We select the inserted structure
