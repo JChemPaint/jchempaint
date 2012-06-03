@@ -522,7 +522,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     	else {
     		cor= new MDLV2000Reader(new StringReader(mol), Mode.RELAXED); 
     		chemModel=JChemPaint.getChemModelFromReader(cor, theJcpp);
-    		JChemPaint.cleanUpChemModel(chemModel,true);
+    		JChemPaint.cleanUpChemModel(chemModel,true, theJcpp);
     	}
 
     	theJcpp.setChemModel(chemModel);
