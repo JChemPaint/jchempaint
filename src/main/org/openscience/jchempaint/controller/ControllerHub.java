@@ -121,6 +121,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private static StructureDiagramGenerator diagramGenerator;
 
 	private IControllerModule activeDrawModule;
+	private IControllerModule fallbackModule;
 
 	private final static RingPlacer ringPlacer = new RingPlacer();
 
@@ -235,16 +236,20 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void mouseClickedDownRight(int screenX, int screenY) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
-		// Relay the mouse event to the general handlers
-		for (IControllerModule module : generalModules) {
-			module.mouseClickedDownRight(modelCoord);
-		}
-
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
 			activeModule.mouseClickedDownRight(modelCoord);
-	}
+		if (activeModule.wasEscaped()) {
+			setActiveDrawModule(null);
+			return;
+		}
+
+		// Relay the mouse event to the general handlers
+		for (IControllerModule module : generalModules) {
+			module.mouseClickedDownRight(modelCoord);
+		}
+}
 
 	public void mouseClickedUpRight(int screenX, int screenY) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
@@ -369,9 +374,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void setActiveDrawModule(IControllerModule activeDrawModule) {
+		if (activeDrawModule == null)
+			activeDrawModule = this.fallbackModule;
 		this.activeDrawModule = activeDrawModule;
 		for (int i = 0; i < changeModeListeners.size(); i++)
-			changeModeListeners.get(i).modeChanged(activeDrawModule);
+			changeModeListeners.get(i).modeChanged(this.activeDrawModule);
 	}
 
 	// OK
@@ -2574,6 +2581,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	public void removeChangeModeListener(IChangeModeListener listener) {
 		changeModeListeners.remove(listener);
+	}
+	
+	public void setFallbackModule (IControllerModule m) {
+		this.fallbackModule = m;
 	}
 
 	/*
