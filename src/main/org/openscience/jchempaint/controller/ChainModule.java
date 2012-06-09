@@ -102,7 +102,7 @@ public class ChainModule extends ControllerModuleAdapter {
         chemModelRelay.clearPhantoms();
         //how many bonds do we want?
         double distance = start.distance(worldCoordTo);
-        int numberofbonds = (int)(distance / (bondLength*.9));
+        int numberofbonds = (int)(distance / (bondLength*.8660254)); // constant is sqrt(3)/4
         if(numberofbonds>0){
         	//add start atom
         	IAtomContainer phantoms = getBuilder().newInstance(IAtomContainer.class);
@@ -120,36 +120,37 @@ public class ChainModule extends ControllerModuleAdapter {
         		phantoms.addBond(getBuilder().newInstance(IBond.class, startAtom, nextAtom, IBond.Order.SINGLE));
         		startAtom = nextAtom;
         	}
-            //calculate a second point on the perpendicular through start point
-            double angle = Math.PI / 2;
-            double costheta = Math.cos(angle);
-            double sintheta = Math.sin(angle);
+        	
+        	// The algorithm is 1. calc point a bondlength away in the mouse direction
+        	// 2. calc point rotating the above 30° down, then the same 30° up
+        	// 3. chain the points alternatively
             Point2d point = new Point2d(worldCoordTo);
             Point2d center = new Point2d(start);
-            double relativex = point.x - center.x;
-            double relativey = point.y - center.y;
-            Point2d start2 = new Point2d();
-            start2.x = relativex * costheta - relativey * sintheta + center.x;
-            start2.y = relativex * sintheta + relativey * costheta + center.y;
-            //scale that
-            start2.x = start.x + (start2.x-start.x)/numberofbonds;
-            start2.y = start.y + (start2.y-start.y)/numberofbonds;
-            Point2d worldCoordTo2 = new Point2d();
-            worldCoordTo2.x = relativex * costheta - relativey * sintheta + point.x;
-            worldCoordTo2.y = relativex * sintheta + relativey * costheta + point.y;
-            //scale that
-            worldCoordTo2.x = worldCoordTo.x + (worldCoordTo2.x-worldCoordTo.x)/numberofbonds;
-            worldCoordTo2.y = worldCoordTo.y + (worldCoordTo2.y-worldCoordTo.y)/numberofbonds;
-            for(int i=1;i<phantoms.getAtomCount();i++){
-        		Point2d p1 = new Point2d();
+            double dx = (point.x - center.x)/numberofbonds;
+            double dy = (point.y - center.y)/numberofbonds;
+            double angle = Math.PI / 6;
+            double cosangle = Math.cos(angle);
+            double sinangle = Math.sin(angle);
+            double firstx = dx*cosangle - dy*sinangle;
+            double firsty = dx*sinangle + dy*cosangle;
+            double secx = dx*cosangle + dy*sinangle;
+            double secy = -dx*sinangle + dy*cosangle;
+    		Point2d p1 = new Point2d(start);
+    		phantoms.getAtom(0).setPoint2d(p1);
+    		double currx = p1.x;
+    		double curry = p1.y;
+            for(int i=0; i<phantoms.getAtomCount(); i++){
+        		Point2d p = new Point2d(currx,curry);
             	if(i % 2 == 1){
-            		//atoms on line2
-                    p1.interpolate(start2, worldCoordTo2, 1.0/phantoms.getAtomCount()*i);
+            		p.x += firstx;
+            		p.y += firsty;
             	}else{
-            		//atoms on line
-                    p1.interpolate(start, worldCoordTo, 1.0/phantoms.getAtomCount()*i);
-            	}
-        		phantoms.getAtom(i).setPoint2d(p1);
+            		p.x += secx;
+            		p.y += secy;
+                }
+            	currx = p.x;
+            	curry = p.y;
+        		phantoms.getAtom(i).setPoint2d(p);
             }
             chemModelRelay.setPhantoms(phantoms);
             chemModelRelay.setPhantomText(""+phantoms.getAtomCount(), worldCoordTo);
