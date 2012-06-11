@@ -2151,17 +2151,26 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			return removed;
 		
 		for (int i = 0; i < selected.getAtomCount(); i++) {
-			removed.addAtom(selected.getAtom(i));
+			IAtom atom = selected.getAtom(i);
+			removed.addAtom(atom);
 			Iterator<IBond> it = ChemModelManipulator.getRelevantAtomContainer(
-					chemModel, selected.getAtom(i)).getConnectedBondsList(
-					selected.getAtom(i)).iterator();
+					chemModel, atom).getConnectedBondsList(atom).iterator();
+			IAtomContainer ac = selected.getBuilder().newInstance(IAtomContainer.class);
 			while (it.hasNext()) {
 				IBond bond = it.next();
-				if (!removed.contains(bond))
+				if (!removed.contains(bond)) {
 					removed.addBond(bond);
+					ac.addBond(bond);
+				}
 			}
 			ChemModelManipulator.removeAtomAndConnectedElectronContainers(
-					chemModel, selected.getAtom(i));
+                                       chemModel, atom); 
+			for (IBond bond : ac.bonds()) {
+				if (bond.getAtom(0) == atom)
+					updateAtom(bond.getAtom(1));
+				else
+					updateAtom(bond.getAtom(0));
+			}
 		}
 		removeEmptyContainers(chemModel);
 		if (undoredofactory != null && undoredohandler != null) {
