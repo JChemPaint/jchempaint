@@ -94,17 +94,6 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 	}
 
 	@Test
-	public void testSetSmiles() throws CDKException {
-		JPanelFixture jcppanel = applet.panel("appletframe");
-		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
-		jcpApplet.setSmiles("CCCC");
-		panel.get2DHub().updateView();
-		Assert.assertEquals(4, panel.getChemModel().getMoleculeSet()
-				.getAtomContainer(0).getAtomCount());
-		restoreModelToEmpty();
-	}
-
-	@Test
 	public void testSetMolFile() throws CDKException {
 		JPanelFixture jcppanel = applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
@@ -548,49 +537,4 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         Assert.assertEquals(7, mol.getAtomCount());
         restoreModelToEmpty();
 	}
-
-    @Test public void testBug65() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("hexagon").click();
-        applet.click();
-        applet.button("eraser").click();
-        Point2d point = getBondPoint(panel,0);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
-        point = getBondPoint(panel,2);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
-
-        int atomCount=0, bondCount=0;
-		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
-			atomCount+=atc.getAtomCount();
-			bondCount+=atc.getBondCount();
-		}
-		Assert.assertEquals(6, atomCount);
-        Assert.assertEquals(4, bondCount);
-        restoreModelToEmpty();
-    }
-
-    @Test public void testBug75() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("hexagon").click();
-        applet.click();
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100), MouseButton.LEFT_BUTTON,1);
-        applet.button("eraser").click();
-        Point2d moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        moveto=getAtomPoint(panel,0,1);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
-        Assert.assertEquals("C1CCCCC1", panel.getSmiles());
-        restoreModelToEmpty();
-    }
-
 }
