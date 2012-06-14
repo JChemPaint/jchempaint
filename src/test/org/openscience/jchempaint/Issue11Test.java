@@ -37,7 +37,7 @@ import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
  */
 public class Issue11Test extends AbstractAppletTest {
 
-    @Test public void testBug65() {
+    @Test public void testIssue11() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         try {

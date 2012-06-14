@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class Issue19Test extends AbstractAppletTest {
 
-    @Test public void test() throws AWTException {
+    @Test public void testIssue19() throws AWTException {
     	Robot robot = new Robot();
     	JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
