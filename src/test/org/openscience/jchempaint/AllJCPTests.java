@@ -17,6 +17,7 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue11Test.class,
         Issue19Test.class,
         Issue32Test.class,
+        Issue40Test.class,
         SetSmilesTest.class
         } )
 public class AllJCPTests {
