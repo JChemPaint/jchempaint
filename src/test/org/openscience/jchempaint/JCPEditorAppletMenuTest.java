@@ -177,55 +177,6 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).setFormalCharge(0);
     }
 	
-	@Test public void testMenuIsotopeMajorPlusThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(15);
-	}
-
-	@Test public void testMenuIsotopeMajorPlusTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(14);
-	}
-	
-	@Test public void testMenuIsotopeMajorPlusOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(13);
-	}
-	
-	@Test public void testMenuIsotopeMajor() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(12);
-	}
-	
-	@Test public void testMenuIsotopeMajorMinusOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(11);
-	}
-	
-	private void genericIsotopeTest(int isotopeNumber){
-	    //we go to select mode
-	    restoreModelWithBasicmol();
-        applet.button("select").click();
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
-        panel.selectionChanged();
-        int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
-        applet.menuItem("isotopeChange").click();
-        applet.menuItem("C"+isotopeNumber).click();
-        Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
-        //the mode should have changed now
-        Assert.assertEquals("C", panel.get2DHub().getActiveDrawModule().getID());
-        Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
-        //if we click somewhere, we should get a new atom with specified properties
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,100));
-        Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
-        Assert.assertEquals("C", panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtom(0).getSymbol());
-        Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtom(0).getMassNumber().intValue());
-        panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setMassNumber(12);
-    }
-	
-	@Test public void testMenuIsotopeMajorMinusTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(10);
-	}
-	
-	@Test public void testMenuIsotopeMajorMinusThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    genericIsotopeTest(9);
-	}
-	
 	@Test public void testMenuValenceOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(1);
     }
@@ -535,28 +486,6 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 		}
 		//TODO do this for all formats
 		
-		@Test public void testMenuCut(){
-		    restoreModelWithBasicmol();
-	        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
-	        panel.selectionChanged();
-	        Assert.assertEquals(8,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-	        applet.menuItem("cut").click();
-            Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-            applet.menuItem("paste").click();
-            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(7,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
-            Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(4).getPoint2d().y);
-            JPopupMenuFixture popup = applet.panel("renderpanel").showPopupMenuAt(new Point((int)moveto.x,(int)moveto.y));
-            //try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
-            popup.menuItem("cut").click();
-            Assert.assertEquals(3,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            //try {Thread.sleep(5000);} catch (InterruptedException e) {e.printStackTrace();}
-            Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-            Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
-            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
-		}
-	
 	    @Test public void testMenuTemplatesAll() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
             restoreModelWithBasicmol();
             applet.menuItem("pasteTemplate").click();
