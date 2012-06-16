@@ -59,14 +59,14 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                     .getSelection().isFilled())
                 bounds = BoundsCalculator.calculateBounds(this.chemModelRelay.getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer());
         IAtom closestAtom = chemModelRelay.getClosestAtom(p);
-        IChemObject highlightedAtom = getHighlighted( p, closestAtom);
+/*        IChemObject highlightedAtom = getHighlighted( p, closestAtom);
         IBond closestBond = chemModelRelay.getClosestBond(p);
-        IChemObject highlightedBond = getHighlighted( p, closestBond);
+        IChemObject highlightedBond = getHighlighted( p, closestBond);*/
+        
         //in case the user either starts dragging inside the current selection
-        //or in highlight distance to an atom, we switch to move mode, else
-        //we start a new selection
-        if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) 
-            || highlightedAtom!=null || highlightedBond!=null){
+        //we switch to move mode, else we start a new selection 
+        if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) ){
+//            || highlightedAtom!=null || highlightedBond!=null){
                 IControllerModule newActiveModule = new MoveModule(this.chemModelRelay, this);
                 newActiveModule.setID("move");
                 this.chemModelRelay
@@ -78,12 +78,12 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 	        this.selection.clear();
         }
 
-        if (highlightedAtom!=null ) {
+/*        if (highlightedAtom!=null ) {
             selection.addAtom((IAtom)highlightedAtom);
         }
         if (highlightedBond!=null) {
             selection.addBond((IBond)highlightedBond);
-        }
+        }*/
 
         this.chemModelRelay.getRenderer().getRenderer2DModel().setSelection(this.selection);
         startPoint=p;
