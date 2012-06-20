@@ -167,6 +167,11 @@ public class MoveModule extends ControllerModuleAdapter {
                 chemModelRelay.moveBy(atomsToMove, null, end);
             }
     	}
+        IControllerModule newActiveModule = new SelectSquareModule(this.chemModelRelay);
+        newActiveModule.setID("select");
+        this.chemModelRelay
+                .setActiveDrawModule(newActiveModule);
+    
     	endMove();
     }
 
@@ -176,31 +181,52 @@ public class MoveModule extends ControllerModuleAdapter {
         offset = null;
     }
 
+    /**
+     * Most move mode calculations are done in this routine.
+     */
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
-        if (chemModelRelay != null && offset != null) {
+    	if (atomsToMove == null) {
+    		IAtomContainer selectedAC = getSelectedAtomContainer(worldCoordFrom );
+    		if (selectedAC != null) {
+            
+                // It could be that only a  selected bond is going to be moved. 
+                // So make sure that the attached atoms are included, otherwise
+                // the undo will fail to place the atoms back where they were
+        		atomsToMove = new HashSet<IAtom>();
 
-        	end2DCenter = worldCoordTo;
-            Point2d atomCoord = new Point2d();
-            atomCoord.add(worldCoordTo, offset);
+                for (IAtom atom : selectedAC.atoms()) {
+                    atomsToMove.add(atom);
+                }
+                for (IBond bond : selectedAC.bonds()) {
+                    for (IAtom atom : bond.atoms()){
+                        atomsToMove.add(atom);
+                        selectedAC.addAtom(atom);
+                    }
+                }
+    		} else return; // TODO: do we also move highlighted atoms?
+	    	if (offset == null) {
+		    	Point2d current = GeometryTools.get2DCenter(selectedAC);
+		        start2DCenter = current;
+		        offset = new Vector2d();
+		        offset.sub(current, worldCoordTo);
+	    	}
+    	}
+    	end2DCenter = worldCoordTo;
+        Point2d atomCoord = new Point2d();
+        atomCoord.add(worldCoordTo, offset);
 
-            Vector2d d = new Vector2d();
-            d.sub(worldCoordTo, worldCoordFrom);
+        Vector2d d = new Vector2d();
+        d.sub(worldCoordTo, worldCoordFrom);
 
-            // check for possible merges
-            RendererModel model = 
-                chemModelRelay.getRenderer().getRenderer2DModel();
-            model.getMerge().clear();
+        // check for possible merges
+        RendererModel model = 
+            chemModelRelay.getRenderer().getRenderer2DModel();
+        model.getMerge().clear();
 
-            model.getMerge().putAll( calculateMerge(atomsToMove) );
+        model.getMerge().putAll( calculateMerge(atomsToMove) );
 
-            chemModelRelay.moveBy(atomsToMove, d, null);
-            chemModelRelay.updateView();
-
-        } else {
-            if (chemModelRelay == null) {
-                logger.debug("chemObjectRelay is NULL!");
-            }
-        }
+        chemModelRelay.moveBy(atomsToMove, d, null);
+        chemModelRelay.updateView();
     }
 
     public static class DistAtom implements Comparable<DistAtom>{
