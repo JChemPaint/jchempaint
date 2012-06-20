@@ -1,2 +1,12 @@
 bin
 ant.properties
+dist/
+*~
+lib-licenses.txt
+lgpl.license
+MANIFEST.MF
+.gitignore
+.classpath
+.project
+build.xml
+po/

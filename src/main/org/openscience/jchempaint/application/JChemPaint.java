@@ -284,7 +284,7 @@ public class JChemPaint {
             boolean avoidOverlap=true;
             if (cor instanceof RGroupQueryReader)
             	avoidOverlap=false;
-            JChemPaint.cleanUpChemModel(chemModel, avoidOverlap);
+            JChemPaint.cleanUpChemModel(chemModel, avoidOverlap, panel);
 
         }
         finally {
@@ -323,7 +323,7 @@ public class JChemPaint {
         if (cor instanceof RGroupQueryReader)
         	avoidOverlap=false;
 
-        JChemPaint.cleanUpChemModel(chemModel, avoidOverlap);
+        JChemPaint.cleanUpChemModel(chemModel, avoidOverlap, panel);
 
         return chemModel;
     }
@@ -334,7 +334,7 @@ public class JChemPaint {
      * @param avoidOverlap
      * @throws CDKException
      */
-    public static void cleanUpChemModel(IChemModel chemModel, boolean avoidOverlap)
+    public static void cleanUpChemModel(IChemModel chemModel, boolean avoidOverlap, AbstractJChemPaintPanel panel)
             throws CDKException {
         JChemPaint.setReactionIDs(chemModel);
         JChemPaint.replaceReferencesWithClones(chemModel);
@@ -350,8 +350,14 @@ public class JChemPaint {
         JChemPaint.removeEmptyMolecules(chemModel);
 
         if (avoidOverlap) {
-            ControllerHub.avoidOverlap(chemModel);
-		}
+        	try {
+        		ControllerHub.avoidOverlap(chemModel);
+        	} catch (Exception e) {
+                JOptionPane.showMessageDialog(panel, GT._("Structure could not be generated"));
+                throw new CDKException(
+                        "Cannot depict structure");
+                }
+        	}
         
         //We update implicit Hs in any case
         CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
@@ -491,10 +497,17 @@ public class JChemPaint {
         return chemModel;
     }
 
-
-    
-
-    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) {
+    /**
+     * Inserts a molecule into the current set, usually from Combobox or Insert field, with possible
+     * shifting of the existing set.  
+     * @param chemPaintPanel
+     * @param molecule
+     * @param generateCoordinates
+     * @param shiftPanel
+     * @throws CDKException
+     */
+    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) 
+    throws CDKException {
         if (molecule == null) return;
 
         IChemModel chemModel = chemPaintPanel.getChemModel();
@@ -543,7 +556,9 @@ public class JChemPaint {
                 sdg.generateCoordinates(new Vector2d(0, 1));
                 molecule = sdg.getMolecule();
             } catch (Exception exc) {
-                exc.printStackTrace();
+                JOptionPane.showMessageDialog(chemPaintPanel, GT._("Structure could not be generated"));
+                throw new CDKException(
+                        "Cannot depict structure");
             }
         }
 

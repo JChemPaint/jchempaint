@@ -207,6 +207,7 @@ public class CopyPasteAction extends JCPAction{
             }
             if (atomInRange != null) {
                 jcpPanel.get2DHub().removeAtom(atomInRange);
+                renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 jcpPanel.get2DHub().removeBond(bondInRange);
             } else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
@@ -379,6 +380,7 @@ public class CopyPasteAction extends JCPAction{
             if (atomInRange != null) {
                 tocopyclone.addAtom(atomInRange);
                 jcpPanel.get2DHub().removeAtom(atomInRange);
+                renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 tocopyclone.addBond(bondInRange);
                 jcpPanel.get2DHub().removeBond(bondInRange);
@@ -535,7 +537,12 @@ public class CopyPasteAction extends JCPAction{
         if(toPaste.getAtomCount()==1 && toPaste.getAtom(0).getPoint2d()==null)
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
 
-        JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+        try {
+            JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+        } catch (CDKException e) {
+			e.printStackTrace();
+        	return;
+        }
         jcpPanel.get2DHub().fireStructureChangedEvent();
 
         //We select the inserted structure

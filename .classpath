@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="org/openscience/jchempaint/TestEditor.java|org/openscience/jchempaint/TestRenderer.java" kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/main"/>
 	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="src" path="src/util"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="po/classes"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/usr/lib64/icedtea7/jre/lib/amd64"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-cli.jar"/>
 	<classpathentry kind="lib" path="lib/jfontchooser.jar"/>
 	<classpathentry kind="lib" path="libutil/batik.jar"/>
@@ -15,6 +17,34 @@
 	<classpathentry kind="lib" path="libdevel/fest-util-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/inchi-1.0.2.jar"/>
 	<classpathentry kind="lib" path="libutil/html.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/cdk_jcp"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/cmlxom-2.5-b1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/jniinchi-0.7.jar" sourcepath="/CDK/cdksrc.zip"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/jama-1.0.2.jar" sourcepath="/CDK/cdksrc.zip"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/jgrapht-0.6.0.jar" sourcepath="/CDK/cdksrc.zip"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/vecmath1.2-1.14.jar" sourcepath="/CDK/cdksrc.zip"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/xom-1.1.jar" sourcepath="/CDK/cdksrc.zip"/>
+	<classpathentry kind="lib" path="/home/ralf/cdk-1.4.10/jar/xpp3-1.1.4c.jar" sourcepath="/CDK/org.openscience.cdksrc.zip"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="po/classes"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/jena/jena.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/com-sun-javadoc.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/com-sun-tools-doclets-Taglet.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-core.jar" sourcepath="/CDK-1.4.10/jar/cdk-core-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-data.jar" sourcepath="/CDK-1.4.10/jar/cdk-data-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-extra.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-formula.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-interfaces.jar" sourcepath="/CDK-1.4.10/jar/cdk-interfaces-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-io.jar" sourcepath="/CDK-1.4.10/jar/cdk-io-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-ioformats.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-isomorphism.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-libiocml.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-qm.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-reaction.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-sdg.jar" sourcepath="/CDK-1.4.10/jar/cdk-sdg-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-smiles.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-standard.jar" sourcepath="/CDK-1.4.10/jar/cdk-standard-sources.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-valencycheck.jar"/>
+	<classpathentry kind="lib" path="/CDK-1.4.10/jar/log4j.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

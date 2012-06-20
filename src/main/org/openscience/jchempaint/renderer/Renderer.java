@@ -932,6 +932,10 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         return diagram;
     }
 
+    /**
+     * Return the list of generators for the Renderer
+     * @return
+     */
     public List<IGenerator> getGenerators() {
         return new ArrayList<IGenerator>(generators);
     }

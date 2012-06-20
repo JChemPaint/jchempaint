@@ -20,7 +20,6 @@
 */
 package org.openscience.jchempaint.renderer;
 
-import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -540,16 +539,4 @@ public class AtomContainerRenderer implements IRenderer {
 	public IFontManager getFontManager() {
 		return fontManager;
 	}
-	
-    public void setCursor(int cursor){
-        if(renderPanel!=null)
-            renderPanel.setCursor(new Cursor(cursor));
-    }
-
-    public int getCursor() {
-        if(renderPanel!=null)
-            return renderPanel.getCursor().getType();
-        else
-            return Cursor.DEFAULT_CURSOR;
-    }
 }

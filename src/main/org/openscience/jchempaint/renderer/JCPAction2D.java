@@ -6,7 +6,7 @@
  *
  *  Copyright (C) 1997-2007  The JChemPaint project
  *
- *  Contact: jchempaint-devel@lists.sourceforge.net
+ *  Contact: cdk-jchempaint@lists.sourceforge.net
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
