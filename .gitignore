@@ -10,3 +10,4 @@ MANIFEST.MF
 .project
 build.xml
 po/
+po/classes/app/i18n/*.class
