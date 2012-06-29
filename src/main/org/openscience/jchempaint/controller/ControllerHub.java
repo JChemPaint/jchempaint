@@ -73,6 +73,7 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -111,7 +112,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	private IRenderer renderer;
 
-	private IViewEventRelay eventRelay;
+	private RenderPanel eventRelay;
 
 	private List<IControllerModule> generalModules;
 
@@ -120,6 +121,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private static StructureDiagramGenerator diagramGenerator;
 
 	private IControllerModule activeDrawModule;
+	private IControllerModule fallbackModule;
 
 	private final static RingPlacer ringPlacer = new RingPlacer();
 
@@ -146,7 +148,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	private String phantomText = null;
 
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
-			IChemModel chemModel, IViewEventRelay eventRelay,
+			IChemModel chemModel, RenderPanel eventRelay,
 			UndoRedoHandler undoredohandler, IUndoRedoFactory undoredofactory,
 			boolean isViewer, JChemPaintAbstractApplet applet) {
 		this.controllerModel = controllerModel;
@@ -234,16 +236,20 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void mouseClickedDownRight(int screenX, int screenY) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
-		// Relay the mouse event to the general handlers
-		for (IControllerModule module : generalModules) {
-			module.mouseClickedDownRight(modelCoord);
-		}
-
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
 			activeModule.mouseClickedDownRight(modelCoord);
-	}
+		if (activeModule.wasEscaped()) {
+			setActiveDrawModule(null);
+			return;
+		}
+
+		// Relay the mouse event to the general handlers
+		for (IControllerModule module : generalModules) {
+			module.mouseClickedDownRight(modelCoord);
+		}
+}
 
 	public void mouseClickedUpRight(int screenX, int screenY) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
@@ -269,11 +275,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
-		if (activeModule != null)
+		if (activeModule != null) {
 			activeModule.mouseClickedDown(modelCoord);
-
-		if (renderer.getCursor() == Cursor.HAND_CURSOR
-				|| renderer.getCursor() == Cursor.HAND_CURSOR) {
+		}
+		
+		if (getCursor() == Cursor.HAND_CURSOR
+				|| getCursor() == Cursor.HAND_CURSOR) {
 			setCursor(Cursor.MOVE_CURSOR);
 			oldMouseCursor = Cursor.HAND_CURSOR;
 		} else {
@@ -292,8 +299,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
-		if (activeModule != null)
+		if (activeModule != null) {
 			activeModule.mouseClickedUp(modelCoord);
+		}
+		
 		setCursor(oldMouseCursor);
 	}
 
@@ -368,9 +377,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void setActiveDrawModule(IControllerModule activeDrawModule) {
+		if (activeDrawModule == null)
+			activeDrawModule = this.fallbackModule;
 		this.activeDrawModule = activeDrawModule;
 		for (int i = 0; i < changeModeListeners.size(); i++)
-			changeModeListeners.get(i).modeChanged(activeDrawModule);
+			changeModeListeners.get(i).modeChanged(this.activeDrawModule);
 	}
 
 	// OK
@@ -2143,17 +2154,26 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			return removed;
 		
 		for (int i = 0; i < selected.getAtomCount(); i++) {
-			removed.addAtom(selected.getAtom(i));
+			IAtom atom = selected.getAtom(i);
+			removed.addAtom(atom);
 			Iterator<IBond> it = ChemModelManipulator.getRelevantAtomContainer(
-					chemModel, selected.getAtom(i)).getConnectedBondsList(
-					selected.getAtom(i)).iterator();
+					chemModel, atom).getConnectedBondsList(atom).iterator();
+			IAtomContainer ac = selected.getBuilder().newInstance(IAtomContainer.class);
 			while (it.hasNext()) {
 				IBond bond = it.next();
-				if (!removed.contains(bond))
+				if (!removed.contains(bond)) {
 					removed.addBond(bond);
+					ac.addBond(bond);
+				}
 			}
 			ChemModelManipulator.removeAtomAndConnectedElectronContainers(
-					chemModel, selected.getAtom(i));
+                                       chemModel, atom); 
+			for (IBond bond : ac.bonds()) {
+				if (bond.getAtom(0) == atom)
+					updateAtom(bond.getAtom(1));
+				else
+					updateAtom(bond.getAtom(0));
+			}
 		}
 		removeEmptyContainers(chemModel);
 		if (undoredofactory != null && undoredohandler != null) {
@@ -2574,6 +2594,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void removeChangeModeListener(IChangeModeListener listener) {
 		changeModeListeners.remove(listener);
 	}
+	
+	public void setFallbackModule (IControllerModule m) {
+		this.fallbackModule = m;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -2655,8 +2679,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return chemModel;
 	}
 
+	/**
+	 * Sets the mouse cursor shown on the renderPanel.
+	 * 
+	 * @param cursor One of the constants from java.awt.Cursor.
+	 */
 	public void setCursor(int cursor) {
-		renderer.setCursor(cursor);
+		eventRelay.setCursor(new Cursor(cursor));
+	}
+
+	/**
+	 * Tells the mouse cursor shown on the renderPanel.
+	 * 
+	 * @return One of the constants from java.awt.Cursor.
+	 */
+	public int getCursor() {
+		return eventRelay.getCursor().getType();
 	}
 
 	/**

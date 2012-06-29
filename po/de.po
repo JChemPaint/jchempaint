@@ -515,7 +515,7 @@ msgstr "Implizite Wasserstoffe zeigen"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:197
 msgid "Show aromatic ring circles"
-msgstr "Aromtische Ringe benutzen"
+msgstr "Aromatische Ringe benutzen"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:204
 msgid "Color atoms by element"

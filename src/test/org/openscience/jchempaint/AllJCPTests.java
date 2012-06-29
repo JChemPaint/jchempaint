@@ -10,7 +10,19 @@ import org.junit.runners.Suite.SuiteClasses;
         JCPEditorAppletMenuTest.class,
         JCPEditorAppletDrawingTest.class,
         JCPEditorAppletBugsTest.class,
-        JCPEditorAppletUndoRedoTest.class} )
+        JCPEditorAppletUndoRedoTest.class,
+        BugSF65Test.class,
+        BugSF75Test.class,
+        Issue4Test.class,
+        Issue11Test.class,
+        Issue19Test.class,
+        Issue32Test.class,
+        Issue40Test.class,
+        Issue58Test.class,
+        MenuCutTest.class,
+        MenuIsotopeTest.class,
+        SetSmilesTest.class
+        } )
 public class AllJCPTests {
 
 }

@@ -235,6 +235,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
 
     public void setCursor(int cursor);
+    public int getCursor();
     public IChemModel getChemModel();
     public RGroupHandler getRGroupHandler();
 	public void setRGroupHandler(RGroupHandler rGroupHandler);
