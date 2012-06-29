@@ -51,6 +51,9 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.IControllerModule;
+import org.openscience.jchempaint.controller.SelectSquareModule;
 
 /**
  *  This class makes the JCPToolBar
@@ -268,6 +271,10 @@ public class JCPToolBar
         {
             toolbar2.add(Box.createHorizontalGlue());
         }
+    	ControllerHub relay = chemPaintPanel.get2DHub();
+    	IControllerModule m = new SelectSquareModule (relay);
+    	m.setID("select");
+    	relay.setFallbackModule(m);
         return toolbar2;
     }
 }

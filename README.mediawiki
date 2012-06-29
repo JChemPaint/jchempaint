@@ -2,6 +2,10 @@
 It is implemented in several forms: a Java application and two varieties of Java applet.
 
 Please see the documentation at
-https://github.com/rwst/jchempaint/wiki
+https://github.com/JChemPaint/jchempaint/wiki
 for more information.
+
+The issue tracker here (on top of this page) is for specific
+JCP-related bugs. For problems in CDK proper, please use
+http://sourceforge.net/tracker/?group_id=20024&atid=120024
 

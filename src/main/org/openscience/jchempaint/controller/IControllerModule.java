@@ -108,4 +108,14 @@ public interface IControllerModule {
 	 * @param ID The ID attribute
 	 */
 	public void setID(String ID);
+	
+	/**
+	 * Set wasEscaped flag to true
+	 */
+	public void escapeTheMode();
+	
+	/**
+	 * Returns wasEscaped attribute
+	 */
+	public boolean wasEscaped();
 }

@@ -51,48 +51,59 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     public AbstractSelectModule(IChemModelRelay chemModelRelay) {
         super(chemModelRelay);
     }
-    
+
+	private IAtom getClosestSelAtom(Point2d worldCoord) {
+		IAtom closestAtom = null;
+		IChemObjectSelection sel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
+		double closestDistanceSQ = Double.MAX_VALUE;
+
+		for (IAtom atom : sel.elements(IAtom.class)) {
+			if (atom.getPoint2d() != null) {
+				double distanceSQ = atom.getPoint2d().distanceSquared(
+						worldCoord);
+				if (distanceSQ < closestDistanceSQ) {
+					closestAtom = atom;
+					closestDistanceSQ = distanceSQ;
+				}
+			}
+		}
+		return closestAtom;
+	}
+
     public void mouseClickedDown(Point2d p) {
-        Rectangle2D bounds=null;
-        if(this.chemModelRelay.getRenderer().getRenderer2DModel().getSelection()!=null 
-                    && this.chemModelRelay.getRenderer().getRenderer2DModel()
-                    .getSelection().isFilled())
-                bounds = BoundsCalculator.calculateBounds(this.chemModelRelay.getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer());
-        IAtom closestAtom = chemModelRelay.getClosestAtom(p);
-        IChemObject highlightedAtom = getHighlighted( p, closestAtom);
-        IBond closestBond = chemModelRelay.getClosestBond(p);
-        IChemObject highlightedBond = getHighlighted( p, closestBond);
-        //in case the user either starts dragging inside the current selection
-        //or in highlight distance to an atom, we switch to move mode, else
-        //we start a new selection
-        if((bounds !=null && bounds.contains(new Point2D.Double(p.x, p.y))) 
-            || highlightedAtom!=null || highlightedBond!=null){
-                IControllerModule newActiveModule = new MoveModule(this.chemModelRelay, this);
-                newActiveModule.setID("move");
-                this.chemModelRelay
-                        .setActiveDrawModule(newActiveModule);
-                ((IMouseEventRelay)this.chemModelRelay).mouseClickedDown(
-                		(int)this.chemModelRelay.getRenderer().toScreenCoordinates(p.x, p.y).x,
-                		(int)this.chemModelRelay.getRenderer().toScreenCoordinates(p.x, p.y).y);
-        }else{
-	        this.selection.clear();
-        }
-
-        if (highlightedAtom!=null ) {
-            selection.addAtom((IAtom)highlightedAtom);
-        }
-        if (highlightedBond!=null) {
-            selection.addBond((IBond)highlightedBond);
-        }
-
-        this.chemModelRelay.getRenderer().getRenderer2DModel().setSelection(this.selection);
         startPoint=p;
     }
         
     
     public void mouseDrag(Point2d from, Point2d to) {
+        Rectangle2D bounds=null;
+        boolean inSelectionCircle = false; 
+        IChemObjectSelection sel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
+        double d = chemModelRelay.getRenderer().getRenderer2DModel().getSelectionRadius() 
+        		/ chemModelRelay.getRenderer().getRenderer2DModel().getScale();
+        if(from.equals(startPoint)) {
+        	if (sel != null && sel.isFilled()) {
+	            bounds = BoundsCalculator.calculateBounds(sel.getConnectedAtomContainer());
+	            IAtom closestAtom = getClosestSelAtom(startPoint);
+	            inSelectionCircle = closestAtom.getPoint2d().distance(startPoint) < 4*d;
+	        }
+	        //in case the user either starts dragging inside the current selection
+	        //rectangle or in a selection circle, we switch to move mode,
+	        //else we start a new selection 
+	        if((bounds !=null && bounds.contains(new Point2D.Double(startPoint.x, startPoint.y)))
+	        		|| inSelectionCircle ){
+	                IControllerModule newActiveModule = new MoveModule(this.chemModelRelay, this);
+	                newActiveModule.setID("move");
+	                chemModelRelay.setActiveDrawModule(newActiveModule);
+	                Point2d sf = chemModelRelay.getRenderer().toScreenCoordinates(startPoint.x, startPoint.y);
+	                Point2d st = chemModelRelay.getRenderer().toScreenCoordinates(to.x, to.y);
+	                ((IMouseEventRelay)this.chemModelRelay).mouseDrag((int)sf.x,(int)sf.y,(int)st.x,(int)st.y);
+	                return;
+	        }
+        }
         this.selection.addPoint(to);
         this.chemModelRelay.select(selection);
+        this.chemModelRelay.getRenderer().getRenderer2DModel().setSelection(this.selection);
         this.chemModelRelay.updateView();
     }
     
@@ -126,23 +137,26 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     }
 
     public void mouseClickedUp(Point2d p) {
-
-        this.chemModelRelay.select(selection);
-        this.selection.reset();
+        chemModelRelay.select(selection);
+        selection.reset();
         if(p.equals(startPoint)){
             IAtom closestAtom = chemModelRelay.getClosestAtom(p);
             IBond closestBond = chemModelRelay.getClosestBond(p);
             IChemObject singleSelection = getHighlighted( p,
                     closestAtom,
                     closestBond );
-            if(singleSelection instanceof IAtom){
-                IChemObjectSelection selection = new SingleSelection<IAtom>((IAtom)singleSelection);
-                this.chemModelRelay.select(selection);
+            IChemObjectSelection sel = null;
+            if (singleSelection == null){
+            	selection.clear();
+            	sel = null;
+            }else if(singleSelection instanceof IAtom){
+                sel = new SingleSelection<IAtom>((IAtom)singleSelection);
             }else if(singleSelection instanceof IBond){
-                IChemObjectSelection selection = new SingleSelection<IBond>((IBond)singleSelection);
-                this.chemModelRelay.select(selection);
+                sel = new SingleSelection<IBond>((IBond)singleSelection);
             }
+            this.chemModelRelay.select(sel);
         }
+
         this.chemModelRelay.updateView();
     }
     

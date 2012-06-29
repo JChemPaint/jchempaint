@@ -156,6 +156,14 @@ public class AddRingModule extends ControllerModuleAdapter {
 		chemModelRelay.updateView();
 	}
     
+	public void mouseClickedDownRight(Point2d worldCoord) {
+        this.chemModelRelay.clearPhantoms();
+        this.setSelection(AbstractSelection.EMPTY_SELECTION);
+        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
+        this.chemModelRelay.updateView();
+        this.escapeTheMode();
+	}
+
     public void mouseMove(Point2d worldCoord) {
         if ((System.nanoTime() - drawTime) < 4000000) {
             return;

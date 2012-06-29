@@ -2,11 +2,12 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.3.0" />
+    <property name="jcp.version" value="3.3-1206" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
 
+    <property name="cdk.dir" value="/home/ralf/cdk-1.4.10" />
     <property name="cdk.dist" value="${cdk.dir}/dist" />
     <property name="cdk.lib" value="${cdk.dir}/jar" />
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />

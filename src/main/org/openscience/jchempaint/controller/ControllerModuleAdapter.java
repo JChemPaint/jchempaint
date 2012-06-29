@@ -20,9 +20,11 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 
 	protected IChemModelRelay chemModelRelay;
 	protected IChemObjectSelection selection;
+	protected boolean wasEscaped;
 
     public ControllerModuleAdapter(IChemModelRelay chemModelRelay) {
 		this.chemModelRelay = chemModelRelay;
+		this.wasEscaped = false;
 	}
 
 	public double getHighlightDistance() {
@@ -197,5 +199,14 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
             chemModelRelay.updateView();
         }
     }
+    
+    public void escapeTheMode() {
+    	this.wasEscaped = true;
+    }
+    
+    public boolean wasEscaped() {
+    	return this.wasEscaped;
+    }
+    
 
 }

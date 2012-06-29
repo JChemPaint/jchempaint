@@ -96,7 +96,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     protected boolean debug = false;
     protected List<String> blacklist = new ArrayList<String>();
     
-    private static String appletInfo = "JChemPaint Applet. See http://cdk.sourceforge.net "
+    private static String appletInfo = "JChemPaint Applet. See http://jchempaint.github.com "
             + "for more information";
 
     public static String[][] paramInfo;
@@ -522,7 +522,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     	else {
     		cor= new MDLV2000Reader(new StringReader(mol), Mode.RELAXED); 
     		chemModel=JChemPaint.getChemModelFromReader(cor, theJcpp);
-    		JChemPaint.cleanUpChemModel(chemModel,true);
+    		JChemPaint.cleanUpChemModel(chemModel,true, theJcpp);
     	}
 
     	theJcpp.setChemModel(chemModel);
