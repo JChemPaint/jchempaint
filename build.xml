@@ -7,7 +7,7 @@
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
 
-    <property name="cdk.dir" value="/home/ralf/cdk-1.4.10" />
+    <property name="cdk.dir" value="/home/ralf/remote/CDK" />
     <property name="cdk.dist" value="${cdk.dir}/dist" />
     <property name="cdk.lib" value="${cdk.dir}/jar" />
     <property name="cdk.devellib" value="${cdk.dir}/develjar" />
@@ -89,7 +89,6 @@
                 <includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
                 <includesfile name="${cdk.metainf}/libiocml.libdepends"/>
                 <includesfile name="${cdk.metainf}/libiomd.libdepends"/>
-                <includesfile name="${cdk.metainf}/nonotify.libdepends"/>
                 <includesfile name="${cdk.metainf}/pcore.libdepends"/>
                 <includesfile name="${cdk.metainf}/pdb.libdepends"/>
                 <includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
@@ -106,6 +105,7 @@
                 <includesfile name="${cdk.metainf}/smarts.libdepends"/>
                 <includesfile name="${cdk.metainf}/smiles.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
+                <includesfile name="${cdk.metainf}/valencycheck.libdepends"/>
             </fileset>
         </unjar>
         <unjar dest="${dist-classes}">
@@ -137,11 +137,11 @@
                 <include name="cdk-inchi.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-io.jar"/>
+                <include name="cdk-ioformats.jar"/>
                 <include name="cdk-ionpot.jar"/>
                 <include name="cdk-isomorphism.jar"/>
                 <include name="cdk-libiocml.jar"/>
                 <include name="cdk-libiomd.jar"/>
-                <include name="cdk-nonotify.jar"/>
                 <include name="cdk-pcore.jar"/>
                 <include name="cdk-pdbcml.jar"/>
                 <include name="cdk-pdb.jar"/>
@@ -297,7 +297,6 @@
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience.jar"/>
              <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar"/>
-             <entrypointjar name="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar"/>
              <property name="error-checking" value="pedantic"/>
 
              <keep>
@@ -589,15 +588,14 @@
         <jar-from-list destfile="${dist}/jar/jchempaint-applet-resources.jar" includesfile="${metainf}/jchempaint.datafiles"/>
         <!-- the following jar files are packed from directory patterns -->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_config.jar" includepattern="org/openscience/cdk/config/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"/>
+        <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_dict.jar" includepattern="org/openscience/cdk/dict/**"/-->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io_cml.jar" includepattern="org/openscience/cdk/io/cml/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_io.jar" includepattern="org/openscience/cdk/io/**"/>
         <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_qsar.jar" includepattern="org/openscience/cdk/qsar/**"/-->
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_iupac.jar" includepattern="org/openscience/cdk/iupac/**"/>
+        <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_iupac.jar" includepattern="org/openscience/cdk/iupac/**"/-->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_math.jar" includepattern="org/openscience/cdk/math/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_tools.jar" includepattern="org/openscience/cdk/tools/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_structgen.jar" includepattern="org/openscience/cdk/structgen/**"/>
-        <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_nonotify.jar" includepattern="org/openscience/cdk/nonotify/**"/>
+        <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_structgen.jar" includepattern="org/openscience/cdk/structgen/**"/-->
         <!--jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_modeling.jar" includepattern="org/openscience/cdk/modeling/**"/-->
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk_controller.jar" includepattern="org/openscience/cdk/controller/**"/>
         <jar-from-pattern destfile="${dist}/jar/jchempaint-applet-org_openscience_cdk.jar" includepattern="org/openscience/cdk/**"/>
@@ -622,7 +620,7 @@
             </fileset>
         </jar>
         <exec dir="${dist}/jar" executable="jar" >
-             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_dict.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_iupac.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk_structgen.jar jchempaint-applet-org_openscience_cdk_nonotify.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-templates.jar jchempaint-applet-others.jar" />
+             <arg line="i jchempaint-applet-core.jar jchempaint-applet-viewer-opts.jar jchempaint-applet-editor.jar jchempaint-applet-editor-opts.jar jchempaint-applet-resources.jar jchempaint-applet-org_openscience_cdk_config.jar jchempaint-applet-org_openscience_cdk_controller.jar jchempaint-applet-org_jaxen.jar jchempaint-applet-org_xmlcml.jar jchempaint-applet-org_openscience_cdk_io.jar jchempaint-applet-org_openscience_cdk_io_cml.jar jchempaint-applet-org_openscience_cdk_math.jar jchempaint-applet-org_openscience_cdk_tools.jar jchempaint-applet-org_openscience_cdk.jar jchempaint-applet-org_openscience.jar jchempaint-applet-org_3pq.jar jchempaint-applet-org_apache.jar jchempaint-applet-org_w3c.jar jchempaint-applet-org.jar jchempaint-applet-com_ozten.jar jchempaint-applet-Jama.jar jchempaint-applet-jas.jar jchempaint-applet-javax_vecmath.jar jchempaint-applet-nu.jar jchempaint-applet-templates.jar jchempaint-applet-others.jar" />
         </exec>
     </target>
     
