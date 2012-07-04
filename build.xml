@@ -68,6 +68,26 @@
             </fileset>          
         </jar>
     </target>
+   <!-- Without any dependencies, to be used as maven artifact -->	
+   <target id="nodeps" name="nodeps" depends="compile-jcp, unjar-libjars, unjar-cdkjars"
+            description="Builds the JChemPaint application">
+        <jar jarfile="${dist}/jchempaint-nodeps-${jcp.version}.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.openscience.jchempaint.application.JChemPaint"/>
+                <section name="org/openscience/jchempaint/">
+                    <attribute name="Specification-Title" value="JChemPaint"/>
+                    <attribute name="Specification-Version" value="2.2"/>
+                    <attribute name="Specification-Vendor" value="The CDK Project"/>
+                    <attribute name="Implementation-Title" value="org.openscience.cdk.applications.jchempaint"/>
+                    <attribute name="Implementation-Version" value="${jcp.version}"/>
+                    <attribute name="Implementation-Vendor" value="The CDK Project"/>
+                </section>
+            </manifest>
+            <fileset dir="${dist-classes}">
+		<include name="org/openscience/jchempaint/**" /> 
+            </fileset>
+        </jar>
+    </target>
 
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
