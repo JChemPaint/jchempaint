@@ -139,62 +139,54 @@
     <target id="unjar-cdkjars" name="unjar-cdkjars">
      <unjar dest="${dist-classes}">
             <fileset dir="${cdk.dist}/jar">
+                <include name="cdk-annotation.jar"/>
                 <include name="cdk-atomtype.jar"/>
                 <!--include name="cdk-builder3d.jar"/>
                 <include name="cdk-builder3dtools.jar"/-->
-                <include name="cdk-charges.jar"/>
-                <include name="cdk-control.jar"/>
+                <!--include name="cdk-charges.jar"/>
+                <include name="cdk-control.jar"/-->
                 <include name="cdk-core.jar"/>
                 <include name="cdk-log4j.jar"/>
                 <!--include name="cdk-datadebug.jar"/-->
                 <include name="cdk-data.jar"/>
                 <include name="cdk-dict.jar"/>
-                <include name="cdk-diff.jar"/>
+                <!--include name="cdk-diff.jar"/-->
                 <include name="cdk-extra.jar"/>
                 <!--include name="cdk-fingerprint.jar"/-->
-                <include name="cdk-forcefield.jar"/>
+                <!--include name="cdk-forcefield.jar"/-->
                 <include name="cdk-formula.jar"/>
                 <include name="cdk-inchi.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-io.jar"/>
                 <include name="cdk-ioformats.jar"/>
-                <include name="cdk-ionpot.jar"/>
+                <!--include name="cdk-ionpot.jar"/-->
                 <include name="cdk-isomorphism.jar"/>
                 <include name="cdk-libiocml.jar"/>
-                <include name="cdk-libiomd.jar"/>
-                <include name="cdk-pcore.jar"/>
+                <!--include name="cdk-libiomd.jar"/-->
+                <!--include name="cdk-pcore.jar"/>
                 <include name="cdk-pdbcml.jar"/>
-                <include name="cdk-pdb.jar"/>
+                <include name="cdk-pdb.jar"/-->
                 <include name="cdk-qm.jar"/>
                 <!--include name="cdk-qsaratomic.jar"/>
                 <include name="cdk-qsarbond.jar"/>
                 <include name="cdk-qsarionpot.jar"/>
                 <include name="cdk-qsar.jar"/>
                 <include name="cdk-qsarmolecular.jar"/>
-                <include name="cdk-qsarprotein.jar"/>
-                <include name="cdk-reaction.jar"/-->
-                <include name="cdk-render.jar"/>
+                <include name="cdk-qsarprotein.jar"/-->
+                <include name="cdk-reaction.jar"/>
+                <!--include name="cdk-render.jar"/-->
                 <include name="cdk-sdg.jar"/>
-                <include name="cdk-smarts.jar"/>
+                <!--include name="cdk-smarts.jar"/-->
                 <include name="cdk-smiles.jar"/>
                 <include name="cdk-standard.jar"/>
-                <include name="cdk-controlbasic.jar"/>
-                <include name="cdk-structgen.jar"/>
+                <!--include name="cdk-controlbasic.jar"/>
+                <include name="cdk-structgen.jar"/-->
                 <include name="cdk-valencycheck.jar"/>
                 
-                <!-- added by MR, new controller/renderer -->
-                <include name="cdk-controlawt.jar"/>
-                <include name="cdk-controlextra.jar"/>
-                <include name="cdk-renderawt.jar"/>
-                <include name="cdk-renderbasic.jar"/>
-                <include name="cdk-rendercontrol.jar"/>
-                <include name="cdk-renderextra.jar"/>
-                <include name="cdk-rendersvg.jar"/>
-                <include name="cdk-ioformats.jar"/> 
             </fileset>
         </unjar>
         <delete dir="${dist-classes}/META-INF" />
-        <delete dir="${dist-classes}/org/openscience/cdk/renderer" />
+        <!--delete dir="${dist-classes}/org/openscience/cdk/renderer" /-->
         <delete dir="${dist-classes}/org/openscience/cdk/controller" />
         <delete>
            <fileset dir="${dist-classes}" includes="*" excludes="io-formats.set"/>
