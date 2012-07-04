@@ -1,0 +1,118 @@
+Assumes JChemPaint is already built via ant targets dist and nodeps and jars exist in ../dist folder.
+
+To install in local Maven repository
+
+>mvn install
+
+To deploy to a remote repository (defined in <distributionManagement> )
+
+>mvn deploy
+
+
+The following artifacts will be created
+
+<dependency>
+  <groupId>org.openscience.cdk</groupId>
+  <artifactId>jchempaint</artifactId>
+  <version>3.3-1206</version>
+<dependency>
+
+
+
+
+<dependency>
+  <groupId>org.openscience.cdk</groupId>
+  <artifactId>jchempaint-nodeps</artifactId>
+  <version>3.3-1206</version>
+<dependency>
+
+Example output :
+
+$ mvn clean install
+[INFO] Scanning for projects...
+[INFO] Reactor build order:
+[INFO]   JChemPaint releases
+[INFO]   JChemPaint application with embedded dependencies
+[INFO]   JChemPaint application without embedded dependencies
+[INFO] ------------------------------------------------------------------------
+[INFO] Building JChemPaint releases
+[INFO]    task-segment: [clean, install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [clean:clean {execution: default-clean}]
+[INFO] [site:attach-descriptor {execution: default-attach-descriptor}]
+[INFO] [install:install {execution: default-install}]
+[INFO] Installing /home/myself/jchempaint/maven/pom.xml to 
+/home/myself/.m2/repository/org/openscience/cdk/jchempaint-all/3.3-1206/jchempaint-all-3.3-1206.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] Building JChemPaint application with embedded dependencies
+[INFO]    task-segment: [clean, install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [clean:clean {execution: default-clean}]
+[INFO] Deleting directory /home/myself/jchempaint/maven/jchempaint-application/target
+[INFO] [resources:resources {execution: default-resources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/myself/jchempaint/maven/jchempaint-application/src/main/resources
+[INFO] [compiler:compile {execution: default-compile}]
+[INFO] No sources to compile
+[INFO] [resources:testResources {execution: default-testResources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/myself/jchempaint/maven/jchempaint-application/src/test/resources
+[INFO] [compiler:testCompile {execution: default-testCompile}]
+[INFO] No sources to compile
+[INFO] [surefire:test {execution: default-test}]
+[INFO] No tests to run.
+[INFO] [jar:jar {execution: default-jar}]
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /home/myself/jchempaint/maven/jchempaint-application/target/jchempaint-3.3-1206.jar
+[INFO] [antrun-extended:run {execution: default}]
+[INFO] Executing tasks
+[INFO] Executed tasks
+[INFO] [install:install {execution: default-install}]
+[INFO] Installing /home/myself/jchempaint/dist/jchempaint-3.3-1206.jar to 
+/home/myself/.m2/repository/org/openscience/cdk/jchempaint/3.3-1206/jchempaint-3.3-1206.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Building JChemPaint application without embedded dependencies
+[INFO]    task-segment: [clean, install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [clean:clean {execution: default-clean}]
+[INFO] Deleting directory /home/myself/jchempaint/maven/jchempaint-nodeps/target
+[INFO] [resources:resources {execution: default-resources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/myself/jchempaint/maven/jchempaint-nodeps/src/main/resources
+[INFO] [compiler:compile {execution: default-compile}]
+[INFO] No sources to compile
+[INFO] [resources:testResources {execution: default-testResources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/myself/jchempaint/maven/jchempaint-nodeps/src/test/resources
+[INFO] [compiler:testCompile {execution: default-testCompile}]
+[INFO] No sources to compile
+[INFO] [surefire:test {execution: default-test}]
+[INFO] No tests to run.
+[INFO] [jar:jar {execution: default-jar}]
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: /home/myself/jchempaint/maven/jchempaint-nodeps/target/jchempaint-nodeps-3.3-1206.jar
+[INFO] [antrun-extended:run {execution: default}]
+[INFO] Executing tasks
+[INFO] Executed tasks
+[INFO] [install:install {execution: default-install}]
+[INFO] Installing /home/myself/jchempaint/dist/jchempaint-nodeps-3.3-1206.jar to 
+/home/myself/.m2/repository/org/openscience/cdk/jchempaint-nodeps/3.3-1206/jchempaint-nodeps-3.3-1206.jar
+[INFO]
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ------------------------------------------------------------------------
+[INFO] JChemPaint releases ................................... SUCCESS [2.549s]
+[INFO] JChemPaint application with embedded dependencies ..... SUCCESS [2.397s]
+[INFO] JChemPaint application without embedded dependencies .. SUCCESS [0.288s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Tue Jul 03 21:23:28 EEST 2012
+[INFO] Final Memory: 27M/298M
+[INFO] ------------------------------------------------------------------------
+
+
+
