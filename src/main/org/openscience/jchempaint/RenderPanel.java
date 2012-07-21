@@ -242,8 +242,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         IChemModel chemModel = this.hub.getIChemModel();
         if (chemModel != null && chemModel.getMoleculeSet() != null) {
             SVGGenerator svgGenerator = new SVGGenerator();
-            this.renderer.paintChemModel(chemModel, svgGenerator, this
-                    .getBounds(), true);
+            this.renderer.paintChemModel(chemModel, svgGenerator);
             return svgGenerator.getResult();
         } else {
             return "<svg></svg>";

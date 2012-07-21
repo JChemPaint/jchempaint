@@ -26,9 +26,16 @@ package org.openscience.jchempaint.renderer.visitor;
 
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
+import javax.vecmath.Vector4d;
 
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.elements.ArrowElement;
@@ -43,9 +50,28 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.jchempaint.renderer.elements.WedgeLineElement;
 import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
+import org.openscience.jchempaint.renderer.font.FreeSansBoldGM;
+import org.openscience.jchempaint.renderer.font.GlyphMetrics;
 import org.openscience.jchempaint.renderer.font.IFontManager;
 
 /**
+ * We can only guarantee the same quality of SVG output everywhere
+ * by drawing paths and not using fonts. This is an indirect
+ * consequence of font commercialisation which has successfully
+ * prevented SVG fonts from becoming usable on all browsers. See
+ * https://github.com/JChemPaint/jchempaint/wiki/The-svg-font-problem-and-its-solution
+ *
+ * So, we convert an open font to SVG paths and use these.
+ * To resolve the problem of placement, we use bbox, advance and
+ * (maybe later) kerning values from the same font. 
+ * To make sure bonds don't cross text, we use two passes where
+ * text is drawn first and the bonds second.
+ * 
+ * Two-pass implementation (c) 2012 by
+ * @author Ralf Stephan <ralf@ark.in-berlin.de>
+ * @jcp.issue #2
+ * 
+ * First code layer (c) 2007 by
  * @author maclean
  * @cdk.module rendersvg
  * @cdk.bug 2403250
@@ -62,51 +88,338 @@ public class SVGGenerator implements IDrawVisitor {
 			"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n" +
 			"\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
 			"<svg xmlns=\"http://www.w3.org/2000/svg\" " +
-			"width=\"1000\" height=\"600\">";
+			"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+			"viewBox=\"1234567890ABCDEFGHI\">";
 
 	private final StringBuffer svg = new StringBuffer();
+	
+	private FreeSansBoldGM the_fm;
 
 	private AffineTransform transform;
+	
+	private List<IRenderingElement> elList;
+	private List<String> tcList;
+	private HashMap<String,Point2d> tgMap;
+	private HashMap<Integer,Point2d> ptMap;
+	private List<Vector4d> bbList;
+	
+	private double trscale, tgpadding, vbpadding;
+	private Rectangle2D bbox;
+	
+	//------------------------------------------------------------------
 
 	public SVGGenerator() {
+		the_fm = new FreeSansBoldGM();
+		the_fm.init();
+		elList = new ArrayList<IRenderingElement>();
+		tcList = new ArrayList<String>();
+		tgMap = new HashMap<String,Point2d>();
+		ptMap = new HashMap<Integer,Point2d>();
+		bbList = new ArrayList<Vector4d>();
+		bbox = new Rectangle2D.Double (50,50,0,0);
+				
 		svg.append(SVGGenerator.HEADER);
-	}
+		newline();
+		svg.append("<defs>");
+		tgpadding = 4;
+		vbpadding = 40;
+		trscale = 0.03;        // TODO: Def. dependent on 
+	}                          // rendererModel.getBondLength()
 
 	private void newline() {
 		svg.append("\n");
 	}
-
-	public String getResult() {
-		newline();
-		svg.append("</svg>");
-		return svg.toString();
-	}
-
-	public int[] transformPoint(double x, double y) {
+	
+	public double[] transformPoint(double x, double y) {
         double[] src = new double[] {x, y};
         double[] dest = new double[2];
         this.transform.transform(src, 0, dest, 0, 1);
-        return new int[] { (int) dest[0], (int) dest[1] };
+        return dest;
+    }
+	
+	public double[] invTransformPoint (double x, double y) {
+        double[] src = new double[] {x, y};
+        double[] dest = new double[2];
+        try {
+        	this.transform.createInverse().transform(src, 0, dest, 0, 1);
+        } catch (NoninvertibleTransformException e) {
+        	System.err.println ("Cannot invert transform!\n");
+        }
+        return dest;
     }
 
-	public void setTransform(AffineTransform transform) {
-		this.transform = transform;
+	/**
+	 * Fills two lists: tcList contains all characters used in
+	 * atoms, tgList has all strings. We also write the character
+	 * paths immediately as DEFS into the SVG, for reference.
+	 * 
+	 * @param e
+	 */
+	private void writeDEFS (TextGroupElement e) {
+		if (e.text.length()>1 && !tgMap.containsKey(e.text))
+			tgMap.put(e.text, new Point2d(0,0));
+		for (char c : e.text.toCharArray()) { 
+			String idstr = "Atom-" + c;
+			if(!tcList.contains(idstr)) {
+				tcList.add(idstr);
+				GlyphMetrics m = the_fm.map.get((int)c);
+				Point2d bb = new Point2d (m.xMax-m.xMin, m.yMax-m.yMin);
+				if (!ptMap.containsKey((int)c))
+					ptMap.put ((int)c, bb);
+				newline();
+				svg.append (String.format(
+						"  <path id=\"%s\" transform=\"scale(%f,%f)\" d=\"%s\" />",
+						idstr, trscale, -trscale, m.outline));
+			}
+		}
 	}
 
-	public void visit(ElementGroup group) {
-		group.visitChildren(this);
+	/**
+	 * In this first pass, visiting elements are copied to
+	 * a list, and DEFS/PATH elements are written for all TextGroups.
+	 */
+	public void visit(IRenderingElement element) {
+		elList.add(element);
+		
+		if (element instanceof ElementGroup)
+			((ElementGroup) element).visitChildren(this);
+        else if (element instanceof TextGroupElement)
+            writeDEFS ((TextGroupElement) element);
+	}
+	
+	public void draw (OvalElement oval) {
+		newline();
+		double[] p1 = transformPoint(oval.x - oval.radius, oval.y - oval.radius);
+		double[] p2 = transformPoint(oval.x + oval.radius, oval.y + oval.radius);
+		bbox = bbox.createUnion(new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[1]));
+		double r = (p2[0] - p1[0]) / 2;
+		svg.append(String.format(
+				"<ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" " +
+				"style=\"stroke:black; stroke-width:1px; fill:none;\" />",
+				p1[0] + r, p1[1] + r, r, r));
 	}
 
-	public void visit(WedgeLineElement wedge) {
+	public void draw (AtomSymbolElement atomSymbol) {
+		newline();
+		double[] p = transformPoint(atomSymbol.x, atomSymbol.y);
+		svg.append(String.format(
+				"<text x=\"%s\" y=\"%s\" style=\"fill:%s\"" +
+				">%s</text>",
+				p[0],
+				p[1],
+				toColorString(atomSymbol.color),
+				atomSymbol.text
+				));
+	}
+
+	// this is a stupid method, but no idea how else to do it...
+	private String toColorString(Color color) {
+		if (color == Color.RED) {
+			return "red";
+		} else if (color == Color.BLUE) {
+			return "blue";
+		} else {
+			return "black";
+		}
+	}
+
+	public void draw (TextElement textElement) {
+		newline();
+		double[] p = transformPoint(textElement.x, textElement.y);
+		svg.append(String.format(
+				"<text x=\"%s\" y=\"%s\">%s</text>",
+				p[0],
+				p[1],
+				textElement.text
+				));
+	}
+	
+	/**
+	 * At the time of this call, all that we need is in place:
+	 * the SVG character macros are written and the bboxes computed.
+	 * The textgroup text is now placed with its center at the
+	 * position of the atom.
+	 * 
+	 * @param e
+	 */
+	public void draw (TextGroupElement e) {
+		newline();
+		double[] pos = transformPoint(e.x, e.y);
+		Point2d bb;
+		if (e.text.length() == 1) 
+			bb = ptMap.get((int)e.text.charAt(0));
+		else
+			bb = tgMap.get(e.text);
+		Vector4d v = new Vector4d(pos[0]-trscale*bb.x/2,
+				pos[1]-trscale*bb.y/2-tgpadding,
+				pos[0]+trscale*bb.x/2+tgpadding,
+				pos[1]+trscale*bb.y/2+tgpadding);
+		bbList.add(v);
+		bbox = bbox.createUnion(new Rectangle2D.Double(v.x,v.y,v.z-v.x,v.w-v.y));
+		svg.append(String.format(
+				"<use xlink:href=\"#Atom-%s\" x=\"%s\" y=\"%s\"/>",
+				e.text,
+				pos[0] - trscale*bb.x/2,
+				pos[1] + trscale*bb.y/2
+				));		
+	}
+	
+	/**
+	 * In this second pass, everything except bonds (and arrows)
+	 * is placed, the textgroups referring to the DEFS ids. For
+	 * intermediate caching, we first add strings to the DEFS block.
+	 */
+	public void drawNoBonds() {
+		newline();
+		svg.append("</defs>");
+		if (!tgMap.isEmpty()) { newline(); svg.append("<defs>"); }
+		for (String s : tgMap.keySet()) {
+			newline();
+			svg.append(String.format("<g id=\"Atom-%s\">", s));
+			boolean first = true;
+			int advance = 0;
+			int xMin = 9999, xMax = 0, yMin = 9999, yMax = 0;
+			for (char c : s.toCharArray()) { 
+				svg.append(String.format("<use xlink:href=\"#Atom-%c\" ", c));
+				if (first) {
+					first=false;
+				}
+				else {
+					svg.append(String.format("transform=\"translate(%f,0)\"", advance*trscale));
+				}
+				GlyphMetrics m = the_fm.map.get((int)c);
+				if (m.xMin + advance < xMin) xMin = m.xMin + advance;
+				if (m.xMax + advance > xMax) xMax = m.xMax + advance;
+				if (m.yMin < yMin) yMin = m.yMin;
+				if (m.yMax > yMax) yMax = m.yMax;
+				advance += m.adv;
+				svg.append("/>");
+			}
+			svg.append("</g>");
+			Point2d p = tgMap.get(s);
+			p.x = xMax - xMin;
+			p.y = yMax - yMin;
+		}
+		if (!tgMap.isEmpty()) { newline(); svg.append("</defs>"); }
+
+		for (IRenderingElement element : elList) {
+			if (element instanceof OvalElement)
+				draw((OvalElement) element);
+	        else if (element instanceof TextGroupElement)
+	            draw((TextGroupElement) element);
+			else if (element instanceof AtomSymbolElement)
+				draw((AtomSymbolElement) element);
+			else if (element instanceof TextElement)
+				draw((TextElement) element);
+			else if (element instanceof RectangleElement)
+				draw((RectangleElement) element);
+			else if (element instanceof PathElement)
+				draw((PathElement) element);
+		}
+	}
+	
+	/**
+	 * In the third pass, bonds (and arrows) are drawn,
+	 * taking care to leave a small distance to atoms with
+	 * text.
+	 */
+	public void drawBonds() {
+		for (IRenderingElement element : elList) {
+			if (element instanceof WedgeLineElement)
+				draw((WedgeLineElement) element);
+			else if (element instanceof LineElement)
+				draw((LineElement) element);
+	        else if (element instanceof ArrowElement)
+	            draw((ArrowElement) element);
+	        else if (element instanceof WigglyLineElement)
+	        	draw((WigglyLineElement) element);
+		}
+	}
+
+	/**
+	 * This is where most of the work is done by calling
+	 * the 2nd and 3rd passes, and finally computing
+	 * width and height of the document which is set at last.
+	 * @return the SVG document as String
+	 */
+	public String getResult() {
+		drawNoBonds();
+		drawBonds();
+		newline();
+		svg.append("</svg>");
+		int i = svg.indexOf ("1234567890ABCDEFGHI");
+		svg.replace(i, i+19, String.format("%4.0f %4.0f %4.0f %4.0f",
+				bbox.getX()-vbpadding,
+				bbox.getY()-vbpadding,
+				bbox.getWidth()+2*vbpadding,
+				bbox.getHeight()+2*vbpadding));
+		return svg.toString();
+	}
+
+	/**
+	 * Applies all collected bboxes to the two points and, if one is
+	 * inside a bbox, places it at the bbox's edge, same direction.
+	 * Intended to be cumulative, i.e., both points may be moved more
+	 * than once, or never. Returns true if any segment is left.
+	 * @param p1
+	 * @param p2
+	 */
+	private boolean shorten_line(double[] p1, double[] p2)
+	{
+		double rx = 0.0, ry = 0.0;
+		boolean inside1 = false, inside2 = false;
+		for (Vector4d v : bbList) {   // shorten line acc. to bboxes
+			inside1 = (p1[0]>v.x && p1[0]<v.z && p1[1]>v.y && p1[1]<v.w); 
+			inside2 = (p2[0]>v.x && p2[0]<v.z && p2[1]>v.y && p2[1]<v.w);
+			if (!inside1 && !inside2) continue;
+			if (inside1 && inside2) return false;
+			double px, py, qx, qy, cx=0.0, cy=0.0;
+			if (inside1) {
+				px = p1[0]; py = p1[1];
+				qx = p2[0]; qy = p2[1];
+			} else {
+				px = p2[0]; py = p2[1];
+				qx = p1[0]; qy = p1[1];
+			}
+			if (qx<v.x && v.x<px) cx = v.x;
+			if (px<v.z && v.z<qx) cx = v.z;
+			if (qy<v.y && v.y<py) cy = v.y;
+			if (py<v.w && v.w<qy) cy = v.w;
+			if (qy==py) { rx=cx; ry=py; }
+			else if (cx == 0.0) { ry = cy; rx = px + (cy-py)*(qx-px)/(qy-py); }
+			else if (qx==px) { ry=cy; rx=px; }
+			else if (cy == 0.0) { rx = cx; ry = py + (cx-px)*(qy-py)/(qx-px); }
+			else {  // cx, cy, qx-px, qy-py all nonzero
+				if (Math.abs((cx-px)/(cy-py)) > Math.abs((qx-px)/(qy-py)))
+				{ ry = cy; rx = px + (cy-py)*(qx-px)/(qy-py); }
+				else
+				{ rx = cx; ry = py + (cx-px)*(qy-py)/(qx-px); }
+			}
+			if (inside1) {
+				p1[0] = (int)rx; p1[1] = (int)ry;
+			} else {
+				p2[0] = (int)rx; p2[1] = (int)ry;
+			}
+		}
+		return true;
+	}
+
+	public void draw (WedgeLineElement wedge) {
+		double[] p1 = transformPoint(wedge.x1, wedge.y1);
+		double[] p2 = transformPoint(wedge.x2, wedge.y2);
+		bbox = bbox.createUnion(new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[0]));
+		if (!shorten_line (p1, p2)) return;
+		double w1[] = invTransformPoint (p1[0], p1[1]);
+		double w2[] = invTransformPoint (p2[0], p2[1]);
         // make the vector normal to the wedge axis
         Vector2d normal = 
-            new Vector2d(wedge.y1 - wedge.y2, wedge.x2 - wedge.x1);
+            new Vector2d(w1[1] - w2[1], w2[0] - w1[0]);
         normal.normalize();
         normal.scale(rendererModel.getWedgeWidth() / rendererModel.getScale());  
         
         // make the triangle corners
-        Point2d vertexA = new Point2d(wedge.x1, wedge.y1);
-        Point2d vertexB = new Point2d(wedge.x2, wedge.y2);
+        Point2d vertexA = new Point2d(w1[0], w1[1]);
+        Point2d vertexB = new Point2d(w2[0], w2[1]);
         Point2d vertexC = new Point2d(vertexB);
         vertexB.add(normal);
         vertexC.sub(normal);
@@ -119,7 +432,7 @@ public class SVGGenerator implements IDrawVisitor {
         }
 	}
 	
-	    public void visit(WigglyLineElement wedge) {
+	    public void draw (WigglyLineElement wedge) {
 		    	//TODO add code. see http://www.w3.org/TR/SVG/paths.html#PathDataCurveCommands
 		    }
 	
@@ -132,7 +445,7 @@ public class SVGGenerator implements IDrawVisitor {
 			        double gap = distance * gapFactor;
 			        double numberOfDashes = distance / gap;
 			        double d = 0;
-			        int[] old=null;
+			        double[] old=null;
 			        
 			        // draw by interpolating along the edges of the triangle
 			        for (int i = 0; i < numberOfDashes; i++) {
@@ -141,8 +454,8 @@ public class SVGGenerator implements IDrawVisitor {
 			            p1.interpolate(vertexA, vertexB, d);
 			            Point2d p2 = new Point2d();
 			            p2.interpolate(vertexA, vertexC, d2);
-			            int[] p1T = this.transformPoint(p1.x, p1.y);
-			            int[] p2T = this.transformPoint(p2.x, p2.y);
+			            double[] p1T = this.transformPoint(p1.x, p1.y);
+			            double[] p2T = this.transformPoint(p2.x, p2.y);
 			    		svg.append(String.format(
 								"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
 								"style=\"stroke:black; stroke-width:1px;\" />",
@@ -173,9 +486,9 @@ public class SVGGenerator implements IDrawVisitor {
 	
     private void drawFilledWedge(
             Point2d vertexA, Point2d vertexB, Point2d vertexC) {
-        int[] pB = this.transformPoint(vertexB.x, vertexB.y);
-        int[] pC = this.transformPoint(vertexC.x, vertexC.y);
-        int[] pA = this.transformPoint(vertexA.x, vertexA.y);
+        double[] pB = this.transformPoint(vertexB.x, vertexB.y);
+        double[] pC = this.transformPoint(vertexC.x, vertexC.y);
+        double[] pA = this.transformPoint(vertexA.x, vertexA.y);
         
 		svg.append(String.format(
 				"<polygon points=\"%s,%s %s,%s %s,%s\" "+
@@ -187,23 +500,24 @@ public class SVGGenerator implements IDrawVisitor {
 				));
     }
 
-	public void visit(PathElement path) {
+	public void draw (PathElement path) {
 
 	}
+	
 
-	public void visit(LineElement line) {
+	public void draw (LineElement line) {
 		newline();
-
-		int[] p1 = transformPoint(line.x1, line.y1);
-		int[] p2 = transformPoint(line.x2, line.y2);
+		double[] p1 = transformPoint(line.x1, line.y1);
+		double[] p2 = transformPoint(line.x2, line.y2);
+		if (!shorten_line (p1, p2)) return;
 		svg.append(String.format(
-					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
-					"style=\"stroke:black; stroke-width:1px;\" />",
-					p1[0],
-					p1[1],
-					p2[0],
-					p2[1]
-					));
+				"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+				"style=\"stroke:black; stroke-width:3px;\" />",
+				p1[0],
+				p1[1],
+				p2[0],
+				p2[1]
+				));
 	}
 	
     private void drawDashedWedge(
@@ -222,8 +536,8 @@ public class SVGGenerator implements IDrawVisitor {
             p1.interpolate(vertexA, vertexB, d);
             Point2d p2 = new Point2d();
             p2.interpolate(vertexA, vertexC, d);
-            int[] p1T = this.transformPoint(p1.x, p1.y);
-            int[] p2T = this.transformPoint(p2.x, p2.y);
+            double[] p1T = this.transformPoint(p1.x, p1.y);
+            double[] p2T = this.transformPoint(p2.x, p2.y);
     		svg.append(String.format(
 					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
 					"style=\"stroke:black; stroke-width:1px;\" />",
@@ -241,61 +555,11 @@ public class SVGGenerator implements IDrawVisitor {
         }
     }
 
-	public void visit(OvalElement oval) {
-		newline();
-		int[] p1 = transformPoint(oval.x - oval.radius, oval.y - oval.radius);
-		int[] p2 = transformPoint(oval.x + oval.radius, oval.y + oval.radius);
-		int r = (p2[0] - p1[0]) / 2;
-		svg.append(String.format(
-				"<ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" " +
-				"style=\"stroke:black; stroke-width:1px; fill:none;\" />",
-				p1[0] + r, p1[1] + r, r, r));
-	}
-
-	public void visit(AtomSymbolElement atomSymbol) {
-		newline();
-		int[] p = transformPoint(atomSymbol.x, atomSymbol.y);
-		svg.append(String.format(
-				"<text x=\"%s\" y=\"%s\" style=\"fill:%s\"" +
-				">%s</text>",
-				p[0],
-				p[1],
-				toColorString(atomSymbol.color),
-				atomSymbol.text
-				));
-	}
-
-	// this is a stupid method, but no idea how else to do it...
-	private String toColorString(Color color) {
-		if (color == Color.RED) {
-			return "red";
-		} else if (color == Color.BLUE) {
-			return "blue";
-		} else {
-			return "black";
-		}
-	}
-
-	public void visit(TextElement textElement) {
-		newline();
-		int[] p = transformPoint(textElement.x, textElement.y);
-		svg.append(String.format(
-				"<text x=\"%s\" y=\"%s\">%s</text>",
-				p[0],
-				p[1],
-				textElement.text
-				));
-	}
-	
-	public void visit(TextGroupElement textGroup) {
-		//TODO add code here
-	}
-	
-    public void visit(ArrowElement line) {
+    public void draw (ArrowElement line) {
       
         int w = (int) (line.width * this.rendererModel.getScale());
-        int[] a = this.transformPoint(line.x1, line.y1);
-        int[] b = this.transformPoint(line.x2, line.y2);
+        double[] a = this.transformPoint(line.x1, line.y1);
+        double[] b = this.transformPoint(line.x2, line.y2);
         newline();
 		svg.append(String.format(
 				"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
@@ -307,8 +571,8 @@ public class SVGGenerator implements IDrawVisitor {
 				));
         double aW = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
         if(line.direction){
-	        int[] c = this.transformPoint(line.x1-aW, line.y1-aW);
-	        int[] d = this.transformPoint(line.x1-aW, line.y1+aW);
+	        double[] c = this.transformPoint(line.x1-aW, line.y1-aW);
+	        double[] d = this.transformPoint(line.x1-aW, line.y1+aW);
 	        newline();
 			svg.append(String.format(
 					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
@@ -328,8 +592,8 @@ public class SVGGenerator implements IDrawVisitor {
 					d[1]
 					));
         }else{
-	        int[] c = this.transformPoint(line.x2+aW, line.y2-aW);
-	        int[] d = this.transformPoint(line.x2+aW, line.y2+aW);
+	        double[] c = this.transformPoint(line.x2+aW, line.y2-aW);
+	        double[] d = this.transformPoint(line.x2+aW, line.y2+aW);
 	        newline();
 			svg.append(String.format(
 					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
@@ -352,11 +616,11 @@ public class SVGGenerator implements IDrawVisitor {
     }
 
 
-	public void visit(RectangleElement rectangleElement) {
-        int[] pA = this.transformPoint(rectangleElement.x, rectangleElement.y);
-        int[] pB = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y);
-        int[] pC = this.transformPoint(rectangleElement.x, rectangleElement.y+rectangleElement.height);
-        int[] pD = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y+rectangleElement.height);
+	public void draw (RectangleElement rectangleElement) {
+        double[] pA = this.transformPoint(rectangleElement.x, rectangleElement.y);
+        double[] pB = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y);
+        double[] pC = this.transformPoint(rectangleElement.x, rectangleElement.y+rectangleElement.height);
+        double[] pD = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y+rectangleElement.height);
         
         newline();
 		svg.append(String.format(
@@ -372,36 +636,14 @@ public class SVGGenerator implements IDrawVisitor {
 
 	}
 
-	public void visit(IRenderingElement element) {
-		if (element instanceof ElementGroup)
-			visit((ElementGroup) element);
-		else if (element instanceof WedgeLineElement)
-			visit((WedgeLineElement) element);
-		else if (element instanceof LineElement)
-			visit((LineElement) element);
-        else if (element instanceof ArrowElement)
-            visit((ArrowElement) element);
-        else if (element instanceof WigglyLineElement)
-        	visit((WigglyLineElement) element);
-        else if (element instanceof OvalElement)
-			visit((OvalElement) element);
-        else if (element instanceof TextGroupElement)
-            visit((TextGroupElement) element);
-		else if (element instanceof AtomSymbolElement)
-			visit((AtomSymbolElement) element);
-		else if (element instanceof TextElement)
-			visit((TextElement) element);
-		else if (element instanceof RectangleElement)
-			visit((RectangleElement) element);
-		else if (element instanceof PathElement)
-			visit((PathElement) element);
-		else
-			System.err.println("Visitor method for "
-					+ element.getClass().getName() + " is not implemented");
+    public void setTransform(AffineTransform transform) {
+		this.transform = transform;
+		this.transform.setToScale(30, -30);
+//		System.err.println(transform.toString());
+//		System.err.println(String.format("scale=%f zoom=%f\n", transform.getScaleX(), transform.getScaleY()));
 	}
 
     public void setFontManager(IFontManager fontManager) {
-        // FIXME : what kind of font management does SVG really need?
     }
 
     public void setRendererModel(RendererModel rendererModel) {
