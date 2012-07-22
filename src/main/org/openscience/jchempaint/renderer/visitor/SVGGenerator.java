@@ -116,7 +116,7 @@ public class SVGGenerator implements IDrawVisitor {
 		tgMap = new HashMap<String,Point2d>();
 		ptMap = new HashMap<Integer,Point2d>();
 		bbList = new ArrayList<Vector4d>();
-		bbox = new Rectangle2D.Double (50,50,0,0);
+		bbox = null;
 				
 		svg.append(SVGGenerator.HEADER);
 		newline();
@@ -168,7 +168,7 @@ public class SVGGenerator implements IDrawVisitor {
 					ptMap.put ((int)c, bb);
 				newline();
 				svg.append (String.format(
-						"  <path id=\"%s\" transform=\"scale(%f,%f)\" d=\"%s\" />",
+						"  <path id=\"%s\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
 						idstr, trscale, -trscale, m.outline));
 			}
 		}
@@ -255,9 +255,10 @@ public class SVGGenerator implements IDrawVisitor {
 				pos[0]+trscale*bb.x/2+tgpadding,
 				pos[1]+trscale*bb.y/2+tgpadding);
 		bbList.add(v);
+		if (bbox==null) bbox = new Rectangle2D.Double(v.x,v.y,v.z-v.x,v.w-v.y);
 		bbox = bbox.createUnion(new Rectangle2D.Double(v.x,v.y,v.z-v.x,v.w-v.y));
 		svg.append(String.format(
-				"<use xlink:href=\"#Atom-%s\" x=\"%s\" y=\"%s\"/>",
+				"<use xlink:href=\"#Atom-%s\" x=\"%4.2f\" y=\"%4.2f\"/>",
 				e.text,
 				pos[0] - trscale*bb.x/2,
 				pos[1] + trscale*bb.y/2
@@ -285,7 +286,7 @@ public class SVGGenerator implements IDrawVisitor {
 					first=false;
 				}
 				else {
-					svg.append(String.format("transform=\"translate(%f,0)\"", advance*trscale));
+					svg.append(String.format("transform=\"translate(%4.2f,0)\"", advance*trscale));
 				}
 				GlyphMetrics m = the_fm.map.get((int)c);
 				if (m.xMin + advance < xMin) xMin = m.xMin + advance;
@@ -407,6 +408,7 @@ public class SVGGenerator implements IDrawVisitor {
 	public void draw (WedgeLineElement wedge) {
 		double[] p1 = transformPoint(wedge.x1, wedge.y1);
 		double[] p2 = transformPoint(wedge.x2, wedge.y2);
+		if (bbox==null) bbox = new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[0]);
 		bbox = bbox.createUnion(new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[0]));
 		if (!shorten_line (p1, p2)) return;
 		double w1[] = invTransformPoint (p1[0], p1[1]);
@@ -457,7 +459,7 @@ public class SVGGenerator implements IDrawVisitor {
 			            double[] p1T = this.transformPoint(p1.x, p1.y);
 			            double[] p2T = this.transformPoint(p2.x, p2.y);
 			    		svg.append(String.format(
-								"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+								"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 								"style=\"stroke:black; stroke-width:1px;\" />",
 								p1T[0],
 								p1T[1],
@@ -467,7 +469,7 @@ public class SVGGenerator implements IDrawVisitor {
 			            if(old==null)
 			            	old = p2T;
 			    		svg.append(String.format(
-								"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+								"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 								"style=\"stroke:black; stroke-width:1px;\" />",
 								old[0],
 								old[1],
@@ -491,7 +493,7 @@ public class SVGGenerator implements IDrawVisitor {
         double[] pA = this.transformPoint(vertexA.x, vertexA.y);
         
 		svg.append(String.format(
-				"<polygon points=\"%s,%s %s,%s %s,%s\" "+
+				"<polygon points=\"%4.2f,%4.2f %4.2f,%4.2f %4.2f,%4.2f\" "+
 					"style=\"fill:black;"+
 					"stroke:black;stroke-width:1\"/>", 
 				pB[0],pB[1],
@@ -511,7 +513,7 @@ public class SVGGenerator implements IDrawVisitor {
 		double[] p2 = transformPoint(line.x2, line.y2);
 		if (!shorten_line (p1, p2)) return;
 		svg.append(String.format(
-				"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+				"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 				"style=\"stroke:black; stroke-width:3px;\" />",
 				p1[0],
 				p1[1],
@@ -539,7 +541,7 @@ public class SVGGenerator implements IDrawVisitor {
             double[] p1T = this.transformPoint(p1.x, p1.y);
             double[] p2T = this.transformPoint(p2.x, p2.y);
     		svg.append(String.format(
-					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+					"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 					"style=\"stroke:black; stroke-width:1px;\" />",
 					p1T[0],
 					p1T[1],
@@ -562,7 +564,7 @@ public class SVGGenerator implements IDrawVisitor {
         double[] b = this.transformPoint(line.x2, line.y2);
         newline();
 		svg.append(String.format(
-				"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
+				"<line x1=\"%4.2d\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 				"style=\"stroke:black; stroke-width:"+w+"px;\" />",
 				a[0],
 				a[1],
