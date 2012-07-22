@@ -39,9 +39,9 @@ import javax.swing.JOptionPane;
 
 import org.junit.Assert;
 import org.openscience.cdk.Atom;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.exception.CDKException;
@@ -49,7 +49,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
@@ -107,7 +107,7 @@ public class RGroupAction extends JCPAction {
 		Map<Integer,RGroupList> existingRgroupLists =null;
 
 		IRGroupQuery rgrpQuery=null;
-		Molecule molecule=null;
+		AtomContainer molecule=null;
 
 		/* User action: generate possible configurations for the R-group */
 		if(type.equals("rgpGenerate")) {
@@ -123,7 +123,7 @@ public class RGroupAction extends JCPAction {
 				File outFile = chooser.getSelectedFile();
 				System.out.println(outFile);
 				List<IAtomContainer> molecules= jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery().getAllConfigurations();
-		        IMoleculeSet molSet = new MoleculeSet();
+		        IAtomContainerSet molSet = new AtomContainerSet();
 		        for (IAtomContainer mol : molecules) {
 		        	molSet.addAtomContainer(mol);
 		        }
@@ -442,7 +442,7 @@ public class RGroupAction extends JCPAction {
 	 */
 	private IRGroupQuery newRGroupQuery() {
 		IRGroupQuery rgrpQuery = new RGroupQuery();
-		rgrpQuery.setRootStructure(new Molecule());
+		rgrpQuery.setRootStructure(new AtomContainer());
 		rgrpQuery
 				.setRootAttachmentPoints(new HashMap<IAtom, Map<Integer, IBond>>());
 		rgrpQuery.setRGroupDefinitions(new HashMap<Integer, RGroupList>());
@@ -524,7 +524,7 @@ public class RGroupAction extends JCPAction {
 	 * Creates a new molecule based on a user selection, and removes the
 	 * selected atoms/bonds from the atom container where they are currently in.
 	 */
-	private Molecule createMolecule(IAtomContainer atc,
+	private AtomContainer createMolecule(IAtomContainer atc,
 			Map<IAtom, IAtomContainer> existingAtomDistr,
 			Map<IBond, IAtomContainer> existingBondDistr) {
 		for (IAtom atom : atc.atoms()) {
@@ -539,7 +539,7 @@ public class RGroupAction extends JCPAction {
 			existingBondDistr.put(bond, original);
 			original.removeBond(bond);
 		}
-		Molecule molecule = new Molecule();
+		AtomContainer molecule = new AtomContainer();
 		molecule.add(atc);
 		return molecule;
 	}

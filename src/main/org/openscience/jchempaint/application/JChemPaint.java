@@ -56,11 +56,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -70,8 +70,7 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
@@ -213,9 +212,9 @@ public class JChemPaint {
     
     public static IChemModel emptyModel() {
         IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
-        chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
+        chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IAtomContainerSet.class));
         chemModel.getMoleculeSet().addAtomContainer(
-                chemModel.getBuilder().newInstance(IMolecule.class));
+                chemModel.getBuilder().newInstance(IAtomContainer.class));
         return chemModel;
     }
 
@@ -422,10 +421,10 @@ public class JChemPaint {
         }
 
         // Smiles reading
-        if (cor.accepts(MoleculeSet.class) && chemModel==null) {
+        if (cor.accepts(AtomContainerSet.class) && chemModel==null) {
             // try to read a Molecule set
             try {
-                IMoleculeSet som = (MoleculeSet) cor.read(new MoleculeSet());
+                IAtomContainerSet som = (AtomContainerSet) cor.read(new AtomContainerSet());
                 chemModel = new ChemModel();
                 chemModel.setMoleculeSet(som);
                 if (chemModel == null) {
@@ -438,13 +437,13 @@ public class JChemPaint {
         }
 
         // MDLV3000 reading
-        if (cor.accepts(Molecule.class) && chemModel==null) {
+        if (cor.accepts(AtomContainer.class) && chemModel==null) {
             // try to read a Molecule
-                IMolecule mol = (Molecule) cor.read(new Molecule());
+                IAtomContainer mol = (AtomContainer) cor.read(new AtomContainer());
                 if(mol!=null ) 
                     try{
-                        IMoleculeSet newSet = new MoleculeSet();
-                        newSet.addMolecule(mol);
+                        IAtomContainerSet newSet = new AtomContainerSet();
+                        newSet.addAtomContainer(mol);
                         chemModel = new ChemModel();
                         chemModel.setMoleculeSet(newSet);
                         if (chemModel == null) {
@@ -494,13 +493,13 @@ public class JChemPaint {
 
     
 
-    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IMolecule molecule, boolean generateCoordinates, boolean shiftPasted) {
+    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IAtomContainer molecule, boolean generateCoordinates, boolean shiftPasted) {
         if (molecule == null) return;
 
         IChemModel chemModel = chemPaintPanel.getChemModel();
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet == null) {
-            moleculeSet = new MoleculeSet();
+            moleculeSet = new AtomContainerSet();
         }
         
         // On copy & paste on top of an existing drawn structure, prevent the
@@ -585,7 +584,7 @@ public class JChemPaint {
         if (chemModel.getReactionSet() != null) {
             for (IReaction reaction : chemModel.getReactionSet().reactions()) {
                 int i = 0;
-                IMoleculeSet products = reaction.getProducts();
+                IAtomContainerSet products = reaction.getProducts();
                 for (IAtomContainer product : products.atomContainers()) {
                     try {
                         products.replaceAtomContainer(i,
@@ -595,7 +594,7 @@ public class JChemPaint {
                     i++;
                 }
                 i = 0;
-                IMoleculeSet reactants = reaction.getReactants();
+                IAtomContainerSet reactants = reaction.getReactants();
                 for (IAtomContainer reactant : reactants.atomContainers()) {
                     try {
                         reactants.replaceAtomContainer(i,
@@ -611,7 +610,7 @@ public class JChemPaint {
     private static void removeDuplicateMolecules(IChemModel chemModel) {
         // we remove molecules which are in MoleculeSet as well as in a reaction
         IReactionSet reactionSet = chemModel.getReactionSet();
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         if (reactionSet != null && moleculeSet != null) {
             List<IAtomContainer> aclist = ReactionSetManipulator
                     .getAllAtomContainers(reactionSet);
@@ -628,7 +627,7 @@ public class JChemPaint {
     }
 
     private static void removeEmptyMolecules(IChemModel chemModel) {
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet != null && moleculeSet.getAtomContainerCount() == 0) {
             chemModel.setMoleculeSet(null);
         }
@@ -693,7 +692,7 @@ public class JChemPaint {
         StructureDiagramGenerator sdg = new StructureDiagramGenerator();
         for (int atIdx = 0; atIdx < molecules.size(); atIdx++) {
             IAtomContainer mol = molecules.get(atIdx);
-            sdg.setMolecule(mol.getBuilder().newInstance(IMolecule.class,mol));
+            sdg.setMolecule(mol.getBuilder().newInstance(IAtomContainer.class,mol));
             try {
                 sdg.generateCoordinates();
             } catch (Exception e) {

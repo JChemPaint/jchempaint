@@ -22,7 +22,7 @@ package org.openscience.jchempaint.renderer.generators;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -43,7 +43,7 @@ public class ReactionPlusGenerator implements IReactionGenerator {
 		ElementGroup diagram = new ElementGroup();
         Color color = model.getForeColor();
 		
-		IMoleculeSet reactants = reaction.getReactants();
+		IAtomContainerSet reactants = reaction.getReactants();
 		if(reactants.getAtomContainerCount()>0){
             Rectangle2D totalBoundsReactants = Renderer.calculateBounds(reactants);
             Rectangle2D bounds1 = 
@@ -57,7 +57,7 @@ public class ReactionPlusGenerator implements IReactionGenerator {
             }
 		}
         
-        IMoleculeSet products = reaction.getProducts();
+        IAtomContainerSet products = reaction.getProducts();
         if(products.getAtomContainerCount()>0){
             Rectangle2D totalBoundsProducts = Renderer.calculateBounds(products);
             double axis = totalBoundsProducts.getCenterY();

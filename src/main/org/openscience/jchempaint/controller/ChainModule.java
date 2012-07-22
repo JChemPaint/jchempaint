@@ -31,7 +31,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
 
@@ -167,18 +166,22 @@ public class ChainModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-		IAtomContainer toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-		IAtomContainer fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
-    	if(source!=null){
+		IAtomContainer toContainer = null;
+		if (merge != null)
+			toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
+		IAtomContainer fromContainer = null;
+		if (source != null) {
+			fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
     		chemModelRelay.getPhantoms().removeAtom(0);
-    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
+    		chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
     	}else{
-    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), toContainer, null);
+    		chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,chemModelRelay.getPhantoms()), toContainer, null);
     	}
         if(merge!=null){
         	chemModelRelay.updateAtom(merge);
         }
-		chemModelRelay.updateAtom(source);
+        if (source != null)
+        	chemModelRelay.updateAtom(source);
         chemModelRelay.clearPhantoms();
         chemModelRelay.setPhantomText(null, null);
         chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();

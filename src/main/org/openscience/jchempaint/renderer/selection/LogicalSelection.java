@@ -29,7 +29,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.elements.IRenderingElement;
 
@@ -87,7 +87,7 @@ public class LogicalSelection implements IChemObjectSelection {
     
     public void select(IAtomContainer atomContainer) {
         this.chemModel = atomContainer.getBuilder().newInstance(IChemModel.class);
-        IMoleculeSet molSet = atomContainer.getBuilder().newInstance(IMoleculeSet.class);
+        IAtomContainerSet molSet = atomContainer.getBuilder().newInstance(IAtomContainerSet.class);
         molSet.addAtomContainer(atomContainer);
         this.chemModel.setMoleculeSet(molSet);
     }

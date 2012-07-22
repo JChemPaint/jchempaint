@@ -28,7 +28,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -59,7 +58,7 @@ public class TemplateImagesMaker {
                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
                         System.err.println(dir.listFiles()[k].getAbsolutePath());
                         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
-                        IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+                        IAtomContainer cdkmol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
                         String inputstr = getMolSvg(cdkmol, 100, 100);
                         ImageTranscoder imageTranscoder = new JPEGTranscoder();
                         imageTranscoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));

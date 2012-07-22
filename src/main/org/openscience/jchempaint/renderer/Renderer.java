@@ -32,8 +32,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.RenderPanel;
@@ -47,7 +46,7 @@ import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
 
 /**
  * A general renderer for {@link IChemModel}s, {@link IReaction}s, and
- * {@link IMolecule}s. The chem object
+ * {@link IAtomContainer}s. The chem object
  * is converted into a 'diagram' made up of {@link IRenderingElement}s. It takes
  * an {@link IDrawVisitor} to do the drawing of the generated diagram. Various
  * display properties can be set using the {@link RendererModel}.<p>
@@ -233,12 +232,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
     /**
-     * Set the scale for an IMoleculeSet. It calculates the average bond length
+     * Set the scale for an IAtomContainerSet. It calculates the average bond length
      * of the model and calculates the multiplication factor to transform this
      * to the bond length that is set in the RendererModel.
      * @param moleculeSet
      */
-    public void setScale(IMoleculeSet moleculeSet) {
+    public void setScale(IAtomContainerSet moleculeSet) {
         double bondLength = Renderer.calculateAverageBondLength(moleculeSet);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
@@ -259,7 +258,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     public Rectangle paintChemModel(
             IChemModel chemModel, IDrawVisitor drawVisitor) {
 
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         IReactionSet reactionSet = chemModel.getReactionSet();
 
         if (moleculeSet == null && reactionSet != null) {
@@ -330,10 +329,10 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
     public Rectangle paintMoleculeSet(
-            IMoleculeSet moleculeSet, IDrawVisitor drawVisitor) {
+            IAtomContainerSet moleculeSet, IDrawVisitor drawVisitor) {
         // total up the bounding boxes
         Rectangle2D totalBounds = new Rectangle2D.Double();
-        for (IAtomContainer molecule : moleculeSet.molecules()) {
+        for (IAtomContainer molecule : moleculeSet.atomContainers()) {
             Rectangle2D modelBounds = Renderer.calculateBounds(molecule);
             if (totalBounds == null) {
                 totalBounds = modelBounds;
@@ -345,7 +344,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         // setup and draw
         this.setupTransformNatural(totalBounds);
         ElementGroup diagram = new ElementGroup();
-        for (IAtomContainer molecule : moleculeSet.molecules()) {
+        for (IAtomContainer molecule : moleculeSet.atomContainers()) {
             diagram.add(this.generateDiagram(molecule));
         }
         this.paint(drawVisitor, diagram);
@@ -365,7 +364,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     public void paintChemModel(IChemModel chemModel,
             IDrawVisitor drawVisitor, Rectangle2D bounds, boolean resetCenter) {
         // check for an empty model
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         IReactionSet reactionSet = chemModel.getReactionSet();
 
         // nasty, but it seems that reactions can be read in as ChemModels
@@ -460,12 +459,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param resetCenter
      *     if true, set the draw center to be the center of bounds
      */
-    public void paintMoleculeSet(IMoleculeSet molecules,
+    public void paintMoleculeSet(IAtomContainerSet molecules,
             IDrawVisitor drawVisitor, Rectangle2D bounds, boolean resetCenter) {
 
         // total up the bounding boxes
         Rectangle2D totalBounds = null;
-        for (IAtomContainer molecule : molecules.molecules()) {
+        for (IAtomContainer molecule : molecules.atomContainers()) {
             Rectangle2D modelBounds = Renderer.calculateBounds(molecule);
             if (totalBounds == null) {
                 totalBounds = modelBounds;
@@ -478,7 +477,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                 Renderer.calculateAverageBondLength(molecules), resetCenter);
 
         ElementGroup diagram = new ElementGroup();
-        for (IAtomContainer molecule : molecules.molecules()) {
+        for (IAtomContainer molecule : molecules.atomContainers()) {
             diagram.add(this.generateDiagram(molecule));
         }
 
@@ -501,7 +500,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @return a rectangle in screen space.
      */
     public Rectangle calculateDiagramBounds(IChemModel model) {
-        IMoleculeSet moleculeSet = model.getMoleculeSet();
+        IAtomContainerSet moleculeSet = model.getMoleculeSet();
         IReactionSet reactionSet = model.getReactionSet();
         if ((moleculeSet == null && reactionSet == null)) {
             return new Rectangle();
@@ -537,13 +536,13 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                 Renderer.calculateBounds(reaction));
     }
 
-    public Rectangle calculateDiagramBounds(IMoleculeSet moleculeSet) {
+    public Rectangle calculateDiagramBounds(IAtomContainerSet moleculeSet) {
         return this.calculateScreenBounds(
                 Renderer.calculateBounds(moleculeSet));
     }
 
     public static Rectangle2D calculateBounds(IChemModel chemModel) {
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         IReactionSet reactionSet = chemModel.getReactionSet();
         Rectangle2D totalBounds = null;
         if (moleculeSet != null) {
@@ -576,8 +575,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
     public static Rectangle2D calculateBounds(IReaction reaction) {
         // get the participants in the reaction
-        IMoleculeSet reactants = reaction.getReactants();
-        IMoleculeSet products = reaction.getProducts();
+        IAtomContainerSet reactants = reaction.getReactants();
+        IAtomContainerSet products = reaction.getProducts();
         if (reactants == null || products == null) {
             return null;
         }
@@ -597,7 +596,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
     }
 
-    public static Rectangle2D calculateBounds(IMoleculeSet moleculeSet) {
+    public static Rectangle2D calculateBounds(IAtomContainerSet moleculeSet) {
         Rectangle2D totalBounds = null;
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
@@ -619,7 +618,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     public static double calculateAverageBondLength(IChemModel model) {
 
         // empty models have to have a scale
-        IMoleculeSet moleculeSet = model.getMoleculeSet();
+        IAtomContainerSet moleculeSet = model.getMoleculeSet();
         if (moleculeSet == null) {
             IReactionSet reactionSet = model.getReactionSet();
             if (reactionSet != null) {
@@ -642,7 +641,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
     public static double calculateAverageBondLength(IReaction reaction) {
 
-        IMoleculeSet reactants = reaction.getReactants();
+        IAtomContainerSet reactants = reaction.getReactants();
         double reactantAverage = 0.0;
         if (reactants != null) {
             reactantAverage =
@@ -650,7 +649,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                     / reactants.getAtomContainerCount();
         }
 
-        IMoleculeSet products = reaction.getProducts();
+        IAtomContainerSet products = reaction.getProducts();
         double productAverage = 0.0;
         if (products != null) {
             productAverage =
@@ -665,9 +664,9 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
     }
 
-    public static double calculateAverageBondLength(IMoleculeSet moleculeSet) {
+    public static double calculateAverageBondLength(IAtomContainerSet moleculeSet) {
         double averageBondModelLength = 0.0;
-        for (IAtomContainer atomContainer : moleculeSet.molecules()) {
+        for (IAtomContainer atomContainer : moleculeSet.atomContainers()) {
             averageBondModelLength +=
                     GeometryTools.getBondLengthAverage(atomContainer);
         }
@@ -921,7 +920,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         return diagram;
     }
 
-    private IRenderingElement generateDiagram(IMoleculeSet moleculeSet) {
+    private IRenderingElement generateDiagram(IAtomContainerSet moleculeSet) {
         ElementGroup diagram = new ElementGroup();
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);

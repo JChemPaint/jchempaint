@@ -24,7 +24,6 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
@@ -462,7 +461,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         JButtonFixture savebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         savebutton.click();
         MDLReader reader = new MDLReader(new FileInputStream(file));
-        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
         restoreModelToEmpty();
 	}
@@ -485,9 +484,9 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         okbutton.click();
         //not the bug, but still worth testing
         MDLReader reader = new MDLReader(new FileInputStream(file));
-        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
-        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
-        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
+        IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
         applet.menuItem("new").click();
         applet.button("hexagon").click();
         applet.click();
@@ -507,9 +506,9 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         okbutton.click();
         //not the bug, but still worth testing
         reader = new MDLReader(new FileInputStream(file));
-        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
-        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
-        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
+        Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
         //ok, now the critical bits - open mol1
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
         applet.menuItem("open").click();
@@ -540,11 +539,11 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("save").click();
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
         reader = new MDLReader(new FileInputStream(file));
-        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(6, mol.getAtomCount());
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
         reader = new MDLReader(new FileInputStream(file));
-        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(7, mol.getAtomCount());
         restoreModelToEmpty();
 	}

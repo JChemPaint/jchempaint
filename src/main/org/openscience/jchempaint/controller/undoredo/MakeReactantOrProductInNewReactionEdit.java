@@ -32,8 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -81,7 +80,7 @@ public class MakeReactantOrProductInNewReactionEdit implements IUndoRedoable {
 		chemModel.getMoleculeSet().removeAtomContainer(movedContainer);
 		IReaction reaction = chemModel.getBuilder().newInstance(IReaction.class);
 		reaction.setID(reactionID);
-		IMolecule mol=chemModel.getBuilder().newInstance(IMolecule.class,movedContainer);
+		IAtomContainer mol=chemModel.getBuilder().newInstance(IAtomContainer.class,movedContainer);
 		mol.setID(movedContainer.getID());
 		if(reactantOrProduct)
 			reaction.addReactant(mol);
@@ -95,7 +94,7 @@ public class MakeReactantOrProductInNewReactionEdit implements IUndoRedoable {
 
 	public void undo() {
 		if(chemModel.getMoleculeSet()==null)
-			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
+			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IAtomContainerSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(oldContainer);
 		chemModel.getReactionSet().removeReaction(ReactionSetManipulator.getReactionByAtomContainerID(chemModel.getReactionSet(), movedContainer.getID()));
 	}

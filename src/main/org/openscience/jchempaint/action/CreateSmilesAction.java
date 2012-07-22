@@ -34,7 +34,7 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import org.openscience.cdk.Molecule;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -93,7 +93,7 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule molecule = new Molecule(container);
+        	AtomContainer molecule = new AtomContainer(container);
         	smiles += generator.createSMILES(molecule);
             //valencies are set when creating smiles, which we don't want in jcp
             for(int i=0;i<container.getAtomCount();i++){
@@ -113,7 +113,7 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule moleculewithh = new Molecule(container);
+        	AtomContainer moleculewithh = new AtomContainer(container);
         	CDKHydrogenAdder.getInstance(moleculewithh.getBuilder()).addImplicitHydrogens(moleculewithh);
         	AtomContainerManipulator.convertImplicitToExplicitHydrogens(moleculewithh);
         	double bondLength = GeometryTools.getBondLengthAverage(container);

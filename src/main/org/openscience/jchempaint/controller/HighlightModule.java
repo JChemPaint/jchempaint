@@ -73,7 +73,7 @@ public class HighlightModule extends ControllerModuleAdapter {
             model.setHighlightedBond(null);
             try {
                 if(chemModelRelay.getIChemModel().getMoleculeSet()!=null && chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>0)
-                    highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getMolecule(0).getAtomNumber(atom));
+                    highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).getAtomNumber(atom));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -87,7 +87,7 @@ public class HighlightModule extends ControllerModuleAdapter {
         	return;
         try{
 	        Method highlightMethod = getSpectrumApplet().getClass().getMethod("highlightPeakInSpectrum", new Class[] { Integer.TYPE });
-    	        highlightMethod.invoke(getSpectrumApplet(), new Object[] { new Integer(chemModelRelay.getIChemModel().getMoleculeSet().getMolecule(0).getAtomNumber(atom)) });
+    	        highlightMethod.invoke(getSpectrumApplet(), new Object[] { new Integer(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).getAtomNumber(atom)) });
         	    spectrumApplet.repaint();
         }catch(Exception ex){
             ex.printStackTrace();

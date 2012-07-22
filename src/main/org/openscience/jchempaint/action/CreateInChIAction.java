@@ -69,7 +69,7 @@ public class CreateInChIAction extends JCPAction {
             int i = 0;
             String eol = System.getProperty("line.separator");
             for (IAtomContainer container : model.getMoleculeSet()
-                    .molecules()) {
+                    .atomContainers()) {
                 if (model.getMoleculeSet().getAtomContainerCount() > 1) {
                     dialogText.append(GT._("Structure") + " #" + (i + 1)
                             + eol);

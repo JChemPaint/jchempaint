@@ -22,8 +22,8 @@ package org.openscience.jchempaint.renderer.generators;
 
 import java.awt.geom.Rectangle2D;
 
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -44,12 +44,12 @@ public class BoundsGenerator implements IReactionGenerator {
     
     public IRenderingElement generate(IReaction reaction, RendererModel model) {
         ElementGroup elementGroup = new ElementGroup();
-        IMoleculeSet reactants = reaction.getReactants();
+        IAtomContainerSet reactants = reaction.getReactants();
         if (reactants != null) {
             elementGroup.add(this.generate(reactants, model));
         }
         
-        IMoleculeSet products = reaction.getProducts();
+        IAtomContainerSet products = reaction.getProducts();
         if (products != null) {
             elementGroup.add(this.generate(products, model));
         }
@@ -57,7 +57,7 @@ public class BoundsGenerator implements IReactionGenerator {
         return elementGroup;
     }
     
-    public IRenderingElement generate(IMolecule molecule, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer molecule, RendererModel model) {
         Rectangle2D bounds = Renderer.calculateBounds(molecule);
         return new RectangleElement(bounds.getMinX(),
                 bounds.getMaxY(),
@@ -67,7 +67,7 @@ public class BoundsGenerator implements IReactionGenerator {
     }
     
     public IRenderingElement generate(
-            IMoleculeSet moleculeSet, RendererModel model) {
+            IAtomContainerSet moleculeSet, RendererModel model) {
         Rectangle2D totalBounds = Renderer.calculateBounds(moleculeSet);
         
         return new RectangleElement(totalBounds.getMinX(),
