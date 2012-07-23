@@ -163,7 +163,7 @@ public class SVGGenerator implements IDrawVisitor {
 			if(!tcList.contains(idstr)) {
 				tcList.add(idstr);
 				GlyphMetrics m = the_fm.map.get((int)c);
-				Point2d bb = new Point2d (m.xMax-m.xMin, m.yMax-m.yMin);
+				Point2d bb = new Point2d (m.xMax, m.yMax-m.yMin);
 				if (!ptMap.containsKey((int)c))
 					ptMap.put ((int)c, bb);
 				newline();
