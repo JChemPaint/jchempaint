@@ -2,7 +2,7 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.3-1206" />
+    <property name="jcp.version" value="3.3-1207" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
@@ -20,6 +20,7 @@
     <property name="dist-classes" value="${dist}/classes" />
     <property name="dist-test" value="${dist}/test" />
     <property name="metainf" value="META-INF" />
+    <property name="po" value="po" />
     <property name="po-classes" value="po/classes" />
 
     <property name="growing_list_file" value="${dist}/applet-classes-list.files"/>
@@ -226,7 +227,7 @@
         </exec>
     </target>
 
-    <target id="build-languageclasses" name="build-languageclasses" >
+    <target id="build-languageclasses" name="build-languageclasses" unless="i18n.uptodate">
         <echo message="Compiling po files." />
         <foreach target="msgfmt" param="file">
           <path>
@@ -237,7 +238,16 @@
         </foreach>
     </target>
 
-    <target id="compile-jcp" name="compile-jcp" depends="build-languageclasses, makelicenseinfo" >
+    <target id="check-languageclasses" name="check-languageclasses">
+      <condition property="i18n.uptodate">
+        <uptodate>
+          <srcfiles dir="${po}" includes="**/*.po"/>
+          <mapper type="glob" from="*.po" to="classes/app/i18n/Messages_*.class"/>
+        </uptodate>
+      </condition>
+    </target>
+
+    <target id="compile-jcp" name="compile-jcp" depends="check-languageclasses, build-languageclasses, makelicenseinfo" >
         <!-- TODO check if dist-all in cdk has been done-->
         <echo message="Compiling JChemPaint classes." />
         <mkdir dir="${dist-classes}" />
