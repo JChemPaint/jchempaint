@@ -101,7 +101,7 @@ public class SVGGenerator implements IDrawVisitor {
 	private List<String> tcList;
 	private HashMap<String,Point2d> tgMap;
 	private HashMap<Integer,Point2d> ptMap;
-	private List<Vector4d> bbList;
+	private List<Rectangle2D> bbList;
 	
 	private double trscale, tgpadding, vbpadding;
 	private Rectangle2D bbox;
@@ -115,7 +115,7 @@ public class SVGGenerator implements IDrawVisitor {
 		tcList = new ArrayList<String>();
 		tgMap = new HashMap<String,Point2d>();
 		ptMap = new HashMap<Integer,Point2d>();
-		bbList = new ArrayList<Vector4d>();
+		bbList = new ArrayList<Rectangle2D>();
 		bbox = null;
 				
 		svg.append(SVGGenerator.HEADER);
@@ -191,7 +191,9 @@ public class SVGGenerator implements IDrawVisitor {
 		newline();
 		double[] p1 = transformPoint(oval.x - oval.radius, oval.y - oval.radius);
 		double[] p2 = transformPoint(oval.x + oval.radius, oval.y + oval.radius);
-		bbox = bbox.createUnion(new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[1]));
+		bbox = bbox.createUnion(new Rectangle2D.Double(
+                    Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
+                    Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1])));
 		double r = (p2[0] - p1[0]) / 2;
 		svg.append(String.format(
 				"<ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" " +
@@ -250,13 +252,15 @@ public class SVGGenerator implements IDrawVisitor {
 			bb = ptMap.get((int)e.text.charAt(0));
 		else
 			bb = tgMap.get(e.text);
-		Vector4d v = new Vector4d(pos[0]-trscale*bb.x/2,
+		Rectangle2D v = new Rectangle2D.Double(pos[0]-trscale*bb.x/2,
 				pos[1]-trscale*bb.y/2-tgpadding,
-				pos[0]+trscale*bb.x/2+tgpadding,
-				pos[1]+trscale*bb.y/2+tgpadding);
+				trscale*bb.x+tgpadding,
+				trscale*bb.y+2*tgpadding);
 		bbList.add(v);
-		if (bbox==null) bbox = new Rectangle2D.Double(v.x,v.y,v.z-v.x,v.w-v.y);
-		bbox = bbox.createUnion(new Rectangle2D.Double(v.x,v.y,v.z-v.x,v.w-v.y));
+		if (bbox==null) bbox = new Rectangle2D.Double(
+                        v.getX(), v.getY(), v.getWidth(), v.getHeight());
+                else bbox = bbox.createUnion(new Rectangle2D.Double(
+                        v.getX(), v.getY(), v.getWidth(), v.getHeight()));
 		svg.append(String.format(
 				"<use xlink:href=\"#Atom-%s\" x=\"%4.2f\" y=\"%4.2f\"/>",
 				e.text,
@@ -350,8 +354,8 @@ public class SVGGenerator implements IDrawVisitor {
 		svg.append("</svg>");
 		int i = svg.indexOf ("1234567890ABCDEFGHI");
 		svg.replace(i, i+19, String.format("%4.0f %4.0f %4.0f %4.0f",
-				bbox.getX()-vbpadding,
-				bbox.getY()-vbpadding,
+				bbox.getMinX()-vbpadding,
+				bbox.getMinY()-vbpadding,
 				bbox.getWidth()+2*vbpadding,
 				bbox.getHeight()+2*vbpadding));
 		return svg.toString();
@@ -367,13 +371,12 @@ public class SVGGenerator implements IDrawVisitor {
 	 */
 	private boolean shorten_line(double[] p1, double[] p2)
 	{
-		double rx = 0.0, ry = 0.0;
-		boolean inside1 = false, inside2 = false;
-		for (Vector4d v : bbList) {   // shorten line acc. to bboxes
-			inside1 = (p1[0]>v.x && p1[0]<v.z && p1[1]>v.y && p1[1]<v.w); 
-			inside2 = (p2[0]>v.x && p2[0]<v.z && p2[1]>v.y && p2[1]<v.w);
+		for (Rectangle2D v : bbList) {   // shorten line acc. to bboxes
+			boolean inside1 = v.contains(p1[0], p1[1]);
+			boolean inside2 = v.contains(p2[0], p2[1]);
 			if (!inside1 && !inside2) continue;
 			if (inside1 && inside2) return false;
+                        
 			double px, py, qx, qy, cx=0.0, cy=0.0;
 			if (inside1) {
 				px = p1[0]; py = p1[1];
@@ -382,10 +385,12 @@ public class SVGGenerator implements IDrawVisitor {
 				px = p2[0]; py = p2[1];
 				qx = p1[0]; qy = p1[1];
 			}
-			if (qx<v.x && v.x<px) cx = v.x;
-			if (px<v.z && v.z<qx) cx = v.z;
-			if (qy<v.y && v.y<py) cy = v.y;
-			if (py<v.w && v.w<qy) cy = v.w;
+			if (qx<v.getX() && v.getX()<px) cx = v.getX();
+			if (px<v.getMaxX() && v.getMaxX()<qx) cx = v.getMaxX();
+			if (qy<v.getY() && v.getY()<py) cy = v.getY();
+			if (py<v.getMaxY() && v.getMaxY()<qy) cy = v.getMaxY();
+                        
+                        double rx, ry;
 			if (qy==py) { rx=cx; ry=py; }
 			else if (cx == 0.0) { ry = cy; rx = px + (cy-py)*(qx-px)/(qy-py); }
 			else if (qx==px) { ry=cy; rx=px; }
@@ -408,8 +413,12 @@ public class SVGGenerator implements IDrawVisitor {
 	public void draw (WedgeLineElement wedge) {
 		double[] p1 = transformPoint(wedge.x1, wedge.y1);
 		double[] p2 = transformPoint(wedge.x2, wedge.y2);
-		if (bbox==null) bbox = new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[0]);
-		bbox = bbox.createUnion(new Rectangle2D.Double(p1[0],p1[1],p2[0]-p1[0],p2[1]-p1[0]));
+		if (bbox==null) bbox = new Rectangle2D.Double(
+                            Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
+                            Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1]));
+                else bbox = bbox.createUnion(new Rectangle2D.Double(
+                        Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
+                        Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1])));
 		if (!shorten_line (p1, p2)) return;
 		double w1[] = invTransformPoint (p1[0], p1[1]);
 		double w2[] = invTransformPoint (p2[0], p2[1]);
@@ -512,7 +521,16 @@ public class SVGGenerator implements IDrawVisitor {
 		double[] p1 = transformPoint(line.x1, line.y1);
 		double[] p2 = transformPoint(line.x2, line.y2);
 		if (!shorten_line (p1, p2)) return;
-		svg.append(String.format(
+                if (bbox == null) {
+                    bbox = new Rectangle2D.Double(
+                            Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
+                            Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1]));
+                } else {
+                    bbox = bbox.createUnion(new Rectangle2D.Double(
+                            Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
+                            Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1])));
+                }
+    		svg.append(String.format(
 				"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
 				"style=\"stroke:black; stroke-width:3px;\" />",
 				p1[0],
