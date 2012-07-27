@@ -71,7 +71,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -320,8 +320,8 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = sp.parseSmiles(
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
-                        toPaste = new DeduceBondSystemTool().fixAromaticBondOrders(toPaste);
-                        
+                        toPaste = new FixBondOrdersTool().kekuliseAromaticRings(toPaste);
+
                         IMoleculeSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
                         for(int i=0;i<mols.getAtomContainerCount();i++)
                         {

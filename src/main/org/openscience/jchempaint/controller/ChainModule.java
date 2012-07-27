@@ -139,7 +139,7 @@ public class ChainModule extends ControllerModuleAdapter {
     		phantoms.getAtom(0).setPoint2d(p1);
     		double currx = p1.x;
     		double curry = p1.y;
-            for(int i=0; i<phantoms.getAtomCount(); i++){
+            for(int i=1; i<phantoms.getAtomCount(); i++){
         		Point2d p = new Point2d(currx,curry);
             	if(i % 2 == 1){
             		p.x += firstx;

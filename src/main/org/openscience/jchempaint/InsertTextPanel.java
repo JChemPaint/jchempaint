@@ -54,9 +54,8 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.smiles.DeduceBondSystemTool;
+import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.inchi.StdInChIParser;
 
@@ -165,7 +164,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 return null;
             }
             try {
-				molecule = new DeduceBondSystemTool().fixAromaticBondOrders(molecule);
+                molecule = new FixBondOrdersTool().kekuliseAromaticRings(molecule);
 			} catch (CDKException e) {
 				e.printStackTrace();//we do nothing if this fails
 			}

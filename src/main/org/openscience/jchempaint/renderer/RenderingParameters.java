@@ -206,7 +206,7 @@ public class RenderingParameters {
      * Determines whether rings should be drawn with a circle if they are
      * aromatic.
      */
-    private boolean showAromaticity;
+    private boolean showAromaticity = false;
 
     private boolean showAromaticityInCDKStyle = false;
 
