@@ -103,7 +103,7 @@ public class SVGGenerator implements IDrawVisitor {
 	private HashMap<Integer,Point2d> ptMap;
 	private List<Rectangle2D> bbList;
 	
-	private double trscale, tgpadding, vbpadding;
+	private double trscale, subscale, subshift, tgpadding, vbpadding;
 	private Rectangle2D bbox;
 	
 	//------------------------------------------------------------------
@@ -123,8 +123,10 @@ public class SVGGenerator implements IDrawVisitor {
 		svg.append("<defs>");
 		tgpadding = 4;
 		vbpadding = 40;
-		trscale = 0.03;        // TODO: Def. dependent on 
-	}                          // rendererModel.getBondLength()
+		trscale = 0.03;
+		subscale = trscale*0.7;
+		subshift = 0.5;
+	}
 
 	private void newline() {
 		svg.append("\n");
@@ -160,16 +162,49 @@ public class SVGGenerator implements IDrawVisitor {
 			tgMap.put(e.text, new Point2d(0,0));
 		for (char c : e.text.toCharArray()) { 
 			String idstr = "Atom-" + c;
+			GlyphMetrics m = the_fm.map.get((int) c);
+			if (!ptMap.containsKey((int) c)) 
+				ptMap.put((int) c, new Point2d(m.xMax, m.yMax - m.yMin));
 			if(!tcList.contains(idstr)) {
 				tcList.add(idstr);
-				GlyphMetrics m = the_fm.map.get((int)c);
-				Point2d bb = new Point2d (m.xMax, m.yMax-m.yMin);
-				if (!ptMap.containsKey((int)c))
-					ptMap.put ((int)c, bb);
 				newline();
 				svg.append (String.format(
 						"  <path id=\"%s\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
 						idstr, trscale, -trscale, m.outline));
+			}
+		}
+		
+		// Set hyd and hPos according to entry
+		int hyd=0, hPos=0;
+		for (TextGroupElement.Child ch : e.children) {
+			if (ch.text.equals ("H")) {
+				if (ch.subscript == null) hyd=1;
+				else if (ch.subscript.equals("2")) hyd=2;
+				else hyd=3;
+				if (ch.position==TextGroupElement.Position.E) hPos=1;
+				else if (ch.position==TextGroupElement.Position.W) hPos=-1;
+			}
+		}
+		if (hyd>0) {
+			if (!tcList.contains("Atom-H")) {
+				tcList.add("Atom-H");
+				GlyphMetrics m = the_fm.map.get((int) "H".charAt(0));
+				svg.append (String.format(
+						"  <path id=\"Atom-H\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
+						trscale, -trscale, m.outline));
+			}
+			if (hyd>=2) {
+				char c = '2';
+				if (hyd==3) c='3';
+				String idstr = "Atom-" + c;
+				GlyphMetrics m = the_fm.map.get((int) c);
+				if(!tcList.contains(idstr)) {
+					tcList.add(idstr);
+					newline();
+					svg.append (String.format(
+							"  <path id=\"%s\" transform=\"scale(%1.4f,%1.4f)\" d=\"%s\" />",
+							idstr, subscale, -subscale, m.outline));
+				}				
 			}
 		}
 	}
@@ -240,33 +275,87 @@ public class SVGGenerator implements IDrawVisitor {
 	 * At the time of this call, all that we need is in place:
 	 * the SVG character macros are written and the bboxes computed.
 	 * The textgroup text is now placed with its center at the
-	 * position of the atom.
+	 * position of the atom. Implicit hydrogens are added.
 	 * 
 	 * @param e
 	 */
 	public void draw (TextGroupElement e) {
 		newline();
 		double[] pos = transformPoint(e.x, e.y);
+		
+		// Determine the bbox of the Atom symbol text
 		Point2d bb;
 		if (e.text.length() == 1) 
 			bb = ptMap.get((int)e.text.charAt(0));
 		else
 			bb = tgMap.get(e.text);
-		Rectangle2D v = new Rectangle2D.Double(pos[0]-trscale*bb.x/2,
-				pos[1]-trscale*bb.y/2-tgpadding,
-				trscale*bb.x+tgpadding,
-				trscale*bb.y+2*tgpadding);
-		bbList.add(v);
-		if (bbox==null) bbox = new Rectangle2D.Double(
-                        v.getX(), v.getY(), v.getWidth(), v.getHeight());
-                else bbox = bbox.createUnion(new Rectangle2D.Double(
-                        v.getX(), v.getY(), v.getWidth(), v.getHeight()));
+		
+		// Set hyd and hPos according to entry
+		int hyd=0, hPos=0;
+		for (TextGroupElement.Child c : e.children) {
+			if (c.text.equals ("H")) {
+				if (c.subscript == null) hyd=1;
+				else if (c.subscript.equals("2")) hyd=2;
+				else hyd=3;
+				if (c.position==TextGroupElement.Position.E) hPos=1;
+				else if (c.position==TextGroupElement.Position.W) hPos=-1;
+			}
+		}
+
+		// Set v to the bbox of the whole TextGroup, add it to
+		// the list of such bboxes and enlarge the viewport bbox
+		double x, y, w, h;
+		x = pos[0]-trscale*bb.x/2;
+		y = pos[1]-trscale*bb.y/2-tgpadding;
+		w = trscale*bb.x+tgpadding;
+		h = trscale*bb.y+2*tgpadding;
+		if (hyd>0) { // add H width and half the subscript height
+			w += trscale*the_fm.map.get((int)"H".charAt(0)).adv;
+			if (hPos<0)
+				x -= 	trscale*the_fm.map.get((int)"H".charAt(0)).adv;
+			GlyphMetrics m = the_fm.map.get(50+hyd);
+			if (hyd>=2) {
+				// don't enlarge the bbox by the subscript
+				// w += subscale*m.adv;
+				// h += subshift*subscale*(m.yMax-m.yMin);
+				// if (hPos<0)
+				//	x -= subscale*m.adv;
+			}
+		}
+		Rectangle2D v = new Rectangle2D.Double(x, y, w, h);
+		bbList.add (v);
+		if (bbox==null) bbox = v;
+                else bbox = bbox.createUnion (v);
+ 
+		// Output use command(s)
+		x = pos[0] - trscale*bb.x/2;
+		y = pos[1] + trscale*bb.y/2;
 		svg.append(String.format(
 				"<use xlink:href=\"#Atom-%s\" x=\"%4.2f\" y=\"%4.2f\"/>",
-				e.text,
-				pos[0] - trscale*bb.x/2,
-				pos[1] + trscale*bb.y/2
-				));		
+				e.text, x, y));
+		if (hyd != 0) {
+			GlyphMetrics m = the_fm.map.get(50+hyd);
+			if (hPos>0) 
+				x += trscale*bb.x;
+			else {
+				x -= trscale* the_fm.map.get((int) "H".charAt(0)).adv;
+				if (hyd>=2)
+					x -= subscale*m.adv;
+			}
+			svg.append(String.format(
+					"<use xlink:href=\"#Atom-H\" x=\"%4.2f\" y=\"%4.2f\"/>",
+					x, y));
+			if (hyd>=2) {
+				char c = '2';
+				if (hyd==3) c='3';
+				String idstr = "Atom-" + c;
+				x += trscale* the_fm.map.get((int) "H".charAt(0)).adv;
+				y += subshift*subscale*(m.yMax-m.yMin);
+				svg.append(String.format(
+						"<use xlink:href=\"#%s\" x=\"%4.2f\" y=\"%4.2f\"/>",
+						idstr, x, y));
+			}
+		}
 	}
 	
 	/**
