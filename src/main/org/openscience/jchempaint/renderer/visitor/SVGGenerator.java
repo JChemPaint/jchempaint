@@ -89,7 +89,8 @@ public class SVGGenerator implements IDrawVisitor {
 			"\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
 			"<svg xmlns=\"http://www.w3.org/2000/svg\" " +
 			"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-			"viewBox=\"1234567890ABCDEFGHI\">";
+			"viewBox=\"0 0 1234567890\">\n" +
+			"<g transform=\"translate(12345,67890)\">";
 
 	private final StringBuffer svg = new StringBuffer();
 	
@@ -440,13 +441,16 @@ public class SVGGenerator implements IDrawVisitor {
 		drawNoBonds();
 		drawBonds();
 		newline();
-		svg.append("</svg>");
-		int i = svg.indexOf ("1234567890ABCDEFGHI");
-		svg.replace(i, i+19, String.format("%4.0f %4.0f %4.0f %4.0f",
-				bbox.getMinX()-vbpadding,
-				bbox.getMinY()-vbpadding,
+		svg.append("</g>\n</svg>\n");
+		
+		int i = svg.indexOf ("0 0 1234567890");
+		svg.replace(i, i+14, String.format("0 0 %4.0f %4.0f",
 				bbox.getWidth()+2*vbpadding,
 				bbox.getHeight()+2*vbpadding));
+		i = svg.indexOf ("12345,67890");
+		svg.replace(i, i+11, String.format ("%4.0f,%4.0f",
+				-bbox.getMinX()+vbpadding,
+				-bbox.getMinY()+vbpadding));
 		return svg.toString();
 	}
 
