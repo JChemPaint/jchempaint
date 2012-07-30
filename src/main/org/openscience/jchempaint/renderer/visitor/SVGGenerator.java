@@ -310,19 +310,6 @@ public class SVGGenerator implements IDrawVisitor {
 		y = pos[1]-trscale*bb.y/2-tgpadding;
 		w = trscale*bb.x+tgpadding;
 		h = trscale*bb.y+2*tgpadding;
-		if (hyd>0) { // add H width and half the subscript height
-			w += trscale*the_fm.map.get((int)"H".charAt(0)).adv;
-			if (hPos<0)
-				x -= 	trscale*the_fm.map.get((int)"H".charAt(0)).adv;
-			GlyphMetrics m = the_fm.map.get(50+hyd);
-			if (hyd>=2) {
-				// don't enlarge the bbox by the subscript
-				// w += subscale*m.adv;
-				// h += subshift*subscale*(m.yMax-m.yMin);
-				// if (hPos<0)
-				//	x -= subscale*m.adv;
-			}
-		}
 		Rectangle2D v = new Rectangle2D.Double(x, y, w, h);
 		bbList.add (v);
 		if (bbox==null) bbox = v;
