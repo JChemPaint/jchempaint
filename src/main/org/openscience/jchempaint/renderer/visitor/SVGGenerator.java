@@ -227,14 +227,19 @@ public class SVGGenerator implements IDrawVisitor {
 		newline();
 		double[] p1 = transformPoint(oval.x - oval.radius, oval.y - oval.radius);
 		double[] p2 = transformPoint(oval.x + oval.radius, oval.y + oval.radius);
-		bbox = bbox.createUnion(new Rectangle2D.Double(
-                    Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
-                    Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1])));
-		double r = (p2[0] - p1[0]) / 2;
+		double x, y, w, h;
+		x = Math.min(p1[0], p2[0]);
+		y = Math.min(p1[1], p2[1]);
+		w = Math.abs(p2[0] - p1[0]);
+		h = Math.abs(p2[1] - p1[1]);
+		Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
+		if (bbox==null) bbox=rect;
+		else bbox = bbox.createUnion(rect);
+		double r = w / 2;
 		svg.append(String.format(
-				"<ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" " +
+				"<ellipse cx=\"%4.2f\" cy=\"%4.2f\" rx=\"%4.2f\" ry=\"%4.2f\" " +
 				"style=\"stroke:black; stroke-width:1px; fill:none;\" />",
-				p1[0] + r, p1[1] + r, r, r));
+				x + r, y + r, r, r));
 	}
 
 	public void draw (AtomSymbolElement atomSymbol) {
