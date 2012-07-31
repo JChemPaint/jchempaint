@@ -46,7 +46,6 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -71,6 +70,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -316,7 +316,7 @@ public class CopyPasteAction extends JCPAction{
                     }
                     else {    
                         SmilesParser sp = new SmilesParser(
-                                DefaultChemObjectBuilder.getInstance());
+                                SilentChemObjectBuilder.getInstance());
                         toPaste = sp.parseSmiles(
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());

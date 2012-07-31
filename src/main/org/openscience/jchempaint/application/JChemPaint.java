@@ -58,7 +58,6 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.MoleculeSet;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
@@ -83,6 +82,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.layout.TemplateHandler;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
@@ -212,7 +212,7 @@ public class JChemPaint {
     }
     
     public static IChemModel emptyModel() {
-        IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+        IChemModel chemModel = SilentChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
         chemModel.getMoleculeSet().addAtomContainer(
                 chemModel.getBuilder().newInstance(IMolecule.class));
