@@ -28,18 +28,17 @@
  */
 package org.openscience.jchempaint.applet;
 
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.jchempaint.JChemPaintPanel;
 
 public class JChemPaintEditorApplet extends JChemPaintAbstractApplet{
 	public static final String GUI_APPLET="applet";
 	public void init() {
 		super.init();
-		IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+		IChemModel chemModel = SilentChemObjectBuilder.getInstance().newInstance(IChemModel.class);
 		chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IMolecule.class));
 		JChemPaintPanel p = new JChemPaintPanel(chemModel,GUI_APPLET,debug,this, this.blacklist);

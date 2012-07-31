@@ -2,7 +2,7 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.3-1207" />
+    <property name="jcp.version" value="3.3-1208" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
@@ -114,15 +114,16 @@
                 <includesfile name="${cdk.metainf}/pdb.libdepends"/>
                 <includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
                 <includesfile name="${cdk.metainf}/qm.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsar.libdepends"/>
+                <!--includesfile name="${cdk.metainf}/qsar.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsaratomic.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsarbond.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsarcml.libdepends"/>
                 <includesfile name="${cdk.metainf}/qsarmolecular.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsarprotein.libdepends"/>
+                <includesfile name="${cdk.metainf}/qsarprotein.libdepends"/-->
                 <includesfile name="${cdk.metainf}/reaction.libdepends"/>
                 <includesfile name="${cdk.metainf}/render.libdepends"/>
                 <includesfile name="${cdk.metainf}/sdg.libdepends"/>
+                <includesfile name="${cdk.metainf}/silent.libdepends"/>
                 <includesfile name="${cdk.metainf}/smarts.libdepends"/>
                 <includesfile name="${cdk.metainf}/smiles.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
@@ -177,6 +178,7 @@
                 <include name="cdk-reaction.jar"/>
                 <!--include name="cdk-render.jar"/-->
                 <include name="cdk-sdg.jar"/>
+                <include name="cdk-silent.jar"/>
                 <!--include name="cdk-smarts.jar"/-->
                 <include name="cdk-smiles.jar"/>
                 <include name="cdk-standard.jar"/>
