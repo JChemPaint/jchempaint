@@ -23,11 +23,9 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,19 +35,16 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import org.junit.Assert;
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.Reaction;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
@@ -59,13 +54,9 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.dialog.editor.AtomEditor;
-import org.openscience.jchempaint.dialog.editor.BondEditor;
 import org.openscience.jchempaint.dialog.editor.ChemObjectEditor;
 import org.openscience.jchempaint.dialog.editor.ChemObjectPropertyDialog;
-import org.openscience.jchempaint.dialog.editor.PseudoAtomEditor;
 import org.openscience.jchempaint.dialog.editor.RGroupEditor;
-import org.openscience.jchempaint.dialog.editor.ReactionEditor;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
@@ -107,7 +98,7 @@ public class RGroupAction extends JCPAction {
 		Map<Integer,RGroupList> existingRgroupLists =null;
 
 		IRGroupQuery rgrpQuery=null;
-		Molecule molecule=null;
+		IMolecule molecule=null;
 
 		/* User action: generate possible configurations for the R-group */
 		if(type.equals("rgpGenerate")) {
@@ -123,14 +114,15 @@ public class RGroupAction extends JCPAction {
 				File outFile = chooser.getSelectedFile();
 				System.out.println(outFile);
 				List<IAtomContainer> molecules= jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery().getAllConfigurations();
-		        IMoleculeSet molSet = new MoleculeSet();
-		        for (IAtomContainer mol : molecules) {
-		        	molSet.addAtomContainer(mol);
-		        }
-		        SDFWriter sdfWriter = new SDFWriter(new FileWriter(outFile));
-		        sdfWriter.write(molSet);
-		        sdfWriter.close();
-
+				if (molecules.size() > 0) {
+					IMoleculeSet molSet = molecules.get(0).getBuilder().newInstance(IMoleculeSet.class);
+					for (IAtomContainer mol : molecules) {
+						molSet.addAtomContainer(mol);
+					}
+					SDFWriter sdfWriter = new SDFWriter(new FileWriter(outFile));
+					sdfWriter.write(molSet);
+					sdfWriter.close();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(jcpPanel, GT._("There was an error generating the configurations {0}",e.getMessage()));
@@ -207,7 +199,7 @@ public class RGroupAction extends JCPAction {
 
 				//Undo/redo business______
 				IAtom pseudo=null;
-				if (apoBond.getAtom(0) instanceof PseudoAtom)
+				if (apoBond.getAtom(0) instanceof IPseudoAtom)
 					pseudo=apoBond.getAtom(0);
 				else 
 					pseudo=apoBond.getAtom(1); 
@@ -265,7 +257,7 @@ public class RGroupAction extends JCPAction {
 
 				if (hub.getRGroupHandler() == null) {
 					isNewRgroup=true;
-					rgrpQuery = newRGroupQuery();
+					rgrpQuery = newRGroupQuery(molecule.getBuilder());
 					rGroupHandler = new RGroupHandler(rgrpQuery);
 					hub.setRGroupHandler(rGroupHandler);
 				}
@@ -287,8 +279,8 @@ public class RGroupAction extends JCPAction {
 				//Define new root apo's
 				Map<IAtom, Map<Integer, IBond>> apoBonds= new HashMap<IAtom, Map<Integer, IBond>>();
 				for (IAtom atom : molecule.atoms()) {
-					if (atom instanceof PseudoAtom) {
-						PseudoAtom pseudo = (PseudoAtom)atom;
+					if (atom instanceof IPseudoAtom) {
+						IPseudoAtom pseudo = (IPseudoAtom)atom;
 						if (pseudo.getLabel()!=null && RGroupQuery.isValidRgroupQueryLabel(pseudo.getLabel())) {
 							chooseRootAttachmentBonds(pseudo,molecule,apoBonds);
 						}
@@ -316,8 +308,8 @@ public class RGroupAction extends JCPAction {
 				// Check - are there any R-groups -> collect them so that user input can be validated
 				Map<Integer,Integer> validRnumChoices=new HashMap<Integer,Integer>();
 				for (IAtom atom : hub.getRGroupHandler().getrGroupQuery().getRootStructure().atoms()) {
-					if (atom instanceof PseudoAtom) {
-						PseudoAtom pseudo = (PseudoAtom)atom;
+					if (atom instanceof IPseudoAtom) {
+						IPseudoAtom pseudo = (IPseudoAtom)atom;
 						if (pseudo.getLabel()!=null && RGroupQuery.isValidRgroupQueryLabel(pseudo.getLabel())) {
 							int bondCnt=0;
 							int rNum=new Integer(pseudo.getLabel().substring(1));
@@ -440,9 +432,9 @@ public class RGroupAction extends JCPAction {
 	 * 
 	 * @return a new empty RGroupQuery
 	 */
-	private IRGroupQuery newRGroupQuery() {
+	private IRGroupQuery newRGroupQuery(IChemObjectBuilder builder) {
 		IRGroupQuery rgrpQuery = new RGroupQuery();
-		rgrpQuery.setRootStructure(new Molecule());
+		rgrpQuery.setRootStructure(builder.newInstance(IMolecule.class));
 		rgrpQuery
 				.setRootAttachmentPoints(new HashMap<IAtom, Map<Integer, IBond>>());
 		rgrpQuery.setRGroupDefinitions(new HashMap<Integer, RGroupList>());
@@ -524,7 +516,7 @@ public class RGroupAction extends JCPAction {
 	 * Creates a new molecule based on a user selection, and removes the
 	 * selected atoms/bonds from the atom container where they are currently in.
 	 */
-	private Molecule createMolecule(IAtomContainer atc,
+	private IMolecule createMolecule(IAtomContainer atc,
 			Map<IAtom, IAtomContainer> existingAtomDistr,
 			Map<IBond, IAtomContainer> existingBondDistr) {
 		for (IAtom atom : atc.atoms()) {
@@ -539,7 +531,7 @@ public class RGroupAction extends JCPAction {
 			existingBondDistr.put(bond, original);
 			original.removeBond(bond);
 		}
-		Molecule molecule = new Molecule();
+		IMolecule molecule = atc.getBuilder().newInstance(IMolecule.class);
 		molecule.add(atc);
 		return molecule;
 	}

@@ -33,25 +33,20 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.MoleculeSet;
-import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
-import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -90,7 +85,7 @@ public class RGroupHandler  {
 		if (rGroupQuery==null || rGroupQuery.getRootStructure() == null || rGroupQuery.getRootStructure().getAtomCount()==0)
 			throw new CDKException( "The R-group is empty");
 
-		IMoleculeSet moleculeSet = new MoleculeSet();
+		IMoleculeSet moleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
 		moleculeSet.addAtomContainer(rGroupQuery.getRootStructure());
 		chemModel.setMoleculeSet(moleculeSet);
 		for (int rgrpNum : sortRGroupNumbers()) {
@@ -443,7 +438,7 @@ public class RGroupHandler  {
 	 * @return
 	 */
 	public boolean checkRGroupOkayForDelete(IAtom at,IChemModelRelay hub ) {
-		IAtomContainer tmp = new AtomContainer();
+		IAtomContainer tmp = at.getBuilder().newInstance(IAtomContainer.class);
 		tmp.addAtom(at);
 		return (checkRGroupOkayForDelete(tmp,hub));
 	}
@@ -506,7 +501,7 @@ public class RGroupHandler  {
     public boolean isRGroupRootBond(IBond bond) {
     	if (rGroupQuery!=null && rGroupQuery.getRootStructure()!=null && rGroupQuery.getRootStructure().contains(bond)) {
 			for(IAtom atom : bond.atoms()) {
-				if (atom instanceof PseudoAtom && RGroupQuery.isValidRgroupQueryLabel(((PseudoAtom)atom).getLabel())) {
+				if (atom instanceof IPseudoAtom && RGroupQuery.isValidRgroupQueryLabel(((IPseudoAtom)atom).getLabel())) {
 					return true;
 				}
 			}
