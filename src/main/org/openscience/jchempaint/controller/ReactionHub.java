@@ -72,7 +72,7 @@ public class ReactionHub {
         chemModel.setReactionSet(reactionSet);
         chemModel.getMoleculeSet().removeAtomContainer(oldcontainer);
         if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
-            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IAtomContainer.class));
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IMolecule.class));
         if(controllerhub.getUndoRedoFactory()!=null && controllerhub.getUndoRedoHandler()!=null){
             IUndoRedoable undoredo = controllerhub.getUndoRedoFactory().getMakeReactantOrProductInNewReactionEdit(chemModel, newContainer, oldcontainer, false, "Make Reactant in new Reaction");
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
