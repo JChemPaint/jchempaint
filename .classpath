@@ -30,21 +30,26 @@
 	<classpathentry kind="lib" path="/CDK-1.4.10/jar/jena/jena.jar"/>
 	<classpathentry kind="lib" path="/CDK-1.4.10/jar/com-sun-javadoc.jar"/>
 	<classpathentry kind="lib" path="/CDK-1.4.10/jar/com-sun-tools-doclets-Taglet.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-core.jar" sourcepath="/CDK-1.4.10/jar/cdk-core-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-data.jar" sourcepath="/CDK-1.4.10/jar/cdk-data-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-extra.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-formula.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-interfaces.jar" sourcepath="/CDK-1.4.10/jar/cdk-interfaces-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-io.jar" sourcepath="/CDK-1.4.10/jar/cdk-io-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-ioformats.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-isomorphism.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-libiocml.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-qm.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-reaction.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-sdg.jar" sourcepath="/CDK-1.4.10/jar/cdk-sdg-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-smiles.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-standard.jar" sourcepath="/CDK-1.4.10/jar/cdk-standard-sources.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/cdk-valencycheck.jar"/>
-	<classpathentry kind="lib" path="/CDK-1.4.10/jar/log4j.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-annotation.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-atomtype.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-core.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-data.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-diff.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-extra.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-formula.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-inchi.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-interfaces.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-io.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-ioformats.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-isomorphism.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-libiocml.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-log4j.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-qm.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-reaction.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-sdg.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-smiles.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-standard.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/CDK-1.4.11/cdk-valencycheck.jar"/>
+	<classpathentry kind="lib" path="/home/ralf/remote/jcp-rwst/bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
