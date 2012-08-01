@@ -49,15 +49,17 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.templates.DummyClass;
 
@@ -221,7 +223,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                                 if(entry.getName().indexOf(".mol")>-1){
                                     InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
                                     MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.RELAXED);
-                                    IMolecule cdkmol = (IMolecule)reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
                                     entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
                                     entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
                                 }else{
@@ -244,7 +246,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                                 for(int k=0;k<dir.list().length;k++){
                                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
                                         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
-                                        IMolecule cdkmol = (IMolecule)reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+                                        IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
                                         entriesMol.get(dir.getName()).add(cdkmol);
                                         entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
                                     }else{

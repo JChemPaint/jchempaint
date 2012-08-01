@@ -38,6 +38,7 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
@@ -51,7 +52,6 @@ import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.ringsearch.SSSRFinder;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
@@ -69,7 +69,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
         super(chemModelRelay);
         String filename = "org/openscience/jchempaint/resources/funcgroups.txt";
         InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-        SmilesParser sp=new SmilesParser(SilentChemObjectBuilder.getInstance());
+        SmilesParser sp=new SmilesParser(DefaultChemObjectBuilder.getInstance());
         StringBuffer sb=new StringBuffer();
         InputStreamReader isr = new InputStreamReader(ins);
         try{

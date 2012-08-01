@@ -49,11 +49,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -156,7 +156,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 return null;
             }
         } else { // OK, it must be a SMILES
-            SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+            SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
             try {
                 molecule = smilesParser.parseSmiles(text);
             } catch (InvalidSmilesException e1) {
@@ -237,7 +237,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         if (!found) return null;
 
         // got the canonical SMILES, lets get the molecule
-        SmilesParser smilesParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
+        SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
         try {
         	IMolecule mol=smilesParser.parseSmiles(smiles);
             //for some reason, smilesparser sets valencies, which we don't want in jcp
