@@ -28,15 +28,15 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.Reaction;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.jchempaint.dialog.editor.AtomEditor;
 import org.openscience.jchempaint.dialog.editor.BondEditor;
 import org.openscience.jchempaint.dialog.editor.ChemObjectEditor;
@@ -56,16 +56,16 @@ public class EditChemObjectPropsAction extends JCPAction {
 		IChemObject object = getSource(event);
 		logger.debug("Showing object properties for: ", object);
 		ChemObjectEditor editor = null;
-		if (object instanceof PseudoAtom) {
+		if (object instanceof IPseudoAtom) {
 			editor = new PseudoAtomEditor();
 		}
-		else if (object instanceof Atom) {
+		else if (object instanceof IAtom) {
 			editor = new AtomEditor(jcpPanel.get2DHub());
 		}
-		else if (object instanceof Reaction) {
+		else if (object instanceof IReaction) {
 			editor = new ReactionEditor();
 		}
-		else if (object instanceof org.openscience.cdk.interfaces.IBond) {
+		else if (object instanceof IBond) {
 			editor = new BondEditor(jcpPanel.get2DHub(), jcpPanel.getBlacklist());
 		}
 		

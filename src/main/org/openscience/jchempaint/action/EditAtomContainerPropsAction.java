@@ -33,9 +33,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.dialog.editor.AtomContainerEditor;
@@ -55,10 +55,10 @@ public class EditAtomContainerPropsAction extends JCPAction {
 		logger.debug("Showing object properties for: ", object);
 		ChemObjectEditor editor = new AtomContainerEditor();
 		IAtomContainer relevantContainer = null;
-		if(object instanceof Atom)
-			relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Atom)object);
-		if(object instanceof Bond)
-			relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(Bond)object);
+		if(object instanceof IAtom)
+			relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(IAtom)object);
+		if(object instanceof IBond)
+			relevantContainer = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(),(IBond)object);
 		editor.setChemObject(relevantContainer);
 		ChemObjectPropertyDialog frame =
 			new ChemObjectPropertyDialog(JOptionPane.getFrameForComponent(editor), jcpPanel.get2DHub(), editor);
