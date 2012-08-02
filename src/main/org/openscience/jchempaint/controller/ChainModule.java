@@ -168,18 +168,19 @@ public class ChainModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-		IAtomContainer fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
+	IAtomContainer fromContainer = null, toContainer = null;
     	if(source!=null){
-    		IAtomContainer toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-    		if (toContainer != null)
-    			chemModelRelay.getPhantoms().removeAtom(0);
+		fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
+		chemModelRelay.getPhantoms().removeAtom(0);
+		if (merge!=null)
+	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
     		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
     	}else{
     		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, null);
     	}
-        if(merge!=null){
+        if (merge!=null)
         	chemModelRelay.updateAtom(merge);
-        }
+	if (source!=null)
 		chemModelRelay.updateAtom(source);
         chemModelRelay.clearPhantoms();
         chemModelRelay.setPhantomText(null, null);
