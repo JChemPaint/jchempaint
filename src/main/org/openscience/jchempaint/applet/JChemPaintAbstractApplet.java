@@ -80,6 +80,9 @@ import org.openscience.jchempaint.StringHelper;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.IControllerModel;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -210,21 +213,35 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder
                         .getInstance());
                 IMolecule mol = sp.parseSmiles(smiles);
-                StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-                sdg.setMolecule(mol);
-                sdg.generateCoordinates(new Vector2d(0, 1));
-                mol = sdg.getMolecule();
-                mol = new FixBondOrdersTool().kekuliseAromaticRings(mol);
+
                 //for some reason, smilesparser sets valencies, which we don't want in jcp
                 for(int i=0;i<mol.getAtomCount();i++){
                 	mol.getAtom(i).setValency(null);
                 }
+		JChemPaint.generateModel(theJcpp, mol, rootPaneCheckingEnabled, debug);
+                /*StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+                sdg.setMolecule(mol);
+                sdg.generateCoordinates(new Vector2d(0, 1));
+                mol = sdg.getMolecule();
+                mol = new FixBondOrdersTool().kekuliseAromaticRings(mol);
+		
                 IChemModel chemModel = DefaultChemObjectBuilder.getInstance()
                         .newInstance(IChemModel.class);
                 chemModel.setMoleculeSet(DefaultChemObjectBuilder.getInstance()
                         .newInstance(IMoleculeSet.class));
                 chemModel.getMoleculeSet().addAtomContainer(mol);
                 theJcpp.setChemModel(chemModel);
+				
+		IUndoRedoFactory undoRedoFactory= theJcpp.get2DHub().getUndoRedoFactory();
+		UndoRedoHandler undoRedoHandler= theJcpp.get2DHub().getUndoRedoHandler();
+
+		if (undoRedoFactory!=null) {
+			IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(theJcpp.get2DHub().getIChemModel(), 
+			mol, null, "Paste", theJcpp.get2DHub());
+			undoRedoHandler.postEdit(undoredo);
+		}
+		theJcpp.updateUndoRedoControls();*/
+		
             } catch (Exception exception) {
                 theJcpp.announceError(exception);
             }

@@ -14,6 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
         BugSF65Test.class,
         BugSF75Test.class,
         Issue4Test.class,
+        Issue10Test.class,
         Issue11Test.class,
         Issue19Test.class,
         Issue32Test.class,
