@@ -23,9 +23,11 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  * @cdk.module controlextra
@@ -41,22 +43,34 @@ public class LoadNewModelEdit implements IUndoRedoable {
 	private IMoleculeSet newsom;
 	private IReactionSet newsor;
 	private String type;
+	private IChemModelRelay chemModelRelay = null;
 
-	public LoadNewModelEdit(IChemModel chemModel, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type) {
+	public LoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type) {
 		this.chemModel = chemModel;
 		this.newsom=newsom;
 		this.newsor=newsor;
 		this.oldsom=oldsom;
 		this.oldsor=oldsor;
 		this.type=type;
+		this.chemModelRelay = relay;
 	}
 
 	public void redo() {
+		if (chemModelRelay != null) {
+			for (IAtomContainer ac : newsom.atomContainers()) {
+				chemModelRelay.updateAtoms(ac, ac.atoms());
+			}
+		}
 		chemModel.setMoleculeSet(newsom);
 		chemModel.setReactionSet(newsor);
 	}
-	
+
 	public void undo() {
+		if (chemModelRelay != null) {
+			for (IAtomContainer ac : oldsom.atomContainers()) {
+				chemModelRelay.updateAtoms(ac, ac.atoms());
+			}
+		}
 		chemModel.setMoleculeSet(oldsom);
 		chemModel.setReactionSet(oldsor);
 	}

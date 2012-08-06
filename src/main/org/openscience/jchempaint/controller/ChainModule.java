@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010  Conni Wagner <conni75@users.sourceforge.net>
+ *               2012  Ralf Stephan <ralf@ark.in-berlin.de>
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -176,7 +177,9 @@ public class ChainModule extends ControllerModuleAdapter {
 	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
     		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
     	}else{
-    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, null);
+		if (merge!=null)
+	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
+    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, toContainer);
     	}
         if (merge!=null)
         	chemModelRelay.updateAtom(merge);

@@ -218,7 +218,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 for(int i=0;i<mol.getAtomCount();i++){
                 	mol.getAtom(i).setValency(null);
                 }
-		JChemPaint.generateModel(theJcpp, mol, rootPaneCheckingEnabled, debug);
+		JChemPaint.generateModel(theJcpp, mol, true, false);
                 /*StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                 sdg.setMolecule(mol);
                 sdg.generateCoordinates(new Vector2d(0, 1));
