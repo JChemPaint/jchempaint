@@ -309,7 +309,7 @@ public class JCPMenuTextMaker {
         entries.put("Rotate in space", GT._("Rotate in space"));
         entries.put("Benzene", GT._("Benzene"));
         entries.put("Select in Free Form", GT._("Select in Free Form"));
-        entries.put("Select Square", GT._("Select Rectangle"));
+        entries.put("Select Square", GT._("Select / Move"));
         entries.put("CTooltip", GT._("Change drawing symbol to {0}", "C"));
         entries.put("HTooltip", GT._("Change drawing symbol to {0}", "H"));
         entries.put("OTooltip", GT._("Change drawing symbol to {0}", "O"));

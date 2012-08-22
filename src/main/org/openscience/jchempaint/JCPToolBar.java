@@ -195,87 +195,85 @@ public class JCPToolBar
 
 
     /**
-     *  Creates a toolbar given by a String with all the buttons that are specified
-     *  in the properties file.
+     * Creates a toolbar given by a String with all the buttons that are
+     * specified in the properties file.
      *
-     *@param  orientation  int The orientation of the toolbar
-     *@param  kind         String The String used to identify the toolbar
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
-     *@return              Component The created toolbar
+     * @param orientation int The orientation of the toolbar
+     * @param kind String The String used to identify the toolbar
+     * @param blacklist A list of menuitems/buttons which should be ignored when
+     * building gui.
+     * @return Component The created toolbar
      */
-    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines)
-    {
+    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines) {
         JToolBar toolbar2 = new JToolBar(orientation);
         String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
-        if (resource_string == null)
+        if (resource_string == null) {
             return null;
+        }
         String[] toolKeys = StringHelper.tokenize(resource_string);
         JButton button = null;
-        Box box=null;
-        int counter=0;
-        for (int i = 0; i < toolKeys.length; i++)
-        {
-            if (toolKeys[i].equals("-"))
-            {
+        Box box = null;
+        int counter = 0;
+        for (int i = 0; i < toolKeys.length; i++) {
+            if (toolKeys[i].equals("|")) {
                 toolbar2.add(box);
-                if (orientation == SwingConstants.HORIZONTAL)
-                {
+                box = null;
+                toolbar2.addSeparator();
+            } else if (toolKeys[i].equals("-")) {
+                toolbar2.add(box);
+                if (orientation == SwingConstants.HORIZONTAL) {
                     toolbar2.add(Box.createHorizontalStrut(5));
-                } else if (orientation == SwingConstants.VERTICAL)
-                {
+                } else if (orientation == SwingConstants.VERTICAL) {
                     toolbar2.add(Box.createVerticalStrut(5));
                 }
-                counter=0;
-            } 
-            else if(!blacklist.contains(toolKeys[i]))
-            {
-                if(counter % lines==0){
-                    if(box!=null)
+                counter = 0;
+            } else if (!blacklist.contains(toolKeys[i])) {
+                if (counter % lines == 0) {
+                    if (box != null) {
                         toolbar2.add(box);
-                    box=new Box(BoxLayout.Y_AXIS);
+                    }
+                    if (orientation == SwingConstants.HORIZONTAL) {
+                        box = new Box(BoxLayout.X_AXIS);
+                    } else if (orientation == SwingConstants.VERTICAL) {
+                        box = new Box(BoxLayout.Y_AXIS);
+                    }
                 }
-                button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length()<3);
-                /*if (toolKeys[i].equals("lasso"))
-				{
-					selectButton = button;
-				}*/
-                if (button != null)
-                {
+                button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length() < 3);
+                /*
+                 * if (toolKeys[i].equals("lasso")) { selectButton = button; }
+                 */
+                if (button != null) {
                     box.add(button);
-                    if (toolKeys[i].equals("bondTool"))
-                    {
+                    if (toolKeys[i].equals("bondTool")) {
                         //button.setBackground(Color.GRAY);
-                        button.setBackground(new Color(238,238,238)); 
+                        button.setBackground(new Color(238, 238, 238));
                         chemPaintPanel.setLastActionButton(button);
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
                         activeModule.setID(toolKeys[i]);
                         chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
                         chemPaintPanel.updateStatusBar();
-                    } else if(toolKeys[i].equals("C")){
+                    } else if (toolKeys[i].equals("C")) {
                         button.setBackground(Color.GRAY);
                         chemPaintPanel.setLastSecondaryButton(button);
-                    } else
-                    {
+                    } else {
                         button.setBackground(BUTTON_INACTIVE_COLOR);
                     }
-                } else
-                {
-                    logger.error("Could not create button"+toolKeys[i]);
+                } else {
+                    logger.error("Could not create button" + toolKeys[i]);
                 }
                 counter++;
             }
         }
-        if(box!=null)
+        if (box != null) {
             toolbar2.add(box);
-        if (orientation == SwingConstants.HORIZONTAL)
-        {
+        }
+        if (orientation == SwingConstants.HORIZONTAL) {
             toolbar2.add(Box.createHorizontalGlue());
         }
-    	ControllerHub relay = chemPaintPanel.get2DHub();
-    	IControllerModule m = new SelectSquareModule (relay);
-    	m.setID("select");
-    	relay.setFallbackModule(m);
+        ControllerHub relay = chemPaintPanel.get2DHub();
+        IControllerModule m = new SelectSquareModule(relay);
+        m.setID("select");
+        relay.setFallbackModule(m);
         return toolbar2;
     }
 }
-
