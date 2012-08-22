@@ -141,6 +141,7 @@ public class JCPTransferHandler extends TransferHandler {
                             IUndoRedoable undoredo = jcpPanel.get2DHub()
                                     .getUndoRedoFactory().getLoadNewModelEdit(
                                             jcpPanel.getChemModel(),
+						null,
                                             jcpPanel.getChemModel()
                                                     .getMoleculeSet(),
                                             jcpPanel.getChemModel()

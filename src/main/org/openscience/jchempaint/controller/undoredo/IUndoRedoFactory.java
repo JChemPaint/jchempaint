@@ -82,7 +82,7 @@ public interface IUndoRedoFactory {
 			Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newGrgpHash, 
 			String type, IChemModelRelay c2dm);
 	public IUndoRedoable getChangeHydrogenCountEdit(Map<IAtom, Integer[]> atomHydrogenCountsMap, String type);
-	public IUndoRedoable getLoadNewModelEdit(IChemModel chemModel, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type);
+	public IUndoRedoable getLoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type);
 	public IUndoRedoable getChangeValenceEdit(IAtom atomInRange, Integer formerValence,
 			Integer valence, String text, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getRGroupEdit(String type, boolean isNewRGroup,IChemModelRelay hub,RGroupHandler rgrpHandler

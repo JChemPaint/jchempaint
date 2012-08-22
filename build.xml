@@ -2,7 +2,7 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.3-1207" />
+    <property name="jcp.version" value="3.3-1208" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
@@ -167,7 +167,7 @@
                 <include name="cdk-reaction.jar"/>
                 <!--include name="cdk-render.jar"/-->
                 <include name="cdk-sdg.jar"/>
-                <include name="cdk-silent.jar"/>
+                <!--include name="cdk-silent.jar"/-->
                 <!--include name="cdk-smarts.jar"/-->
                 <include name="cdk-smiles.jar"/>
                 <include name="cdk-standard.jar"/>

@@ -577,6 +577,7 @@ public class JChemPaint {
         }
         
         chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
+	chemPaintPanel.updateUndoRedoControls();
         chemPaintPanel.get2DHub().updateView();
     }
     

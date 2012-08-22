@@ -40,50 +40,45 @@ import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
- * @cdk.module controlbasic
- * @cdk.svnrev  $Revision: 13311 $
+ * @cdk.module controlbasic @cdk.svnrev $Revision: 13311 $
  */
 public class AddAtomsAndBondsEdit implements IUndoRedoable {
 
-    private static final long serialVersionUID = -7667903450980188402L;
-
-    private IChemModel chemModel;
-
+	private static final long serialVersionUID = -7667903450980188402L;
+	private IChemModel chemModel;
 	private IAtomContainer undoRedoContainer;
-
 	private String type;
-	
-	private IChemModelRelay chemModelRelay=null;
-
-    private IAtomContainer containerToAddTo;
-    
-    private IAtomContainer removedAtomContainer;
+	private IChemModelRelay chemModelRelay = null;
+	private IAtomContainer containerToAddTo;
+	private IAtomContainer removedAtomContainer;
 
 	/**
 	 * @param chemModel
 	 * @param undoRedoContainer
-     * @param removedAtomContainer atomContainer which has been removed from setOfAtomContainers as part of the edit, if none, null.
-	 * @param chemModelRelay 
+	 * @param removedAtomContainer atomContainer which has been removed from
+	 * setOfAtomContainers as part of the edit, if none, null.
+	 * @param chemModelRelay
 	 */
 	public AddAtomsAndBondsEdit(IChemModel chemModel,
 			IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay chemModelRelay) {
 		this.chemModel = chemModel;
 		this.undoRedoContainer = undoRedoContainer;
 		this.type = type;
-		this.chemModelRelay=chemModelRelay;
-		this.removedAtomContainer=removedAtomContainer;
+		this.chemModelRelay = chemModelRelay;
+		this.removedAtomContainer = removedAtomContainer;
 	}
 
 	public void redo() {
 
-		if(containerToAddTo!=null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo)==-1)
-	        chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
-	    
+		if (containerToAddTo != null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo) == -1) {
+			chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
+		}
+
 		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
 		//if(removedAtomContainer!=null){
-	    //    containerToAddTo.add(removedAtomContainer);
-	    //    chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
-	    //}
+		//    containerToAddTo.add(removedAtomContainer);
+		//    chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
+		//}
 
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
@@ -92,7 +87,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
 			IAtom atom = undoRedoContainer.getAtom(i);
 			containerToAddTo.addAtom(atom);
-	        chemModelRelay.updateAtom(atom);
+			chemModelRelay.updateAtom(atom);
 		}
 	}
 
@@ -100,36 +95,41 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 
 		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
 		//if(removedAtomContainer!=null){
-        //    ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
-        //    chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
-        //}
+		//    ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
+		//    chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
+		//}
 
-        IBond[] bonds = new IBond[undoRedoContainer.getBondCount()];
-        int idx=0;
-        for (IBond bond : undoRedoContainer.bonds())
-			bonds[idx++]=bond;
-        for (IBond bond : bonds){
+		IBond[] bonds = new IBond[undoRedoContainer.getBondCount()];
+		int idx = 0;
+		for (IBond bond : undoRedoContainer.bonds()) {
+			bonds[idx++] = bond;
+		}
+		for (IBond bond : bonds) {
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, bond);
-			containerToAddTo.removeBond(bond);
+			if (containerToAddTo != null) {
+				containerToAddTo.removeBond(bond);
+			}
 		}
-		
+
 		IAtom[] atoms = new IAtom[undoRedoContainer.getAtomCount()];
-		idx=0;
-		for (IAtom atom : undoRedoContainer.atoms())
-			atoms[idx++]=atom;
-        for (IAtom atom : atoms){
-			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
-			containerToAddTo.removeAtom(atom);
+		idx = 0;
+		for (IAtom atom : undoRedoContainer.atoms()) {
+			atoms[idx++] = atom;
 		}
-		
-		if(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>1)
-		    ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
-		Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
-    	while (containers.hasNext()) {
-    		IAtomContainer container = (IAtomContainer)containers.next();
-    		chemModelRelay.updateAtoms(container, container.atoms());
-    	}
-    }
+		for (IAtom atom : atoms) {
+			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
+			if (containerToAddTo != null) {
+				containerToAddTo.removeAtom(atom);
+			}
+		}
+
+		if (chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount() > 1) {
+			ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
+		}
+		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+			chemModelRelay.updateAtoms(container, container.atoms());
+		}
+	}
 
 	public boolean canRedo() {
 		return true;

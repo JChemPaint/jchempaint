@@ -2122,27 +2122,39 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void addFragment(IAtomContainer toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove) {
-		IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
-		if(moleculeToAddTo==null){
-			if (moleculeSet == null) {
-				moleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
-			}
-			moleculeSet.addAtomContainer(toPaste);
+		IMoleculeSet newMoleculeSet = chemModel.getMoleculeSet();
+		if (newMoleculeSet == null) {
+			newMoleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
+		}
+		IMoleculeSet oldMoleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
+		if (moleculeToAddTo == null) {
+			newMoleculeSet.addAtomContainer(toPaste);
 			moleculeToAddTo = toPaste;
-		}else{
+		} else {
+			try {
+				oldMoleculeSet.addAtomContainer((IAtomContainer)moleculeToAddTo.clone());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			moleculeToAddTo.add(toPaste);
 		}
-		if(toRemove!=null){
+		if (toRemove != null) {
+			try {
+				oldMoleculeSet.addAtomContainer(toRemove);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			moleculeToAddTo.add(toRemove);
-			moleculeSet.removeAtomContainer(toRemove);
-		}
-		if (undoredofactory != null && undoredohandler != null) {
-			IUndoRedoable undoredo = undoredofactory.getAddAtomsAndBondsEdit(
-					getIChemModel(), toPaste.getBuilder().newInstance(IAtomContainer.class,
-							toPaste), toRemove, "Paste", this);
-			undoredohandler.postEdit(undoredo);
+			updateAtoms(toRemove, toRemove.atoms());
+			newMoleculeSet.removeAtomContainer(toRemove);
 		}
 		updateAtoms(toPaste, toPaste.atoms());
+		if (undoredofactory != null && undoredohandler != null) {
+			IUndoRedoable undoredo = undoredofactory.getLoadNewModelEdit(
+					getIChemModel(), this, oldMoleculeSet, null, newMoleculeSet, null, "Add Chain Fragment");
+			undoredohandler.postEdit(undoredo);
+		}
+		chemModel.setMoleculeSet(newMoleculeSet);
 		structureChanged();
 	}
 

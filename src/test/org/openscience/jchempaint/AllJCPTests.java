@@ -14,6 +14,8 @@ import org.junit.runners.Suite.SuiteClasses;
         BugSF65Test.class,
         BugSF75Test.class,
         Issue4Test.class,
+        Issue8Test.class,
+        Issue10Test.class,
         Issue11Test.class,
         Issue19Test.class,
         Issue32Test.class,
@@ -21,7 +23,9 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue58Test.class,
         Issue71Test.class,
         Issue73Test.class,
+	Issue76Test.class,
         Issue81Test.class,
+        Issue82Test.class,
         MenuCutTest.class,
         MenuIsotopeTest.class,
         SetSmilesTest.class

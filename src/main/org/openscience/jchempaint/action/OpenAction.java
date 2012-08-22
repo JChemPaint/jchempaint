@@ -106,6 +106,7 @@ public class OpenAction extends JCPAction {
                             IUndoRedoable undoredo = jcpPanel.get2DHub()
                                     .getUndoRedoFactory().getLoadNewModelEdit(
                                             jcpPanel.getChemModel(),
+											null,
                                             jcpPanel.getChemModel()
                                                     .getMoleculeSet(),
                                             jcpPanel.getChemModel()
