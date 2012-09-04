@@ -104,7 +104,6 @@
                 <includesfile name="${cdk.metainf}/extra.libdepends"/>
                 <includesfile name="${cdk.metainf}/forcefield.libdepends"/>
                 <includesfile name="${cdk.metainf}/formula.libdepends"/>
-                <!--includesfile name="${cdk.metainf}/inchi.libdepends"/-->
                 <includesfile name="${cdk.metainf}/interfaces.libdepends"/>
                 <includesfile name="${cdk.metainf}/io.libdepends"/>
                 <includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
@@ -157,7 +156,6 @@
                 <!--include name="cdk-fingerprint.jar"/-->
                 <!--include name="cdk-forcefield.jar"/-->
                 <include name="cdk-formula.jar"/>
-                <include name="cdk-inchi.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-io.jar"/>
                 <include name="cdk-ioformats.jar"/>
