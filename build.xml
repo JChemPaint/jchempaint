@@ -93,8 +93,6 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
-                <includesfile name="${cdk.metainf}/annotation.libdepends"/>
-                <includesfile name="${cdk.metainf}/atomtype.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
                 <includesfile name="${cdk.metainf}/dict.libdepends"/>
                 <includesfile name="${cdk.metainf}/extra.libdepends"/>
