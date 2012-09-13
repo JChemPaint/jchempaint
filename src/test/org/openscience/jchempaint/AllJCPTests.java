@@ -13,6 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
         JCPEditorAppletUndoRedoTest.class,
         BugSF65Test.class,
         BugSF75Test.class,
+        BugSF80Test.class,
         Issue4Test.class,
         Issue8Test.class,
         Issue10Test.class,

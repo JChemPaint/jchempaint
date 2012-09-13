@@ -387,45 +387,6 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 		restoreModelToEmpty();
 	}
 
-	//Test for Trac ticket # 80 : deletion of the double bonds that bind the oxygens in caffeine led to               
-	//                            incorrect cascading removal of the bound carbons too.
-	@Test
-	public void testRemoveBond() throws CDKException, ClassNotFoundException,
-			IOException, CloneNotSupportedException {
-		// Clean the panel:
-    	applet.menuItem("new").click();
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-
-		// Paste caffeine template:
-        applet.menuItem("pasteTemplate").click();
-		DialogFixture dialog = applet.dialog("templates");
-		JButtonFixture templateButton = new JButtonFixture(dialog.robot,
-				dialog.robot.finder().find(
-						new ButtonTextComponentMatcher("Caffeine")));
-		templateButton.click();
-		applet.button("select").click();
-		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), 
-				new Point(0,0), MouseButton.LEFT_BUTTON,1);
-
-        //Delete the double bonds connecting the two oxygen atoms:
-		applet.button("eraser").click();
-		for (IBond bond : panel.getChemModel().getMoleculeSet().getAtomContainer(0).bonds()) 
-			if (bond.getOrder().equals(IBond.Order.DOUBLE) && 
-					(bond.getAtom(0).getSymbol().equals("O")||bond.getAtom(1).getSymbol().equals("O"))) {
-				double xAvg= (bond.getAtom(0).getPoint2d().x +bond.getAtom(1).getPoint2d().x)/2; 
-				double yAvg= (bond.getAtom(0).getPoint2d().y +bond.getAtom(1).getPoint2d().y)/2; 
-				Point2d moveTo=panel.getRenderPanel().getRenderer().toScreenCoordinates(xAvg,yAvg);
-				Point p = new Point((int)moveTo.x, (int)moveTo.y);
-				applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), 
-						p, MouseButton.LEFT_BUTTON,1);
-			}
-        
-        //Establish that only the double bonds plus the oxygens are gone, rest is still in place:
-		Assert.assertEquals(12, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount() );
-
-	}
-
 	@Test public void testBug70() throws FileNotFoundException, CDKException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
