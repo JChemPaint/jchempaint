@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -206,9 +207,10 @@ public class TemplateBrowser extends JDialog implements ActionListener {
     public static void createTemplatesMaps(Map<String, List<IMolecule>> entriesMol,
             Map<IMolecule, String> entriesMolName, Map<String, Icon> entriesIcon, boolean withsubdirs) throws Exception{
         DummyClass dummy = new DummyClass();
+        URL loc = dummy.getClass().getProtectionDomain().getCodeSource().getLocation();
             try{
                 // Create a URL that refers to a jar file on the net
-                URL url = new URL("jar:"+dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()+"!/");
+                URL url = new URL("jar:"+loc.toURI()+"!/");
                 // Get the jar file
                 JarURLConnection conn = (JarURLConnection)url.openConnection();
                 JarFile jarfile = conn.getJarFile();
@@ -234,7 +236,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                         }
                     }
                 }
-            }catch(ZipException ex){
+            }catch(IOException ex){
                 //This is a version we fall back to if no jar available. This should be in Eclipse only.
                 File file = new File(new File(dummy.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath()+File.separator+TEMPLATES_PACKAGE.replace('/', File.separatorChar));
                 for (int i=0;i<file.listFiles().length ; i++) {
