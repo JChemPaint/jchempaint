@@ -32,13 +32,16 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         //(for my understanding) the model against itself.
         models.add((IChemModel)panel.getChemModel());
         drawRing(100,100);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
         models.add((IChemModel)panel.getChemModel());
         attachRing();
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
         models.add((IChemModel)panel.getChemModel());
         panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
         deleteAtom();
         models.add((IChemModel)panel.getChemModel());
         drawRing(300,200);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
         models.add((IChemModel)panel.getChemModel());
         applet.button("undo").click();
         compare(3);
@@ -57,14 +60,18 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     }
 
     @Test public void testRedo(){
-        applet.button("redo").click();
-        compare(1);
-        applet.button("redo").click();
-        compare(2);
-        applet.button("redo").click();
-        compare(3);
-        applet.button("redo").click();
-        compare(4);
+        try {
+			applet.button("redo").click();
+			compare(1);
+			applet.button("redo").click();
+			compare(2);
+			applet.button("redo").click();
+			compare(3);
+			applet.button("redo").click();
+			compare(4);
+		} catch (IllegalStateException e) {
+			Assert.fail("Redo button disabled");
+		}
     }
     
     private void attachRing() {
