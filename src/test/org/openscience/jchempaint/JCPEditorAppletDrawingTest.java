@@ -277,6 +277,8 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         restoreModelWithBasicmol();
     }
 
+	// The double-click functionality was removed. Commented out
+	/*
 	@Test public void selectByDoubleClick(){
 	    restoreModelWithBasicmol();
         JPanelFixture jcppanel=applet.panel("appletframe");
@@ -293,7 +295,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
         Assert.assertEquals(oldAtomCount, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
-	}
+	}*/
 
 	@Test public void mergeAndUndoRedo(){
         restoreModelWithBasicmol();
@@ -302,6 +304,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
         applet.button("select").click();
         Point2d startpoint=getAtomPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y), MouseButton.LEFT_BUTTON,1);
         ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
         dandd.drag(applet.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y));
         Point2d movetopoint=getAtomPoint(panel,1);
