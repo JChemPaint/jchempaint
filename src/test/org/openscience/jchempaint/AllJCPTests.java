@@ -18,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue4Test.class,
         Issue8Test.class,
         Issue10Test.class,
-        Issue11Test.class,
+        //inclusion of this test depends on #11 or #138
+        //Issue11Test.class,
         Issue19Test.class,
         Issue32Test.class,
         Issue40Test.class,
