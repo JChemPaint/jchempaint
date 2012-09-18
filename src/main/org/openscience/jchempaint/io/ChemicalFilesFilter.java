@@ -51,8 +51,7 @@ public class ChemicalFilesFilter extends javax.swing.filechooser.FileFilter {
         String extension = getExtension(f);
         if (extension != null) {
         	extension = extension.toLowerCase();
-            if (extension.equals("cml") ||
-                    extension.equals("smi") ||
+            if (extension.equals("smi") ||
                     extension.equals("smiles") ||
                     extension.equals("sdf") ||
                     extension.equals("txt") ||
@@ -71,6 +70,6 @@ public class ChemicalFilesFilter extends javax.swing.filechooser.FileFilter {
 
     //The description of this filter
     public String getDescription() {
-        return "CML/SMILES/IUPAC/SDF/MOL/RXN";
+        return "SMILES/IUPAC/SDF/MOL/RXN";
     }
 }

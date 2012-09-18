@@ -84,9 +84,9 @@ public class SaveAction extends SaveAsAction
 				if (type.equals(JCPSaveFileFilter.mol))
 		        {
 		          saveAsMol(model, outFile);
-		        } else if (type.equals(JCPSaveFileFilter.cml))
-		        {
-		          saveAsCML2(model, outFile);
+		        //} else if (type.equals(JCPSaveFileFilter.cml))
+		        //{
+		        //  saveAsCML2(model, outFile);
 		        } else if (type.equals(JCPSaveFileFilter.smiles))
 		        {
 		          saveAsSMILES(model, outFile);

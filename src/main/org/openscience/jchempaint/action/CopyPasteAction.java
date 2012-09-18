@@ -60,7 +60,6 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
@@ -271,9 +270,9 @@ public class CopyPasteAction extends JCPAction{
             }
 
             // if looks like CML - InputStream required. Reader throws error.
-            if(content!=null && content.indexOf("cml")>-1) {
-                reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
-            }
+            //if(content!=null && content.indexOf("cml")>-1) {
+            //    reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
+            //}
 
             IMolecule toPaste = null;
             boolean rgrpQuery=false;

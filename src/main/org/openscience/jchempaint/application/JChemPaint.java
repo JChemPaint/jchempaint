@@ -75,7 +75,6 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
-import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.SMILESReader;
@@ -313,9 +312,9 @@ public class JChemPaint {
             e.printStackTrace();
         }
 
-        if (cor instanceof CMLReader)
-            cor.setReader(new FileInputStream(file)); // hack
-        else
+        //if (cor instanceof CMLReader)
+        //    cor.setReader(new FileInputStream(file)); // hack
+        //else
             cor.setReader(new FileReader(file)); // hack
 
         IChemModel chemModel = JChemPaint.getChemModelFromReader(cor,panel);
