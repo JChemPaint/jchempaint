@@ -96,6 +96,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
+	    restoreModelWithBasicmol();
 	    applet.button("down_bond").click();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
