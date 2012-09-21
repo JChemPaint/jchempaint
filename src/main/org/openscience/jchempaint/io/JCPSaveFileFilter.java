@@ -54,7 +54,7 @@ public class JCPSaveFileFilter extends JCPFileFilter {
     public static void addChoosableFileFilters(JFileChooser chooser) {
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.mol));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.cdk));
-        //chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.cml));
+        chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.cml));
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.rxn));
         chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPSaveFileFilter.smiles));
         chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.inchi));

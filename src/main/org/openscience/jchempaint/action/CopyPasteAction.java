@@ -60,6 +60,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLReader;
@@ -107,8 +108,8 @@ public class CopyPasteAction extends JCPAction{
             "chemical/x-mdl-molfile", "mdl mol file format");
     private DataFlavor svgFlavor = new DataFlavor(
             "image/svg+xml",          "scalable vector graphics");
-//    private DataFlavor cmlFlavor = new DataFlavor(
-//            "image/cml",          "chemical markup language");
+    private DataFlavor cmlFlavor = new DataFlavor(
+            "image/cml",          "chemical markup language");
     private DataFlavor smilesFlavor = new DataFlavor(
             "chemical/x-daylight-smiles", "smiles format");
 
@@ -270,9 +271,9 @@ public class CopyPasteAction extends JCPAction{
             }
 
             // if looks like CML - InputStream required. Reader throws error.
-            //if(content!=null && content.indexOf("cml")>-1) {
-            //    reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
-            //}
+            if(content!=null && content.indexOf("cml")>-1) {
+                reader = new CMLReader(new ByteArrayInputStream(content.getBytes()));
+            }
 
             IMolecule toPaste = null;
             boolean rgrpQuery=false;
@@ -574,12 +575,12 @@ public class CopyPasteAction extends JCPAction{
 
     class JcpSelection implements Transferable, ClipboardOwner {
         private DataFlavor [] supportedFlavors = {
-                molFlavor, DataFlavor.stringFlavor, svgFlavor, smilesFlavor
+                molFlavor, DataFlavor.stringFlavor, svgFlavor, cmlFlavor, smilesFlavor
         };
         String mol;
         String smiles;
         String svg;
-        //String cml;
+        String cml;
 
         @SuppressWarnings("unchecked")
         public JcpSelection(IAtomContainer tocopy1) throws Exception {
@@ -593,23 +594,23 @@ public class CopyPasteAction extends JCPAction{
             // SVG output
             svg=jcpPanel.getSVGString();
             // CML output
-            //sw = new StringWriter();
-            //Class cmlWriterClass = null;
-            //try {
-            //    cmlWriterClass = this.getClass().getClassLoader().loadClass(
-            //    "org.openscience.cdk.io.CMLWriter");
-            //    if (cmlWriterClass != null) {
-            //        IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
-            //        Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
-            //        cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
-            //        cow.write(tocopy);
-            //        cow.close();
-            //    }
-            //    cml=sw.toString();
-            //} catch (Exception exception) {
-            //    logger.error("Could not load CMLWriter: ", exception.getMessage());
-            //    logger.debug(exception);
-            //}
+            sw = new StringWriter();
+            Class cmlWriterClass = null;
+            try {
+                cmlWriterClass = this.getClass().getClassLoader().loadClass(
+                "org.openscience.cdk.io.CMLWriter");
+                if (cmlWriterClass != null) {
+                    IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
+                    Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
+                    cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
+                    cow.write(tocopy);
+                    cow.close();
+                }
+                cml=sw.toString();
+            } catch (Exception exception) {
+                logger.error("Could not load CMLWriter: ", exception.getMessage());
+                logger.debug(exception);
+            }
         }
 
         public synchronized DataFlavor [] getTransferDataFlavors () {
@@ -631,8 +632,8 @@ public class CopyPasteAction extends JCPAction{
                 return new StringReader(smiles);
             } else if(parFlavor.equals(DataFlavor.stringFlavor)) {
                 return mol;
-            //} else if(parFlavor.equals(cmlFlavor)) {
-            //    return new StringReader(cml);
+            } else if(parFlavor.equals(cmlFlavor)) {
+                return new StringReader(cml);
             } else if(parFlavor.equals(svgFlavor)) {
                 return new StringReader(svg);
             } else {

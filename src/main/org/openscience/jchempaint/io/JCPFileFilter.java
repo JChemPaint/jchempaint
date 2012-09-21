@@ -113,7 +113,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	 */
 	public static void addChoosableFileFilters(JFileChooser chooser)
 	{
-		//chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPFileFilter.cml));  
+		chooser.addChoosableFileFilter(new JCPSaveFileFilter(JCPFileFilter.cml));  
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.smi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.inchi));
 		chooser.addChoosableFileFilter(new JCPFileFilter(JCPFileFilter.sdf));
@@ -208,10 +208,10 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		{
 			return "SMILES";
 		}
-		//if (type.equals(cml) || type.equals(xml))
-		//{
-		//	return "Chemical Markup Language";
-		//}
+		if (type.equals(cml) || type.equals(xml))
+		{
+			return "Chemical Markup Language";
+		}
 		return null;
 	}
 

@@ -9,6 +9,7 @@ import java.net.URL;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.FormatFactory;
 import org.openscience.cdk.io.INChIReader;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -16,6 +17,7 @@ import org.openscience.cdk.io.MDLRXNV2000Reader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.SMILESReader;
+import org.openscience.cdk.io.formats.CMLFormat;
 import org.openscience.cdk.io.formats.IChemFormat;
 import org.openscience.cdk.io.formats.MDLV2000Format;
 import org.openscience.cdk.io.formats.RGroupQueryFormat;
@@ -66,10 +68,10 @@ public class FileHandler {
 	                cor = new RGroupQueryReader();
 		        	cor.setReader(input);
 	        	}
-	        	//else if (format instanceof CMLFormat ) {
-	        	//	cor = new CMLReader(urlString);
-		        //	cor.setReader(url.openStream());
-	        	//}
+	        	else if (format instanceof CMLFormat ) {
+	        		cor = new CMLReader(urlString);
+		        	cor.setReader(url.openStream());
+	        	}
 	        	else if (format instanceof MDLV2000Format ) { 
 	                cor = new MDLV2000Reader(getReader(url));
 		        	cor.setReader(input);
@@ -93,12 +95,12 @@ public class FileHandler {
         if (cor == null) {
             // try to determine from user's guess
         	type = ext;
-        	if (type.equals(JCPFileFilter.mol)) {
-        		cor = new MDLV2000Reader(getReader(url));
-        	//} else if (type.equals(JCPFileFilter.cml)|| type.equals(JCPFileFilter.xml)) {
-            //    cor = new CMLReader(urlString);
+            if (type.equals(JCPFileFilter.cml)|| type.equals(JCPFileFilter.xml)) {
+                cor = new CMLReader(urlString);
 
             } else if (type.equals(JCPFileFilter.sdf)) {
+                cor = new MDLV2000Reader(getReader(url));
+            } else if (type.equals(JCPFileFilter.mol)) {
                 cor = new MDLV2000Reader(getReader(url));
             } else if (type.equals(JCPFileFilter.inchi)) {
                 try {
