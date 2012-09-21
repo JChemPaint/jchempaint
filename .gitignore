@@ -11,3 +11,4 @@ MANIFEST.MF
 build.xml
 po/
 po/classes/app/i18n/
+maven/jchempaint-nodeps/target/

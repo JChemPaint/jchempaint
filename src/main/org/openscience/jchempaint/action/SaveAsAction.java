@@ -125,6 +125,7 @@ public class SaveAsAction extends JCPAction
 
             JFileChooser chooser = new JFileChooser();
             chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
+            chooser.setAcceptAllFileFilterUsed(false);
             JCPSaveFileFilter.addChoosableFileFilters(chooser);
             if (jcpPanel.getCurrentSaveFileFilter() != null)
             {

@@ -41,8 +41,13 @@ public class FileHandler {
      */
     public static ISimpleChemObjectReader createReader(URL url,String urlString, String type) throws CDKException {
 
-    	if (type == null) {
-            type = "mol";
+    	String ext = type; // handle all degenerate cases first
+    	if (type == null || type.equals("")) {
+    		int i = urlString.lastIndexOf('.');
+    		if (i > 0 && i < urlString.length() - 1)
+    			ext = urlString.substring(i + 1).toLowerCase();
+    		else
+    			ext = "mol";
         }
 
         ISimpleChemObjectReader cor = null;
@@ -89,6 +94,7 @@ public class FileHandler {
         
         if (cor == null) {
             // try to determine from user's guess
+        	type = ext;
             if (type.equals(JCPFileFilter.cml)|| type.equals(JCPFileFilter.xml)) {
                 cor = new CMLReader(urlString);
 
@@ -104,7 +110,7 @@ public class FileHandler {
                 }
             } else if (type.equals(JCPFileFilter.rxn)) {
                 cor = new MDLRXNV2000Reader(getReader(url));
-            } else if (type.equals(JCPFileFilter.smi)) {
+            } else if (type.equals(JCPFileFilter.smi) || type.equals("smiles")) {
                 cor = new SMILESReader(getReader(url));
             }
 

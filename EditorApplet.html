@@ -1,45 +1,42 @@
-<html>
-<head>
-<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="PRAGMA" content="NO-CACHE">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
 <title>The JChemPaint Applet Demo</title>
 </head>
-<body BGCOLOR="#ffffff" LINK="#000099">
+<body bgcolor="#ffffff" link="#000099">
 
 <h2>
-The JChemPaint Applet
+The JChemPaint Applet-3.3-1208 on toolserver.org
 </h2>
 
-<applet code="org.openscience.jchempaint.applet.JChemPaintEditorApplet" archive="dist/jar/jchempaint-applet-core.jar"
-    		name="Editor" width="600" height="500">
-
-  <param name="impliciths" value="true">
-  <param name="codebase_lookup" value="false" />
-  <PARAM name="onLoadTarget" value="statusFrame">
-  <PARAM NAME="image" VALUE="hourglass.gif">
-  <PARAM NAME="boxborder" VALUE="false">
-  <PARAM NAME="centerimage" VALUE="true">
-  <param name="load" value="applettests/big.mol">
-  <param name="reactions" value="on">
-
+<applet code="org.openscience.jchempaint.applet.JChemPaintEditorApplet" archive="EditorApplet_files/jchempaint-applet-editor.jar,EditorApplet_files/jchempaint-applet-core.jar" name="Editor" height="700" width="900">
+<!--param name="load" value="applettests/rdemo.mol"-->
+<param name="impliciths" value="true">
+<param name="codebase" value=".">
+<!--param name="codebase_lookup" value="false"-->
+<param name="onLoadTarget" value="statusFrame">
+<param name="image" value="hourglass.gif">
+<param name="boxborder" value="false">
+<param name="centerimage" value="true">
 </applet>
-<BR><BR>
+<br><br>
 <a href="javascript:alert(document.Editor.getMolFile())">show mol file</a>
 <a href="javascript:alert(document.Editor.getSmiles())">show smiles</a>
 <a href="javascript:alert(document.Editor.getSmilesChiral())">show stereo smiles</a>
 <a href="javascript:document.Editor.makeHydrogensExplicit()">Make hydrogens explicit</a>
 <a href="javascript:document.Editor.clear()">clear</a>
-<a href="javascript:document.Editor.setMolFile('\n  CDK    1/19/07,10:3\n\n  2  1  0  0  0  0  0  0  0  0999 V2000 \n  2.520000 10.220000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2.270000 10.470000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \nM  END')">insert CC (as mol file)</a>
-<a href="javascript:document.Editor.setSmiles('CCC')">insert CCC (as SMILES)</a>
-<a href="javascript:alert(document.Editor.getMolMass())">Show mol mass</a>
-<a href="javascript:alert(document.Editor.getMolFormula())">Show formula</a>
+<a href="javascript:document.Editor.setSmiles('CCCC')">insert CCCC (as SMILES)</a>
 <a href="javascript:document.Editor.selectAtom(0)">Select first atom </a>
-
 <blockquote>
 <hr>
+<br>
+<a href="https://github.com/JChemPaint/jchempaint/issues?state=open">Report bugs/features</a><br>
+<a href="http://jchempaint.github.com/">Applet web site</a><br>
+<p>Built by ayacop</p>
 
-</body>
-</html>
 
 
 
+
+</blockquote></body></html>

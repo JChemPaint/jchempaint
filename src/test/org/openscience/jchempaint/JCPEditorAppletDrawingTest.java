@@ -96,6 +96,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
+	    restoreModelWithBasicmol();
 	    applet.button("down_bond").click();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -116,13 +117,14 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 	
 	@Test public void testPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		applet.button("periodictable").click();
 		DialogFixture dialog = applet.dialog();
 		dialog.button("Li").click();
-		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
+		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		applet.button("bondTool").click();
@@ -132,6 +134,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
 	}
 	@Test public void testEnterelement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -153,12 +156,13 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testTriangle() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a triangle to an atom
 		applet.button("triangle").click();
-		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);	
+		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(oldAtomCount+2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
@@ -169,6 +173,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testPentagon() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -185,6 +190,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testHexagon() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -201,6 +207,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testOctagon() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -217,6 +224,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testBenzene() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -233,6 +241,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
 	@Test public void testSquare() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
@@ -269,6 +278,8 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         restoreModelWithBasicmol();
     }
 
+	// The double-click functionality was removed. Commented out
+	/*
 	@Test public void selectByDoubleClick(){
 	    restoreModelWithBasicmol();
         JPanelFixture jcppanel=applet.panel("appletframe");
@@ -285,7 +296,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
         Assert.assertEquals(oldAtomCount, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
-	}
+	}*/
 
 	@Test public void mergeAndUndoRedo(){
         restoreModelWithBasicmol();
@@ -294,6 +305,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
         applet.button("select").click();
         Point2d startpoint=getAtomPoint(panel,0);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y), MouseButton.LEFT_BUTTON,1);
         ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
         dandd.drag(applet.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y));
         Point2d movetopoint=getAtomPoint(panel,1);
@@ -314,6 +326,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         applet.button("hexagon").click();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,50), MouseButton.LEFT_BUTTON,1);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(400,50), MouseButton.LEFT_BUTTON,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
         applet.button("reactionArrow").click();
         ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
         dandd.drag(applet.panel("renderpanel").component(), new Point(150,50));
@@ -323,6 +336,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
         Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
         applet.button("hexagon").click();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(500,50), MouseButton.LEFT_BUTTON,1);
+        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
         Point2d point = getAtomPoint(panel,0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
         applet.menuItem("addProductToExistingReaction").click();

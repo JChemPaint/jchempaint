@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openscience.cdk</groupId>
   <artifactId>jchempaint-all</artifactId>
-  <version>3.3-1206</version>
+  <version>3.3-1209</version>
   <packaging>pom</packaging>
 
   <name>JChemPaint releases</name>
@@ -110,6 +110,17 @@
    		<version>${cdk.version}</version>
    		<scope>compile</scope>
    	</dependency>     	 	
+    	<dependency>
+   		<groupId>commons-cli</groupId>
+   		<artifactId>commons-cli</artifactId>
+   		<version>1.0</version>
+   		<scope>compile</scope>
+   	<dependency>
+   		<groupId>org.iupac</groupId>
+   		<artifactId>inchi-nestedvm</artifactId>
+   		<version>1.0.2</version>
+   		<scope>compile</scope>
+   	</dependency>     	 	
    </dependencies>
    <distributionManagement>
 
@@ -133,6 +144,24 @@
     </repository>
   </repositories>
 
+  <repositories>
+    <repository>
+      <id>rwst-releases</id>
+      <releases>
+      	<enabled>true</enabled>
+	<updatepolicy>always</updatepolicy>
+	<checksumpolicy>fail</checksumpolicy>
+      </releases>
+      <snapshots>
+      	<enabled>false</enabled>
+	<updatepolicy>always</updatepolicy>
+	<checksumpolicy>warn</checksumpolicy>
+      </snapshots>
+      <name>JCP Repository for Maven</name>
+      <url>https://raw.github.com/rwst/mavenrepo/master/releases</url>
+    </repository>
+  </repositories>
+
   <pluginRepositories>
     <pluginRepository>
       <id>maven2-repository.dev.java.net</id>
@@ -142,13 +171,13 @@
   </pluginRepositories>
 
   
-    <modules>
+    <!--modules>
     <module>jchempaint-application</module>
-  <!-- Not sure if it make sense to deploy an applet into a maven repo. 	
+  < Not sure if it make sense to deploy an applet into a maven repo. 	
     <module>jchempaint-applet</module>
--->
+
     <module>jchempaint-nodeps</module>
-   </modules>
+   </modules-->
 
   <properties>
   	<cdk.version>1.4.11</cdk.version>
