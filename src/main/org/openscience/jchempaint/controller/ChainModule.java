@@ -172,7 +172,8 @@ public class ChainModule extends ControllerModuleAdapter {
 	IAtomContainer fromContainer = null, toContainer = null;
     	if(source!=null){
 		fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
-		chemModelRelay.getPhantoms().removeAtom(0);
+		if (chemModelRelay.getPhantoms().getAtomCount() > 0)
+			chemModelRelay.getPhantoms().removeAtom(0);
 		if (merge!=null)
 	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
     		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);

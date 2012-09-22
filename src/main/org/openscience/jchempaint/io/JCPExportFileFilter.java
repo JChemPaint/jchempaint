@@ -60,10 +60,10 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
      * Adds the JCPFileFilter to the JFileChooser object.
      */
     public static void addChoosableFileFilters(JFileChooser chooser) {
+        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.svg));
+        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.png));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.bmp));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.jpg));
-        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.png));
-        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.svg));
     }
 
     /**

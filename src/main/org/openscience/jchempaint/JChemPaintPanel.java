@@ -403,8 +403,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             lastSecondaryButton = this.buttons.get("enterR");
         }
         if(JCPToolBar.getToolbarResourceString("lowertoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
+                    this.buttons.get("bondTool").setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
             //the newActiveModule should always be an AddAtomModule, but we still check
-            if(newActiveModule instanceof AddAtomModule){
+            /* if(newActiveModule instanceof AddAtomModule){
                 if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.NONE)){
                     this.buttons.get("bondTool").setBackground(Color.GRAY);
                     lastSecondaryButton = this.buttons.get("bondTool");
@@ -424,7 +425,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             }else{
                 this.buttons.get("bondTool").setBackground(Color.GRAY);
                 lastSecondaryButton = this.buttons.get("bondTool");
-            }
+            }*/
         }
         if(!(newActiveModule instanceof MoveModule)){
             this.renderPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

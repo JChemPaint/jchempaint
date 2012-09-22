@@ -2,7 +2,7 @@
     
     <property file="ant.properties"/>
 
-    <property name="jcp.version" value="3.3-1208" />
+    <property name="jcp.version" value="3.3-1209" />
     <property name="debug" value="on" />
     <property name="deprecation" value="on" />
     <property name="optimization" value="off" />
@@ -93,38 +93,16 @@
     <target id="unjar-libjars" name="unjar-libjars">
         <unjar dest="${dist-classes}">
             <fileset dir="${cdk.lib}">
-                <includesfile name="${cdk.metainf}/builder3d.libdepends"/>
-                <includesfile name="${cdk.metainf}/builder3dtools.libdepends"/>
-                <includesfile name="${cdk.metainf}/charges.libdepends"/>
-                <includesfile name="${cdk.metainf}/control.libdepends"/>
                 <includesfile name="${cdk.metainf}/data.libdepends"/>
-                <includesfile name="${cdk.metainf}/datadebug.libdepends"/>
                 <includesfile name="${cdk.metainf}/dict.libdepends"/>
-                <includesfile name="${cdk.metainf}/diff.libdepends"/>
                 <includesfile name="${cdk.metainf}/extra.libdepends"/>
-                <includesfile name="${cdk.metainf}/forcefield.libdepends"/>
                 <includesfile name="${cdk.metainf}/formula.libdepends"/>
-                <!--includesfile name="${cdk.metainf}/inchi.libdepends"/-->
                 <includesfile name="${cdk.metainf}/interfaces.libdepends"/>
                 <includesfile name="${cdk.metainf}/io.libdepends"/>
                 <includesfile name="${cdk.metainf}/isomorphism.libdepends"/>
                 <includesfile name="${cdk.metainf}/libiocml.libdepends"/>
-                <includesfile name="${cdk.metainf}/libiomd.libdepends"/>
-                <includesfile name="${cdk.metainf}/pcore.libdepends"/>
-                <includesfile name="${cdk.metainf}/pdb.libdepends"/>
-                <includesfile name="${cdk.metainf}/pdbcml.libdepends"/>
-                <!--includesfile name="${cdk.metainf}/qm.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsar.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsaratomic.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsarbond.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsarcml.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsarmolecular.libdepends"/>
-                <includesfile name="${cdk.metainf}/qsarprotein.libdepends"/-->
                 <includesfile name="${cdk.metainf}/reaction.libdepends"/>
-                <includesfile name="${cdk.metainf}/render.libdepends"/>
                 <includesfile name="${cdk.metainf}/sdg.libdepends"/>
-                <includesfile name="${cdk.metainf}/silent.libdepends"/>
-                <includesfile name="${cdk.metainf}/smarts.libdepends"/>
                 <includesfile name="${cdk.metainf}/smiles.libdepends"/>
                 <includesfile name="${cdk.metainf}/standard.libdepends"/>
                 <includesfile name="${cdk.metainf}/valencycheck.libdepends"/>
@@ -143,36 +121,21 @@
             <fileset dir="${cdk.dist}/jar">
                 <include name="cdk-annotation.jar"/>
                 <include name="cdk-atomtype.jar"/>
-                <!--include name="cdk-builder3d.jar"/>
-                <include name="cdk-builder3dtools.jar"/-->
-                <!--include name="cdk-charges.jar"/>
-                <include name="cdk-control.jar"/-->
                 <include name="cdk-core.jar"/>
-                <include name="cdk-log4j.jar"/>
-                <!--include name="cdk-datadebug.jar"/-->
                 <include name="cdk-data.jar"/>
                 <include name="cdk-dict.jar"/>
-                <!--include name="cdk-diff.jar"/-->
                 <include name="cdk-extra.jar"/>
-                <!--include name="cdk-fingerprint.jar"/-->
-                <!--include name="cdk-forcefield.jar"/-->
                 <include name="cdk-formula.jar"/>
-                <include name="cdk-inchi.jar"/>
                 <include name="cdk-interfaces.jar"/>
                 <include name="cdk-io.jar"/>
                 <include name="cdk-ioformats.jar"/>
-                <!--include name="cdk-ionpot.jar"/-->
                 <include name="cdk-isomorphism.jar"/>
                 <include name="cdk-libiocml.jar"/>
+                <!--include name="cdk-log4j.jar"/-->
                 <include name="cdk-reaction.jar"/>
-                <!--include name="cdk-render.jar"/-->
                 <include name="cdk-sdg.jar"/>
-                <!--include name="cdk-silent.jar"/-->
-                <!--include name="cdk-smarts.jar"/-->
                 <include name="cdk-smiles.jar"/>
                 <include name="cdk-standard.jar"/>
-                <!--include name="cdk-controlbasic.jar"/>
-                <include name="cdk-structgen.jar"/-->
                 <include name="cdk-valencycheck.jar"/>
                 
             </fileset>
@@ -186,7 +149,7 @@
         <delete dir="${dist-classes}/org/omegahat" />
         <delete dir="${dist-classes}/org/openscience/cdk/modeling" />
         <delete dir="${dist-classes}/org/openscience/cdk/fingerprint" />
-        <delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" />
+        <!--delete dir="${dist-classes}/org/openscience/cdk/io/cml/data" /-->
     </target>
 
     <target id="build-pot-pos" name="build-pot-pos" >

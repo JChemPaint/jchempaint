@@ -42,6 +42,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.io.ChemicalFilesFilter;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -65,6 +66,9 @@ public class OpenAction extends JCPAction {
 
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
+        chooser.setAcceptAllFileFilterUsed(false);
+		chooser.addChoosableFileFilter(new ChemicalFilesFilter());
+        chooser.setAcceptAllFileFilterUsed(true);
         JCPFileFilter.addChoosableFileFilters(chooser);
         if (jcpPanel.getCurrentOpenFileFilter() != null) {
             for(int i=0;i<chooser.getChoosableFileFilters().length;i++){
