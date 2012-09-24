@@ -131,7 +131,7 @@
                 <include name="cdk-ioformats.jar"/>
                 <include name="cdk-isomorphism.jar"/>
                 <include name="cdk-libiocml.jar"/>
-                <!--include name="cdk-log4j.jar"/-->
+                <include name="cdk-log4j.jar"/>
                 <include name="cdk-reaction.jar"/>
                 <include name="cdk-sdg.jar"/>
                 <include name="cdk-smiles.jar"/>
