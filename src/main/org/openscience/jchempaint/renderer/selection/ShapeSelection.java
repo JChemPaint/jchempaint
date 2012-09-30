@@ -154,16 +154,16 @@ public abstract class ShapeSelection implements IncrementalSelection {
     @SuppressWarnings("unchecked")
     public <E extends IChemObject> Collection<E> elements(Class<E> clazz){
         Set<E> set = new HashSet<E>();
-        if(clazz.isAssignableFrom( IChemObject.class )) {
-            set.addAll( (Collection<? extends E>) atoms );
-            set.addAll( (Collection<? extends E>) bonds );
-            return set;
-        }
         if(clazz.isAssignableFrom( IAtom.class )) {
             set.addAll( (Collection<? extends E>) atoms );
             return set;
         }
         if(clazz.isAssignableFrom( IBond.class )) {
+            set.addAll( (Collection<? extends E>) bonds );
+            return set;
+        }
+        if(clazz.isAssignableFrom( IChemObject.class )) {
+            set.addAll( (Collection<? extends E>) atoms );
             set.addAll( (Collection<? extends E>) bonds );
             return set;
         }

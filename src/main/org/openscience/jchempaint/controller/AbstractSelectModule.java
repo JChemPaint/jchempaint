@@ -31,7 +31,9 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
+import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
@@ -69,6 +71,24 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 		}
 		return closestAtom;
 	}
+	
+	private IBond getClosestSelBond(Point2d worldCoord) {
+		IBond closestBond = null;
+		IChemObjectSelection sel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
+		double closestDistanceSQ = Double.MAX_VALUE;
+
+		for (IBond bond : sel.elements(IBond.class)) {
+			if (bond.get2DCenter() != null) {
+				double distanceSQ = bond.get2DCenter().distanceSquared(
+						worldCoord);
+				if (distanceSQ < closestDistanceSQ) {
+					closestBond = bond;
+					closestDistanceSQ = distanceSQ;
+				}
+			}
+		}
+		return closestBond;
+	}
 
     public void mouseClickedDown(Point2d p) {
         startPoint=p;
@@ -77,21 +97,36 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     
     public void mouseDrag(Point2d from, Point2d to) {
         Rectangle2D bounds=null;
-        boolean inSelectionCircle = false; 
-        IChemObjectSelection sel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
-        double d = chemModelRelay.getRenderer().getRenderer2DModel().getSelectionRadius() 
-        		/ chemModelRelay.getRenderer().getRenderer2DModel().getScale();
+        boolean inSelectionCircle = false;
+        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        IChemObjectSelection sel = model.getSelection();
+        double d = model.getSelectionRadius() / model.getScale();
+        IAtom closestAtom = null;
+        IBond closestBond = null;
+        IAtom highlitAtom = model.getHighlightedAtom();
+        IBond highlitBond = model.getHighlightedBond();
         if(from.equals(startPoint)) {
-        	if (sel != null && sel.isFilled()) {
-	            bounds = BoundsCalculator.calculateBounds(sel.getConnectedAtomContainer());
-	            IAtom closestAtom = getClosestSelAtom(startPoint);
-	            inSelectionCircle = closestAtom.getPoint2d().distance(startPoint) < 4*d;
+        	LogicalSelection lsel = null;
+        	boolean isAllSelected = false;
+            if (sel.getClass().isAssignableFrom(LogicalSelection.class)) {
+            	lsel = (LogicalSelection)sel;
+                isAllSelected = lsel.getType() == LogicalSelection.Type.ALL
+            		&& sel.isFilled();
 	        }
+        	if (!isAllSelected && sel != null && sel.isFilled()) {
+	            bounds = BoundsCalculator.calculateBounds(sel.getConnectedAtomContainer());
+	            closestAtom = getClosestSelAtom(startPoint);
+	            closestBond = getClosestSelBond(startPoint);
+	        }
+            inSelectionCircle = (closestAtom != null && closestAtom.getPoint2d().distance(startPoint) < 4*d)
+    	            || (closestBond != null && closestBond.get2DCenter().distance(startPoint) < 4*d)
+            		|| highlitAtom != null || highlitBond != null;
 	        //in case the user either starts dragging inside the current selection
 	        //rectangle or in a selection circle, we switch to move mode,
 	        //else we start a new selection 
-	        if((bounds !=null && bounds.contains(new Point2D.Double(startPoint.x, startPoint.y)))
-	        		|| inSelectionCircle ){
+	        if(inSelectionCircle || isAllSelected
+	        		|| (bounds !=null 
+	        		&& bounds.contains(new Point2D.Double(startPoint.x, startPoint.y)))) {
 	                IControllerModule newActiveModule = new MoveModule(this.chemModelRelay, this);
 	                newActiveModule.setID("move");
 	                chemModelRelay.setActiveDrawModule(newActiveModule);
