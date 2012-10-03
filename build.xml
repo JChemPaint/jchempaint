@@ -454,17 +454,6 @@
       </move>
       <delete dir="${dist}/jar/shrinkout"/>
       
-      <signjar destDir=""
-            alias="${certificatealias}"
-            storepass="${keystorepassphrase}"
-            preservelastmodified="true">
-            <path>
-                <fileset dir=".">
-                    <includesfile name="${growing_classpath}"/>
-                </fileset>
-            </path>
-      </signjar>
-      
       <zip destfile="${dist}/jchempaint-applet-${jcp.version}.zip">
             <zipfileset dir="${dist}/jar" includes="jchempaint-applet-*.jar"/>
             <zipfileset dir="${cdk.dir}/doc" includes="lgpl.license"/>
@@ -616,6 +605,9 @@
                         <include name="*.jar" />
                 </fileset>
                 <fileset dir="${devellib}">
+                        <include name="*.jar" />
+                </fileset>
+                <fileset dir="${cdk.dir}/dist/jar/">
                         <include name="*.jar" />
                 </fileset>
             </classpath>
