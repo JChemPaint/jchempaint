@@ -71,7 +71,7 @@ public class Issue76Test extends AbstractAppletTest {
 			atomCount+=atc.getAtomCount();
 			bondCount+=atc.getBondCount();
 		}
-	Assert.assertEquals(0, atomCount);
+		Assert.assertEquals(0, atomCount);
         Assert.assertEquals(0, bondCount);
 
 	}

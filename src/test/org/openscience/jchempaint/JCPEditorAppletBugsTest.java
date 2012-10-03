@@ -393,13 +393,13 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.button("hexagon").click();
         applet.click();
         applet.menuItem("saveAs").click();
+        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
+        if(file.exists())
+            file.delete();
         DialogFixture dialog = applet.dialog();
         JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
         combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
-        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
-        if(file.exists())
-            file.delete();
         text.setText(file.toString());
         JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
