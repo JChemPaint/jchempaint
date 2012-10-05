@@ -2131,19 +2131,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			newMoleculeSet.addAtomContainer(toPaste);
 			moleculeToAddTo = toPaste;
 		} else {
-			try {
-				oldMoleculeSet.addAtomContainer((IAtomContainer)moleculeToAddTo.clone());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			IMolecule mol = chemModel.getBuilder().newInstance(IMolecule.class);
+			for (IAtom atom: moleculeToAddTo.atoms())
+				mol.addAtom(atom);
+			for (IBond bond: moleculeToAddTo.bonds())
+				mol.addBond(bond);
+			oldMoleculeSet.addAtomContainer(mol);
 			moleculeToAddTo.add(toPaste);
 		}
 		if (toRemove != null) {
-			try {
-				oldMoleculeSet.addAtomContainer(toRemove);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			oldMoleculeSet.addAtomContainer(toRemove);
 			moleculeToAddTo.add(toRemove);
 			updateAtoms(toRemove, toRemove.atoms());
 			newMoleculeSet.removeAtomContainer(toRemove);
