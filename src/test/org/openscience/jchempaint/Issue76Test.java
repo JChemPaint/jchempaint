@@ -19,53 +19,53 @@ public class Issue76Test extends AbstractAppletTest {
     @Test public void testIssue76() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
-	applet.button("benzene").click();
+        applet.button("benzene").click();
         pane.get2DHub().mouseClickedDown(100, 100);
         pane.get2DHub().mouseClickedUp(100, 100);
         pane.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
 
-	Point2d atompos=pane.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d();
-	atompos = pane.getRenderPanel().getRenderer().toScreenCoordinates(atompos.x, atompos.y);
-	int x = (int) atompos.x;
-	int y = (int) atompos.y;
-	applet.button("C").click();
-        applet.button("chain").click();
-        pane.get2DHub().mouseClickedDown(x, y);
-        pane.get2DHub().updateView();
-        applet.panel("renderpanel").robot.waitForIdle();
-        pane.get2DHub().mouseDrag(x, y, x+200, y);
-        pane.get2DHub().updateView();
-        applet.panel("renderpanel").robot.waitForIdle();
-        pane.get2DHub().mouseClickedUp(x+200, y);
-        pane.get2DHub().updateView();
-        applet.panel("renderpanel").robot.waitForIdle();
+		Point2d atompos=pane.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d();
+		atompos = pane.getRenderPanel().getRenderer().toScreenCoordinates(atompos.x, atompos.y);
+		int x = (int) atompos.x;
+		int y = (int) atompos.y;
+		applet.button("C").click();
+	    applet.button("chain").click();
+	    pane.get2DHub().mouseClickedDown(x, y);
+	    pane.get2DHub().updateView();
+	    applet.panel("renderpanel").robot.waitForIdle();
+	    pane.get2DHub().mouseDrag(x, y, x+200, y);
+	    pane.get2DHub().updateView();
+	    applet.panel("renderpanel").robot.waitForIdle();
+	    pane.get2DHub().mouseClickedUp(x+200, y);
+	    pane.get2DHub().updateView();
+	    applet.panel("renderpanel").robot.waitForIdle();
 
-        int atomCount=0, bondCount=0;
+	    int atomCount=0, bondCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
 			atomCount+=atc.getAtomCount();
 			bondCount+=atc.getBondCount();
 		}
-	Assert.assertEquals(11, atomCount);
-        Assert.assertEquals(11, bondCount);
-		
-	applet.button("undo").click();
-	pane.get2DHub().updateView();
+		Assert.assertEquals(11, atomCount);
+	    Assert.assertEquals(11, bondCount);
+			
+		applet.button("undo").click();
+		pane.get2DHub().updateView();
 
         atomCount=0; bondCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
 			atomCount+=atc.getAtomCount();
 			bondCount+=atc.getBondCount();
 		}
-	Assert.assertEquals(6, atomCount);
+		Assert.assertEquals(6, atomCount);
         Assert.assertEquals(6, bondCount);
 
-	try {
-		applet.button("undo").click();
-		pane.get2DHub().updateView();
-	} catch (Exception e) {
-		Assert.fail();
-	}
+        try {
+			applet.button("undo").click();
+			pane.get2DHub().updateView();
+		} catch (Exception e) {
+			Assert.fail();
+		}
         atomCount=0; bondCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
 			atomCount+=atc.getAtomCount();

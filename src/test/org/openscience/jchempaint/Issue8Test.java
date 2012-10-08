@@ -7,8 +7,6 @@ package org.openscience.jchempaint;
 import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * Draw chain, replace middle atom with H, clean up.
@@ -43,14 +41,8 @@ public class Issue8Test extends AbstractAppletTest {
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		
-		
-		try {
-			applet.button("cleanup").click();
-			pane.get2DHub().updateView();
-			applet.panel("renderpanel").robot.waitForIdle();
-		} catch (Exception e) 
-		{
-			Assert.fail();
-		}
+		applet.button("cleanup").click();
+		pane.get2DHub().updateView();
+		applet.panel("renderpanel").robot.waitForIdle();
 	}
 }
