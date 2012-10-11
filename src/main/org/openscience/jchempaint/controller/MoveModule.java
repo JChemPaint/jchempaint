@@ -256,12 +256,12 @@ public class MoveModule extends ControllerModuleAdapter {
             for(IAtom atom:mergeAtoms) {
                 List<DistAtom> candidates = findMergeCandidates(ac,atom);
                 Collections.sort( candidates);
-                for(DistAtom candiate:candidates) {
-                    if(candiate.distSquared>maxDistance)
+                for(DistAtom candidate:candidates) {
+                    if(candidate.distSquared>maxDistance)
                         break;
-                    if(mergeAtoms.contains( candiate.atom ))
+                    if(mergeAtoms.contains( candidate.atom ))
                         continue;
-                    mergers.put( atom, candiate.atom );
+                    mergers.put( atom, candidate.atom );
                 }
             }
         }
