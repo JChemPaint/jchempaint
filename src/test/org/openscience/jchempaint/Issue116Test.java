@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 
@@ -60,7 +61,12 @@ public class Issue116Test extends AbstractAppletTest {
 		Assert.assertEquals(2, implicitHCount);
 
         try {
-			applet.button("undo").click();
+            // For some reason this does not work
+            // applet.button("undo").click();
+            // panel.get2DHub().updateView();
+            // so we crank the lever manually
+            JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.UndoAction");
+            act.actionPerformed(null);
 		} catch (Exception e) {
 			Assert.fail();
 		}
