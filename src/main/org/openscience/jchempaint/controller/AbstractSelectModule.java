@@ -100,6 +100,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         boolean inSelectionCircle = false;
         RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         IChemObjectSelection sel = model.getSelection();
+        if (sel == null) return;
         double d = model.getSelectionRadius() / model.getScale();
         IAtom closestAtom = null;
         IBond closestBond = null;
@@ -131,6 +132,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 	                newActiveModule.setID("move");
 	                chemModelRelay.setActiveDrawModule(newActiveModule);
 	                Point2d sf = chemModelRelay.getRenderer().toScreenCoordinates(startPoint.x, startPoint.y);
+	                ((IMouseEventRelay)this.chemModelRelay).mouseClickedDown((int)sf.x,(int)sf.y);
 	                Point2d st = chemModelRelay.getRenderer().toScreenCoordinates(to.x, to.y);
 	                ((IMouseEventRelay)this.chemModelRelay).mouseDrag((int)sf.x,(int)sf.y,(int)st.x,(int)st.y);
 	                return;
