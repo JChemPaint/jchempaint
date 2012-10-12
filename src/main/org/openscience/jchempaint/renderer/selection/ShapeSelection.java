@@ -137,7 +137,9 @@ public abstract class ShapeSelection implements IncrementalSelection {
         }
         
         for (IBond bond : atomContainer.bonds()) {
-            if (contains(bond.get2DCenter()) && !bonds.contains(bond)) {
+            if (contains(bond.getAtom(0).getPoint2d())
+            		&& contains(bond.getAtom(1).getPoint2d())
+            		&& !bonds.contains(bond)) {
                 bonds.add(bond); 
              }
         }
