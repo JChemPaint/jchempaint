@@ -7,6 +7,7 @@ package org.openscience.jchempaint;
 import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.jchempaint.action.JCPAction;
 
 /**
  * Draw chain, replace middle atom with H, clean up.
@@ -41,8 +42,17 @@ public class Issue8Test extends AbstractAppletTest {
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		
-		applet.button("cleanup").click();
-		pane.get2DHub().updateView();
-		applet.panel("renderpanel").robot.waitForIdle();
+        try {
+            // For some reason this does not work
+            // applet.button("cleanup").click();
+            // panel.get2DHub().updateView();
+            // so we crank the lever manually
+            JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.CleanupAction");
+            act.actionPerformed(null);
+		} catch (Exception e) {
+			Assert.fail();
+		}
+        panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
 	}
 }
