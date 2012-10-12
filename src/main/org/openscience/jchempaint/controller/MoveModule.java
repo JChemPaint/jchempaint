@@ -192,6 +192,8 @@ public class MoveModule extends ControllerModuleAdapter {
                 // It could be that only a  selected bond is going to be moved. 
                 // So make sure that the attached atoms are included, otherwise
                 // the undo will fail to place the atoms back where they were
+    			// TODO: as this is called many times during a drag, rewrite to
+    			// increase efficiency.
         		atomsToMove = new HashSet<IAtom>();
 
                 for (IAtom atom : selectedAC.atoms()) {

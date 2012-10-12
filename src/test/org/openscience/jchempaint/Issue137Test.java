@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.action.ChangeModeAction;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 
@@ -24,8 +26,12 @@ public class Issue137Test extends AbstractAppletTest {
         panel.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
 
-        applet.button("select").click();
-        panel.get2DHub().updateView();
+        // For some reason this does not work
+        // applet.button("select").click();
+        // panel.get2DHub().updateView();
+        // so we crank the lever manually
+        JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.ChangeModeAction@select");
+        act.actionPerformed(null);
         applet.panel("renderpanel").robot.waitForIdle();
 		IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 		Renderer r = panel.getRenderPanel().getRenderer();
