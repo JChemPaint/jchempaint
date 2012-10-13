@@ -2435,6 +2435,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				droppedContainers.add(null);
 			}
 
+			// Handle the case of a bond between mergedAtom and mergedPartnerAtom.
+			// This bond should be removed.
+			IBond rb = container1.getBond(mergedAtom, mergedPartnerAtom);
+			if (rb != null) {
+				container1.removeBond(rb);
+				removedBonds.add(rb);
+			}
+				
 			// In the next loop we remove bonds that are redundant, that is
 			// to say bonds that exist on both sides of the parts to be merged
 			// and would cause duplicate bonding in the end result.

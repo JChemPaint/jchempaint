@@ -15,6 +15,9 @@ import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 
 /**
  * @author Ralf Stephan <ralf@ark.in-berlin.de>
+ * 
+ * #137: move C in ethane over the other gives CH3
+ * #153: merging ethane internally does not delete bond from model
  */
 public class Issue137Test extends AbstractAppletTest {
 
