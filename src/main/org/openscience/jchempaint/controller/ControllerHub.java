@@ -2145,7 +2145,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateAtoms(toRemove, toRemove.atoms());
 			newMoleculeSet.removeAtomContainer(toRemove);
 		}
-		updateAtoms(toPaste, toPaste.atoms());
+		for (IAtomContainer ac: newMoleculeSet.atomContainers())
+			updateAtoms(ac, ac.atoms());
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getLoadNewModelEdit(
 					getIChemModel(), this, oldMoleculeSet, null, newMoleculeSet, null, "Add Chain Fragment");
