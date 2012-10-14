@@ -35,6 +35,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 /**
  * Adds a bond at direction that is dragged.
@@ -169,26 +171,30 @@ public class ChainModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-	IAtomContainer fromContainer = null, toContainer = null;
+        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        double d = model.getSelectionRadius() / model.getScale();
+    	if (start.distance(worldCoord) < 4*d)
+    		return;
+    	IAtomContainer fromContainer = null, toContainer = null;
     	if(source!=null){
-		fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
-		if (chemModelRelay.getPhantoms().getAtomCount() > 0)
-			chemModelRelay.getPhantoms().removeAtom(0);
-		if (merge!=null)
-	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
-    	}else{
-		if (merge!=null)
-	    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, toContainer);
+			fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
+			if (chemModelRelay.getPhantoms().getAtomCount() > 0)
+				chemModelRelay.getPhantoms().removeAtom(0);
+			if (merge!=null)
+		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
+	    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
+    	} else {
+			if (merge!=null)
+		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
+	    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, toContainer);
     	}
         if (merge!=null)
         	chemModelRelay.updateAtom(merge);
-	if (source!=null)
-		chemModelRelay.updateAtom(source);
-        chemModelRelay.clearPhantoms();
-        chemModelRelay.setPhantomText(null, null);
-        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
+		if (source!=null)
+			chemModelRelay.updateAtom(source);
+	        chemModelRelay.clearPhantoms();
+	        chemModelRelay.setPhantomText(null, null);
+	        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
     }
 
     public String getDrawModeString() {
