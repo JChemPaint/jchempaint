@@ -6,12 +6,15 @@ import javax.vecmath.Point2d;
 import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- * Issue76: synopsis: place a benzene; draw chain from a benzene C-atom
+ * #76: synopsis: place a benzene; draw chain from a benzene C-atom
  * should not change this atom's position; first undo should give unaltered
  * benzene; second back to zero, without NullPointerException
+ * #154: merging with chain garbles implicit Hs
+ * #158: with chain, single click on atom creates undo slot, should do nothing
  * @author Ralf Stephan <ralf@ark.in-berlin.de>
  */
 public class Issue76Test extends AbstractAppletTest {
@@ -34,6 +37,12 @@ public class Issue76Test extends AbstractAppletTest {
 	    pane.get2DHub().mouseClickedDown(x, y);
 	    pane.get2DHub().updateView();
 	    applet.panel("renderpanel").robot.waitForIdle();
+	    pane.get2DHub().mouseClickedUp(x, y);
+	    pane.get2DHub().updateView();
+	    applet.panel("renderpanel").robot.waitForIdle();
+	    pane.get2DHub().mouseClickedDown(x, y);
+	    pane.get2DHub().updateView();
+	    applet.panel("renderpanel").robot.waitForIdle();
 	    pane.get2DHub().mouseDrag(x, y, x+200, y);
 	    pane.get2DHub().updateView();
 	    applet.panel("renderpanel").robot.waitForIdle();
@@ -41,14 +50,17 @@ public class Issue76Test extends AbstractAppletTest {
 	    pane.get2DHub().updateView();
 	    applet.panel("renderpanel").robot.waitForIdle();
 
-	    int atomCount=0, bondCount=0;
-		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
+		int atomCount=0, bondCount=0, implicitHCount=0;
+		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
+			for (IAtom a : atc.atoms())
+				implicitHCount += a.getImplicitHydrogenCount();
 			atomCount+=atc.getAtomCount();
 			bondCount+=atc.getBondCount();
 		}
 		Assert.assertEquals(11, atomCount);
-	    Assert.assertEquals(11, bondCount);
-			
+		Assert.assertEquals(11, bondCount);
+		Assert.assertEquals(16, implicitHCount);
+	
 		applet.button("undo").click();
 		pane.get2DHub().updateView();
 
