@@ -30,6 +30,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -176,21 +177,26 @@ public class ChainModule extends ControllerModuleAdapter {
     	if (start.distance(worldCoord) < 4*d)
     		return;
     	IAtomContainer fromContainer = null, toContainer = null;
-    	if(source!=null){
-			fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), source);
+    	IChemModel chemModel = chemModelRelay.getChemModel();
+    	if(source != null){
+			fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, source);
 			if (chemModelRelay.getPhantoms().getAtomCount() > 0)
 				chemModelRelay.getPhantoms().removeAtom(0);
-			if (merge!=null)
-		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-	    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), fromContainer, toContainer==fromContainer ? null : toContainer);
+			if (merge != null)
+		    	toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
+	    	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,
+	    			chemModelRelay.getPhantoms()),
+	    			fromContainer, toContainer==fromContainer ? null : toContainer);
     	} else {
-			if (merge!=null)
-		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getChemModel(), merge);
-	    		chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,chemModelRelay.getPhantoms()), null, toContainer);
+			if (merge != null)
+		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
+	    	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,
+	    			chemModelRelay.getPhantoms()),
+	    			null, toContainer);
     	}
-        if (merge!=null)
+        if (merge != null)
         	chemModelRelay.updateAtom(merge);
-		if (source!=null)
+		if (source != null)
 			chemModelRelay.updateAtom(source);
 	        chemModelRelay.clearPhantoms();
 	        chemModelRelay.setPhantomText(null, null);
