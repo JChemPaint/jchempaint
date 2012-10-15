@@ -516,6 +516,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             reactionBounds = Renderer.calculateBounds(reactionSet);
         }
 
+        if (moleculeBounds == null && reactionBounds == null)
+        	return new Rectangle();
         if (moleculeBounds == null) {
             return this.calculateScreenBounds(reactionBounds);
         } else if (reactionBounds == null) {
