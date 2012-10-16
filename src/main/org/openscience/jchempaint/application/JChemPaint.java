@@ -413,6 +413,9 @@ public class JChemPaint {
         if (error != null) {
             throw new CDKException(error);
         }
+        if (chemModel == null && chemFile != null) {
+            chemModel = (ChemModel) chemFile.getChemSequence(0).getChemModel(0);
+        }
         if (cor.accepts(ChemModel.class) && chemModel==null) {
             // try to read a ChemModel
             try {
