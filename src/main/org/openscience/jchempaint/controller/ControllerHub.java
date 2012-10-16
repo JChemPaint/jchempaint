@@ -771,6 +771,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		Map<IBond, IBond.Stereo[]> changedBondsStereo = new HashMap<IBond, IBond.Stereo[]>();
 		changedBonds.put(bond, orders);
 		changedBondsStereo.put(bond, stereos);
+		// set hybridization from bond order
+		bond.getAtom(0).setHybridization(null);
+		bond.getAtom(1).setHybridization(null);
 		updateAtom(bond.getAtom(0));
 		updateAtom(bond.getAtom(1));
 		structureChanged();
