@@ -1804,6 +1804,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void removeBondWithoutUndo(IBond bond) {
 		ChemModelManipulator.removeElectronContainer(chemModel, bond);
+		// set hybridization from bond order
+		bond.getAtom(0).setHybridization(null);
+		bond.getAtom(1).setHybridization(null);
 		updateAtom(bond.getAtom(0));
 		updateAtom(bond.getAtom(1));
 		adjustRgroup();
