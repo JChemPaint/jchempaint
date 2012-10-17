@@ -34,8 +34,8 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(IBond.Order.DOUBLE, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getOrder());
-		Assert.assertEquals(oldhydrogencount0-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getImplicitHydrogenCount().intValue());
-		Assert.assertEquals(oldhydrogencount1-2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getImplicitHydrogenCount().intValue());
+		Assert.assertEquals(oldhydrogencount0-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getImplicitHydrogenCount().intValue());
+		Assert.assertEquals(oldhydrogencount1-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getImplicitHydrogenCount().intValue());
 		//using up bond button,
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4)));
 		applet.button("up_bond").click();
