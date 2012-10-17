@@ -54,6 +54,10 @@ public class LogicalSelection implements IChemObjectSelection {
         this.type = Type.NONE;
         this.chemModel = null;
     }
+    
+    public Type getType() {
+    	return type;
+    }
 
     public IRenderingElement generate(Color color) {
         return null;

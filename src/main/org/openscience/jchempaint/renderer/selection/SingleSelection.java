@@ -25,7 +25,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 
 /**
@@ -61,8 +65,29 @@ public class SingleSelection<T extends IChemObject> extends AbstractSelection
 	public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
 		if (selection == null)
 			return Collections.emptySet();
-		Set<E> set = new HashSet<E>();
-		set.add((E) selection);
-		return set;
+        Set<E> set = new HashSet<E>();
+        if(clazz.isAssignableFrom( IAtom.class )) {
+        	if (selection instanceof IAtom || selection instanceof Atom) {
+	    		set.add((E) selection);
+	            return set;
+        	}
+        	else
+        		return Collections.emptySet();
+    	}
+
+        if(clazz.isAssignableFrom( IBond.class )) {
+        	if (selection instanceof IBond || selection instanceof Bond) {
+	    		set.add((E) selection);
+	            return set;
+        	}
+        	else
+                return Collections.emptySet();
+    	}
+        
+        if(clazz.isAssignableFrom( IChemObject.class )) {
+    		set.add((E) selection);
+            return set;
+        }
+        return Collections.emptySet();
 	}
 }

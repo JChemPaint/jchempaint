@@ -253,7 +253,7 @@ public class JCPMenuTextMaker {
         entries.put("minusTooltip", GT._("Decrease the charge on an Atom"));
         entries.put("eraserTooltip", GT._("Delete atoms and bonds"));
         entries.put("lassoTooltip", GT._("Select atoms and bonds in a free-form region"));
-        entries.put("selectTooltip", GT._("Select atoms and bonds in a rectangular region"));
+        entries.put("selectTooltip", GT._("Select objects in a rectangle / move objects"));
         entries.put("triangleTooltip", GT._("Add a propane ring"));
         entries.put("squareTooltip", GT._("Add a butane ring"));
         entries.put("pentagonTooltip", GT._("Add a pentane ring"));

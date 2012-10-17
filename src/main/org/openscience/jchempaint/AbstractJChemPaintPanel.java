@@ -35,6 +35,8 @@ import java.awt.Image;
 import java.awt.image.*;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -182,12 +184,17 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      * @param ex The throwable which occured.
      */
     public void announceError(Throwable ex){
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    	PrintStream ps = new PrintStream(baos);
+    	ex.printStackTrace(ps);
+    	String trace = baos.toString();
+
     	JOptionPane.showMessageDialog(this, 
     			GT._("The error was:")+" "+ex.getMessage()+". "+GT._("\nYou can file a bug report at ")+
     			"https://github.com/JChemPaint/jchempaint/issues "+
-    			GT._("\nWe apologize for any inconvenience!"), GT._("Error occured"),
+    			GT._("\nWe apologize for any inconvenience!") + trace, GT._("Error occured"),
     			JOptionPane.ERROR_MESSAGE);
-    	ex.printStackTrace();
+    	
     	logger.error(ex.getMessage());
     }
 
