@@ -771,6 +771,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		Map<IBond, IBond.Stereo[]> changedBondsStereo = new HashMap<IBond, IBond.Stereo[]>();
 		changedBonds.put(bond, orders);
 		changedBondsStereo.put(bond, stereos);
+		// set hybridization from bond order
+		bond.getAtom(0).setHybridization(null);
+		bond.getAtom(1).setHybridization(null);
 		updateAtom(bond.getAtom(0));
 		updateAtom(bond.getAtom(1));
 		structureChanged();
@@ -1801,6 +1804,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void removeBondWithoutUndo(IBond bond) {
 		ChemModelManipulator.removeElectronContainer(chemModel, bond);
+		// set hybridization from bond order
+		bond.getAtom(0).setHybridization(null);
+		bond.getAtom(1).setHybridization(null);
 		updateAtom(bond.getAtom(0));
 		updateAtom(bond.getAtom(1));
 		adjustRgroup();
@@ -2131,24 +2137,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			newMoleculeSet.addAtomContainer(toPaste);
 			moleculeToAddTo = toPaste;
 		} else {
-			try {
-				oldMoleculeSet.addAtomContainer((IAtomContainer)moleculeToAddTo.clone());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			IMolecule mol = chemModel.getBuilder().newInstance(IMolecule.class);
+			for (IAtom atom: moleculeToAddTo.atoms())
+				mol.addAtom(atom);
+			for (IBond bond: moleculeToAddTo.bonds())
+				mol.addBond(bond);
+			oldMoleculeSet.addAtomContainer(mol);
 			moleculeToAddTo.add(toPaste);
 		}
 		if (toRemove != null) {
-			try {
-				oldMoleculeSet.addAtomContainer(toRemove);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			oldMoleculeSet.addAtomContainer(toRemove);
 			moleculeToAddTo.add(toRemove);
 			updateAtoms(toRemove, toRemove.atoms());
 			newMoleculeSet.removeAtomContainer(toRemove);
 		}
-		updateAtoms(toPaste, toPaste.atoms());
+		for (IAtomContainer ac: newMoleculeSet.atomContainers())
+			updateAtoms(ac, ac.atoms());
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getLoadNewModelEdit(
 					getIChemModel(), this, oldMoleculeSet, null, newMoleculeSet, null, "Add Chain Fragment");
@@ -2438,6 +2442,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				droppedContainers.add(null);
 			}
 
+			// Handle the case of a bond between mergedAtom and mergedPartnerAtom.
+			// This bond should be removed.
+			IBond rb = container1.getBond(mergedAtom, mergedPartnerAtom);
+			if (rb != null) {
+				container1.removeBond(rb);
+				removedBonds.add(rb);
+			}
+				
 			// In the next loop we remove bonds that are redundant, that is
 			// to say bonds that exist on both sides of the parts to be merged
 			// and would cause duplicate bonding in the end result.

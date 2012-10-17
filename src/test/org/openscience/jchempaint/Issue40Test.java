@@ -5,7 +5,9 @@ import javax.vecmath.Point2d;
 import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.action.JCPAction;
 
 /**
  * @author Ralf Stephan <ralf@ark.in-berlin.de>
@@ -29,6 +31,31 @@ public class Issue40Test extends AbstractAppletTest {
         } catch(Exception e) {
         	Assert.fail();
         }	
+		int atomCount=0, bondCount=0, implicitHCount=0;
+		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
+			for (IAtom a : atc.atoms())
+				implicitHCount += a.getImplicitHydrogenCount();
+			atomCount+=atc.getAtomCount();
+			bondCount+=atc.getBondCount();
+		}
+		Assert.assertEquals(6, atomCount);
+		Assert.assertEquals(5, bondCount);
+		Assert.assertEquals(14, implicitHCount);
+	
+		try {
+            JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.UndoAction");
+            act.actionPerformed(null);
+		} catch (NullPointerException e) {
+        	Assert.fail();
+		}
+
+        atomCount=0; bondCount=0;
+		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
+			atomCount+=atc.getAtomCount();
+			bondCount+=atc.getBondCount();
+		}
+		Assert.assertEquals(0, atomCount);
+        Assert.assertEquals(0, bondCount);
     }
 
 }

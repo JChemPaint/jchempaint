@@ -29,6 +29,10 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue76Test.class,
         Issue81Test.class,
         Issue82Test.class,
+        Issue116Test.class,
+        Issue129Test.class,
+        Issue137Test.class,
+        Issue139Test.class,
         MenuCutTest.class,
         MenuIsotopeTest.class,
         SetSmilesTest.class

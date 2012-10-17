@@ -116,9 +116,16 @@ public class CopyPasteAction extends JCPAction{
 
     private void addToClipboard(Clipboard clipboard, IAtomContainer container) {
         try {
-            JcpSelection jcpselection = new JcpSelection((IAtomContainer)container.clone());
-            clipboard.setContents(jcpselection,null);
-        } catch (Exception e) {
+        	for (IBond bond: container.bonds())
+        		if (bond.getAtomCount() < 2 
+        				|| !container.contains(bond.getAtom(0))
+        				|| !container.contains(bond.getAtom(1)))
+        			container.removeBond(bond);
+        	if (container.getAtomCount() > 0) {
+        		JcpSelection jcpselection = new JcpSelection((IAtomContainer)container.clone());
+        		clipboard.setContents(jcpselection,null);
+        	}
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
     }
@@ -149,11 +156,12 @@ public class CopyPasteAction extends JCPAction{
                 IAtomContainer tocopyclone =
                     atomInRange.getBuilder().newInstance(IAtomContainer.class);
                 try {
-                    tocopyclone.addAtom((IAtom) atomInRange.clone());
-                    addToClipboard(sysClip, tocopyclone);
-                } catch (CloneNotSupportedException e1) {
-                    e1.printStackTrace();
-                }
+					tocopyclone.addAtom((IAtom) atomInRange.clone());
+				} catch (CloneNotSupportedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                addToClipboard(sysClip, tocopyclone);
             }
             else if(renderModel.getHighlightedBond()!=null){
                 IBond bond = renderModel.getHighlightedBond();
@@ -163,17 +171,17 @@ public class CopyPasteAction extends JCPAction{
                     try {
                         tocopyclone.addAtom((IAtom) bond.getAtom(0).clone());
                         tocopyclone.addAtom((IAtom) bond.getAtom(1).clone());
-                        tocopyclone.addBond(bond.getBuilder().newInstance(IBond.class,tocopyclone.getAtom(0), tocopyclone.getAtom(1), bond.getOrder()));
-                        addToClipboard(sysClip, tocopyclone);
                     } catch (CloneNotSupportedException e1) {
                         e1.printStackTrace();
                     }
+                    tocopyclone.addBond(bond.getBuilder().newInstance(IBond.class,tocopyclone.getAtom(0), tocopyclone.getAtom(1), bond.getOrder()));
+                    addToClipboard(sysClip, tocopyclone);
                 }
             }else if(renderModel.getSelection().getConnectedAtomContainer()!=null){
-                addToClipboard(sysClip,
-                        renderModel.getSelection().getConnectedAtomContainer());
+            	addToClipboard(sysClip,
+					        renderModel.getSelection().getConnectedAtomContainer());
             }else{
-                addToClipboard(sysClip, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
+				addToClipboard(sysClip, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
             }
         } else if ("copyAsSmiles".equals(type)) {
             handleSystemClipboard(sysClip);
@@ -393,8 +401,9 @@ public class CopyPasteAction extends JCPAction{
                         LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             }
-            if(tocopyclone.getAtomCount()>0 || tocopyclone.getBondCount()>0)
-                addToClipboard(sysClip, tocopyclone);
+			if(tocopyclone.getAtomCount()>0 || tocopyclone.getBondCount()>0)
+			    addToClipboard(sysClip, tocopyclone);
+			
         }else if (type.equals("selectAll")) {
             ControllerHub hub = jcpPanel.get2DHub();
             IChemObjectSelection allSelection =
@@ -583,11 +592,16 @@ public class CopyPasteAction extends JCPAction{
         String cml;
 
         @SuppressWarnings("unchecked")
-        public JcpSelection(IAtomContainer tocopy1) throws Exception {
+        public JcpSelection(IAtomContainer tocopy1) {
             IMolecule tocopy= tocopy1.getBuilder().newInstance(IMolecule.class,tocopy1);
             // MDL mol output
             StringWriter sw = new StringWriter();
-            new MDLV2000Writer(sw).writeMolecule(tocopy);
+            try {
+				new MDLV2000Writer(sw).writeMolecule(tocopy);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             this.mol=sw.toString();
             SmilesGenerator sg=new SmilesGenerator();
             smiles = sg.createSMILES(tocopy);

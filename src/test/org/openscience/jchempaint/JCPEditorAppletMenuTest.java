@@ -224,6 +224,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     
     private void genericValenceTest(int valence){
         //we go to select mode
+        restoreModelWithBasicmol();
         applet.button("select").click();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
@@ -247,6 +248,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     }
 
     @Test public void testMenuConvertToRadical() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		//applet.menuItem("convertToRadical").click();
@@ -256,6 +258,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	}
 	
 	@Test public void testMenuPseudoStar() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("pseudoStar").click();
@@ -270,6 +273,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	}
 
 	@Test public void testMenuPseudoR() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("pseudoR").click();
@@ -284,6 +288,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 	}
 	
 	@Test public void testMenuPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
 		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
 		panel.selectionChanged();
 		applet.menuItem("periodictable").click();
@@ -374,16 +379,23 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 		@Test public void testMenuSaveAsMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 			  applet.menuItem("save").click();
 			  DialogFixture dialog = applet.dialog();
-			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			  combobox.setSelectedItem(combobox.getItemAt(6));
-			  JTextComponentFixture text = dialog.textBox();
 			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
 			  if(file.exists())
 				  file.delete();
+			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+			  combobox.setSelectedItem(combobox.getItemAt(6));
+			  JTextComponentFixture text = dialog.textBox();
 			  text.setText(file.toString());
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 			  okbutton.click();
-			  MDLReader reader = new MDLReader(new FileInputStream(file));
+			  MDLReader reader = null;
+				try {
+					reader = new MDLReader(new FileInputStream(file));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Assert.fail("File not found.");
+					return;
+				}
 			  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
 			  JPanelFixture jcppanel=applet.panel("appletframe");
 			  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;

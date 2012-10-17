@@ -53,7 +53,8 @@ import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**
- * Module to move around a selection of atoms and bonds
+ * Module to move around a selection of atoms and bonds.
+ * Handles merging of atoms.
  *
  * @author Niels Out
  * @cdk.svnrev $Revision: 9162 $
@@ -88,22 +89,15 @@ public class MoveModule extends ControllerModuleAdapter {
         this.switchtowhenoutside = switchtowhenoutside;
     }
 
-    /**
-     * Constructor for the MoveModule.
-     *
-     * @param chemObjectRelay The current ChemObjectRelay.
-     */
-    public MoveModule(IChemModelRelay chemObjectRelay) {
-        super(chemObjectRelay);
-    }
-
+    // if anything is selected, set offset, start2DCenter, and atomsToMove.
+    // if not, switch to other mode and reset mouse cursor.
     public void mouseClickedDown(Point2d worldCoord) {
 
         //if we are outside bounding box, we deselect, else
         //we actually start a move.
         IAtomContainer selectedAC = getSelectedAtomContainer(worldCoord );
         if (selectedAC != null) {
-            
+
             // It could be that only a  selected bond is going to be moved. 
             // So make sure that the attached atoms are included, otherwise
             // the undo will fail to place the atoms back where they were
@@ -117,7 +111,6 @@ public class MoveModule extends ControllerModuleAdapter {
                     atomsToMove.add(atom);
                     selectedAC.addAtom(atom);
                 }
-
             }
 
             Point2d current = GeometryTools.get2DCenter(selectedAC);
@@ -150,8 +143,11 @@ public class MoveModule extends ControllerModuleAdapter {
             Point2d end2DCenter = GeometryTools.get2DCenter(atomsToMove);
             end.sub(end2DCenter, start2DCenter);
 
-            Map<IAtom, IAtom> mergeMap = chemModelRelay.getRenderer()
-                                          .getRenderer2DModel().getMerge();
+            Map<IAtom, IAtom> mergeMap = calculateMerge(atomsToMove);
+            RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+            model.getMerge().clear();
+            model.getMerge().putAll(mergeMap);
+
             // Do the merge of atoms
             if (!mergeMap.isEmpty()) {
                 try {
@@ -185,45 +181,12 @@ public class MoveModule extends ControllerModuleAdapter {
      * Most move mode calculations are done in this routine.
      */
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
-    	if (atomsToMove == null) {
-    		IAtomContainer selectedAC = getSelectedAtomContainer(worldCoordFrom );
-    		if (selectedAC != null) {
-            
-                // It could be that only a  selected bond is going to be moved. 
-                // So make sure that the attached atoms are included, otherwise
-                // the undo will fail to place the atoms back where they were
-        		atomsToMove = new HashSet<IAtom>();
-
-                for (IAtom atom : selectedAC.atoms()) {
-                    atomsToMove.add(atom);
-                }
-                for (IBond bond : selectedAC.bonds()) {
-                    for (IAtom atom : bond.atoms()){
-                        atomsToMove.add(atom);
-                        selectedAC.addAtom(atom);
-                    }
-                }
-    		} else return; // TODO: do we also move highlighted atoms?
-	    	if (offset == null) {
-		    	Point2d current = GeometryTools.get2DCenter(selectedAC);
-		        start2DCenter = current;
-		        offset = new Vector2d();
-		        offset.sub(current, worldCoordTo);
-	    	}
-    	}
     	end2DCenter = worldCoordTo;
         Point2d atomCoord = new Point2d();
         atomCoord.add(worldCoordTo, offset);
 
         Vector2d d = new Vector2d();
         d.sub(worldCoordTo, worldCoordFrom);
-
-        // check for possible merges
-        RendererModel model = 
-            chemModelRelay.getRenderer().getRenderer2DModel();
-        model.getMerge().clear();
-
-        model.getMerge().putAll( calculateMerge(atomsToMove) );
 
         chemModelRelay.moveBy(atomsToMove, d, null);
         chemModelRelay.updateView();
@@ -256,12 +219,12 @@ public class MoveModule extends ControllerModuleAdapter {
             for(IAtom atom:mergeAtoms) {
                 List<DistAtom> candidates = findMergeCandidates(ac,atom);
                 Collections.sort( candidates);
-                for(DistAtom candiate:candidates) {
-                    if(candiate.distSquared>maxDistance)
+                for(DistAtom candidate:candidates) {
+                    if(candidate.distSquared>maxDistance)
                         break;
-                    if(mergeAtoms.contains( candiate.atom ))
+                    if(mergeAtoms.contains( candidate.atom ))
                         continue;
-                    mergers.put( atom, candiate.atom );
+                    mergers.put( atom, candidate.atom );
                 }
             }
         }

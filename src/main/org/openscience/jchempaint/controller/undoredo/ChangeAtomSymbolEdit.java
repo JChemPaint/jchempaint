@@ -77,8 +77,10 @@ public class ChangeAtomSymbolEdit implements IUndoRedoable {
 	public void redo() throws CannotRedoException {
 		this.atom.setSymbol(symbol);
 		try {
-			IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+			IsotopeFactory ifac = IsotopeFactory.getInstance(atom.getBuilder());
+			this.atom.setMassNumber(ifac.getMajorIsotope(symbol).getMassNumber());
 			chemModelRelay.updateAtom(atom);
+			ifac.configure(atom);
 		} catch (OptionalDataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,9 +98,11 @@ public class ChangeAtomSymbolEdit implements IUndoRedoable {
 	 */
 	public void undo() throws CannotUndoException {
 		this.atom.setSymbol(formerSymbol);
-		chemModelRelay.updateAtom(atom);
 		try {
-			IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+			IsotopeFactory ifac = IsotopeFactory.getInstance(atom.getBuilder());
+			this.atom.setMassNumber(ifac.getMajorIsotope(formerSymbol).getMassNumber());
+			chemModelRelay.updateAtom(atom);
+			ifac.configure(atom);
 		} catch (OptionalDataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
