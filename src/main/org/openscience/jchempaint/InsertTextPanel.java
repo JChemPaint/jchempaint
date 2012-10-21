@@ -119,6 +119,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 return;
             try {
             	JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
+            	jChemPaintPanel.setModified(true);
             } catch (CDKException e) {
 				e.printStackTrace();
             	return;
