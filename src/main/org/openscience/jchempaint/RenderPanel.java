@@ -474,9 +474,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     public void doUndo(IUndoRedoable undoredo) {
         undoManager.addEdit((UndoableEdit) undoredo);
-        Container root = this.getParent().getParent().getParent();
-        if (root instanceof JChemPaintPanel)
-            ((JChemPaintPanel) root).updateUndoRedoControls();
+        // buttons are updated via JChemPaintPanel.doUndo()
     }
 
     public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
