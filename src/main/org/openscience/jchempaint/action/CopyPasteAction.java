@@ -234,10 +234,25 @@ public class CopyPasteAction extends JCPAction{
             }
             TemplateBrowser templateBrowser = new TemplateBrowser(templatetab);
             if(templateBrowser.getChosenmolecule()!=null){
+                // do we have an empty model?
+            	boolean emptyModel = false;
+                IChemModel cm = jcpPanel.get2DHub().getChemModel();
+                if ((cm.getMoleculeSet() == null || cm.getMoleculeSet().getMoleculeCount() < 2)
+                		&& (cm.getReactionSet() == null || cm.getReactionSet().getReactionCount() == 0)) {
+                	if (cm.getMoleculeSet().getMoleculeCount() == 1) {
+                		IMolecule mol = cm.getMoleculeSet().getMolecule(0);
+                		if (mol.getAtomCount() == 0)
+                			emptyModel = true;
+                	} else {
+            			emptyModel = true;
+                	}
+                }
                 scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
-                jcpPanel.getRenderPanel().setZoomWide(true);
-                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+                if (emptyModel) {
+//                	jcpPanel.getRenderPanel().setZoomWide(true);
+                	jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+                }
             }
         } else if ("paste".equals(type)) {
             handleSystemClipboard(sysClip);
