@@ -662,9 +662,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			IMolecule ac = atomCon.getBuilder().newInstance(IMolecule.class);
 			ac.addAtom(atom);
 			ac.addAtom(newAtom);
-			Point2d distanceMeasure = new Point2d(0, 0); // XXX not sure about
-			// this?
 			IAtom connectedAtom = connectedAtoms.get(0);
+			Point2d distanceMeasure = connectedAtom.getPoint2d();
 			Vector2d v = atomPlacer.getNextBondVector(atom, connectedAtom,
 					distanceMeasure, true);
 			atomPlacer.placeLinearChain(ac, v, bondLength);
