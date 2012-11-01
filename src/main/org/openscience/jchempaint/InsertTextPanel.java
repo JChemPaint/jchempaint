@@ -158,6 +158,8 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             }
         } else { // OK, it must be a SMILES
             SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+            // remove spaces from cut&paste
+            text = text.replace (" ", "");
             try {
                 molecule = smilesParser.parseSmiles(text);
             } catch (InvalidSmilesException e1) {
