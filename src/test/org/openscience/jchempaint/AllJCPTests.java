@@ -15,6 +15,7 @@ import org.junit.runners.Suite.SuiteClasses;
         BugSF70Test.class,
         BugSF75Test.class,
         BugSF80Test.class,
+        CDK1269Test.class,
         CDK1272Test.class,
         Issue4Test.class,
         Issue8Test.class,

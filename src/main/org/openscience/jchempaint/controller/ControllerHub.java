@@ -1280,7 +1280,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				container.getAtom(i).setPoint2d(
 						cleanedMol.getAtom(i).getPoint2d());
 			}
-		} catch (Exception e) {
+		} catch (CDKException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
