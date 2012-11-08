@@ -127,6 +127,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private PhantomTextGenerator ptg = new PhantomTextGenerator();
 
     boolean isFirstDrawing = true;
+    
+    private String customStatus;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
             boolean fitToScreen, boolean debug, boolean isViewer, JChemPaintAbstractApplet applet) throws IOException {
@@ -428,24 +430,28 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             }
         } else if (position == 2) {
             // depict brutto formula of the selected molecule or part of
-            // molecule
-            IChemObjectSelection selection = renderer.getRenderer2DModel()
+            // molecule or custom string
+        	if (customStatus != null) {
+        		status = customStatus;
+        	} else {
+        		IChemObjectSelection selection = renderer.getRenderer2DModel()
                     .getSelection();
 
-            if (selection != null) {
-                IAtomContainer ac = selection.getConnectedAtomContainer();
-                if (ac != null) {
-                    int implicitHs = 0;
-                    for (IAtom atom : ac.atoms()) {
-                        if (atom.getImplicitHydrogenCount() != null) {
-                            implicitHs += atom.getImplicitHydrogenCount();
-                        }
-                    }
-                    String formula = MolecularFormulaManipulator
-                            .getHTML(MolecularFormulaManipulator
-                                    .getMolecularFormula(ac), true, false);
-                    status = makeStatusBarString(formula, implicitHs);
-                }
+	            if (selection != null) {
+	                IAtomContainer ac = selection.getConnectedAtomContainer();
+	                if (ac != null) {
+	                    int implicitHs = 0;
+	                    for (IAtom atom : ac.atoms()) {
+	                        if (atom.getImplicitHydrogenCount() != null) {
+	                            implicitHs += atom.getImplicitHydrogenCount();
+	                        }
+	                    }
+	                    String formula = MolecularFormulaManipulator
+	                            .getHTML(MolecularFormulaManipulator
+	                                    .getMolecularFormula(ac), true, false);
+	                    status = makeStatusBarString(formula, implicitHs);
+	                }
+	            }
             }
         } else if (position == 3) {
             status = GT._("Zoomfactor")
@@ -462,6 +468,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 + formula
                 + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
                         + GT._("Hs implicit") + ")") + "</html>";
+    }
+    
+    public void setCustomStatus (String str) {
+    	customStatus = str;
     }
 
     public Renderer getRenderer() {

@@ -2830,5 +2830,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public String getPhantomText() {
 		return phantomText;
 	}
+	
+    public void setCustomStatus (String str) {
+    	eventRelay.setCustomStatus(str);
+    }
 }
 

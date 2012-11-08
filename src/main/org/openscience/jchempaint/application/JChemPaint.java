@@ -559,9 +559,8 @@ public class JChemPaint {
                 sdg.generateCoordinates(new Vector2d(0, 1));
                 molecule = sdg.getMolecule();
             } catch (Exception exc) {
-                JOptionPane.showMessageDialog(chemPaintPanel, GT._("Structure could not be generated"));
-                throw new CDKException(
-                        "Cannot depict structure");
+            	chemPaintPanel.get2DHub().setCustomStatus("ERROR: Structure could not be generated");
+            	chemPaintPanel.updateStatusBar();
             }
         }
 
