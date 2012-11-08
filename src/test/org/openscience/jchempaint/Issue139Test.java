@@ -35,13 +35,10 @@ public class Issue139Test extends AbstractAppletTest {
         sel.addBond(ethane.getBond(0));
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(sel);
         panel.selectionChanged();
-        try {
-			applet.button("cut").click();
-	        panel.get2DHub().updateView();
-	        applet.panel("renderpanel").robot.waitForIdle();
-		} catch (Exception e) {
-	        Assert.fail();
-		}
+        
+		applet.button("cut").click();
+        panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
 
 		int atomCount=0, bondCount=0, implicitHCount=0;
 		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
@@ -54,11 +51,8 @@ public class Issue139Test extends AbstractAppletTest {
 		Assert.assertEquals(0, bondCount);
 		Assert.assertEquals(4, implicitHCount);
 
-        try {
-			applet.button("paste").click();
-		} catch (Exception e) {
-	        Assert.fail();
-		}
+		applet.button("paste").click();
+
         panel.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
 

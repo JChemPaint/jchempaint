@@ -22,12 +22,9 @@ public class Issue129Test extends AbstractAppletTest {
     @Test public void testIssue129() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        try {
-        	jcpApplet.setSmiles("C=C");
-        	panel.get2DHub().updateView();
-		} catch (Exception e) {
-			Assert.fail();
-		}
+        
+    	jcpApplet.setSmiles("C=C");
+    	panel.get2DHub().updateView();
         
         int atomCount=0, bondCount=0, implicitHCount=0;
 		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {

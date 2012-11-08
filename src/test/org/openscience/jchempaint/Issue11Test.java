@@ -3,6 +3,7 @@ package org.openscience.jchempaint;
 import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
@@ -13,15 +14,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class Issue11Test extends AbstractAppletTest {
 
-    @Test public void testIssue11() {
+    @Test (expected=CDKException.class)
+    public void testIssue11() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        try {
-        	jcpApplet.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
-        	panel.get2DHub().updateView();
-		} catch (Exception e) {
-			Assert.fail();
-		}
+
+        jcpApplet.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
+        panel.get2DHub().updateView();
         
         int atomCount=0, bondCount=0;
 		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {

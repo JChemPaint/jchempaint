@@ -42,16 +42,14 @@ public class Issue8Test extends AbstractAppletTest {
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		
-        try {
-            // For some reason this does not work
-            // applet.button("cleanup").click();
-            // panel.get2DHub().updateView();
-            // so we crank the lever manually
-            JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.CleanupAction");
-            act.actionPerformed(null);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+
+        // For some reason this does not work
+        // applet.button("cleanup").click();
+        // panel.get2DHub().updateView();
+        // so we crank the lever manually
+        JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.CleanupAction");
+        act.actionPerformed(null);
+
         panel.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
 	}

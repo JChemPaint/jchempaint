@@ -60,16 +60,13 @@ public class Issue116Test extends AbstractAppletTest {
 		Assert.assertEquals(0, bondCount);
 		Assert.assertEquals(2, implicitHCount);
 
-        try {
-            // For some reason this does not work
-            // applet.button("undo").click();
-            // panel.get2DHub().updateView();
-            // so we crank the lever manually
-            JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.UndoAction");
-            act.actionPerformed(null);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+        // For some reason this does not work
+        // applet.button("undo").click();
+        // panel.get2DHub().updateView();
+        // so we crank the lever manually
+        JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.UndoAction");
+        act.actionPerformed(null);
+            
         panel.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
         

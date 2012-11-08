@@ -22,18 +22,15 @@ public class Issue19Test extends AbstractAppletTest {
         applet.button("select").click();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
         applet.panel("renderpanel").robot.moveMouse(100,100);
-        try {
-            robot.keyPress(KeyEvent.VK_DELETE);
-            robot.delay(500);
-            robot.keyRelease(KeyEvent.VK_DELETE);
-            robot.delay(500);
-            robot.keyPress(KeyEvent.VK_DELETE);
-            robot.delay(500);
-            robot.keyRelease(KeyEvent.VK_DELETE);
-            robot.delay(500);
-		} catch (Exception e) {
-			Assert.fail();
-		}
+
+        robot.keyPress(KeyEvent.VK_DELETE);
+        robot.delay(500);
+        robot.keyRelease(KeyEvent.VK_DELETE);
+        robot.delay(500);
+        robot.keyPress(KeyEvent.VK_DELETE);
+        robot.delay(500);
+        robot.keyRelease(KeyEvent.VK_DELETE);
+        robot.delay(500);
         
     }
 
