@@ -22,6 +22,7 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue10Test.class,
         Issue11Test.class,
         Issue19Test.class,
+        Issue27Test.class,
         Issue32Test.class,
         Issue40Test.class,
         Issue58Test.class,
