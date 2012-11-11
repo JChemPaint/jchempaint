@@ -36,6 +36,7 @@ import org.junit.runners.Suite.SuiteClasses;
         Issue129Test.class,
         Issue137Test.class,
         Issue139Test.class,
+        Issue168Test.class,
         MenuCutTest.class,
         MenuIsotopeTest.class,
         SetSmilesTest.class

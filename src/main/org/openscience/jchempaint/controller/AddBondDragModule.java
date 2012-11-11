@@ -37,6 +37,8 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
@@ -212,12 +214,25 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             newAtom = source;
 
         // if merge is set either form a bond or add and form
-        IAtomContainer removedContainer=null;
         if(merge!=null) {
-                chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
-                removedContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), merge);
-                IBond newBond = chemModelRelay.addBond( newAtom , merge, stereoForNewBond, orderForNewBond );
-                containerForUndoRedo.addBond(newBond);
+        	IMoleculeSet prevSet = chemModelRelay.getIChemModel().getBuilder().newInstance(IMoleculeSet.class);
+        	for (IAtomContainer mol : chemModelRelay.getIChemModel().getMoleculeSet().molecules()) {
+    			IMolecule newMol = chemModelRelay.getIChemModel().getBuilder().newInstance(IMolecule.class);
+				for (IAtom atom: mol.atoms())
+					newMol.addAtom(atom);
+				for (IBond bond: mol.bonds())
+					newMol.addBond(bond);
+				prevSet.addMolecule(newMol);
+	        }
+            chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
+            IBond newBond = chemModelRelay.addBond( newAtom , merge, stereoForNewBond, orderForNewBond );
+            if (factory != null && handler != null) {
+	            IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getLoadNewModelEdit
+	            		(chemModelRelay.getIChemModel(), chemModelRelay, prevSet, null, chemModelRelay.getChemModel().getMoleculeSet(), null, "Add Bond");
+	            handler.postEdit(undoredo);
+	        }
+            chemModelRelay.updateView();
+            return;
         } else {
             if(start.distance( worldCoord )<getHighlightDistance()) {
                 if(!newSource) {
@@ -244,7 +259,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
         if (factory != null && handler != null) {
             IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
-            (chemModelRelay.getIChemModel(), containerForUndoRedo, removedContainer, "Add Bond",chemModelRelay);
+            (chemModelRelay.getIChemModel(), containerForUndoRedo, null, "Add Bond",chemModelRelay);
             handler.postEdit(undoredo);
         }
         chemModelRelay.updateView();
