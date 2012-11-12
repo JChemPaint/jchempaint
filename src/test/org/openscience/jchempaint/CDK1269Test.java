@@ -39,4 +39,41 @@ public class CDK1269Test extends AbstractAppletTest {
         Assert.assertEquals(6, implicitHCount);
     }
 
+    @Test (expected=CDKException.class)
+    public void testCDK1269A() {
+        JPanelFixture jcppanel=applet.panel("appletframe");
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+
+    	applet.button("C").click();
+    	panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
+        panel.get2DHub().mouseClickedDown(100, 100);
+        panel.get2DHub().mouseClickedUp(100, 100);
+        panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
+
+    	applet.button("H").click();
+    	panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
+        panel.get2DHub().mouseClickedDown(200, 200);
+        panel.get2DHub().mouseClickedUp(200, 200);
+        panel.get2DHub().updateView();
+        applet.panel("renderpanel").robot.waitForIdle();
+
+		panel.get2DHub().cleanup();
+		panel.get2DHub().updateView();
+		applet.panel("renderpanel").robot.waitForIdle();
+			
+		int atomCount=0, bondCount=0, implicitHCount=0;
+		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
+			for (IAtom a : atc.atoms())
+				implicitHCount += a.getImplicitHydrogenCount();
+			atomCount+=atc.getAtomCount();
+			bondCount+=atc.getBondCount();
+		}
+		Assert.assertEquals(2, atomCount);
+        Assert.assertEquals(0, bondCount);
+        Assert.assertEquals(5, implicitHCount);
+    }
+
 }
