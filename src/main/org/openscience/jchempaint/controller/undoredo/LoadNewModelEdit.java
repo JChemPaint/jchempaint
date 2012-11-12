@@ -3,7 +3,8 @@
  * $Date: 2008-11-26 16:01:05 +0000 (Wed, 26 Nov 2008) $
  * $Revision: 13311 $
  *
- * Copyright (C) 2005-2008 Stefan Kuhn
+ * Copyright (C) 2005-2009 Stefan Kuhn
+ *           (C) 2012      Ralf Stephan
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -45,6 +46,17 @@ public class LoadNewModelEdit implements IUndoRedoable {
 	private String type;
 	private IChemModelRelay chemModelRelay = null;
 
+	/**
+	 * Called by
+	 *     OpenAction.actionPerformed
+	 * @param chemModel
+	 * @param relay
+	 * @param oldsom
+	 * @param oldsor
+	 * @param newsom
+	 * @param newsor
+	 * @param type
+	 */
 	public LoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type) {
 		this.chemModel = chemModel;
 		this.newsom=newsom;

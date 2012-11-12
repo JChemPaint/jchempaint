@@ -31,6 +31,8 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -61,6 +63,20 @@ public class UndoAction extends JCPAction
         }
         jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
         	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
+        
+        // Set panel to unmodified if chemModel is empty
+		jcpPanel.setModified(true);
+        IChemModel cm = jcpPanel.get2DHub().getChemModel();
+        if ((cm.getMoleculeSet() == null || cm.getMoleculeSet().getMoleculeCount() < 2)
+        		&& (cm.getReactionSet() == null || cm.getReactionSet().getReactionCount() == 0)) {
+        	if (cm.getMoleculeSet().getMoleculeCount() == 1) {
+        		IMolecule mol = cm.getMoleculeSet().getMolecule(0);
+        		if (mol.getAtomCount() == 0)
+        			jcpPanel.setModified(false);
+        	} else {
+    			jcpPanel.setModified(false);
+        	}
+        }
         jcpPanel.updateUndoRedoControls();
         jcpPanel.updateStatusBar();
         RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();

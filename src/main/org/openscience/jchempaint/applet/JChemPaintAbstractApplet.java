@@ -251,6 +251,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     }
 
     public void setSmiles(String smiles) {
+    	smiles = smiles.replace (" ", "");
         loadModelFromSmiles(smiles);
         theJcpp.get2DHub().updateView();
         repaint();

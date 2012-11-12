@@ -28,14 +28,12 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
-import javax.vecmath.Vector4d;
 
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.elements.ArrowElement;
@@ -124,7 +122,7 @@ public class SVGGenerator implements IDrawVisitor {
 		svg.append("<defs>");
 		tgpadding = 4;
 		vbpadding = 40;
-		trscale = 0.03;
+		trscale = 0.02;
 		subscale = trscale*0.7;
 		subshift = 0.5;
 	}
@@ -176,14 +174,14 @@ public class SVGGenerator implements IDrawVisitor {
 		}
 		
 		// Set hyd and hPos according to entry
-		int hyd=0, hPos=0;
+		int hyd=0;
 		for (TextGroupElement.Child ch : e.children) {
 			if (ch.text.equals ("H")) {
 				if (ch.subscript == null) hyd=1;
 				else if (ch.subscript.equals("2")) hyd=2;
 				else hyd=3;
-				if (ch.position==TextGroupElement.Position.E) hPos=1;
-				else if (ch.position==TextGroupElement.Position.W) hPos=-1;
+				//if (ch.position==TextGroupElement.Position.E) hPos=1;
+				//else if (ch.position==TextGroupElement.Position.W) hPos=-1;
 			}
 		}
 		if (hyd>0) {

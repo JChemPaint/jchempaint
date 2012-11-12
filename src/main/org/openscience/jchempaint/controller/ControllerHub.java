@@ -662,9 +662,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			IMolecule ac = atomCon.getBuilder().newInstance(IMolecule.class);
 			ac.addAtom(atom);
 			ac.addAtom(newAtom);
-			Point2d distanceMeasure = new Point2d(0, 0); // XXX not sure about
-			// this?
 			IAtom connectedAtom = connectedAtoms.get(0);
+			Point2d distanceMeasure = connectedAtom.getPoint2d();
 			Vector2d v = atomPlacer.getNextBondVector(atom, connectedAtom,
 					distanceMeasure, true);
 			atomPlacer.placeLinearChain(ac, v, bondLength);
@@ -1137,6 +1136,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				|| stereo == IBond.Stereo.UP_OR_DOWN_INVERTED;
 	}
 
+	/**
+	 * Resolve any 2d overlap in the model.
+	 * 
+	 * @param chemModel
+	 */
 	public static void avoidOverlap(IChemModel chemModel){
         //we avoid overlaps
         //first we we shift down the reactions
@@ -1212,7 +1216,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         //TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
     }
 
-	// OK
+	/**
+	 * 1. mark all atom containers in the model as not placed.
+	 * 2. for individual connected container parts, generate new coords.
+	 * 3. call avoidOverlap() on model.
+	 * 4. from old and new coords (collected), create a ChangeCoordsEdit.
+	 */
 	public void cleanup() {
 		Map<IAtom, Point2d[]> coords = new HashMap<IAtom, Point2d[]>();
 		for (IAtomContainer container : ChemModelManipulator
@@ -1221,7 +1230,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				Point2d[] coordsforatom = new Point2d[2];
 				coordsforatom[1] = atom.getPoint2d();
 				coords.put(atom, coordsforatom);
-				atom.setPoint2d(null);
+	            atom.setFlag(CDKConstants.ISPLACED, false);
 			}
 
 			if (ConnectivityChecker.isConnected(container)) {
@@ -1271,7 +1280,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				container.getAtom(i).setPoint2d(
 						cleanedMol.getAtom(i).getPoint2d());
 			}
-		} catch (Exception e) {
+		} catch (CDKException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -2282,6 +2291,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 								+ 1);
 					atom.setFlag(CDKConstants.IS_TYPEABLE, false);
 				} else {
+					atom.setImplicitHydrogenCount(0);
 					atom.setFlag(CDKConstants.IS_TYPEABLE, true);
 				}
 			} catch (CDKException e) {
@@ -2820,5 +2830,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public String getPhantomText() {
 		return phantomText;
 	}
+	
+    public void setCustomStatus (String str) {
+    	eventRelay.setCustomStatus(str);
+    }
 }
 

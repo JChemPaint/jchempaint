@@ -119,6 +119,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 return;
             try {
             	JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
+            	jChemPaintPanel.setModified(true);
             } catch (CDKException e) {
 				e.printStackTrace();
             	return;
@@ -157,6 +158,8 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             }
         } else { // OK, it must be a SMILES
             SmilesParser smilesParser = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+            // remove spaces from cut&paste
+            text = text.replace (" ", "");
             try {
                 molecule = smilesParser.parseSmiles(text);
             } catch (InvalidSmilesException e1) {

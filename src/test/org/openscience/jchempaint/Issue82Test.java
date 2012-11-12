@@ -48,14 +48,10 @@ public class Issue82Test extends AbstractAppletTest {
 		pane.get2DHub().mouseDrag(200, 100, 300, 100);
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
-		try {
-			pane.get2DHub().mouseClickedUp(300, 100);
-			pane.get2DHub().updateView();
-			applet.panel("renderpanel").robot.waitForIdle();
-		} catch (Exception e) 
-		{
-			Assert.fail();
-		}
+
+		pane.get2DHub().mouseClickedUp(300, 100);
+		pane.get2DHub().updateView();
+		applet.panel("renderpanel").robot.waitForIdle();
 
 		int atomCount=0, bondCount=0, implicitHCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
@@ -82,14 +78,11 @@ public class Issue82Test extends AbstractAppletTest {
 		Assert.assertEquals(1, bondCount);
 		Assert.assertEquals(6, implicitHCount);
 		
-		try {
-			applet.button("undo").click();
-			pane.get2DHub().updateView();
-			applet.panel("renderpanel").robot.waitForIdle();
-		} catch (Exception e) 
-		{
-			Assert.fail();
-		}
+
+		applet.button("undo").click();
+		pane.get2DHub().updateView();
+		applet.panel("renderpanel").robot.waitForIdle();
+
 		atomCount=0; bondCount=0; implicitHCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
 			for (IAtom a : atc.atoms())

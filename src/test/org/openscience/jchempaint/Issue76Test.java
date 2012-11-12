@@ -72,12 +72,10 @@ public class Issue76Test extends AbstractAppletTest {
 		Assert.assertEquals(6, atomCount);
         Assert.assertEquals(6, bondCount);
 
-        try {
-			applet.button("undo").click();
-			pane.get2DHub().updateView();
-		} catch (Exception e) {
-			Assert.fail();
-		}
+
+		applet.button("undo").click();
+		pane.get2DHub().updateView();
+
         atomCount=0; bondCount=0;
 		for(IAtomContainer atc : pane.getChemModel().getMoleculeSet().atomContainers()) {
 			atomCount+=atc.getAtomCount();

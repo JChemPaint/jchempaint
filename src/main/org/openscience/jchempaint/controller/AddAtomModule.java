@@ -32,6 +32,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -177,12 +179,19 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
             IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
             UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-            IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
+        	IMoleculeSet prevSet = chemModelRelay.getIChemModel().getBuilder().newInstance(IMoleculeSet.class);
+        	for (IAtomContainer mol : chemModelRelay.getIChemModel().getMoleculeSet().molecules()) {
+    			IMolecule newMol = chemModelRelay.getIChemModel().getBuilder().newInstance(IMolecule.class);
+				for (IAtom atom1: mol.atoms())
+					newMol.addAtom(atom1);
+				for (IBond bond: mol.bonds())
+					newMol.addBond(bond);
+				prevSet.addMolecule(newMol);
+	        }
             IBond bond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond);
-            containerForUndoRedo.addBond(bond);
             if (factory != null && handler != null) {
-                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
-                (chemModelRelay.getIChemModel(), containerForUndoRedo, null, "Add Bond",chemModelRelay);
+                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getLoadNewModelEdit
+                (chemModelRelay.getIChemModel(), chemModelRelay, prevSet, null, chemModelRelay.getChemModel().getMoleculeSet(), null, "Add Bond");
                 handler.postEdit(undoredo);
             }
 

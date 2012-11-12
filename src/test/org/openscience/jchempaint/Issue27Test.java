@@ -2,12 +2,11 @@ package org.openscience.jchempaint;
 
 import javax.vecmath.Vector2d;
 
-import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -16,20 +15,17 @@ import org.openscience.cdk.smiles.SmilesParser;
 /**
  * @author Ralf Stephan <ralf@ark.in-berlin.de>
  *
- * Tests SMILES input of a salt, the correct model and
- * error handling (#11). Depends on cdk SF#3531612.
+ * Tests SMILES input. Depends on cdk SF#3531612.
  */
-public class Issue11Test extends AbstractAppletTest {
+public class Issue27Test extends AbstractAppletTest {
 
     @Test //(expected=CDKException.class)
-    public void testIssue11() throws Exception, InvalidSmilesException {
-        JPanelFixture jcppanel=applet.panel("appletframe");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+    public void testIssue27() throws Exception, InvalidSmilesException {
         
         SmilesParser sp = 
                 new SmilesParser(DefaultChemObjectBuilder.getInstance());
             String smiles = 
-                "[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]";
+                "C1C1";
             		
             IMolecule mol = sp.parseSmiles(smiles);
 
@@ -37,19 +33,12 @@ public class Issue11Test extends AbstractAppletTest {
             sdg.setMolecule(mol);
             sdg.generateCoordinates(new Vector2d(0, 1));
             mol = sdg.getMolecule();
-            System.out.print(mol);
-/*
-
-        jcpApplet.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
-        panel.get2DHub().updateView();
-        
-        int atomCount=0, bondCount=0;
-		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
-			atomCount+=atc.getAtomCount();
-			bondCount+=atc.getBondCount();
-		}
-		Assert.assertEquals(16, atomCount);
-        Assert.assertEquals(14, bondCount);
-*/    }
+            int nullpos = 0;
+            for (IAtom atom: mol.atoms()) {
+            	nullpos += (atom.getPoint2d() == null)? 1:0;
+            }
+            Assert.assertTrue(nullpos == 0);
+    }
 
 }
+

@@ -60,18 +60,16 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     }
 
     @Test public void testRedo(){
-        try {
-			applet.button("redo").click();
-			compare(1);
-			applet.button("redo").click();
-			compare(2);
-			applet.button("redo").click();
-			compare(3);
-			applet.button("redo").click();
-			compare(4);
-		} catch (IllegalStateException e) {
-			Assert.fail("Redo button disabled");
-		}
+
+		applet.button("redo").click();
+		compare(1);
+		applet.button("redo").click();
+		compare(2);
+		applet.button("redo").click();
+		compare(3);
+		applet.button("redo").click();
+		compare(4);
+
     }
     
     private void attachRing() {

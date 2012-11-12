@@ -376,39 +376,99 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 		  restoreModelWithBasicmol();
     }
 		
-		@Test public void testMenuSaveAsMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-			  applet.menuItem("save").click();
-			  DialogFixture dialog = applet.dialog();
-			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
-			  if(file.exists())
+	@Test public void testMenuSaveAsMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+		  applet.menuItem("save").click();
+		  DialogFixture dialog = applet.dialog();
+		  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+		  if(file.exists())
+			  file.delete();
+		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+		  combobox.setSelectedItem(combobox.getItemAt(6));
+		  JTextComponentFixture text = dialog.textBox();
+		  text.setText(file.toString());
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.click();
+		  MDLReader reader = null;
+
+		  reader = new MDLReader(new FileInputStream(file));
+
+		  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+		  JPanelFixture jcppanel=applet.panel("appletframe");
+		  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
+		  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
+	}
+	//TODO do this for all formats
+	
+	@Test public void testMenuOpenMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        if(System.getProperty("os.name").indexOf("Mac")==-1){
+			String filename = "data/chebi/ChEBI_26120.mol";
+	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+			if(file.exists())
 				  file.delete();
-			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			  combobox.setSelectedItem(combobox.getItemAt(6));
-			  JTextComponentFixture text = dialog.textBox();
-			  text.setText(file.toString());
-			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-			  okbutton.click();
-			  MDLReader reader = null;
-				try {
-					reader = new MDLReader(new FileInputStream(file));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					Assert.fail("File not found.");
-					return;
-				}
-			  IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
-			  JPanelFixture jcppanel=applet.panel("appletframe");
-			  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getAtomCount(), mol.getAtomCount());
-			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getMolecule(0).getBondCount(), mol.getBondCount());
-		}
-		//TODO do this for all formats
-		
-		@Test public void testMenuOpenMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-            if(System.getProperty("os.name").indexOf("Mac")==-1){
-    			String filename = "data/chebi/ChEBI_26120.mol";
+	        FileOutputStream fos = new FileOutputStream(file);
+	        while(ins.available()>0)
+	        	fos.write(ins.read());
+			applet.menuItem("open").click();
+			DialogFixture dialog = applet.dialog();
+			JTextComponentFixture text = dialog.textBox();
+			text.setText(file.toString());
+			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+			okbutton.click();
+	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+	        MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
+	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+	        Assert.assertNotNull(chemFile);
+	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
+	        JPanelFixture jcppanel=applet.panel("appletframe");
+	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+	        Assert.assertEquals(1, containersList.size());
+	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+	        restoreModelWithBasicmol();
+        }
+	}
+	
+	// CML i/o was disabled, buggy test commented out
+	/*
+	@Test public void testMenuOpenCml() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	    if(System.getProperty("os.name").indexOf("Mac")==-1){
+			String filename = "data/a-pinen.cml";
+	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.cml");
+			if(file.exists())
+				  file.delete();
+	        FileOutputStream fos = new FileOutputStream(file);
+	        while(ins.available()>0)
+	        	fos.write(ins.read());
+			applet.menuItem("open").click();
+			DialogFixture dialog = applet.dialog();
+			//JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+	        //combobox.setSelectedItem(combobox.getItemAt(1));
+			JTextComponentFixture text = dialog.textBox();
+			text.setText(file.toString());
+			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
+			okbutton.click();
+	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
+	        CMLReader reader = new CMLReader(ins);
+	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+	        Assert.assertNotNull(chemFile);
+	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
+	        JPanelFixture jcppanel=applet.panel("appletframe");
+	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+	        Assert.assertEquals(containersList.size(), containersList.size());
+	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
+	        restoreModelWithBasicmol();
+	    }
+	}*/
+
+	@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+          if(System.getProperty("os.name").indexOf("Mac")==-1){
+    			String filename = "data/smiles.smi";
     	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-    	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+    	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.smi");
     			if(file.exists())
     				  file.delete();
     	        FileOutputStream fos = new FileOutputStream(file);
@@ -416,46 +476,18 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        	fos.write(ins.read());
     			applet.menuItem("open").click();
     			DialogFixture dialog = applet.dialog();
+    			//it seems the Combo selection depends on if you run test as single test or all in class, no idea why
+    			//JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter","org.openscience.jchempaint.io.JCPSaveFileFilter"));
+    	        //combobox.setSelectedItem(combobox.getItemAt(2));
     			JTextComponentFixture text = dialog.textBox();
     			text.setText(file.toString());
     			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
     			okbutton.click();
+    			DialogFixture coordsdialog = new DialogFixture(applet.robot, applet.robot.finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
+    			JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot, coordsdialog.robot.finder().find(new ButtonTextComponentMatcher("Yes")));
+    			okbuttoncoordsdialog.click();
     	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-    	        MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
-    	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
-    	        Assert.assertNotNull(chemFile);
-    	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
-    	        JPanelFixture jcppanel=applet.panel("appletframe");
-    	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-    	        Assert.assertEquals(1, containersList.size());
-    	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-    	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-    	        restoreModelWithBasicmol();
-            }
-		}
-		
-		// CML i/o was disabled, buggy test commented out
-		/*
-		@Test public void testMenuOpenCml() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		    if(System.getProperty("os.name").indexOf("Mac")==-1){
-    			String filename = "data/a-pinen.cml";
-    	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-    	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.cml");
-    			if(file.exists())
-    				  file.delete();
-    	        FileOutputStream fos = new FileOutputStream(file);
-    	        while(ins.available()>0)
-    	        	fos.write(ins.read());
-    			applet.menuItem("open").click();
-    			DialogFixture dialog = applet.dialog();
-    			//JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-    	        //combobox.setSelectedItem(combobox.getItemAt(1));
-    			JTextComponentFixture text = dialog.textBox();
-    			text.setText(file.toString());
-    			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
-    			okbutton.click();
-    	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-    	        CMLReader reader = new CMLReader(ins);
+    	        SMILESReader reader = new SMILESReader(ins);
     	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
     	        Assert.assertNotNull(chemFile);
     	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
@@ -465,87 +497,49 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
     	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
     	        restoreModelWithBasicmol();
-		    }
-		}*/
+          }
+	}
+	//TODO do this for all formats
+	
+    @Test public void testMenuTemplatesAll() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
+        applet.menuItem("pasteTemplate").click();
+        DialogFixture dialog = applet.dialog("templates");
+        JButtonFixture morphineButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
+        morphineButton.click();
+        Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
+    }
 
-		@Test public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	          if(System.getProperty("os.name").indexOf("Mac")==-1){
-        			String filename = "data/smiles.smi";
-        	        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-        	        File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.smi");
-        			if(file.exists())
-        				  file.delete();
-        	        FileOutputStream fos = new FileOutputStream(file);
-        	        while(ins.available()>0)
-        	        	fos.write(ins.read());
-        			applet.menuItem("open").click();
-        			DialogFixture dialog = applet.dialog();
-        			//it seems the Combo selection depends on if you run test as single test or all in class, no idea why
-        			//JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter","org.openscience.jchempaint.io.JCPSaveFileFilter"));
-        	        //combobox.setSelectedItem(combobox.getItemAt(2));
-        			JTextComponentFixture text = dialog.textBox();
-        			text.setText(file.toString());
-        			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
-        			okbutton.click();
-        			DialogFixture coordsdialog = new DialogFixture(applet.robot, applet.robot.finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
-        			JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot, coordsdialog.robot.finder().find(new ButtonTextComponentMatcher("Yes")));
-        			okbuttoncoordsdialog.click();
-        	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-        	        SMILESReader reader = new SMILESReader(ins);
-        	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
-        	        Assert.assertNotNull(chemFile);
-        	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
-        	        JPanelFixture jcppanel=applet.panel("appletframe");
-        	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        	        Assert.assertEquals(containersList.size(), containersList.size());
-        	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
-        	        restoreModelWithBasicmol();
-	          }
-		}
-		//TODO do this for all formats
-		
-	    @Test public void testMenuTemplatesAll() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-            restoreModelWithBasicmol();
-            applet.menuItem("pasteTemplate").click();
-            DialogFixture dialog = applet.dialog("templates");
-            JButtonFixture morphineButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Morphine")));
-            morphineButton.click();
-            Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
-            Assert.assertEquals(22,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
-	    }
-
-        @Test public void testSwitchLanguage(){
-            applet.menuItem("options").click();
-            DialogFixture dialog = applet.dialog();
-            JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
-            tabs.robot.click(tabs.component(), new Point(200,10), MouseButton.LEFT_BUTTON,1);
-            JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
-            for(int i=0;i<combobox.getItemCount();i++){
-                if(((String)combobox.getItemAt(i)).equals("German")){
-                    combobox.setSelectedIndex(i);
-                    break;
-                }
+    @Test public void testSwitchLanguage(){
+        applet.menuItem("options").click();
+        DialogFixture dialog = applet.dialog();
+        JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
+        tabs.robot.click(tabs.component(), new Point(200,10), MouseButton.LEFT_BUTTON,1);
+        JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
+        for(int i=0;i<combobox.getItemCount();i++){
+            if(((String)combobox.getItemAt(i)).equals("German")){
+                combobox.setSelectedIndex(i);
+                break;
             }
-            JButtonFixture applybutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
-            applybutton.click();
-            Assert.assertEquals("Neu", applet.menuItem("new").component().getText());
-            
-            for(int i=0;i<combobox.getItemCount();i++){
-                if(((String)combobox.getItemAt(i)).equals("American English")){
-                    combobox.setSelectedIndex(i);
-                    System.out.println("set USA");
-                    break;
-                }
+        }
+        JButtonFixture applybutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
+        applybutton.click();
+        Assert.assertEquals("Neu", applet.menuItem("new").component().getText());
+        
+        for(int i=0;i<combobox.getItemCount();i++){
+            if(((String)combobox.getItemAt(i)).equals("American English")){
+                combobox.setSelectedIndex(i);
+                System.out.println("set USA");
+                break;
             }
-
-            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
-            okbutton.click();
-            
-            Assert.assertFalse(dialog.component().isShowing());
-            Assert.assertEquals("New", applet.menuItem("new").component().getText()); // fails in test only?
         }
 
-
+        JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
+        okbutton.click();
+        
+        Assert.assertFalse(dialog.component().isShowing());
+        Assert.assertEquals("New", applet.menuItem("new").component().getText()); // fails in test only?
+    }
 
 }

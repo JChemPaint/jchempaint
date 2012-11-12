@@ -72,12 +72,14 @@ import org.openscience.jchempaint.controller.IChangeModeListener;
 import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.MoveModule;
+import org.openscience.jchempaint.controller.undoredo.IUndoListener;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
-        IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
+        IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener, IUndoListener {
 
     private static final long serialVersionUID = 7810772571955039160L;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
@@ -127,6 +129,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.add(topContainer, BorderLayout.NORTH);
 
         renderPanel.getHub().addChangeModeListener(this);
+        renderPanel.getHub().getUndoRedoHandler().addIUndoListener(this);
         renderPanel.setName("renderpanel");
         centerContainer=new JPanel();
         centerContainer.setLayout(new BorderLayout());
@@ -456,5 +459,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void setLastSecondaryButton(JComponent lastSecondaryButton) {
         this.lastSecondaryButton = lastSecondaryButton;
+    }
+    
+    // implements IUndoRedoListener
+    public void doUndo (IUndoRedoable undoredo) {
+    	super.updateUndoRedoControls();
     }
 }

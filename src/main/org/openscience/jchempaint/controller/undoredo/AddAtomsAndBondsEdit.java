@@ -4,6 +4,7 @@
  * $Revision: 13311 $
  *
  * Copyright (C) 2005-2008 Tobias Helmus, Stefan Kuhn
+ *           (C) 2010      Mark Rynbeek
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -23,14 +24,6 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -40,7 +33,10 @@ import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
- * @cdk.module controlbasic @cdk.svnrev $Revision: 13311 $
+ * Undo/Redoable Object that contains all information to reconstruct
+ * the next/previous model state in the undo chain. Condition: between
+ * state A and B may only happen additions of bonds and additions of atoms.
+ * In case of mergers following from these additions better use another handler.
  */
 public class AddAtomsAndBondsEdit implements IUndoRedoable {
 
@@ -48,11 +44,24 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	private IChemModel chemModel;
 	private IAtomContainer undoRedoContainer;
 	private String type;
-	private IChemModelRelay chemModelRelay = null;
-	private IAtomContainer containerToAddTo;
+	private IChemModelRelay chemModelRelay;
+	private IAtomContainer containerToAddTo;		// set in undo()
 	private IAtomContainer removedAtomContainer;
 
 	/**
+	 * Called from:
+		ControllerHub.addAtom (urc, null, Add Atom) 1A
+		ControllerHub.addNewBond (urc, null, Add Bond) 2A1B
+		ControllerHub.makeNewStereoBond (urc, null, Add Stereo Bond) 1A1B
+		ControllerHub.makeAllImplicitExplicit (urc, null, Make implicit Hs explicit) NANB
+		ControllerHub.addPhenyl (new ring, null, Benzene) R
+		ControllerHub.addRing (new ring, null, Ring N) R
+		AddRingModule.mouseClickedUp (urc, null, Ring N) R
+		ControllerHub.createAttachRing (new ring, null, Ring N) R
+		JChemPaint.generateModel (molecule, null, Paste) M
+		EnterElementSwingModule (new AC, null, Add Functional Group) AC
+	 * This means that removedAtomContainer is never used.
+	 *
 	 * @param chemModel
 	 * @param undoRedoContainer
 	 * @param removedAtomContainer atomContainer which has been removed from
@@ -74,12 +83,6 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 			chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
 		}
 
-		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
-		//if(removedAtomContainer!=null){
-		//    containerToAddTo.add(removedAtomContainer);
-		//    chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
-		//}
-
 		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
 			IBond bond = undoRedoContainer.getBond(i);
 			containerToAddTo.addBond(bond);
@@ -92,12 +95,6 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void undo() {
-
-		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
-		//if(removedAtomContainer!=null){
-		//    ChemModelManipulator.getRelevantAtomContainer(chemModel, removedAtomContainer.getAtom(0)).remove(removedAtomContainer);
-		//    chemModel.getMoleculeSet().addAtomContainer(removedAtomContainer);
-		//}
 
 		IBond[] bonds = new IBond[undoRedoContainer.getBondCount()];
 		int idx = 0;
