@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
@@ -71,7 +71,7 @@ public class RGroupHandler  {
 
 	
 	/**
-	 * Creates a {@link org.openscience.cdk.interfaces.IMoleculeSet} from a
+	 * Creates a {@link org.openscience.cdk.interfaces.IAtomContainerSet} from a
 	 * provided {@link org.openscience.cdk.isomorphism.matchers.IRGroupQuery).
 	 * The root structure becomes the atom container as position zero,  the
 	 * substitutes follow on position 1..n, ordered by R-group number.
@@ -80,12 +80,12 @@ public class RGroupHandler  {
 	 * @param RgroupQuery
 	 * @throws CDKException
 	 */
-	public IMoleculeSet getMoleculeSet (IChemModel chemModel) throws CDKException {
+	public IAtomContainerSet getMoleculeSet (IChemModel chemModel) throws CDKException {
 
 		if (rGroupQuery==null || rGroupQuery.getRootStructure() == null || rGroupQuery.getRootStructure().getAtomCount()==0)
 			throw new CDKException( "The R-group is empty");
 
-		IMoleculeSet moleculeSet = chemModel.getBuilder().newInstance(IMoleculeSet.class);
+		IAtomContainerSet moleculeSet = chemModel.getBuilder().newInstance(IAtomContainerSet.class);
 		moleculeSet.addAtomContainer(rGroupQuery.getRootStructure());
 		chemModel.setMoleculeSet(moleculeSet);
 		for (int rgrpNum : sortRGroupNumbers()) {
@@ -202,7 +202,7 @@ public class RGroupHandler  {
 	 * in the molecule set in the hub, possibly due to deletion or merging. 
 	 * @param moleculeSet
 	 */
-	public void cleanUpRGroup(IMoleculeSet moleculeSet){
+	public void cleanUpRGroup(IAtomContainerSet moleculeSet){
 		List<Integer> rgrpToRemove=new ArrayList<Integer>();
 		if (rGroupQuery!=null){
 			Map<Integer,RGroupList> def = rGroupQuery.getRGroupDefinitions();
@@ -233,13 +233,13 @@ public class RGroupHandler  {
 
 
 	/**
-	 * Helper method for {@link #cleanUpRGroup(IMoleculeSet)}, checks if
+	 * Helper method for {@link #cleanUpRGroup(IAtomContainerSet)}, checks if
 	 * an atom container referred to in the R-group still exists in the current
 	 * molecule set in the hub. 
 	 * @param atcRgrp
 	 * @param chemModel
 	 */
-	private boolean exists(IAtomContainer atcRgrp,IMoleculeSet moleculeSet) {
+	private boolean exists(IAtomContainer atcRgrp,IAtomContainerSet moleculeSet) {
 		int i=0;
 		for (IAtomContainer atc : moleculeSet.atomContainers()) {
 			if(atc==atcRgrp)
@@ -259,8 +259,8 @@ public class RGroupHandler  {
 	 * @param newSet molecule set with freshly created containers (but existing atoms)
 	 * @throws CDKException 
 	 */
-	public void adjustAtomContainers(IMoleculeSet newSet) throws CDKException {
-		//System.out.println("^^^ adjustAtomContainers(IMoleculeSet newSet)");
+	public void adjustAtomContainers(IAtomContainerSet newSet) throws CDKException {
+		//System.out.println("^^^ adjustAtomContainers(IAtomContainerSet newSet)");
 		boolean hasRoot=false;
 		if (rGroupQuery!=null) {
 			for (IAtomContainer newAtc : newSet.atomContainers()) {
@@ -376,7 +376,7 @@ public class RGroupHandler  {
 	/**
 	 * See restores what was saved by makeHash().
 	 */
-	public void restoreFromHash(Map<Integer,Map<Integer,Integer>> mash, IMoleculeSet mset) {
+	public void restoreFromHash(Map<Integer,Map<Integer,Integer>> mash, IAtomContainerSet mset) {
     	if(rGroupQuery!=null) {
     		int rootHash = mash.get(-1).get(0);
     		rGroupQuery.setRootStructure(findContainer(rootHash,mset));
@@ -449,7 +449,7 @@ public class RGroupHandler  {
 	 * @param mset
 	 * @return
 	 */
-    private IAtomContainer findContainer (Integer atcHash, IMoleculeSet mset) {
+    private IAtomContainer findContainer (Integer atcHash, IAtomContainerSet mset) {
     	if(atcHash!=null)
 	    	for (IAtomContainer atc : mset.atomContainers()) {
 	    		if(atc.hashCode()==atcHash)

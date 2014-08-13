@@ -27,7 +27,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.geometry.BondTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.reaction.ReactionChain;
@@ -62,7 +62,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         chemModelRelay.updateView();
         //for each molecule, we need to look if the majority of
         // its atoms are to the left or right or on the arrow
-        IMoleculeSet moleculeSet = super.chemModelRelay.getChemModel().getMoleculeSet();
+        IAtomContainerSet moleculeSet = super.chemModelRelay.getChemModel().getMoleculeSet();
         if (moleculeSet.getAtomContainerCount() == 0 || (moleculeSet.getAtomContainerCount() == 1 && moleculeSet.getAtomContainer(0).getAtomCount() == 0)) {
             return;
         }

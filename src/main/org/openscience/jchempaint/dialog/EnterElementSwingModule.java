@@ -39,14 +39,14 @@ import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.layout.AtomPlacer;
@@ -61,7 +61,7 @@ import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
 
-    private HashMap<String,IMolecule> funcgroupsmap=new HashMap<String,IMolecule>();
+    private HashMap<String,IAtomContainer> funcgroupsmap=new HashMap<String,IAtomContainer>();
     private final static RingPlacer ringPlacer = new RingPlacer();
     private String ID;
     
@@ -82,7 +82,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                         StringTokenizer st=new StringTokenizer(sb.toString());
                         String key=(String)st.nextElement();
                         String value=(String)st.nextElement();
-                        IMolecule mol = sp.parseSmiles(value);
+                        IAtomContainer mol = sp.parseSmiles(value);
                         //for some reason, smilesparser sets valencies, which we don't want in jcp
                         for(int k=0;k<mol.getAtomCount();k++){
                             mol.getAtom(k).setValency(null);
@@ -98,7 +98,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 StringTokenizer st=new StringTokenizer(sb.toString());
                 String key=(String)st.nextElement();
                 String value=(String)st.nextElement();
-                IMolecule mol = sp.parseSmiles(value);
+                IAtomContainer mol = sp.parseSmiles(value);
                 //for some reason, smilesparser sets valencies, which we don't want in jcp
                 for(int k=0;k<mol.getAtomCount();k++){
                     mol.getAtom(k).setValency(null);
@@ -137,7 +137,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 counter=1;
                 if(container==null){
                     if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
-                        chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newInstance(IMoleculeSet.class));
+                        chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newInstance(IAtomContainerSet.class));
                     chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
                     ac.getAtom(0).setPoint2d(new Point2d(0,0));
                     lastplaced = ac.getAtom(0);
@@ -185,7 +185,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
             }else if(x!=null && x.length()>0){
                 if(Character.isLowerCase(x.toCharArray()[0]))
                     x=Character.toUpperCase(x.charAt(0))+x.substring(1);
-                IsotopeFactory ifa=IsotopeFactory.getInstance(chemModelRelay.getIChemModel().getBuilder());
+                IsotopeFactory ifa=XMLIsotopeFactory.getInstance(chemModelRelay.getIChemModel().getBuilder());
                 IIsotope iso=ifa.getMajorIsotope(x);
                 if(iso!=null){
                     if(closestAtom==null){

@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElectronContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
@@ -103,7 +103,7 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getClearAllEdit(IChemModel chemModel,
-			IMoleculeSet som, IReactionSet sor, String type) {
+			IAtomContainerSet som, IReactionSet sor, String type) {
 		return new SwingClearAllEdit(chemModel, som, sor, type);
 	}
 
@@ -136,7 +136,7 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getLoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay,
-			IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom,
+			IAtomContainerSet oldsom, IReactionSet oldsor, IAtomContainerSet newsom,
 			IReactionSet newsor, String type) {
 		return new SwingLoadNewModelEdit(chemModel, relay, oldsom, oldsor, newsom, newsor, type);
 	}

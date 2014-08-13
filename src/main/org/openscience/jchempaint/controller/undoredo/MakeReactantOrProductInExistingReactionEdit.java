@@ -32,8 +32,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -87,7 +87,7 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 		    reaction.setID(reactionID);
 	        chemModel.getReactionSet().addReaction(reaction);
 		}
-		IMolecule mol=chemModel.getBuilder().newInstance(IMolecule.class,movedContainer);
+		IAtomContainer mol=chemModel.getBuilder().newInstance(IAtomContainer.class,movedContainer);
 		mol.setID(movedContainer.getID());
 		if(reactantOrProduct)
 			reaction.addReactant(mol);
@@ -95,14 +95,14 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 			reaction.addProduct(mol);
 		chemModel.getMoleculeSet().removeAtomContainer(oldContainer);
         if(chemModel.getMoleculeSet().getAtomContainerCount()==0)
-            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IMolecule.class));
+            chemModel.getMoleculeSet().addAtomContainer(chemModel.getBuilder().newInstance(IAtomContainer.class));
 	}
 
 	public void undo() {
 		if(chemModel.getMoleculeSet()==null)
-			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
+			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IAtomContainerSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(oldContainer);
-		IMoleculeSet reactantsorproducts;
+		IAtomContainerSet reactantsorproducts;
 		if(reactantOrProduct)
 			reactantsorproducts = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID).getReactants();
 		else

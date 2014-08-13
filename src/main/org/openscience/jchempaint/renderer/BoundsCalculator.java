@@ -29,7 +29,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 
@@ -39,7 +39,7 @@ import org.openscience.cdk.interfaces.IReactionSet;
 public class BoundsCalculator {
 
 	public static Rectangle2D calculateBounds(IChemModel chemModel) {
-        IMoleculeSet moleculeSet = chemModel.getMoleculeSet();
+        IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         IReactionSet reactionSet = chemModel.getReactionSet();
         Rectangle2D totalBounds = null;
         if (moleculeSet != null) {
@@ -72,8 +72,8 @@ public class BoundsCalculator {
 
     public static Rectangle2D calculateBounds(IReaction reaction) {
         // get the participants in the reaction
-        IMoleculeSet reactants = reaction.getReactants();
-        IMoleculeSet products = reaction.getProducts();
+        IAtomContainerSet reactants = reaction.getReactants();
+        IAtomContainerSet products = reaction.getProducts();
         if (reactants == null || products == null) return null;
 
         // determine the bounds of everything in the reaction
@@ -81,7 +81,7 @@ public class BoundsCalculator {
         return reactantsBounds.createUnion(calculateBounds(products));
     }
 
-    public static Rectangle2D calculateBounds(IMoleculeSet moleculeSet) {
+    public static Rectangle2D calculateBounds(IAtomContainerSet moleculeSet) {
         Rectangle2D totalBounds = new Rectangle2D.Double();
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);

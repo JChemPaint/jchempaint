@@ -31,8 +31,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
@@ -77,8 +77,8 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.removeAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IMolecule molecule = container.getBuilder().newInstance(IMolecule.class,container);
-		IMoleculeSet moleculeSet = ConnectivityChecker
+		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);
+		IAtomContainerSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
 		if (chemModelRelay.getRGroupHandler()!=null) {
@@ -101,8 +101,8 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.addAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IMolecule molecule = container.getBuilder().newInstance(IMolecule.class,container);
-		IMoleculeSet moleculeSet = ConnectivityChecker
+		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);
+		IAtomContainerSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
 		if (chemModelRelay.getRGroupHandler()!=null) {

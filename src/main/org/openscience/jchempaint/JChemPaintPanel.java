@@ -57,6 +57,7 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -338,7 +339,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     x = Character.toUpperCase(x);
                 System.out.println(x);
                 IsotopeFactory ifa;
-                ifa = IsotopeFactory.getInstance(closestAtom.getBuilder());
+                ifa = XMLIsotopeFactory.getInstance(closestAtom.getBuilder());
                 IIsotope iso = ifa.getMajorIsotope(Character.toString(x));
                 if (iso != null) {
                     relay.setSymbol(closestAtom, Character.toString(x));

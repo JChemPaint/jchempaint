@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -83,8 +83,7 @@ public class ChangeIsotopeAction extends JCPAction {
             int isotopeNumber = 0;
             try {
                 IIsotope isotope = 
-                    IsotopeFactory
-                        .getInstance(
+                    XMLIsotopeFactory.getInstance(
                                 atom.getBuilder()).getMajorIsotope(
                                 atom.getSymbol());
                 isotopeNumber = isotope.getMassNumber();

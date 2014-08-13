@@ -33,7 +33,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
@@ -184,13 +184,13 @@ public class ChainModule extends ControllerModuleAdapter {
 				chemModelRelay.getPhantoms().removeAtom(0);
 			if (merge != null)
 		    	toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
-	    	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,
+	    	chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,
 	    			chemModelRelay.getPhantoms()),
 	    			fromContainer, toContainer==fromContainer ? null : toContainer);
     	} else {
 			if (merge != null)
 		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
-	    	chemModelRelay.addFragment(getBuilder().newInstance(IMolecule.class,
+	    	chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,
 	    			chemModelRelay.getPhantoms()),
 	    			null, toContainer);
     	}

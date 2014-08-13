@@ -50,7 +50,7 @@ import javax.swing.undo.UndoableEdit;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
@@ -412,7 +412,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         } else if (position == 1) {
             // depict bruto formula
             IChemModel chemModel = hub.getIChemModel();
-            IMoleculeSet molecules = chemModel.getMoleculeSet();
+            IAtomContainerSet molecules = chemModel.getMoleculeSet();
             if (molecules != null && molecules.getAtomContainerCount() > 0) {
                 Iterator<IAtomContainer> containers = ChemModelManipulator
                         .getAllAtomContainers(chemModel).iterator();

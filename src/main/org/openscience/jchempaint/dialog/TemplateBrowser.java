@@ -58,7 +58,7 @@ import javax.swing.SwingConstants;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.jchempaint.GT;
@@ -84,8 +84,8 @@ public class TemplateBrowser extends JDialog implements ActionListener {
     private JPanel myPanel;
     private JButton yesButton;
     private JTabbedPane tabbedPane;
-    private Map<JButton, IMolecule> mols = new HashMap<JButton, IMolecule>();
-    private IMolecule chosenmolecule;
+    private Map<JButton, IAtomContainer> mols = new HashMap<JButton, IAtomContainer>();
+    private IAtomContainer chosenmolecule;
     public final static String TEMPLATES_PACKAGE = "org/openscience/jchempaint/dialog/templates";
 
     /**
@@ -93,7 +93,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
      * 
      * @return The molecule, null if cancelled.
      */
-    public IMolecule getChosenmolecule() {
+    public IAtomContainer getChosenmolecule() {
         return chosenmolecule;
     }
 
@@ -113,8 +113,8 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         bottomPanel.add(yesButton);
         myPanel.add(bottomPanel, BorderLayout.SOUTH); 
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT, JTabbedPane.WRAP_TAB_LAYOUT);
-        Map<String,List<IMolecule>> entriesMol = new TreeMap<String,List<IMolecule>>(); 
-        Map<IMolecule, String> entriesMolName = new HashMap<IMolecule, String>();
+        Map<String,List<IAtomContainer>> entriesMol = new TreeMap<String,List<IAtomContainer>>(); 
+        Map<IAtomContainer, String> entriesMolName = new HashMap<IAtomContainer, String>();
         Map<String, Icon> entriesIcon = new HashMap<String, Icon>();
         
         JPanel allPanel = new JPanel();
@@ -134,7 +134,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                 JPanel panel = new JPanel();
                 panel.setLayout(experimentLayout);
                 for(int k=0;k<entriesMol.get(key).size();k++){
-                    IMolecule cdkmol = entriesMol.get(key).get(k);
+                    IAtomContainer cdkmol = entriesMol.get(key).get(k);
                     Icon icon = entriesIcon.get(entriesMolName.get(cdkmol));
                     JButton button = new JButton();
                     if(icon!=null)
@@ -204,8 +204,8 @@ public class TemplateBrowser extends JDialog implements ActionListener {
      * @param withsubdirs     true=all of the above will be filled, false=only names in entriesMol will be filled (values in entriesMol will be empty, other maps as well, these can be passed as null).
      * @throws Exception      Problems reading directories.
      */
-    public static void createTemplatesMaps(Map<String, List<IMolecule>> entriesMol,
-            Map<IMolecule, String> entriesMolName, Map<String, Icon> entriesIcon, boolean withsubdirs) throws Exception{
+    public static void createTemplatesMaps(Map<String, List<IAtomContainer>> entriesMol,
+            Map<IAtomContainer, String> entriesMolName, Map<String, Icon> entriesIcon, boolean withsubdirs) throws Exception{
         DummyClass dummy = new DummyClass();
         URL loc = dummy.getClass().getProtectionDomain().getCodeSource().getLocation();
             try{
@@ -220,12 +220,12 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                         String restname = entry.getName().substring(new String(TEMPLATES_PACKAGE+"/").length());
                         if(restname.length()>2){
                             if(restname.indexOf("/")==restname.length()-1){
-                                entriesMol.put(restname.substring(0,restname.length()-1), new ArrayList<IMolecule>());
+                                entriesMol.put(restname.substring(0,restname.length()-1), new ArrayList<IAtomContainer>());
                             }else if(restname.indexOf("/")>-1 && withsubdirs){
                                 if(entry.getName().indexOf(".mol")>-1){
                                     InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
                                     MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.RELAXED);
-                                    IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+                                    IAtomContainer cdkmol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
                                     entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
                                     entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
                                 }else{
@@ -243,12 +243,12 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                     if(file.listFiles()[i].isDirectory()){
                         File dir = file.listFiles()[i];
                         if(!dir.getName().startsWith(".")) { 
-                            entriesMol.put(dir.getName(), new ArrayList<IMolecule>());
+                            entriesMol.put(dir.getName(), new ArrayList<IAtomContainer>());
                             if(withsubdirs){
                                 for(int k=0;k<dir.list().length;k++){
                                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
                                         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
-                                        IMolecule cdkmol = (IMolecule)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+                                        IAtomContainer cdkmol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
                                         entriesMol.get(dir.getName()).add(cdkmol);
                                         entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
                                     }else{

@@ -25,7 +25,7 @@ package org.openscience.jchempaint.controller.undoredo;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
@@ -38,14 +38,14 @@ public class LoadNewModelEdit implements IUndoRedoable {
     private static final long serialVersionUID = -9022673628051651034L;
     
     private IChemModel chemModel;
-	private IMoleculeSet oldsom;
+	private IAtomContainerSet oldsom;
 	private IReactionSet oldsor;
-	private IMoleculeSet newsom;
+	private IAtomContainerSet newsom;
 	private IReactionSet newsor;
 	private String type;
 	private IChemModelRelay chemModelRelay = null;
 
-	public LoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay, IMoleculeSet oldsom, IReactionSet oldsor, IMoleculeSet newsom, IReactionSet newsor, String type) {
+	public LoadNewModelEdit(IChemModel chemModel, IChemModelRelay relay, IAtomContainerSet oldsom, IReactionSet oldsor, IAtomContainerSet newsom, IReactionSet newsor, String type) {
 		this.chemModel = chemModel;
 		this.newsom=newsom;
 		this.newsor=newsor;

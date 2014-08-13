@@ -37,6 +37,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
@@ -112,7 +113,7 @@ public class ChangeAtomSymbolAction extends JCPAction
                         symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
                     IsotopeFactory ifa;
                     try {
-                        ifa = IsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
+                        ifa = XMLIsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
                         IIsotope iso=ifa.getMajorIsotope(symbol);
                         if(iso==null){
                             JOptionPane.showMessageDialog(jcpPanel, GT._("No valid element symbol entered"), GT._("Invalid symbol"), JOptionPane.WARNING_MESSAGE);
@@ -151,7 +152,7 @@ public class ChangeAtomSymbolAction extends JCPAction
                     // configure the atom, so that the atomic number matches the symbol
                     try
                     {
-                        IsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
+                        XMLIsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
                     } catch (Exception exception)
                     {
                         logger.error("Error while configuring atom");

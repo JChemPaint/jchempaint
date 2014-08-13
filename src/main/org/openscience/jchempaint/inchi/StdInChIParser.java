@@ -38,7 +38,7 @@ import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
@@ -171,7 +171,7 @@ public class StdInChIParser extends StdInChITool{
 
             // Generate coordinates for the atom container
             StructureDiagramGenerator sdg =
-                new StructureDiagramGenerator((IMolecule)atc);
+                new StructureDiagramGenerator((IAtomContainer)atc);
             sdg.generateCoordinates();
 
 

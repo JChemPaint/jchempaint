@@ -28,6 +28,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
@@ -52,9 +53,8 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
         Integer majorIsotopeNumber = null;
         if(atom.getMassNumber()!=null){
             try {
-    			IIsotope isotope = IsotopeFactory
-                    .getInstance(
-                            atom.getBuilder()).getMajorIsotope(
+    			IIsotope isotope = XMLIsotopeFactory.getInstance(
+                        atom.getBuilder()).getMajorIsotope(
                             atom.getSymbol());
     			if(isotope!=null)
     				majorIsotopeNumber = isotope.getMassNumber();
@@ -132,7 +132,7 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
         if (massNumber != null) {
             try {
                 IsotopeFactory factory = 
-                    IsotopeFactory.getInstance(ac.getBuilder());
+                    XMLIsotopeFactory.getInstance(ac.getBuilder());
                 if(factory.getMajorIsotope(atom.getSymbol())!=null){
 	                int majorMass = 
 	                    factory.getMajorIsotope(atom.getSymbol()).getMassNumber();

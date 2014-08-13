@@ -52,14 +52,14 @@ import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
@@ -212,7 +212,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
             try {
                 SmilesParser sp = new SmilesParser(DefaultChemObjectBuilder
                         .getInstance());
-                IMolecule mol = sp.parseSmiles(smiles);
+                IAtomContainer mol = sp.parseSmiles(smiles);
 
                 //for some reason, smilesparser sets valencies, which we don't want in jcp
                 for(int i=0;i<mol.getAtomCount();i++){
@@ -228,7 +228,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 IChemModel chemModel = DefaultChemObjectBuilder.getInstance()
                         .newInstance(IChemModel.class);
                 chemModel.setMoleculeSet(DefaultChemObjectBuilder.getInstance()
-                        .newInstance(IMoleculeSet.class));
+                        .newInstance(IAtomContainerSet.class));
                 chemModel.getMoleculeSet().addAtomContainer(mol);
                 theJcpp.setChemModel(chemModel);
 				
@@ -487,7 +487,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         newmol.append(mol.substring(s));
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(newmol
                 .toString()));
-        IMolecule cdkmol = (IMolecule) reader.read(DefaultChemObjectBuilder
+        IAtomContainer cdkmol = (IAtomContainer) reader.read(DefaultChemObjectBuilder
                 .getInstance().newInstance(IAtomContainer.class));
         JChemPaint.generateModel(theJcpp, cdkmol, false,false);
         theJcpp.get2DHub().updateView();
@@ -582,7 +582,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         IAtomContainer ac = chemModel.getMoleculeSet().getBuilder()
                 .newInstance(IAtomContainer.class);
         if(atom!=-1){
-            ac.addAtom(chemModel.getMoleculeSet().getMolecule(0).getAtom(atom));
+            ac.addAtom(chemModel.getMoleculeSet().getAtomContainer(0).getAtom(atom));
             rendererModel.setExternalSelectedPart(ac);
         }else{
             rendererModel.setExternalSelectedPart(null);
@@ -631,7 +631,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
         try {
             if (implicitHs > 0)
-                wholeModel.addIsotope(IsotopeFactory.getInstance(
+                wholeModel.addIsotope(XMLIsotopeFactory.getInstance(
                         wholeModel.getBuilder()).getMajorIsotope(1),
                         implicitHs);
         } catch (IOException e) {

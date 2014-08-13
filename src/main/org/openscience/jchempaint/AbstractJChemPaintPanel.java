@@ -556,7 +556,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             // into the undo stack
             // ClearAllEdit coa = null;
             // TODO undo redo missing coa = new
-            // ClearAllEdit(this.getChemModel(),(IMoleculeSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
+            // ClearAllEdit(this.getChemModel(),(IAtomContainerSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
             // this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
             return JOptionPane.YES_OPTION;
         } else {
