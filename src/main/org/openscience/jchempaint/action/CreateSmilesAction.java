@@ -93,8 +93,8 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule molecule = new Molecule(container);
-        	smiles += generator.createSMILES(molecule);
+        	IAtomContainer molecule = new AtomContainer(container);
+        	smiles += generator.create(molecule);
             //valencies are set when creating smiles, which we don't want in jcp
             for(int i=0;i<container.getAtomCount();i++){
                 container.getAtom(i).setValency(null);
@@ -113,17 +113,13 @@ public class CreateSmilesAction extends JCPAction
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
         	IAtomContainer container = (IAtomContainer)containers.next();
-        	Molecule moleculewithh = new Molecule(container);
+        	IAtomContainer moleculewithh = new AtomContainer(container);
         	CDKHydrogenAdder.getInstance(moleculewithh.getBuilder()).addImplicitHydrogens(moleculewithh);
         	AtomContainerManipulator.convertImplicitToExplicitHydrogens(moleculewithh);
         	double bondLength = GeometryTools.getBondLengthAverage(container);
         	new HydrogenPlacer().placeHydrogens2D(moleculewithh, bondLength);
         	boolean[] bool=new boolean[moleculewithh.getBondCount()];
-        	for(int i=0;i<bool.length;i++){
-        		if (generator.isValidDoubleBondConfiguration(moleculewithh, moleculewithh.getBond(i)))
-        			bool[i]=true;
-        	}
-        	chiralsmiles += generator.createChiralSMILES(moleculewithh,bool);
+        	chiralsmiles += generator.create(moleculewithh);
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container);
             CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(container
                     .getBuilder());

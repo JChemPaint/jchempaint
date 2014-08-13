@@ -53,6 +53,7 @@ import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.SMILESWriter;
 import org.openscience.cdk.io.listener.SwingGUIListener;
+import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
@@ -348,7 +349,7 @@ public class SaveAsAction extends JCPAction
         cow = new CMLWriter(sw);
         if (cow != null && askIOSettings())
         {
-            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
+            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
         }
         cow.write(object);
         cow.close();
@@ -411,7 +412,7 @@ public class SaveAsAction extends JCPAction
         cow = new SMILESWriter(new FileWriter(outFile));
         if (cow != null && askIOSettings())
         {
-            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
+            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
         }
         Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         IAtomContainerSet som = model.getBuilder().newInstance(IAtomContainerSet.class);
@@ -438,7 +439,7 @@ public class SaveAsAction extends JCPAction
         cow = new CDKSourceCodeWriter(new FileWriter(outFile));
         if (cow != null && askIOSettings())
         {
-            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, 4));
+            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
         }
         Iterator containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {

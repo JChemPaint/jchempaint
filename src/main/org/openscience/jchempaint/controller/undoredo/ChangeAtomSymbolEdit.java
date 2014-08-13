@@ -29,6 +29,7 @@ import java.io.OptionalDataException;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
+import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.jchempaint.controller.IChemModelRelay;
