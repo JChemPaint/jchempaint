@@ -88,6 +88,9 @@ public class CreateSmilesAction extends JCPAction
 		return getChiralSmiles(model);
 	}
 
+    /**
+     * @deprecated no such thing as chiral SMILES use {@link #getSmiles} for 'a' SMILES.
+     */
     @Deprecated
 	public static String getChiralSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         
