@@ -555,7 +555,7 @@ public class JChemPaint {
             sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
             try {
                 sdg.setMolecule(molecule);
-                sdg.generateCoordinates(new Vector2d(0, 1));
+                sdg.generateCoordinates();
                 molecule = sdg.getMolecule();
             } catch (Exception exc) {
                 JOptionPane.showMessageDialog(chemPaintPanel, GT._("Structure could not be generated"));
