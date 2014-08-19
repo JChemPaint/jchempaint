@@ -69,13 +69,11 @@ public class CreateSmilesAction extends JCPAction
 			dialog = new TextViewDialog(frame, "SMILES", null, false, 40, 2);
 			dialog.setName("smilestextdialog");
 		}
-		String smiles = "";
-		String chiralsmiles ="";
 		try
 		{
-			smiles=getSmiles(jcpPanel.getChemModel());
-			chiralsmiles=getChiralSmiles(jcpPanel.getChemModel());
-			dialog.setMessage(GT._("Generated SMILES:"), "SMILES: "+smiles+System.getProperty("line.separator")+"chiral SMILES: "+chiralsmiles);
+			String smiles = getSmiles(jcpPanel.getChemModel());
+			dialog.setMessage(GT._("Generated SMILES:"),
+                              "SMILES: " + smiles);
 		} catch (Exception exception)
 		{
 			String message = GT._("Error while creating SMILES:") + " " + exception.getMessage();
@@ -87,52 +85,22 @@ public class CreateSmilesAction extends JCPAction
 	}
 	
 	public static String getSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
-		String smiles="";
-        SmilesGenerator generator = new SmilesGenerator();
-        generator.setUseAromaticityFlag(true);
-        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-        while (containers.hasNext()) {
-        	IAtomContainer container = (IAtomContainer)containers.next();
-        	IAtomContainer molecule = new AtomContainer(container);
-        	smiles += generator.create(molecule);
-            //valencies are set when creating smiles, which we don't want in jcp
-            for(int i=0;i<container.getAtomCount();i++){
-                container.getAtom(i).setValency(null);
-            }
-        	if (containers.hasNext()) {
-        		smiles += ".";
-        	}
-        }
-        return smiles;
+		return getChiralSmiles(model);
 	}
 
+    @Deprecated
 	public static String getChiralSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-		String chiralsmiles="";
-        SmilesGenerator generator = new SmilesGenerator();
-        generator.setUseAromaticityFlag(true);
-        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
-        while (containers.hasNext()) {
-        	IAtomContainer container = (IAtomContainer)containers.next();
-        	IAtomContainer moleculewithh = new AtomContainer(container);
-        	CDKHydrogenAdder.getInstance(moleculewithh.getBuilder()).addImplicitHydrogens(moleculewithh);
-        	AtomContainerManipulator.convertImplicitToExplicitHydrogens(moleculewithh);
-        	double bondLength = GeometryTools.getBondLengthAverage(container);
-        	new HydrogenPlacer().placeHydrogens2D(moleculewithh, bondLength);
-        	boolean[] bool=new boolean[moleculewithh.getBondCount()];
-        	chiralsmiles += generator.create(moleculewithh);
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container);
-            CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(container
-                    .getBuilder());
-            hAdder.addImplicitHydrogens(container);
-            //valencies are set when creating smiles, which we don't want in jcp
-            for(int i=0;i<container.getAtomCount();i++){
-                container.getAtom(i).setValency(null);
-            }
-        	if (containers.hasNext()) {
-        		chiralsmiles += ".";
-        	}
+        
+        SmilesGenerator smigen = SmilesGenerator.isomeric();
+        
+		StringBuilder sb = new StringBuilder();
+        for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(model)) {
+            if (sb.length() > 0)
+                sb.append('.');
+            sb.append(smigen.create(container));
         }
-        return chiralsmiles;
+        
+        return sb.toString();
 	}
 
 }
