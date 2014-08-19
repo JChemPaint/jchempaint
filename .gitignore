@@ -8,6 +8,4 @@ MANIFEST.MF
 .classpath
 .project
 build.xml
-po/
-po/classes/app/i18n/
 maven/jchempaint-nodeps/target/

@@ -150,6 +150,46 @@
 
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.gettext-commons</groupId>
+                <artifactId>gettext-maven-plugin</artifactId>
+                <version>1.2.4</version>
+                <executions>
+                    <execution>
+                        <id>convert-po-class</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>dist</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <poDirectory>${basedir}/po</poDirectory>
+                    <targetBundle>app.i18n.Messages</targetBundle>
+                    <outputFormat>class</outputFormat>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.googlecode.gettext-commons</groupId>
+                        <artifactId>gettext-commons</artifactId>
+                        <version>0.9.8</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
     <repositories>
         <repository>
             <id>ebi-repo</id>
