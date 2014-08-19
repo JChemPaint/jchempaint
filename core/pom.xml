@@ -1,7 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-       
+
     <parent>
         <groupId>org.openscience.jchempaint</groupId>
         <artifactId>jchempaint</artifactId>
@@ -13,8 +14,15 @@
     <name>jchempaint-core</name>
 
     <packaging>jar</packaging>
-    
+
     <dependencies>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.2</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-annotation</artifactId>
@@ -62,6 +70,11 @@
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-libiocml</artifactId>
+            <version>1.5.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-isomorphism</artifactId>
             <version>1.5.8-SNAPSHOT</version>
         </dependency>
@@ -96,8 +109,22 @@
             <artifactId>cdk-extra</artifactId>
             <version>1.5.8-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-legacy</artifactId>
+            <version>1.5.8-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.iupac</groupId>
+            <artifactId>nestedvm-inchi</artifactId>
+            <version>1.0.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/dep/inchi-1.0.2.jar</systemPath>
+        </dependency>
+
     </dependencies>
-    
+
     <repositories>
         <repository>
             <id>ebi-repo</id>
@@ -108,7 +135,7 @@
             <url>www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots</url>
         </repository>
     </repositories>
-    
+
 </project>
 
 
