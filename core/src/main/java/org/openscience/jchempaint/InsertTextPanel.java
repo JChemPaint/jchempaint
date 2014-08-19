@@ -163,15 +163,6 @@ public class InsertTextPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Invalid SMILES specified"));
                 return null;
             }
-            try {
-                molecule = new FixBondOrdersTool().kekuliseAromaticRings(molecule);
-			} catch (CDKException e) {
-				e.printStackTrace();//we do nothing if this fails
-			}
-            //for some reason, smilesparser sets valencies, which we don't want in jcp
-            for(int i=0;i<molecule.getAtomCount();i++){
-            	molecule.getAtom(i).setValency(null);
-            }
         }
 
         // OK, we have a valid molecule, save it and show it
