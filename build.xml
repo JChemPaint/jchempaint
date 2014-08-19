@@ -220,12 +220,12 @@
             </classpath>
 
          </javac>
-        <copy file="lib-licenses.txt" todir="${src}/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
-        <copy file="${cdk.dir}/doc/lgpl.license" todir="${src}/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
-        <copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="${src}/main/org/openscience/jchempaint/resources"></copydir>
+        <copy file="lib-licenses.txt" todir="core/src/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
+        <copy file="${cdk.dir}/doc/lgpl.license" todir="core/src/main/org/openscience/jchempaint/resources/userhelp_jcp"/>
+        <copydir dest="${dist-classes}/org/openscience/jchempaint/resources" src="core/src/main/org/openscience/jchempaint/resources"></copydir>
         <replace file="${dist-classes}/org/openscience/jchempaint/resources/JChemPaintResources.properties" token="@@@" value="${jcp.version}"/>
         <replace file="${dist-classes}/org/openscience/jchempaint/resources/userhelp_jcp/license.html" token="@@@" value="${jcp.version}"/>
-        <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="${src}/main/org/openscience/jchempaint/dialog/templates"></copydir>
+        <copydir dest="${dist-classes}/org/openscience/jchempaint/dialog/templates" src="core/src/main/org/openscience/jchempaint/dialog/templates"></copydir>
         <delete file="${dist-classes}/org/openscience/jchempaint/dialog/templates/DummyClass.java"></delete>
         <copy todir="${dist-classes}">
             <fileset dir="${po-classes}"/>
@@ -698,7 +698,7 @@
                 </fileset>
             </classpath>
             <taglet name="JCPParamsTaglet" path="${cdk.lib}/jar/xom-1.1.jar:${javadoc.dir}:${dist-classes}" />
-            <packageset dir="${src}/main" defaultexcludes="yes">
+            <packageset dir="core/src/main" defaultexcludes="yes">
                 <include name="org/openscience/jchempaint/**" />
             </packageset>
         </javadoc>
