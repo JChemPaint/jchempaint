@@ -47,7 +47,6 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -57,7 +56,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
@@ -88,7 +86,7 @@ import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.controller.RemoveModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
-import org.openscience.jchempaint.inchi.StdInChIParser;
+import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -320,7 +318,7 @@ public class CopyPasteAction extends JCPAction{
                     supported(transfer, DataFlavor.stringFlavor)) {
                 try{
                     if (content.toLowerCase().indexOf("inchi")>-1 ) { 
-                        toPaste = (IAtomContainer) new StdInChIParser().parseInchi(content);
+                        toPaste = InChITool.parseInChI(content);
                     }
                     else {    
                         SmilesParser sp = new SmilesParser(

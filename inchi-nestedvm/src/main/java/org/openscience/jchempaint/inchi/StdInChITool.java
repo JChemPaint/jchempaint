@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 /**
  * Abstract class offering common functionality when 
  * invoking {@linkplain org.iupac.StdInChI}.
@@ -61,7 +62,7 @@ abstract class StdInChITool {
     /**
      * Helper method for InChi conversion, gets rid of temporary files.
      * @param fileName
-     * @throws IOException
+     * @throws java.io.IOException
      */
     void deleteFileIfExists(String fileName) throws IOException {
         File f = new File(fileName);
@@ -78,7 +79,7 @@ abstract class StdInChITool {
      * Helper method to distill error message from StdInChI log file.
      * @param tmpLogFile
      * @return
-     * @throws IOException
+     * @throws java.io.IOException
      */
     String getErrorMsg (String tmpLogFile) throws IOException {
 

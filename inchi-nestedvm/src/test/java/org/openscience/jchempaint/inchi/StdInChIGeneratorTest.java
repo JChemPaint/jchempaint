@@ -1,19 +1,18 @@
 package org.openscience.jchempaint.inchi;
 
-import javax.vecmath.Point2d;
-import javax.vecmath.Point3d;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.CDKTestCase;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class StdInChIGeneratorTest extends CDKTestCase {
+import javax.vecmath.Point2d;
+import javax.vecmath.Point3d;
+
+public class StdInChIGeneratorTest {
     
     protected StdInChIGenerator gen = new StdInChIGenerator();
 

@@ -33,7 +33,7 @@ import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
 import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.inchi.InChI;
-import org.openscience.jchempaint.inchi.StdInChIGenerator;
+import org.openscience.jchempaint.inchi.InChITool;
 
 /**
  * Creates InChI(s) from the current model, to be displayed to user
@@ -75,7 +75,7 @@ public class CreateInChIAction extends JCPAction {
                             + eol);
                 }
                 try {
-                    InChI inchi = new StdInChIGenerator().generateInchi(container);
+                    InChI inchi = InChITool.generateInchi(container);
                     dialogText.append(inchi.getInChI() + eol);
                     dialogText.append(inchi.getAuxInfo()+ eol);
                     dialogText.append(inchi.getKey() + eol);

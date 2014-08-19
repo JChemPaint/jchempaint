@@ -23,6 +23,16 @@
  */
 package org.openscience.jchempaint.inchi;
 
+import org.iupac.StdInChI;
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.ChemFile;
+import org.openscience.cdk.ChemObject;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -31,17 +41,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.iupac.StdInChI;
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.ChemFile;
-import org.openscience.cdk.ChemObject;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 
 /**
  * Parses an InChI string into an IAtomContainer using a C->Java conversion 

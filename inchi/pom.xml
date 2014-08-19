@@ -19,30 +19,13 @@
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-core</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
             <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-sdg</artifactId>
+            <artifactId>cdk-test</artifactId>
             <version>1.5.8-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-io</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.iupac</groupId>
-            <artifactId>nestedvm-inchi</artifactId>
-            <version>1.0.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dep/inchi-1.0.2.jar</systemPath>
         </dependency>
     </dependencies>
 

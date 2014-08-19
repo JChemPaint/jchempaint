@@ -23,6 +23,7 @@
     <modules>
         <module>core</module>
         <module>inchi</module>
+        <module>inchi-nestedvm</module>
     </modules>
 
 </project>

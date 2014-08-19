@@ -53,4 +53,9 @@ public class InChI {
         this.key = key;
     }
     
+    public static InChI create(String str) {
+        InChI inchi = new InChI();
+        inchi.setInChI(str);
+        return inchi;
+    }    
 }

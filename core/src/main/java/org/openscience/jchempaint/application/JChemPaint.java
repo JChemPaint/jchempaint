@@ -70,7 +70,6 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
@@ -95,7 +94,7 @@ import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.dialog.WaitDialog;
-import org.openscience.jchempaint.inchi.StdInChIReader;
+import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.io.FileHandler;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
@@ -275,7 +274,7 @@ public class JChemPaint {
         try {
         	ISimpleChemObjectReader cor=null;
             if(url.endsWith("txt")) {
-                chemModel = StdInChIReader.readInChI(fileURL);
+                chemModel = InChITool.readInChI(fileURL);
             }
             else {
                 cor = FileHandler.createReader(fileURL, url,type);

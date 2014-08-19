@@ -60,7 +60,8 @@ import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.inchi.StdInChIGenerator;
+import org.openscience.jchempaint.inchi.InChI;
+import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.io.IJCPFileFilter;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.io.JCPSaveFileFilter;
@@ -370,22 +371,23 @@ public class SaveAsAction extends JCPAction
             outFile = new File(fileName);
         }
         BufferedWriter out = new BufferedWriter(new FileWriter(outFile));
-        StdInChIGenerator inchiGen = new StdInChIGenerator();
 
         String eol=System.getProperty("line.separator");
         if (object instanceof IChemModel) {
             IAtomContainerSet mSet = ((IChemModel) object).getMoleculeSet();
             for (IAtomContainer atc : mSet.atomContainers()) {
-                out.write(inchiGen.generateInchi(atc).getInChI()+eol);
-                out.write(inchiGen.generateInchi(atc).getAuxInfo()+eol);
-                out.write(inchiGen.generateInchi(atc).getKey()+eol);
+                InChI inchi = InChITool.generateInchi(atc);
+                out.write(inchi.getInChI()+eol);
+                out.write(inchi.getAuxInfo()+eol);
+                out.write(inchi.getKey()+eol);
             }
         }
         else if (object instanceof IAtomContainer) {
             IAtomContainer atc = (IAtomContainer) object;
-            out.write(inchiGen.generateInchi(atc).getInChI()+eol);
-            out.write(inchiGen.generateInchi(atc).getAuxInfo()+eol);
-            out.write(inchiGen.generateInchi(atc).getKey()+eol);
+            InChI inchi = InChITool.generateInchi(atc);
+            out.write(inchi.getInChI()+eol);
+            out.write(inchi.getAuxInfo()+eol);
+            out.write(inchi.getKey()+eol);
         }
         out.close();
         return outFile;

@@ -23,6 +23,11 @@
  */
 package org.openscience.jchempaint.inchi;
 
+import org.iupac.StdInChI;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLV2000Writer;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -35,11 +40,6 @@ import java.io.PrintStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.iupac.StdInChI;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLV2000Writer;
 
 /**
  * Generates InChI data using a C->Java conversion of the InChI command 
@@ -84,12 +84,12 @@ public class StdInChIGenerator extends StdInChITool {
     /**
      * Generate InChI for a given atom container.<BR> 
      * Take current user's home directory as temporary dir.<BR>
-     * Overloads {@linkplain #generateInchi(IAtomContainer, String)}
+     * Overloads {@linkplain #generateInchi(org.openscience.cdk.interfaces.IAtomContainer, String)}
      *  
      * @param molfile
      * @return InChI generated from Molfile
-     * @throws IOException
-     * @throws CDKException 
+     * @throws java.io.IOException
+     * @throws org.openscience.cdk.exception.CDKException 
      */
     public InChI generateInchi(IAtomContainer atc) 
     throws IOException, CDKException {
@@ -107,8 +107,8 @@ public class StdInChIGenerator extends StdInChITool {
      * @param molfile
      * @param workingDir working directory including a final slash
      * @return InChI generated from Molfile
-     * @throws IOException
-     * @throws CDKException 
+     * @throws java.io.IOException
+     * @throws org.openscience.cdk.exception.CDKException 
      */
     public InChI generateInchi(IAtomContainer atc, String workingDir) 
        throws IOException, CDKException {

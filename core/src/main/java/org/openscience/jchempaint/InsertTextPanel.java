@@ -53,11 +53,12 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.inchi.StdInChIParser;
+import org.openscience.jchempaint.inchi.InChI;
+import org.openscience.jchempaint.inchi.InChIHandler;
+import org.openscience.jchempaint.inchi.InChITool;
 
 /**
  * A panel containing a text field and button to directly insert SMILES or InChI's
@@ -139,8 +140,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         if (text.startsWith("InChI")) { // handle it as an InChI
             try {
 
-                StdInChIParser parser = new StdInChIParser();
-                IAtomContainer atomContainer = parser.parseInchi(text);
+                IAtomContainer atomContainer = InChITool.parseInChI(text);
                 molecule = atomContainer.getBuilder().newInstance(IAtomContainer.class,atomContainer);
                 
                 
