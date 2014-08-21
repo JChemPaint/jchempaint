@@ -37,7 +37,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
  * @cdk.module rendercontrol

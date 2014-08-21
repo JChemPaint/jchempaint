@@ -18,45 +18,51 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements;
+package org.openscience.cdk.renderer.elements;
 
 import java.awt.Color;
 
 /**
- * @cdk.module renderbasic
+ * @cdk.module render
  */
-public class RectangleElement implements IRenderingElement {
-    
-    public final double x;
-    public final double y;
-    public final double width;
-    public final double height;
-    public final boolean filled;
-    public final Color color;
+public class TextElement implements IRenderingElement {
 
-    
-    public RectangleElement(
-            double x1, double y1, double x2, double y2, Color color) {
-        
-        this(x1, y1, x2 - x1, y2 - y1, false, color);
-    }
-    
-    public RectangleElement(double x,
-                            double y, 
-                            double width,
-                            double height,
-                            boolean filled,
-                            Color color) {
+	public final double x;
+	public final double y;
+	public final String text;
+	public final Color color;
+	public final Color backColor;
+	public final Double extraZoom;
+
+    public TextElement(double x, double y, String text, Color color, Color backColor) {
+        this.backColor = backColor;
         this.x = x;
-        this.y =y;
-        this.width = width;
-        this.height = height;
-        this.filled = filled;
+        this.y = y;
+        this.text = text;
         this.color = color;
+        this.extraZoom=null;
     }
-    
-    public void accept(IRenderingVisitor v) {
-        v.visit(this);
+
+    public TextElement(double x, double y, String text, Color color) {
+		this.x = x;
+		this.y = y;
+		this.text = text;
+		this.color = color;
+		this.backColor = null;
+        this.extraZoom=null;
     }
+
+    public TextElement(double x, double y, String text, Color color, double extraZoom) {
+		this.x = x;
+		this.y = y;
+		this.text = text;
+		this.color = color;
+		this.backColor = null;
+        this.extraZoom=extraZoom;
+    }
+
+	public void accept(IRenderingVisitor v) {
+		v.visit(this);
+	}
 
 }

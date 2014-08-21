@@ -19,26 +19,14 @@
 package org.openscience.jchempaint.renderer.generators;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
-import org.openscience.jchempaint.renderer.elements.TextGroupElement;
-import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.TextGroupElement;
 
 /**
  * A generator for tooltips shown when hovering over an atom

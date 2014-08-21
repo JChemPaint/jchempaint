@@ -32,11 +32,11 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
-import org.openscience.jchempaint.renderer.elements.AtomSymbolElement;
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.OvalElement;
-import org.openscience.jchempaint.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.elements.AtomSymbolElement;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.OvalElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
 
 /**
  * @cdk.module renderbasic

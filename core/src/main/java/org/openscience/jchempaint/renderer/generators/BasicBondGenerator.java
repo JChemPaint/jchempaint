@@ -38,14 +38,13 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparatorBy2DCenter;
-import org.openscience.cdk.tools.manipulator.RingSetManipulator;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.LineElement;
-import org.openscience.jchempaint.renderer.elements.WedgeLineElement;
-import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
-import org.openscience.jchempaint.renderer.elements.WedgeLineElement.Direction;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.LineElement;
+import org.openscience.cdk.renderer.elements.WedgeLineElement;
+import org.openscience.cdk.renderer.elements.WigglyLineElement;
+import org.openscience.cdk.renderer.elements.WedgeLineElement.Direction;
 
 /**
  * @cdk.module renderbasic

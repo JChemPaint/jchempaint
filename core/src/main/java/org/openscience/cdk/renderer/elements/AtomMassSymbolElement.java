@@ -18,32 +18,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements;
+package org.openscience.cdk.renderer.elements;
 
 import java.awt.Color;
 
-
 /**
- * @cdk.module renderbasic
+ * @cdk.module renderextra
  */
-public class AtomSymbolElement extends TextElement {
+public class AtomMassSymbolElement extends AtomSymbolElement {
 
-	public final int formalCharge;
-	public final int hydrogenCount;
-	public final int alignment;
+	public final int atomMassNumber;
 
-	public AtomSymbolElement(double x, double y, String symbol,
-			Integer formalCharge, Integer hydrogenCount, int alignment, Color color) {
-		super(x, y, symbol, color);
-		this.formalCharge = formalCharge != null ? formalCharge : -1;
-		this.hydrogenCount = hydrogenCount != null ? hydrogenCount : -1;
-		this.alignment = alignment;
+	public AtomMassSymbolElement(double x, double y, String symbol,
+			Integer formalCharge, Integer hydrogenCount, int alignment,
+			Integer atomMass, Color color) {
+		super(x, y, symbol, formalCharge, hydrogenCount, alignment, color);
+		this.atomMassNumber = atomMass != null ? atomMass : -1;
 	}
-
-	@Override
-	public void accept(IRenderingVisitor v) {
-	    
-	    v.visit( this );
-	}
-
 }

@@ -1,4 +1,4 @@
-package org.openscience.jchempaint.renderer.elements;
+package org.openscience.cdk.renderer.elements;
 
 import java.awt.Color;
 

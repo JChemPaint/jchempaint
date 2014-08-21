@@ -26,8 +26,8 @@ import java.util.ArrayList;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.PathElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.PathElement;
 
 /**
  * @cdk.module rendercontrol

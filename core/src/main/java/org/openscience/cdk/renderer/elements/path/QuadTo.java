@@ -21,16 +21,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements.path;
+package org.openscience.cdk.renderer.elements.path;
+
+import javax.vecmath.Point2d;
 
 /**
  * @author Arvid
  * @cdk.module renderbasic
  */
-public enum Type {
-    MoveTo,
-    LineTo,
-    QuadTo,
-    CubicTo,
-    Close;
+public class QuadTo extends PathElement {
+
+    Point2d p1;
+    Point2d p2;
+
+    public QuadTo(Point2d p1, Point2d p2) {
+
+        super( Type.QuadTo );
+        this.p1 = p1;
+        this.p2 = p2;
+    }
+    
+    @Override
+    public float[] points() {
+     return new float[] { (float) p1.x,
+                          (float) p1.y,
+                          (float) p2.x,
+                          (float) p2.y};
+    }
 }

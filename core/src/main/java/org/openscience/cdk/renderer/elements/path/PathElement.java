@@ -21,26 +21,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements.path;
-
-import javax.vecmath.Point2d;
+package org.openscience.cdk.renderer.elements.path;
 
 /**
  * @author Arvid
  * @cdk.module renderbasic
  */
-public class LineTo extends PathElement {
-
-    Point2d point;
-
-    public LineTo(Point2d point) {
-
-        super( Type.LineTo );
-        this.point = point;
+public abstract class PathElement {
+    Type type;
+    
+    public PathElement( Type type) {
+        this.type = type;
     }
     
-    @Override
-    public float[] points() {
-        return new float[]{ (float) point.x, (float) point.y};
-    }
+    public Type type() { return type;}
+    
+   public abstract float[] points();
 }

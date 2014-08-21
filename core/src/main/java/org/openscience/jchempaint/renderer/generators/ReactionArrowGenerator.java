@@ -23,8 +23,8 @@ import java.awt.geom.Rectangle2D;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.ArrowElement;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.ArrowElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
  * Generate the arrow for a reaction.

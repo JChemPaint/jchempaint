@@ -26,8 +26,8 @@ import java.awt.geom.Rectangle2D;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
 
 /**
  * @cdk.module rendercontrol

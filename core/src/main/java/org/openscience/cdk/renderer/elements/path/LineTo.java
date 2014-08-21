@@ -21,33 +21,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements;
+package org.openscience.cdk.renderer.elements.path;
 
-import java.awt.Color;
-import java.util.List;
-
-import org.openscience.jchempaint.renderer.elements.path.PathElement;
+import javax.vecmath.Point2d;
 
 /**
  * @author Arvid
  * @cdk.module renderbasic
  */
-public class GeneralPath implements IRenderingElement{
-    
-    public final Color color;
-    
-    public final List<PathElement> elements;
-    
-    
-    public GeneralPath(List<PathElement> elements, Color color) {
-        this.elements = elements;
-        this.color = color;
+public class LineTo extends PathElement {
+
+    Point2d point;
+
+    public LineTo(Point2d point) {
+
+        super( Type.LineTo );
+        this.point = point;
     }
-
-    public void accept( IRenderingVisitor v ) {
-
-        v.visit( this );
-        
+    
+    @Override
+    public float[] points() {
+        return new float[]{ (float) point.x, (float) point.y};
     }
-
 }

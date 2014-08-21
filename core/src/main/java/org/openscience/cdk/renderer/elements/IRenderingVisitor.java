@@ -18,38 +18,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements;
+package org.openscience.cdk.renderer.elements;
 
-import java.awt.Color;
+import java.awt.geom.AffineTransform;
 
 /**
- * @cdk.module renderbasic
+ * @cdk.module  render
  */
-public class OvalElement implements IRenderingElement {
-
-	public final double x;
-	public final double y;
-	public final double radius;
-	public final boolean fill;
-	public final Color color;
-
-	public OvalElement(double x, double y, Color color) {
-		this(x, y, 10, color);
-	}
-
-	public OvalElement(double x, double y, double radius, Color color) {
-		this(x, y, radius, true, color);
-	}
-
-	public OvalElement(double x, double y, double radius, boolean fill, Color color) {
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
-		this.fill = fill;
-		this.color = color;
-	}
-
-	public void accept(IRenderingVisitor v) {
-		v.visit(this);
-	}
+public interface IRenderingVisitor {
+    
+    public abstract void visit(IRenderingElement element);
+    
+    public abstract void setTransform(AffineTransform transform);
+    
 }

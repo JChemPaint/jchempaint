@@ -21,21 +21,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.jchempaint.renderer.elements.path;
+package org.openscience.cdk.renderer.elements;
+
+import java.awt.Color;
+import java.util.List;
+
+import org.openscience.cdk.renderer.elements.path.PathElement;
 
 /**
  * @author Arvid
  * @cdk.module renderbasic
  */
-public class Close extends PathElement {
-
-    public Close() {
-
-        super( Type.Close );
-    }
+public class GeneralPath implements IRenderingElement{
     
-    @Override
-    public float[] points() {
-        return new float[0];
+    public final Color color;
+    
+    public final List<PathElement> elements;
+    
+    
+    public GeneralPath(List<PathElement> elements, Color color) {
+        this.elements = elements;
+        this.color = color;
     }
+
+    public void accept( IRenderingVisitor v ) {
+
+        v.visit( this );
+        
+    }
+
 }

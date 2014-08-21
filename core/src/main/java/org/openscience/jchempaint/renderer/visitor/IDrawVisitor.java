@@ -19,7 +19,7 @@
 package org.openscience.jchempaint.renderer.visitor;
 
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.IRenderingVisitor;
+import org.openscience.cdk.renderer.elements.IRenderingVisitor;
 import org.openscience.jchempaint.renderer.font.IFontManager;
 
 /**

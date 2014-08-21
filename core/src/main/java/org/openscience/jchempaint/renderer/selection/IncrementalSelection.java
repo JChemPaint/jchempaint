@@ -22,8 +22,7 @@ package org.openscience.jchempaint.renderer.selection;
 
 import java.awt.Color;
 
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
  * @author Arvid

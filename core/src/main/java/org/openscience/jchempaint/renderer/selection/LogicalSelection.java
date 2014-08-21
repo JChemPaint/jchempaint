@@ -21,8 +21,6 @@ package org.openscience.jchempaint.renderer.selection;
 
 import java.awt.Color;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -31,7 +29,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
  * 

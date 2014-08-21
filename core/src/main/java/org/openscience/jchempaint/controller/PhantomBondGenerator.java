@@ -29,8 +29,8 @@ import java.awt.Color;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 

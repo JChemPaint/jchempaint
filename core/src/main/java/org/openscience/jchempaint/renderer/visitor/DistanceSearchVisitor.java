@@ -23,13 +23,13 @@ package org.openscience.jchempaint.renderer.visitor;
 
 import java.awt.geom.AffineTransform;
 
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.IRenderingVisitor;
-import org.openscience.jchempaint.renderer.elements.LineElement;
-import org.openscience.jchempaint.renderer.elements.OvalElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
-import org.openscience.jchempaint.renderer.elements.WedgeLineElement;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.IRenderingVisitor;
+import org.openscience.cdk.renderer.elements.LineElement;
+import org.openscience.cdk.renderer.elements.OvalElement;
+import org.openscience.cdk.renderer.elements.TextElement;
+import org.openscience.cdk.renderer.elements.WedgeLineElement;
 
 
 /**

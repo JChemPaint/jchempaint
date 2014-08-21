@@ -28,8 +28,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.AtomMassSymbolElement;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.AtomMassSymbolElement;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
  * @cdk.module renderextra

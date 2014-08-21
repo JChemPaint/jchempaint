@@ -23,10 +23,10 @@ import java.awt.geom.Rectangle2D;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.elements.ElementGroup;
-import org.openscience.jchempaint.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.RectangleElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.elements.TextElement;
 
 /**
  * Generate the symbols for radicals.
