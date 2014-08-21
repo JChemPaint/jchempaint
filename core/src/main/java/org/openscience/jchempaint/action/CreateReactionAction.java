@@ -105,7 +105,7 @@ public class CreateReactionAction extends JCPAction
 				if (reactionSet.getReactionCount() == 0)
 				{
 					logger.warn("Cannot add to reaction if no one exists");
-					JOptionPane.showMessageDialog(jcpPanel, GT._("No reaction existing. Cannot add therefore to something!"), GT._("No existing reactions"), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("No reaction existing. Cannot add therefore to something!"), GT.get("No existing reactions"), JOptionPane.WARNING_MESSAGE);
 					return;
 				} else
 				{
@@ -141,7 +141,7 @@ public class CreateReactionAction extends JCPAction
 				if (reactionSet.getReactionCount() == 0)
 				{
 					logger.warn("Cannot add to reaction if no one exists");
-					JOptionPane.showMessageDialog(jcpPanel, GT._("No reaction existing. Cannot add therefore to something!"), GT._("No existing reactions"), JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("No reaction existing. Cannot add therefore to something!"), GT.get("No existing reactions"), JOptionPane.WARNING_MESSAGE);
 					return;
 				} else
 				{

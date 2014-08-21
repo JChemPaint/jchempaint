@@ -73,15 +73,15 @@ public class RGroupEditor extends ChemObjectEditor {
 			JTextField occurrenceField = new JTextField(20);
 			occurrenceField.setName("occurrence");
 
-			addField(GT._("Occurrence"), occurrenceField, rgrpPanel,DEF_INSET);
+			addField(GT.get("Occurrence"), occurrenceField, rgrpPanel,DEF_INSET);
 
-			String[] trueFalseStrings = { GT._("True"), GT._("False")};
+			String[] trueFalseStrings = { GT.get("True"), GT.get("False")};
 			JComboBox restHBox= new JComboBox(trueFalseStrings);
 			restHBox.setName("restH");
-			addField(GT._("Rest H"), restHBox, rgrpPanel,DEF_INSET);
+			addField(GT.get("Rest H"), restHBox, rgrpPanel,DEF_INSET);
 
 			List<String> otherRnums = new ArrayList<String>();
-			otherRnums.add(GT._("None"));
+			otherRnums.add(GT.get("None"));
 			for (Iterator<Integer> rnumItr=hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
 				int r_=rnumItr.next();
 				if (r_!= r) {
@@ -91,7 +91,7 @@ public class RGroupEditor extends ChemObjectEditor {
 			String[] ifThenStrings=(String[])(otherRnums.toArray(new String[otherRnums.size()]));
 			JComboBox ifThenBox = new JComboBox(ifThenStrings);
 			ifThenBox.setName("ifThen");
-			addField(GT._("If R"+r+" then "), ifThenBox, rgrpPanel,DEF_INSET);
+			addField(GT.get("If R" + r + " then "), ifThenBox, rgrpPanel,DEF_INSET);
 			panels.add(rgrpPanel);
 		}
 	}
@@ -112,12 +112,12 @@ public class RGroupEditor extends ChemObjectEditor {
 
 				JComboBox restHBox = (JComboBox) (rgrpPanel.getComponent(3));
 				boolean restH=rgrpList.isRestH();
-				String restHString= restH? GT._("True"): GT._("False");
+				String restHString= restH? GT.get("True"): GT.get("False");
 				restHBox.setSelectedItem(restHString);
 
 				JComboBox ifThenBox = (JComboBox) (rgrpPanel.getComponent(5));
 				int ifThenR = rgrpList.getRequiredRGroupNumber();
-				String ifThenRString= ifThenR==0?GT._("None"):"R"+ifThenR; 
+				String ifThenRString= ifThenR==0?GT.get("None"):"R"+ifThenR; 
 				ifThenBox.setSelectedItem(ifThenRString);
 			}
 
@@ -138,7 +138,7 @@ public class RGroupEditor extends ChemObjectEditor {
 			JTextField occurrenceField = (JTextField) (rgrpPanel.getComponent(1));
 			String userOccurrenceText=occurrenceField.getText();
 			if (userOccurrenceText.trim().equals("") || !RGroupList.isValidOccurrenceSyntax(userOccurrenceText)) {
-				throw new RuntimeException (GT._("Invalid occurrence specified for {0}","R"+r));
+				throw new RuntimeException (GT.get("Invalid occurrence specified for {0}", "R" + r));
 			}
 		}
 
@@ -159,7 +159,7 @@ public class RGroupEditor extends ChemObjectEditor {
 
 			JComboBox restHBox = (JComboBox) (rgrpPanel.getComponent(3));
 			String restHString= (String) (restHBox.getSelectedItem());
-			if (restHString.equals(GT._("True")))
+			if (restHString.equals(GT.get("True")))
 				rgrpList.setRestH(true);
 			else
 				rgrpList.setRestH(false);
@@ -167,7 +167,7 @@ public class RGroupEditor extends ChemObjectEditor {
 
 			JComboBox ifThenBox = (JComboBox) (rgrpPanel.getComponent(5));
 			String ifThenR= (String) (ifThenBox.getSelectedItem());
-			if (ifThenR.equals(GT._("None")))
+			if (ifThenR.equals(GT.get("None")))
 				rgrpList.setRequiredRGroupNumber(0);
 			else {
 				int userRnumInput = new Integer (ifThenR.substring(1));

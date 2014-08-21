@@ -64,7 +64,7 @@ public class PeriodicTableDialog extends JDialog {
     public void doInit(){
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Color.white);
-        setTitle(GT._("Choose an element..."));
+        setTitle(GT.get("Choose an element..."));
         
         ptp = new PeriodicTablePanel();
         ptp.addCDKChangeListener(new PTDialogChangeListener());

@@ -78,11 +78,11 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 		if(type.equals("RX")) {
 			boolean inputOkay=false;
 			do {
-			    label = JOptionPane.showInputDialog(GT._("Enter label"), "R");
+			    label = JOptionPane.showInputDialog(GT.get("Enter label"), "R");
 	            if (label == null)
 	            	return;
 	            if(label.startsWith("R") && label.length()>1 && !RGroupQuery.isValidRgroupQueryLabel(label))
-					JOptionPane.showMessageDialog(null, GT._("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
+					JOptionPane.showMessageDialog(null, GT.get("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
 	            else
 	            	inputOkay=true;
 			}

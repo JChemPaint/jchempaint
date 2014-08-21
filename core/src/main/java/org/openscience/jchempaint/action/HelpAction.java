@@ -29,12 +29,10 @@
 package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.net.URL;
 
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.HelpDialog;
-import org.openscience.jchempaint.GT;
 
 /**
  * Pops up the help.
@@ -57,23 +55,23 @@ public class HelpAction extends JCPAction
 		
 		if (type.equals("tutorial"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/tutorial.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/tutorial.html", GT.get("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("rgpTutorial"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/rgroup_tutorial.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/rgroup_tutorial.html", GT.get("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("feedback"))
 		{
-			new HelpDialog(null, helpRoot+language+"/contain/feedback.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/contain/feedback.html", GT.get("JChemPaint Help")).setVisible(true);
 		} 
 		else if (type.equals("license"))
 		{
-			new HelpDialog(null, helpRoot+language+"/license.html", GT._("JChemPaint License")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/license.html", GT.get("JChemPaint License")).setVisible(true);
 		} 
 		else
 		{
-			new HelpDialog(null, helpRoot+language+"/jcp.html", GT._("JChemPaint Help")).setVisible(true);
+			new HelpDialog(null, helpRoot+language+"/jcp.html", GT.get("JChemPaint Help")).setVisible(true);
 		}
 	}
 }

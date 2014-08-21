@@ -52,7 +52,7 @@ public class AtomContainerEditor extends ChemObjectEditor {
     private void constructPanel() {
         titleField = new JTextField(30);
         titleField.setName("Title");
-        addField(GT._("Title"), titleField, this);
+        addField(GT.get("Title"), titleField, this);
     }
     
     public void setChemObject(IChemObject object) {

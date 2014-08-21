@@ -57,99 +57,110 @@ public class BondEditor extends ChemObjectEditor {
 		this.blacklist = blacklist;
 		constructPanel();
 	}
-	
-	// Since the order in the following arrays is arbitrary, we must add
-	// index functions, too.
-	private String[] orderString = {GT._("Single"), GT._("Double"), GT._("Triple"), GT._("Quadruple")};
-	private String[] stereoString = {GT._("None"), GT._("Up"), GT._("Down"), GT._("Up or Down"), GT._("E or Z")};
-	
-	private static int bondOrderIndex (IBond.Order o) {
-		switch (o) {
-			case SINGLE: return 0;
-			case DOUBLE: return 1;
-			case TRIPLE: return 2;
-			case QUADRUPLE: return 3;
-		}
-		return -1;
-	}
 
-	private static int bondStereoIndex (IBond.Stereo s) {
-		switch (s) {
-			case NONE: return 0;
-			case UP: return 1;
-			case DOWN: return 2;
-			case UP_OR_DOWN: return 3;
-			case E_OR_Z: return 4;
-		}
-		return -1;
-	}
+    // Since the order in the following arrays is arbitrary, we must add
+    // index functions, too.
+    private String[] orderString  = {GT.get("Single"), GT.get("Double"), GT.get("Triple"), GT.get("Quadruple")};
+    private String[] stereoString = {GT.get("None"), GT.get("Up"), GT.get("Down"), GT.get("Up or Down"), GT.get("E or Z")};
 
-	private void constructPanel() {
-		orderField = new JComboBox(orderString);
-		addField(GT._("Bond order"), orderField, this);
+    private static int bondOrderIndex(IBond.Order o) {
+        switch (o) {
+            case SINGLE:
+                return 0;
+            case DOUBLE:
+                return 1;
+            case TRIPLE:
+                return 2;
+            case QUADRUPLE:
+                return 3;
+        }
+        return -1;
+    }
 
-		if (!blacklist.contains("stereochemistry")) {
-			stereoField = new JComboBox(stereoString);
-			addField(GT._("Bond stereo"), stereoField, this);
-		}
-	}
+    private static int bondStereoIndex(IBond.Stereo s) {
+        switch (s) {
+            case NONE:
+                return 0;
+            case UP:
+                return 1;
+            case DOWN:
+                return 2;
+            case UP_OR_DOWN:
+                return 3;
+            case E_OR_Z:
+                return 4;
+        }
+        return -1;
+    }
 
-	public void setChemObject(IChemObject object) {
-		if (object instanceof org.openscience.cdk.interfaces.IBond) {
-			source = object;
-			IBond bond = (IBond) source;
-			orderField.setSelectedIndex(bondOrderIndex(bond.getOrder()));
-			if (!blacklist.contains("stereochemistry")) 
-				stereoField.setSelectedIndex(bondStereoIndex(bond.getStereo()));
-		} else {
-			throw new IllegalArgumentException("Argument must be an Bond");
-		}
-	}
+    private void constructPanel() {
+        orderField = new JComboBox(orderString);
+        addField(GT.get("Bond order"), orderField, this);
 
-	public void applyChanges() {
-		IBond bond = (IBond) source;
+        if (!blacklist.contains("stereochemistry")) {
+            stereoField = new JComboBox(stereoString);
+            addField(GT.get("Bond stereo"), stereoField, this);
+        }
+    }
 
-		int newOrder = orderField.getSelectedIndex();
-		Order order = null;
-		switch (newOrder) {
-			case 0:
-				order = Order.SINGLE;
-				break;
-			case 1:
-				order = Order.DOUBLE;
-				break;
-			case 2:
-				order = Order.TRIPLE;
-				break;
-			case 3:
-				order = Order.QUADRUPLE;
-				break;
-		}
+    public void setChemObject(IChemObject object) {
+        if (object instanceof org.openscience.cdk.interfaces.IBond) {
+            source = object;
+            IBond bond = (IBond) source;
+            orderField.setSelectedIndex(bondOrderIndex(bond.getOrder()));
+            if (!blacklist.contains("stereochemistry"))
+                stereoField.setSelectedIndex(bondStereoIndex(bond.getStereo()));
+        }
+        else {
+            throw new IllegalArgumentException("Argument must be an Bond");
+        }
+    }
 
-		Stereo stereo = null;
-		if (order != Order.SINGLE || stereoField == null) {
-			stereo = Stereo.NONE;
-		} else {
-			int newStereo = stereoField.getSelectedIndex();
-			switch (newStereo) {
-				case 0:
-					stereo = Stereo.NONE;
-					break;
-				case 1:
-					stereo = Stereo.UP;
-					break;
-				case 2:
-					stereo = Stereo.DOWN;
-					break;
-				case 3:
-					stereo = Stereo.UP_OR_DOWN;
-					break;
-				case 4:
-					stereo = Stereo.E_OR_Z;
-					break;
-			}
-		}
+    public void applyChanges() {
+        IBond bond = (IBond) source;
 
-		hub.changeBond(bond, order, stereo);
-	}
+        int newOrder = orderField.getSelectedIndex();
+        Order order = null;
+        switch (newOrder) {
+            case 0:
+                order = Order.SINGLE;
+                break;
+            case 1:
+                order = Order.DOUBLE;
+                break;
+            case 2:
+                order = Order.TRIPLE;
+                break;
+            case 3:
+                order = Order.QUADRUPLE;
+                break;
+        }
+
+        Stereo stereo = null;
+        if (order != Order.SINGLE || stereoField == null) {
+            stereo = Stereo.NONE;
+        }
+        else {
+            int newStereo = stereoField.getSelectedIndex();
+            switch (newStereo) {
+                case 0:
+                    stereo = Stereo.NONE;
+                    break;
+                case 1:
+                    stereo = Stereo.UP;
+                    break;
+                case 2:
+                    stereo = Stereo.DOWN;
+                    break;
+                case 3:
+                    stereo = Stereo.UP_OR_DOWN;
+                    break;
+                case 4:
+                    stereo = Stereo.E_OR_Z;
+                    break;
+            }
+        }
+
+        hub.changeBond(bond, order, stereo);
+    }
 }

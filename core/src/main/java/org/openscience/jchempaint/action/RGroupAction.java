@@ -43,7 +43,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
@@ -84,7 +83,7 @@ public class RGroupAction extends JCPAction {
 		IChemObjectSelection selection = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
 		if(selection ==null || !selection.isFilled()
 				&&(type.equals("setRoot")||type.equals("setSubstitute")) ) {
-			JOptionPane.showMessageDialog(jcpPanel, GT._("You have not selected any atoms or bonds."));
+			JOptionPane.showMessageDialog(jcpPanel, GT.get("You have not selected any atoms or bonds."));
 			return;
 		}
 
@@ -104,7 +103,7 @@ public class RGroupAction extends JCPAction {
 		/* User action: generate possible configurations for the R-group */
 		if(type.equals("rgpGenerate")) {
 			if((jcpPanel.get2DHub().getRGroupHandler()==null)) {
-				JOptionPane.showMessageDialog(jcpPanel, GT._("Please define an R-group (root and substituents) first."));
+				JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define an R-group (root and substituents) first."));
 				return;
 			}
             try {
@@ -126,7 +125,7 @@ public class RGroupAction extends JCPAction {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(jcpPanel, GT._("There was an error generating the configurations {0}",e.getMessage()));
+				JOptionPane.showMessageDialog(jcpPanel, GT.get("There was an error generating the configurations {0}", e.getMessage()));
 				return;
 			}
 		
@@ -135,7 +134,7 @@ public class RGroupAction extends JCPAction {
 		else if(type.equals("rgpAdvanced")) {
 
 			if((jcpPanel.get2DHub().getRGroupHandler()==null)) {
-				JOptionPane.showMessageDialog(jcpPanel, GT._("Please define an R-group (root and substituent) first."));
+				JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define an R-group (root and substituent) first."));
 				return;
 			}
 			jcpPanel.get2DHub().getRGroupHandler().cleanUpRGroup(jcpPanel.get2DHub().getChemModel().getMoleculeSet());
@@ -156,7 +155,7 @@ public class RGroupAction extends JCPAction {
 			/* User action: generate possible configurations for the R-group */
 			if(type.equals("clearRgroup")) {
 				if((jcpPanel.get2DHub().getRGroupHandler()==null)) {
-					JOptionPane.showMessageDialog(jcpPanel, GT._("There is no R-group defined"));
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("There is no R-group defined"));
 					return;
 				}
 				rGroupHandler=hub.getRGroupHandler();
@@ -249,7 +248,7 @@ public class RGroupAction extends JCPAction {
 
 				IAtomContainer atc =selection.getConnectedAtomContainer();
 				if (!isProperSelection(atc)) {
-					JOptionPane.showMessageDialog(jcpPanel, GT._("Please do not make a fragmented selection."));
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("Please do not make a fragmented selection."));
 					return;
 				}
 
@@ -296,13 +295,13 @@ public class RGroupAction extends JCPAction {
 
 				if (hub.getRGroupHandler() == null || hub.getRGroupHandler().getrGroupQuery()==null ||
 						hub.getRGroupHandler().getrGroupQuery().getRootStructure()==null) {
-					JOptionPane.showMessageDialog(jcpPanel, GT._("Please define a root structure first."));
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define a root structure first."));
 					return;
 				}
 
 				IAtomContainer atc =selection.getConnectedAtomContainer();
 				if (!isProperSelection(atc)) {
-					JOptionPane.showMessageDialog(jcpPanel, GT._("Please do not make a fragmented selection."));
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("Please do not make a fragmented selection."));
 					return;
 				}
 
@@ -326,7 +325,7 @@ public class RGroupAction extends JCPAction {
 				}
 				// Here we test: the user wants to define a substitute, but are there any R1..R32 groups to begin with?
 				if (validRnumChoices.size()==0) {
-					JOptionPane.showMessageDialog(jcpPanel, GT._("There are no numbered R-atoms in the root structure to refer to."));
+					JOptionPane.showMessageDialog(jcpPanel, GT.get("There are no numbered R-atoms in the root structure to refer to."));
 					return;
 				}
 
@@ -335,17 +334,17 @@ public class RGroupAction extends JCPAction {
 				String userInput=null;
 				Integer rNum=0;
 				do {
-					userInput = JOptionPane.showInputDialog(GT._("Enter an R-group number "),validRnumChoices.get(0));
+					userInput = JOptionPane.showInputDialog(GT.get("Enter an R-group number "),validRnumChoices.get(0));
 					if (userInput == null)
 						return;
 					try {
 						rNum = new Integer(userInput);
 						if(!validRnumChoices.containsKey(rNum))
-							JOptionPane.showMessageDialog(null, GT._("The number you entered has no corresponding R-group in the root."));
+							JOptionPane.showMessageDialog(null, GT.get("The number you entered has no corresponding R-group in the root."));
 						else
 							inputOkay=true;
 					} catch (NumberFormatException e) {
-						JOptionPane.showMessageDialog(null, GT._("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
+						JOptionPane.showMessageDialog(null, GT.get("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
 					}
 				}
 				while (!inputOkay);

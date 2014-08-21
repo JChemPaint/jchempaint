@@ -75,15 +75,15 @@ public class AtomEditor extends ChemObjectEditor {
     private void constructPanel() {
     	symbolField = new JTextField(4);
         symbolField.getDocument().addDocumentListener(new MyDocumentListener(this));
-        addField(GT._("Symbol"), symbolField, this);
+        addField(GT.get("Symbol"), symbolField, this);
         hCountField = new JSpinner(new SpinnerNumberModel());
-        addField(GT._("H Count"), hCountField, this);
+        addField(GT.get("H Count"), hCountField, this);
         formalChargeField = new JSpinner(new SpinnerNumberModel());
-        addField(GT._("Formal Charge"), formalChargeField, this);
+        addField(GT.get("Formal Charge"), formalChargeField, this);
         isotopeField = new JSpinner(new SpinnerNumberModel());
-        addField(GT._("Isotope number"), isotopeField, this);
+        addField(GT.get("Isotope number"), isotopeField, this);
         commentField = new JTextField(16);
-        addField(GT._("Comment"), commentField, this);
+        addField(GT.get("Comment"), commentField, this);
     }
     
     public void setChemObject(IChemObject object) {

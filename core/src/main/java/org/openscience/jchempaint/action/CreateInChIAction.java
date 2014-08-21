@@ -62,8 +62,8 @@ public class CreateInChIAction extends JCPAction {
         if (model.getReactionSet() != null
                 && model.getReactionSet().getReactionCount() > 0) {
             dialog.setMessage(
-                    GT._("Problem"),
-                    GT._("You have reactions in JCP. Reactions cannot be shown as InChI!"));
+                    GT.get("Problem"),
+                    GT.get("You have reactions in JCP. Reactions cannot be shown as InChI!"));
         } else {
             StringBuffer dialogText = new StringBuffer();
             int i = 0;
@@ -71,7 +71,7 @@ public class CreateInChIAction extends JCPAction {
             for (IAtomContainer container : model.getMoleculeSet()
                     .atomContainers()) {
                 if (model.getMoleculeSet().getAtomContainerCount() > 1) {
-                    dialogText.append(GT._("Structure") + " #" + (i + 1)
+                    dialogText.append(GT.get("Structure") + " #" + (i + 1)
                             + eol);
                 }
                 try {
@@ -81,12 +81,12 @@ public class CreateInChIAction extends JCPAction {
                     dialogText.append(inchi.getKey() + eol);
                     
                 } catch (Exception cdke) {
-                    dialogText.append(GT._("InChI generation failed")
+                    dialogText.append(GT.get("InChI generation failed")
                             + ": " + cdke.getMessage() + eol + eol);
                 }
                 i++;
             }
-            dialog.setMessage(GT._("InChI generation") + ":", dialogText
+            dialog.setMessage(GT.get("InChI generation") + ":", dialogText
                     .toString());
         }
 

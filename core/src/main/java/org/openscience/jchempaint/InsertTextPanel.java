@@ -53,11 +53,8 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.inchi.InChI;
-import org.openscience.jchempaint.inchi.InChIHandler;
 import org.openscience.jchempaint.inchi.InChITool;
 
 /**
@@ -68,10 +65,10 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = -5329451371043240706L;
     private AbstractJChemPaintPanel jChemPaintPanel;
-    private JComboBox textCombo;
-    private JTextComponent editor;
-    private JFrame closeafter = null;
-    private JButton button = new JButton(GT._("Insert"));
+    private JComboBox               textCombo;
+    private JTextComponent          editor;
+    private JFrame  closeafter = null;
+    private JButton button     = new JButton(GT.get("Insert"));
 
     public InsertTextPanel(AbstractJChemPaintPanel jChemPaintPanel, JFrame closeafter) {
         super();
@@ -83,7 +80,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
         textCombo = new JComboBox(oldText.toArray());
         textCombo.setEditable(true);
-        textCombo.setToolTipText(GT._("Enter a CAS, SMILES or InChI string"));
+        textCombo.setToolTipText(GT.get("Enter a CAS, SMILES or InChI string"));
 
         textCombo.addActionListener(this);
         editor = (JTextComponent) textCombo.getEditor().getEditorComponent();
@@ -114,15 +111,15 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         String actionCommand = actionEvent.getActionCommand();
         if (actionCommand.equals("comboBoxEdited")
-                || actionCommand.equals(GT._("Insert"))) {
+                || actionCommand.equals(GT.get("Insert"))) {
             IAtomContainer molecule = getMolecule();
             if (molecule == null)
                 return;
             try {
-            	JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
+                JChemPaint.generateModel(jChemPaintPanel, molecule, true, false);
             } catch (CDKException e) {
-				e.printStackTrace();
-            	return;
+                e.printStackTrace();
+                return;
             }
             if (closeafter != null)
                 closeafter.setVisible(false);
@@ -141,18 +138,18 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             try {
 
                 IAtomContainer atomContainer = InChITool.parseInChI(text);
-                molecule = atomContainer.getBuilder().newInstance(IAtomContainer.class,atomContainer);
-                
-                
+                molecule = atomContainer.getBuilder().newInstance(IAtomContainer.class, atomContainer);
+
+
             } catch (Exception e2) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Could not load InChI subsystem"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT.get("Could not load InChI subsystem"));
                 return null;
             }
         } else if (isCASNumber(text)) { // is it a CAS number?
             try {
                 molecule = getMoleculeFromCAS(text);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Error in reading data from PubChem"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT.get("Error in reading data from PubChem"));
                 return null;
             }
         } else { // OK, it must be a SMILES
@@ -160,7 +157,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
             try {
                 molecule = smilesParser.parseSmiles(text);
             } catch (InvalidSmilesException e1) {
-                JOptionPane.showMessageDialog(jChemPaintPanel, GT._("Invalid SMILES specified"));
+                JOptionPane.showMessageDialog(jChemPaintPanel, GT.get("Invalid SMILES specified"));
                 return null;
             }
         }
@@ -253,8 +250,8 @@ public class InsertTextPanel extends JPanel implements ActionListener {
     }
 
     public void updateLanguage() {
-        textCombo.setToolTipText(GT._("Enter a CAS, SMILES or InChI string"));
-        button.setText(GT._("Insert"));
+        textCombo.setToolTipText(GT.get("Enter a CAS, SMILES or InChI string"));
+        button.setText(GT.get("Insert"));
     }
 
 }

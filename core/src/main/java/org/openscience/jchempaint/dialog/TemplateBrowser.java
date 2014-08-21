@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipException;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -50,14 +49,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
@@ -102,12 +99,12 @@ public class TemplateBrowser extends JDialog implements ActionListener {
 	 * @param tabToSelect a tab with that name will be shown at startup.
      */
     public TemplateBrowser(String tabToSelect) {
-        super((JFrame)null, GT._("Structure Templates"), true);
+        super((JFrame)null, GT.get("Structure Templates"), true);
         this.setName("templates");
         myPanel = new JPanel();
         getContentPane().add(myPanel);
         myPanel.setLayout(new BorderLayout());
-        yesButton = new JButton(GT._("Cancel"));
+        yesButton = new JButton(GT.get("Cancel"));
         yesButton.addActionListener(this);
         JPanel bottomPanel =new JPanel();
         bottomPanel.add(yesButton);
@@ -123,7 +120,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
         allPanel.setLayout(allLayout);
         JScrollPane scrollPane = new JScrollPane(allPanel,
             JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        tabbedPane.addTab(GT._("All"), scrollPane );
+        tabbedPane.addTab(GT.get("All"), scrollPane );
         try{
             createTemplatesMaps(entriesMol, entriesMolName, entriesIcon, true);
             myPanel.add( tabbedPane, BorderLayout.CENTER );

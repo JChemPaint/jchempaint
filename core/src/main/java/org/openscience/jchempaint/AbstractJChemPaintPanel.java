@@ -190,9 +190,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     	String trace = baos.toString();
 
     	JOptionPane.showMessageDialog(this, 
-    			GT._("The error was:")+" "+ex.getMessage()+". "+GT._("\nYou can file a bug report at ")+
+    			GT.get("The error was:")+" "+ex.getMessage()+". "+GT.get("\nYou can file a bug report at ")+
     			"https://github.com/JChemPaint/jchempaint/issues "+
-    			GT._("\nWe apologize for any inconvenience!") + trace, GT._("Error occured"),
+    			GT.get("\nWe apologize for any inconvenience!") + trace, GT.get("Error occured"),
     			JOptionPane.ERROR_MESSAGE);
     	
     	logger.error(ex.getMessage());
@@ -540,8 +540,8 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
                                                                                   // {
             int answer = JOptionPane.showConfirmDialog(this, renderPanel
                     .getChemModel().getID()
-                    + " " + GT._("has unsaved data. Do you want to save it?"),
-                    GT._("Unsaved data"), JOptionPane.YES_NO_CANCEL_OPTION,
+                    + " " + GT.get("has unsaved data. Do you want to save it?"),
+                    GT.get("Unsaved data"), JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.WARNING_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
                 SaveAction saveaction = new SaveAction(this, false);
@@ -623,21 +623,21 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         if (undoManager.canRedo()) {
             redoButton.setEnabled(true);
             redoMenu.setEnabled(true);
-            redoButton.setToolTipText(GT._("Redo")+": "+undoManager.getRedoPresentationName());
+            redoButton.setToolTipText(GT.get("Redo")+": "+undoManager.getRedoPresentationName());
         } else {
             redoButton.setEnabled(false);
             redoMenu.setEnabled(false);
-            redoButton.setToolTipText(GT._("No redo possible"));
+            redoButton.setToolTipText(GT.get("No redo possible"));
         }
 
         if (undoManager.canUndo()) {
             undoButton.setEnabled(true);
             undoMenu.setEnabled(true);
-            undoButton.setToolTipText(GT._("Undo")+": "+undoManager.getUndoPresentationName());
+            undoButton.setToolTipText(GT.get("Undo")+": "+undoManager.getUndoPresentationName());
         } else {
             undoButton.setEnabled(false);
             undoMenu.setEnabled(false);
-            undoButton.setToolTipText(GT._("No undo possible"));
+            undoButton.setToolTipText(GT.get("No undo possible"));
         }
     }
 

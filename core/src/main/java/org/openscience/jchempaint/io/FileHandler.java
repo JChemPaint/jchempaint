@@ -116,7 +116,7 @@ public class FileHandler {
 
         }
         if (cor == null) {
-            throw new CDKException(GT._("Could not determine file format"));
+            throw new CDKException(GT.get("Could not determine file format"));
         }
 
         // Take care of files called .mol, but having several, sdf-style entries
@@ -127,11 +127,11 @@ public class FileHandler {
                 while ((line = in.readLine()) != null) {
                     if (line.equals("$$$$")) {
                         String message = GT
-                                ._("It seems you opened a mol or sdf"
-                                        + " file containing several molecules. "
-                                        + "Only the first one will be shown");
+                                .get("It seems you opened a mol or sdf"
+                                             + " file containing several molecules. "
+                                             + "Only the first one will be shown");
                         JOptionPane.showMessageDialog(null, message, GT
-                                ._("sdf-like file"),
+                                .get("sdf-like file"),
                                 JOptionPane.INFORMATION_MESSAGE);
                         break;
                     }

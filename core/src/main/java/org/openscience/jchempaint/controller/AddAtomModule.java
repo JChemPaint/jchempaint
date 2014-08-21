@@ -208,7 +208,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	}
 
 	public String getDrawModeString() {
-		return GT._("Add Atom Or Change Element") +" ("+
+		return GT.get("Add Atom Or Change Element") +" ("+
 		    (chemModelRelay.getController2DModel().getDrawIsotopeNumber()==0 ? "" 
 		        : chemModelRelay.getController2DModel().getDrawIsotopeNumber())+
 		    chemModelRelay.getController2DModel().getDrawElement()+")";

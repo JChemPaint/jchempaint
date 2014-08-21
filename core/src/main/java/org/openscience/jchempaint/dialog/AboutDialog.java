@@ -70,9 +70,9 @@ public class AboutDialog extends JDialog {
 	public void doInit() {
 		String version = JCPPropertyHandler.getInstance(true).getVersion();
 		String s1 = "JChemPaint " + version + "\n";
-		s1 += GT._("An open-source editor for 2D chemical structures.");
-		String s2 = GT._("An OpenScience project.")+"\n";
-		s2 += GT._("See 'http://jchempaint.github.com' for more information.");
+		s1 += GT.get("An open-source editor for 2D chemical structures.");
+		String s2 = GT.get("An OpenScience project.")+"\n";
+		s2 += GT.get("See 'http://jchempaint.github.com' for more information.");
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().setBackground(Color.white);

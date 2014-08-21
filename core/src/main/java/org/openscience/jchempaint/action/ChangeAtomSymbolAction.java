@@ -107,7 +107,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
             if(atomsInRange!=null){
                 String[] funcGroupsKeys=new String[0];
-                symbol=EnterElementOrGroupDialog.showDialog(null,null, GT._("Enter an element symbol:"), GT._("Enter element"), funcGroupsKeys, "","");
+                symbol=EnterElementOrGroupDialog.showDialog(null,null, GT.get("Enter an element symbol:"), GT.get("Enter element"), funcGroupsKeys, "","");
                 if(symbol!=null && symbol.length()>0){
                     if(Character.isLowerCase(symbol.toCharArray()[0]))
                         symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
@@ -116,7 +116,7 @@ public class ChangeAtomSymbolAction extends JCPAction
                         ifa = XMLIsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder());
                         IIsotope iso=ifa.getMajorIsotope(symbol);
                         if(iso==null){
-                            JOptionPane.showMessageDialog(jcpPanel, GT._("No valid element symbol entered"), GT._("Invalid symbol"), JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(jcpPanel, GT.get("No valid element symbol entered"), GT.get("Invalid symbol"), JOptionPane.WARNING_MESSAGE);
                             return;
                         }
                     } catch (IOException e) {

@@ -158,7 +158,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private void constructPanel() {
 
-        JPanel rendererOptionsPanel = this.addTab(GT._("Display Preferences"));
+        JPanel rendererOptionsPanel = this.addTab(GT.get("Display Preferences"));
 		rendererOptionsPanel.setLayout(new java.awt.GridLayout(1,2,5,0));
 		JPanel options1 = new JPanel();
 		options1.setLayout(new BoxLayout(options1, BoxLayout.PAGE_AXIS));
@@ -171,37 +171,37 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //addField("Rendering Settings",new JPanel());
 		addField("", new JLabel(" "), options1);
 
-        drawNumbers = new JCheckBox(GT._("Draw atom numbers"));
+        drawNumbers = new JCheckBox(GT.get("Draw atom numbers"));
 		options1.add(drawNumbers);
         //addField(GT._("Draw atom numbers"), drawNumbers, options1);
 
         //showAtomAtomMapping = new JCheckBox();
         //addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
 
-        useKekuleStructure = new JCheckBox(GT._("Explicit carbons"));
+        useKekuleStructure = new JCheckBox(GT.get("Explicit carbons"));
 		options1.add(useKekuleStructure);
         //addField(GT._("Explicit carbons"), useKekuleStructure, options1);
 
-        showEndCarbons = new JCheckBox(GT._("Show explicit methyl groups"));
+        showEndCarbons = new JCheckBox(GT.get("Show explicit methyl groups"));
 		options1.add(showEndCarbons);
         //addField(GT._("Show explicit methyl groups"), showEndCarbons, options1);
 
-        showExplicitHydrogens = new JCheckBox(GT._("Show explicit hydrogens"));
+        showExplicitHydrogens = new JCheckBox(GT.get("Show explicit hydrogens"));
 		options1.add(showExplicitHydrogens);
         //addField(GT._("Show explicit hydrogens"), showExplicitHydrogens, options1);
 
-        showImplicitHydrogens = new JCheckBox(GT._("Show implicit hydrogens"));
+        showImplicitHydrogens = new JCheckBox(GT.get("Show implicit hydrogens"));
 		options1.add(showImplicitHydrogens);
         //addField(GT._("Show implicit hydrogens"), showImplicitHydrogens, options1);
 
-        showAromaticity = new JCheckBox(GT._("Show aromatic ring circles"));
+        showAromaticity = new JCheckBox(GT.get("Show aromatic ring circles"));
 		options1.add(showAromaticity);
         //addField(GT._("Show aromatic ring circles"), showAromaticity, options1);
 
         //showAromaticityCDKStyle = new JCheckBox();
         //addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
 
-        colorAtomsByType = new JCheckBox(GT._("Color atoms by element"));
+        colorAtomsByType = new JCheckBox(GT.get("Color atoms by element"));
 		options1.add(colorAtomsByType);
         //addField(GT._("Color atoms by element"), colorAtomsByType, options1);
 
@@ -211,11 +211,11 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         //showToolTip = new JCheckBox();
         //addField(GT._("Show tooltips"), showToolTip);
 
-        showReactionBoxes = new JCheckBox(GT._("Show boxes around reactions"));
+        showReactionBoxes = new JCheckBox(GT.get("Show boxes around reactions"));
         options1.add(showReactionBoxes);
 
 
-        isFitToScreen = new JCheckBox(GT._("Set fit to screen"));
+        isFitToScreen = new JCheckBox(GT.get("Set fit to screen"));
 		options1.add(isFitToScreen);
         //addField(GT._("Set fit to screen"), isFitToScreen, options1);
 
@@ -223,17 +223,17 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         addField("", new JSeparator(), options1);
 		addField("", new JLabel(" "), options1);
 
-        nonCompactShape = new JRadioButton(GT._("Show atom symbols"));
+        nonCompactShape = new JRadioButton(GT.get("Show atom symbols"));
         group.add(nonCompactShape);
 		options1.add(nonCompactShape);
         //addField(GT._("Show atom symbols"), nonCompactShape, options1);
 
-        compactShapeOval = new JRadioButton(GT._("Show ball atoms"));
+        compactShapeOval = new JRadioButton(GT.get("Show ball atoms"));
         group.add(compactShapeOval);
 		options1.add(compactShapeOval);
         //addField(GT._("Show ball atoms"), compactShapeOval, options1);
 
-        compactShapeSquare = new JRadioButton(GT._("Show square atoms"));
+        compactShapeSquare = new JRadioButton(GT.get("Show square atoms"));
         group.add(compactShapeSquare);
 		options1.add(compactShapeSquare);
         //addField(GT._("Show square atoms"), compactShapeSquare, options1);
@@ -247,7 +247,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         atomRadius.setMajorTickSpacing(5);
         atomRadius.setMinorTickSpacing(1);
 		addField("", new JLabel(" "), options2);
-        addField(GT._("Atom size"), atomRadius, options2);
+        addField(GT.get("Atom size"), atomRadius, options2);
         addField("", new JLabel(" "), options2);
         addField("", new JSeparator(), options2);
 
@@ -258,7 +258,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         bondWidth.setPaintTicks(true);
         bondWidth.setMajorTickSpacing(1);
 		addField("", new JLabel(" "), options2);
-        addField(GT._("Bond width"), bondWidth, options2);
+        addField(GT.get("Bond width"), bondWidth, options2);
         addField("", new JLabel(" "), options2);
         addField("", new JSeparator(), options2);
 
@@ -277,7 +277,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance.setMajorTickSpacing(5);
         highlightDistance.setMinorTickSpacing(1);
 		addField("", new JLabel(" "), options2);
-        addField(GT._("Highlight/Select diameter"), highlightDistance, options2);
+        addField(GT.get("Highlight/Select diameter"), highlightDistance, options2);
         addField("", new JLabel(" "), options2);
         addField("", new JSeparator(), options2);
 
@@ -287,7 +287,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         wedgeWidth.setPaintTicks(true);
         wedgeWidth.setMajorTickSpacing(1);
 		addField("", new JLabel(" "), options2);
-        addField(GT._("Wedge width"), wedgeWidth, options2);
+        addField(GT.get("Wedge width"), wedgeWidth, options2);
         addField("", new JLabel(" "), options2);
         //addField("", new JSeparator(), options2);
 
@@ -302,32 +302,32 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
          */
 
         color = new JLabel();
-		color.setText("      "+GT._("Background color")+"      ");
+		color.setText("      "+GT.get("Background color")+"      ");
 		color.setOpaque(true);
 		addField("", new JLabel(" "), options1);
 		options1.add(color);
 		addField("", new JLabel(" "), options1);
         //addField(GT._("Background color"), color, options2);
 
-        chooseColorButton = new JButton(GT._("Choose background color..."));
+        chooseColorButton = new JButton(GT.get("Choose background color..."));
         chooseColorButton.addActionListener(this);
         chooseColorButton.setActionCommand("chooseColor");
 		options1.add(chooseColorButton);
 		addField("", new JLabel(" "), options1);
         //addField("", chooseColorButton, options2);
 		
-        JPanel otherOptionsPanel = this.addTab(GT._("Other Preferences"));
+        JPanel otherOptionsPanel = this.addTab(GT.get("Other Preferences"));
         
         undoStackSize = new JTextField();
-        addField(GT._("Number of undoable operations"), undoStackSize, otherOptionsPanel);
+        addField(GT.get("Number of undoable operations"), undoStackSize, otherOptionsPanel);
 
         askForIOSettings = new JCheckBox();
-        addField(GT._("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
+        addField(GT.get("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
 		if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            String [] lookAndFeels = {GT._("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
+            String [] lookAndFeels = {GT.get("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
 		    lookAndFeel = new JComboBox(lookAndFeels);
-		    addField(GT._("Look and feel"), lookAndFeel, otherOptionsPanel);
+		    addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
             addField("", new JSeparator(), otherOptionsPanel);
         }
 
@@ -341,7 +341,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             if(gtlanguages[i].code.equals(GT.getLanguage()))
                 language.setSelectedIndex(i);
         }
-        addField(GT._("User Interface Language"), language, otherOptionsPanel);
+        addField(GT.get("User Interface Language"), language, otherOptionsPanel);
         
         this.tabbedPane.setSelectedIndex(tabtoshow);
     }
@@ -478,7 +478,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                     undoStackSize.getText());
             jcpPanel.getRenderPanel().getUndoManager().setLimit(size);
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(this, GT._("Number of undoable operations")+" "+GT._("must be a number from 1 to 100"), GT._("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, GT.get("Number of undoable operations")+" "+GT.get("must be a number from 1 to 100"), GT.get("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             String lnfName="";
@@ -508,17 +508,17 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 props.setProperty("LookAndFeelClass", lnfName);
 		    }
             catch (UnsupportedLookAndFeelException e) {
-	    	    JOptionPane.showMessageDialog(this, GT._("Look and feel")+" \""+lookAndFeel.getSelectedItem()+"\" "+GT._("is not supported on this platform"),GT._("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
+	    	    JOptionPane.showMessageDialog(this, GT.get("Look and feel")+" \""+lookAndFeel.getSelectedItem()+"\" "+GT.get("is not supported on this platform"),GT.get("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
             }
             catch (ClassNotFoundException e) {
-                JOptionPane.showMessageDialog(this, GT._("Class not found:")+" "+ lnfName);
+                JOptionPane.showMessageDialog(this, GT.get("Class not found:")+" "+ lnfName);
             }
             catch (InstantiationException e) {
             // handle exception
-	    	    JOptionPane.showMessageDialog(this, GT._("Instantiation Exception:")+" "+ lnfName);
+	    	    JOptionPane.showMessageDialog(this, GT.get("Instantiation Exception:")+" "+ lnfName);
             }
             catch (IllegalAccessException e) {
-                JOptionPane.showMessageDialog(this, GT._("Illegal Access: ") + lnfName);
+                JOptionPane.showMessageDialog(this, GT.get("Illegal Access: ") + lnfName);
             }
         }
 
@@ -567,7 +567,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
         */
         if ("chooseColor".equals(e.getActionCommand())) {
-            Color newColor = JColorChooser.showDialog(this, GT._("Choose Background Color"), model.getBackColor());
+            Color newColor = JColorChooser.showDialog(this, GT.get("Choose Background Color"), model.getBackColor());
             if (newColor != null) {
                 currentColor = newColor;
                 color.setBackground(currentColor);

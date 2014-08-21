@@ -52,7 +52,7 @@ public class PseudoAtomEditor extends ChemObjectEditor {
     
     private void constructPanel() {
         labelField = new JTextField(20);
-        addField(GT._("Label"), labelField, this);
+        addField(GT.get("Label"), labelField, this);
     }
     
     public void setChemObject(IChemObject object) {
@@ -68,7 +68,7 @@ public class PseudoAtomEditor extends ChemObjectEditor {
     public void applyChanges() {
     	String label=labelField.getText();
     	if (label!=null && label.startsWith("R")&&label.length()>1 && !RGroupQuery.isValidRgroupQueryLabel(label) ) {
-    		JOptionPane.showMessageDialog(null, GT._("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
+    		JOptionPane.showMessageDialog(null, GT.get("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
 		}
     	else {
     		IPseudoAtom atom = (IPseudoAtom)source;

@@ -362,7 +362,7 @@ public class CopyPasteAction extends JCPAction{
                 }
             }
             else{
-                JOptionPane.showMessageDialog(jcpPanel, GT._("The content you tried to copy could not be read to any known format"), GT._("Could not process content"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(jcpPanel, GT.get("The content you tried to copy could not be read to any known format"), GT.get("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
 
         } else if (type.equals("cut")) {

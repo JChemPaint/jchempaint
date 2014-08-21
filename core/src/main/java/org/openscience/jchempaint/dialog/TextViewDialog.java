@@ -111,7 +111,7 @@ public class TextViewDialog extends JDialog {
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        JButton ok = new JButton(GT._("OK"));
+        JButton ok = new JButton(GT.get("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();

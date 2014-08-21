@@ -46,7 +46,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -110,24 +109,24 @@ public class JChemPaint {
             String vers = System.getProperty("java.version");
             String requiredJVM = "1.5.0";
             Package self = Package.getPackage("org.openscience.jchempaint");
-            String version = GT._("Could not determine JCP version");
+            String version = GT.get("Could not determine JCP version");
             if (self != null)
                 version = JCPPropertyHandler.getInstance(true).getVersion();
             if (vers.compareTo(requiredJVM) < 0) {
-                System.err.println(GT._("WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher.", new String[]{version, requiredJVM}));
-                System.err.println(GT._("Your JVM version is {0}", vers));
+                System.err.println(GT.get("WARNING: JChemPaint {0} must be run with a Java VM version {1} or higher.", new String[]{version, requiredJVM}));
+                System.err.println(GT.get("Your JVM version is {0}", vers));
                 System.exit(1);
             }
 
             Options options = new Options();
-            options.addOption("h", "help", false, GT._("gives this help page"));
+            options.addOption("h", "help", false, GT.get("gives this help page"));
             options.addOption("v", "version", false, GT
-                    ._("gives JChemPaints version number"));
+                    .get("gives JChemPaints version number"));
             options.addOption("d", "debug", false,
                     "switches on various debug options");
             options.addOption(OptionBuilder.withArgName("property=value")
                     .hasArg().withValueSeparator().withDescription(
-                            GT._("supported options are given below")).create(
+                            GT.get("supported options are given below")).create(
                             "D"));
 
             CommandLine line = null;
@@ -189,7 +188,7 @@ public class JChemPaint {
                 modelFilename = args[0];
                 File file = new File(modelFilename);
                 if (!file.exists()) {
-                    System.err.println(GT._("File does not exist") + ": "
+                    System.err.println(GT.get("File does not exist") + ": "
                             + modelFilename);
                     System.exit(-1);
                 }
@@ -206,7 +205,7 @@ public class JChemPaint {
 
     public static void showEmptyInstance(boolean debug) {
         IChemModel chemModel = emptyModel();
-        showInstance(chemModel, GT._("Untitled") + " "
+        showInstance(chemModel, GT.get("Untitled") + " "
                 + (instancecounter++), debug);
     }
     
@@ -232,7 +231,7 @@ public class JChemPaint {
             JOptionPane.showMessageDialog(jcpPanel, ex.getMessage());
             return;
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(jcpPanel, GT._("File does not exist")
+            JOptionPane.showMessageDialog(jcpPanel, GT.get("File does not exist")
                     + ": " + inFile.getPath());
             return;
         }
@@ -352,7 +351,7 @@ public class JChemPaint {
         	try {
         		ControllerHub.avoidOverlap(chemModel);
         	} catch (Exception e) {
-                JOptionPane.showMessageDialog(panel, GT._("Structure could not be generated"));
+                JOptionPane.showMessageDialog(panel, GT.get("Structure could not be generated"));
                 throw new CDKException(
                         "Cannot depict structure");
                 }
@@ -558,7 +557,7 @@ public class JChemPaint {
                 sdg.generateCoordinates();
                 molecule = sdg.getMolecule();
             } catch (Exception exc) {
-                JOptionPane.showMessageDialog(chemPaintPanel, GT._("Structure could not be generated"));
+                JOptionPane.showMessageDialog(chemPaintPanel, GT.get("Structure could not be generated"));
                 throw new CDKException(
                         "Cannot depict structure");
             }
@@ -657,15 +656,15 @@ public class JChemPaint {
         for (IAtomContainer next : ChemModelManipulator
                 .getAllAtomContainers(chemModel)) {
             if (GeometryTools.has2DCoordinatesNew(next) != 2) {
-                String error = GT._("Not all atoms have 2D coordinates."
-                        + " JCP can only show full 2D specified structures."
-                        + " Shall we lay out the structure?");
+                String error = GT.get("Not all atoms have 2D coordinates."
+                                              + " JCP can only show full 2D specified structures."
+                                              + " Shall we lay out the structure?");
                 int answer = JOptionPane.showConfirmDialog(null, error,
                         "No 2D coordinates", JOptionPane.YES_NO_OPTION);
 
                 if (answer == JOptionPane.NO_OPTION) {
                     throw new CDKException(GT
-                            ._("Cannot display without 2D coordinates"));
+                            .get("Cannot display without 2D coordinates"));
                 } else {
                     // CreateCoordinatesForFileDialog frame =
                     // new CreateCoordinatesForFileDialog(chemModel);

@@ -93,10 +93,10 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
         super(frame, title, true);
 
         //Create and initialize the buttons.
-        JButton cancelButton = new JButton(GT._("Cancel"));
+        JButton cancelButton = new JButton(GT.get("Cancel"));
         cancelButton.addActionListener(this);
         //
-        final JButton setButton = new JButton(GT._("OK"));
+        final JButton setButton = new JButton(GT.get("OK"));
         setButton.setName("ok");
         setButton.setActionCommand("Set");
         setButton.addActionListener(this);

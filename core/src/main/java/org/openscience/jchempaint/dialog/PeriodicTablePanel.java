@@ -136,7 +136,7 @@ public class PeriodicTablePanel extends JPanel
         butt = new JButton("1");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("H")));
+        panel.add(createButton(GT.get("H")));
 
         butt = new JButton("2");
         butt.setBorder(new EmptyBorder(2,2,2,2));
@@ -166,33 +166,33 @@ public class PeriodicTablePanel extends JPanel
         panel.add(butt);
         //
 
-        panel.add(createButton(GT._("He")));
+        panel.add(createButton(GT.get("He")));
 
         butt = new JButton("2");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
 
-        panel.add(createButton(GT._("Li")));
+        panel.add(createButton(GT.get("Li")));
 
-        panel.add(createButton(GT._("Be")));
+        panel.add(createButton(GT.get("Be")));
         for (int i = 0; i < 10; i++)
         {
             panel.add(Box.createHorizontalGlue());
         }
         //no metall
-        panel.add(createButton(GT._("B")));
-        panel.add(createButton(GT._("C")));
-        panel.add(createButton(GT._("N")));
-        panel.add(createButton(GT._("O")));
-        panel.add(createButton(GT._("F")));
+        panel.add(createButton(GT.get("B")));
+        panel.add(createButton(GT.get("C")));
+        panel.add(createButton(GT.get("N")));
+        panel.add(createButton(GT.get("O")));
+        panel.add(createButton(GT.get("F")));
         //
-        panel.add(createButton(GT._("Ne")));
+        panel.add(createButton(GT.get("Ne")));
 
         butt = new JButton("3");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("Na")));
-        panel.add(createButton(GT._("Mg")));
+        panel.add(createButton(GT.get("Na")));
+        panel.add(createButton(GT.get("Mg")));
 
         butt = new JButton("3");
         butt.setBorder(new EmptyBorder(2,2,2,2));
@@ -225,142 +225,142 @@ public class PeriodicTablePanel extends JPanel
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
         //no metall
-        panel.add(createButton(GT._("Al")));
-        panel.add(createButton(GT._("Si")));
-        panel.add(createButton(GT._("P")));
-        panel.add(createButton(GT._("S")));
-        panel.add(createButton(GT._("Cl")));
+        panel.add(createButton(GT.get("Al")));
+        panel.add(createButton(GT.get("Si")));
+        panel.add(createButton(GT.get("P")));
+        panel.add(createButton(GT.get("S")));
+        panel.add(createButton(GT.get("Cl")));
         //
-        panel.add(createButton(GT._("Ar")));
+        panel.add(createButton(GT.get("Ar")));
 
         butt = new JButton("4");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("K")));
-        panel.add(createButton(GT._("Ca")));
+        panel.add(createButton(GT.get("K")));
+        panel.add(createButton(GT.get("Ca")));
         //transition
-        panel.add(createButton(GT._("Sc")));
-        panel.add(createButton(GT._("Ti")));
-        panel.add(createButton(GT._("V")));
-        panel.add(createButton(GT._("Cr")));
-        panel.add(createButton(GT._("Mn")));
-        panel.add(createButton(GT._("Fe")));
-        panel.add(createButton(GT._("Co")));
-        panel.add(createButton(GT._("Ni")));
-        panel.add(createButton(GT._("Cu")));
-        panel.add(createButton(GT._("Zn")));
+        panel.add(createButton(GT.get("Sc")));
+        panel.add(createButton(GT.get("Ti")));
+        panel.add(createButton(GT.get("V")));
+        panel.add(createButton(GT.get("Cr")));
+        panel.add(createButton(GT.get("Mn")));
+        panel.add(createButton(GT.get("Fe")));
+        panel.add(createButton(GT.get("Co")));
+        panel.add(createButton(GT.get("Ni")));
+        panel.add(createButton(GT.get("Cu")));
+        panel.add(createButton(GT.get("Zn")));
         //no metall
-        panel.add(createButton(GT._("Ga")));
-        panel.add(createButton(GT._("Ge")));
-        panel.add(createButton(GT._("As")));
-        panel.add(createButton(GT._("Se")));
-        panel.add(createButton(GT._("Br")));
+        panel.add(createButton(GT.get("Ga")));
+        panel.add(createButton(GT.get("Ge")));
+        panel.add(createButton(GT.get("As")));
+        panel.add(createButton(GT.get("Se")));
+        panel.add(createButton(GT.get("Br")));
         //
-        panel.add(createButton(GT._("Kr")));
+        panel.add(createButton(GT.get("Kr")));
 
         butt = new JButton("5");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("Rb")));
-        panel.add(createButton(GT._("Sr")));
+        panel.add(createButton(GT.get("Rb")));
+        panel.add(createButton(GT.get("Sr")));
         //transition
-        panel.add(createButton(GT._("Y")));
-        panel.add(createButton(GT._("Zr")));
-        panel.add(createButton(GT._("Nb")));
-        panel.add(createButton(GT._("Mo")));
-        panel.add(createButton(GT._("Tc")));
-        panel.add(createButton(GT._("Ru")));
-        panel.add( createButton(GT._("Rh")));
-        panel.add(createButton(GT._("Pd")));
-        panel.add(createButton(GT._("Ag")));
-        panel.add(createButton(GT._("Cd")));
+        panel.add(createButton(GT.get("Y")));
+        panel.add(createButton(GT.get("Zr")));
+        panel.add(createButton(GT.get("Nb")));
+        panel.add(createButton(GT.get("Mo")));
+        panel.add(createButton(GT.get("Tc")));
+        panel.add(createButton(GT.get("Ru")));
+        panel.add( createButton(GT.get("Rh")));
+        panel.add(createButton(GT.get("Pd")));
+        panel.add(createButton(GT.get("Ag")));
+        panel.add(createButton(GT.get("Cd")));
         //no metall
-        panel.add(createButton(GT._("In")));
-        panel.add(createButton(GT._("Sn")));
-        panel.add(createButton(GT._("Sb")));
-        panel.add(createButton(GT._("Te")));
-        panel.add(createButton(GT._("I")));
+        panel.add(createButton(GT.get("In")));
+        panel.add(createButton(GT.get("Sn")));
+        panel.add(createButton(GT.get("Sb")));
+        panel.add(createButton(GT.get("Te")));
+        panel.add(createButton(GT.get("I")));
         //
-        panel.add(createButton(GT._("Xe")));
+        panel.add(createButton(GT.get("Xe")));
 
         butt = new JButton("6");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("Cs")));
-        panel.add(createButton(GT._("Ba")));
+        panel.add(createButton(GT.get("Cs")));
+        panel.add(createButton(GT.get("Ba")));
         //transition
-        panel.add(createButton(GT._("La")));
-        panel.add(createButton(GT._("Hf")));
-        panel.add(createButton(GT._("Ta")));
-        panel.add(createButton(GT._("W")));
-        panel.add(createButton(GT._("Re")));
-        panel.add(createButton(GT._("Os")));
-        panel.add(createButton(GT._("Ir")));
-        panel.add(createButton(GT._("Pt")));
-        panel.add(createButton(GT._("Au")));
-        panel.add(createButton(GT._("Hg")));
+        panel.add(createButton(GT.get("La")));
+        panel.add(createButton(GT.get("Hf")));
+        panel.add(createButton(GT.get("Ta")));
+        panel.add(createButton(GT.get("W")));
+        panel.add(createButton(GT.get("Re")));
+        panel.add(createButton(GT.get("Os")));
+        panel.add(createButton(GT.get("Ir")));
+        panel.add(createButton(GT.get("Pt")));
+        panel.add(createButton(GT.get("Au")));
+        panel.add(createButton(GT.get("Hg")));
         //no metall
-        panel.add(createButton(GT._("Tl")));
-        panel.add(createButton(GT._("Pb")));
-        panel.add(createButton(GT._("Bi")));
-        panel.add(createButton(GT._("Po")));
-        panel.add(createButton(GT._("At")));
+        panel.add(createButton(GT.get("Tl")));
+        panel.add(createButton(GT.get("Pb")));
+        panel.add(createButton(GT.get("Bi")));
+        panel.add(createButton(GT.get("Po")));
+        panel.add(createButton(GT.get("At")));
         //
-        panel.add(createButton(GT._("Rn")));
+        panel.add(createButton(GT.get("Rn")));
 
         butt = new JButton("7");
         butt.setBorder(new EmptyBorder(2,2,2,2));
         panel.add(butt);
-        panel.add(createButton(GT._("Fr")));
-        panel.add(createButton(GT._("Ra")));
+        panel.add(createButton(GT.get("Fr")));
+        panel.add(createButton(GT.get("Ra")));
         //transition
-        panel.add(createButton(GT._("Ac")));
-        panel.add(createButton(GT._("Rf")));
-        panel.add(createButton(GT._("Db")));
-        panel.add(createButton(GT._("Sg")));
-        panel.add(createButton(GT._("Bh")));
-        panel.add(createButton(GT._("Hs")));
-        panel.add(createButton(GT._("Mt")));
-        panel.add(createButton(GT._("Ds")));
-        panel.add(createButton(GT._("Rg")));
+        panel.add(createButton(GT.get("Ac")));
+        panel.add(createButton(GT.get("Rf")));
+        panel.add(createButton(GT.get("Db")));
+        panel.add(createButton(GT.get("Sg")));
+        panel.add(createButton(GT.get("Bh")));
+        panel.add(createButton(GT.get("Hs")));
+        panel.add(createButton(GT.get("Mt")));
+        panel.add(createButton(GT.get("Ds")));
+        panel.add(createButton(GT.get("Rg")));
         for (int i = 0; i < 10; i++)
         {
             panel.add(Box.createHorizontalGlue());
         }
         //Acti
-        panel.add(createButton(GT._("Ce")));
-        panel.add(createButton(GT._("Pr")));
-        panel.add(createButton(GT._("Nd")));
-        panel.add(createButton(GT._("Pm")));
-        panel.add(createButton(GT._("Sm")));
-        panel.add(createButton(GT._("Eu")));
-        panel.add(createButton(GT._("Gd")));
-        panel.add(createButton(GT._("Tb")));
-        panel.add(createButton(GT._("Dy")));
-        panel.add(createButton(GT._("Ho")));
-        panel.add(createButton(GT._("Er")));
-        panel.add(createButton(GT._("Tm")));
-        panel.add(createButton(GT._("Yb")));
-        panel.add(createButton(GT._("Lu")));
+        panel.add(createButton(GT.get("Ce")));
+        panel.add(createButton(GT.get("Pr")));
+        panel.add(createButton(GT.get("Nd")));
+        panel.add(createButton(GT.get("Pm")));
+        panel.add(createButton(GT.get("Sm")));
+        panel.add(createButton(GT.get("Eu")));
+        panel.add(createButton(GT.get("Gd")));
+        panel.add(createButton(GT.get("Tb")));
+        panel.add(createButton(GT.get("Dy")));
+        panel.add(createButton(GT.get("Ho")));
+        panel.add(createButton(GT.get("Er")));
+        panel.add(createButton(GT.get("Tm")));
+        panel.add(createButton(GT.get("Yb")));
+        panel.add(createButton(GT.get("Lu")));
         for (int i = 0; i < 5; i++)
         {
             panel.add(Box.createHorizontalGlue());
         }
         //Lacti
-        panel.add( createButton(GT._("Th")));
-        panel.add(createButton(GT._("Pa")));
-        panel.add(createButton(GT._("U")));
-        panel.add(createButton(GT._("Np")));
-        panel.add(createButton(GT._("Pu")));
-        panel.add(createButton(GT._("Am")));
-        panel.add(createButton(GT._("Cm")));
-        panel.add(createButton(GT._("Bk")));
-        panel.add(createButton(GT._("Cf")));
-        panel.add(createButton(GT._("Es")));
-        panel.add(createButton(GT._("Fm")));
-        panel.add(createButton(GT._("Md")));
-        panel.add(createButton(GT._("No")));
-        panel.add(createButton(GT._("Lr")));
+        panel.add( createButton(GT.get("Th")));
+        panel.add(createButton(GT.get("Pa")));
+        panel.add(createButton(GT.get("U")));
+        panel.add(createButton(GT.get("Np")));
+        panel.add(createButton(GT.get("Pu")));
+        panel.add(createButton(GT.get("Am")));
+        panel.add(createButton(GT.get("Cm")));
+        panel.add(createButton(GT.get("Bk")));
+        panel.add(createButton(GT.get("Cf")));
+        panel.add(createButton(GT.get("Es")));
+        panel.add(createButton(GT.get("Fm")));
+        panel.add(createButton(GT.get("Md")));
+        panel.add(createButton(GT.get("No")));
+        panel.add(createButton(GT.get("Lr")));
         //End
         panel.setVisible(true);
         return panel;
@@ -476,362 +476,362 @@ public class PeriodicTablePanel extends JPanel
         String result;
         switch(element) {
         case 1:
-            result = GT._("Hydrogen");
+            result = GT.get("Hydrogen");
             break;
         case 2:
-            result = GT._("Helium");
+            result = GT.get("Helium");
             break;
         case 3:
-            result = GT._("Lithium");
+            result = GT.get("Lithium");
             break;
         case 4:
-            result = GT._("Beryllium");
+            result = GT.get("Beryllium");
             break;
         case 5:
-            result = GT._("Boron");
+            result = GT.get("Boron");
             break;
         case 6:
-            result = GT._("Carbon");
+            result = GT.get("Carbon");
             break;
         case 7:
-            result = GT._("Nitrogen");
+            result = GT.get("Nitrogen");
             break;
         case 8:
-            result = GT._("Oxygen");
+            result = GT.get("Oxygen");
             break;
         case 9:
-            result = GT._("Fluorine");
+            result = GT.get("Fluorine");
             break;
         case 10:
-            result = GT._("Neon");
+            result = GT.get("Neon");
             break;
         case 11:
-            result = GT._("Sodium");
+            result = GT.get("Sodium");
             break;
         case 12:
-            result = GT._("Magnesium");
+            result = GT.get("Magnesium");
             break;
         case 13:
-            result = GT._("Aluminum");
+            result = GT.get("Aluminum");
             break;
         case 14:
-            result = GT._("Silicon");
+            result = GT.get("Silicon");
             break;
         case 15:
-            result = GT._("Phosphorus");
+            result = GT.get("Phosphorus");
             break;
         case 16:
-            result = GT._("Sulfur");
+            result = GT.get("Sulfur");
             break;
         case 17:
-            result = GT._("Chlorine");
+            result = GT.get("Chlorine");
             break;
         case 18:
-            result = GT._("Argon");
+            result = GT.get("Argon");
             break;
         case 19:
-            result = GT._("Potassium");
+            result = GT.get("Potassium");
             break;
         case 20:
-            result = GT._("Calcium");
+            result = GT.get("Calcium");
             break;
         case 21:
-            result = GT._("Scandium");
+            result = GT.get("Scandium");
             break;
         case 22:
-            result = GT._("Titanium");
+            result = GT.get("Titanium");
             break;
         case 23:
-            result = GT._("Vanadium");
+            result = GT.get("Vanadium");
             break;
         case 24:
-            result = GT._("Chromium");
+            result = GT.get("Chromium");
             break;
         case 25:
-            result = GT._("Manganese");
+            result = GT.get("Manganese");
             break;
         case 26:
-            result = GT._("Iron");
+            result = GT.get("Iron");
             break;
         case 27:
-            result = GT._("Cobalt");
+            result = GT.get("Cobalt");
             break;
         case 28:
-            result = GT._("Nickel");
+            result = GT.get("Nickel");
             break;
         case 29:
-            result = GT._("Copper");
+            result = GT.get("Copper");
             break;
         case 30:
-            result = GT._("Zinc");
+            result = GT.get("Zinc");
             break;
         case 31:
-            result = GT._("Gallium");
+            result = GT.get("Gallium");
             break;
         case 32:
-            result = GT._("Germanium");
+            result = GT.get("Germanium");
             break;
         case 33:
-            result = GT._("Arsenic");
+            result = GT.get("Arsenic");
             break;
         case 34:
-            result = GT._("Selenium");
+            result = GT.get("Selenium");
             break;
         case 35:
-            result = GT._("Bromine");
+            result = GT.get("Bromine");
             break;
         case 36:
-            result = GT._("Krypton");
+            result = GT.get("Krypton");
             break;
         case 37:
-            result = GT._("Rubidium");
+            result = GT.get("Rubidium");
             break;
         case 38:
-            result = GT._("Strontium");
+            result = GT.get("Strontium");
             break;
         case 39:
-            result = GT._("Yttrium");
+            result = GT.get("Yttrium");
             break;
         case 40:
-            result = GT._("Zirconium");
+            result = GT.get("Zirconium");
             break;
         case 41:
-            result = GT._("Niobium");
+            result = GT.get("Niobium");
             break;
         case 42:
-            result = GT._("Molybdenum");
+            result = GT.get("Molybdenum");
             break;
         case 43:
-            result = GT._("Technetium");
+            result = GT.get("Technetium");
             break;
         case 44:
-            result = GT._("Ruthenium");
+            result = GT.get("Ruthenium");
             break;
         case 45:
-            result = GT._("Rhodium");
+            result = GT.get("Rhodium");
             break;
         case 46:
-            result = GT._("Palladium");
+            result = GT.get("Palladium");
             break;
         case 47:
-            result = GT._("Silver");
+            result = GT.get("Silver");
             break;
         case 48:
-            result = GT._("Cadmium");
+            result = GT.get("Cadmium");
             break;
         case 49:
-            result = GT._("Indium");
+            result = GT.get("Indium");
             break;
         case 50:
-            result = GT._("Tin");
+            result = GT.get("Tin");
             break;
         case 51:
-            result = GT._("Antimony");
+            result = GT.get("Antimony");
             break;
         case 52:
-            result = GT._("Tellurium");
+            result = GT.get("Tellurium");
             break;
         case 53:
-            result = GT._("Iodine");
+            result = GT.get("Iodine");
             break;
         case 54:
-            result = GT._("Xenon");
+            result = GT.get("Xenon");
             break;
         case 55:
-            result = GT._("Cesium");
+            result = GT.get("Cesium");
             break;
         case 56:
-            result = GT._("Barium");
+            result = GT.get("Barium");
             break;
         case 57:
-            result = GT._("Lanthanum");
+            result = GT.get("Lanthanum");
             break;
         case 58:
-            result = GT._("Cerium");
+            result = GT.get("Cerium");
             break;
         case 59:
-            result = GT._("Praseodymium");
+            result = GT.get("Praseodymium");
             break;
         case 60:
-            result = GT._("Neodymium");
+            result = GT.get("Neodymium");
             break;
         case 61:
-            result = GT._("Promethium");
+            result = GT.get("Promethium");
             break;
         case 62:
-            result = GT._("Samarium");
+            result = GT.get("Samarium");
             break;
         case 63:
-            result = GT._("Europium");
+            result = GT.get("Europium");
             break;
         case 64:
-            result = GT._("Gadolinium");
+            result = GT.get("Gadolinium");
             break;
         case 65:
-            result = GT._("Terbium");
+            result = GT.get("Terbium");
             break;
         case 66:
-            result = GT._("Dysprosium");
+            result = GT.get("Dysprosium");
             break;
         case 67:
-            result = GT._("Holmium");
+            result = GT.get("Holmium");
             break;
         case 68:
-            result = GT._("Erbium");
+            result = GT.get("Erbium");
             break;
         case 69:
-            result = GT._("Thulium");
+            result = GT.get("Thulium");
             break;
         case 70:
-            result = GT._("Ytterbium");
+            result = GT.get("Ytterbium");
             break;
         case 71:
-            result = GT._("Lutetium");
+            result = GT.get("Lutetium");
             break;
         case 72:
-            result = GT._("Hafnium");
+            result = GT.get("Hafnium");
             break;
         case 73:
-            result = GT._("Tantalum");
+            result = GT.get("Tantalum");
             break;
         case 74:
-            result = GT._("Tungsten");
+            result = GT.get("Tungsten");
             break;
         case 75:
-            result = GT._("Rhenium");
+            result = GT.get("Rhenium");
             break;
         case 76:
-            result = GT._("Osmium");
+            result = GT.get("Osmium");
             break;
         case 77:
-            result = GT._("Iridium");
+            result = GT.get("Iridium");
             break;
         case 78:
-            result = GT._("Platinum");
+            result = GT.get("Platinum");
             break;
         case 79:
-            result = GT._("Gold");
+            result = GT.get("Gold");
             break;
         case 80:
-            result = GT._("Mercury");
+            result = GT.get("Mercury");
             break;
         case 81:
-            result = GT._("Thallium");
+            result = GT.get("Thallium");
             break;
         case 82:
-            result = GT._("Lead");
+            result = GT.get("Lead");
             break;
         case 83:
-            result = GT._("Bismuth");
+            result = GT.get("Bismuth");
             break;
         case 84:
-            result = GT._("Polonium");
+            result = GT.get("Polonium");
             break;
         case 85:
-            result = GT._("Astatine");
+            result = GT.get("Astatine");
             break;
         case 86:
-            result = GT._("Radon");
+            result = GT.get("Radon");
             break;
         case 87:
-            result = GT._("Francium");
+            result = GT.get("Francium");
             break;
         case 88:
-            result = GT._("Radium");
+            result = GT.get("Radium");
             break;
         case 89:
-            result = GT._("Actinium");
+            result = GT.get("Actinium");
             break;
         case 90:
-            result = GT._("Thorium");
+            result = GT.get("Thorium");
             break;
         case 91:
-            result = GT._("Protactinium");
+            result = GT.get("Protactinium");
             break;
         case 92:
-            result = GT._("Uranium");
+            result = GT.get("Uranium");
             break;
         case 93:
-            result = GT._("Neptunium");
+            result = GT.get("Neptunium");
             break;
         case 94:
-            result = GT._("Plutonium");
+            result = GT.get("Plutonium");
             break;
         case 95:
-            result = GT._("Americium");
+            result = GT.get("Americium");
             break;
         case 96:
-            result = GT._("Curium");
+            result = GT.get("Curium");
             break;
         case 97:
-            result = GT._("Berkelium");
+            result = GT.get("Berkelium");
             break;
         case 98:
-            result = GT._("Californium");
+            result = GT.get("Californium");
             break;
         case 99:
-            result = GT._("Einsteinium");
+            result = GT.get("Einsteinium");
             break;
         case 100:
-            result = GT._("Fermium");
+            result = GT.get("Fermium");
             break;
         case 101:
-            result = GT._("Mendelevium");
+            result = GT.get("Mendelevium");
             break;
         case 102:
-            result = GT._("Nobelium");
+            result = GT.get("Nobelium");
             break;
         case 103:
-            result = GT._("Lawrencium");
+            result = GT.get("Lawrencium");
             break;
         case 104:
-            result = GT._("Rutherfordium");
+            result = GT.get("Rutherfordium");
             break;
         case 105:
-            result = GT._("Dubnium");
+            result = GT.get("Dubnium");
             break;
         case 106:
-            result = GT._("Seaborgium");
+            result = GT.get("Seaborgium");
             break;
         case 107:
-            result = GT._("Bohrium");
+            result = GT.get("Bohrium");
             break;
         case 108:
-            result = GT._("Hassium");
+            result = GT.get("Hassium");
             break;
         case 109:
-            result = GT._("Meitnerium");
+            result = GT.get("Meitnerium");
             break;
         case 110:
-            result = GT._("Darmstadtium");
+            result = GT.get("Darmstadtium");
             break;
         case 111:
-            result = GT._("Roentgenium");
+            result = GT.get("Roentgenium");
             break;
         case 112:
-            result = GT._("Ununbium");
+            result = GT.get("Ununbium");
             break;
         case 113:
-            result = GT._("Ununtrium");
+            result = GT.get("Ununtrium");
             break;
         case 114:
-            result = GT._("Ununquadium");
+            result = GT.get("Ununquadium");
             break;
         case 115:
-            result = GT._("Ununpentium");
+            result = GT.get("Ununpentium");
             break;
         case 116:
-            result = GT._("Ununhexium");
+            result = GT.get("Ununhexium");
             break;
         case 117:
-            result = GT._("Ununseptium");
+            result = GT.get("Ununseptium");
             break;
         case 118:
-            result = GT._("Ununoctium");
+            result = GT.get("Ununoctium");
             break;
 
         default:
-            result = GT._("Unknown");
+            result = GT.get("Unknown");
         }
 
         return result;
@@ -846,27 +846,27 @@ public class PeriodicTablePanel extends JPanel
      */
     public String serieTranslator(String serie) {
         if(serie.equals("Noble Gasses"))
-            return GT._("Noble Gases");
+            return GT.get("Noble Gases");
         else if(serie.equals("Halogens"))
-            return GT._("Halogens"); 
+            return GT.get("Halogens"); 
         else if(serie.equals("Nonmetals"))
-            return GT._("Nonmetals");
+            return GT.get("Nonmetals");
         else if(serie.equals("Metalloids"))
-            return GT._("Metalloids");
+            return GT.get("Metalloids");
         else if(serie.equals("Metals"))
-            return GT._("Metals");
+            return GT.get("Metals");
         else if(serie.equals("Alkali Earth Metals"))
-            return GT._("Alkali Earth Metals");
+            return GT.get("Alkali Earth Metals");
         else if(serie.equals("Alkali Metals"))
-            return GT._("Alkali Metals");
+            return GT.get("Alkali Metals");
         else if(serie.equals("Transition metals"))
-            return GT._("Transition metals");
+            return GT.get("Transition metals");
         else if(serie.equals("Lanthanides"))
-            return GT._("Lanthanides");
+            return GT.get("Lanthanides");
         else if(serie.equals("Actinides"))
-            return GT._("Actinides");
+            return GT.get("Actinides");
         else
-            return GT._("Unknown");
+            return GT.get("Unknown");
     }
 
     /**
@@ -878,13 +878,13 @@ public class PeriodicTablePanel extends JPanel
      */
     public String phaseTranslator(String serie) {
         if(serie.equals("Gas"))
-            return GT._("Gas");
+            return GT.get("Gas");
         else if(serie.equals("Liquid"))
-            return GT._("Liquid"); 
+            return GT.get("Liquid"); 
         else if(serie.equals("Solid"))
-            return GT._("Solid");
+            return GT.get("Solid");
         else
-            return GT._("Unknown");
+            return GT.get("Unknown");
     }
 
     /**
@@ -1007,18 +1007,18 @@ public class PeriodicTablePanel extends JPanel
             Integer group = PeriodicTable.getGroup(elementSymbol);
             label = new JLabel("<html><FONT SIZE=+2>"
                     +elementTranslator(PeriodicTable.getAtomicNumber(elementSymbol))+" ("+elementSymbol+")</FONT><br> "
-                    +GT._("Atomic number")+" "+PeriodicTable.getAtomicNumber(elementSymbol)
-                    + (group!=null ? ", "+GT._("Group")+" "+group : "")
-                    +", "+GT._("Period")+" "+ PeriodicTable.getPeriod(elementSymbol)+"</html>");
+                    +GT.get("Atomic number")+" "+PeriodicTable.getAtomicNumber(elementSymbol)
+                    + (group!=null ? ", "+GT.get("Group")+" "+group : "")
+                    +", "+GT.get("Period")+" "+ PeriodicTable.getPeriod(elementSymbol)+"</html>");
             label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
             pan.add(label,BorderLayout.NORTH);
 
             label = new JLabel("<html><FONT> "
-                    +GT._("CAS RN:")+" "+ PeriodicTable.getCASId(elementSymbol)+"<br> "
-                    +GT._("Element Category:")+" "+serieTranslator(PeriodicTable.getChemicalSeries(elementSymbol))+"<br> "
-                    +GT._("State:")+" "+phaseTranslator(PeriodicTable.getPhase(elementSymbol))+"<br> "
-                    +GT._("Electronegativity:")+" "
-                    +(PeriodicTable.getPaulingElectronegativity(elementSymbol)==null ? GT._("undefined") : PeriodicTable.getPaulingElectronegativity(elementSymbol))+"<br>"
+                    +GT.get("CAS RN:")+" "+ PeriodicTable.getCASId(elementSymbol)+"<br> "
+                    +GT.get("Element Category:")+" "+serieTranslator(PeriodicTable.getChemicalSeries(elementSymbol))+"<br> "
+                    +GT.get("State:")+" "+phaseTranslator(PeriodicTable.getPhase(elementSymbol))+"<br> "
+                    +GT.get("Electronegativity:")+" "
+                    +(PeriodicTable.getPaulingElectronegativity(elementSymbol)==null ? GT.get("undefined") : PeriodicTable.getPaulingElectronegativity(elementSymbol))+"<br>"
                     +"</FONT></html>");
             label.setMinimumSize(new Dimension(165,150));
             label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -1026,7 +1026,7 @@ public class PeriodicTablePanel extends JPanel
         }
         else
         {
-            label = new JLabel("     "+GT._("Periodic Table of elements"));
+            label = new JLabel("     "+GT.get("Periodic Table of elements"));
             label.setHorizontalTextPosition(JLabel.CENTER);
             label.setVerticalTextPosition(JLabel.CENTER);
             label.setOpaque(true);

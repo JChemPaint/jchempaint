@@ -448,7 +448,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 }
             }
         } else if (position == 3) {
-            status = GT._("Zoomfactor")
+            status = GT.get("Zoomfactor")
                     + ": "
                     + NumberFormat.getPercentInstance().format(
                             renderer.getRenderer2DModel().getZoomFactor());
@@ -461,7 +461,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return "<html>"
                 + formula
                 + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
-                        + GT._("Hs implicit") + ")") + "</html>";
+                        + GT.get("Hs implicit") + ")") + "</html>";
     }
 
     public Renderer getRenderer() {

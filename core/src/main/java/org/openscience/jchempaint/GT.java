@@ -120,19 +120,19 @@ public class GT {
     boolean wasTranslating = doTranslate;
     doTranslate = false;
     languageList = new Language[] {
-      new Language("en_US", GT._("American English"),         true), // global default for "en" will be "en_US"
-      new Language("ar",    GT._("Arabic"),                   true),
-      new Language("pt_BR", GT._("Brazilian Portuguese"),     true),
-      new Language("ca",    GT._("Catalan"),                  true),
-      new Language("zh",    GT._("Chinese"),                  true),
-      new Language("cs",    GT._("Czech"),                    true),
-      new Language("nl",    GT._("Dutch"),                    true),
-      new Language("de",    GT._("German"),                   true),
-      new Language("hu",    GT._("Hungarian"),                true),
-      new Language("pl",    GT._("Polish"),                   true),
-      new Language("ru",    GT._("Russian"),                  true),
-      new Language("es",    GT._("Spanish"),                  true),
-      new Language("th",    GT._("Thai"),                     true),
+      new Language("en_US", GT.get("American English"),         true), // global default for "en" will be "en_US"
+      new Language("ar",    GT.get("Arabic"),                   true),
+      new Language("pt_BR", GT.get("Brazilian Portuguese"),     true),
+      new Language("ca",    GT.get("Catalan"),                  true),
+      new Language("zh",    GT.get("Chinese"),                  true),
+      new Language("cs",    GT.get("Czech"),                    true),
+      new Language("nl",    GT.get("Dutch"),                    true),
+      new Language("de",    GT.get("German"),                   true),
+      new Language("hu",    GT.get("Hungarian"),                true),
+      new Language("pl",    GT.get("Polish"),                   true),
+      new Language("ru",    GT.get("Russian"),                  true),
+      new Language("es",    GT.get("Spanish"),                  true),
+      new Language("th",    GT.get("Thai"),                     true),
     };
     doTranslate = wasTranslating;
     return languageList;
@@ -328,42 +328,42 @@ public class GT {
     return getTextWrapper().doTranslate;
   }
 
-  public static String _(String string) {
+  public static String get(String string) {
     return getTextWrapper().getString(string);
   }
 
-  public static String _(String string, String item) {
+  public static String get(String string, String item) {
     return getTextWrapper().getString(string, new Object[] { item });
   }
 
-  public static String _(String string, int item) {
+  public static String get(String string, int item) {
     return getTextWrapper().getString(string,
         new Object[] { new Integer(item) });
   }
 
-  public static String _(String string, Object[] objects) {
+  public static String get(String string, Object[] objects) {
     return getTextWrapper().getString(string, objects);
   }
 
   //forced translations
   
-  public static String _(String string, boolean t) {
-    return _(string, (Object[])null, t);
+  public static String get(String string, boolean t) {
+    return get(string, (Object[]) null, t);
   }
 
-  public static String _(String string, String item, boolean t) {
-    return _(string, new Object[] { item });
+  public static String get(String string, String item, boolean t) {
+    return get(string, new Object[]{item});
   }
 
-  public static String _(String string, int item, boolean t) {
-    return _(string, new Object[] { new Integer(item) });
+  public static String get(String string, int item, boolean t) {
+    return get(string, new Object[]{new Integer(item)});
   }
 
-  public static synchronized String _(String string, Object[] objects, boolean t) {
+  public static synchronized String get(String string, Object[] objects, boolean t) {
     boolean wasTranslating;
     if (!(wasTranslating = getTextWrapper().doTranslate))
       setDoTranslate(true);
-    String str = (objects == null ? _(string) : _(string, objects));
+    String str = (objects == null ? get(string) : get(string, objects));
     if (!wasTranslating)
       setDoTranslate(false);
     return str;

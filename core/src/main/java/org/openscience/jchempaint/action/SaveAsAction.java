@@ -111,7 +111,7 @@ public class SaveAsAction extends JCPAction
         IChemModel jcpm = jcpPanel.getChemModel();
         if (jcpm == null)
         {
-            String error = GT._("Nothing to save.");
+            String error = GT.get("Nothing to save.");
             JOptionPane.showMessageDialog(jcpPanel, error,error,JOptionPane.WARNING_MESSAGE);
         } else
         {
@@ -151,21 +151,21 @@ public class SaveAsAction extends JCPAction
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 if(!(currentFilter instanceof IJCPFileFilter)){
-                    JOptionPane.showMessageDialog(jcpPanel, GT._("Please choose a file type!"), GT._("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(jcpPanel, GT.get("Please choose a file type!"), GT.get("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }else{
                     type = ((IJCPFileFilter) currentFilter).getType();
                     File outFile = chooser.getSelectedFile();
                     if(outFile.exists()){
                         ready=JOptionPane.showConfirmDialog((Component)null,
-                        GT._("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
-                        GT._("File already exists"),JOptionPane.YES_NO_OPTION);
+                        GT.get("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
+                        GT.get("File already exists"),JOptionPane.YES_NO_OPTION);
                     }else{
                         try{
                             if(new File(outFile.getCanonicalFile()+"."+type).exists()){
                                 ready=JOptionPane.showConfirmDialog((Component)null,
-                                GT._("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
-                                GT._("File already exists"),JOptionPane.YES_NO_OPTION);
+                                GT.get("File {0} already exists. Do you want to overwrite it?", outFile.getName()), 
+                                GT.get("File already exists"),JOptionPane.YES_NO_OPTION);
                             }
                         }catch(Throwable ex){
                             jcpPanel.announceError(ex);
@@ -199,7 +199,7 @@ public class SaveAsAction extends JCPAction
                                     outFile = saveAsRXN(model, outFile);
                                 } else
                                 {
-                                    String error = GT._("Cannot save file in this format:") + " " + type;
+                                    String error = GT.get("Cannot save file in this format:") + " " + type;
                                     logger.error(error);
                                     JOptionPane.showMessageDialog(jcpPanel, error);
                                     return;
@@ -207,7 +207,7 @@ public class SaveAsAction extends JCPAction
                                 jcpPanel.setModified(false);
                             } catch (Exception exc)
                             {
-                                String error = GT._("Error while writing file")+": " + exc.getMessage();
+                                String error = GT.get("Error while writing file")+": " + exc.getMessage();
                                 logger.error(error);
                                 logger.debug(exc);
                                 JOptionPane.showMessageDialog(jcpPanel, error);
@@ -229,16 +229,16 @@ public class SaveAsAction extends JCPAction
 
     protected File saveAsRXN(IChemModel model, File outFile) throws IOException, CDKException {
         if(model.getMoleculeSet()!=null && model.getMoleculeSet().getAtomContainerCount()>0){
-			String error = GT._("Problems handling data");
-			String message = GT._("{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?","RXN");
+			String error = GT.get("Problems handling data");
+			String message = GT.get("{0} files cannot contain extra molecules. You painted molecules outside the reaction(s), which will not be in the file. Continue?", "RXN");
 
 			int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
 			if(answer == JOptionPane.NO_OPTION)
 				return null;
     	}
     	if(model.getReactionSet()==null || model.getReactionSet().getReactionCount()==0){
-			String error = GT._("Problems handling data");
-			String message = GT._("RXN can only save reactions. You have no reactions painted!");
+			String error = GT.get("Problems handling data");
+			String message = GT.get("RXN can only save reactions. You have no reactions painted!");
 			JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
 			return null;
     	}
@@ -267,14 +267,14 @@ public class SaveAsAction extends JCPAction
         logger.info("Saving the contents in a MDL molfile file...");
         
         if(model.getMoleculeSet()==null || model.getMoleculeSet().getAtomContainerCount()==0){
-            String error = GT._("Problems handling data");
-            String message = GT._("MDL mol files can only save molecules. You have no molecules painted!");
+            String error = GT.get("Problems handling data");
+            String message = GT.get("MDL mol files can only save molecules. You have no molecules painted!");
             JOptionPane.showMessageDialog(jcpPanel, message, error, JOptionPane.WARNING_MESSAGE);
             return null;
         }
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
-            String error = GT._("Problems handling data");
-            String message = GT._("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?","MDL mol");
+            String error = GT.get("Problems handling data");
+            String message = GT.get("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?", "MDL mol");
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)
                 return null;
@@ -285,8 +285,8 @@ public class SaveAsAction extends JCPAction
 			  rGroupQuery= jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery();
 
         if(rGroupQuery!=null){
-            String error = GT._("Please choose a file type!");
-            String message = GT._("Would you like to save the drawing as an R-group Query File? (RGFile = extended MOLfile)");
+            String error = GT.get("Please choose a file type!");
+            String message = GT.get("Would you like to save the drawing as an R-group Query File? (RGFile = extended MOLfile)");
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.YES_OPTION)
             	saveAsRgrpQuery=true;
@@ -307,16 +307,16 @@ public class SaveAsAction extends JCPAction
         	jcpPanel.get2DHub().getRGroupHandler().cleanUpRGroup(jcpPanel.get2DHub().getChemModel().getMoleculeSet());
 
         	if(!rGroupQuery.areRootAtomsDefined()) {
-                message = GT._("The R-group Query is not valid: there are substitutes that have no corresponding atom in the root structure.");
+                message = GT.get("The R-group Query is not valid: there are substitutes that have no corresponding atom in the root structure.");
                 problem=true;
         	}
         	if(!rGroupQuery.areSubstituentsDefined()) {
-                message = GT._("The R-group Query is not valid: the root structure has R# definitions for which no substitutes are defined.");
+                message = GT.get("The R-group Query is not valid: the root structure has R# definitions for which no substitutes are defined.");
 				problem=true;
         	}
         	if (problem) {
-                String error = GT._("Could not save file");
-				JOptionPane.showMessageDialog(jcpPanel, message, GT._(error), JOptionPane.INFORMATION_MESSAGE);
+                String error = GT.get("Could not save file");
+				JOptionPane.showMessageDialog(jcpPanel, message, GT.get(error), JOptionPane.INFORMATION_MESSAGE);
                 return null;
         	}
 
@@ -399,8 +399,8 @@ public class SaveAsAction extends JCPAction
         
         logger.info("Saving the contents in SMILES format...");
         if(model.getReactionSet()!=null && model.getReactionSet().getReactionCount()>0){
-            String error = GT._("Problems handling data");
-            String message = GT._("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?","SMILES");
+            String error = GT.get("Problems handling data");
+            String message = GT.get("{0} files cannot contain reactions. Your have reaction(s) painted. The reactants/products of these will be included as separate molecules. Continue?", "SMILES");
 
             int answer = JOptionPane.showConfirmDialog(jcpPanel, message, error, JOptionPane.YES_NO_OPTION);
             if(answer == JOptionPane.NO_OPTION)

@@ -57,17 +57,17 @@ public class ReactionEditor extends ChemObjectEditor {
     
     private void constructPanel() {
         idField = new JTextField(40);
-        addField(GT._("Reaction ID"), idField, this);
+        addField(GT.get("Reaction ID"), idField, this);
         // the options given next should match the order in the Reaction class!
         String[] options = {
-            "", GT._("Forward"), GT._("Backward"), GT._("Bidirectional")
+            "", GT.get("Forward"), GT.get("Backward"), GT.get("Bidirectional")
         };
         directionField = new JComboBox(options);
-        addField(GT._("Direction"), directionField, this);
+        addField(GT.get("Direction"), directionField, this);
         solventField = new JTextField(40);
-        addField(GT._("Solvent"), solventField, this);
+        addField(GT.get("Solvent"), solventField, this);
         tempField = new JTextField(10);
-        addField(GT._("Temperature"), tempField, this);
+        addField(GT.get("Temperature"), tempField, this);
     }
     
     public void setChemObject(IChemObject object) {

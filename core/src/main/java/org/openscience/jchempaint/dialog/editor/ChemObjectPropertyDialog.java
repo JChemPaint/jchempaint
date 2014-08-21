@@ -69,19 +69,19 @@ public class ChemObjectPropertyDialog extends JDialog {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle(GT._("Properties"));
+        setTitle(GT.get("Properties"));
         getContentPane().add("Center",editor);
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
-        JButton ok = new JButton(GT._("OK"));
+        JButton ok = new JButton(GT.get("OK"));
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 OKPressed();
             }}
         );
         buttonPanel.add( ok );
-        JButton cancel = new JButton(GT._("Cancel"));
+        JButton cancel = new JButton(GT.get("Cancel"));
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeFrame();
@@ -102,10 +102,10 @@ public class ChemObjectPropertyDialog extends JDialog {
     			closeFrame();     			
     		}
     		catch (Exception e) {
-        		JOptionPane.showMessageDialog(this,e.getMessage(), GT._("A problem has occurred"), JOptionPane.WARNING_MESSAGE, null);
+        		JOptionPane.showMessageDialog(this,e.getMessage(), GT.get("A problem has occurred"), JOptionPane.WARNING_MESSAGE, null);
     		}
     	}else{
-    		JOptionPane.showMessageDialog(this,GT._("You did not provide necessary information"), GT._("Incomplete Information"), JOptionPane.WARNING_MESSAGE, null);
+    		JOptionPane.showMessageDialog(this,GT.get("You did not provide necessary information"), GT.get("Incomplete Information"), JOptionPane.WARNING_MESSAGE, null);
     	}
     }
 

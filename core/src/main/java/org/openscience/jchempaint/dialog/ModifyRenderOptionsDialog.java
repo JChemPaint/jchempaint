@@ -41,7 +41,6 @@ import javax.swing.JPanel;
 
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.dialog.editor.PropertiesModelEditor;
 import org.openscience.jchempaint.renderer.RendererModel;
 
@@ -76,13 +75,13 @@ public class ModifyRenderOptionsDialog extends JDialog {
     private void createDialog(){
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
-        setTitle(GT._("Preferences"));
+        setTitle(GT.get("Preferences"));
         editor.setModel(model);
         getContentPane().add("Center",editor);
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
-        JButton ok = new JButton(GT._("OK"));
+        JButton ok = new JButton(GT.get("OK"));
         ok.setName("ok");
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +90,7 @@ public class ModifyRenderOptionsDialog extends JDialog {
         );
         buttonPanel.add( ok );
         getRootPane().setDefaultButton(ok);
-        JButton apply = new JButton(GT._("Apply"));
+        JButton apply = new JButton(GT.get("Apply"));
         apply.setName("apply");
         apply.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -99,7 +98,7 @@ public class ModifyRenderOptionsDialog extends JDialog {
             }}
         );
         buttonPanel.add( apply );
-        JButton cancel = new JButton(GT._("Cancel"));
+        JButton cancel = new JButton(GT.get("Cancel"));
         cancel.setName("cancel");
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

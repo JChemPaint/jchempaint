@@ -30,20 +30,13 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.swing.JFrame;
 
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.layout.HydrogenPlacer;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
@@ -72,14 +65,14 @@ public class CreateSmilesAction extends JCPAction
 		try
 		{
 			String smiles = getSmiles(jcpPanel.getChemModel());
-			dialog.setMessage(GT._("Generated SMILES:"),
+			dialog.setMessage(GT.get("Generated SMILES:"),
                               "SMILES: " + smiles);
 		} catch (Exception exception)
 		{
-			String message = GT._("Error while creating SMILES:") + " " + exception.getMessage();
+			String message = GT.get("Error while creating SMILES:") + " " + exception.getMessage();
 			logger.error(message);
 			logger.debug(exception);
-			dialog.setMessage(GT._("Error"), message);
+			dialog.setMessage(GT.get("Error"), message);
 		}
 		dialog.setVisible(true);
 	}

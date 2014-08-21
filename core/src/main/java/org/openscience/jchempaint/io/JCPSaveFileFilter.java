@@ -72,7 +72,7 @@ public class JCPSaveFileFilter extends JCPFileFilter {
             } else if (type.equals(smiles)) {
                 result = "SMILES";
             } else if (type.equals(cdk)) {
-                result = GT._("CDK source code fragment");
+                result = GT.get("CDK source code fragment");
             }
         }
         return result;

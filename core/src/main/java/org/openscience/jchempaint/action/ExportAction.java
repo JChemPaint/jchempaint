@@ -95,7 +95,7 @@ public class ExportAction extends SaveAsAction {
         currentFilter = chooser.getFileFilter();
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             if(!(currentFilter instanceof IJCPFileFilter)){
-                JOptionPane.showMessageDialog(jcpPanel, GT._("Please chose a file type!"), GT._("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(jcpPanel, GT.get("Please chose a file type!"), GT.get("No file type chosen"), JOptionPane.INFORMATION_MESSAGE);
                 return;
             }else{
                 type = ((JCPExportFileFilter) currentFilter).getType();
@@ -107,8 +107,8 @@ public class ExportAction extends SaveAsAction {
                     outFile = new File(fileName);
                 }
                 if (outFile.exists()) {
-                    String message = GT._("File already exists. Do you want to overwrite it?");
-                    String title = GT._("File already exists");
+                    String message = GT.get("File already exists. Do you want to overwrite it?");
+                    String title = GT.get("File already exists");
                     int value = JOptionPane.showConfirmDialog(jcpPanel, message,
                             title, JOptionPane.YES_NO_OPTION);
                     if (value == JOptionPane.NO_OPTION) {
@@ -123,10 +123,10 @@ public class ExportAction extends SaveAsAction {
                     	writer.append(svg);
                     	writer.flush();
                         JOptionPane.showMessageDialog(jcpPanel,
-                                GT._("Exported image to {0}", outFile.getName()));
+                                GT.get("Exported image to {0}", outFile.getName()));
                         return;
                     } catch (IOException e) {
-                        String error = GT._("Problem exporting to SVG");
+                        String error = GT.get("Problem exporting to SVG");
                         JOptionPane.showMessageDialog(jcpPanel, error);
                         return;
                     }
@@ -147,20 +147,20 @@ public class ExportAction extends SaveAsAction {
                                 outFile);
                         if (succeeded) {
                             JOptionPane.showMessageDialog(jcpPanel,
-                                    GT._("Exported image to {0}", outFile.getName()));
+                                    GT.get("Exported image to {0}", outFile.getName()));
                             return;
                         } else {
                             // no writer of type imageIOType found
                             ImageIO.write(image, "PNG", outFile);
                             JOptionPane.showMessageDialog(jcpPanel,
-                                    GT._("Exported image to {0} as PNG, since {1} could not be written", 
-                                        new String[]{outFile.getName(), type}));
+                                    GT.get("Exported image to {0} as PNG, since {1} could not be written",
+                                           new String[]{outFile.getName(), type}));
                             return;
                         }
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
                         JOptionPane.showMessageDialog(jcpPanel,
-                                GT._("Problem exporting image"));
+                                GT.get("Problem exporting image"));
                     }
                 }
             }
