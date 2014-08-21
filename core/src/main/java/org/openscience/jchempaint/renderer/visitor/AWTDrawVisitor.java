@@ -30,6 +30,7 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
@@ -427,10 +428,18 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     }
     
     public void visit(GeneralPath path) {
-        this.g.setColor( path.color );
-        java.awt.geom.GeneralPath gp = new java.awt.geom.GeneralPath();
-        gp.append( getPathIterator( path, transform) , false );
-        this.g.draw( gp );
+        this.g.setColor(path.color);
+        Path2D cpy = new Path2D.Double();
+        cpy.append(getPathIterator(path, transform), false);
+
+        if (path.fill) {
+            this.g.fill(cpy);
+        } else {
+            Stroke stroke = this.g.getStroke();
+            this.g.setStroke(new BasicStroke((float) (path.stroke * transform.getScaleX()), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            this.g.draw(cpy);
+            this.g.setStroke(stroke);
+        }
     }
 
     private static PathIterator getPathIterator(final GeneralPath path,
@@ -450,7 +459,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
                 }
             }
             public void next() {
-               index++;
+                index++;
             }
 
             public boolean isDone() {
@@ -458,18 +467,13 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             }
 
             public int getWindingRule() {
-
-                return WIND_EVEN_ODD;
+                return path.winding;
             }
 
-            public int currentSegment( double[] coords ) {
-                float[] src = new float[6];
-                int type = currentSegment( src );
-                double[] srcD = coords;
-                for(int i=0;i<src.length;i++){
-                    srcD[i] = (double) src[i];
-                }
-                return type;
+            public int currentSegment(double[] coords) {
+                path.elements.get(index).points(coords);
+                transform.transform(coords, 0, coords, 0, 3);
+                return type(path.elements.get(index).type);
             }
 
             public int currentSegment( float[] coords ) {
