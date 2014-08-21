@@ -18,6 +18,11 @@
             <artifactId>jchempaint-core</artifactId>
             <version>3.4-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.jchempaint</groupId>
+            <artifactId>jchempaint-inchi-jni</artifactId>
+            <version>3.4-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

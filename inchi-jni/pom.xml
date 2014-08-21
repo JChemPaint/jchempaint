@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jchempaint</artifactId>
+        <groupId>org.openscience.jchempaint</groupId>
+        <version>3.4-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jchempaint-inchi-jni</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openscience.jchempaint</groupId>
+            <artifactId>jchempaint-inchi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-inchi</artifactId>
+            <version>1.5.8-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

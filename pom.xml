@@ -27,6 +27,7 @@
         <module>app-osx</module>
         <module>app-jar</module>
         <module>app-windows</module>
+        <module>inchi-jni</module>
     </modules>
 
 </project>

@@ -160,11 +160,6 @@
             <artifactId>jchempaint-inchi</artifactId>
             <version>3.4-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.openscience.jchempaint</groupId>
-            <artifactId>jchempaint-inchi-nestedvm</artifactId>
-            <version>3.4-SNAPSHOT</version>
-        </dependency>
 
     </dependencies>
 
