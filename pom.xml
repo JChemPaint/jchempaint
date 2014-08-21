@@ -26,6 +26,7 @@
         <module>inchi-nestedvm</module>
         <module>app-osx</module>
         <module>app-jar</module>
+        <module>app-windows</module>
     </modules>
 
 </project>
