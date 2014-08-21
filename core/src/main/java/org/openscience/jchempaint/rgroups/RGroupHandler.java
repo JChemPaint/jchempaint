@@ -46,6 +46,7 @@ import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
@@ -55,8 +56,11 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
  */
 public class RGroupHandler  {
 
-	public RGroupHandler (IRGroupQuery _rGroupQuery) {
+    private final AbstractJChemPaintPanel jcpPanel;
+    
+	public RGroupHandler (IRGroupQuery _rGroupQuery, AbstractJChemPaintPanel jcpPanel) {
 		rGroupQuery = _rGroupQuery;
+        this.jcpPanel = jcpPanel;
 	}
 
 	private IRGroupQuery rGroupQuery;
@@ -334,7 +338,7 @@ public class RGroupHandler  {
 					List<IAtomContainer> substitutes = rGroupQuery.getSubstituents();
 					if ((container1==rGroupQuery.getRootStructure() && substitutes.contains(container2)) 
   					 || (container2==rGroupQuery.getRootStructure() && substitutes.contains(container1))) {
-						JOptionPane.showMessageDialog(hub.getRenderPanel(), GT.get("This operation is not allowed in the R-Group configuration."), GT.get("R-Group alert"), JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(jcpPanel.getRenderPanel(), GT.get("This operation is not allowed in the R-Group configuration."), GT.get("R-Group alert"), JOptionPane.INFORMATION_MESSAGE);
 						return false;
 					}
 				}
@@ -423,7 +427,7 @@ public class RGroupHandler  {
     			}
     		}
 			if (!rootRemains) {
-				int answer = JOptionPane.showConfirmDialog(hub.getRenderPanel(), GT.get("This operation would irreversibly remove the R-Group query. Continue?"), GT.get("R-Group alert"), JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(jcpPanel.getRenderPanel(), GT.get("This operation would irreversibly remove the R-Group query. Continue?"), GT.get("R-Group alert"), JOptionPane.YES_NO_OPTION);
 				if(answer == JOptionPane.NO_OPTION)
 					return false;
 			}

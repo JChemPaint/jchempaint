@@ -258,7 +258,7 @@ public class RGroupAction extends JCPAction {
 				if (hub.getRGroupHandler() == null) {
 					isNewRgroup=true;
 					rgrpQuery = newRGroupQuery(molecule.getBuilder());
-					rGroupHandler = new RGroupHandler(rgrpQuery);
+					rGroupHandler = new RGroupHandler(rgrpQuery, this.jcpPanel);
 					hub.setRGroupHandler(rGroupHandler);
 				}
 				else {

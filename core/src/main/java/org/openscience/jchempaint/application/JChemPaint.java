@@ -470,7 +470,7 @@ public class JChemPaint {
         	if(rgroupQuery!=null ) 
         		try{
         			chemModel = new ChemModel();
-        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery);
+        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery, panel);
         			panel.get2DHub().setRGroupHandler(rgHandler);
         			chemModel.setMoleculeSet(rgHandler.getMoleculeSet(chemModel));
         			rgHandler.layoutRgroup();

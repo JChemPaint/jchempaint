@@ -173,12 +173,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return renderer;
 	}
 
-    @Override 
-    public RenderPanel getRenderPanel() {
-        return eventRelay;
-    }
-
-	public IChemModel getIChemModel() {
+    public IChemModel getIChemModel() {
 		return chemModel;
 	}
 

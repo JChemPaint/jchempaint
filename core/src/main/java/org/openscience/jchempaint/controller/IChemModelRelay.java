@@ -55,7 +55,6 @@ public interface IChemModelRelay extends IAtomBondEdits {
     /* Interaction*/
     public IControllerModel getController2DModel();
     public IRenderer getRenderer();
-    public RenderPanel getRenderPanel();
     public IChemModel getIChemModel();
     public void setChemModel(IChemModel model);
     public IAtom getClosestAtom(Point2d worldCoord);

@@ -308,7 +308,7 @@ public class CopyPasteAction extends JCPAction{
 	        			rgrpQuery=true;
                 		IRGroupQuery rgroupQuery = (RGroupQuery) reader.read(new RGroupQuery(DefaultChemObjectBuilder.getInstance()));
 	        			chemModel = new ChemModel();
-	        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery);
+	        			RGroupHandler rgHandler =  new RGroupHandler(rgroupQuery, this.jcpPanel);
 	        			this.jcpPanel.get2DHub().setRGroupHandler(rgHandler);
 	        			chemModel.setMoleculeSet(rgHandler.getMoleculeSet(chemModel));
 	        			rgHandler.layoutRgroup();
