@@ -242,7 +242,7 @@ public class SVGGenerator implements IDrawVisitor {
 
 	public void draw (AtomSymbolElement atomSymbol) {
 		newline();
-		double[] p = transformPoint(atomSymbol.x, atomSymbol.y);
+		double[] p = transformPoint(atomSymbol.xCoord, atomSymbol.yCoord);
 		svg.append(String.format(
 				"<text x=\"%s\" y=\"%s\" style=\"fill:%s\"" +
 				">%s</text>",

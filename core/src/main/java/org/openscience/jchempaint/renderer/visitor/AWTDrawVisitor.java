@@ -358,9 +358,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         this.g.setFont(this.fontManager.getFont());
         Point p = 
             super.getTextBasePoint(
-                    atomSymbol.text, atomSymbol.x, atomSymbol.y, g);
+                    atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, g);
         Rectangle2D textBounds = 
-            this.getTextBounds(atomSymbol.text, atomSymbol.x, atomSymbol.y, g, 
+            this.getTextBounds(atomSymbol.text, atomSymbol.xCoord, atomSymbol.yCoord, g, 
                     rendererModel.getZoomFactor());
         this.g.setColor(this.rendererModel.getBackColor());
         this.g.fill(textBounds);
