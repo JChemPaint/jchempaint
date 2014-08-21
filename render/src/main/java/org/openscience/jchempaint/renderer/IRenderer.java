@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 
 /**

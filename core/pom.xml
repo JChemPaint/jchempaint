@@ -158,7 +158,12 @@
         <dependency>
             <groupId>org.openscience.jchempaint</groupId>
             <artifactId>jchempaint-inchi</artifactId>
-            <version>3.4-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.jchempaint</groupId>
+            <artifactId>jchempaint-render</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

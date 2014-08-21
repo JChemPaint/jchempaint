@@ -28,6 +28,7 @@
         <module>app-jar</module>
         <module>app-windows</module>
         <module>inchi-jni</module>
+        <module>render</module>
     </modules>
 
 </project>
