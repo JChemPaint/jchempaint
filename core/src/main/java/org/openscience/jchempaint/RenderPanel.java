@@ -167,7 +167,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
         if (this.renderer == null) {
             this.renderer = new Renderer(makeGenerators(chemModel),
-                    makeReactionGenerators(), new AWTFontManager(), this, true);
+                    makeReactionGenerators(), new AWTFontManager(), true);
             // any specific rendering settings defaults that overwrite user settings should go here
             //this.renderer.getRenderer2DModel().setShowEndCarbons(false);
             //this.renderer.getRenderer2DModel().setShowAromaticity(false);

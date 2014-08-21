@@ -334,7 +334,7 @@ public class RGroupHandler  {
 					List<IAtomContainer> substitutes = rGroupQuery.getSubstituents();
 					if ((container1==rGroupQuery.getRootStructure() && substitutes.contains(container2)) 
   					 || (container2==rGroupQuery.getRootStructure() && substitutes.contains(container1))) {
-						JOptionPane.showMessageDialog(hub.getRenderer().getRenderPanel(), GT.get("This operation is not allowed in the R-Group configuration."), GT.get("R-Group alert"), JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(hub.getRenderPanel(), GT.get("This operation is not allowed in the R-Group configuration."), GT.get("R-Group alert"), JOptionPane.INFORMATION_MESSAGE);
 						return false;
 					}
 				}
@@ -423,7 +423,7 @@ public class RGroupHandler  {
     			}
     		}
 			if (!rootRemains) {
-				int answer = JOptionPane.showConfirmDialog(hub.getRenderer().getRenderPanel(), GT.get("This operation would irreversibly remove the R-Group query. Continue?"), GT.get("R-Group alert"), JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(hub.getRenderPanel(), GT.get("This operation would irreversibly remove the R-Group query. Continue?"), GT.get("R-Group alert"), JOptionPane.YES_NO_OPTION);
 				if(answer == JOptionPane.NO_OPTION)
 					return false;
 			}

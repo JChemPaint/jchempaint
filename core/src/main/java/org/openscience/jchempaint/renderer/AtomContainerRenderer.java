@@ -127,12 +127,6 @@ public class AtomContainerRenderer implements IRenderer {
 
     protected IRenderingElement cachedDiagram;
 
-    protected RenderPanel renderPanel;
-
-    public RenderPanel getRenderPanel() {
-        return renderPanel;
-    }
-
     /**
      * A renderer that generates diagrams using the specified
      * generators and manages fonts with the supplied font manager.

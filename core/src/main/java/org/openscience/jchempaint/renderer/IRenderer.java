@@ -80,7 +80,4 @@ public interface IRenderer {
 	public void shiftDrawCenter(double screenX, double screenY);
 
 	public List<IGenerator> getGenerators();
-
-    public RenderPanel getRenderPanel();
-
 }

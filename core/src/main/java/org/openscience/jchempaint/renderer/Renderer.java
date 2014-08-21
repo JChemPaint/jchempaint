@@ -36,7 +36,6 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.jchempaint.RenderPanel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
@@ -130,12 +129,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
     public Renderer(List<IGenerator> generators,
             List<IReactionGenerator> reactionGenerators,
-            IFontManager fontManager, RenderPanel renderPanel, boolean useUserSettings) {
+            IFontManager fontManager, boolean useUserSettings) {
         this(generators, fontManager, useUserSettings);
         this.reactionGenerators = reactionGenerators;
         this.reactionSetGenerators = new ArrayList<IReactionSetGenerator>();
         this.setup();
-        super.renderPanel = renderPanel;
     }
 
     /**

@@ -37,6 +37,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -54,6 +55,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
     /* Interaction*/
     public IControllerModel getController2DModel();
     public IRenderer getRenderer();
+    public RenderPanel getRenderPanel();
     public IChemModel getIChemModel();
     public void setChemModel(IChemModel model);
     public IAtom getClosestAtom(Point2d worldCoord);
