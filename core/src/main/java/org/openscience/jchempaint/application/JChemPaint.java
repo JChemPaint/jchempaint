@@ -246,6 +246,7 @@ public class JChemPaint {
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
         p.updateStatusBar();
         f.setPreferredSize(new Dimension(800, 494));    //1.618
+        f.setJMenuBar(p.getJMenuBar());
         f.add(p);
         f.pack();
         Point point = GraphicsEnvironment.getLocalGraphicsEnvironment()
