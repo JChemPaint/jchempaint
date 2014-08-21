@@ -13,7 +13,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  *
  * @author John May
  */
-public final class JniInChIHandler implements InChIHandler {
+public final class JNIInChIHandler implements InChIHandler {
 
     @Override public IAtomContainer parse(InChI inchi) throws CDKException {
 
