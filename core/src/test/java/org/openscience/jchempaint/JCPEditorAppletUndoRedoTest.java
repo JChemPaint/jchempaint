@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import junit.framework.Assert;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;

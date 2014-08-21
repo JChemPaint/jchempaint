@@ -44,6 +44,7 @@ import java.lang.reflect.Constructor;
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.CDK;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -57,6 +58,7 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
@@ -184,9 +186,14 @@ public class CopyPasteAction extends JCPAction{
         } else if ("copyAsSmiles".equals(type)) {
             handleSystemClipboard(sysClip);
             try {
-                if(renderModel.getSelection().getConnectedAtomContainer()!=null){
-                    SmilesGenerator sg=new SmilesGenerator();
-                    sysClip.setContents(new SmilesSelection(sg.createSMILES(renderModel.getSelection().getConnectedAtomContainer().getBuilder().newInstance(IAtomContainer.class,renderModel.getSelection().getConnectedAtomContainer()))),null);
+                
+                final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
+                final IChemObjectBuilder bldr = selection.getBuilder();
+                
+                if(selection!=null){
+                    IChemModel selectionModel = bldr.newInstance(IChemModel.class);
+                    selectionModel.getMoleculeSet().addAtomContainer(selection);
+                    sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(selectionModel)), null);
                 }else{
                     sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(chemModel)),null);
                 }
@@ -601,8 +608,13 @@ public class CopyPasteAction extends JCPAction{
 				e.printStackTrace();
 			}
             this.mol=sw.toString();
-            SmilesGenerator sg=new SmilesGenerator();
-            smiles = sg.createSMILES(tocopy);
+            SmilesGenerator sg=SmilesGenerator.isomeric();
+            try {
+                smiles = sg.create(tocopy);
+            } catch (CDKException ex) {
+                logger.error("Could not create SMILES: ", ex.getMessage());
+                logger.debug(ex);    
+            }
             // SVG output
             svg=jcpPanel.getSVGString();
             // CML output

@@ -655,7 +655,7 @@ public class JChemPaint {
             throws CDKException {
         for (IAtomContainer next : ChemModelManipulator
                 .getAllAtomContainers(chemModel)) {
-            if (GeometryTools.has2DCoordinatesNew(next) != 2) {
+            if (!GeometryTools.has2DCoordinates(next)) {
                 String error = GT.get("Not all atoms have 2D coordinates."
                                               + " JCP can only show full 2D specified structures."
                                               + " Shall we lay out the structure?");

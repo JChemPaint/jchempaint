@@ -462,7 +462,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      */
     public String getSmilesChiral() throws CDKException,
             ClassNotFoundException, IOException, CloneNotSupportedException {
-        return CreateSmilesAction.getChiralSmiles(theJcpp.getChemModel());
+        return CreateSmilesAction.getSmiles(theJcpp.getChemModel());
     }
 
     /**
