@@ -104,7 +104,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(ArrowElement line) {
         Stroke savedStroke = this.g.getStroke();
 
-        int w = (int) (line.width * this.rendererModel.getScale());
+        int w = (int) (line.width * this.transform.getScaleX());
         if (strokeMap.containsKey(w)) {
             this.g.setStroke(strokeMap.get(w));
         }
@@ -156,7 +156,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(LineElement line) {
         Stroke savedStroke = this.g.getStroke();
         
-        int w = (int) (line.width * this.rendererModel.getScale());
+        int w = (int) (line.width * this.transform.getScaleX());
         if (w < 1) {
             w=1;
         }
