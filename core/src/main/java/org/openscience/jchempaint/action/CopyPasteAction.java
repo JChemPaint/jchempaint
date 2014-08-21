@@ -187,9 +187,9 @@ public class CopyPasteAction extends JCPAction{
             try {
                 
                 final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
-                final IChemObjectBuilder bldr = selection.getBuilder();
                 
                 if(selection!=null){
+                    final IChemObjectBuilder bldr = selection.getBuilder();
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
                     selectionModel.setMoleculeSet(bldr.newInstance(IAtomContainerSet.class));
                     selectionModel.getMoleculeSet().addAtomContainer(selection);
