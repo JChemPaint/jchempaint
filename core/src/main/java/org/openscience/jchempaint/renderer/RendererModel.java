@@ -39,11 +39,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
-import org.openscience.jchempaint.renderer.color.CDK2DAtomColors;
 import org.openscience.jchempaint.renderer.color.IAtomColorer;
 import org.openscience.jchempaint.renderer.color.RasmolColors;
-import org.openscience.jchempaint.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 /**

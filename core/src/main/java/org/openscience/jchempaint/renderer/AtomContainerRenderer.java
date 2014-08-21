@@ -32,11 +32,11 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.RenderPanel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
-import org.openscience.jchempaint.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
 
@@ -108,13 +108,13 @@ public class AtomContainerRenderer implements IRenderer {
 
     protected IFontManager fontManager;
 
-	/**
-	 * The renderer model is final as it is not intended to be replaced.
-	 */
+    /**
+     * The renderer model is final as it is not intended to be replaced.
+     */
     protected final RendererModel rendererModel;
 
     protected List<IGenerator> generators;
-	
+
     protected AffineTransform transform;
 
     protected Point2d modelCenter = new Point2d(0, 0); // model
@@ -126,14 +126,14 @@ public class AtomContainerRenderer implements IRenderer {
     protected double zoom = 1.0;
 
     protected IRenderingElement cachedDiagram;
-    
+
     protected RenderPanel renderPanel;
 
     public RenderPanel getRenderPanel() {
-		return renderPanel;
-	}
+        return renderPanel;
+    }
 
-	/**
+    /**
      * A renderer that generates diagrams using the specified
      * generators and manages fonts with the supplied font manager.
      *
@@ -141,22 +141,22 @@ public class AtomContainerRenderer implements IRenderer {
      *            a list of classes that implement the IGenerator interface
      * @param fontManager
      *            a class that manages mappings between zoom and font sizes
-	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
+     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-	public AtomContainerRenderer(List<IGenerator> generators, 
-	        IFontManager fontManager, boolean useUserSettings) {
-	    rendererModel = new RendererModel(useUserSettings);
-	    this.generators = generators;
+    public AtomContainerRenderer(List<IGenerator> generators,
+                                 IFontManager fontManager, boolean useUserSettings) {
+        rendererModel = new RendererModel(useUserSettings);
+        this.generators = generators;
         this.fontManager = fontManager;
-	}
-	
-	/**
-	 * Setup the transformations necessary to draw this Atom Container.
-	 *
-	 * @param atomContainer
-	 * @param screen
-	 */
-	public void setup(IAtomContainer atomContainer, Rectangle screen) {
+    }
+
+    /**
+     * Setup the transformations necessary to draw this Atom Container.
+     *
+     * @param atomContainer
+     * @param screen
+     */
+    public void setup(IAtomContainer atomContainer, Rectangle screen) {
         this.setScale(atomContainer);
         Rectangle2D bounds = calculateBounds(atomContainer);
         this.modelCenter = new Point2d(bounds.getCenterX(), bounds.getCenterY());
@@ -200,7 +200,7 @@ public class AtomContainerRenderer implements IRenderer {
 	}
 	*/
 
-	/**
+    /**
      * Paint a molecule (an IAtomContainer).
      *
      * @param atomContainer the molecule to paint
@@ -210,18 +210,18 @@ public class AtomContainerRenderer implements IRenderer {
      *     if true, set the draw center to be the center of bounds
      */
     public void paintMolecule(IAtomContainer atomContainer,
-            IDrawVisitor drawVisitor, Rectangle2D bounds, boolean resetCenter) {
+                              IDrawVisitor drawVisitor, Rectangle2D bounds, boolean resetCenter) {
 
         // the bounds of the model
-    	Rectangle2D modelBounds = calculateBounds(atomContainer);
+        Rectangle2D modelBounds = calculateBounds(atomContainer);
 
-    	this.setupTransformToFit(bounds, modelBounds,
-    	        GeometryTools.getBondLengthAverage(atomContainer), resetCenter);
+        this.setupTransformToFit(bounds, modelBounds,
+                                 GeometryTools.getBondLengthAverage(atomContainer), resetCenter);
 
-    	// the diagram to draw
-    	IRenderingElement diagram = this.generateDiagram(atomContainer);
+        // the diagram to draw
+        IRenderingElement diagram = this.generateDiagram(atomContainer);
 
-    	this.paint(drawVisitor, diagram);
+        this.paint(drawVisitor, diagram);
     }
 
     /**
@@ -233,30 +233,31 @@ public class AtomContainerRenderer implements IRenderer {
         this.paint(drawVisitor, cachedDiagram);
     }
 
-	public Rectangle calculateDiagramBounds(IAtomContainer atomContainer) {
-		return this.calculateScreenBounds(
-		    calculateBounds(atomContainer));
-	}
+    public Rectangle calculateDiagramBounds(IAtomContainer atomContainer) {
+        return this.calculateScreenBounds(
+                calculateBounds(atomContainer));
+    }
 
-	public Rectangle calculateScreenBounds(Rectangle2D modelBounds) {
-	    double margin = this.rendererModel.getMargin();
+    public Rectangle calculateScreenBounds(Rectangle2D modelBounds) {
+        double margin = this.rendererModel.getMargin();
         Point2d modelScreenCenter
-            = this.toScreenCoordinates(modelBounds.getCenterX(),
-                                       modelBounds.getCenterY());
+                = this.toScreenCoordinates(modelBounds.getCenterX(),
+                                           modelBounds.getCenterY());
         double w = (scale * zoom * modelBounds.getWidth()) + (2 * margin);
         double h = (scale * zoom * modelBounds.getHeight()) + (2 * margin);
         return new Rectangle((int) (modelScreenCenter.x - w / 2),
                              (int) (modelScreenCenter.y - h / 2),
                              (int) w,
                              (int) h);
-	}
+    }
 
     public static Rectangle2D calculateBounds(IAtomContainer ac) {
         // this is essential, otherwise a rectangle
         // of (+INF, -INF, +INF, -INF) is returned!
         if (ac.getAtomCount() == 0) {
             return new Rectangle2D.Double();
-        } else if (ac.getAtomCount() == 1) {
+        }
+        else if (ac.getAtomCount() == 1) {
             Point2d p = ac.getAtom(0).getPoint2d();
             return new Rectangle2D.Double(p.x, p.y, 0, 0);
         }

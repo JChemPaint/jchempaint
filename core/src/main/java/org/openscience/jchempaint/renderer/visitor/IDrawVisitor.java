@@ -18,9 +18,9 @@
  */
 package org.openscience.jchempaint.renderer.visitor;
 
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingVisitor;
-import org.openscience.jchempaint.renderer.font.IFontManager;
 
 /**
  * @cdk.module render

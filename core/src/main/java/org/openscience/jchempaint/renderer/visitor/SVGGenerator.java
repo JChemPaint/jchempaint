@@ -35,6 +35,7 @@ import java.util.List;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
@@ -50,7 +51,6 @@ import org.openscience.cdk.renderer.elements.WedgeLineElement;
 import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
 import org.openscience.jchempaint.renderer.font.FreeSansBoldGM;
 import org.openscience.jchempaint.renderer.font.GlyphMetrics;
-import org.openscience.jchempaint.renderer.font.IFontManager;
 
 /**
  * We can only guarantee the same quality of SVG output everywhere

@@ -40,6 +40,8 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
@@ -55,15 +57,13 @@ import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
 import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
 import org.openscience.cdk.renderer.elements.path.Type;
-import org.openscience.jchempaint.renderer.font.AWTFontManager;
-import org.openscience.jchempaint.renderer.font.IFontManager;
 
 
 /**
  * @cdk.module renderawt
  */
 public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
-	
+
     /**
      * The font manager cannot be set by the constructor as it needs to
      * be managed by the Renderer.
@@ -74,40 +74,41 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
      * The renderer model cannot be set by the constructor as it needs to
      * be managed by the Renderer.
      */
-	private RendererModel rendererModel;
-	
-	private final Map<Integer, BasicStroke> strokeMap = 
-	    new HashMap<Integer, BasicStroke>();
-	
-	private final Map<TextAttribute, Object> map = 
-        new Hashtable<TextAttribute, Object>();
-	
-	private final Graphics2D g;
-	
-	public AWTDrawVisitor(Graphics2D g) {
-		this.g = g;
-		this.fontManager = null;
-		this.rendererModel = null;
+    private RendererModel rendererModel;
+
+    private final Map<Integer, BasicStroke> strokeMap =
+            new HashMap<Integer, BasicStroke>();
+
+    private final Map<TextAttribute, Object> map =
+            new Hashtable<TextAttribute, Object>();
+
+    private final Graphics2D g;
+
+    public AWTDrawVisitor(Graphics2D g) {
+        this.g = g;
+        this.fontManager = null;
+        this.rendererModel = null;
         this.fm = g.getFontMetrics();
 
         map.put(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB);
-	}
-	
-	public void visitElementGroup(ElementGroup elementGroup) {
-		elementGroup.visitChildren(this);
-	}
-	
+    }
+
+    public void visitElementGroup(ElementGroup elementGroup) {
+        elementGroup.visitChildren(this);
+    }
+
     public void visit(ElementGroup elementGroup) {
         elementGroup.visitChildren(this);
     }
 
     public void visit(ArrowElement line) {
         Stroke savedStroke = this.g.getStroke();
-        
+
         int w = (int) (line.width * this.rendererModel.getScale());
         if (strokeMap.containsKey(w)) {
             this.g.setStroke(strokeMap.get(w));
-        } else {
+        }
+        else {
             BasicStroke stroke = new BasicStroke(w);
             this.g.setStroke(stroke);
             strokeMap.put(w, stroke);
@@ -117,22 +118,22 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         int[] b = this.transformPoint(line.endX, line.endY);
         this.g.drawLine(a[0], a[1], b[0], b[1]);
         double arrowWidth = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
-        double lenghtOfArrow = Math.sqrt(Math.pow(Math.abs(line.startX - line.endX),2) + Math.pow(Math.abs(line.startY - line.endY),2));
-        double fractionOfHead = arrowWidth/lenghtOfArrow;
+        double lenghtOfArrow = Math.sqrt(Math.pow(Math.abs(line.startX - line.endX), 2) + Math.pow(Math.abs(line.startY - line.endY), 2));
+        double fractionOfHead = arrowWidth / lenghtOfArrow;
         //headpoint is a line on the arrow arrowWidth away from end
         Point2d headPoint = new Point2d();
-        if(line.startX<line.endX)
-            headPoint.x = line.startX + (line.endX-line.startX)*(fractionOfHead);
+        if (line.startX < line.endX)
+            headPoint.x = line.startX + (line.endX - line.startX) * (fractionOfHead);
         else
-            headPoint.x = line.endX + (line.startX-line.endX)*(1-fractionOfHead);
-        if(line.startY<line.endY)
-            headPoint.y = line.startY + (line.endY-line.startY)*(fractionOfHead);
+            headPoint.x = line.endX + (line.startX - line.endX) * (1 - fractionOfHead);
+        if (line.startY < line.endY)
+            headPoint.y = line.startY + (line.endY - line.startY) * (fractionOfHead);
         else
-            headPoint.y = line.endY + (line.startY-line.endY)*(1-fractionOfHead);
+            headPoint.y = line.endY + (line.startY - line.endY) * (1 - fractionOfHead);
         //rotate headpoint in both directions to get end points of arrow
         double relativex = headPoint.x - line.startX;
         double relativey = headPoint.y - line.startY;
-        double angle = Math.PI/6;
+        double angle = Math.PI / 6;
         double costheta = Math.cos(angle);
         double sintheta = Math.sin(angle);
         Point2d firstArrowPoint = new Point2d();

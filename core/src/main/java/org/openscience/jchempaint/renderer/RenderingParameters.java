@@ -24,7 +24,7 @@ package org.openscience.jchempaint.renderer;
 import java.awt.Color;
 //import java.util.Properties;
 
-import org.openscience.jchempaint.renderer.font.IFontManager;
+import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.JCPPropertyHandler;
 
 /**
@@ -82,7 +82,7 @@ public class RenderingParameters {
      * be covered by a shape determined by this enumeration
      */
     public enum AtomShape { OVAL, SQUARE };
-    
+
     /**
      * The width of an arrow head
      */
@@ -92,7 +92,7 @@ public class RenderingParameters {
      * The background color of the rendered image
      */
     private Color backColor;
-    
+
     /**
      * The color used for underlining not typeable atoms.
      */
@@ -117,7 +117,7 @@ public class RenderingParameters {
      * The width on screen of an atom-atom mapping line
      */
     private double mappingLineWidth = 1.0;
-    
+
     /**
      * The color of the box drawn at the bounds of a
      * molecule, molecule set, or reaction
@@ -190,7 +190,7 @@ public class RenderingParameters {
      */
     private double scale = 1.0;
 
-    private Color selectedPartColor = new Color(00,153, 204); //Color.lightGray;
+    private Color selectedPartColor = new Color(00, 153, 204); //Color.lightGray;
 
     /**
      * The shape to display over selected atoms
@@ -334,7 +334,7 @@ public class RenderingParameters {
         this.selectionShape = selectionShape;
     }
 
-	public String getFontName() {
+    public String getFontName() {
         return this.fontName;
     }
 
@@ -377,7 +377,7 @@ public class RenderingParameters {
     public double getMappingLineWidth() {
         return mappingLineWidth;
     }
-    
+
     public Color getExternalHighlightColor() {
         return externalHighlightColor;
     }
