@@ -477,10 +477,11 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             }
 
             public int currentSegment( float[] coords ) {
-
-                float[] src = path.elements.get( index ).points();
-                transform.transform( src, 0, coords, 0, src.length/2 );
-                return type(path.elements.get( index ).type());
+                double[] doubleCoords = new double[6];
+                int type = currentSegment(doubleCoords);
+                for (int i = 0; i < 5; i++)
+                    coords[i] = (float) doubleCoords[i];
+                return type;
             }
         };
     }
