@@ -35,8 +35,8 @@ import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.cdk.renderer.elements.TextGroupElement;
-import org.openscience.cdk.renderer.elements.TextGroupElement.Position;
+import org.openscience.jchempaint.renderer.elements.TextGroupElement;
+import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
 
 /**
  * A generator for atoms with mass, charge, etc.

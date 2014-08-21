@@ -34,7 +34,7 @@ import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.cdk.renderer.elements.TextElement;
+import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
  * @cdk.module rendercontrol

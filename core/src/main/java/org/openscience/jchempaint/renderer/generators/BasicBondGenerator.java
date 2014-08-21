@@ -43,7 +43,7 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
-import org.openscience.cdk.renderer.elements.WigglyLineElement;
+import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement.Direction;
 
 /**
@@ -384,13 +384,13 @@ public class BasicBondGenerator implements IGenerator {
 					bond, model));
 		} else {
 			// set wedge type
-			int wedgeType = 1;
+			WedgeLineElement.TYPE wedgeType = WedgeLineElement.TYPE.WEDGED;
 			if (stereo == IBond.Stereo.DOWN
 					|| stereo == IBond.Stereo.DOWN_INVERTED)
-				wedgeType = 0;
+				wedgeType = WedgeLineElement.TYPE.DASHED;
 			if (stereo == IBond.Stereo.UP_OR_DOWN
 					|| stereo == IBond.Stereo.UP_OR_DOWN_INVERTED)
-				wedgeType = 2;
+				wedgeType = WedgeLineElement.TYPE.INDIFF;
 
 			// set Direction
 			Direction dir = Direction.toSecond;
@@ -401,8 +401,7 @@ public class BasicBondGenerator implements IGenerator {
 
 			IRenderingElement base = generateBondElement(bond,
 					IBond.Order.SINGLE, model);
-			return new WedgeLineElement((LineElement) base, wedgeType, dir,
-					getColorForBond(bond, model));
+			return new WedgeLineElement((LineElement) base, wedgeType, dir, getColorForBond(bond, model));
 		}
 	}
 

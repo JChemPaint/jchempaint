@@ -32,7 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.cdk.renderer.elements.TextElement;
+import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
  * @author maclean

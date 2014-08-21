@@ -26,7 +26,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.cdk.renderer.elements.TextGroupElement;
+import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 
 /**
  * A generator for tooltips shown when hovering over an atom

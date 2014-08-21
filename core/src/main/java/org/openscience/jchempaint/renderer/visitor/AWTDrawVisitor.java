@@ -50,10 +50,10 @@ import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.PathElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
-import org.openscience.cdk.renderer.elements.TextElement;
-import org.openscience.cdk.renderer.elements.TextGroupElement;
+import org.openscience.jchempaint.renderer.elements.TextElement;
+import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
-import org.openscience.cdk.renderer.elements.WigglyLineElement;
+import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
 import org.openscience.cdk.renderer.elements.path.Type;
 import org.openscience.jchempaint.renderer.font.AWTFontManager;
 import org.openscience.jchempaint.renderer.font.IFontManager;
@@ -113,39 +113,39 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             strokeMap.put(w, stroke);
         }
         this.g.setColor(line.color);
-        int[] a = this.transformPoint(line.x1, line.y1);
-        int[] b = this.transformPoint(line.x2, line.y2);
+        int[] a = this.transformPoint(line.startX, line.startY);
+        int[] b = this.transformPoint(line.endX, line.endY);
         this.g.drawLine(a[0], a[1], b[0], b[1]);
         double arrowWidth = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
-        double lenghtOfArrow = Math.sqrt(Math.pow(Math.abs(line.x1 - line.x2),2) + Math.pow(Math.abs(line.y1 - line.y2),2));
+        double lenghtOfArrow = Math.sqrt(Math.pow(Math.abs(line.startX - line.endX),2) + Math.pow(Math.abs(line.startY - line.endY),2));
         double fractionOfHead = arrowWidth/lenghtOfArrow;
         //headpoint is a line on the arrow arrowWidth away from end
         Point2d headPoint = new Point2d();
-        if(line.x1<line.x2)
-            headPoint.x = line.x1 + (line.x2-line.x1)*(fractionOfHead);
+        if(line.startX<line.endX)
+            headPoint.x = line.startX + (line.endX-line.startX)*(fractionOfHead);
         else
-            headPoint.x = line.x2 + (line.x1-line.x2)*(1-fractionOfHead);
-        if(line.y1<line.y2)
-            headPoint.y = line.y1 + (line.y2-line.y1)*(fractionOfHead);
+            headPoint.x = line.endX + (line.startX-line.endX)*(1-fractionOfHead);
+        if(line.startY<line.endY)
+            headPoint.y = line.startY + (line.endY-line.startY)*(fractionOfHead);
         else
-            headPoint.y = line.y2 + (line.y1-line.y2)*(1-fractionOfHead);
+            headPoint.y = line.endY + (line.startY-line.endY)*(1-fractionOfHead);
         //rotate headpoint in both directions to get end points of arrow
-        double relativex = headPoint.x - line.x1;
-        double relativey = headPoint.y - line.y1;
+        double relativex = headPoint.x - line.startX;
+        double relativey = headPoint.y - line.startY;
         double angle = Math.PI/6;
         double costheta = Math.cos(angle);
         double sintheta = Math.sin(angle);
         Point2d firstArrowPoint = new Point2d();
-        firstArrowPoint.x = relativex * costheta - relativey * sintheta + line.x1;
-        firstArrowPoint.y = relativex * sintheta + relativey * costheta + line.y1;
+        firstArrowPoint.x = relativex * costheta - relativey * sintheta + line.startX;
+        firstArrowPoint.y = relativex * sintheta + relativey * costheta + line.startY;
         int[] firstArrowPointCoords = this.transformPoint(firstArrowPoint.x, firstArrowPoint.y);
         this.g.drawLine(a[0], a[1], firstArrowPointCoords[0], firstArrowPointCoords[1]);
         angle = -Math.PI/6;
         costheta = Math.cos(angle);
         sintheta = Math.sin(angle);
         Point2d secondArrowPoint = new Point2d();
-        secondArrowPoint.x = relativex * costheta - relativey * sintheta + line.x1;
-        secondArrowPoint.y = relativex * sintheta + relativey * costheta + line.y1;
+        secondArrowPoint.x = relativex * costheta - relativey * sintheta + line.startX;
+        secondArrowPoint.y = relativex * sintheta + relativey * costheta + line.startY;
         int[] secondArrowPointCoords = this.transformPoint(secondArrowPoint.x, secondArrowPoint.y);
         this.g.drawLine(a[0], a[1], secondArrowPointCoords[0], secondArrowPointCoords[1]);
         this.g.setStroke(savedStroke);
@@ -169,8 +169,8 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         }
         
         this.g.setColor(line.color);
-        int[] a = this.transformPoint(line.x1, line.y1);
-        int[] b = this.transformPoint(line.x2, line.y2);
+        int[] a = this.transformPoint(line.firstPointX, line.firstPointY);
+        int[] b = this.transformPoint(line.secondPointX, line.secondPointY);
         this.g.drawLine(a[0], a[1], b[0], b[1]);
         
         this.g.setStroke(savedStroke);
@@ -179,9 +179,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(OvalElement oval) {
         this.g.setColor(oval.color);
         int[] min = 
-            this.transformPoint(oval.x - oval.radius, oval.y - oval.radius);
-        int[] max = 
-            this.transformPoint(oval.x + oval.radius, oval.y + oval.radius);
+            this.transformPoint(oval.xCoord - oval.radius, oval.yCoord - oval.radius);
+        int[] max =                                              
+            this.transformPoint(oval.xCoord + oval.radius, oval.yCoord + oval.radius);
         int w = max[0] - min[0];
         int h = min[1] - max[1];
         if (oval.fill) {
@@ -212,20 +212,20 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(WedgeLineElement wedge) {
         // make the vector normal to the wedge axis
         Vector2d normal = 
-            new Vector2d(wedge.y1 - wedge.y2, wedge.x2 - wedge.x1);
+            new Vector2d(wedge.firstPointY - wedge.secondPointY, wedge.secondPointX - wedge.firstPointX);
         normal.normalize();
         normal.scale(rendererModel.getWedgeWidth() / rendererModel.getScale());  
         
         // make the triangle corners
-        Point2d vertexA = new Point2d(wedge.x1, wedge.y1);
-        Point2d vertexB = new Point2d(wedge.x2, wedge.y2);
+        Point2d vertexA = new Point2d(wedge.firstPointX, wedge.firstPointY);
+        Point2d vertexB = new Point2d(wedge.secondPointX, wedge.secondPointY);
         Point2d vertexC = new Point2d(vertexB);
         vertexB.add(normal);
         vertexC.sub(normal);
         this.g.setColor(wedge.color);
-        if (wedge.wedgeType==0) {
+        if (wedge.type == WedgeLineElement.TYPE.DASHED) {
             this.drawDashedWedge(vertexA, vertexB, vertexC);
-        } else if(wedge.wedgeType==1){
+        } else if(wedge.type == WedgeLineElement.TYPE.WEDGED){
             this.drawFilledWedge(vertexA, vertexB, vertexC);
         } else {
         	this.drawCrissCrossWedge(vertexA, vertexB, vertexC);
@@ -234,8 +234,8 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     
     public void visit(WigglyLineElement wedge) {
         // make the endpoints
-        Point2d vertexA = new Point2d(wedge.x1, wedge.y1);
-        Point2d vertexB = new Point2d(wedge.x2, wedge.y2);
+        Point2d vertexA = new Point2d(wedge.firstPointX, wedge.firstPointY);
+        Point2d vertexB = new Point2d(wedge.secondPointX, wedge.secondPointY);
         this.g.setColor(wedge.color);
         
         // store the current stroke
@@ -250,7 +250,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         
         int diameter = (int)(rendererModel.getBondLength()*rendererModel.getZoomFactor()*1.2*gapFactor)+2;
         double d = 0;
-        double rad=BondTools.giveAngleBothMethods(new Point2d(wedge.x1,wedge.y1), new Point2d(wedge.x1+100,wedge.y1), new Point2d(wedge.x2,wedge.y2), true);
+        double rad=BondTools.giveAngleBothMethods(new Point2d(wedge.firstPointX,wedge.firstPointY), new Point2d(wedge.firstPointX+100,wedge.firstPointY), new Point2d(wedge.secondPointX,wedge.secondPointY), true);
         int degrees=(int)(360*(rad/(2*Math.PI)));
         // draw by interpolating along the imaginary straight line
         for (int i = 0; i < numberOfCircles; i++) {
@@ -403,9 +403,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     }
     
     public void visit(RectangleElement rectangle) {
-        int[] p1 = this.transformPoint(rectangle.x, rectangle.y);
+        int[] p1 = this.transformPoint(rectangle.xCoord, rectangle.yCoord);
         int[] p2 = this.transformPoint(
-                rectangle.x + rectangle.width, rectangle.y + rectangle.height);
+                rectangle.xCoord + rectangle.width, rectangle.yCoord + rectangle.height);
         this.g.setColor(rectangle.color);
         if (rectangle.filled) {
             this.g.fillRect(p1[0], p1[1], p2[0] - p1[0], p2[1] - p1[1]);

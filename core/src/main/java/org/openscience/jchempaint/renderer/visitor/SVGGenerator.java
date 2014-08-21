@@ -44,10 +44,10 @@ import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.PathElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
-import org.openscience.cdk.renderer.elements.TextElement;
-import org.openscience.cdk.renderer.elements.TextGroupElement;
+import org.openscience.jchempaint.renderer.elements.TextElement;
+import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
-import org.openscience.cdk.renderer.elements.WigglyLineElement;
+import org.openscience.jchempaint.renderer.elements.WigglyLineElement;
 import org.openscience.jchempaint.renderer.font.FreeSansBoldGM;
 import org.openscience.jchempaint.renderer.font.GlyphMetrics;
 import org.openscience.jchempaint.renderer.font.IFontManager;
@@ -223,8 +223,8 @@ public class SVGGenerator implements IDrawVisitor {
 	
 	public void draw (OvalElement oval) {
 		newline();
-		double[] p1 = transformPoint(oval.x - oval.radius, oval.y - oval.radius);
-		double[] p2 = transformPoint(oval.x + oval.radius, oval.y + oval.radius);
+		double[] p1 = transformPoint(oval.xCoord - oval.radius, oval.yCoord - oval.radius);
+		double[] p2 = transformPoint(oval.xCoord + oval.radius, oval.yCoord + oval.radius);
 		double x, y, w, h;
 		x = Math.min(p1[0], p2[0]);
 		y = Math.min(p1[1], p2[1]);
@@ -496,8 +496,8 @@ public class SVGGenerator implements IDrawVisitor {
 	}
 
 	public void draw (WedgeLineElement wedge) {
-		double[] p1 = transformPoint(wedge.x1, wedge.y1);
-		double[] p2 = transformPoint(wedge.x2, wedge.y2);
+		double[] p1 = transformPoint(wedge.firstPointX, wedge.firstPointY);
+		double[] p2 = transformPoint(wedge.secondPointX, wedge.secondPointY);
 		if (bbox==null) bbox = new Rectangle2D.Double(
                             Math.min(p1[0], p2[0]), Math.min(p1[1], p2[1]),
                             Math.abs(p2[0] - p1[0]), Math.abs(p2[1] - p1[1]));
@@ -519,9 +519,9 @@ public class SVGGenerator implements IDrawVisitor {
         Point2d vertexC = new Point2d(vertexB);
         vertexB.add(normal);
         vertexC.sub(normal);
-        if (wedge.wedgeType==0) {
+        if (wedge.type == WedgeLineElement.TYPE.DASHED) {
             this.drawDashedWedge(vertexA, vertexB, vertexC);
-        } else if (wedge.wedgeType==1) {
+        } else if (wedge.type == WedgeLineElement.TYPE.WEDGED) {
             this.drawFilledWedge(vertexA, vertexB, vertexC);
         } else {
         	this.drawCrissCrossWedge(vertexA, vertexB, vertexC);
@@ -603,8 +603,8 @@ public class SVGGenerator implements IDrawVisitor {
 
 	public void draw (LineElement line) {
 		newline();
-		double[] p1 = transformPoint(line.x1, line.y1);
-		double[] p2 = transformPoint(line.x2, line.y2);
+		double[] p1 = transformPoint(line.firstPointX, line.firstPointY);
+		double[] p2 = transformPoint(line.secondPointX, line.secondPointY);
 		if (!shorten_line (p1, p2)) return;
                 if (bbox == null) {
                     bbox = new Rectangle2D.Double(
@@ -663,8 +663,8 @@ public class SVGGenerator implements IDrawVisitor {
     public void draw (ArrowElement line) {
       
         int w = (int) (line.width * this.rendererModel.getScale());
-        double[] a = this.transformPoint(line.x1, line.y1);
-        double[] b = this.transformPoint(line.x2, line.y2);
+        double[] a = this.transformPoint(line.startX, line.startY);
+        double[] b = this.transformPoint(line.startX, line.startY);
         newline();
 		svg.append(String.format(
 				"<line x1=\"%4.2f\" y1=\"%4.2f\" x2=\"%4.2f\" y2=\"%4.2f\" " +
@@ -676,8 +676,8 @@ public class SVGGenerator implements IDrawVisitor {
 				));
         double aW = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
         if(line.direction){
-	        double[] c = this.transformPoint(line.x1-aW, line.y1-aW);
-	        double[] d = this.transformPoint(line.x1-aW, line.y1+aW);
+	        double[] c = this.transformPoint(line.startX-aW, line.startY-aW);
+	        double[] d = this.transformPoint(line.startX-aW, line.startY+aW);
 	        newline();
 			svg.append(String.format(
 					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
@@ -697,8 +697,8 @@ public class SVGGenerator implements IDrawVisitor {
 					d[1]
 					));
         }else{
-	        double[] c = this.transformPoint(line.x2+aW, line.y2-aW);
-	        double[] d = this.transformPoint(line.x2+aW, line.y2+aW);
+	        double[] c = this.transformPoint(line.endX+aW, line.endY-aW);
+	        double[] d = this.transformPoint(line.endX+aW, line.endY+aW);
 	        newline();
 			svg.append(String.format(
 					"<line x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\" " +
@@ -722,10 +722,10 @@ public class SVGGenerator implements IDrawVisitor {
 
 
 	public void draw (RectangleElement rectangleElement) {
-        double[] pA = this.transformPoint(rectangleElement.x, rectangleElement.y);
-        double[] pB = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y);
-        double[] pC = this.transformPoint(rectangleElement.x, rectangleElement.y+rectangleElement.height);
-        double[] pD = this.transformPoint(rectangleElement.x+rectangleElement.width, rectangleElement.y+rectangleElement.height);
+        double[] pA = this.transformPoint(rectangleElement.xCoord, rectangleElement.yCoord);
+        double[] pB = this.transformPoint(rectangleElement.xCoord+rectangleElement.width, rectangleElement.yCoord);
+        double[] pC = this.transformPoint(rectangleElement.xCoord, rectangleElement.yCoord+rectangleElement.height);
+        double[] pD = this.transformPoint(rectangleElement.xCoord+rectangleElement.width, rectangleElement.yCoord+rectangleElement.height);
         
         newline();
 		svg.append(String.format(

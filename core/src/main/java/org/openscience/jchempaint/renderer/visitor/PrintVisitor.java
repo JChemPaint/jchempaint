@@ -28,7 +28,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.IRenderingVisitor;
 import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
-import org.openscience.cdk.renderer.elements.TextElement;
+import org.openscience.jchempaint.renderer.elements.TextElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
 
 
@@ -52,21 +52,21 @@ public class PrintVisitor implements IRenderingVisitor {
 
 	public void visitLine(LineElement lineElement) {
 		System.out.println("Line [" 
-		        + lineElement.x1 
+		        + lineElement.firstPointX 
 		        + " " 
-		        + lineElement.y1 
+		        + lineElement.firstPointY 
 		        + "]-["
-				+ lineElement.x2 
+				+ lineElement.firstPointX 
 				+ " " 
-				+ lineElement.y2
+				+ lineElement.firstPointY
 				+"]");
 	}
 
 	public void visitOval(OvalElement ovalElement) {
 		System.out.println("Oval ["
-		        + ovalElement.x 
-		        + "," 
-		        + ovalElement.y 
+		        + ovalElement.xCoord 
+		        + ","         
+		        + ovalElement.yCoord 
 		        + " " 
 		        + ovalElement.radius
 		        + "]");
