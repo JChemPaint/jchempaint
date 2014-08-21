@@ -9,3 +9,8 @@ The issue tracker here (on top of this page) is for specific
 JCP-related bugs. For problems in CDK proper, please use
 http://sourceforge.net/tracker/?group_id=20024&atid=120024
 
+
+Build requirements (need installation)
+ - gettext : http://www.gnu.org/software/gettext/
+ - app-bundler: https://github.com/federkasten/appbundler-plugin
+

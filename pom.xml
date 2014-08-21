@@ -24,6 +24,8 @@
         <module>core</module>
         <module>inchi</module>
         <module>inchi-nestedvm</module>
+        <module>app-osx</module>
+        <module>app-jar</module>
     </modules>
 
 </project>
