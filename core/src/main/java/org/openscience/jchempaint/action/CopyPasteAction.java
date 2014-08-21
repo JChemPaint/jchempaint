@@ -191,6 +191,7 @@ public class CopyPasteAction extends JCPAction{
                 
                 if(selection!=null){
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
+                    selectionModel.setMoleculeSet(bldr.newInstance(IAtomContainerSet.class));
                     selectionModel.getMoleculeSet().addAtomContainer(selection);
                     sysClip.setContents(new SmilesSelection(CreateSmilesAction.getSmiles(selectionModel)), null);
                 }else{
