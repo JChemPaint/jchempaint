@@ -9,10 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import org.openscience.jchempaint.AbstractAppletTest;
-import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * @author Ralf Stephan <ralf@ark.in-berlin.de>

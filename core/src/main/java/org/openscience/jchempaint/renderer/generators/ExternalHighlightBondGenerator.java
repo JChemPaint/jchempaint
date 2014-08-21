@@ -27,7 +27,7 @@ import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.selection.AtomContainerSelection;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * A generator to generate the externally selected bonds in ExternalHighlightColor.

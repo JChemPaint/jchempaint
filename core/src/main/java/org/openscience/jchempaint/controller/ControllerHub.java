@@ -52,7 +52,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
@@ -83,7 +82,7 @@ import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 

@@ -28,6 +28,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 

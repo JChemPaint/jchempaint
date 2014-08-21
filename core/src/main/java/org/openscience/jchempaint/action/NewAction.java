@@ -32,10 +32,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**

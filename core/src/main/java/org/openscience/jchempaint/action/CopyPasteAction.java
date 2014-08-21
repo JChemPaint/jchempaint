@@ -44,7 +44,6 @@ import java.lang.reflect.Constructor;
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.CDK;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -90,7 +89,7 @@ import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;

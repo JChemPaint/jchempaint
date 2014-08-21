@@ -6,11 +6,9 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.jchempaint.controller.IChemModelRelay;
-import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**

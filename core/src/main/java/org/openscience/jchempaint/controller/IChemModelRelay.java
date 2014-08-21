@@ -40,7 +40,7 @@ import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 

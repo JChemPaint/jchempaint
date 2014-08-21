@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 
 /**
  * @author Arvid

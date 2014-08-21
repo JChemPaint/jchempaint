@@ -43,7 +43,7 @@ import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.renderer.color.RasmolColors;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * Model for {@link Renderer} that contains settings for drawing objects.

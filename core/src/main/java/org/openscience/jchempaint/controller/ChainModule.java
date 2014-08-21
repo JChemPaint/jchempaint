@@ -25,7 +25,6 @@
 package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -33,11 +32,9 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 
 /**
  * Adds a bond at direction that is dragged.

@@ -23,12 +23,13 @@ package org.openscience.jchempaint.renderer.selection;
 import java.awt.Color;
 
 import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * @author Arvid
  * @cdk.module rendercontrol
  */
-public interface IncrementalSelection extends IChemObjectSelection{
+public interface IncrementalSelection extends IChemObjectSelection {
 
 
     /**

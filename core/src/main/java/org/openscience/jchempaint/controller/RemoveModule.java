@@ -31,7 +31,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 
 
 /**

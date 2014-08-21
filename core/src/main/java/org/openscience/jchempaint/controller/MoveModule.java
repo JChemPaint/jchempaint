@@ -49,7 +49,7 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**

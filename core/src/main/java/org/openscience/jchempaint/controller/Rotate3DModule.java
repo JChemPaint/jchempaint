@@ -24,22 +24,8 @@
 
 package org.openscience.jchempaint.controller;
 
-import java.awt.geom.Rectangle2D;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.ILoggingTool;
-import org.openscience.cdk.tools.LoggingToolFactory;
-import org.openscience.jchempaint.controller.RotateModule;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
-import org.openscience.jchempaint.renderer.BoundsCalculator;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 

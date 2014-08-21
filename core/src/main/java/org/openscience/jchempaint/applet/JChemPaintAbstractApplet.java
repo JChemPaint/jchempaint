@@ -48,7 +48,6 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
-import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -58,16 +57,12 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.RGroupQueryWriter;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -80,11 +75,8 @@ import org.openscience.jchempaint.StringHelper;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.IControllerModel;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 /**

@@ -92,7 +92,7 @@ import org.openscience.jchempaint.renderer.generators.RingGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
 import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;

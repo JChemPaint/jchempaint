@@ -24,9 +24,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -36,7 +33,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**

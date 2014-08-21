@@ -58,7 +58,7 @@ import org.openscience.jchempaint.dialog.editor.ChemObjectEditor;
 import org.openscience.jchempaint.dialog.editor.ChemObjectPropertyDialog;
 import org.openscience.jchempaint.dialog.editor.RGroupEditor;
 import org.openscience.jchempaint.io.JCPFileView;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 /**

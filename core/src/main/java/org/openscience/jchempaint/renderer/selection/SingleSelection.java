@@ -31,6 +31,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * Represents a single <code>ChemObject</code>

@@ -61,21 +61,19 @@ import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
 import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.selection.AbstractSelection;
-import org.openscience.jchempaint.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
