@@ -73,8 +73,8 @@ public class JCPAction extends AbstractAction
 	protected static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JCPAction.class);
 
-	private Hashtable actions = null;
-	private Hashtable popupActions = null;
+	private Hashtable<String,JCPAction> actions = null;
+	private Hashtable<String,JCPAction> popupActions = null;
 
 	/**
 	 *  Description of the Field
@@ -104,11 +104,11 @@ public class JCPAction extends AbstractAction
 		super();
 		if (this.actions == null)
 		{
-			this.actions = new Hashtable();
+			this.actions = new Hashtable<String,JCPAction>();
 		}
 		if (this.popupActions == null)
 		{
-			this.popupActions = new Hashtable();
+			this.popupActions = new Hashtable<String,JCPAction>();
 		}
 		this.type = "";
 		this.isPopupAction = isPopupAction;
