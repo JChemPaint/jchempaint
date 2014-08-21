@@ -18,7 +18,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package org.openscience.cdk.renderer.elements;
+package org.openscience.jchempaint.renderer.elements;
+
+import org.openscience.cdk.renderer.elements.IRenderingVisitor;
+import org.openscience.cdk.renderer.elements.LineElement;
 
 import java.awt.Color;
 
@@ -54,7 +57,7 @@ public class WigglyLineElement extends LineElement {
 	 */
 	public WigglyLineElement(LineElement element,
 			Color color) {
-		this(element.x1, element.y1, element.x2, element.y2,
+		this(element.firstPointX, element.firstPointY, element.secondPointX, element.secondPointY,
 		     element.width, color);
 	}
 
