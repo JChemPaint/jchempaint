@@ -29,14 +29,13 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 
-public class PhantomTextGenerator implements IGenerator{
+public class PhantomTextGenerator implements IGenerator<IAtomContainer> {
 
     ControllerHub hub;
 
@@ -56,7 +55,7 @@ public class PhantomTextGenerator implements IGenerator{
             return new TextElement(hub.getPhantomTextPosition().x, hub.getPhantomTextPosition().y, hub.getPhantomText(), Color.GRAY);
     }
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

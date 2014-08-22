@@ -76,7 +76,7 @@ import org.openscience.jchempaint.renderer.generators.ExternalHighlightAtomGener
 import org.openscience.jchempaint.renderer.generators.ExternalHighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightBondGenerator;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
 import org.openscience.jchempaint.renderer.generators.LonePairGenerator;
 import org.openscience.jchempaint.renderer.generators.MappingGenerator;

@@ -32,6 +32,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -45,7 +46,7 @@ import org.openscience.cdk.renderer.elements.OvalElement;
  * @cdk.module renderextra
  *
  */
-public class RadicalGenerator implements IGenerator {
+public class RadicalGenerator implements IGenerator<IAtomContainer> {
     
     public RadicalGenerator() {}
 
@@ -86,7 +87,7 @@ public class RadicalGenerator implements IGenerator {
         return group;
     }
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

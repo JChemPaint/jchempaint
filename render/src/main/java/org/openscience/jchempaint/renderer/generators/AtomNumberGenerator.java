@@ -30,6 +30,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -40,7 +41,7 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
  * @author maclean
  * @cdk.module renderextra
  */
-public class AtomNumberGenerator implements IGenerator {
+public class AtomNumberGenerator implements IGenerator<IAtomContainer> {
 
 	public AtomNumberGenerator() {}
 
@@ -60,7 +61,7 @@ public class AtomNumberGenerator implements IGenerator {
 		return numbers;
 	}
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

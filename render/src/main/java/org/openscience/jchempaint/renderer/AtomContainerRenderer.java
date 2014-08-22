@@ -36,7 +36,7 @@ import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
 
 /**

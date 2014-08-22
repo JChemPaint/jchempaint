@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -24,7 +25,7 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
  * does not have all the information we need here. 
  * @author Mark R.
  */
-public class RGroupGenerator implements IGenerator{
+public class RGroupGenerator implements IGenerator<IAtomContainer> {
 
 	private IRGroupQuery rGroupQuery;
 	private final static String APO1_LABEL="*"; 
@@ -149,7 +150,7 @@ public class RGroupGenerator implements IGenerator{
 		return diagram;
 	}
 
-	public List<IGeneratorParameter> getParameters() {
+	public List<IGeneratorParameter<?>> getParameters() {
 		// Auto-generated method stub
 		return null;
 	}

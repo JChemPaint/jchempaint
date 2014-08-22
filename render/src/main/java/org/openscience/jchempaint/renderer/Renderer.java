@@ -38,7 +38,7 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionSetGenerator;
 import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;

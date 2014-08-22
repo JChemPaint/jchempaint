@@ -35,6 +35,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -51,7 +52,7 @@ import org.openscience.cdk.renderer.elements.WedgeLineElement.Direction;
 /**
  * @cdk.module renderbasic
  */
-public class BasicBondGenerator implements IGenerator {
+public class BasicBondGenerator implements IGenerator<IAtomContainer> {
 	
 	private static ILoggingTool logger = LoggingToolFactory
 			.createLoggingTool(BasicBondGenerator.class);
@@ -459,7 +460,7 @@ public class BasicBondGenerator implements IGenerator {
 		}
 	}
 
-	public List<IGeneratorParameter> getParameters() {
+	public List<IGeneratorParameter<?>> getParameters() {
 		// TODO Auto-generated method stub
 		return null;
 	}

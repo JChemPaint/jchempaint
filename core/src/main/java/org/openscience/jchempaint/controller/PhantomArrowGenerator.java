@@ -33,13 +33,13 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 
 /**
  * Draws a phantom arrow in ControllerHub
  */
-public class PhantomArrowGenerator implements IGenerator{
+public class PhantomArrowGenerator implements IGenerator<IAtomContainer> {
 
     ControllerHub hub;
 
@@ -65,7 +65,7 @@ public class PhantomArrowGenerator implements IGenerator{
                     Color.GRAY);
     }
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

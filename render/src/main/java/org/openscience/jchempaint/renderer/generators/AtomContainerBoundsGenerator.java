@@ -26,15 +26,15 @@ import java.util.List;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 
 /**
  * @cdk.module renderextra
  */
-public class AtomContainerBoundsGenerator implements IGenerator {
+public class AtomContainerBoundsGenerator implements IGenerator<IAtomContainer> {
 
     public IRenderingElement generate( IAtomContainer ac, RendererModel model) {
         double[] minMax = GeometryTools.getMinMax(ac);
@@ -43,7 +43,7 @@ public class AtomContainerBoundsGenerator implements IGenerator {
         
     }
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

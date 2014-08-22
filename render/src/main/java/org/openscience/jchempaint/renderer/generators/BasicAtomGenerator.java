@@ -30,6 +30,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -43,7 +44,7 @@ import org.openscience.cdk.renderer.elements.RectangleElement;
 /**
  * @cdk.module renderbasic
  */
-public class BasicAtomGenerator implements IGenerator {
+public class BasicAtomGenerator implements IGenerator<IAtomContainer> {
 
 	public BasicAtomGenerator() {}
 
@@ -176,7 +177,7 @@ public class BasicAtomGenerator implements IGenerator {
 		return false;
 	}
 
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

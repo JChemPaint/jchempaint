@@ -25,6 +25,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -33,8 +34,7 @@ import org.openscience.cdk.renderer.elements.path.PathBuilder;
 /**
  * @cdk.module rendercontrol
  */
-public class MergeAtomsGenerator extends BasicAtomGenerator
-                                implements IGenerator {
+public class MergeAtomsGenerator extends BasicAtomGenerator {
 
     public MergeAtomsGenerator() {}
 

@@ -80,7 +80,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;

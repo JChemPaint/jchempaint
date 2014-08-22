@@ -31,6 +31,7 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
@@ -41,7 +42,7 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
 /**
  * @cdk.module rendercontrol
  */
-public class AtomContainerTitleGenerator implements IGenerator {
+public class AtomContainerTitleGenerator implements IGenerator<IAtomContainer> {
 
     public AtomContainerTitleGenerator() {}
 
@@ -66,7 +67,7 @@ public class AtomContainerTitleGenerator implements IGenerator {
         return diagram;
     }
     
-    public List<IGeneratorParameter> getParameters() {
+    public List<IGeneratorParameter<?>> getParameters() {
         // TODO Auto-generated method stub
         return null;
     }

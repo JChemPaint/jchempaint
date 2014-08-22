@@ -26,7 +26,7 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.jchempaint.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 
 /**
  * Interface that all 2D renderers implement.
