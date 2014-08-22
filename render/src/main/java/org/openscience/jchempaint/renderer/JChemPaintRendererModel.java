@@ -86,8 +86,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * 
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public JChemPaintRendererModel(boolean useUserSettings) {
-        this.parameters = new RenderingParameters(useUserSettings);
+    public JChemPaintRendererModel() {
+        this.parameters = new RenderingParameters();
     }
 
     /**

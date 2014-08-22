@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionSetGenerator;
@@ -122,15 +123,14 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            a class that manages mappings between zoom and font sizes
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public Renderer(List<IGenerator> generators, IFontManager fontManager,
-            boolean useUserSettings) {
-        super(generators, fontManager, useUserSettings);
+    public Renderer(List<IGenerator> generators, IFontManager fontManager) {
+        super(generators, fontManager);
     }
 
     public Renderer(List<IGenerator> generators,
             List<IReactionGenerator> reactionGenerators,
-            IFontManager fontManager, boolean useUserSettings) {
-        this(generators, fontManager, useUserSettings);
+            IFontManager fontManager) {
+        this(generators, fontManager);
         this.reactionGenerators = reactionGenerators;
         this.reactionSetGenerators = new ArrayList<IReactionSetGenerator>();
         this.setup();

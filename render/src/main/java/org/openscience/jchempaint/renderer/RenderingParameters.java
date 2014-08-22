@@ -31,46 +31,6 @@ import org.openscience.jchempaint.JCPPropertyHandler;
  * @cdk.module render
  */
 public class RenderingParameters {
-
-    /**
-     * Constructor for the RenderingParameters.
-     * 
-     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
-     */
-    public RenderingParameters(boolean useUserSettings){
-        atomRadius = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("AtomRadius"));
-        backColor = new Color(Integer.parseInt(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB()))));
-        bondWidth = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("BondWidth"));
-        compactShape = JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
-                .getProperty("CompactShape").equals("square") ? AtomShape.SQUARE : AtomShape.OVAL;
-        compact = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("IsCompact"));
-        colorAtomsByType = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ColorAtomsByType"));
-        showImplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowImplicitHydrogens"));
-        willDrawNumbers = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("DrawNumbers"));
-        kekuleStructure = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("KekuleStructure"));
-        showEndCarbons = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowEndCarbons"));
-        showExplicitHydrogens = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowExplicitHydrogens"));
-        highlightDistance = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("HighlightDistance"));
-        fitToScreen = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("FitToScreen"));
-        showAromaticity = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowAromaticity"));
-        wedgeWidth = Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("WedgeWidth"));
-        showReactionBoxes = Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                .getJCPProperties().getProperty("ShowReactionBoxes"));
-    }
     
     /**
      * The size on screen of a compact mode shape

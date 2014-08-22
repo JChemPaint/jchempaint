@@ -137,10 +137,10 @@ public class AtomContainerRenderer implements IRenderer {
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
     public AtomContainerRenderer(List<IGenerator> generators,
-                                 IFontManager fontManager, boolean useUserSettings) {
-        rendererModel = new JChemPaintRendererModel(useUserSettings);
+                                 IFontManager fontManager) {
+        rendererModel = new JChemPaintRendererModel();
         this.generators = generators;
-        this.fontManager = fontManager; 
+        this.fontManager = fontManager;
         for (IGenerator<?> generator : generators) {
             if (generator.getParameters() != null)
                 rendererModel.registerParameters(generator);

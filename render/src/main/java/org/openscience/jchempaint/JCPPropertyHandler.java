@@ -28,6 +28,7 @@
  */
 package org.openscience.jchempaint;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,8 +41,11 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  *  A property manager for JChemPaint.
@@ -346,4 +350,43 @@ public class JCPPropertyHandler
 	    return this.getJCPProperties().getProperty("General.JCPVersion");
 	}
 
+    /**
+     * Set rendering preferences using this property handler instance.  
+     * 
+     * @param model rendering model
+     */
+    public void setRenderingPreferences(JChemPaintRendererModel model) {
+        model.setAtomRadius(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                          .getJCPProperties().getProperty("AtomRadius")));
+        model.setBackColor(new Color(Integer.parseInt(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                 .getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB())))));
+        model.setBondWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                .getJCPProperties().getProperty("BondWidth")));
+        model.setCompactShape(JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
+                                         .getProperty("CompactShape").equals("square") ? RenderingParameters.AtomShape.SQUARE : RenderingParameters.AtomShape.OVAL);
+        model.setIsCompact(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                         .getJCPProperties().getProperty("IsCompact")));
+        model.setColorAtomsByType(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                  .getJCPProperties().getProperty("ColorAtomsByType")));
+        model.setShowImplicitHydrogens(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                       .getJCPProperties().getProperty("ShowImplicitHydrogens")));
+        model.setDrawNumbers(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                 .getJCPProperties().getProperty("DrawNumbers")));
+        model.setKekuleStructure(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                 .getJCPProperties().getProperty("KekuleStructure")));
+        model.setShowEndCarbons(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                .getJCPProperties().getProperty("ShowEndCarbons")));
+        model.setShowExplicitHydrogens(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                       .getJCPProperties().getProperty("ShowExplicitHydrogens")));
+        model.setHighlightDistance(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                 .getJCPProperties().getProperty("HighlightDistance")));
+        model.setFitToScreen(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                             .getJCPProperties().getProperty("FitToScreen")));
+        model.setShowAromaticity(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                 .getJCPProperties().getProperty("ShowAromaticity")));
+        model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                          .getJCPProperties().getProperty("WedgeWidth")));
+        model.setShowReactionBoxes(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                   .getJCPProperties().getProperty("ShowReactionBoxes")));    
+    }
 }
