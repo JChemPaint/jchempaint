@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
@@ -44,12 +45,14 @@ public class AtomContainerTitleGenerator implements IGenerator {
 
     public AtomContainerTitleGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
-    	
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+        
         if(ac==null ||ac.getProperty(CDKConstants.TITLE)==null|| (ac.getAtomCount()==0 && ac.getBondCount()==0))
         	return null;
         
-        double d = model.getBondLength() / model.getScale()/2;
+        double d = jcpModel.getBondLength() / jcpModel.getScale()/2;
         Rectangle2D totalBounds = Renderer.calculateBounds(ac);
         
         ElementGroup diagram = new ElementGroup();

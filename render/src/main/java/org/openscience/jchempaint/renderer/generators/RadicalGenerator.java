@@ -31,6 +31,7 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ISingleElectron;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -48,7 +49,8 @@ public class RadicalGenerator implements IGenerator {
     
     public RadicalGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         ElementGroup group = new ElementGroup();
         
         // TODO : put into RendererModel
@@ -56,9 +58,9 @@ public class RadicalGenerator implements IGenerator {
         final Color RADICAL_COLOR = Color.BLACK;
         
         // XXX : is this the best option?
-        final double ATOM_RADIUS = model.getAtomRadius() / model.getScale();
+        final double ATOM_RADIUS = jcpModel.getAtomRadius() / jcpModel.getScale();
         
-        double modelRadius = SCREEN_RADIUS / model.getScale();
+        double modelRadius = SCREEN_RADIUS / jcpModel.getScale();
         Map<IAtom,Integer> singleElectronsPerAtom = new HashMap<IAtom, Integer>();
         for (ISingleElectron e : ac.singleElectrons()) {
             IAtom atom = e.getAtom();

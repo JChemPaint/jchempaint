@@ -28,6 +28,7 @@ import java.awt.Color;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -52,13 +53,14 @@ public class PhantomBondGenerator extends BasicBondGenerator implements IGenerat
     }
     
     @Override
-    public IRenderingElement generate( IAtomContainer ac, JChemPaintRendererModel model ) {
+    public IRenderingElement generate( IAtomContainer ac, RendererModel model ) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         if(hub == null || hub.getPhantoms()==null)
             return new ElementGroup();
         final ElementGroup group = new ElementGroup();
         for(IBond bond:hub.getPhantoms().bonds()) {
             this.setOverrideColor(Color.GRAY);
-            IRenderingElement element = generateBond( bond, model);
+            IRenderingElement element = generateBond( bond, jcpModel);
             group.add(element);
         }
         return group;

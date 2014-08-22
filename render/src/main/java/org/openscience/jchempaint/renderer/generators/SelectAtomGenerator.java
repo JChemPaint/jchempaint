@@ -27,6 +27,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -44,10 +45,11 @@ public class SelectAtomGenerator implements IGenerator {
 
     public SelectAtomGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
-        Color selectionColor = model.getSelectedPartColor();
-        IChemObjectSelection selection = model.getSelection();
-        return generate(selection, selectionColor, model);
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+        Color selectionColor = jcpModel.getSelectedPartColor();
+        IChemObjectSelection selection = jcpModel.getSelection();
+        return generate(selection, selectionColor, jcpModel);
     }
     
     protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, JChemPaintRendererModel model){

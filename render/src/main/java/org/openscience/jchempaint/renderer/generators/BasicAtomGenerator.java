@@ -29,6 +29,7 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -46,10 +47,11 @@ public class BasicAtomGenerator implements IGenerator {
 
 	public BasicAtomGenerator() {}
 
-	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
 		ElementGroup elementGroup = new ElementGroup();
 		for (IAtom atom : ac.atoms()) {
-			elementGroup.add(this.generate(ac, atom, model));
+			elementGroup.add(this.generate(ac, atom, jcpModel));
 		}
 		return elementGroup;
 	}

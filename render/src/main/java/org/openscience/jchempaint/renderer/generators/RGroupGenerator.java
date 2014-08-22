@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -96,14 +97,16 @@ public class RGroupGenerator implements IGenerator{
 	/**
 	 * Generate R-group visualizations.
 	 */
-	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
 
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+        
 		if (rGroupQuery==null || ac.getAtomCount()==0) {
 			return null;
 		}
 
 		//ToDO find a better place for this
-		model.setShowMoleculeTitle(true);
+		jcpModel.setShowMoleculeTitle(true);
 
 		ElementGroup diagram = new ElementGroup();
 
@@ -130,9 +133,9 @@ public class RGroupGenerator implements IGenerator{
 						if(rgrp.getGroup()==ac) {
 							acDetachedFromRGroup=false;
 							if(ac.contains(rgrp.getFirstAttachmentPoint()))
-								labelApoAtoms(rgrp.getFirstAttachmentPoint(),diagram,APO1_LABEL,ac,model);
+								labelApoAtoms(rgrp.getFirstAttachmentPoint(),diagram,APO1_LABEL,ac,jcpModel);
 							if (ac.contains(rgrp.getSecondAttachmentPoint()))
-								labelApoAtoms(rgrp.getSecondAttachmentPoint(),diagram,APO2_LABEL,ac,model);
+								labelApoAtoms(rgrp.getSecondAttachmentPoint(),diagram,APO2_LABEL,ac,jcpModel);
 							break apo;
 						}
 					}

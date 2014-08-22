@@ -34,6 +34,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -155,16 +156,19 @@ public class BasicBondGenerator implements IGenerator {
 		return model.getWedgeWidth() / scale;
 	}
 
-	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+        
 		ElementGroup group = new ElementGroup();
-		this.ringSet = this.getRingSet(ac,model);
+		this.ringSet = this.getRingSet(ac,jcpModel);
 
 		// Sort the ringSet consistently to ensure consistent rendering.
 		// If this is omitted, the bonds may 'tremble'.
 		ringSet.sortAtomContainers(new AtomContainerComparatorBy2DCenter());
 
 		for (IBond bond : ac.bonds()) {
-			group.add(this.generate(bond, model));
+			group.add(this.generate(bond, jcpModel));
 		}
 		return group;
 	}

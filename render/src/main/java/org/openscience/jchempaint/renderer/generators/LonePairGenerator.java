@@ -29,6 +29,7 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ILonePair;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -46,7 +47,8 @@ public class LonePairGenerator implements IGenerator {
     
     public LonePairGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         ElementGroup group = new ElementGroup();
         
         // TODO : put into RendererModel
@@ -56,9 +58,9 @@ public class LonePairGenerator implements IGenerator {
         final Color RADICAL_COLOR = Color.BLACK;
         
         // XXX : is this the best option?
-        final double ATOM_RADIUS = model.getAtomRadius();
+        final double ATOM_RADIUS = jcpModel.getAtomRadius();
         
-        double scale = model.getScale();
+        double scale = jcpModel.getScale();
         double modelAtomRadius = ATOM_RADIUS / scale;
         double modelPointRadius = SCREEN_RADIUS / scale;
         double modelSeparation = SCREEN_SEPARATION / scale;
