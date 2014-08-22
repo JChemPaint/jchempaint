@@ -1334,7 +1334,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		else
 			chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
 		newAtomContainer.add(ring);
-		newAtomContainer.add(ring);
 		updateAtoms(ring, ring.atoms());
 		structureChanged();
 		if (undoable && getUndoRedoFactory() != null
@@ -1396,7 +1395,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					sourceContainer.addBond(ringBond);
 			}
 			if (!phantom)
-				updateAtoms(newRing, newRing.atoms());
+				updateAtoms(sourceContainer, newRing.atoms());
 
 			JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 			double d = rModel.getHighlightDistance() / rModel.getScale();
@@ -1474,7 +1473,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				sourceContainer.addBond(ringBond);
 		}
 		if (!phantom)
-			updateAtoms(newRing, newRing.atoms());
+			updateAtoms(sourceContainer, newRing.atoms());
 		for (IAtom newatom : newRing.atoms()) {
 			if (atom != newatom && getClosestAtom(atom) != null) {
 				JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
@@ -1645,7 +1644,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 		if (!phantom)
-			updateAtoms(newRing, newRing.atoms());
+			updateAtoms(sourceContainer, newRing.atoms());
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
@@ -1786,7 +1785,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 		if (!phantom)
-			updateAtoms(newRing, newRing.atoms());
+			updateAtoms(sourceContainer, newRing.atoms());
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
