@@ -30,7 +30,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
@@ -43,7 +43,7 @@ public class AtomNumberGenerator implements IGenerator {
 
 	public AtomNumberGenerator() {}
 
-	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
 		ElementGroup numbers = new ElementGroup();
 		if (!model.drawNumbers()) return numbers;
 

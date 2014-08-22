@@ -22,7 +22,7 @@
 package org.openscience.jchempaint.renderer.generators;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
@@ -39,7 +39,7 @@ public class BasicGenerator {
 		this.bondGenerator = new BasicBondGenerator();
 	}
 	
-	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
 		ElementGroup diagram = new ElementGroup();
 		diagram.add(this.bondGenerator.generate(ac, model));
 		diagram.add(this.atomGenerator.generate(ac, model));

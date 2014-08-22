@@ -28,7 +28,7 @@ import java.awt.Color;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -51,7 +51,7 @@ public class PhantomArrowGenerator implements IGenerator{
         this.hub = hub;
     }
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
         if(hub.getPhantomArrow()[0]==null || hub.getPhantomArrow()[1]==null)
             return new ElementGroup();
         else

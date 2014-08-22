@@ -43,7 +43,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.geometry.BondTools;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -75,7 +75,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
      * The renderer model cannot be set by the constructor as it needs to
      * be managed by the Renderer.
      */
-    private RendererModel rendererModel;
+    private JChemPaintRendererModel rendererModel;
 
     private final Map<Integer, BasicStroke> strokeMap =
             new HashMap<Integer, BasicStroke>();
@@ -142,7 +142,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         firstArrowPoint.y = relativex * sintheta + relativey * costheta + line.startY;
         int[] firstArrowPointCoords = this.transformPoint(firstArrowPoint.x, firstArrowPoint.y);
         this.g.drawLine(a[0], a[1], firstArrowPointCoords[0], firstArrowPointCoords[1]);
-        angle = -Math.PI/6;
+        angle = -Math.PI / 6;
         costheta = Math.cos(angle);
         sintheta = Math.sin(angle);
         Point2d secondArrowPoint = new Point2d();
@@ -636,7 +636,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         this.fontManager = (AWTFontManager) fontManager;
     }
 
-    public void setRendererModel(RendererModel rendererModel) {
+    public void setRendererModel(JChemPaintRendererModel rendererModel) {
         this.rendererModel = rendererModel;
         if (rendererModel.getUseAntiAliasing()) {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

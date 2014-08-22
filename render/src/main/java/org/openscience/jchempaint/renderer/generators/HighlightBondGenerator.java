@@ -24,7 +24,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
@@ -37,11 +37,11 @@ public class HighlightBondGenerator extends BasicBondGenerator
 
     public HighlightBondGenerator() {}
     
-    private boolean shouldHighlight(IBond bond, RendererModel model) {
+    private boolean shouldHighlight(IBond bond, JChemPaintRendererModel model) {
         return !super.bindsHydrogen(bond) || model.getShowExplicitHydrogens();
     }
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
         IBond bond = model.getHighlightedBond();
         if (bond != null && shouldHighlight(bond, model)) {
             super.ringSet = super.getRingSet(ac,model);

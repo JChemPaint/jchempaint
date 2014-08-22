@@ -24,7 +24,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 
@@ -35,7 +35,7 @@ import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 public class TooltipGenerator extends BasicAtomGenerator {
     
     public IRenderingElement generate(
-            IAtomContainer ac, IAtom atom, RendererModel model) {
+            IAtomContainer ac, IAtom atom, JChemPaintRendererModel model) {
         
         if (model.getShowTooltip() && (atom == model.getHighlightedAtom() ||( model.getExternalSelectedPart()!=null &&  model.getExternalSelectedPart().contains(atom))) && model.getToolTipText(atom) != null)
         {

@@ -27,7 +27,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.AtomMassSymbolElement;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
@@ -42,7 +42,7 @@ public class AtomMassGenerator extends BasicAtomGenerator {
 	public AtomMassGenerator() {}
 
 	public IRenderingElement generateElements(
-	        IAtom atom, int alignment, RendererModel model) {
+	        IAtom atom, int alignment, JChemPaintRendererModel model) {
 		return new AtomMassSymbolElement(
 				atom.getPoint2d().x,
 				atom.getPoint2d().y, 
@@ -55,7 +55,7 @@ public class AtomMassGenerator extends BasicAtomGenerator {
 	}
 
 	public boolean showCarbon(
-	        IAtom atom, IAtomContainer ac, RendererModel model) {
+	        IAtom atom, IAtomContainer ac, JChemPaintRendererModel model) {
 
 		Integer massNumber = atom.getMassNumber(); 
 		if (massNumber != null) {

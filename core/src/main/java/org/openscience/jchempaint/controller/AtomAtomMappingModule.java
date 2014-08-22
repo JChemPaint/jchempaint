@@ -29,7 +29,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IMapping;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * Adds an atom on the given location on mouseclick
@@ -47,7 +47,7 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 	}
 
 	public void mouseClickedDown(Point2d worldCoord) {
-		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		double dH = model.getHighlightDistance() / model.getScale();
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 
@@ -58,7 +58,7 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 	}
 	
 	public void mouseClickedUp(Point2d worldCoord){
-		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		double dH = model.getHighlightDistance() / model.getScale();
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 

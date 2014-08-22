@@ -39,7 +39,7 @@ import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparatorBy2DCenter;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
@@ -79,7 +79,7 @@ public class BasicBondGenerator implements IGenerator {
 		this.overrideBondWidth = bondWidth;
 	}
 
-	protected IRingSet getRingSet(final IAtomContainer atomContainer,RendererModel renderModel) {
+	protected IRingSet getRingSet(final IAtomContainer atomContainer,JChemPaintRendererModel renderModel) {
 		//if(renderModel.isRecalculationRequiredForSSSR() || this.ringSet==null) {
 		//	System.out.println("recalc SSSR");
 		//	renderModel.setRecalculationRequiredForSSSR(false);
@@ -117,7 +117,7 @@ public class BasicBondGenerator implements IGenerator {
 	 *            the rendering model
 	 * @return the color to paint the bond
 	 */
-	public Color getColorForBond(IBond bond, RendererModel model) {
+	public Color getColorForBond(IBond bond, JChemPaintRendererModel model) {
 		if (this.overrideColor != null) {
 			return overrideColor;
 		}
@@ -141,7 +141,7 @@ public class BasicBondGenerator implements IGenerator {
 	 *            the renderer model
 	 * @return a double in chem-model space
 	 */
-	public double getWidthForBond(IBond bond, RendererModel model) {
+	public double getWidthForBond(IBond bond, JChemPaintRendererModel model) {
 		double scale = model.getScale();
 		if (this.overrideBondWidth != -1) {
 			return this.overrideBondWidth / scale;
@@ -150,12 +150,12 @@ public class BasicBondGenerator implements IGenerator {
 		}
 	}
 
-	public double getWidthForWedge(RendererModel model) {
+	public double getWidthForWedge(JChemPaintRendererModel model) {
 		double scale = model.getScale();
 		return model.getWedgeWidth() / scale;
 	}
 
-	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
 		ElementGroup group = new ElementGroup();
 		this.ringSet = this.getRingSet(ac,model);
 
@@ -169,7 +169,7 @@ public class BasicBondGenerator implements IGenerator {
 		return group;
 	}
 
-	public IRenderingElement generate(IBond currentBond, RendererModel model) {
+	public IRenderingElement generate(IBond currentBond, JChemPaintRendererModel model) {
 		IRing ring = getSmallestRing(ringSet, currentBond);
 		if (ring != null) {
 			return generateRingElements(currentBond, ring, model);
@@ -198,7 +198,7 @@ public class BasicBondGenerator implements IGenerator {
 		return ring;
 	}
 
-	public IRenderingElement generateBondElement(IBond bond, RendererModel model) {
+	public IRenderingElement generateBondElement(IBond bond, JChemPaintRendererModel model) {
 		return this.generateBondElement(bond, bond.getOrder(), model);
 	}
 
@@ -214,7 +214,7 @@ public class BasicBondGenerator implements IGenerator {
 	 * @return
 	 */
 	public IRenderingElement generateBondElement(IBond bond, IBond.Order type,
-			RendererModel model) {
+			JChemPaintRendererModel model) {
 		// More than 2 atoms per bond not supported by this module
 		if (bond.getAtomCount() > 2)
 			return null;
@@ -251,7 +251,7 @@ public class BasicBondGenerator implements IGenerator {
 	}
 
 	private IRenderingElement generateBoldBondElement(IBond bond,
-			RendererModel model) {
+			JChemPaintRendererModel model) {
 		Point2d p1 = bond.getAtom(0).getPoint2d();
 		Point2d p2 = bond.getAtom(1).getPoint2d();
 		return new LineElement(p1.x, p1.y, p2.x, p2.y, getWidthForWedge(model),
@@ -292,7 +292,7 @@ public class BasicBondGenerator implements IGenerator {
 	}
 
 	public IRenderingElement generateRingElements(IBond bond, IRing ring,
-			RendererModel model) {
+			JChemPaintRendererModel model) {
 		// check for bold bond
 		if (isBetweenTwoWedges(bond, ring) && !isTriple(bond)) {
 			if (isSingle(bond)) {
@@ -324,12 +324,12 @@ public class BasicBondGenerator implements IGenerator {
 	}
 
 	public LineElement generateInnerElement(IBond bond, IRing ring,
-			RendererModel model) {
+			JChemPaintRendererModel model) {
 		return generateInnerElement(bond, ring, model, false);
 	}
 
 	public LineElement generateInnerElement(IBond bond, IRing ring,
-			RendererModel model, boolean isBold) {
+			JChemPaintRendererModel model, boolean isBold) {
 		Point2d center = GeometryTools.get2DCenter(ring);
 		Point2d a = bond.getAtom(0).getPoint2d();
 		Point2d b = bond.getAtom(1).getPoint2d();
@@ -375,7 +375,7 @@ public class BasicBondGenerator implements IGenerator {
 	 * @return The rendering element.
 	 */
 	private IRenderingElement generateStereoElement(IBond bond,
-			RendererModel model) {
+			JChemPaintRendererModel model) {
 
 		IBond.Stereo stereo = bond.getStereo();
 		if (stereo == IBond.Stereo.E_OR_Z) {
@@ -443,7 +443,7 @@ public class BasicBondGenerator implements IGenerator {
 		return false;
 	}
 
-	public IRenderingElement generateBond(IBond bond, RendererModel model) {
+	public IRenderingElement generateBond(IBond bond, JChemPaintRendererModel model) {
 		if (!model.getShowExplicitHydrogens() && bindsHydrogen(bond)) {
 			return null;
 		}

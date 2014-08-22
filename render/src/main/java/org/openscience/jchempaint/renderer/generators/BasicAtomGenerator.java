@@ -31,7 +31,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.validate.ProblemMarker;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -46,7 +46,7 @@ public class BasicAtomGenerator implements IGenerator {
 
 	public BasicAtomGenerator() {}
 
-	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
 		ElementGroup elementGroup = new ElementGroup();
 		for (IAtom atom : ac.atoms()) {
 			elementGroup.add(this.generate(ac, atom, model));
@@ -58,16 +58,16 @@ public class BasicAtomGenerator implements IGenerator {
 	    return atom != null && atom.getPoint2d() != null;   
 	}
 	
-	public boolean invisibleHydrogen(IAtom atom, RendererModel model) {
+	public boolean invisibleHydrogen(IAtom atom, JChemPaintRendererModel model) {
 	    return isHydrogen(atom) && !model.getShowExplicitHydrogens();
 	}
 	
 	public boolean invisibleCarbon(
-	        IAtom atom, IAtomContainer ac, RendererModel model) {
+	        IAtom atom, IAtomContainer ac, JChemPaintRendererModel model) {
 	    return isCarbon(atom) && !showCarbon(atom, ac, model);
 	}
 	
-	public boolean canDraw(IAtom atom, IAtomContainer ac, RendererModel model) {
+	public boolean canDraw(IAtom atom, IAtomContainer ac, JChemPaintRendererModel model) {
 	    // don't draw atoms without coordinates
 	    if (!hasCoordinates(atom)) {
 	          return false;
@@ -86,12 +86,12 @@ public class BasicAtomGenerator implements IGenerator {
 	    return true;
 	}
 
-	protected Color getColorForAtom(IAtom atom, RendererModel model) {
+	protected Color getColorForAtom(IAtom atom, JChemPaintRendererModel model) {
 		return model.getAtomColor(atom, Color.BLACK);
 	}
 
 	public IRenderingElement generate(
-	        IAtomContainer ac, IAtom atom, RendererModel model) {
+	        IAtomContainer ac, IAtom atom, JChemPaintRendererModel model) {
 	    if (!canDraw(atom, ac, model)) {
 	        return null;
 	    } else if (model.getIsCompact()) {
@@ -109,7 +109,7 @@ public class BasicAtomGenerator implements IGenerator {
 	}
 
 	public IRenderingElement generateCompactElement(
-	        IAtom atom, RendererModel model) {
+	        IAtom atom, JChemPaintRendererModel model) {
 	    Point2d p = atom.getPoint2d();
 	    double r = model.getAtomRadius() / model.getScale();
 	    double d = 2 * r;
@@ -125,7 +125,7 @@ public class BasicAtomGenerator implements IGenerator {
 	}
 
 	public IRenderingElement generateElements(
-	        IAtom atom, int alignment, RendererModel model) {
+	        IAtom atom, int alignment, JChemPaintRendererModel model) {
 	    String text;
 	    if (atom instanceof IPseudoAtom) {
 	        text = ((IPseudoAtom) atom).getLabel();
@@ -150,7 +150,7 @@ public class BasicAtomGenerator implements IGenerator {
 	}
 
 	public boolean showCarbon(
-	        IAtom atom, IAtomContainer ac, RendererModel model) {
+	        IAtom atom, IAtomContainer ac, JChemPaintRendererModel model) {
 
 		if (model.getKekuleStructure())
 			return true;

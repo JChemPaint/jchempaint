@@ -24,8 +24,8 @@ import java.awt.geom.Rectangle2D;
 
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
@@ -39,7 +39,7 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
  */
 public class ReactionPlusGenerator implements IReactionGenerator {
 
-	public IRenderingElement generate(IReaction reaction, RendererModel model) {
+	public IRenderingElement generate(IReaction reaction, JChemPaintRendererModel model) {
 		ElementGroup diagram = new ElementGroup();
         Color color = model.getForeColor();
 		

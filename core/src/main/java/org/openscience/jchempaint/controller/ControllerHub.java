@@ -79,7 +79,7 @@ import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
@@ -554,7 +554,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			molSet.addAtomContainer(newAtomContainer);
 		newAtomContainer.addAtom(newAtom);
 		updateAtom(newAtom);
-		RendererModel model = this.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel model = this.getRenderer().getRenderer2DModel();
 		double nudgeDistance = model.getHighlightDistance() / model.getScale();
 		if (getClosestAtom(newAtom) != null)
 			newAtom.getPoint2d().x += nudgeDistance;
@@ -687,7 +687,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		updateAtom(newBond.getAtom(1));
 
 		// shift the new atom a bit if it is in range of another atom
-		RendererModel model = this.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel model = this.getRenderer().getRenderer2DModel();
 		double nudgeDistance = model.getHighlightDistance() / model.getScale();
 		if (getClosestAtom(newAtom) != null)
 			newAtom.getPoint2d().x += nudgeDistance;
@@ -1398,7 +1398,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			if (!phantom)
 				updateAtoms(newRing, newRing.atoms());
 
-			RendererModel rModel = this.getRenderer().getRenderer2DModel();
+			JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 			double d = rModel.getHighlightDistance() / rModel.getScale();
 			for (IAtom newatom : newRing.atoms()) {
 				if (atom != newatom && getClosestAtom(atom) != null) {
@@ -1477,7 +1477,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateAtoms(newRing, newRing.atoms());
 		for (IAtom newatom : newRing.atoms()) {
 			if (atom != newatom && getClosestAtom(atom) != null) {
-				RendererModel rModel = this.getRenderer().getRenderer2DModel();
+				JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 				double d = rModel.getHighlightDistance() / rModel.getScale();
 				atom.getPoint2d().x += d;
 			}
@@ -1647,7 +1647,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (!phantom)
 			updateAtoms(newRing, newRing.atoms());
 
-		RendererModel rModel = this.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
 		for (IAtom atom : newRing.atoms()) {
 			if (atom != firstAtom && atom != secondAtom
@@ -1667,7 +1667,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public IAtom getAtomInRange(Collection<IAtom> toIgnore, IAtom atom) {
 		Point2d atomPosition = atom.getPoint2d();
-		RendererModel rModel = this.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double highlight = rModel.getHighlightDistance() / rModel.getScale();
 
 		IAtom bestClosestAtom = null;
@@ -1788,7 +1788,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (!phantom)
 			updateAtoms(newRing, newRing.atoms());
 
-		RendererModel rModel = this.getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
 		for (IAtom atom : newRing.atoms()) {
 			if (atom != firstAtom && atom != secondAtom
@@ -1979,7 +1979,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void flip(boolean horizontal) {
 		HashMap<IAtom, Point2d[]> atomCoordsMap = new HashMap<IAtom, Point2d[]>();
-		RendererModel renderModel = renderer.getRenderer2DModel();
+		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
 		IAtomContainer toflip;
 		if (renderModel.getSelection().getConnectedAtomContainer() != null
 				&& renderModel.getSelection().getConnectedAtomContainer()
@@ -2032,7 +2032,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	public void invertStereoInSelection() {
 		IAtomContainer toflip;
-		RendererModel renderModel = renderer.getRenderer2DModel();
+		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
 		if (renderModel.getSelection().getConnectedAtomContainer() != null
 				&& renderModel.getSelection().getConnectedAtomContainer()
 						.getAtomCount() != 0) {
@@ -2063,7 +2063,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (changeHandler != null)
 			changeHandler.structureChanged();
 
-		RendererModel renderModel = renderer.getRenderer2DModel();
+		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
 		renderModel.setRecalculationRequiredForSSSR(true);
 
 	}
@@ -2375,7 +2375,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	public void mergeMolecules(Vector2d movedDistance) {
 
-		RendererModel model = getRenderer().getRenderer2DModel();
+		JChemPaintRendererModel model = getRenderer().getRenderer2DModel();
 		Iterator<IAtom> it = null;
 		if (rGroupHandler != null) {
 			if (!rGroupHandler.isMergeAllowed(this)) {

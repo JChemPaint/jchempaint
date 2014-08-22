@@ -61,7 +61,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
@@ -71,7 +71,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private static final long serialVersionUID = 8694652992068950179L;
 
-	private String guistring;
+    private String guistring;
 
     private JCheckBox drawNumbers;
 
@@ -110,9 +110,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JSlider wedgeWidth;
 
     private ButtonGroup group = new ButtonGroup();
-    
+
     private JRadioButton nonCompactShape;
-    
+
     private JRadioButton compactShapeOval;
 
     private JRadioButton compactShapeSquare;
@@ -130,27 +130,27 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private Color currentColor;
 
     private JDialog frame;
-    
+
     private AbstractJChemPaintPanel jcpPanel;
 
-    private RendererModel model;
+    private JChemPaintRendererModel model;
 
     private JCheckBox askForIOSettings;
 
     private JTextField undoStackSize;
-    
+
     private JComboBox language;
 
     private JComboBox lookAndFeel;
 
     private GT.Language[] gtlanguages = GT.getLanguageList();
-    
+
     private int tabtoshow;
 
     public PropertiesModelEditor(JDialog frame, AbstractJChemPaintPanel jcpPanel, int tabtoshow, String gui) {
         super(true);
         this.frame = frame;
-		this.guistring = gui;
+        this.guistring = gui;
         this.jcpPanel = jcpPanel;
         this.tabtoshow = tabtoshow;
         constructPanel();
@@ -159,50 +159,50 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private void constructPanel() {
 
         JPanel rendererOptionsPanel = this.addTab(GT.get("Display Preferences"));
-		rendererOptionsPanel.setLayout(new java.awt.GridLayout(1,2,5,0));
-		JPanel options1 = new JPanel();
-		options1.setLayout(new BoxLayout(options1, BoxLayout.PAGE_AXIS));
-		rendererOptionsPanel.add(options1);
-		JPanel options2 = new JPanel();
-		options2.setLayout(new BoxLayout(options2, BoxLayout.PAGE_AXIS));
-		rendererOptionsPanel.add(options2);
+        rendererOptionsPanel.setLayout(new java.awt.GridLayout(1, 2, 5, 0));
+        JPanel options1 = new JPanel();
+        options1.setLayout(new BoxLayout(options1, BoxLayout.PAGE_AXIS));
+        rendererOptionsPanel.add(options1);
+        JPanel options2 = new JPanel();
+        options2.setLayout(new BoxLayout(options2, BoxLayout.PAGE_AXIS));
+        rendererOptionsPanel.add(options2);
 
         //addField("",new JPanel());
         //addField("Rendering Settings",new JPanel());
-		addField("", new JLabel(" "), options1);
+        addField("", new JLabel(" "), options1);
 
         drawNumbers = new JCheckBox(GT.get("Draw atom numbers"));
-		options1.add(drawNumbers);
+        options1.add(drawNumbers);
         //addField(GT._("Draw atom numbers"), drawNumbers, options1);
 
         //showAtomAtomMapping = new JCheckBox();
         //addField(GT._("Show atom-atom mappings"), showAtomAtomMapping);
 
         useKekuleStructure = new JCheckBox(GT.get("Explicit carbons"));
-		options1.add(useKekuleStructure);
+        options1.add(useKekuleStructure);
         //addField(GT._("Explicit carbons"), useKekuleStructure, options1);
 
         showEndCarbons = new JCheckBox(GT.get("Show explicit methyl groups"));
-		options1.add(showEndCarbons);
+        options1.add(showEndCarbons);
         //addField(GT._("Show explicit methyl groups"), showEndCarbons, options1);
 
         showExplicitHydrogens = new JCheckBox(GT.get("Show explicit hydrogens"));
-		options1.add(showExplicitHydrogens);
+        options1.add(showExplicitHydrogens);
         //addField(GT._("Show explicit hydrogens"), showExplicitHydrogens, options1);
 
         showImplicitHydrogens = new JCheckBox(GT.get("Show implicit hydrogens"));
-		options1.add(showImplicitHydrogens);
+        options1.add(showImplicitHydrogens);
         //addField(GT._("Show implicit hydrogens"), showImplicitHydrogens, options1);
 
         showAromaticity = new JCheckBox(GT.get("Show aromatic ring circles"));
-		options1.add(showAromaticity);
+        options1.add(showAromaticity);
         //addField(GT._("Show aromatic ring circles"), showAromaticity, options1);
 
         //showAromaticityCDKStyle = new JCheckBox();
         //addField(GT._("CDK style aromatics"), showAromaticityCDKStyle);
 
         colorAtomsByType = new JCheckBox(GT.get("Color atoms by element"));
-		options1.add(colorAtomsByType);
+        options1.add(colorAtomsByType);
         //addField(GT._("Color atoms by element"), colorAtomsByType, options1);
 
         //useAntiAliasing = new JCheckBox();
@@ -346,7 +346,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         this.tabbedPane.setSelectedIndex(tabtoshow);
     }
 
-    public void setModel(RendererModel model) {
+    public void setModel(JChemPaintRendererModel model) {
         this.model = model;
         drawNumbers.setSelected(model.getDrawNumbers());
         //showAtomAtomMapping.setSelected(model.getShowAtomAtomMapping());
@@ -537,7 +537,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         if(languagechanged && !close){
             //we need to rediplay the dialog to change its language
             this.getParent().getParent().getParent().getParent().setVisible(false);
-            RendererModel renderModel = 
+            JChemPaintRendererModel renderModel = 
                 jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
             ModifyRenderOptionsDialog frame =
                     new ModifyRenderOptionsDialog(jcpPanel,renderModel, 1);

@@ -21,8 +21,8 @@ package org.openscience.jchempaint.renderer.generators;
 import java.awt.geom.Rectangle2D;
 
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
@@ -35,7 +35,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
  */
 public class ReactionArrowGenerator implements IReactionGenerator {
 
-	public IRenderingElement generate(IReaction reaction, RendererModel model) {
+	public IRenderingElement generate(IReaction reaction, JChemPaintRendererModel model) {
         Rectangle2D totalBoundsReactants = 
             Renderer.calculateBounds(reaction.getReactants());
         Rectangle2D totalBoundsProducts = 

@@ -31,7 +31,7 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 
 /**
@@ -46,7 +46,7 @@ public class ModifySettingsAction extends JCPAction
 	{
 		//TODO test if renderer uses settings
 		logger.debug("Modify display settings in mode");
-		RendererModel renderModel = 
+		JChemPaintRendererModel renderModel = 
 		    jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
 		ModifyRenderOptionsDialog frame =
 				new ModifyRenderOptionsDialog(jcpPanel,renderModel,0);

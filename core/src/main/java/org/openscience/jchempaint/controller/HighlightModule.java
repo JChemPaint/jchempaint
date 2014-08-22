@@ -34,7 +34,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * This should highlight the atom/bond when moving over with the mouse
@@ -58,14 +58,14 @@ public class HighlightModule extends ControllerModuleAdapter {
     private Applet spectrumApplet;
     int oldnumber=-1;
 	
-	private void update(IChemObject obj, RendererModel model) {
+	private void update(IChemObject obj, JChemPaintRendererModel model) {
 	    if(obj instanceof IAtom)
 	        updateAtom((IAtom)obj,model);
 	    else
 	    if(obj instanceof IBond)
 	        updateBond((IBond)obj,model);
 	}
-	private void updateAtom(IAtom atom, RendererModel model) {
+	private void updateAtom(IAtom atom, JChemPaintRendererModel model) {
 	    if (prevHighlightAtom != atom) {
             model.setHighlightedAtom(atom);
             prevHighlightAtom = atom;
@@ -105,7 +105,7 @@ public class HighlightModule extends ControllerModuleAdapter {
     }
 
 	
-	private void updateBond(IBond bond, RendererModel model) {
+	private void updateBond(IBond bond, JChemPaintRendererModel model) {
 	    if (prevHighlightBond != bond) {
             model.setHighlightedBond(bond);
             prevHighlightBond = bond;
@@ -115,7 +115,7 @@ public class HighlightModule extends ControllerModuleAdapter {
         }
 	}
 	
-	private void unsetHighlights(RendererModel model) {
+	private void unsetHighlights(JChemPaintRendererModel model) {
 	    if (prevHighlightAtom != null || prevHighlightBond != null) {
 	        model.setHighlightedAtom(null);
 	        model.setHighlightedBond(null);
@@ -128,7 +128,7 @@ public class HighlightModule extends ControllerModuleAdapter {
 	public void mouseMove(Point2d worldCoord) {
 		IAtom atom = chemModelRelay.getClosestAtom(worldCoord);
 		IBond bond = chemModelRelay.getClosestBond(worldCoord);
-		RendererModel model = 
+		JChemPaintRendererModel model = 
 		    chemModelRelay.getRenderer().getRenderer2DModel();
 		
 		IChemObject obj = getHighlighted( worldCoord, atom,bond );

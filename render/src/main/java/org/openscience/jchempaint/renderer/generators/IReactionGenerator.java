@@ -19,7 +19,7 @@
 package org.openscience.jchempaint.renderer.generators;
 
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
@@ -31,6 +31,6 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
  */
 public interface IReactionGenerator {
     
-    public IRenderingElement generate(IReaction reaction, RendererModel model);
+    public IRenderingElement generate(IReaction reaction, JChemPaintRendererModel model);
 
 }

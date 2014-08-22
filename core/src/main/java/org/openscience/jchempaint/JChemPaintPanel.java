@@ -71,7 +71,7 @@ import org.openscience.jchempaint.controller.IChangeModeListener;
 import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.MoveModule;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
@@ -327,7 +327,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
      */
     public void keyReleased(KeyEvent arg0) {
-        RendererModel model = renderPanel.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
         if (model.getHighlightedAtom() != null) {
             try {

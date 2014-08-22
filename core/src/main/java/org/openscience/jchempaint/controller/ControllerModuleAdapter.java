@@ -6,7 +6,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -26,7 +26,7 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 	}
 
 	public double getHighlightDistance() {
-	    RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+	    JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         return model.getHighlightDistance() / model.getScale();
 	}
 
@@ -129,7 +129,7 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
          *         by this action. Otherwise <code>null</code>.
          */
         protected IAtomContainer getSelectedAtomContainer(Point2d worldCoord) {
-                RendererModel rModel =
+                JChemPaintRendererModel rModel =
                                                         chemModelRelay.getRenderer().getRenderer2DModel();
                 IAtom atom = chemModelRelay.getClosestAtom(worldCoord);
                 IBond bond = chemModelRelay.getClosestBond(worldCoord);

@@ -34,12 +34,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.jchempaint.controller.AddBondDragModule;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 
 /**
@@ -144,7 +142,7 @@ public class ChangeBondAction extends JCPAction
             
             
         }
-        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         renderModel.setRecalculationRequiredForSSSR(true);
 
         jcpPanel.get2DHub().updateView();

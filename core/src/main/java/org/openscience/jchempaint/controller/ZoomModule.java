@@ -4,7 +4,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.jchempaint.renderer.IRenderer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * @cdk.module controlbasic
@@ -44,7 +44,7 @@ public class ZoomModule extends ControllerModuleAdapter {
     }
     
     private void zoom(double zoomFactor) {
-        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         double zoom = model.getZoomFactor();
         zoom = zoom * zoomFactor;
         if (zoom < .1 && zoom > 100)

@@ -12,7 +12,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
@@ -49,7 +49,7 @@ public class RGroupGenerator implements IGenerator{
 	 * @param ac current atom container
 	 * @param model rendermodel with user preferences etc.
 	 */
-	private void labelApoAtoms (IAtom apoAtom, ElementGroup diagram, String label,IAtomContainer ac,RendererModel model) {
+	private void labelApoAtoms (IAtom apoAtom, ElementGroup diagram, String label,IAtomContainer ac,JChemPaintRendererModel model) {
 		//TODO: could also adjust offset for zoom level.. (model.getZoomFactor())
 		
 		if (apoAtom==null)
@@ -96,7 +96,7 @@ public class RGroupGenerator implements IGenerator{
 	/**
 	 * Generate R-group visualizations.
 	 */
-	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+	public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
 
 		if (rGroupQuery==null || ac.getAtomCount()==0) {
 			return null;

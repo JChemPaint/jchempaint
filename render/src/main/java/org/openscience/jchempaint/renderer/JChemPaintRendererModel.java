@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.color.IAtomColorer;
@@ -51,7 +52,7 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
  * @cdk.module render
  * @cdk.svnrev $Revision$
  */
-public class RendererModel implements Serializable, Cloneable {
+public class JChemPaintRendererModel extends RendererModel implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -4420308906715213445L;
 
@@ -109,7 +110,7 @@ public class RendererModel implements Serializable, Cloneable {
      * 
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public RendererModel(boolean useUserSettings) {
+    public JChemPaintRendererModel(boolean useUserSettings) {
         this.parameters = new RenderingParameters(useUserSettings);
     }
 
@@ -119,7 +120,7 @@ public class RendererModel implements Serializable, Cloneable {
      * @param parameters
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public RendererModel(RenderingParameters parameters, boolean useUserSettings) {
+    public JChemPaintRendererModel(RenderingParameters parameters, boolean useUserSettings) {
         this.parameters = parameters;
     }
     

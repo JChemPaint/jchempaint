@@ -31,9 +31,6 @@ package org.openscience.jchempaint;
 import java.awt.Rectangle;
 import java.util.Hashtable;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.MenuElement;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -44,8 +41,8 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.controller.ControllerModuleAdapter;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 
 public class SwingPopupModule extends ControllerModuleAdapter {
 
@@ -126,7 +123,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
 	private void popupMenuForNearestChemObject(Point2d mouseCoords) {
 	    Renderer renderer = rendererPanel.getRenderer();
-	    RendererModel rendererModel = renderer.getRenderer2DModel();
+	    JChemPaintRendererModel rendererModel = renderer.getRenderer2DModel();
 		IChemObject objectInRange = rendererModel.getHighlightedAtom();
 		
 		if (objectInRange == null)

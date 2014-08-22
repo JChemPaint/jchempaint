@@ -30,7 +30,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;
@@ -97,7 +97,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     public void mouseDrag(Point2d from, Point2d to) {
         Rectangle2D bounds=null;
         boolean inSelectionCircle = false;
-        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         IChemObjectSelection sel = model.getSelection();
         if (sel == null) return;
         double d = model.getSelectionRadius() / model.getScale();

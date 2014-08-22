@@ -31,8 +31,8 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
@@ -44,7 +44,7 @@ public class AtomContainerTitleGenerator implements IGenerator {
 
     public AtomContainerTitleGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
     	
         if(ac==null ||ac.getProperty(CDKConstants.TITLE)==null|| (ac.getAtomCount()==0 && ac.getBondCount()==0))
         	return null;

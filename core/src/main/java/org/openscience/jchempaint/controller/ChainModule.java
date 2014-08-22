@@ -33,8 +33,8 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 
 /**
  * Adds a bond at direction that is dragged.
@@ -169,7 +169,7 @@ public class ChainModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
-        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         double d = model.getSelectionRadius() / model.getScale();
     	if (start.distance(worldCoord) < 4*d)
     		return;

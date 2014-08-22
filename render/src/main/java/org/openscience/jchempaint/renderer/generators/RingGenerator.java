@@ -32,7 +32,7 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRing;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
@@ -50,7 +50,7 @@ public class RingGenerator extends BasicBondGenerator {
 
 	@Override
 	public IRenderingElement generateRingElements(
-	        IBond bond, IRing ring, RendererModel model) {
+	        IBond bond, IRing ring, JChemPaintRendererModel model) {
 		if (ringIsAromatic(ring) && model.getShowAromaticity()) {
 			ElementGroup pair = new ElementGroup();
 			if (model.getShowAromaticityCDKStyle()) {
@@ -72,7 +72,7 @@ public class RingGenerator extends BasicBondGenerator {
 	}
 
 	private IRenderingElement generateRingRingElement(
-	        IBond bond, IRing ring, RendererModel model) {
+	        IBond bond, IRing ring, JChemPaintRendererModel model) {
 		Point2d c = GeometryTools.get2DCenter(ring);
 
 		double[] minmax = GeometryTools.getMinMax(ring);

@@ -36,7 +36,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.AtomSymbolElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -80,143 +80,143 @@ public class SVGGenerator implements IDrawVisitor {
      * The renderer model cannot be set by the constructor as it needs to
      * be managed by the Renderer.
      */
-	private RendererModel rendererModel;
-	
-	public static final String HEADER = "<?xml version=\"1.0\"?>\n" +
-			"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n" +
-			"\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
-			"<svg xmlns=\"http://www.w3.org/2000/svg\" " +
-			"xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-			"viewBox=\"0 0 1234567890\">\n" +
-			"<g transform=\"translate(12345,67890)\">";
+    private JChemPaintRendererModel rendererModel;
 
-	private final StringBuffer svg = new StringBuffer();
-	
-	private FreeSansBoldGM the_fm;
+    public static final String HEADER = "<?xml version=\"1.0\"?>\n" +
+            "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n" +
+            "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" " +
+            "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+            "viewBox=\"0 0 1234567890\">\n" +
+            "<g transform=\"translate(12345,67890)\">";
 
-	private AffineTransform transform;
-	
-	private List<IRenderingElement> elList;
-	private List<String> tcList;
-	private HashMap<String,Point2d> tgMap;
-	private HashMap<Integer,Point2d> ptMap;
-	private List<Rectangle2D> bbList;
-	
-	private double trscale, subscale, subshift, tgpadding, vbpadding;
-	private Rectangle2D bbox;
-	
-	//------------------------------------------------------------------
+    private final StringBuffer svg = new StringBuffer();
 
-	public SVGGenerator() {
-		the_fm = new FreeSansBoldGM();
-		the_fm.init();
-		elList = new ArrayList<IRenderingElement>();
-		tcList = new ArrayList<String>();
-		tgMap = new HashMap<String,Point2d>();
-		ptMap = new HashMap<Integer,Point2d>();
-		bbList = new ArrayList<Rectangle2D>();
-		bbox = null;
-				
-		svg.append(SVGGenerator.HEADER);
-		newline();
-		svg.append("<defs>");
-		tgpadding = 4;
-		vbpadding = 40;
-		trscale = 0.03;
-		subscale = trscale*0.7;
-		subshift = 0.5;
-	}
+    private FreeSansBoldGM the_fm;
 
-	private void newline() {
-		svg.append("\n");
-	}
-	
-	public double[] transformPoint(double x, double y) {
-        double[] src = new double[] {x, y};
+    private AffineTransform transform;
+
+    private List<IRenderingElement>   elList;
+    private List<String>              tcList;
+    private HashMap<String, Point2d>  tgMap;
+    private HashMap<Integer, Point2d> ptMap;
+    private List<Rectangle2D>         bbList;
+
+    private double trscale, subscale, subshift, tgpadding, vbpadding;
+    private Rectangle2D bbox;
+
+    //------------------------------------------------------------------
+
+    public SVGGenerator() {
+        the_fm = new FreeSansBoldGM();
+        the_fm.init();
+        elList = new ArrayList<IRenderingElement>();
+        tcList = new ArrayList<String>();
+        tgMap = new HashMap<String, Point2d>();
+        ptMap = new HashMap<Integer, Point2d>();
+        bbList = new ArrayList<Rectangle2D>();
+        bbox = null;
+
+        svg.append(SVGGenerator.HEADER);
+        newline();
+        svg.append("<defs>");
+        tgpadding = 4;
+        vbpadding = 40;
+        trscale = 0.03;
+        subscale = trscale * 0.7;
+        subshift = 0.5;
+    }
+
+    private void newline() {
+        svg.append("\n");
+    }
+
+    public double[] transformPoint(double x, double y) {
+        double[] src = new double[]{x, y};
         double[] dest = new double[2];
         this.transform.transform(src, 0, dest, 0, 1);
         return dest;
     }
-	
-	public double[] invTransformPoint (double x, double y) {
-        double[] src = new double[] {x, y};
+
+    public double[] invTransformPoint(double x, double y) {
+        double[] src = new double[]{x, y};
         double[] dest = new double[2];
         try {
-        	this.transform.createInverse().transform(src, 0, dest, 0, 1);
+            this.transform.createInverse().transform(src, 0, dest, 0, 1);
         } catch (NoninvertibleTransformException e) {
-        	System.err.println ("Cannot invert transform!\n");
+            System.err.println("Cannot invert transform!\n");
         }
         return dest;
     }
 
-	/**
-	 * Fills two lists: tcList contains all characters used in
-	 * atoms, tgList has all strings. We also write the character
-	 * paths immediately as DEFS into the SVG, for reference.
-	 * 
-	 * @param e
-	 */
-	private void writeDEFS (TextGroupElement e) {
-		if (e.text.length()>1 && !tgMap.containsKey(e.text))
-			tgMap.put(e.text, new Point2d(0,0));
-		for (char c : e.text.toCharArray()) { 
-			String idstr = "Atom-" + c;
-			GlyphMetrics m = the_fm.map.get((int) c);
-			if (!ptMap.containsKey((int) c)) 
-				ptMap.put((int) c, new Point2d(m.xMax, m.yMax - m.yMin));
-			if(!tcList.contains(idstr)) {
-				tcList.add(idstr);
-				newline();
-				svg.append (String.format(
-						"  <path id=\"%s\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
-						idstr, trscale, -trscale, m.outline));
-			}
-		}
-		
-		// Set hyd and hPos according to entry
-		int hyd=0, hPos=0;
-		for (TextGroupElement.Child ch : e.children) {
-			if (ch.text.equals ("H")) {
-				if (ch.subscript == null) hyd=1;
-				else if (ch.subscript.equals("2")) hyd=2;
-				else hyd=3;
-				if (ch.position==TextGroupElement.Position.E) hPos=1;
-				else if (ch.position==TextGroupElement.Position.W) hPos=-1;
-			}
-		}
-		if (hyd>0) {
-			if (!tcList.contains("Atom-H")) {
-				tcList.add("Atom-H");
-				GlyphMetrics m = the_fm.map.get((int) "H".charAt(0));
-				svg.append (String.format(
-						"  <path id=\"Atom-H\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
-						trscale, -trscale, m.outline));
-			}
-			if (hyd>=2) {
-				char c = '2';
-				if (hyd==3) c='3';
-				String idstr = "Atom-" + c;
-				GlyphMetrics m = the_fm.map.get((int) c);
-				if(!tcList.contains(idstr)) {
-					tcList.add(idstr);
-					newline();
-					svg.append (String.format(
-							"  <path id=\"%s\" transform=\"scale(%1.4f,%1.4f)\" d=\"%s\" />",
-							idstr, subscale, -subscale, m.outline));
-				}				
-			}
-		}
-	}
+    /**
+     * Fills two lists: tcList contains all characters used in
+     * atoms, tgList has all strings. We also write the character
+     * paths immediately as DEFS into the SVG, for reference.
+     *
+     * @param e
+     */
+    private void writeDEFS(TextGroupElement e) {
+        if (e.text.length() > 1 && !tgMap.containsKey(e.text))
+            tgMap.put(e.text, new Point2d(0, 0));
+        for (char c : e.text.toCharArray()) {
+            String idstr = "Atom-" + c;
+            GlyphMetrics m = the_fm.map.get((int) c);
+            if (!ptMap.containsKey((int) c))
+                ptMap.put((int) c, new Point2d(m.xMax, m.yMax - m.yMin));
+            if (!tcList.contains(idstr)) {
+                tcList.add(idstr);
+                newline();
+                svg.append(String.format(
+                        "  <path id=\"%s\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
+                        idstr, trscale, -trscale, m.outline));
+            }
+        }
 
-	/**
-	 * In this first pass, visiting elements are copied to
-	 * a list, and DEFS/PATH elements are written for all TextGroups.
-	 */
-	public void visit(IRenderingElement element) {
-		elList.add(element);
-		
-		if (element instanceof ElementGroup)
-			((ElementGroup) element).visitChildren(this);
+        // Set hyd and hPos according to entry
+        int hyd = 0, hPos = 0;
+        for (TextGroupElement.Child ch : e.children) {
+            if (ch.text.equals("H")) {
+                if (ch.subscript == null) hyd = 1;
+                else if (ch.subscript.equals("2")) hyd = 2;
+                else hyd = 3;
+                if (ch.position == TextGroupElement.Position.E) hPos = 1;
+                else if (ch.position == TextGroupElement.Position.W) hPos = -1;
+            }
+        }
+        if (hyd > 0) {
+            if (!tcList.contains("Atom-H")) {
+                tcList.add("Atom-H");
+                GlyphMetrics m = the_fm.map.get((int) "H".charAt(0));
+                svg.append(String.format(
+                        "  <path id=\"Atom-H\" transform=\"scale(%1.3f,%1.3f)\" d=\"%s\" />",
+                        trscale, -trscale, m.outline));
+            }
+            if (hyd >= 2) {
+                char c = '2';
+                if (hyd == 3) c = '3';
+                String idstr = "Atom-" + c;
+                GlyphMetrics m = the_fm.map.get((int) c);
+                if (!tcList.contains(idstr)) {
+                    tcList.add(idstr);
+                    newline();
+                    svg.append(String.format(
+                            "  <path id=\"%s\" transform=\"scale(%1.4f,%1.4f)\" d=\"%s\" />",
+                            idstr, subscale, -subscale, m.outline));
+                }
+            }
+        }
+    }
+
+    /**
+     * In this first pass, visiting elements are copied to
+     * a list, and DEFS/PATH elements are written for all TextGroups.
+     */
+    public void visit(IRenderingElement element) {
+        elList.add(element);
+
+        if (element instanceof ElementGroup)
+            ((ElementGroup) element).visitChildren(this);
         else if (element instanceof TextGroupElement)
             writeDEFS ((TextGroupElement) element);
 	}
@@ -751,7 +751,7 @@ public class SVGGenerator implements IDrawVisitor {
     public void setFontManager(IFontManager fontManager) {
     }
 
-    public void setRendererModel(RendererModel rendererModel) {
+    public void setRendererModel(JChemPaintRendererModel rendererModel) {
         this.rendererModel = rendererModel;
     }
 

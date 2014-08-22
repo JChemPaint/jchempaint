@@ -22,7 +22,7 @@ package org.openscience.jchempaint.renderer.generators;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
 /**
@@ -30,20 +30,20 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
  */
 public class ControllerFeedbackGenerator {
 
-	private RendererModel model;
-	
-    public ControllerFeedbackGenerator(IAtomContainer ac, RendererModel r2dm) {
-    	this.model = r2dm;
+    private JChemPaintRendererModel model;
+
+    public ControllerFeedbackGenerator(IAtomContainer ac, JChemPaintRendererModel r2dm) {
+        this.model = r2dm;
     }
-    
+
     public IRenderingElement generate(IAtomContainer ac, IAtom atom) {
         if (this.model.getHighlightedAtom() == atom) {
-			return generateHighlightElement(atom);
+            return generateHighlightElement(atom);
         }
         return null;
     }
 
-    private IRenderingElement generateHighlightElement( IAtom atom ) {
+    private IRenderingElement generateHighlightElement(IAtom atom) {
 
         // create highlight base on symbol
         // would be nice to attach it to a AtomSymbolElement and use it's 

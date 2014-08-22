@@ -28,7 +28,7 @@ import java.awt.Color;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
@@ -48,7 +48,7 @@ public class PhantomTextGenerator implements IGenerator{
         this.hub = hub;
     }
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
         if(hub.getPhantomText()==null)
             return new ElementGroup();
         else

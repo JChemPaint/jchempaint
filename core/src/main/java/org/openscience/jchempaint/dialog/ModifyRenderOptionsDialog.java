@@ -42,7 +42,7 @@ import javax.swing.JPanel;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.editor.PropertiesModelEditor;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
   * Simple Dialog that shows the loaded dictionaries..
@@ -50,69 +50,72 @@ import org.openscience.jchempaint.renderer.RendererModel;
   */
 public class ModifyRenderOptionsDialog extends JDialog {
 
-	private static final long serialVersionUID = -7228371698429720333L;
-	
-	private PropertiesModelEditor editor;
-    private RendererModel model;
+    private static final long serialVersionUID = -7228371698429720333L;
+
+    private PropertiesModelEditor   editor;
+    private JChemPaintRendererModel model;
     private AbstractJChemPaintPanel jcpPanel;
-    private int tabtoshow;
-    
-	/**
-	 * Displays the Info Dialog for JChemPaint. 
-	 * @param tabtoshow Which tab is to be displayed?
-	 */
-    public ModifyRenderOptionsDialog(AbstractJChemPaintPanel jcpPanel, RendererModel model, int tabtoshow) {
+    private int                     tabtoshow;
+
+    /**
+     * Displays the Info Dialog for JChemPaint. 
+     * @param tabtoshow Which tab is to be displayed?
+     */
+    public ModifyRenderOptionsDialog(AbstractJChemPaintPanel jcpPanel, JChemPaintRendererModel model, int tabtoshow) {
         super();
         this.model = model;
-        this.jcpPanel=jcpPanel;
+        this.jcpPanel = jcpPanel;
         this.tabtoshow = tabtoshow;
-        editor = new PropertiesModelEditor(this, jcpPanel, tabtoshow,jcpPanel.getGuistring());
+        editor = new PropertiesModelEditor(this, jcpPanel, tabtoshow, jcpPanel.getGuistring());
         createDialog();
         pack();
         setVisible(true);
     }
-    
-    private void createDialog(){
+
+    private void createDialog() {
         getContentPane().setLayout(new BorderLayout());
         setBackground(Color.lightGray);
         setTitle(GT.get("Preferences"));
         editor.setModel(model);
-        getContentPane().add("Center",editor);
-        
+        getContentPane().add("Center", editor);
+
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout ( new FlowLayout(FlowLayout.RIGHT) );
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         JButton ok = new JButton(GT.get("OK"));
         ok.setName("ok");
         ok.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                OKPressed();
-            }}
-        );
-        buttonPanel.add( ok );
+                                 public void actionPerformed(ActionEvent e) {
+                                     OKPressed();
+                                 }
+                             }
+                            );
+        buttonPanel.add(ok);
         getRootPane().setDefaultButton(ok);
         JButton apply = new JButton(GT.get("Apply"));
         apply.setName("apply");
         apply.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ApplyPressed(false);
-            }}
-        );
-        buttonPanel.add( apply );
+                                    public void actionPerformed(ActionEvent e) {
+                                        ApplyPressed(false);
+                                    }
+                                }
+                               );
+        buttonPanel.add(apply);
         JButton cancel = new JButton(GT.get("Cancel"));
         cancel.setName("cancel");
         cancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeFrame();
-            }}
-        );
-        buttonPanel.add( cancel );
+                                     public void actionPerformed(ActionEvent e) {
+                                         closeFrame();
+                                     }
+                                 }
+                                );
+        buttonPanel.add(cancel);
         getRootPane().setDefaultButton(ok);
-        getContentPane().add("South",buttonPanel);
-        
+        getContentPane().add("South", buttonPanel);
+
         validate();
     }
-    
-    private  void ApplyPressed(boolean close) {
+
+    private void ApplyPressed(boolean close) {
         // apply new settings
         editor.applyChanges(close);
         jcpPanel.get2DHub().updateView();

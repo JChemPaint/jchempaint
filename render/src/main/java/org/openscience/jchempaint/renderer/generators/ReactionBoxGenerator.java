@@ -21,8 +21,8 @@ package org.openscience.jchempaint.renderer.generators;
 import java.awt.geom.Rectangle2D;
 
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
@@ -37,7 +37,7 @@ import org.openscience.jchempaint.renderer.elements.TextElement;
  */
 public class ReactionBoxGenerator implements IReactionGenerator {
 
-	public IRenderingElement generate(IReaction reaction, RendererModel model) {
+	public IRenderingElement generate(IReaction reaction, JChemPaintRendererModel model) {
 		if (!model.getShowReactionBoxes())
 			return null;
 		double d = model.getBondLength() / model.getScale();

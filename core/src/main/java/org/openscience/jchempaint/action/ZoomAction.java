@@ -28,14 +28,9 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
-import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * @cdk.module jchempaint
@@ -48,7 +43,7 @@ public class ZoomAction extends JCPAction {
     
     public void actionPerformed(ActionEvent e) {
 
-        RendererModel rendererModel = 
+        JChemPaintRendererModel rendererModel = 
             jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel();
         double zoom = rendererModel.getZoomFactor();
         logger.debug("Zooming in/out in mode: ", type);

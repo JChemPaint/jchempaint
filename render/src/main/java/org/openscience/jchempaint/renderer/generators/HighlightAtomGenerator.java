@@ -24,7 +24,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
@@ -37,11 +37,11 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
 
     public HighlightAtomGenerator() {}
     
-    private boolean shouldHighlight(IAtom atom, RendererModel model) {
+    private boolean shouldHighlight(IAtom atom, JChemPaintRendererModel model) {
         return !super.isHydrogen(atom) || model.getShowExplicitHydrogens();
     }
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
         IAtom atom = model.getHighlightedAtom();
         if (atom != null && shouldHighlight(atom, model)) {
             Point2d p = atom.getPoint2d();

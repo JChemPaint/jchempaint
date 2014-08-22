@@ -26,7 +26,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IMapping;
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
@@ -38,7 +38,7 @@ public class MappingGenerator implements IReactionGenerator {
 
     public MappingGenerator() {}
 
-    public IRenderingElement generate(IReaction reaction, RendererModel model) {
+    public IRenderingElement generate(IReaction reaction, JChemPaintRendererModel model) {
 		if(!model.getShowAtomAtomMapping())
 			return null;
         ElementGroup elementGroup = new ElementGroup();
@@ -64,7 +64,7 @@ public class MappingGenerator implements IReactionGenerator {
 	 * @param model the renderer model
 	 * @return a double in chem-model space
 	 */
-	public double getWidthForMappingLine(RendererModel model) {
+	public double getWidthForMappingLine(JChemPaintRendererModel model) {
 		double scale = model.getScale();
 		return model.getMappingLineWidth() / scale;
 	}

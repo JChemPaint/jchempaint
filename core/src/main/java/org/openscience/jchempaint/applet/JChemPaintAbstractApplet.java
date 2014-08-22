@@ -75,7 +75,7 @@ import org.openscience.jchempaint.StringHelper;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.IControllerModel;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
@@ -270,7 +270,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     public void start() {
         // Parameter parsing goes here
         loadModelFromParam();
-        RendererModel rendererModel = theJcpp.get2DHub().getRenderer()
+        JChemPaintRendererModel rendererModel = theJcpp.get2DHub().getRenderer()
                 .getRenderer2DModel();
         IChemModel chemModel = theJcpp.getChemModel();
         IControllerModel controllerModel = theJcpp.get2DHub()
@@ -567,7 +567,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
      *            The atom number (starting with 0), -1 sets empty selection.
      */
     public void selectAtom(int atom) {
-        RendererModel rendererModel = theJcpp.get2DHub().getRenderer()
+        JChemPaintRendererModel rendererModel = theJcpp.get2DHub().getRenderer()
                 .getRenderer2DModel();
         IChemModel chemModel = theJcpp.getChemModel();
         rendererModel.setExternalHighlightColor(Color.RED);

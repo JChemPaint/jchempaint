@@ -36,8 +36,8 @@ import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import org.openscience.jchempaint.GT;
 
@@ -159,7 +159,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
         //-Clicked in empty and dragged more than hightligh distance: 
         // Make a bond of DrawBondType with two new atoms of DrawElement
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
-        RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         double dH = model.getHighlightDistance() / model.getScale();
         IAtom newAtom;
         if(newSource){

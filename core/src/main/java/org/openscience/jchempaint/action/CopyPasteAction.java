@@ -88,7 +88,7 @@ import org.openscience.jchempaint.controller.RemoveModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
@@ -137,7 +137,7 @@ public class CopyPasteAction extends JCPAction{
         logger.info("  type  ", type);
         logger.debug("  source ", e.getSource());
         
-        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         IChemModel chemModel = jcpPanel.getChemModel();
         Clipboard sysClip = jcpPanel.getToolkit().getSystemClipboard();
 
@@ -528,7 +528,7 @@ public class CopyPasteAction extends JCPAction{
      * @param toPaste     The structure to paste.
      * @param renderModel The current renderer model.
      */
-    private void insertStructure(IAtomContainer toPaste, RendererModel renderModel) {
+    private void insertStructure(IAtomContainer toPaste, JChemPaintRendererModel renderModel) {
 
     	//add implicit hs
         if(jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()){

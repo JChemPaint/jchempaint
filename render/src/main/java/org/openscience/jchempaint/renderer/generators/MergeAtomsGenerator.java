@@ -25,7 +25,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.path.PathBuilder;
@@ -38,7 +38,7 @@ public class MergeAtomsGenerator extends BasicAtomGenerator
 
     public MergeAtomsGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
     	ElementGroup selectionElements = new ElementGroup();
     	double radius = model.getHighlightDistance() / model.getScale();
     	radius /= 2.0;

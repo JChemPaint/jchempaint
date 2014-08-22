@@ -33,7 +33,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
@@ -48,7 +48,7 @@ import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
 public class ExtendedAtomGenerator extends BasicAtomGenerator {
     
     public IRenderingElement generate(
-            IAtomContainer ac, IAtom atom, RendererModel model) {
+            IAtomContainer ac, IAtom atom, JChemPaintRendererModel model) {
         
         Integer majorIsotopeNumber = null;
         if(atom.getMassNumber()!=null){
@@ -93,14 +93,14 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
         }
     }
     
-    public boolean hideAtomSymbol(IAtom atom, RendererModel model) {
+    public boolean hideAtomSymbol(IAtom atom, JChemPaintRendererModel model) {
         return atom.getSymbol().equals("C") && !model.getKekuleStructure();
     }
     
     public void decorate(TextGroupElement textGroup, 
                          IAtomContainer ac, 
                          IAtom atom, 
-                         RendererModel model) {
+                         JChemPaintRendererModel model) {
         Stack<Position> unused = getUnusedPositions(ac, atom);
         
         if (!invisibleCarbon(atom, ac, model) && model.getDrawNumbers()) {

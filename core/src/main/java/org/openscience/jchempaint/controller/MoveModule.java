@@ -48,7 +48,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
@@ -144,7 +144,7 @@ public class MoveModule extends ControllerModuleAdapter {
             end.sub(end2DCenter, start2DCenter);
 
             Map<IAtom, IAtom> mergeMap = calculateMerge(atomsToMove);
-            RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+            JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
             model.getMerge().clear();
             model.getMerge().putAll(mergeMap);
 
@@ -209,7 +209,7 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
     private Map<IAtom, IAtom> calculateMerge( Set<IAtom> mergeAtoms ) {
-        RendererModel rModel = chemModelRelay.getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel rModel = chemModelRelay.getRenderer().getRenderer2DModel();
         double maxDistance = rModel.getHighlightDistance()/ rModel.getScale();
         maxDistance *= maxDistance; // maxDistance squared
         Map<IAtom,IAtom> mergers = new HashMap<IAtom, IAtom>();

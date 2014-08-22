@@ -40,7 +40,7 @@ public interface IRenderer {
      * 
      * @return the rendering model
      */
-	public RendererModel getRenderer2DModel();
+	public JChemPaintRendererModel getRenderer2DModel();
 
 	/**
 	 * Converts screen coordinates into model (or world) coordinates.

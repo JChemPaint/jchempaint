@@ -43,7 +43,7 @@ import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
  * A general renderer for {@link IAtomContainer}s. The chem object
  * is converted into a 'diagram' made up of {@link IRenderingElement}s. It takes
  * an {@link IDrawVisitor} to do the drawing of the generated diagram. Various
- * display properties can be set using the {@link RendererModel}.<p>
+ * display properties can be set using the {@link JChemPaintRendererModel}.<p>
  *
  * This class has several usage patterns. For just painting fit-to-screen do:
  * <pre>
@@ -80,7 +80,7 @@ import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
  * Rectangle that represents the actual draw area. The first are intended for
  * drawing molecules fitted to the screen (where 'screen' means any drawing
  * area) while the second type of method are for drawing bonds at the length
- * defined by the {@link RendererModel} parameter bondLength.<p>
+ * defined by the {@link JChemPaintRendererModel} parameter bondLength.<p>
  *
  * There are two numbers used to transform the model so that it fits on screen.
  * The first is <tt>scale</tt>, which is used to map model coordinates to
@@ -110,7 +110,7 @@ public class AtomContainerRenderer implements IRenderer {
     /**
      * The renderer model is final as it is not intended to be replaced.
      */
-    protected final RendererModel rendererModel;
+    protected final JChemPaintRendererModel rendererModel;
 
     protected List<IGenerator> generators;
 
@@ -138,7 +138,7 @@ public class AtomContainerRenderer implements IRenderer {
      */
     public AtomContainerRenderer(List<IGenerator> generators,
                                  IFontManager fontManager, boolean useUserSettings) {
-        rendererModel = new RendererModel(useUserSettings);
+        rendererModel = new JChemPaintRendererModel(useUserSettings);
         this.generators = generators;
         this.fontManager = fontManager;
     }
@@ -272,7 +272,7 @@ public class AtomContainerRenderer implements IRenderer {
     	return new Rectangle2D.Double(xmin, ymin, w, h);
     }
 
-    public RendererModel getRenderer2DModel() {
+    public JChemPaintRendererModel getRenderer2DModel() {
 		return this.rendererModel;
 	}
 

@@ -30,7 +30,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 
@@ -58,7 +58,7 @@ public class RedoAction extends JCPAction
         	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 		jcpPanel.updateUndoRedoControls();
 		jcpPanel.updateStatusBar();
-        RendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
+        JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
         renderModel.setRecalculationRequiredForSSSR(true);
 
 		jcpPanel.get2DHub().updateView();

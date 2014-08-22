@@ -19,7 +19,7 @@
 package org.openscience.jchempaint.renderer.visitor;
 
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.jchempaint.renderer.RendererModel;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingVisitor;
 
 /**
@@ -29,6 +29,6 @@ public interface IDrawVisitor extends IRenderingVisitor {
     
     public void setFontManager(IFontManager fontManager);
     
-    public void setRendererModel(RendererModel rendererModel);
+    public void setRendererModel(JChemPaintRendererModel rendererModel);
 
 }
