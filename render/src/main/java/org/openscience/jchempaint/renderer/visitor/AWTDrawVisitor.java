@@ -41,6 +41,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -623,7 +624,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
             visit((PathElement) element);
         else if (element instanceof GeneralPath)
             visit((GeneralPath)element);
-        else
+        else if (element instanceof Bounds) {
+            // ignore
+        } else
             System.err.println("Visitor method for "
                     + element.getClass().getName() + " is not implemented");
         this.g.setColor(savedColor);
