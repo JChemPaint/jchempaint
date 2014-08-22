@@ -24,6 +24,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -41,17 +42,19 @@ public class HighlightAtomGenerator extends BasicAtomGenerator {
         return !super.isHydrogen(atom) || model.getShowExplicitHydrogens();
     }
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         IAtom atom = model.getHighlightedAtom();
-        if (atom != null && shouldHighlight(atom, model)) {
+        if (atom != null && shouldHighlight(atom, jcpModel)) {
             Point2d p = atom.getPoint2d();
             
             // the element size has to be scaled to model space 
             // so that it can be scaled back to screen space...
-            double radius = model.getHighlightDistance() / model.getScale();
+            double radius = jcpModel.getHighlightDistance() / jcpModel.getScale();
             radius /= 2.0;
-            boolean filled = model.getHighlightShapeFilled();
-            Color highlightColor = model.getHoverOverColor(); 
+            boolean filled = jcpModel.getHighlightShapeFilled();
+            Color highlightColor = jcpModel.getHoverOverColor(); 
             return new OvalElement(p.x, p.y, radius, filled, highlightColor);
         }
         

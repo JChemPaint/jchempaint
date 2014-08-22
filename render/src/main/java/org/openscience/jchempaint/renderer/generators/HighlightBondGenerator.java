@@ -24,6 +24,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -41,16 +42,18 @@ public class HighlightBondGenerator extends BasicBondGenerator {
         return !super.bindsHydrogen(bond) || model.getShowExplicitHydrogens();
     }
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         IBond bond = model.getHighlightedBond();
-        if (bond != null && shouldHighlight(bond, model)) {
-            super.ringSet = super.getRingSet(ac,model);
+        if (bond != null && shouldHighlight(bond, jcpModel)) {
+            super.ringSet = super.getRingSet(ac,jcpModel);
             
-            double r = model.getHighlightDistance() / model.getScale();
+            double r = jcpModel.getHighlightDistance() / jcpModel.getScale();
             r /= 2.0;
-            Color hColor = model.getHoverOverColor();
+            Color hColor = jcpModel.getHoverOverColor();
             Point2d p = bond.get2DCenter();
-            boolean filled = model.getHighlightShapeFilled();
+            boolean filled = jcpModel.getHighlightShapeFilled();
             return new OvalElement(p.x, p.y, r, filled, hColor);
         }
         return new ElementGroup();

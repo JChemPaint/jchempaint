@@ -23,6 +23,7 @@ package org.openscience.jchempaint.renderer.generators;
 import java.awt.Color;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -36,11 +37,13 @@ public class ExternalHighlightBondGenerator extends SelectBondGenerator {
 
     public ExternalHighlightBondGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         if(model.getExternalSelectedPart()==null)
             return new ElementGroup();
-        Color selectionColor = model.getExternalHighlightColor();
+        Color selectionColor = jcpModel.getExternalHighlightColor();
         IChemObjectSelection selection = new AtomContainerSelection(model.getExternalSelectedPart());
-        return generate(selection, selectionColor, model);
+        return generate(selection, selectionColor, jcpModel);
     }
 }
