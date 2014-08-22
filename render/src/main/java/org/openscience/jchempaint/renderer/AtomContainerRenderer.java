@@ -140,7 +140,11 @@ public class AtomContainerRenderer implements IRenderer {
                                  IFontManager fontManager, boolean useUserSettings) {
         rendererModel = new JChemPaintRendererModel(useUserSettings);
         this.generators = generators;
-        this.fontManager = fontManager;
+        this.fontManager = fontManager; 
+        for (IGenerator<?> generator : generators) {
+            if (generator.getParameters() != null)
+                rendererModel.registerParameters(generator);
+        }   
     }
 
     /**
