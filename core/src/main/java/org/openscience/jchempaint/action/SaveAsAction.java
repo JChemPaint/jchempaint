@@ -135,6 +135,8 @@ public class SaveAsAction extends JCPAction
                     if(chooser.getChoosableFileFilters()[i].getDescription().equals(jcpPanel.getCurrentSaveFileFilter().getDescription()))
                         chooser.setFileFilter(chooser.getChoosableFileFilters()[i]);
                 }
+            } else {
+                chooser.setFileFilter(chooser.getChoosableFileFilters()[0]);
             }
             chooser.setFileView(new JCPFileView());
             if(jcpPanel.isAlreadyAFile()!=null)
