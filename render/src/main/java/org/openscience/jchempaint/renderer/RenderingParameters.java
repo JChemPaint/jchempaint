@@ -25,7 +25,6 @@ import java.awt.Color;
 //import java.util.Properties;
 
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.jchempaint.JCPPropertyHandler;
 
 /**
  * @cdk.module render
