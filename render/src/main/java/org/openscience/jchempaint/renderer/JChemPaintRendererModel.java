@@ -155,7 +155,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 
     public void setScale(double scale) {
         this.parameters.setScale(scale);
-        super.set(BasicSceneGenerator.Scale.class, scale);
+        if (hasParameter(BasicSceneGenerator.Scale.class))
+            super.set(BasicSceneGenerator.Scale.class, scale);
     }
 
     public RenderingParameters.AtomShape getSelectionShape() {
