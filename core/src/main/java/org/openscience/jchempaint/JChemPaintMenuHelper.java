@@ -237,6 +237,12 @@ public class JChemPaintMenuHelper {
             isChecked=true;
             cmd=cmd.substring(0, cmd.length() - 1);
         }
+
+        Properties userProps = JCPPropertyHandler.getInstance(true).getJCPProperties();
+        if (userProps.containsKey(cmd + ".value")) {
+            isChecked = Boolean.parseBoolean(userProps.getProperty(cmd + ".value"));
+        }
+        
         String translation = "***" + cmd + "***";
         try {
             translation = jcpPanel.getMenuTextMaker().getText(cmd);

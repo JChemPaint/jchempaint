@@ -45,8 +45,6 @@ public class InsertStructureAction extends JCPAction {
      * @param e Description of the Parameter
      */
     public void actionPerformed(ActionEvent e) {
-        if (jcpPanel.getShowInsertTextField())
-            jcpPanel.setShowInsertTextField(false);
-        else jcpPanel.setShowInsertTextField(true);
+        jcpPanel.setShowInsertTextField(!jcpPanel.getShowInsertTextField());
     }
 }

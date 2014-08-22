@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -91,7 +92,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     private File currentWorkDirectory;
     private boolean showToolBar = true;
     private boolean showMenuBar = true;
-    private boolean showInsertTextField = true;
     private JMenuBar menu;
     private JToolBar uppertoolbar;
     private JToolBar lefttoolbar;
@@ -365,7 +365,10 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      *            true is the text entry widget is to be shown
      */
     public void setShowInsertTextField(boolean showInsertTextField) {
-        this.showInsertTextField = showInsertTextField;
+        JCPPropertyHandler propertyHandler = JCPPropertyHandler.getInstance(true);
+        propertyHandler.getJCPProperties().setProperty("insertstructure.value",
+                                                       Boolean.toString(showInsertTextField));
+        propertyHandler.saveProperties();
         customizeView();
     }
 
@@ -373,9 +376,12 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      * Tells if the enter text field is currently shown or not.
      *
      * @return text field shown or not
-     */
+     */         
     public boolean getShowInsertTextField() {
-        return showInsertTextField;
+        JCPPropertyHandler propertyHandler = JCPPropertyHandler.getInstance(true);
+        Properties properties = propertyHandler.getJCPProperties();
+        return properties.containsKey("insertstructure.value")
+                && Boolean.parseBoolean(properties.getProperty("insertstructure.value"));
     }
 
     /**
@@ -486,12 +492,16 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             centerContainer.remove(lefttoolbar);
             centerContainer.remove(righttoolbar);
         }
-        if (showInsertTextField) {
+
+        JCPPropertyHandler propertyHandler = JCPPropertyHandler.getInstance(true);
+        
+        if (getShowInsertTextField()) {
             if (insertTextPanel == null)
                 insertTextPanel = new InsertTextPanel(this, null);
             centerContainer.add(insertTextPanel, BorderLayout.NORTH);
         } else {
-            centerContainer.remove(insertTextPanel);
+            if (insertTextPanel != null)
+                centerContainer.remove(insertTextPanel);
         }
         revalidate();
     }
