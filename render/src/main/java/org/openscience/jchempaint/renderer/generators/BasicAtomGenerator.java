@@ -29,6 +29,7 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;

@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;

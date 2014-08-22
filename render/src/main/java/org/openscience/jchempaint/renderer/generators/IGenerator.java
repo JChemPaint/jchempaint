@@ -23,6 +23,7 @@ package org.openscience.jchempaint.renderer.generators;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 

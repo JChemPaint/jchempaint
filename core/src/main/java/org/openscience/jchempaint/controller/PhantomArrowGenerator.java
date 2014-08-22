@@ -33,7 +33,7 @@ import org.openscience.cdk.renderer.elements.ArrowElement;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.generators.IGenerator;
-import org.openscience.jchempaint.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 
 /**
  * Draws a phantom arrow in ControllerHub

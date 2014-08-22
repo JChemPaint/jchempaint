@@ -18,7 +18,7 @@
  */
 package org.openscience.jchempaint.renderer.generators.parameter;
 
-import org.openscience.jchempaint.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 
 /**
  * Abstract class to provide the base functionality for
