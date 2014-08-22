@@ -143,12 +143,7 @@ public class RenderingParameters {
      * The proportion of a ring bounds to use to draw the ring.
      */
     private double ringProportion = 0.35;
-
-    /**
-     * The factor to convert from model space to screen space.
-     */
-    private double scale = 1.0;
-
+   
     private Color selectedPartColor = new Color(00, 153, 204); //Color.lightGray;
 
     /**
@@ -253,20 +248,6 @@ public class RenderingParameters {
      */
     public void setCompactShape(AtomShape compactShape) {
         this.compactShape = compactShape;
-    }
-
-    /**
-     * The scale is the factor to multiply model coordinates by to convert to
-     * coordinates in screen space.
-     *
-     * @return the scale
-     */
-    public double getScale() {
-        return scale;
-    }
-
-    public void setScale(double scale) {
-        this.scale = scale;
     }
 
     public double getHighlightDistance() {

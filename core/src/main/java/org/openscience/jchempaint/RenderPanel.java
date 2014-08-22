@@ -52,6 +52,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
@@ -214,6 +215,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
         }
+        generators.add(new BasicSceneGenerator());
         generators.add(new RGroupGenerator());
         generators.add(new RingGenerator());
         generators.add(new ExtendedAtomGenerator());

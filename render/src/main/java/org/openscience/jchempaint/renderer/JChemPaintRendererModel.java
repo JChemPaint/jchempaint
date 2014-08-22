@@ -150,11 +150,12 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public double getScale() {
-        return this.parameters.getScale();
+        if (hasParameter(BasicSceneGenerator.Scale.class))
+            return super.get(BasicSceneGenerator.Scale.class);
+        return new BasicSceneGenerator.Scale().getDefault();
     }
 
     public void setScale(double scale) {
-        this.parameters.setScale(scale);
         if (hasParameter(BasicSceneGenerator.Scale.class))
             super.set(BasicSceneGenerator.Scale.class, scale);
     }
