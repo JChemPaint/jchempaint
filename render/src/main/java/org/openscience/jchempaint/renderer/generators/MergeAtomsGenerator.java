@@ -25,6 +25,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -38,9 +39,11 @@ public class MergeAtomsGenerator extends BasicAtomGenerator {
 
     public MergeAtomsGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
     	ElementGroup selectionElements = new ElementGroup();
-    	double radius = model.getHighlightDistance() / model.getScale();
+    	double radius = jcpModel.getHighlightDistance() / jcpModel.getScale();
     	radius /= 2.0;
     	for(IAtom atom : model.getMerge().keySet()){
     		Point2d p1 = atom.getPoint2d();
@@ -49,7 +52,7 @@ public class MergeAtomsGenerator extends BasicAtomGenerator {
             // the element size has to be scaled to model space
             // so that it can be scaled back to screen space...
     		PathBuilder pb = new PathBuilder();
-    		pb.color( model.getHoverOverColor() );
+    		pb.color( jcpModel.getHoverOverColor() );
 
     		Vector2d vec = new Vector2d();
     		vec.sub( p2, p1 );
