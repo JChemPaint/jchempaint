@@ -458,11 +458,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     private String makeStatusBarString(String formula, int implicitHs) {
-        DecimalFormat df1 = new DecimalFormat("####.0000");
-        return "<html>"
-                + formula
-                + (implicitHs == 0 ? "" : " ( " + implicitHs + " "
-                        + GT.get("Hs implicit") + ")") + "</html>";
+        return "<html>" + formula + "</html>";
     }
 
     public Renderer getRenderer() {
