@@ -26,25 +26,21 @@ package org.openscience.jchempaint.renderer;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.IFontManager;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.renderer.color.RasmolColors;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * Model for {@link Renderer} that contains settings for drawing objects.
@@ -57,12 +53,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     private static final long serialVersionUID = -4420308906715213445L;
 
     private RenderingParameters parameters;
-
-    /* If true, the class will notify its listeners of changes */
-    private boolean notification = true;
-
-    private transient List<ICDKChangeListener> listeners =
-        new ArrayList<ICDKChangeListener>();
 
     /** Determines how much the image is zoomed into on. */
     private double zoomFactor = 1.0;
@@ -78,23 +68,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     private Map<IChemObject, Color> colorHash =
         new Hashtable<IChemObject, Color>();
 
-    private Map<IAtom, String> toolTipTextMap = new HashMap<IAtom, String>();
-
     private IAtomColorer colorer = new RasmolColors();
 
-    private IAtom highlightedAtom = null;
-
-    private IBond highlightedBond = null;
-
-    private IAtomContainer externalSelectedPart = null;
-
-    private IAtomContainer clipboardContent = null;
-
-    private IChemObjectSelection selection;
-
-	private Map<IAtom, IAtom> merge=new HashMap<IAtom, IAtom>();
-	
-	private boolean recalculationRequiredForSSSR=true;
+    private boolean recalculationRequiredForSSSR=true;
 
 
     public boolean isRecalculationRequiredForSSSR() {
@@ -179,14 +155,7 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 
     public void setScale(double scale) {
         this.parameters.setScale(scale);
-    }
-
-    public void setSelection(IChemObjectSelection selection) {
-        this.selection = selection;
-    }
-
-    public IChemObjectSelection getSelection() {
-        return this.selection;
+        super.set(BasicSceneGenerator.Scale.class, scale);
     }
 
     public RenderingParameters.AtomShape getSelectionShape() {
@@ -196,17 +165,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     public void setSelectionShape(RenderingParameters.AtomShape selectionShape) {
         this.parameters.setSelectionShape(selectionShape);
     }
-
-	/**
-	 * This is the central facility for handling "merges" of atoms. A merge occures if during moving atoms an atom is in Range of another atom.
-	 * These atoms are then put into the merge map as a key-value pair. During the move, the atoms are then marked by a circle and on releasing the mouse
-	 * they get actually merged, meaning one atom is removed and bonds pointing to this atom are made to point to the atom it has been marged with.
-	 *
-	 * @return Returns the merge.map
-	 */
-	public Map<IAtom, IAtom> getMerge() {
-		return merge;
-	}
 
     /**
      * Get the name of the font family (Arial, etc).
@@ -592,50 +550,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     /**
-     * Returns the atom currently highlighted.
-     *
-     * @return the atom currently highlighted
-     */
-    public IAtom getHighlightedAtom() {
-        return this.highlightedAtom;
-    }
-
-    /**
-     * Sets the atom currently highlighted.
-     *
-     * @param highlightedAtom
-     *            The atom to be highlighted
-     */
-    public void setHighlightedAtom(IAtom highlightedAtom) {
-        if ((this.highlightedAtom != null) || (highlightedAtom != null)) {
-            this.highlightedAtom = highlightedAtom;
-            fireChange();
-        }
-    }
-
-    /**
-     * Returns the Bond currently highlighted.
-     *
-     * @return the Bond currently highlighted
-     */
-    public IBond getHighlightedBond() {
-        return this.highlightedBond;
-    }
-
-    /**
-     * Sets the Bond currently highlighted.
-     *
-     * @param highlightedBond
-     *            The Bond to be currently highlighted
-     */
-    public void setHighlightedBond(IBond highlightedBond) {
-        if ((this.highlightedBond != null) || (highlightedBond != null)) {
-            this.highlightedBond = highlightedBond;
-            fireChange();
-        }
-    }
-
-    /**
      * Returns the {@link Map} used for coloring substructures.
      *
      * @return the {@link Map} used for coloring substructures
@@ -710,81 +624,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     /**
-     * Returns the atoms and bonds on the Renderer2D clipboard. If the clipboard
-     * is empty it returns null. Primarily used for copy/paste.
-     *
-     * @return an atomcontainer with the atoms and bonds on the clipboard.
-     */
-    public IAtomContainer getClipboardContent() {
-        return clipboardContent;
-    }
-
-    /**
-     * Sets the atoms and bonds on the Renderer2D clipboard. Primarily used for
-     * copy/paste.
-     *
-     * @param content
-     *            the new content of the clipboard.
-     */
-    public void setClipboardContent(IAtomContainer content) {
-        this.clipboardContent = content;
-    }
-
-    /**
-     * Adds a change listener to the list of listeners
-     *
-     * @param listener
-     *            The listener added to the list
-     */
-
-    public void addCDKChangeListener(ICDKChangeListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<ICDKChangeListener>();
-        }
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
-    }
-
-    /**
-     * Removes a change listener from the list of listeners
-     *
-     * @param listener
-     *            The listener removed from the list
-     */
-    public void removeCDKChangeListener(ICDKChangeListener listener) {
-        listeners.remove(listener);
-    }
-
-    /**
-     * Notifies registered listeners of certain changes that have occurred in
-     * this model.
-     */
-    public void fireChange() {
-        if (getNotification() && listeners != null) {
-            EventObject event = new EventObject(this);
-            for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).stateChanged(event);
-            }
-        }
-    }
-
-    /**
-     * Gets the toolTipText for atom certain atom.
-     *
-     * @param atom
-     *            The atom.
-     * @return The toolTipText value.
-     */
-    public String getToolTipText(IAtom atom) {
-        if (toolTipTextMap.get(atom) != null) {
-            return toolTipTextMap.get(atom);
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Sets the showTooltip attribute.
      *
      * @param showToolTip
@@ -802,28 +641,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      */
     public boolean getShowTooltip() {
         return this.parameters.isShowTooltip();
-    }
-
-    /**
-     * Sets the toolTipTextMap.
-     *
-     * @param map
-     *            A map containing Atoms of the current molecule as keys and
-     *            Strings to display as values. A line break will be inserted
-     *            where a \n is in the string.
-     */
-    public void setToolTipTextMap(Map<IAtom, String> map) {
-        toolTipTextMap = map;
-        fireChange();
-    }
-
-    /**
-     * Gets the toolTipTextMap.
-     *
-     * @return The toolTipTextValue.
-     */
-    public Map<IAtom, String> getToolTipTextMap() {
-        return toolTipTextMap;
     }
 
     /**
@@ -875,47 +692,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      */
     public void setSelectedPartColor(Color selectedPartColor) {
         this.parameters.setSelectedPartColor(selectedPartColor);
-    }
-
-    /**
-     * Get externally selected atoms. These are atoms selected externally in e.
-     * g. Bioclipse via the ChemObjectTree, painted in externalSelectedPartColor
-     *
-     * @return the selected part
-     */
-    public IAtomContainer getExternalSelectedPart() {
-        return externalSelectedPart;
-    }
-
-    /**
-     * Set externally selected atoms. These are atoms selected externally in e.
-     * g. Bioclipse via the ChemObjectTree, painted in externalSelectedPartColor
-     *
-     * @param externalSelectedPart
-     *            the selected part
-     */
-    public void setExternalSelectedPart(IAtomContainer externalSelectedPart) {
-        this.externalSelectedPart = externalSelectedPart;
-        getColorHash().clear();
-        if(externalSelectedPart !=null) {
-            for (int i = 0; i < externalSelectedPart.getAtomCount(); i++) {
-                getColorHash().put(externalSelectedPart.getAtom(i),
-                                   this.getExternalHighlightColor());
-            }
-            Iterator<IBond> bonds = externalSelectedPart.bonds().iterator();
-            while (bonds.hasNext()) {
-                getColorHash().put(bonds.next(), getExternalHighlightColor());
-            }
-        }
-        fireChange();
-    }
-
-    public boolean getNotification() {
-        return notification;
-    }
-
-    public void setNotification(boolean notification) {
-        this.notification = notification;
     }
 
     public boolean showAtomTypeNames() {
