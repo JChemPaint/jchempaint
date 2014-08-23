@@ -25,6 +25,7 @@ import java.io.IOException;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -51,7 +52,7 @@ public class AtomMassGenerator extends BasicAtomGenerator {
 				atom.getImplicitHydrogenCount(), 
 				alignment, 
 				atom.getMassNumber(),
-				super.getColorForAtom(atom, model));
+				super.getAtomColor(atom, model));
 	}
 
 	public boolean showCarbon(

@@ -33,6 +33,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
@@ -82,7 +83,7 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
                 text = atom.getSymbol();
             }
             Point2d p = atom.getPoint2d();
-            Color c = getColorForAtom(atom, model);
+            Color c = getAtomColor(atom, model);
             TextGroupElement textGroup = new TextGroupElement(p.x, p.y, text, c);
             if(atom.getFlag(CDKConstants.IS_TYPEABLE)){
                 textGroup.isNotTypeableUnderlined = true;

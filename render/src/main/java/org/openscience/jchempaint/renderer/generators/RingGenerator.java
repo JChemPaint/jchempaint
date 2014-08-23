@@ -32,6 +32,8 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -50,10 +52,11 @@ public class RingGenerator extends BasicBondGenerator {
 
 	@Override
 	public IRenderingElement generateRingElements(
-	        IBond bond, IRing ring, JChemPaintRendererModel model) {
-		if (ringIsAromatic(ring) && model.getShowAromaticity()) {
+	        IBond bond, IRing ring, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+		if (ringIsAromatic(ring) && jcpModel.getShowAromaticity()) {
 			ElementGroup pair = new ElementGroup();
-			if (model.getShowAromaticityCDKStyle()) {
+			if (jcpModel.getShowAromaticityCDKStyle()) {
 			    pair.add(generateBondElement(bond, IBond.Order.SINGLE, model));
 			    super.setOverrideColor(Color.LIGHT_GRAY);
 			    pair.add(generateInnerElement(bond, ring, model));
@@ -62,7 +65,7 @@ public class RingGenerator extends BasicBondGenerator {
     			pair.add(generateBondElement(bond, IBond.Order.SINGLE, model));
     			if (!painted_rings.contains(ring)) {
     				painted_rings.add(ring);
-    				pair.add(generateRingRingElement(bond, ring, model));
+    				pair.add(generateRingRingElement(bond, ring, jcpModel));
     			}
 			}
 			return pair;

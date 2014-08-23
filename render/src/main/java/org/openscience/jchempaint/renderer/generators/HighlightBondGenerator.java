@@ -25,7 +25,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
@@ -47,7 +47,7 @@ public class HighlightBondGenerator extends BasicBondGenerator {
         JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
         IBond bond = model.getHighlightedBond();
         if (bond != null && shouldHighlight(bond, jcpModel)) {
-            super.ringSet = super.getRingSet(ac,jcpModel);
+            super.ringSet = super.getRingSet(ac);
             
             double r = jcpModel.getHighlightDistance() / jcpModel.getScale();
             r /= 2.0;
