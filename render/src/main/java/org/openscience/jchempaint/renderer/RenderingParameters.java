@@ -43,16 +43,6 @@ public class RenderingParameters {
     public enum AtomShape { OVAL, SQUARE };
 
     /**
-     * The width of an arrow head
-     */
-    private int arrowHeadWidth = 20;
-
-    /**
-     * The background color of the rendered image
-     */
-    private Color backColor;
-
-    /**
      * The color used for underlining not typeable atoms.
      */
     private Color notTypeableUnderlineColor = Color.red;
@@ -61,11 +51,6 @@ public class RenderingParameters {
      * The gap between double and triple bond lines on the screen
      */
     private double bondDistance = 2;
-
-    /**
-     * The length on screen of a typical bond
-     */
-    private double bondLength = 40.0;
 
     /**
      * The width on screen of a bond
@@ -104,15 +89,8 @@ public class RenderingParameters {
      */
     private Color defaultBondColor = Color.BLACK;
 
-    private String fontName = "Arial";
-
-    private IFontManager.FontStyle fontStyle = IFontManager.FontStyle.BOLD;
-
+    
     private Color externalHighlightColor = Color.RED;
-
-    private boolean fitToScreen;
-
-    private Color foreColor = Color.black;
 
     private Color hoverOverColor = Color.BLUE;
 
@@ -133,11 +111,6 @@ public class RenderingParameters {
     private boolean highlightShapeFilled = false;
 
     private Color mappingColor = Color.gray;
-
-    /**
-     * Area on each of the four margins to keep white.
-     */
-    private double margin = 10;
 
     /**
      * The proportion of a ring bounds to use to draw the ring.
@@ -180,13 +153,7 @@ public class RenderingParameters {
     /** Determines whether implicit hydrogens should be drawn. */
     private boolean showImplicitHydrogens;
 
-    private boolean showMoleculeTitle = false;
-
     private boolean showReactionBoxes = false;
-
-    private boolean showTooltip = false;
-
-    private boolean useAntiAliasing = true;
 
     private boolean willDrawNumbers;
 
@@ -195,14 +162,6 @@ public class RenderingParameters {
      */
     private double wedgeWidth;
 
-
-    public int getArrowHeadWidth() {
-        return arrowHeadWidth;
-    }
-
-    public void setArrowHeadWidth(int arrowHeadWidth) {
-        this.arrowHeadWidth = arrowHeadWidth;
-    }
 
     public boolean isHighlightShapeFilled() {
         return highlightShapeFilled;
@@ -274,40 +233,12 @@ public class RenderingParameters {
         this.selectionShape = selectionShape;
     }
 
-    public String getFontName() {
-        return this.fontName;
-    }
-
-    public void setFontName(String fontName) {
-        this.fontName = fontName;
-    }
-
-    public IFontManager.FontStyle getFontStyle() {
-        return this.fontStyle;
-    }
-
-    public void setFontStyle(IFontManager.FontStyle fontStyle) {
-        this.fontStyle = fontStyle;
-    }
-
     public double getAtomRadius() {
         return atomRadius;
     }
 
-    public Color getBackColor() {
-        return backColor;
-    }
-
     public double getBondDistance() {
         return bondDistance;
-    }
-
-    public double getBondLength() {
-        return bondLength;
-    }
-
-    public void setBondLength(double bondLength) {
-        this.bondLength = bondLength;
     }
 
     public double getBondWidth() {
@@ -322,28 +253,12 @@ public class RenderingParameters {
         return externalHighlightColor;
     }
 
-    public boolean isFitToScreen() {
-        return fitToScreen;
-    }
-
-    public void setFitToScreen(boolean fitToScreen) {
-        this.fitToScreen = fitToScreen;
-    }
-
-    public Color getForeColor() {
-        return foreColor;
-    }
-
     public Color getHoverOverColor() {
         return hoverOverColor;
     }
 
     public Color getMappingColor() {
         return mappingColor;
-    }
-
-    public double getMargin() {
-        return margin;
     }
 
     public Color getSelectedPartColor() {
@@ -386,20 +301,8 @@ public class RenderingParameters {
         return showImplicitHydrogens;
     }
 
-    public boolean isShowMoleculeTitle() {
-        return showMoleculeTitle;
-    }
-
     public boolean isShowReactionBoxes() {
         return showReactionBoxes;
-    }
-
-    public boolean isShowTooltip() {
-        return showTooltip;
-    }
-
-    public boolean isUseAntiAliasing() {
-        return useAntiAliasing;
     }
 
     public boolean isWillDrawNumbers() {
@@ -408,10 +311,6 @@ public class RenderingParameters {
 
     public void setAtomRadius(double atomRadius) {
         this.atomRadius = atomRadius;
-    }
-
-    public void setBackColor(Color backColor) {
-        this.backColor = backColor;
     }
 
     public void setBondDistance(double bondDistance) {
@@ -438,10 +337,6 @@ public class RenderingParameters {
         this.externalHighlightColor = externalHighlightColor;
     }
 
-    public void setForeColor(Color foreColor) {
-        this.foreColor = foreColor;
-    }
-
     public void setHoverOverColor(Color hoverOverColor) {
         this.hoverOverColor = hoverOverColor;
     }
@@ -452,10 +347,6 @@ public class RenderingParameters {
 
     public void setMappingColor(Color mappingColor) {
         this.mappingColor = mappingColor;
-    }
-
-    public void setMargin(double margin) {
-        this.margin = margin;
     }
 
     public void setSelectedPartColor(Color selectedPartColor) {
@@ -486,20 +377,8 @@ public class RenderingParameters {
         this.showImplicitHydrogens = showImplicitHydrogens;
     }
 
-    public void setShowMoleculeTitle(boolean showMoleculeTitle) {
-        this.showMoleculeTitle = showMoleculeTitle;
-    }
-
     public void setShowReactionBoxes(boolean showReactionBoxes) {
         this.showReactionBoxes = showReactionBoxes;
-    }
-
-    public void setShowTooltip(boolean showTooltip) {
-        this.showTooltip = showTooltip;
-    }
-
-    public void setUseAntiAliasing(boolean useAntiAliasing) {
-        this.useAntiAliasing = useAntiAliasing;
     }
 
     public void setWillDrawNumbers(boolean willDrawNumbers) {

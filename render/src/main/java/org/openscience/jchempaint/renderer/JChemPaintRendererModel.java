@@ -28,12 +28,9 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.IFontManager;
@@ -54,11 +51,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 
     private RenderingParameters parameters;
 
-    /** Determines how much the image is zoomed into on. */
-    private double zoomFactor = 1.0;
-
-    //this is used for the size of the arrowhead, might become configurable
-    public static final int arrowHeadWidth = 10;
     private Map<Integer, Boolean> flags = new HashMap<Integer, Boolean>();
     /**
      * The color hash is used to color substructures.
@@ -83,8 +75,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 
 	/**
      * Constructor for the RendererModel.
-     * 
-     * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
     public JChemPaintRendererModel() {
         this.parameters = new RenderingParameters();
@@ -101,11 +91,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
     
     public int getArrowHeadWidth() {
-        return this.parameters.getArrowHeadWidth();
+        if (hasParameter(BasicSceneGenerator.ArrowHeadWidth.class))
+            return get(BasicSceneGenerator.ArrowHeadWidth.class).intValue();
+        return new BasicSceneGenerator.ArrowHeadWidth().getDefault().intValue();
     }
     
     public void setArrowHeadWidth(int arrowHeadWidth) {
-        this.parameters.setArrowHeadWidth(arrowHeadWidth);
+        if (hasParameter(BasicSceneGenerator.ArrowHeadWidth.class))
+            set(BasicSceneGenerator.ArrowHeadWidth.class, (double) arrowHeadWidth);
     }
 
     public boolean getHighlightShapeFilled() {
@@ -174,15 +167,17 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the name of the font family as a String.
      */
     public String getFontName() {
-        return this.parameters.getFontName();
+        if (hasParameter(BasicSceneGenerator.FontName.class))
+            return get(BasicSceneGenerator.FontName.class);
+        return new BasicSceneGenerator.FontName().getDefault();
     }
 
     /**
      * Set the name of the font family (Arial, etc).
      */
     public void setFontName(String fontName) {
-        this.parameters.setFontName(fontName);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.FontName.class))
+            set(BasicSceneGenerator.FontName.class, fontName);
     }
 
     /**
@@ -192,7 +187,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *         enum
      */
     public IFontManager.FontStyle getFontStyle() {
-        return this.parameters.getFontStyle();
+        if (hasParameter(BasicSceneGenerator.UsedFontStyle.class))
+            return get(BasicSceneGenerator.UsedFontStyle.class);
+        return new BasicSceneGenerator.UsedFontStyle().getDefault();
     }
 
     /**
@@ -201,7 +198,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @param fontStyle a member of the enum in {@link IFontManager}
      */
     public void setFontManager(IFontManager.FontStyle fontStyle) {
-        this.parameters.setFontStyle(fontStyle);
+        if (hasParameter(BasicSceneGenerator.UsedFontStyle.class))
+            set(BasicSceneGenerator.UsedFontStyle.class, fontStyle);
     }
 
     public boolean getIsCompact() {
@@ -213,12 +211,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public boolean getUseAntiAliasing() {
-        return this.parameters.isUseAntiAliasing();
+        if (hasParameter(BasicSceneGenerator.UseAntiAliasing.class))
+            return get(BasicSceneGenerator.UseAntiAliasing.class);
+        return new BasicSceneGenerator.UseAntiAliasing().getDefault();
     }
 
     public void setUseAntiAliasing(boolean bool) {
-        this.parameters.setUseAntiAliasing(bool);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.UseAntiAliasing.class))
+            set(BasicSceneGenerator.UseAntiAliasing.class, bool);
     }
 
     public boolean getShowReactionBoxes() {
@@ -231,12 +231,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public boolean getShowMoleculeTitle() {
-        return this.parameters.isShowMoleculeTitle();
+        if (hasParameter(BasicSceneGenerator.ShowMoleculeTitle.class))
+            return get(BasicSceneGenerator.ShowMoleculeTitle.class);
+        return new BasicSceneGenerator.ShowMoleculeTitle().getDefault();
     }
 
     public void setShowMoleculeTitle(boolean bool) {
-        this.parameters.setShowMoleculeTitle(bool);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.ShowMoleculeTitle.class))
+            set(BasicSceneGenerator.ShowMoleculeTitle.class, bool);
     }
 
     /**
@@ -245,17 +247,20 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the user-selected length of a bond, or the default length.
      */
     public double getBondLength() {
-        return this.parameters.getBondLength();
+        if (hasParameter(BasicSceneGenerator.BondLength.class))
+            return get(BasicSceneGenerator.BondLength.class);
+        return new BasicSceneGenerator.BondLength().getDefault();
     }
 
     /**
      * Set the length on the screen of a typical bond.
      *
-     * @param bondLength the length in pixels of a typical bond.
+     * @param length the length in pixels of a typical bond.
      *
      */
     public void setBondLength(double length) {
-        this.parameters.setBondLength(length);
+        if (hasParameter(BasicSceneGenerator.BondLength.class))
+            set(BasicSceneGenerator.BondLength.class, length);
     }
 
     /**
@@ -324,7 +329,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return a zoom factor for the drawing
      */
     public double getZoomFactor() {
-        return this.zoomFactor;
+        if (hasParameter(BasicSceneGenerator.ZoomFactor.class))
+            return get(BasicSceneGenerator.ZoomFactor.class);
+        return new BasicSceneGenerator.ZoomFactor().getDefault();
     }
 
     /**
@@ -334,16 +341,19 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the zoom factor for the drawing
      */
     public void setZoomFactor(double zoomFactor) {
-        this.zoomFactor = zoomFactor;
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.ZoomFactor.class))
+            set(BasicSceneGenerator.ZoomFactor.class, zoomFactor);
     }
 
     public boolean isFitToScreen() {
-        return this.parameters.isFitToScreen();
+        if (hasParameter(BasicSceneGenerator.FitToScreen.class))
+            return get(BasicSceneGenerator.FitToScreen.class);
+        return new BasicSceneGenerator.FitToScreen().getDefault();
     }
 
     public void setFitToScreen(boolean value) {
-        this.parameters.setFitToScreen(value);
+        if (hasParameter(BasicSceneGenerator.FitToScreen.class))
+            set(BasicSceneGenerator.FitToScreen.class, value);
     }
 
     /**
@@ -352,7 +362,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the foreground color for the drawing
      */
     public Color getForeColor() {
-        return this.parameters.getForeColor();
+        if (hasParameter(BasicSceneGenerator.ForegroundColor.class))
+            return get(BasicSceneGenerator.ForegroundColor.class);
+        return new BasicSceneGenerator.ForegroundColor().getDefault();
     }
 
     /**
@@ -362,8 +374,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the foreground color with which bonds and atoms are drawn
      */
     public void setForeColor(Color foreColor) {
-        this.parameters.setForeColor(foreColor);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.ForegroundColor.class))
+            set(BasicSceneGenerator.ForegroundColor.class, foreColor);
     }
 
     /**
@@ -372,7 +384,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the background color
      */
     public Color getBackColor() {
-        return this.parameters.getBackColor();
+        if (hasParameter(BasicSceneGenerator.BackgroundColor.class))
+            return get(BasicSceneGenerator.BackgroundColor.class);
+        return new BasicSceneGenerator.BackgroundColor().getDefault();
     }
 
     /**
@@ -382,8 +396,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the background color
      */
     public void setBackColor(Color backColor) {
-        this.parameters.setBackColor(backColor);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.BackgroundColor.class))
+            set(BasicSceneGenerator.BackgroundColor.class, backColor);
     }
 
     /**
@@ -628,12 +642,12 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     /**
      * Sets the showTooltip attribute.
      *
-     * @param showToolTip
+     * @param showTooltip
      *            The new value.
      */
     public void setShowTooltip(boolean showTooltip) {
-        this.parameters.setShowTooltip(showTooltip);
-        fireChange();
+        if (hasParameter(BasicSceneGenerator.ShowTooltip.class))
+            set(BasicSceneGenerator.ShowTooltip.class, showTooltip);
     }
 
     /**
@@ -642,7 +656,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return The showTooltip value.
      */
     public boolean getShowTooltip() {
-        return this.parameters.isShowTooltip();
+        if (hasParameter(BasicSceneGenerator.ShowTooltip.class))
+            return get(BasicSceneGenerator.ShowTooltip.class);
+        return new BasicSceneGenerator.ShowTooltip().getDefault();
     }
 
     /**
@@ -705,11 +721,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public double getMargin() {
-        return this.parameters.getMargin();
+        if (hasParameter(BasicSceneGenerator.Margin.class))
+            return get(BasicSceneGenerator.Margin.class);
+        return new BasicSceneGenerator.Margin().getDefault();
     }
 
     public void setMargin(double margin) {
-        this.parameters.setMargin(margin);
+        if (hasParameter(BasicSceneGenerator.Margin.class))
+            set(BasicSceneGenerator.Margin.class, margin);
     }
 
     public Color getBoundsColor() {
