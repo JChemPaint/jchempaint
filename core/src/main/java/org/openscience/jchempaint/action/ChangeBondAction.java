@@ -143,8 +143,6 @@ public class ChangeBondAction extends JCPAction
             
         }
         JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
-        renderModel.setRecalculationRequiredForSSSR(true);
-
         jcpPanel.get2DHub().updateView();
 
     }

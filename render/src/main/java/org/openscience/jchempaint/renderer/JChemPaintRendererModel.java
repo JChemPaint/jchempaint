@@ -62,17 +62,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 
     private IAtomColorer colorer = new RasmolColors();
 
-    private boolean recalculationRequiredForSSSR=true;
-
-
-    public boolean isRecalculationRequiredForSSSR() {
-		return recalculationRequiredForSSSR;
-	}
-
-	public void setRecalculationRequiredForSSSR(boolean recalculationRequiredForSSSR) {
-		this.recalculationRequiredForSSSR = recalculationRequiredForSSSR;
-	}
-
 	/**
      * Constructor for the RendererModel.
      */
