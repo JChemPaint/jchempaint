@@ -34,6 +34,9 @@ import org.openscience.cdk.reaction.ReactionChain;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReactionArrowModule extends ControllerModuleAdapter {
 
     protected static ILoggingTool logger =
@@ -85,14 +88,11 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         Point2d secondOnEndPerpendicular = new Point2d();
         secondOnEndPerpendicular.x = relativex * costheta - relativey * sintheta + center.x;
         secondOnEndPerpendicular.y = relativex * sintheta + relativey * costheta + center.y;
-        IReactionSet reactionSet = super.chemModelRelay.getChemModel().getReactionSet();
-        if (reactionSet == null) {
-            reactionSet = new ReactionChain(); //reactionSet = super.chemModelRelay.getChemModel().getBuilder().newInstance(IReactionSet.class);
-            super.chemModelRelay.getChemModel().setReactionSet(reactionSet);
-        }
-        IReaction reaction = moleculeSet.getBuilder().newInstance(IReaction.class);
-        ((ReactionChain) reactionSet).addReaction(reaction, reactionSet.getReactionCount()); //reactionSet.addReaction(reaction);
-        reaction.setID("reaction-" + System.currentTimeMillis());
+        
+        List<IAtomContainer> reactants = new ArrayList<IAtomContainer>(2);
+        List<IAtomContainer> products = new ArrayList<IAtomContainer>(2);
+        
+        // determine the reactants and products of a reaction
         for (int i = moleculeSet.getAtomContainerCount() - 1; i >= 0; i--) {
             int left = 0;
             int right = 0;
@@ -112,31 +112,64 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
                     leftend++;
                 }
             }
-            IAtomContainer newContainer;
-            try {
-                newContainer = (IAtomContainer) moleculeSet.getAtomContainer(i).clone();
-                if (moleculeSet.getAtomContainer(i).getID() != null) {
-                    newContainer.setID(moleculeSet.getAtomContainer(i).getID());
-                } else {
-                    newContainer.setID("ac" + System.currentTimeMillis());
-                }
-            } catch (CloneNotSupportedException e) {
-                logger.error("Could not clone IAtomContainer: ", e.getMessage());
-                logger.debug(e);
-                return;
-            }
 
             if (left > right) {
                 //is a reactant
-                ReactionHub.makeReactantInExistingReaction((ControllerHub) super.chemModelRelay, reaction.getID(), newContainer, moleculeSet.getAtomContainer(i));
+                reactants.add(moleculeSet.getAtomContainer(i));
             }
             if (rightend > leftend) {
                 //is a product
-                ReactionHub.makeProductInExistingReaction((ControllerHub) super.chemModelRelay, reaction.getID(), newContainer, moleculeSet.getAtomContainer(i));
+                products.add(moleculeSet.getAtomContainer(i));
             } else {
                 //is a catalyst
                 //TODO catalysts in general
             }
+        }
+        
+        // don't create a new reaction
+        if (reactants.isEmpty() && products.isEmpty())
+            return;
+        
+        // do reaction creation
+        IReactionSet reactionSet = super.chemModelRelay.getChemModel().getReactionSet();
+        if (reactionSet == null) {
+            reactionSet = new ReactionChain(); //reactionSet = super.chemModelRelay.getChemModel().getBuilder().newInstance(IReactionSet.class);
+            super.chemModelRelay.getChemModel().setReactionSet(reactionSet);
+        }
+        IReaction reaction = moleculeSet.getBuilder().newInstance(IReaction.class);
+        ((ReactionChain) reactionSet).addReaction(reaction, reactionSet.getReactionCount()); //reactionSet.addReaction(reaction);
+        reaction.setID("reaction-" + System.currentTimeMillis());
+        
+        for (IAtomContainer reactant : reactants) {
+            ReactionHub.makeReactantInExistingReaction((ControllerHub) super.chemModelRelay,
+                                                       reaction.getID(),
+                                                       cloneReactionParticipant(reactant),
+                                                       reactant);
+        }
+        for (IAtomContainer product : products) {
+            ReactionHub.makeProductInExistingReaction((ControllerHub) super.chemModelRelay,
+                                                      reaction.getID(),
+                                                      cloneReactionParticipant(product),
+                                                      product);
+        }
+        
+        
+    }
+    
+    IAtomContainer cloneReactionParticipant(IAtomContainer org) {
+        try {
+            IAtomContainer cpy = (IAtomContainer) org.clone();
+            if (org.getID() != null) {
+                cpy.setID(org.getID());
+            } else {
+                cpy.setID("ac" + System.currentTimeMillis());
+            }
+            return cpy;
+        } catch (CloneNotSupportedException e) {
+            // never going to happen (should be suppressed)
+            logger.error("Could not clone IAtomContainer: ", e.getMessage());
+            logger.debug(e);
+            throw new InternalError("Could not clone IAtomContainer: ", e);
         }
     }
 
