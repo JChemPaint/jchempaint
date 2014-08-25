@@ -268,9 +268,19 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
 
         if (moleculeSet != null && moleculeSet.getAtomContainerCount() > 0 && reactionSet != null) {
-            Rectangle2D totalBounds = Renderer.calculateBounds(reactionSet);
-            totalBounds = totalBounds.createUnion(
-                    Renderer.calculateBounds(moleculeSet));
+            Rectangle2D reactionSetBounds = Renderer.calculateBounds(reactionSet);
+            Rectangle2D moleculeSetBounds = Renderer.calculateBounds(moleculeSet);
+            
+            Rectangle2D totalBounds = new Rectangle2D.Double();
+            
+            if (reactionSetBounds != null && moleculeSetBounds != null) {
+                Rectangle.union(reactionSetBounds, moleculeSetBounds, totalBounds);
+            } else if (reactionSetBounds != null) {
+                totalBounds = reactionSetBounds;
+            } else if (moleculeSetBounds != null) {
+                totalBounds = moleculeSetBounds;
+            }
+            
             this.setupTransformNatural(totalBounds);
             ElementGroup diagram = new ElementGroup();
             for (IReaction reaction : reactionSet.reactions()) {
@@ -564,6 +574,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         Rectangle2D totalBounds = new Rectangle2D.Double();
         for (IReaction reaction : reactionSet.reactions()) {
             Rectangle2D reactionBounds = Renderer.calculateBounds(reaction);
+            if (reactionBounds == null)
+                continue;
             if (totalBounds.isEmpty()) {
                 totalBounds = reactionBounds;
             } else {
