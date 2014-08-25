@@ -8,13 +8,16 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ReactionHub {
 
 
     public static void makeReactantInNewReaction(ControllerHub controllerhub, IAtomContainer newContainer, IAtomContainer oldcontainer) {
         IChemModel chemModel = controllerhub.getChemModel();
         IReaction reaction = newContainer.getBuilder().newInstance(IReaction.class);
-        reaction.setID("reaction-" + System.currentTimeMillis());
+        reaction.setID(newReactionId(controllerhub));
         IAtomContainer mol=newContainer.getBuilder().newInstance(IAtomContainer.class,newContainer);
         mol.setID(newContainer.getID());
         reaction.addReactant(mol);
@@ -59,7 +62,7 @@ public class ReactionHub {
             IAtomContainer oldcontainer) {
         IChemModel chemModel = controllerhub.getChemModel();
         IReaction reaction = newContainer.getBuilder().newInstance(IReaction.class);
-        reaction.setID("reaction-" + System.currentTimeMillis());
+        reaction.setID(newReactionId(controllerhub));
         IAtomContainer mol=newContainer.getBuilder().newInstance(IAtomContainer.class,newContainer);
         mol.setID(newContainer.getID());
         reaction.addProduct(mol);
@@ -98,5 +101,32 @@ public class ReactionHub {
             controllerhub.getUndoRedoHandler().postEdit(undoredo);
         }
         controllerhub.structureChanged();
+    }
+
+    public static String newReactionId(IChemModelRelay hub) {
+        final String name = "untitled reaction";
+        if (hub.getChemModel().getReactionSet() == null)
+            return name;
+        return newReactionId(hub.getChemModel().getReactionSet(), name);
+    }
+    
+    public static String newReactionId(IReactionSet reactionSet, String startName) {
+        final Set<String> ids = currentIds(reactionSet);
+        if (!ids.contains(startName))
+            return startName;
+        for (int i = 2; i < reactionSet.getReactionCount() + 1; i++) {
+            String potentialName = startName + " (" + i + ")";
+            if (!ids.contains(potentialName))
+                return potentialName;
+        }
+        return "reaction-" + System.currentTimeMillis();
+    }
+
+    public static Set<String> currentIds(IReactionSet reactionSet) {
+        Set<String> ids = new HashSet<String>();
+        for (IReaction reaction : reactionSet.reactions()) {
+            ids.add(reaction.getID());
+        }
+        return ids;
     }
 }

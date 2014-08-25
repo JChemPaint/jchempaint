@@ -35,7 +35,9 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ReactionArrowModule extends ControllerModuleAdapter {
 
@@ -138,7 +140,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         }
         IReaction reaction = moleculeSet.getBuilder().newInstance(IReaction.class);
         ((ReactionChain) reactionSet).addReaction(reaction, reactionSet.getReactionCount()); //reactionSet.addReaction(reaction);
-        reaction.setID("reaction-" + System.currentTimeMillis());
+        reaction.setID(ReactionHub.newReactionId(chemModelRelay));
         
         for (IAtomContainer reactant : reactants) {
             ReactionHub.makeReactantInExistingReaction((ControllerHub) super.chemModelRelay,
