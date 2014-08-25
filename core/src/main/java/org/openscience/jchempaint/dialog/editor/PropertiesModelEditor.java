@@ -54,6 +54,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
@@ -370,7 +371,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         if (!model.getIsCompact()){
             group.setSelected(nonCompactShape.getModel(), true);
-        } else if(model.getCompactShape() == RenderingParameters.AtomShape.OVAL) {
+        } else if(model.getCompactShape() == BasicAtomGenerator.Shape.OVAL) {
             group.setSelected(compactShapeOval.getModel(), true);
         } else {
             group.setSelected(compactShapeSquare.getModel(), true);
@@ -422,9 +423,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         model.setWedgeWidth(wedgeWidth.getValue());
 
         if (compactShapeOval.isSelected()) {
-            model.setCompactShape(RenderingParameters.AtomShape.OVAL);
+            model.setCompactShape(BasicAtomGenerator.Shape.OVAL);
         } else {
-            model.setCompactShape(RenderingParameters.AtomShape.SQUARE);
+            model.setCompactShape(BasicAtomGenerator.Shape.SQUARE);
         }
 
         model.setBackColor(currentColor);

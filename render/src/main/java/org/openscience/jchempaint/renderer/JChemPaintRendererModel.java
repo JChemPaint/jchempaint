@@ -34,6 +34,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.IFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.color.IAtomColorer;
@@ -59,8 +60,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      */
     private Map<IChemObject, Color> colorHash =
         new Hashtable<IChemObject, Color>();
-
-    private IAtomColorer colorer = new RasmolColors();
 
 	/**
      * Constructor for the RendererModel.
@@ -123,12 +122,15 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
         this.parameters.setRingProportion(ringProportion);
     }
 
-    public AtomShape getCompactShape() {
-        return this.parameters.getCompactShape();
+    public BasicAtomGenerator.Shape getCompactShape() {
+        if (hasParameter(BasicAtomGenerator.CompactShape.class))
+            return get(BasicAtomGenerator.CompactShape.class);
+        return new BasicAtomGenerator.CompactShape().getDefault();
     }
 
-    public void setCompactShape(AtomShape compactShape) {
-        this.parameters.setCompactShape(compactShape);
+    public void setCompactShape(BasicAtomGenerator.Shape compactShape) {
+        if (hasParameter(BasicAtomGenerator.CompactShape.class))
+            set(BasicAtomGenerator.CompactShape.class, compactShape);
     }
 
     public double getScale() {
@@ -192,11 +194,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public boolean getIsCompact() {
-        return this.parameters.isCompact();
+        if (hasParameter(BasicAtomGenerator.CompactAtom.class))
+            return get(BasicAtomGenerator.CompactAtom.class);
+        return new BasicAtomGenerator.CompactAtom().getDefault();
     }
 
     public void setIsCompact(boolean compact) {
-        this.parameters.setCompact(compact);
+        if (hasParameter(BasicAtomGenerator.CompactAtom.class))
+            set(BasicAtomGenerator.CompactAtom.class, compact);
     }
 
     public boolean getUseAntiAliasing() {
@@ -419,21 +424,25 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public boolean getKekuleStructure() {
-        return this.parameters.isKekuleStructure();
+        if (hasParameter(BasicAtomGenerator.KekuleStructure.class))
+            return get(BasicAtomGenerator.KekuleStructure.class);
+        return new BasicAtomGenerator.KekuleStructure().getDefault();
     }
 
     public void setKekuleStructure(boolean kekule) {
-        this.parameters.setKekuleStructure(kekule);
-        fireChange();
+        if (hasParameter(BasicAtomGenerator.KekuleStructure.class))
+            set(BasicAtomGenerator.KekuleStructure.class, kekule);
     }
 
     public boolean getColorAtomsByType() {
-        return this.parameters.isColorAtomsByType();
+        if (hasParameter(BasicAtomGenerator.ColorByType.class))
+            return get(BasicAtomGenerator.ColorByType.class);
+        return new BasicAtomGenerator.ColorByType().getDefault();
     }
 
     public void setColorAtomsByType(boolean bool) {
-        this.parameters.setColorAtomsByType(bool);
-        fireChange();
+        if (hasParameter(BasicAtomGenerator.ColorByType.class))
+            set(BasicAtomGenerator.ColorByType.class, bool);
     }
 
     public boolean getShowEndCarbons() {
@@ -540,7 +549,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * This is used for the size of the compact atom element.
      */
     public double getAtomRadius() {
-        return this.parameters.getAtomRadius();
+        if (hasParameter(BasicAtomGenerator.AtomRadius.class))
+            return get(BasicAtomGenerator.AtomRadius.class);
+        return new BasicAtomGenerator.AtomRadius().getDefault();
     }
 
     /**
@@ -550,8 +561,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *
      */
     public void setAtomRadius(double atomRadius) {
-        this.parameters.setAtomRadius(atomRadius);
-        fireChange();
+        if (hasParameter(BasicAtomGenerator.AtomRadius.class))
+            set(BasicAtomGenerator.AtomRadius.class, atomRadius);
     }
 
     /**
@@ -561,24 +572,6 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      */
     public Map<IChemObject, Color> getColorHash() {
         return this.colorHash;
-    }
-
-    /**
-     * Returns the drawing color of the given atom. An atom is colored as
-     * highlighted if highlighted. The atom is color marked if in a
-     * substructure. If not, the color from the CDK2DAtomColor is used (if
-     * selected). Otherwise, the atom is colored black.
-     */
-    public Color getAtomColor(IAtom atom, Color defaultColor) {
-        if (atom == null) {
-            return defaultColor;
-        }
-
-        Color atomColor = defaultColor;
-        if (this.parameters.isColorAtomsByType()) {
-            atomColor = colorer.getAtomColor(atom);
-        }
-        return atomColor;
     }
 
     /**
@@ -604,7 +597,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return The AtomColorer.
      */
     public IAtomColorer getAtomColorer() {
-        return colorer;
+        if (hasParameter(BasicAtomGenerator.AtomColorer.class))
+            return get(BasicAtomGenerator.AtomColorer.class);
+        return new BasicAtomGenerator.AtomColorer().getDefault();
     }
 
     /**
@@ -614,7 +609,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the new colorer.
      */
     public void setAtomColorer(final IAtomColorer atomColorer) {
-        colorer = atomColorer;
+        if (hasParameter(BasicAtomGenerator.AtomColorer.class))
+            set(BasicAtomGenerator.AtomColorer.class, atomColorer);
     }
 
     /**

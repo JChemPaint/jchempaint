@@ -502,7 +502,6 @@ public class CopyPasteAction extends JCPAction{
             }
         }
         jcpPanel.get2DHub().updateView();
-        renderModel.setRecalculationRequiredForSSSR(true);
         jcpPanel.updateStatusBar();
 
     }

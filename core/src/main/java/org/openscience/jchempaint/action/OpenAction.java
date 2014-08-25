@@ -138,7 +138,6 @@ public class OpenAction extends JCPAction {
 
                         jcpPanel.setIsAlreadyAFile(chooser.getSelectedFile());
                         JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
-                        renderModel.setRecalculationRequiredForSSSR(true);
 
                     
                         //in case this is an application, we set the file name as title

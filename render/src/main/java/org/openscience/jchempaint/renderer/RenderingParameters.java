@@ -32,11 +32,6 @@ import org.openscience.cdk.renderer.font.IFontManager;
 public class RenderingParameters {
     
     /**
-     * The size on screen of a compact mode shape
-     */
-    private double atomRadius;
-
-    /**
      * When atoms are selected or in compact mode, they will
      * be covered by a shape determined by this enumeration
      */
@@ -69,22 +64,6 @@ public class RenderingParameters {
     private Color boundsColor = Color.LIGHT_GRAY;
 
     /**
-     * Determines whether atoms are colored by type
-     */
-    private boolean colorAtomsByType;
-
-    /**
-     * If true, atoms are displayed in a compact notation,
-     * as a colored square or circle, rather than as text
-     */
-    private boolean compact;
-
-    /**
-     * The shape of the compact mode atom.
-     */
-    private AtomShape compactShape;
-
-    /**
      * The color to draw bonds if not other color is given.
      */
     private Color defaultBondColor = Color.BLACK;
@@ -93,14 +72,6 @@ public class RenderingParameters {
     private Color externalHighlightColor = Color.RED;
 
     private Color hoverOverColor = Color.BLUE;
-
-    /**
-     * Determines whether structures should be drawn as Kekule structures, thus
-     * giving each carbon element explicitly, instead of not displaying the
-     * element symbol. Example C-C-C instead of /\.
-     */
-    private boolean kekuleStructure;
-
 
     /**
      * The maximum distance on the screen the mouse pointer has to be to
@@ -195,20 +166,6 @@ public class RenderingParameters {
         this.ringProportion = ringProportion;
     }
 
-    /**
-     * @return the shape to draw the atoms when in compact mode
-     */
-    public AtomShape getCompactShape() {
-        return compactShape;
-    }
-
-    /**
-     * @param compactShape the shape to draw the atoms when in compact mode
-     */
-    public void setCompactShape(AtomShape compactShape) {
-        this.compactShape = compactShape;
-    }
-
     public double getHighlightDistance() {
         return highlightDistance;
     }
@@ -231,10 +188,6 @@ public class RenderingParameters {
 
     public void setSelectionShape(AtomShape selectionShape) {
         this.selectionShape = selectionShape;
-    }
-
-    public double getAtomRadius() {
-        return atomRadius;
     }
 
     public double getBondDistance() {
@@ -264,19 +217,7 @@ public class RenderingParameters {
     public Color getSelectedPartColor() {
         return selectedPartColor;
     }
-
-    public boolean isColorAtomsByType() {
-        return colorAtomsByType;
-    }
-
-    public boolean isCompact() {
-        return compact;
-    }
-
-    public boolean isKekuleStructure() {
-        return kekuleStructure;
-    }
-
+   
     public boolean isShowAromaticity() {
         return showAromaticity;
     }
@@ -309,10 +250,6 @@ public class RenderingParameters {
         return willDrawNumbers;
     }
 
-    public void setAtomRadius(double atomRadius) {
-        this.atomRadius = atomRadius;
-    }
-
     public void setBondDistance(double bondDistance) {
         this.bondDistance = bondDistance;
     }
@@ -325,24 +262,12 @@ public class RenderingParameters {
         this.mappingLineWidth = mappingLineWidth;
     }
     
-    public void setColorAtomsByType(boolean colorAtomsByType) {
-        this.colorAtomsByType = colorAtomsByType;
-    }
-
-    public void setCompact(boolean compact) {
-        this.compact = compact;
-    }
-
     public void setExternalHighlightColor(Color externalHighlightColor) {
         this.externalHighlightColor = externalHighlightColor;
     }
 
     public void setHoverOverColor(Color hoverOverColor) {
         this.hoverOverColor = hoverOverColor;
-    }
-
-    public void setKekuleStructure(boolean kekuleStructure) {
-        this.kekuleStructure = kekuleStructure;
     }
 
     public void setMappingColor(Color mappingColor) {

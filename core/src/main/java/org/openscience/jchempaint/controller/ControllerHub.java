@@ -2063,7 +2063,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			changeHandler.structureChanged();
 
 		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
-		renderModel.setRecalculationRequiredForSSSR(true);
 
 	}
 

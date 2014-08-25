@@ -59,7 +59,6 @@ public class RedoAction extends JCPAction
 		jcpPanel.updateUndoRedoControls();
 		jcpPanel.updateStatusBar();
         JChemPaintRendererModel renderModel = jcpPanel.get2DHub().getRenderer().getRenderer2DModel();
-        renderModel.setRecalculationRequiredForSSSR(true);
 
 		jcpPanel.get2DHub().updateView();
 	}
