@@ -24,8 +24,10 @@
 package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.geometry.BondTools;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
@@ -61,7 +63,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedUp(Point2d worldCoord) {
+    public void mouseClickedUp(Point2d endPoint) {
         //first, we get rid of the phantom arrow
         chemModelRelay.setPhantomArrow(null, null);
         chemModelRelay.updateView();
@@ -71,59 +73,49 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         if (moleculeSet.getAtomContainerCount() == 0 || (moleculeSet.getAtomContainerCount() == 1 && moleculeSet.getAtomContainer(0).getAtomCount() == 0)) {
             return;
         }
-        //calculate a second point on the perpendicular through start point
-        double angle = Math.PI / 2;
-        double costheta = Math.cos(angle);
-        double sintheta = Math.sin(angle);
-        Point2d point = new Point2d(worldCoord);
-        Point2d center = new Point2d(startPoint);
-        double relativex = point.x - center.x;
-        double relativey = point.y - center.y;
-        Point2d secondOnStartPerpendicular = new Point2d();
-        secondOnStartPerpendicular.x = relativex * costheta - relativey * sintheta + center.x;
-        secondOnStartPerpendicular.y = relativex * sintheta + relativey * costheta + center.y;
-        //and on the perpendicular through the end
-        point = new Point2d(startPoint);
-        center = new Point2d(worldCoord);
-        relativex = point.x - center.x;
-        relativey = point.y - center.y;
-        Point2d secondOnEndPerpendicular = new Point2d();
-        secondOnEndPerpendicular.x = relativex * costheta - relativey * sintheta + center.x;
-        secondOnEndPerpendicular.y = relativex * sintheta + relativey * costheta + center.y;
+        
+        final Vector2d unit = newUnitVector(startPoint, endPoint);
+        final Vector2d perp = new Vector2d(unit.y, -unit.x);
         
         List<IAtomContainer> reactants = new ArrayList<IAtomContainer>(2);
         List<IAtomContainer> products = new ArrayList<IAtomContainer>(2);
         
-        // determine the reactants and products of a reaction
-        for (int i = moleculeSet.getAtomContainerCount() - 1; i >= 0; i--) {
-            int left = 0;
-            int right = 0;
-            for (int k = 0; k < moleculeSet.getAtomContainer(i).getAtomCount(); k++) {
-                if (BondTools.giveAngleBothMethods(startPoint, secondOnStartPerpendicular, moleculeSet.getAtomContainer(i).getAtom(k).getPoint2d(), false) < 0) {
-                    right++;
-                } else {
-                    left++;
-                }
-            }
-            int leftend = 0;
-            int rightend = 0;
-            for (int k = 0; k < moleculeSet.getAtomContainer(i).getAtomCount(); k++) {
-                if (BondTools.giveAngleBothMethods(secondOnEndPerpendicular, worldCoord, moleculeSet.getAtomContainer(i).getAtom(k).getPoint2d(), false) < 0) {
-                    rightend++;
-                } else {
-                    leftend++;
-                }
+        // determine the reactants and products of a reaction we do this by
+        // taking the perpendicular vector and testing where atoms lie with
+        // respect to the start and end of the arrow. The following diagram
+        // may help visualise what the startPos and endPos values are.
+        //
+        // startPos < 0   startPos > 0
+        //                       endPost < 0   endPost > 0
+        //              ^                    ^
+        //              |                    |
+        //              --------------------->
+        //
+        for (IAtomContainer container : moleculeSet.atomContainers()) {
+            
+            // count the number of atoms before and after the arrow for this molecule
+            int beforeStart = 0;
+            int afterEnd = 0;
+                       
+            for (final IAtom atom : container.atoms()){
+                final Point2d p = atom.getPoint2d(); 
+                
+                // sign( (Bx-Ax)*(Y-Ay) - (By-Ay)*(X-Ax) )
+                final double endPos   = (perp.x) * (p.y - endPoint.y) - (perp.y) * (p.x - endPoint.x);
+                final double startPos = (perp.x) * (p.y - startPoint.y) - (perp.y) * (p.x - startPoint.x);
+
+                if (endPos > 0)
+                    afterEnd++;
+                if (startPos < 0)
+                    beforeStart++;
             }
 
-            if (left > right) {
-                //is a reactant
-                reactants.add(moleculeSet.getAtomContainer(i));
+            if (beforeStart > afterEnd) {
+                reactants.add(container);
             }
-            if (rightend > leftend) {
-                //is a product
-                products.add(moleculeSet.getAtomContainer(i));
+            else if (beforeStart < afterEnd) {
+                products.add(container);
             } else {
-                //is a catalyst
                 //TODO catalysts in general
             }
         }
@@ -156,6 +148,13 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
         }
         
         
+    }
+    
+    static Vector2d newUnitVector(Point2d a, Point2d b) {
+        Vector2d v = new Vector2d(b.x - a.x,
+                                  b.y - a.y);
+        v.normalize();
+        return v;
     }
     
     IAtomContainer cloneReactionParticipant(IAtomContainer org) {
