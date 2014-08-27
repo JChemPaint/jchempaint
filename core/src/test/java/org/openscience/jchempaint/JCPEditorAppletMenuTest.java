@@ -38,6 +38,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
+import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 import org.openscience.jchempaint.matchers.DialogTitleComponentMatcher;
@@ -383,7 +384,12 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  if(file.exists())
 				  file.delete();
 			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			  combobox.setSelectedItem(combobox.getItemAt(6));
+              int index = -1;
+              for (int i = 0; i < combobox.getModel().getSize(); i++)
+                  if (((JCPFileFilter)combobox.getModel().getElementAt(i)).getType() == JCPFileFilter.mol)
+                    index = i;
+              Assert.assertFalse(index < 0);
+              combobox.setSelectedIndex(index);
 			  JTextComponentFixture text = dialog.textBox();
 			  text.setText(file.toString());
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
