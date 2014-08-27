@@ -526,7 +526,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             applet.menuItem("options").click();
             DialogFixture dialog = applet.dialog();
             JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
-            tabs.robot.click(tabs.component(), new Point(200,10), MouseButton.LEFT_BUTTON,1);
+            tabs.selectTab(1);
             JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
             for(int i=0;i<combobox.getItemCount();i++){
                 if(((String)combobox.getItemAt(i)).equals("German")){
