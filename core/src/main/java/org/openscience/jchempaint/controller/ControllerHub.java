@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -733,6 +734,26 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+    /**
+     * Class tracks when a bond order is increased and when.
+     */
+    private static final class CycledBond {
+        IBond bond;
+        long time;
+
+        private CycledBond(IBond bond) {
+            this.bond = bond;
+            this.time = System.nanoTime();
+        }
+        
+        boolean expired(IBond bond) {
+            long deltaT = System.nanoTime() - time;
+            return this.bond == null || bond != this.bond || TimeUnit.NANOSECONDS.toMillis(deltaT) > 2500;
+        }
+    }
+    
+    CycledBond cycledBond = new CycledBond(null);
+    
 	// OK
 	public void cycleBondValence(IBond bond) {
 		cycleBondValence(bond, IBond.Order.SINGLE);
@@ -749,13 +770,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			bond.setOrder(order);
 		} else {
 			if (order == IBond.Order.SINGLE) {
-				// cycle the bond order up to maxOrder
-				IBond.Order maxOrder = getController2DModel().getMaxOrder();
-				if (BondManipulator.isLowerOrder(bond.getOrder(), maxOrder)) {
-					BondManipulator.increaseBondOrder(bond);
-				} else {
-					bond.setOrder(IBond.Order.SINGLE);
-				}
+				switch (bond.getOrder()) {
+                    case SINGLE:
+                        bond.setOrder(Order.DOUBLE);
+                        cycledBond = new CycledBond(bond);
+                        break;
+                    case DOUBLE:
+                        if (cycledBond.expired(bond)) {
+                            bond.setOrder(Order.SINGLE);
+                        } else {
+                            bond.setOrder(Order.TRIPLE);
+                        }
+                        break;
+                    case TRIPLE:
+                        bond.setOrder(Order.SINGLE);
+                        break;
+                }
 			} else {
 				if (bond.getOrder() != order) {
 					bond.setOrder(order);
