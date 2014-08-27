@@ -20,58 +20,44 @@
  */
 package org.openscience.jchempaint.renderer.generators;
 
-import java.awt.Color;
-import java.util.List;
-
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.generators.IGenerator;
-import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
+import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 
+import javax.vecmath.Point2d;
+import java.awt.Color;
+import java.util.List;
+
 /**
- * @cdk.module rendercontrol
+ * Generate the outline of the selection tool (e.g. rectangle or lasso).
  */
-public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
+public class SelectionToolGenerator implements IGenerator<IAtomContainer> {
 
-    private boolean autoUpdateSelection = true;
-
-    public SelectAtomGenerator() {}
+    public SelectionToolGenerator() {
+    }
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
-        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
-        Color selectionColor = jcpModel.getSelectedPartColor();
-        IChemObjectSelection selection = jcpModel.getSelection();
-        return generate(selection, selectionColor, jcpModel);
+        return generate(model.getSelection(), ((JChemPaintRendererModel) model).getSelectedPartColor());
     }
-    
-    protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, JChemPaintRendererModel model){
+
+    protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor) {
         ElementGroup selectionElements = new ElementGroup();
 
-        if(selection==null)
+        if (selection == null)
             return selectionElements;
-        if (this.autoUpdateSelection || selection.isFilled()) {
-            double r = model.getSelectionRadius() / model.getScale();
 
-            double d = 4 * r;
-            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
-            if (selectedAC != null) {
-                for (IAtom atom : selectedAC.atoms()) {
-                    Point2d p = atom.getPoint2d();
-                    IRenderingElement element;
-                    element = new OvalElement(
-                          p.x, p.y, d, false, selectionColor);
-                    selectionElements.add(element);
-                }
-            }
+        if (selection instanceof IncrementalSelection) {
+            IncrementalSelection sel = (IncrementalSelection) selection;
+            if (!sel.isFinished())
+                selectionElements.add(sel.generate(selectionColor));
         }
         return selectionElements;
     }

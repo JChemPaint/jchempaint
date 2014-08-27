@@ -92,6 +92,7 @@ import org.openscience.jchempaint.renderer.generators.ReactionBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionPlusGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
+import org.openscience.jchempaint.renderer.generators.SelectionToolGenerator;
 import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
@@ -227,6 +228,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new HighlightBondGenerator());
         generators.add(new SelectAtomGenerator());
         generators.add(new SelectBondGenerator());
+        generators.add(new SelectionToolGenerator());
         generators.add(new MergeAtomsGenerator());
         generators.add(new AtomContainerTitleGenerator());
         generators.add(new TooltipGenerator());
