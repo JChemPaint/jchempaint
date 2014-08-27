@@ -43,16 +43,6 @@ public class RenderingParameters {
     private Color notTypeableUnderlineColor = Color.red;
 
     /**
-     * The gap between double and triple bond lines on the screen
-     */
-    private double bondDistance = 2;
-
-    /**
-     * The width on screen of a bond
-     */
-    private double bondWidth;
-
-    /**
      * The width on screen of an atom-atom mapping line
      */
     private double mappingLineWidth = 1.0;
@@ -62,13 +52,7 @@ public class RenderingParameters {
      * molecule, molecule set, or reaction
      */
     private Color boundsColor = Color.LIGHT_GRAY;
-
-    /**
-     * The color to draw bonds if not other color is given.
-     */
-    private Color defaultBondColor = Color.BLACK;
-
-    
+                            
     private Color externalHighlightColor = Color.RED;
 
     private Color hoverOverColor = Color.BLUE;
@@ -82,11 +66,6 @@ public class RenderingParameters {
     private boolean highlightShapeFilled = false;
 
     private Color mappingColor = Color.gray;
-
-    /**
-     * The proportion of a ring bounds to use to draw the ring.
-     */
-    private double ringProportion = 0.35;
    
     private Color selectedPartColor = new Color(00, 153, 204); //Color.lightGray;
 
@@ -128,11 +107,6 @@ public class RenderingParameters {
 
     private boolean willDrawNumbers;
 
-    /**
-     * The width on screen of the fat end of a wedge bond.
-     */
-    private double wedgeWidth;
-
 
     public boolean isHighlightShapeFilled() {
         return highlightShapeFilled;
@@ -148,23 +122,7 @@ public class RenderingParameters {
 
     public void setShowAromaticityInCDKStyle(boolean shouldShow) {
         this.showAromaticityInCDKStyle = shouldShow;
-    }
-
-    public double getWedgeWidth() {
-        return wedgeWidth;
-    }
-
-    public void setWedgeWidth(double wedgeWidth) {
-        this.wedgeWidth = wedgeWidth;
-    }
-
-    public double getRingProportion() {
-        return ringProportion;
-    }
-
-    public void setRingProportion(double ringProportion) {
-        this.ringProportion = ringProportion;
-    }
+    } 
 
     public double getHighlightDistance() {
         return highlightDistance;
@@ -174,29 +132,13 @@ public class RenderingParameters {
         this.highlightDistance = highlightDistance;
     }
 
-    public Color getDefaultBondColor() {
-        return defaultBondColor;
-    }
-
-    public void setDefaultBondColor(Color defaultBondColor) {
-        this.defaultBondColor = defaultBondColor;
-    }
-
     public AtomShape getSelectionShape() {
         return this.selectionShape;
     }
 
     public void setSelectionShape(AtomShape selectionShape) {
         this.selectionShape = selectionShape;
-    }
-
-    public double getBondDistance() {
-        return bondDistance;
-    }
-
-    public double getBondWidth() {
-        return bondWidth;
-    }
+    }                                                                   
 
     public double getMappingLineWidth() {
         return mappingLineWidth;
@@ -248,14 +190,6 @@ public class RenderingParameters {
 
     public boolean isWillDrawNumbers() {
         return willDrawNumbers;
-    }
-
-    public void setBondDistance(double bondDistance) {
-        this.bondDistance = bondDistance;
-    }
-
-    public void setBondWidth(double bondWidth) {
-        this.bondWidth = bondWidth;
     }
 
     public void setMappingLineWidth(double mappingLineWidth) {

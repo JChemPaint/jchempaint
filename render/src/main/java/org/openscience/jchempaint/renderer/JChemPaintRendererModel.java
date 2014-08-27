@@ -35,6 +35,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.jchempaint.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.color.IAtomColorer;
@@ -107,19 +108,25 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public double getWedgeWidth() {
-        return this.parameters.getWedgeWidth();
+        if (hasParameter(BasicBondGenerator.WedgeWidth.class))
+            return get(BasicBondGenerator.WedgeWidth.class);
+        return new BasicBondGenerator.WedgeWidth().getDefault();
     }
 
     public void setWedgeWidth(double wedgeWidth) {
-        this.parameters.setWedgeWidth(wedgeWidth);
+        if (hasParameter(BasicBondGenerator.WedgeWidth.class))
+            set(BasicBondGenerator.WedgeWidth.class, wedgeWidth);
     }
 
     public double getRingProportion() {
-        return this.parameters.getRingProportion();
+        if (hasParameter(BasicBondGenerator.TowardsRingCenterProportion.class))
+            return get(BasicBondGenerator.TowardsRingCenterProportion.class);
+        return new BasicBondGenerator.TowardsRingCenterProportion().getDefault();
     }
 
     public void setRingProportion(double ringProportion) {
-        this.parameters.setRingProportion(ringProportion);
+        if (hasParameter(BasicBondGenerator.TowardsRingCenterProportion.class))
+            set(BasicBondGenerator.TowardsRingCenterProportion.class, ringProportion);
     }
 
     public BasicAtomGenerator.Shape getCompactShape() {
@@ -263,7 +270,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the distance between two lines in a double or triple bond
      */
     public double getBondDistance() {
-        return this.parameters.getBondDistance();
+        if (hasParameter(BasicBondGenerator.BondDistance.class))
+            return get(BasicBondGenerator.BondDistance.class);
+        return new BasicBondGenerator.BondDistance().getDefault();
     }
 
     /**
@@ -273,8 +282,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the distance between two lines in a double or triple bond
      */
     public void setBondDistance(double bondDistance) {
-        this.parameters.setBondDistance(bondDistance);
-        fireChange();
+        if (hasParameter(BasicBondGenerator.BondDistance.class))
+            set(BasicBondGenerator.BondDistance.class, bondDistance);
     }
 
     /**
@@ -283,7 +292,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the thickness of a bond line
      */
     public double getBondWidth() {
-        return this.parameters.getBondWidth();
+        if (hasParameter(BasicBondGenerator.BondWidth.class))
+            return get(BasicBondGenerator.BondWidth.class);
+        return new BasicBondGenerator.BondWidth().getDefault();
     }
 
     /**
@@ -293,8 +304,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the thickness of a bond line
      */
     public void setBondWidth(double bondWidth) {
-        this.parameters.setBondWidth(bondWidth);
-        fireChange();
+        if (hasParameter(BasicBondGenerator.BondWidth.class))
+            set(BasicBondGenerator.BondWidth.class, bondWidth);
     }
 
     /**
@@ -501,11 +512,14 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public Color getDefaultBondColor() {
-        return this.parameters.getDefaultBondColor();
+        if (hasParameter(BasicBondGenerator.DefaultBondColor.class))
+            return get(BasicBondGenerator.DefaultBondColor.class);
+        return new BasicBondGenerator.DefaultBondColor().getDefault();
     }
 
     public void setDefaultBondColor(Color defaultBondColor) {
-        this.parameters.setDefaultBondColor(defaultBondColor);
+        if (hasParameter(BasicBondGenerator.DefaultBondColor.class))
+            set(BasicBondGenerator.DefaultBondColor.class, defaultBondColor);
     }
 
     /**
