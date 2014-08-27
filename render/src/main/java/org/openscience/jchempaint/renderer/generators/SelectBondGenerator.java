@@ -24,6 +24,7 @@ import java.awt.Color;
 
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -40,10 +41,12 @@ public class SelectBondGenerator extends BasicBondGenerator {
 
     public SelectBondGenerator() {}
 
-    public IRenderingElement generate(IAtomContainer ac, JChemPaintRendererModel model) {
-        Color selectionColor = model.getSelectedPartColor();
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
+        JChemPaintRendererModel jcpModel = (JChemPaintRendererModel) model;
+        Color selectionColor = jcpModel.getSelectedPartColor();
         IChemObjectSelection selection = model.getSelection();
-        return generate(selection, selectionColor, model);
+        return generate(selection, selectionColor, jcpModel);
     }
     
     protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, JChemPaintRendererModel model){
