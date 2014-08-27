@@ -546,7 +546,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
                 }
             }
 
-            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("apply",true)));
+            JButtonFixture okbutton = new JButtonFixture(dialog.robot, (JButton)dialog.robot.finder().find(new NameMatcher("ok",true)));
             okbutton.click();
             
             Assert.assertFalse(dialog.component().isShowing());
