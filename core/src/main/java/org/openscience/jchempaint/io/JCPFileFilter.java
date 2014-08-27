@@ -190,15 +190,15 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		String type = (String) types.get(0);
 		if (type.equals(mol))
 		{
-			return GT.get("MDL MOL file");
+			return GT.get("MDL molfile");
 		}
 		if (type.equals(sdf))
 		{
-			return GT.get("MDL SDF Molfile");
+			return GT.get("MDL SDfile");
 		}
 		if (type.equals(rxn))
 		{
-			return GT.get("MDL RXN Molfile");
+			return GT.get("MDL RXNfile");
 		}
 		if (type.equals(inchi))
 		{
