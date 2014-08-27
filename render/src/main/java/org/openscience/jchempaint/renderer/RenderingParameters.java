@@ -79,14 +79,6 @@ public class RenderingParameters {
      */
     private double selectionRadius = 3;
 
-    /**
-     * Determines whether rings should be drawn with a circle if they are
-     * aromatic.
-     */
-    private boolean showAromaticity = false;
-
-    private boolean showAromaticityInCDKStyle = false;
-
     private boolean showAtomAtomMapping = true;
 
     private boolean showAtomTypeNames = false;
@@ -115,14 +107,6 @@ public class RenderingParameters {
     public void setHighlightShapeFilled(boolean highlightShapeFilled) {
         this.highlightShapeFilled = highlightShapeFilled;
     }
-
-    public boolean isShowAromaticityInCDKStyle() {
-        return this.showAromaticityInCDKStyle;
-    }
-
-    public void setShowAromaticityInCDKStyle(boolean shouldShow) {
-        this.showAromaticityInCDKStyle = shouldShow;
-    } 
 
     public double getHighlightDistance() {
         return highlightDistance;
@@ -158,10 +142,6 @@ public class RenderingParameters {
 
     public Color getSelectedPartColor() {
         return selectedPartColor;
-    }
-   
-    public boolean isShowAromaticity() {
-        return showAromaticity;
     }
 
     public boolean isShowAtomAtomMapping() {
@@ -210,10 +190,6 @@ public class RenderingParameters {
 
     public void setSelectedPartColor(Color selectedPartColor) {
         this.selectedPartColor = selectedPartColor;
-    }
-
-    public void setShowAromaticity(boolean showAromaticity) {
-        this.showAromaticity = showAromaticity;
     }
 
     public void setShowAtomAtomMapping(boolean showAtomAtomMapping) {
