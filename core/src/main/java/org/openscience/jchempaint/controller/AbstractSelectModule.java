@@ -29,6 +29,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
@@ -184,7 +185,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
             IChemObjectSelection sel = null;
             if (singleSelection == null){
             	selection.clear();
-            	sel = null;
+            	sel = AbstractSelection.EMPTY_SELECTION;
             }else if(singleSelection instanceof IAtom){
                 sel = new SingleSelection<IAtom>((IAtom)singleSelection);
             }else if(singleSelection instanceof IBond){
