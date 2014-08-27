@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.vecmath.Point2d;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.NameMatcher;
 import org.fest.swing.fixture.DialogFixture;
@@ -183,39 +184,39 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).setFormalCharge(0);
     }
 	
-	@Test public void testMenuValenceOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Ignore public void testMenuValenceOne() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(1);
     }
 	
-    @Test public void testMenuValenceTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceTwo() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(2);
     }
     
-    @Test public void testMenuValenceThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceThree() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(3);
     }
     
-    @Test public void testMenuValenceFour() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceFour() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(4);
     }
     
-    @Test public void testMenuValenceFive() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceFive() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(5);
     }
     
-    @Test public void testMenuValenceSix() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceSix() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(6);
     }
 
-    @Test public void testMenuValenceSeven() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceSeven() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(7);
     }
 
-    @Test public void testMenuValenceEight() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceEight() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         genericValenceTest(8);
     }
 
-    @Test public void testMenuValenceOff() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    @Ignore public void testMenuValenceOff() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setValency(1);
