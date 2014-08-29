@@ -265,7 +265,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			activeModule.mouseClickedUpRight(modelCoord);
 	}
 
-	public void mouseClickedDown(int screenX, int screenY) {
+	public void mouseClickedDown(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
 		// Relay the mouse event to the general handlers
@@ -288,8 +288,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		}
 	}
+    
+    public void mouseClickedDown(int screenX, int screenY) {
+        mouseClickedDown(screenX, screenY, 0);
+    }
 
-	public void mouseClickedUp(int screenX, int screenY) {
+	public void mouseClickedUp(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
 		// Relay the mouse event to the general handlers
@@ -305,6 +309,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		
 		setCursor(oldMouseCursor);
 	}
+
+    public void mouseClickedUp(int screenX, int screenY) {
+        mouseClickedUp(screenX, screenY, 0);
+    }
 
 	public void mouseDrag(int screenXFrom, int screenYFrom, int screenXTo,
 			int screenYTo) {

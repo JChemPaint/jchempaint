@@ -72,6 +72,14 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 
 	public void mouseClickedUp(Point2d worldCoord) {
 	}
+    
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
+        mouseClickedDown(worldCoord);
+	}
+
+	public void mouseClickedUp(Point2d worldCoord, int modifiers) {
+        mouseClickedUp(worldCoord);
+	}
 
 	public void mouseClickedDownRight(Point2d worldCoord) {
 	}
