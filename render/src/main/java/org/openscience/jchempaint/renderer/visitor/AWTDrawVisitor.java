@@ -30,6 +30,7 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
@@ -172,9 +173,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         }
         
         this.g.setColor(line.color);
-        int[] a = this.transformPoint(line.firstPointX, line.firstPointY);
-        int[] b = this.transformPoint(line.secondPointX, line.secondPointY);
-        this.g.drawLine(a[0], a[1], b[0], b[1]);
+        double[] a = this.transformPointD(line.firstPointX, line.firstPointY);
+        double[] b = this.transformPointD(line.secondPointX, line.secondPointY);
+        this.g.draw(new Line2D.Double(a[0], a[1], b[0], b[1]));
         
         this.g.setStroke(savedStroke);
     }
@@ -642,9 +643,18 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void setRendererModel(JChemPaintRendererModel rendererModel) {
         this.rendererModel = rendererModel;
         if (rendererModel.getUseAntiAliasing()) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
 //            g.setStroke(new BasicStroke((int)rendererModel.getBondWidth()));
         }
+        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                           RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                           RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                           RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+                           RenderingHints.VALUE_STROKE_NORMALIZE);
+        
     }
 }

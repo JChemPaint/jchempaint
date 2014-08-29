@@ -43,6 +43,13 @@ public abstract class AbstractAWTDrawVisitor implements IDrawVisitor {
         this.transform.transform(src, 0, dest, 0, 1);
         return new int[] { (int) dest[0], (int) dest[1] };
     }
+    
+    public double[] transformPointD(double x, double y) {
+        double[] src = new double[] {x, y};
+        double[] dest = new double[2];
+        this.transform.transform(src, 0, dest, 0, 1);
+        return new double[] { dest[0], dest[1] };
+    }
 
     protected Rectangle2D getTextBounds(String text, double x, double y,
             Graphics2D g, double zoomfactor) {
