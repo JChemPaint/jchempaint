@@ -270,13 +270,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseClickedDown(modelCoord);
+			module.mouseClickedDown(modelCoord, modifiers);
 		}
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null) {
-			activeModule.mouseClickedDown(modelCoord);
+			activeModule.mouseClickedDown(modelCoord, modifiers);
 		}
 		
 		if (getCursor() == Cursor.HAND_CURSOR
@@ -298,13 +298,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseClickedUp(modelCoord);
+			module.mouseClickedUp(modelCoord, modifiers);
 		}
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null) {
-			activeModule.mouseClickedUp(modelCoord);
+			activeModule.mouseClickedUp(modelCoord, modifiers);
 		}
 		
 		setCursor(oldMouseCursor);

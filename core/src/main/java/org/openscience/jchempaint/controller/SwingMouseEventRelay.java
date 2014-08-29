@@ -92,7 +92,7 @@ public class SwingMouseEventRelay implements MouseMotionListener,
             relay.mouseClickedDownRight(event.getX(), event.getY());
             isPopupTrigger = true;
         } else {
-            relay.mouseClickedDown(event.getX(), event.getY());
+            relay.mouseClickedDown(event.getX(), event.getY(), event.getModifiersEx());
             isPopupTrigger = false;
         }
         dragFromX = event.getX();
@@ -104,7 +104,7 @@ public class SwingMouseEventRelay implements MouseMotionListener,
             relay.mouseClickedUpRight(event.getX(), event.getY());
             isPopupTrigger=false;
         } else {
-            relay.mouseClickedUp(event.getX(), event.getY());
+            relay.mouseClickedUp(event.getX(), event.getY(), event.getModifiersEx());
         }
     }
 

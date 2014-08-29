@@ -21,12 +21,16 @@
 package org.openscience.jchempaint.controller;
 
 import java.awt.Cursor;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
@@ -90,9 +94,6 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 		return closestBond;
 	}
 
-    public void mouseClickedDown(Point2d p) {
-        startPoint=p;
-    }
         
     
     public void mouseDrag(Point2d from, Point2d to) {
@@ -173,24 +174,64 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         }
     }
 
+    @Override
+    public void mouseClickedDown(Point2d p) {
+        mouseClickedDown(p, 0);
+    }
+
+    @Override
     public void mouseClickedUp(Point2d p) {
+        mouseClickedUp(p, 0);
+    }
+
+    @Override
+    public void mouseClickedDown(Point2d p, int modifiers) {
+        startPoint=p;
+    }
+
+    @Override
+    public void mouseClickedUp(Point2d p, int modifiers) {
         chemModelRelay.select(selection);
         selection.reset();
+
+        boolean shiftPressed = (modifiers & MouseEvent.SHIFT_DOWN_MASK) != 0;
+
         if(p.equals(startPoint)){
+            
             IAtom closestAtom = chemModelRelay.getClosestAtom(p);
             IBond closestBond = chemModelRelay.getClosestBond(p);
             IChemObject singleSelection = getHighlighted( p,
                     closestAtom,
                     closestBond );
+
+            IChemObjectSelection curSel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
             IChemObjectSelection sel = null;
-            if (singleSelection == null){
-            	selection.clear();
-            	sel = AbstractSelection.EMPTY_SELECTION;
-            }else if(singleSelection instanceof IAtom){
-                sel = new SingleSelection<IAtom>((IAtom)singleSelection);
-            }else if(singleSelection instanceof IBond){
-                sel = new SingleSelection<IBond>((IBond)singleSelection);
-            }
+            if (shiftPressed && curSel != null && curSel.isFilled()) {
+                IAtomContainer container = new AtomContainer(curSel.getConnectedAtomContainer());                
+                if (singleSelection instanceof IAtom) {
+                    IAtom atom = (IAtom) singleSelection;
+                    if (!container.contains(atom))  container.addAtom(atom);
+                    else container.removeAtom(atom);
+                } else if (singleSelection instanceof IBond) {
+                    IBond bond = (IBond) singleSelection;
+                    if (!container.contains(bond))  container.addBond(bond);
+                    else container.addBond(bond);
+                }
+                LogicalSelection logSel = new LogicalSelection(LogicalSelection.Type.ALL);
+                logSel.select(container);
+                sel = logSel;
+            } else {
+                if (singleSelection == null) {
+                    selection.clear();
+                    sel = AbstractSelection.EMPTY_SELECTION;
+                }
+                else if (singleSelection instanceof IAtom) {
+                    sel = new SingleSelection<IAtom>((IAtom) singleSelection);
+                }
+                else if (singleSelection instanceof IBond) {
+                    sel = new SingleSelection<IBond>((IBond) singleSelection);
+                }
+            }       
             this.chemModelRelay.select(sel);
         }
 
