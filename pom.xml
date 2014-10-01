@@ -30,6 +30,17 @@
         <module>inchi-jni</module>
         <module>render</module>
     </modules>
+    
+    <distributionManagement>
+        <repository>
+            <id>ebi-repo</id>
+            <url>${cdk.repo.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <url>${cdk.repo.snapshots.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
 
