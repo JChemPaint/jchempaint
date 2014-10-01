@@ -1050,20 +1050,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (IAtom atom : container.atoms()) {
 				if (!(atom instanceof IPseudoAtom)) {
 					try {
-						IAtomType type = matcher.findMatchingAtomType(
-								container, atom);
-						if (type != null
+						IAtomType type = matcher.findMatchingAtomType(container, atom);
+						if (type != null 
+                                && !type.getAtomTypeName().equals("X")
 								&& type.getFormalNeighbourCount() != null) {
-							int connectedAtomCount = container
-									.getConnectedAtomsCount(atom);
-							atomHydrogenCountsMap.put(atom, new Integer[] {
-									type.getFormalNeighbourCount()
-											- connectedAtomCount,
-									atom.getImplicitHydrogenCount() });
-							atom.setImplicitHydrogenCount(type
-									.getFormalNeighbourCount()
-									- connectedAtomCount);
-						}
+
+                            int connectedAtomCount = container
+                                    .getConnectedAtomsCount(atom);
+                            atomHydrogenCountsMap.put(atom, new Integer[]{
+                                    type.getFormalNeighbourCount()
+                                            - connectedAtomCount,
+                                    atom.getImplicitHydrogenCount()});
+                            atom.setImplicitHydrogenCount(type.getFormalNeighbourCount()
+                                                                  - connectedAtomCount);
+                            
+						} else {
+                            atom.setImplicitHydrogenCount(0);
+                        }
 					} catch (CDKException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -2297,7 +2300,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			atom.setImplicitHydrogenCount(0);
 			try {
 				IAtomType type = matcher.findMatchingAtomType(container, atom);
-				if (type != null) {
+				if (type != null && !type.getAtomTypeName().equals("X")) {
 					Integer neighbourCount = type.getFormalNeighbourCount();
 					if (neighbourCount != null) {
 						atom.setImplicitHydrogenCount(neighbourCount
