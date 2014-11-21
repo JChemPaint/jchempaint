@@ -51,108 +51,87 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-annotation</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-atomtype</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-dict</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-formula</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-render</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-renderbasic</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-renderextra</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-ioformats</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-libiocml</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-isomorphism</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-reaction</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-sdg</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-smiles</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-standard</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-valencycheck</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <!-- good to remove extra -->
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-legacy</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
 
         <dependency>

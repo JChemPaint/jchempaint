@@ -15,17 +15,15 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-test</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

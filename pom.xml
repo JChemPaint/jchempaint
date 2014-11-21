@@ -14,6 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cdk.version>1.5.8</cdk.version>
     </properties>
 
     <prerequisites>
@@ -41,6 +42,134 @@
             <url>${cdk.repo.snapshots.url}</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-annotation</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-atomtype</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-core</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-data</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-dict</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-formula</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-render</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-renderbasic</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-renderextra</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-interfaces</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-ioformats</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-io</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-libiocml</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-isomorphism</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-reaction</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-sdg</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-smiles</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-inchi</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-standard</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-valencycheck</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <!-- good to remove extra -->
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-extra</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-legacy</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openscience.cdk</groupId>
+                <artifactId>cdk-test</artifactId>
+                <version>${cdk.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>ebi-repo</id>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
+        </repository>
+    </repositories>
 
 </project>
 

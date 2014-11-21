@@ -12,27 +12,32 @@
     <artifactId>jchempaint-app-osx</artifactId>
     <name>jchempaint-app-osx</name>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.github.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <configuration>
-                    <bundleName>JChemPaint</bundleName>
-                    <mainClass>org.openscience.jchempaint.application.JChemPaint</mainClass>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <profiles>
+        <profile>
+            <id>osx-app</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.github.appbundler</groupId>
+                        <artifactId>appbundle-maven-plugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                        <configuration>
+                            <bundleName>JChemPaint</bundleName>
+                            <mainClass>org.openscience.jchempaint.application.JChemPaint</mainClass>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>bundle</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>

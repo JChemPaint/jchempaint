@@ -20,7 +20,6 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

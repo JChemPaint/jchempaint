@@ -25,27 +25,27 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-sdg</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.5.8-SNAPSHOT</version>
+            
         </dependency>
         <dependency>
             <groupId>org.iupac</groupId>
