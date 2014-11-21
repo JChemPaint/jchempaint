@@ -12,5 +12,10 @@ http://sourceforge.net/tracker/?group_id=20024&atid=120024
 
 Build requirements (need installation)
  - gettext : http://www.gnu.org/software/gettext/
- - app-bundler: https://github.com/federkasten/appbundler-plugin
+ - app-bundler: https://github.com/federkasten/appbundler-plugin (optional)
+
+Build with the following commands
+
+ `mvn install -DskipTests`
+ `mvn install -DskipTests -Posx-app` to build an OS X application bundle
 
