@@ -13,7 +13,6 @@ import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.vecmath.Point2d;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.NameMatcher;
 import org.fest.swing.fixture.DialogFixture;
@@ -23,6 +22,7 @@ import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTabbedPaneFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemObject;
