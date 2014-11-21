@@ -170,7 +170,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
             // never going to happen (should be suppressed)
             logger.error("Could not clone IAtomContainer: ", e.getMessage());
             logger.debug(e);
-            throw new InternalError("Could not clone IAtomContainer: ", e);
+            throw new InternalError("Could not clone IAtomContainer: " + e.getMessage());
         }
     }
 
