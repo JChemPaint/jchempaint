@@ -17,5 +17,6 @@ Build requirements (need installation)
 Build with the following commands
 
  `mvn install -DskipTests`
- `mvn install -DskipTests -Posx-app` to build an OS X application bundle
+ `mvn install -DskipTests -Posx-app` to build an OS X application bundle (.app)
+ `mvn install -DskipTests -Pwindows-app` to build a windows executable (.exe)
 

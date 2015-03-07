@@ -186,19 +186,6 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>ebi-repo</id>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo</url>
-        </repository>
-        <repository>
-            <id>ebi-repo-snapshots</id>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots
-            </url>
-        </repository>
-    </repositories>
-
-
 </project>
 
 
