@@ -15,7 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>1.5.10</cdk.version>
+        <cdk.version>1.5.13-SNAPSHOT</cdk.version>
     </properties>
 
     <prerequisites>
