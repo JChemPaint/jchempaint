@@ -1665,8 +1665,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
 		IRing newRing = createAttachRing(sharedAtoms, size, "C", phantom);
-		ringPlacer.placeFusedRing(newRing, sharedAtoms, sharedAtomsCenter,
-				ringCenterVector, bondLength);
+		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		// add the new atoms and bonds
 		for (IAtom ringAtom : newRing.atoms()) {
 			if (ringAtom != firstAtom && ringAtom != secondAtom) {
@@ -1797,8 +1796,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
 		IRing newRing = createAttachRing(sharedAtoms, 6, "C", phantom);
-		ringPlacer.placeFusedRing(newRing, sharedAtoms, sharedAtomsCenter,
-				ringCenterVector, bondLength);
+		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		if (sourceContainer.getMaximumBondOrder(bond.getAtom(0)) == IBond.Order.SINGLE
 				&& sourceContainer.getMaximumBondOrder(bond.getAtom(1)) == IBond.Order.SINGLE) {
 			newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
