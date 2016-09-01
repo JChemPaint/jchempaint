@@ -18,9 +18,10 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.github.appbundler</groupId>
+                        <!-- https://github.com/federkasten/appbundle-maven-plugin/ -->
+                        <groupId>sh.tak.appbundler</groupId>
                         <artifactId>appbundle-maven-plugin</artifactId>
-                        <version>1.0-SNAPSHOT</version>
+                        <version>1.1.1-SNAPSHOT</version>
                         <configuration>
                             <bundleName>JChemPaint</bundleName>
                             <mainClass>org.openscience.jchempaint.application.JChemPaint</mainClass>
