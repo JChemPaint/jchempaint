@@ -1417,6 +1417,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			// Instead, return empty ring, let user try otherwise..
 			return chemModel.getBuilder().newInstance(IRing.class);
 		} else {
+			ringPlacer.setMolecule(sourceContainer);
 			ringPlacer.placeSpiroRing(newRing, sharedAtoms, sharedAtomsCenter,
 					ringCenterVector, bondLength);
 
@@ -1478,6 +1479,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			 */
 			bondLength = calculateAverageBondLength(chemModel.getMoleculeSet());
 			Point2d ringCenter = new Point2d(atom.getPoint2d());
+			ringPlacer.setMolecule(sourceContainer);
 			ringPlacer.placeRing(newRing, ringCenter, bondLength,
 					RingPlacer.jcpAngles);
 		} else {
@@ -1492,6 +1494,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			if ((ringCenterVector.x == 0 && ringCenterVector.y == 0)) {
 				return chemModel.getBuilder().newInstance(IRing.class);
 			} else {
+				ringPlacer.setMolecule(sourceContainer);
 				ringPlacer.placeSpiroRing(newRing, sharedAtoms,
 						sharedAtomsCenter, ringCenterVector, bondLength);
 			}
@@ -1665,6 +1668,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
 		IRing newRing = createAttachRing(sharedAtoms, size, "C", phantom);
+		ringPlacer.setMolecule(sourceContainer);
 		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		// add the new atoms and bonds
 		for (IAtom ringAtom : newRing.atoms()) {
@@ -1796,6 +1800,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
 		IRing newRing = createAttachRing(sharedAtoms, 6, "C", phantom);
+		ringPlacer.setMolecule(sourceContainer);
 		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		if (sourceContainer.getMaximumBondOrder(bond.getAtom(0)) == IBond.Order.SINGLE
 				&& sourceContainer.getMaximumBondOrder(bond.getAtom(1)) == IBond.Order.SINGLE) {
