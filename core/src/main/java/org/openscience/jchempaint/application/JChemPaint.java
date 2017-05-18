@@ -436,9 +436,6 @@ public class JChemPaint {
                 IAtomContainerSet som = (AtomContainerSet) cor.read(new AtomContainerSet());
                 chemModel = new ChemModel();
                 chemModel.setMoleculeSet(som);
-                if (chemModel == null) {
-                    error = "The object chemModel was empty unexpectedly!";
-                }
             } catch (Exception exception) {
                 error = "Error while reading file: " + exception.getMessage();
                 exception.printStackTrace();
@@ -455,9 +452,6 @@ public class JChemPaint {
                         newSet.addAtomContainer(mol);
                         chemModel = new ChemModel();
                         chemModel.setMoleculeSet(newSet);
-                        if (chemModel == null) {
-                            error = "The object chemModel was empty unexpectedly!";
-                        }
                     } catch (Exception exception) {
                         error = "Error while reading file: " + exception.getMessage();
                         exception.printStackTrace();

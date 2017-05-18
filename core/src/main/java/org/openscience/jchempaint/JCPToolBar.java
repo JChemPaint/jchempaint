@@ -123,7 +123,7 @@ public class JCPToolBar
             return null;
         }
         ImageIcon image = new ImageIcon(url);
-        if (image == null)
+        if (image.getImage() == null)
         {
             logger.error("Cannot find image: ", url);
             return null;
