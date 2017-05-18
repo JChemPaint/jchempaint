@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.generators.IGenerator;
 
 /**
@@ -78,5 +79,5 @@ public interface IRenderer {
      */
 	public void shiftDrawCenter(double screenX, double screenY);
 
-	public List<IGenerator> getGenerators();
+	public List<IGenerator<IAtomContainer>> getGenerators();
 }

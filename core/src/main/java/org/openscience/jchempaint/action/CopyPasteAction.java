@@ -569,7 +569,6 @@ public class CopyPasteAction extends JCPAction{
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);        
     }
 
-    @SuppressWarnings("unchecked")
     private void handleSystemClipboard(Clipboard clipboard) {
         Transferable clipboardContent = clipboard.getContents(this);
         DataFlavor flavors[]=clipboardContent.getTransferDataFlavors();
@@ -579,7 +578,7 @@ public class CopyPasteAction extends JCPAction{
             text+="\n\n Name: "+ flavors[i].getHumanPresentableName();
             text+="\n MIME Type: "+flavors[i].getMimeType();
             text+="\n Class: ";
-            Class cl = flavors[i].getRepresentationClass();
+            Class<?> cl = flavors[i].getRepresentationClass();
             if(cl==null) text+="null";
             else text+=cl.getName();
         }
@@ -618,13 +617,13 @@ public class CopyPasteAction extends JCPAction{
             svg=jcpPanel.getSVGString();
             // CML output
             sw = new StringWriter();
-            Class cmlWriterClass = null;
+            Class<?> cmlWriterClass = null;
             try {
                 cmlWriterClass = this.getClass().getClassLoader().loadClass(
                 "org.openscience.cdk.io.CMLWriter");
                 if (cmlWriterClass != null) {
                     IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
-                    Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
+                    Constructor<? extends IChemObjectWriter> constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
                     cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
                     cow.write(tocopy);
                     cow.close();

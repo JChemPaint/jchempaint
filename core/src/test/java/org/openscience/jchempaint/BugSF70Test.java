@@ -49,7 +49,7 @@ public class BugSF70Test extends AbstractAppletTest {
         File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
         if(file.exists())
             file.delete();
-        JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
         combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
         text.setText(file.toString());

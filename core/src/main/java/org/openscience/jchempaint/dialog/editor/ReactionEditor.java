@@ -46,7 +46,7 @@ public class ReactionEditor extends ChemObjectEditor {
     private final static String TEMPERATURE = "org.openscience.cdk.Reaction.Temperature";
     
     private JTextField idField;
-    private JComboBox directionField;
+    private JComboBox<?> directionField;
     private JTextField solventField;
     private JTextField tempField;
     
@@ -62,7 +62,7 @@ public class ReactionEditor extends ChemObjectEditor {
         String[] options = {
             "", GT.get("Forward"), GT.get("Backward"), GT.get("Bidirectional")
         };
-        directionField = new JComboBox(options);
+        directionField = new JComboBox<Object>(options);
         addField(GT.get("Direction"), directionField, this);
         solventField = new JTextField(40);
         addField(GT.get("Solvent"), solventField, this);

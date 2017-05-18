@@ -112,7 +112,7 @@ public class AtomContainerRenderer implements IRenderer {
      */
     protected final JChemPaintRendererModel rendererModel;
 
-    protected List<IGenerator> generators;
+    protected List<IGenerator<IAtomContainer>> generators;
 
     protected AffineTransform transform;
 
@@ -136,7 +136,7 @@ public class AtomContainerRenderer implements IRenderer {
      *            a class that manages mappings between zoom and font sizes
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public AtomContainerRenderer(List<IGenerator> generators,
+    public AtomContainerRenderer(List<IGenerator<IAtomContainer>> generators,
                                  IFontManager fontManager) {
         rendererModel = new JChemPaintRendererModel();
         this.generators = generators;
@@ -515,7 +515,7 @@ public class AtomContainerRenderer implements IRenderer {
 
 	protected IRenderingElement generateDiagram(IAtomContainer ac) {
 	    ElementGroup diagram = new ElementGroup();
-        for (IGenerator generator : this.generators) {
+        for (IGenerator<IAtomContainer> generator : this.generators) {
         	IRenderingElement element = generator.generate(ac, this.rendererModel);
         	if(!(element instanceof TextGroupElement) || ((TextGroupElement)element).children.size()>0)
         		diagram.add(element);
@@ -525,8 +525,8 @@ public class AtomContainerRenderer implements IRenderer {
         return diagram;
 	}
 
-	public List<IGenerator> getGenerators(){
-	    return new ArrayList<IGenerator>(generators);
+	public List<IGenerator<IAtomContainer>> getGenerators(){
+	    return new ArrayList<IGenerator<IAtomContainer>>(generators);
 	}
 
 	/**

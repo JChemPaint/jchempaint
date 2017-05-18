@@ -78,7 +78,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	/**
 	 *  Description of the Field
 	 */
-	protected List types;
+	protected List<String> types;
 
 	
 	/**
@@ -101,7 +101,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	public JCPFileFilter(String type)
 	{
 		super();
-		types = new ArrayList();
+		types = new ArrayList<>();
 		types.add(type);
 	}
 
@@ -168,7 +168,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 		String extension = getExtension(f);
 		if (extension != null)
 		{
-			if (types.contains(extension) ||  isAlternative (extension, (String)types.get(0))  )
+			if (types.contains(extension) ||  isAlternative (extension, types.get(0))  )
 			{
 				return true;
 			} else
@@ -187,7 +187,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	 */
 	public String getDescription()
 	{
-		String type = (String) types.get(0);
+		String type = types.get(0);
 		if (type.equals(mol))
 		{
 			return GT.get("MDL molfile");
@@ -223,7 +223,7 @@ public class JCPFileFilter extends javax.swing.filechooser.FileFilter implements
 	 */
 	public String getType()
 	{
-		return (String) types.get(0);
+		return types.get(0);
 	}
 
 

@@ -58,8 +58,8 @@ public class JCPTransferHandler extends TransferHandler {
       // Windows
       if (hasFileFlavor(t.getTransferDataFlavors())) {
  
-        final java.util.List files = (java.util.List) t
-            .getTransferData(fileFlavor);
+        @SuppressWarnings("unchecked")
+        final java.util.List<File> files = (java.util.List<File>) t.getTransferData(fileFlavor);
  
         process(files);       
  

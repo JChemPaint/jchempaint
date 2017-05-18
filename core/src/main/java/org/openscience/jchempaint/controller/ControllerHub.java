@@ -2806,7 +2806,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void setRGroupHandler(RGroupHandler rGroupHandler) {
 		ControllerHub.rGroupHandler = rGroupHandler;
 		if (rGroupHandler != null) {
-			for (IGenerator generator : renderer.getGenerators())
+			for (IGenerator<?> generator : renderer.getGenerators())
 				if (generator instanceof RGroupGenerator) {
 					((RGroupGenerator) generator).setRGroupQuery(rGroupHandler
 							.getrGroupQuery());
@@ -2816,7 +2816,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	public void unsetRGroupHandler() {
 		ControllerHub.rGroupHandler = null;
-		for (IGenerator generator : this.getRenderer().getGenerators()) {
+		for (IGenerator<?> generator : this.getRenderer().getGenerators()) {
 			if (generator instanceof RGroupGenerator) {
 				((RGroupGenerator) generator).setRGroupQuery(null);
 			}

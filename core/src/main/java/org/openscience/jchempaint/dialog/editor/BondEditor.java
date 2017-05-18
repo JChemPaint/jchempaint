@@ -46,8 +46,8 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
 public class BondEditor extends ChemObjectEditor {
 
 	private static final long serialVersionUID = -5262566515479485581L;
-	JComboBox orderField;
-	JComboBox stereoField;
+	JComboBox<?> orderField;
+	JComboBox<?> stereoField;
 	IChemModelRelay hub;
 	List<String> blacklist;
 
@@ -94,11 +94,11 @@ public class BondEditor extends ChemObjectEditor {
     }
 
     private void constructPanel() {
-        orderField = new JComboBox(orderString);
+        orderField = new JComboBox<Object>(orderString);
         addField(GT.get("Bond order"), orderField, this);
 
         if (!blacklist.contains("stereochemistry")) {
-            stereoField = new JComboBox(stereoString);
+            stereoField = new JComboBox<Object>(stereoString);
             addField(GT.get("Bond stereo"), stereoField, this);
         }
     }

@@ -123,11 +123,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            a class that manages mappings between zoom and font sizes
      * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?
      */
-    public Renderer(List<IGenerator> generators, IFontManager fontManager) {
+    public Renderer(List<IGenerator<IAtomContainer>> generators, IFontManager fontManager) {
         super(generators, fontManager);
     }
 
-    public Renderer(List<IGenerator> generators,
+    public Renderer(List<IGenerator<IAtomContainer>> generators,
             List<IReactionGenerator> reactionGenerators,
             IFontManager fontManager) {
         this(generators, fontManager);
@@ -936,7 +936,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         ElementGroup diagram = new ElementGroup();
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
-            for (IGenerator generator : this.generators) {
+            for (IGenerator<IAtomContainer> generator : this.generators) {
                 diagram.add(generator.generate(ac, this.rendererModel));
             }
         }
@@ -947,8 +947,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * Return the list of generators for the Renderer
      * @return
      */
-    public List<IGenerator> getGenerators() {
-        return new ArrayList<IGenerator>(generators);
+    public List<IGenerator<IAtomContainer>> getGenerators() {
+        return new ArrayList<IGenerator<IAtomContainer>>(generators);
     }
 
     /**
@@ -963,7 +963,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *
      * @param generator
      */
-    public void addGenerator(IGenerator generator) {
+    public void addGenerator(IGenerator<IAtomContainer> generator) {
         generators.add(generator);
     }
 

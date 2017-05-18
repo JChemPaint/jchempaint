@@ -445,7 +445,7 @@ public class SaveAsAction extends JCPAction
         {
             cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
         }
-        Iterator containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
+        Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(model).iterator();
         while (containers.hasNext()) {
             IAtomContainer ac = (IAtomContainer)containers.next();
             if (ac != null) {

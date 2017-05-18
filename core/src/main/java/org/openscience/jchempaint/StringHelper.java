@@ -47,7 +47,7 @@ public class StringHelper
 	 */
 	public static String[] tokenize(String input)
 	{
-		Vector vector = new Vector();
+		Vector<String> vector = new Vector<>();
 		StringTokenizer tokenizer = new StringTokenizer(input);
 		String seperateWords[];
 		while (tokenizer.hasMoreTokens())
@@ -57,7 +57,7 @@ public class StringHelper
 		seperateWords = new String[vector.size()];
 		for (int i = 0; i < seperateWords.length; i++)
 		{
-			seperateWords[i] = (String) vector.elementAt(i);
+			seperateWords[i] = vector.elementAt(i);
 		}
 		return seperateWords;
 	}

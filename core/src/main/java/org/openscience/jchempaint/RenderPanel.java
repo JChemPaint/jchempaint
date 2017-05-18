@@ -210,9 +210,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return generators;
     }
 
-    private List<IGenerator> makeGenerators(IChemModel chemModel)
+    private List<IGenerator<IAtomContainer>> makeGenerators(IChemModel chemModel)
             throws IOException {
-        List<IGenerator> generators = new ArrayList<IGenerator>();
+        List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
         }

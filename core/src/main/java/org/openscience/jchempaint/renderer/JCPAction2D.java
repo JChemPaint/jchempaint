@@ -73,8 +73,8 @@ public class JCPAction2D extends AbstractAction
 	private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JCPAction2D.class);
 
-	private Hashtable actions = null;
-	private Hashtable popupActions = null;
+	private Hashtable<String, JCPAction2D> actions = null;
+	private Hashtable<String, JCPAction2D> popupActions = null;
 
 	/**
 	 *  Description of the Field
@@ -105,11 +105,11 @@ public class JCPAction2D extends AbstractAction
 		super();
 		if (this.actions == null)
 		{
-			this.actions = new Hashtable();
+			this.actions = new Hashtable<String, JCPAction2D>();
 		}
 		if (this.popupActions == null)
 		{
-			this.popupActions = new Hashtable();
+			this.popupActions = new Hashtable<String, JCPAction2D>();
 		}
 		this.type = "";
 		this.isPopupAction = isPopupAction;

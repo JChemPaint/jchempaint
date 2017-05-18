@@ -384,7 +384,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
 			  if(file.exists())
 				  file.delete();
-			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+			  JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
               int index = -1;
               for (int i = 0; i < combobox.getModel().getSize(); i++)
                   if (((JCPFileFilter)combobox.getModel().getElementAt(i)).getType() == JCPFileFilter.mol)
@@ -527,7 +527,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             DialogFixture dialog = applet.dialog();
             JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
             tabs.selectTab(1);
-            JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
+            JComboBox<?> combobox = (JComboBox<?>)dialog.robot.finder().find(new NameMatcher("language"));
             for(int i=0;i<combobox.getItemCount();i++){
                 if(((String)combobox.getItemAt(i)).equals("German")){
                     combobox.setSelectedIndex(i);

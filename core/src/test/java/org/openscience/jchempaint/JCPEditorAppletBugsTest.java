@@ -397,7 +397,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         if(file.exists())
             file.delete();
         DialogFixture dialog = applet.dialog();
-        JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
         combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
         text.setText(file.toString());
