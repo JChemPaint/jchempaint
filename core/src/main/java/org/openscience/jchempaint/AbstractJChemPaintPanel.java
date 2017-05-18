@@ -675,9 +675,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             String id = renderPanel.getChemModel().getID();
             //String title = ((JFrame) c).getTitle();
             if (isModified)
-                ((JFrame) c).setTitle('*' + id + this.getAppTitle());
+                ((JFrame) c).setTitle('*' + id + AbstractJChemPaintPanel.getAppTitle());
             else
-                ((JFrame) c).setTitle(id + this.getAppTitle());
+                ((JFrame) c).setTitle(id + AbstractJChemPaintPanel.getAppTitle());
         }
     }
 
