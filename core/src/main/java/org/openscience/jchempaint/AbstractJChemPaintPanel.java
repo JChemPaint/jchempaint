@@ -492,8 +492,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             centerContainer.remove(righttoolbar);
         }
 
-        JCPPropertyHandler propertyHandler = JCPPropertyHandler.getInstance(true);
-        
         if (getShowInsertTextField()) {
             if (insertTextPanel == null)
                 insertTextPanel = new InsertTextPanel(this, null);

@@ -244,7 +244,6 @@ public class RGroupHandler  {
 	 * @param chemModel
 	 */
 	private boolean exists(IAtomContainer atcRgrp,IAtomContainerSet moleculeSet) {
-		int i=0;
 		for (IAtomContainer atc : moleculeSet.atomContainers()) {
 			if(atc==atcRgrp)
 				return true;
