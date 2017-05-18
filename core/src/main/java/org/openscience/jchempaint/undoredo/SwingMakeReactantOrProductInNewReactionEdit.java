@@ -32,8 +32,6 @@ import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.jchempaint.controller.IControllerModel;
-import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.jchempaint.controller.undoredo.MakeReactantOrProductInNewReactionEdit;
 
 /**

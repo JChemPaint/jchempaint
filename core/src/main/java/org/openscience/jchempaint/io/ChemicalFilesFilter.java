@@ -4,15 +4,6 @@
 package org.openscience.jchempaint.io;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JFileChooser;
-
-import org.openscience.jchempaint.GT;
 
 /**
  * Displays all CML/SMILES/IUPAC/SDF/MOL/RXN files

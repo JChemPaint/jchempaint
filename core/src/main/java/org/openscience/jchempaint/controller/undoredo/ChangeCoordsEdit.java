@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;

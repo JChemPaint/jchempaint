@@ -33,8 +33,6 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
-import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.io.JCPFileFilter;
 import org.openscience.jchempaint.io.JCPSaveFileFilter;

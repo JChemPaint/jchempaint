@@ -41,12 +41,10 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  *  A property manager for JChemPaint.

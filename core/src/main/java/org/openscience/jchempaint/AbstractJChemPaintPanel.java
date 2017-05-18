@@ -67,7 +67,6 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 

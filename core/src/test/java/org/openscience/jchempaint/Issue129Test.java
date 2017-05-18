@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.renderer.Renderer;
 
 /**

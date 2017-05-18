@@ -63,7 +63,6 @@ import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  * @cdk.bug          1525961

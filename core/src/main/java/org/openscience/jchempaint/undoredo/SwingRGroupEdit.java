@@ -10,7 +10,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.jchempaint.controller.IChemModelRelay;
-import org.openscience.jchempaint.controller.undoredo.LoadNewModelEdit;
 import org.openscience.jchempaint.controller.undoredo.RGroupEdit;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 

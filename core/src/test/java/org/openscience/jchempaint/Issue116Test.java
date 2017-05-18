@@ -1,14 +1,11 @@
 package org.openscience.jchempaint;
 
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.timing.Pause;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.jchempaint.action.JCPAction;
-import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 
 /**
  * @author Ralf Stephan <ralf@ark.in-berlin.de>

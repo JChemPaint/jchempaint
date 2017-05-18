@@ -28,7 +28,6 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
