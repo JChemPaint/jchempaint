@@ -620,17 +620,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		} else {
 			newAtom = chemModel.getBuilder().newInstance(IAtom.class,atomType);
 		}
-		IBond newBond;
-		if (order == IBond.Order.DOUBLE) {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_DOUBLE, stereo);
-		} else if (order == IBond.Order.TRIPLE) {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_TRIPLE, stereo);
-		} else {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_SINGLE, stereo);
-		}
+		IBond newBond = 
+		        chemModel.getBuilder().newInstance(
+		                IBond.class,atom, newAtom, order, stereo);
 
 		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(
 				chemModel, atom);
