@@ -153,13 +153,13 @@
                 <artifactId>gettext-maven-plugin</artifactId>
                 <version>1.2.4</version>
                 <executions>
-                    <execution>
+                    <!-- <execution>
                         <id>convert-po-class</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>dist</goal>
                         </goals>
-                    </execution>
+                    </execution> -->
                 </executions>
                 <configuration>
                     <poDirectory>${basedir}/po</poDirectory>
