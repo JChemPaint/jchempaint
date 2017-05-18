@@ -599,11 +599,21 @@ public class CopyPasteAction extends JCPAction{
             IAtomContainer tocopy= tocopy1.getBuilder().newInstance(IAtomContainer.class,tocopy1);
             // MDL mol output
             StringWriter sw = new StringWriter();
+            MDLV2000Writer mdlWriter = null;
             try {
-				new MDLV2000Writer(sw).writeMolecule(tocopy);
+				mdlWriter = new MDLV2000Writer(sw);
+				mdlWriter.writeMolecule(tocopy);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} finally {
+			    if (mdlWriter != null) {
+			        try {
+			            mdlWriter.close();
+			        } catch (IOException ioe) {
+			            // TODO
+			        }
+			    }
 			}
             this.mol=sw.toString();
             SmilesGenerator sg=SmilesGenerator.isomeric();

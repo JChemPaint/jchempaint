@@ -408,6 +408,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
 			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
+			  reader.close();
 		}
 		//TODO do this for all formats
 		
@@ -421,6 +422,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        FileOutputStream fos = new FileOutputStream(file);
     	        while(ins.available()>0)
     	        	fos.write(ins.read());
+    	        fos.close();
     			applet.menuItem("open").click();
     			DialogFixture dialog = applet.dialog();
     			JTextComponentFixture text = dialog.textBox();
@@ -430,6 +432,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
     	        MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
     	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+    	        reader.close();
     	        Assert.assertNotNull(chemFile);
     	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
     	        JPanelFixture jcppanel=applet.panel("appletframe");
@@ -485,6 +488,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         	        FileOutputStream fos = new FileOutputStream(file);
         	        while(ins.available()>0)
         	        	fos.write(ins.read());
+        	        fos.close();
         			applet.menuItem("open").click();
         			DialogFixture dialog = applet.dialog();
         			//it seems the Combo selection depends on if you run test as single test or all in class, no idea why
@@ -501,6 +505,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         	        SMILESReader reader = new SMILESReader(ins);
         	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
         	        Assert.assertNotNull(chemFile);
+        	        reader.close();
         	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
         	        JPanelFixture jcppanel=applet.panel("appletframe");
         	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;

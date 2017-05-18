@@ -223,6 +223,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                                     InputStream ins = dummy.getClass().getClassLoader().getResourceAsStream(entry.getName());
                                     MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.RELAXED);
                                     IAtomContainer cdkmol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+                                    reader.close();
                                     entriesMol.get(restname.substring(0,restname.indexOf("/"))).add(cdkmol);
                                     entriesMolName.put(cdkmol,entry.getName().substring(0,entry.getName().length()-4));
                                 }else{
@@ -246,6 +247,7 @@ public class TemplateBrowser extends JDialog implements ActionListener {
                                     if(dir.listFiles()[k].getName().indexOf(".mol")>-1){
                                         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(dir.listFiles()[k]), Mode.RELAXED);
                                         IAtomContainer cdkmol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+                                        reader.close();
                                         entriesMol.get(dir.getName()).add(cdkmol);
                                         entriesMolName.put(cdkmol,dir.listFiles()[k].getName().substring(0,dir.listFiles()[k].getName().length()-4));
                                     }else{

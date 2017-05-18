@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
@@ -30,7 +31,7 @@ public class BugSF70Test extends AbstractAppletTest {
 
 	private static int SAVE_AS_MOL_COMBOBOX_POS=6;
 
-	@Test public void testBug70() throws FileNotFoundException, CDKException{
+	@Test public void testBug70() throws CDKException, IOException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").click();
@@ -58,6 +59,7 @@ public class BugSF70Test extends AbstractAppletTest {
         MDLReader reader = new MDLReader(new FileInputStream(file));
         IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
+        reader.close();
 	}
 
 }

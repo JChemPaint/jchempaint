@@ -134,6 +134,7 @@ public class StdInChIGenerator extends StdInChITool {
             
             mdlWriter.write(atc);
             String mdl = writer.toString();
+            mdlWriter.close();
             
             //Write the Molfile String into a file for the generator to work on.  
             FileWriter fstream = new FileWriter(tmpMolFile);

@@ -387,7 +387,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 		restoreModelToEmpty();
 	}
 
-	@Test public void testBug77() throws FileNotFoundException, CDKException{
+	@Test public void testBug77() throws CDKException, IOException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").click();
@@ -425,6 +425,8 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         text.setText(file.toString());
         okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
+        reader.close();
+        
         //not the bug, but still worth testing
         reader = new MDLReader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
@@ -448,6 +450,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         text.setText(file.toString());
         okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
+        reader.close();
         //open mol2
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
         applet.menuItem("open").click();
@@ -462,10 +465,13 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         reader = new MDLReader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(6, mol.getAtomCount());
+        reader.close();
+        
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
         reader = new MDLReader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(7, mol.getAtomCount());
         restoreModelToEmpty();
+        reader.close();
 	}
 }
