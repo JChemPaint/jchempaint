@@ -42,7 +42,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	private String type;
 	private IChemModelRelay chemModelRelay = null;
 	private IAtomContainer containerToAddTo;
-	private IAtomContainer removedAtomContainer;
+	private IAtomContainer removedAtomContainer;   // TODO - remove this, also from constructor. see markr's comments
 
 	/**
 	 * @param chemModel

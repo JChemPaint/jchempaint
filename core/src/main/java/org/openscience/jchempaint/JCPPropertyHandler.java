@@ -72,21 +72,6 @@ public class JCPPropertyHandler
 
 
 	/**
-	 *  Constructor for the JCPPropertyHandler object
-	 */
-	private JCPPropertyHandler()
-	{
-		currentProperties = null;
-		//defaultPropsFile = null;
-		userPropsFile = null;
-		//userAtypeFile = null;
-		uhome = null;
-		ujcpdir = null;
-		guiDefinition = null;
-	}
-
-
-	/**
 	 * Constructor for the JCPPropertyHandler.
 	 * 
 	 * @param useUserSettings Should user setting (in $HOME/.jchempaint/properties) be used or not?

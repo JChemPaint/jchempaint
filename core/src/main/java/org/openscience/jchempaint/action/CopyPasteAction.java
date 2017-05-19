@@ -589,7 +589,6 @@ public class CopyPasteAction extends JCPAction{
         String svg;
         String cml;
 
-        @SuppressWarnings("unchecked")
         public JcpSelection(IAtomContainer tocopy1) {
             IAtomContainer tocopy= tocopy1.getBuilder().newInstance(IAtomContainer.class,tocopy1);
             // MDL mol output

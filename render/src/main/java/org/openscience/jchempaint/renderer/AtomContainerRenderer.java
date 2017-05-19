@@ -385,18 +385,6 @@ public class AtomContainerRenderer implements IRenderer {
 	    diagram.accept(drawVisitor);
 	}
 
-	/**
-	 * Set the transform for a non-fit to screen paint.
-	 *
-	 * @param modelBounds
-     *            the bounding box of the model
-	 */
-	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    this.zoom = this.rendererModel.getZoomFactor();
-        this.fontManager.setFontForZoom(zoom);
-        this.setup();
-	}
-
     /**
      * Sets the transformation needed to draw the model on the canvas when
      * the diagram needs to fit the screen.
@@ -460,36 +448,6 @@ public class AtomContainerRenderer implements IRenderer {
         } else {
             return this.rendererModel.getBondLength() / modelBondLength;
         }
-	}
-
-    /**
-     * Calculate the bounds of the diagram on screen, given the current scale,
-     * zoom, and margin.
-     *
-     * @param modelBounds
-     *            the bounds in model space of the chem object
-     * @return the bounds in screen space of the drawn diagram
-     */
-	private Rectangle convertToDiagramBounds(Rectangle2D modelBounds) {
-	    double cx = modelBounds.getCenterX();
-        double cy = modelBounds.getCenterY();
-        double mw = modelBounds.getWidth();
-        double mh = modelBounds.getHeight();
-
-        Point2d mc = this.toScreenCoordinates(cx, cy);
-
-        // special case for 0 or 1 atoms
-        if (mw == 0 && mh == 0) {
-            return new Rectangle((int)mc.x, (int)mc.y, 0, 0);
-        }
-
-        double margin = this.rendererModel.getMargin();
-        int w = (int) ((scale * zoom * mw) + (2 * margin));
-        int h = (int) ((scale * zoom * mh) + (2 * margin));
-        int x = (int) (mc.x - w / 2);
-        int y = (int) (mc.y - h / 2);
-
-        return new Rectangle(x, y, w, h);
 	}
 
 	private void setup() {

@@ -2578,28 +2578,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		updateView();
 	}
 
-	private void fireEvents(Collection<Changed> events) {
-		for (Changed changed : events) {
-			switch (changed) {
-			case Structure:
-				changeHandler.structureChanged();
-				break;
-			case Properties:
-				changeHandler.structurePropertiesChanged();
-				break;
-			case Coordinates:
-				changeHandler.coordinatesChanged();
-				break;
-			case Selection:
-				changeHandler.selectionChanged();
-				break;
-			case Zoom:
-				changeHandler.zoomChanged();
-				break;
-			}
-		}
-	}
-
 	/**
 	 * Calculates average bond length. Returns a default value when nothing has
 	 * been drawn yet.

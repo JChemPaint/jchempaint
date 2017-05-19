@@ -89,7 +89,6 @@ public class ConvertToPseudoAtomAction extends JCPAction {
 			while (!inputOkay);
         }
 
-		range:
 		while(atomsInRange.hasNext()){
             IAtom atom = atomsInRange.next();
         	if(type.equals("normal")){
