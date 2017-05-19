@@ -21,7 +21,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
@@ -54,7 +54,7 @@ public class BugSF70Test extends AbstractAppletTest {
         text.setText(file.toString());
         JButtonFixture savebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         savebutton.click();
-        MDLReader reader = new MDLReader(new FileInputStream(file));
+        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
         IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
         reader.close();

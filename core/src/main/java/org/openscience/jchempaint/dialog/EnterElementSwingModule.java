@@ -42,6 +42,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -51,7 +52,6 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
-import org.openscience.cdk.ringsearch.SSSRFinder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
@@ -168,7 +168,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                             unplacedNeighbours.addAtom((IAtom)l.get(i));
                     }
                     ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
-                    IRingSet ringset=new SSSRFinder(container).findSSSR();
+                    IRingSet ringset = Cycles.sssr(container).toRingSet();
                     for(IAtomContainer ring:ringset.atomContainers()){
                         ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength() / chemModelRelay.getRenderer().getRenderer2DModel().getScale());
                     }

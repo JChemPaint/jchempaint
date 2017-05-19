@@ -80,7 +80,6 @@ import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
@@ -546,7 +545,6 @@ public class JChemPaint {
         if(generateCoordinates){
             // now generate 2D coordinates
             StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-            sdg.setTemplateHandler(new TemplateHandler(moleculeSet.getBuilder()));
             try {
                 sdg.setMolecule(molecule);
                 sdg.generateCoordinates();

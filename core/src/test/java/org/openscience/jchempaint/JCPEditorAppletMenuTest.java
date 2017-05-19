@@ -31,7 +31,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
@@ -392,9 +391,9 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  text.setText(file.toString());
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 			  okbutton.click();
-			  MDLReader reader = null;
+			  MDLV2000Reader reader = null;
 				try {
-					reader = new MDLReader(new FileInputStream(file));
+					reader = new MDLV2000Reader(new FileInputStream(file));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					Assert.fail("File not found.");

@@ -47,6 +47,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -62,15 +63,13 @@ import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
-import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -264,7 +263,7 @@ public class CopyPasteAction extends JCPAction{
                     while((x=sbis.read())!=-1){
                         sb.append((char)x);
                     }
-                    reader = new MDLReader(new StringReader(sb.toString()));
+                    reader = new MDLV2000Reader(new StringReader(sb.toString()));
 				} catch (UnsupportedFlavorException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -333,17 +332,13 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = sp.parseSmiles(
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
-                        toPaste = new FixBondOrdersTool().kekuliseAromaticRings(toPaste);
+                        Kekulization.kekulize(toPaste);
 
                         IAtomContainerSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
                         for(int i=0;i<mols.getAtomContainerCount();i++)
                         {
                             StructureDiagramGenerator sdg =
                                 new StructureDiagramGenerator((IAtomContainer)mols.getAtomContainer(i));
-
-                            sdg.setTemplateHandler(
-                                    new TemplateHandler(toPaste.getBuilder())
-                            );
                             sdg.generateCoordinates();
                         }
                         //SMILES parser sets valencies, unset

@@ -127,8 +127,10 @@ public class AddRingModule extends ControllerModuleAdapter {
             for(IAtom atom : chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet()){
                 undoredocontainer.removeAtom(atom);
                 for(IAtom innerAtom : chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet()){
-                    if(undoredocontainer.getBondNumber(atom, innerAtom)>-1)
-                        undoredocontainer.removeBond(undoredocontainer.getBondNumber(atom, innerAtom));
+                    IBond bond = undoredocontainer.getBond(atom, innerAtom);
+                    int bondIndex = undoredocontainer.indexOf(bond); 
+                    if (bondIndex > -1)
+                        undoredocontainer.removeBond(bondIndex);
                 }
             }
             if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){

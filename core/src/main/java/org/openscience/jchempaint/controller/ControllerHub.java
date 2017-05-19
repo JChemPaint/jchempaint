@@ -64,7 +64,6 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.SaturationChecker;
@@ -1286,7 +1285,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		if (diagramGenerator == null) {
 			diagramGenerator = new StructureDiagramGenerator();
-			diagramGenerator.setTemplateHandler(new TemplateHandler(builder));
 		}
 		if (container instanceof IAtomContainer) {
 			diagramGenerator.setMolecule((IAtomContainer) container);
@@ -1295,7 +1293,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		try {
-			diagramGenerator.generateExperimentalCoordinates();
+			diagramGenerator.generateCoordinates();
 			IAtomContainer cleanedMol = diagramGenerator.getMolecule();
 			// now copy/paste coordinates
 			for (int i = 0; i < cleanedMol.getAtomCount(); i++) {

@@ -20,7 +20,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
@@ -399,7 +399,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
         //not the bug, but still worth testing
-        MDLReader reader = new MDLReader(new FileInputStream(file));
+        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
         IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
@@ -423,7 +423,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         reader.close();
         
         //not the bug, but still worth testing
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
@@ -457,13 +457,13 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         //save should write to mol2, ie mol1=6 atoms, mol2=7atoms
         applet.menuItem("save").click();
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(6, mol.getAtomCount());
         reader.close();
         
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(7, mol.getAtomCount());
         restoreModelToEmpty();
