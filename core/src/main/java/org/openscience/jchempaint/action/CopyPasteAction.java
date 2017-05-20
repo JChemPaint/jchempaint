@@ -47,7 +47,6 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.aromaticity.Kekulization;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -332,7 +331,6 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = sp.parseSmiles(
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
-                        Kekulization.kekulize(toPaste);
 
                         IAtomContainerSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
                         for(int i=0;i<mols.getAtomContainerCount();i++)
