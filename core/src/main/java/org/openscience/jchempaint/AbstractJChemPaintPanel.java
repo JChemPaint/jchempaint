@@ -67,7 +67,6 @@ import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.SaveAction;
 import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
@@ -493,8 +492,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             centerContainer.remove(righttoolbar);
         }
 
-        JCPPropertyHandler propertyHandler = JCPPropertyHandler.getInstance(true);
-        
         if (getShowInsertTextField()) {
             if (insertTextPanel == null)
                 insertTextPanel = new InsertTextPanel(this, null);
@@ -678,9 +675,9 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             String id = renderPanel.getChemModel().getID();
             //String title = ((JFrame) c).getTitle();
             if (isModified)
-                ((JFrame) c).setTitle('*' + id + this.getAppTitle());
+                ((JFrame) c).setTitle('*' + id + AbstractJChemPaintPanel.getAppTitle());
             else
-                ((JFrame) c).setTitle(id + this.getAppTitle());
+                ((JFrame) c).setTitle(id + AbstractJChemPaintPanel.getAppTitle());
         }
     }
 

@@ -1,16 +1,16 @@
 package org.openscience.jchempaint.inchi;
 
+import javax.vecmath.Point2d;
+import javax.vecmath.Point3d;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-
-import javax.vecmath.Point2d;
-import javax.vecmath.Point3d;
+import org.openscience.cdk.interfaces.IBond;
 
 public class StdInChIGeneratorTest {
     
@@ -103,7 +103,7 @@ public class StdInChIGeneratorTest {
         a2.setImplicitHydrogenCount(3);
         ac.addAtom(a1);
         ac.addAtom(a2);
-        ac.addBond(new Bond(a1, a2, CDKConstants.BONDORDER_SINGLE));
+        ac.addBond(new Bond(a1, a2, IBond.Order.SINGLE));
         InChI inchi = gen.generateInchi(ac);
         Assert.assertEquals(inchi.getInChI(), "InChI=1S/C2H6/c1-2/h1-2H3");
         Assert.assertEquals("InChIKey=OTMSDBZUPAUEDD-UHFFFAOYSA-N", inchi.getKey());
@@ -122,7 +122,7 @@ public class StdInChIGeneratorTest {
         a2.setImplicitHydrogenCount(2);
         ac.addAtom(a1);
         ac.addAtom(a2);
-        ac.addBond(new Bond(a1, a2, CDKConstants.BONDORDER_DOUBLE));
+        ac.addBond(new Bond(a1, a2, IBond.Order.DOUBLE));
         Assert.assertEquals(gen.generateInchi(ac).getInChI(), "InChI=1S/C2H4/c1-2/h1-2H2");
     }
     
@@ -139,7 +139,7 @@ public class StdInChIGeneratorTest {
         a2.setImplicitHydrogenCount(1);
         ac.addAtom(a1);
         ac.addAtom(a2);
-        ac.addBond(new Bond(a1, a2, CDKConstants.BONDORDER_TRIPLE));
+        ac.addBond(new Bond(a1, a2, IBond.Order.TRIPLE));
         Assert.assertEquals(gen.generateInchi(ac).getInChI(), "InChI=1S/C2H2/c1-2/h1-2H");
     }
     
@@ -163,9 +163,9 @@ public class StdInChIGeneratorTest {
         acE.addAtom(a3E);
         acE.addAtom(a4E);
 
-        acE.addBond(new Bond(a1E, a2E, CDKConstants.BONDORDER_DOUBLE));
-        acE.addBond(new Bond(a1E, a3E, CDKConstants.BONDORDER_SINGLE));
-        acE.addBond(new Bond(a2E, a4E, CDKConstants.BONDORDER_SINGLE));
+        acE.addBond(new Bond(a1E, a2E, IBond.Order.DOUBLE));
+        acE.addBond(new Bond(a1E, a3E, IBond.Order.SINGLE));
+        acE.addBond(new Bond(a2E, a4E, IBond.Order.SINGLE));
         
         Assert.assertEquals(gen.generateInchi(acE).getInChI(), "InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1+");
         
@@ -182,9 +182,9 @@ public class StdInChIGeneratorTest {
         acZ.addAtom(a3Z);
         acZ.addAtom(a4Z);
 
-        acZ.addBond(new Bond(a1Z, a2Z, CDKConstants.BONDORDER_DOUBLE));
-        acZ.addBond(new Bond(a1Z, a3Z, CDKConstants.BONDORDER_SINGLE));
-        acZ.addBond(new Bond(a2Z, a4Z, CDKConstants.BONDORDER_SINGLE));
+        acZ.addBond(new Bond(a1Z, a2Z, IBond.Order.DOUBLE));
+        acZ.addBond(new Bond(a1Z, a3Z, IBond.Order.SINGLE));
+        acZ.addBond(new Bond(a2Z, a4Z, IBond.Order.SINGLE));
         
         Assert.assertEquals(gen.generateInchi(acZ).getInChI(), "InChI=1S/C2H2Cl2/c3-1-2-4/h1-2H/b2-1-");
 
@@ -218,11 +218,11 @@ public class StdInChIGeneratorTest {
         acL.addAtom(a5L);
         acL.addAtom(a6L);
         
-        acL.addBond(new Bond(a1L, a2L, CDKConstants.BONDORDER_SINGLE));
-        acL.addBond(new Bond(a1L, a3L, CDKConstants.BONDORDER_SINGLE));
-        acL.addBond(new Bond(a1L, a4L, CDKConstants.BONDORDER_SINGLE));
-        acL.addBond(new Bond(a2L, a5L, CDKConstants.BONDORDER_SINGLE));
-        acL.addBond(new Bond(a2L, a6L, CDKConstants.BONDORDER_DOUBLE));
+        acL.addBond(new Bond(a1L, a2L, IBond.Order.SINGLE));
+        acL.addBond(new Bond(a1L, a3L, IBond.Order.SINGLE));
+        acL.addBond(new Bond(a1L, a4L, IBond.Order.SINGLE));
+        acL.addBond(new Bond(a2L, a5L, IBond.Order.SINGLE));
+        acL.addBond(new Bond(a2L, a6L, IBond.Order.DOUBLE));
         
         Assert.assertEquals(gen.generateInchi(acL).getInChI(), "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");
         
@@ -246,11 +246,11 @@ public class StdInChIGeneratorTest {
         acD.addAtom(a5D);
         acD.addAtom(a6D);
         
-        acD.addBond(new Bond(a1D, a2D, CDKConstants.BONDORDER_SINGLE));
-        acD.addBond(new Bond(a1D, a3D, CDKConstants.BONDORDER_SINGLE));
-        acD.addBond(new Bond(a1D, a4D, CDKConstants.BONDORDER_SINGLE));
-        acD.addBond(new Bond(a2D, a5D, CDKConstants.BONDORDER_SINGLE));
-        acD.addBond(new Bond(a2D, a6D, CDKConstants.BONDORDER_DOUBLE));
+        acD.addBond(new Bond(a1D, a2D, IBond.Order.SINGLE));
+        acD.addBond(new Bond(a1D, a3D, IBond.Order.SINGLE));
+        acD.addBond(new Bond(a1D, a4D, IBond.Order.SINGLE));
+        acD.addBond(new Bond(a2D, a5D, IBond.Order.SINGLE));
+        acD.addBond(new Bond(a2D, a6D, IBond.Order.DOUBLE));
         
                                                              //"InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m1/s1");
         Assert.assertEquals(gen.generateInchi(acL).getInChI(), "InChI=1S/C3H7NO2/c1-2(4)3(5)6/h2H,4H2,1H3,(H,5,6)/t2-/m0/s1");

@@ -21,7 +21,6 @@
 package org.openscience.jchempaint.controller;
 
 import java.awt.Cursor;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;

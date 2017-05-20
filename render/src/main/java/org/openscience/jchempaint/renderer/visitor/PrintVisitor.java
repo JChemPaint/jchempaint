@@ -45,7 +45,7 @@ public class PrintVisitor implements IRenderingVisitor {
 
 	public void visitElementGroup(ElementGroup elementGroup) {
 		this.depth += 1;
-		System.out.println("Group");
+		System.out.println("Group at depth " + depth);
 		elementGroup.visitChildren(this);
 		this.depth -= 1;
 	}

@@ -78,7 +78,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@param  someClass  The new popupMenu value
 	 *@param  jchemPaintPopupMenu        The new popupMenu value
 	 */
-	public void setPopupMenu(Class someClass, JChemPaintPopupMenu jchemPaintPopupMenu) {
+	public void setPopupMenu(Class<?> someClass, JChemPaintPopupMenu jchemPaintPopupMenu) {
 		SwingPopupModule.popupMenus.put(someClass.getName(), jchemPaintPopupMenu);
 	}
 
@@ -89,7 +89,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@param  someClass  Description of the Parameter
 	 *@return             The popupMenu value
 	 */
-	public JChemPaintPopupMenu getPopupMenu(Class classSearched,IChemObject objectInRange) {
+	public JChemPaintPopupMenu getPopupMenu(Class<?> classSearched,IChemObject objectInRange) {
 		logger.debug("Searching popup for: ", classSearched.getName());
         while (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());

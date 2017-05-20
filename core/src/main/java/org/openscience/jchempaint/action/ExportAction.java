@@ -122,6 +122,7 @@ public class ExportAction extends SaveAsAction {
                     	FileWriter writer = new FileWriter(outFile);
                     	writer.append(svg);
                     	writer.flush();
+                    	writer.close();
                         JOptionPane.showMessageDialog(jcpPanel,
                                 GT.get("Exported image to {0}", outFile.getName()));
                         return;

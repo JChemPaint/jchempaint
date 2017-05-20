@@ -165,6 +165,7 @@ public class StdInChIParser extends StdInChITool{
             InputStream ins = new FileInputStream(tmpMolFile);
             MDLV2000Reader reader = new MDLV2000Reader(ins);
             ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+            reader.close();
             atc= ChemFileManipulator.getAllAtomContainers(chemFile).get(0);
             atc.setProperty(CDKConstants.TITLE, null);
 

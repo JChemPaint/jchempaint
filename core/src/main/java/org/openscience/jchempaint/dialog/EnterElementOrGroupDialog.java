@@ -53,7 +53,7 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
 	
     private static EnterElementOrGroupDialog dialog;
     private static String value = "";
-    private JComboBox list;
+    private JComboBox<?> list;
 
     /**
      * Set up and show the dialog.  The first Component argument
@@ -103,7 +103,7 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
         getRootPane().setDefaultButton(setButton);
 
         //main part of the dialog
-        list = new JComboBox(data);
+        list = new JComboBox<Object>(data);
         list.setEditable(true);
         JPanel listPane = new JPanel();
         listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));

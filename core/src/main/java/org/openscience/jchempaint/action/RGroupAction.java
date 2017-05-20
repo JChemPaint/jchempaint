@@ -505,8 +505,9 @@ public class RGroupAction extends JCPAction {
 		result.add(atom);
 		for (IBond bond : atc.bonds()) {
 			if (bond.contains(atom)) {
-				if (!result.contains(bond.getConnectedAtom(atom))) {
-					findConnectedAtoms(bond.getConnectedAtom(atom), atc, result);
+			    IAtom other = bond.getOther(atom);
+				if (!result.contains(other)) {
+					findConnectedAtoms(other, atc, result);
 				}
 			}
 		}

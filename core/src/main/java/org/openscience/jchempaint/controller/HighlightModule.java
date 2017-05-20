@@ -73,7 +73,7 @@ public class HighlightModule extends ControllerModuleAdapter {
             model.setHighlightedBond(null);
             try {
                 if(chemModelRelay.getIChemModel().getMoleculeSet()!=null && chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount()>0)
-                    highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).getAtomNumber(atom));
+                    highlightPeakInTable(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).indexOf(atom));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -87,7 +87,7 @@ public class HighlightModule extends ControllerModuleAdapter {
         	return;
         try{
 	        Method highlightMethod = getSpectrumApplet().getClass().getMethod("highlightPeakInSpectrum", new Class[] { Integer.TYPE });
-    	        highlightMethod.invoke(getSpectrumApplet(), new Object[] { new Integer(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).getAtomNumber(atom)) });
+    	        highlightMethod.invoke(getSpectrumApplet(), new Object[] { new Integer(chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0).indexOf(atom)) });
         	    spectrumApplet.repaint();
         }catch(Exception ex){
             ex.printStackTrace();
@@ -157,13 +157,13 @@ public class HighlightModule extends ControllerModuleAdapter {
     public void highlightPeakInTable(int atomNumber) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException{
       if(jcpApplet==null || jcpApplet.getParameter("highlightTable")==null)
           return;
-      Class[] paratypes={new Applet().getClass()};
-      Class jso = Class.forName("netscape.javascript.JSObject");
+      Class<?>[] paratypes={new Applet().getClass()};
+      Class<?> jso = Class.forName("netscape.javascript.JSObject");
       Method getWindowMethod=jso.getMethod("getWindow", paratypes);
       Object win=getWindowMethod.invoke(jso, new Object[] {jcpApplet});
-      Class[] paratypes2={new String("").getClass()};
+      Class<?>[] paratypes2={new String("").getClass()};
       Method evalMethod=jso.getMethod("eval", paratypes2);
-      Class[] paratypes3={new String("").getClass(),new Object().getClass()};
+      Class<?>[] paratypes3={new String("").getClass(),new Object().getClass()};
       Method setMemberMethod=jso.getMethod("setMember", paratypes3);
 
       if(oldnumber!=-1){

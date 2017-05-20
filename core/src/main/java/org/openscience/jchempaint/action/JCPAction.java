@@ -41,7 +41,6 @@ import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.JChemPaintMenuBar;
-import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.JChemPaintPopupMenu;
 
 /**

@@ -65,7 +65,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = -5329451371043240706L;
     private AbstractJChemPaintPanel jChemPaintPanel;
-    private JComboBox               textCombo;
+    private JComboBox<String>               textCombo;
     private JTextComponent          editor;
     private JFrame  closeafter = null;
     private JButton button     = new JButton(GT.get("Insert"));
@@ -78,7 +78,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         List<String> oldText = new ArrayList<String>();
         oldText.add("");
 
-        textCombo = new JComboBox(oldText.toArray());
+        textCombo = new JComboBox<String>(oldText.toArray(new String[]{}));
         textCombo.setEditable(true);
         textCombo.setToolTipText(GT.get("Enter a CAS, SMILES or InChI string"));
 

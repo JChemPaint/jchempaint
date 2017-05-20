@@ -27,10 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  * Undo/Redo Edit class for the ChangeCharge actions in AbstarctController2D,

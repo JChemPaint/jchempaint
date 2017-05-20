@@ -2,15 +2,7 @@
  */
 package org.openscience.jchempaint;
 
-import java.awt.Point;
-import javax.vecmath.Point2d;
-import org.fest.swing.core.ComponentDragAndDrop;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.matcher.JTextComponentMatcher;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtom;

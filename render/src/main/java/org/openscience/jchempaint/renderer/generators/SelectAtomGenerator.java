@@ -35,7 +35,6 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 
 /**
  * @cdk.module rendercontrol

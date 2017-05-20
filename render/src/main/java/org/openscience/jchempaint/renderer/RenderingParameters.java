@@ -22,9 +22,6 @@
 package org.openscience.jchempaint.renderer;
 
 import java.awt.Color;
-//import java.util.Properties;
-
-import org.openscience.cdk.renderer.font.IFontManager;
 
 /**
  * @cdk.module render

@@ -418,12 +418,21 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         org.openscience.cdk.interfaces.IChemModel som = theJcpp.getChemModel();
 
     	if (theJcpp.get2DHub().getRGroupHandler()!=null) {
-    		RGroupQueryWriter rgw = new RGroupQueryWriter (sw);
-    		rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
+    		try (RGroupQueryWriter rgw = new RGroupQueryWriter(sw)) {
+    		    rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
+                rgw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     	}
     	else {
             MDLV2000Writer mdlwriter = new MDLV2000Writer(sw);
             mdlwriter.write(som);
+            try {
+                mdlwriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     	}
         return (sw.toString());
     }
@@ -481,6 +490,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 .toString()));
         IAtomContainer cdkmol = (IAtomContainer) reader.read(DefaultChemObjectBuilder
                 .getInstance().newInstance(IAtomContainer.class));
+        reader.close();
         JChemPaint.generateModel(theJcpp, cdkmol, false,false);
         theJcpp.get2DHub().updateView();
         // the newly opened file should nicely fit the screen

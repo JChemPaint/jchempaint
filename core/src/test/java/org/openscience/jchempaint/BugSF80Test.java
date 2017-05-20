@@ -5,21 +5,14 @@ import java.io.IOException;
 
 import javax.vecmath.Point2d;
 
-import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.matcher.JTextComponentMatcher;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
-import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class BugSF80Test extends AbstractAppletTest {
 

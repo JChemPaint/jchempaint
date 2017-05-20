@@ -3,29 +3,24 @@ package org.openscience.jchempaint;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JComboBox;
-import javax.swing.text.JTextComponent;
 import javax.vecmath.Point2d;
 
 import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.matcher.JTextComponentMatcher;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
@@ -387,7 +382,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
 		restoreModelToEmpty();
 	}
 
-	@Test public void testBug77() throws FileNotFoundException, CDKException{
+	@Test public void testBug77() throws CDKException, IOException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").click();
@@ -397,14 +392,14 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         if(file.exists())
             file.delete();
         DialogFixture dialog = applet.dialog();
-        JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+        JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
         combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
         JTextComponentFixture text = dialog.textBox();
         text.setText(file.toString());
         JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
         //not the bug, but still worth testing
-        MDLReader reader = new MDLReader(new FileInputStream(file));
+        MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
         IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
@@ -425,8 +420,10 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         text.setText(file.toString());
         okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
+        reader.close();
+        
         //not the bug, but still worth testing
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
         Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
@@ -448,6 +445,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         text.setText(file.toString());
         okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
         okbutton.click();
+        reader.close();
         //open mol2
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
         applet.menuItem("open").click();
@@ -459,13 +457,16 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         //save should write to mol2, ie mol1=6 atoms, mol2=7atoms
         applet.menuItem("save").click();
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test1.mol");
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(6, mol.getAtomCount());
+        reader.close();
+        
         file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test2.mol");
-        reader = new MDLReader(new FileInputStream(file));
+        reader = new MDLV2000Reader(new FileInputStream(file));
         mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         Assert.assertEquals(7, mol.getAtomCount());
         restoreModelToEmpty();
+        reader.close();
 	}
 }

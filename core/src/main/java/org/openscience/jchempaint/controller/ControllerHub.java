@@ -48,27 +48,27 @@ import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Order;
+import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.ISingleElectron;
-import org.openscience.cdk.interfaces.IBond.Order;
-import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
+import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
-import org.openscience.cdk.tools.manipulator.BondManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
@@ -81,9 +81,7 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
@@ -621,17 +619,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		} else {
 			newAtom = chemModel.getBuilder().newInstance(IAtom.class,atomType);
 		}
-		IBond newBond;
-		if (order == IBond.Order.DOUBLE) {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_DOUBLE, stereo);
-		} else if (order == IBond.Order.TRIPLE) {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_TRIPLE, stereo);
-		} else {
-			newBond = chemModel.getBuilder().newInstance(IBond.class,atom, newAtom,
-					CDKConstants.BONDORDER_SINGLE, stereo);
-		}
+		IBond newBond = 
+		        chemModel.getBuilder().newInstance(
+		                IBond.class,atom, newAtom, order, stereo);
 
 		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(
 				chemModel, atom);
@@ -1295,7 +1285,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		if (diagramGenerator == null) {
 			diagramGenerator = new StructureDiagramGenerator();
-			diagramGenerator.setTemplateHandler(new TemplateHandler(builder));
 		}
 		if (container instanceof IAtomContainer) {
 			diagramGenerator.setMolecule((IAtomContainer) container);
@@ -1304,7 +1293,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		try {
-			diagramGenerator.generateExperimentalCoordinates();
+			diagramGenerator.generateCoordinates();
 			IAtomContainer cleanedMol = diagramGenerator.getMolecule();
 			// now copy/paste coordinates
 			for (int i = 0; i < cleanedMol.getAtomCount(); i++) {
@@ -2105,9 +2094,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					.getSelection());
 		if (changeHandler != null)
 			changeHandler.structureChanged();
-
-		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
-
 	}
 
 	public void fireZoomEvent() {
@@ -2592,28 +2578,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		updateView();
 	}
 
-	private void fireEvents(Collection<Changed> events) {
-		for (Changed changed : events) {
-			switch (changed) {
-			case Structure:
-				changeHandler.structureChanged();
-				break;
-			case Properties:
-				changeHandler.structurePropertiesChanged();
-				break;
-			case Coordinates:
-				changeHandler.coordinatesChanged();
-				break;
-			case Selection:
-				changeHandler.selectionChanged();
-				break;
-			case Zoom:
-				changeHandler.zoomChanged();
-				break;
-			}
-		}
-	}
-
 	/**
 	 * Calculates average bond length. Returns a default value when nothing has
 	 * been drawn yet.
@@ -2806,7 +2770,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void setRGroupHandler(RGroupHandler rGroupHandler) {
 		ControllerHub.rGroupHandler = rGroupHandler;
 		if (rGroupHandler != null) {
-			for (IGenerator generator : renderer.getGenerators())
+			for (IGenerator<?> generator : renderer.getGenerators())
 				if (generator instanceof RGroupGenerator) {
 					((RGroupGenerator) generator).setRGroupQuery(rGroupHandler
 							.getrGroupQuery());
@@ -2816,7 +2780,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	public void unsetRGroupHandler() {
 		ControllerHub.rGroupHandler = null;
-		for (IGenerator generator : this.getRenderer().getGenerators()) {
+		for (IGenerator<?> generator : this.getRenderer().getGenerators()) {
 			if (generator instanceof RGroupGenerator) {
 				((RGroupGenerator) generator).setRGroupQuery(null);
 			}

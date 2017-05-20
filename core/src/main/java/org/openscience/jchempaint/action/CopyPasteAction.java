@@ -62,15 +62,13 @@ import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
-import org.openscience.cdk.io.MDLReader;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.layout.TemplateHandler;
-import org.openscience.cdk.smiles.FixBondOrdersTool;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -264,7 +262,7 @@ public class CopyPasteAction extends JCPAction{
                     while((x=sbis.read())!=-1){
                         sb.append((char)x);
                     }
-                    reader = new MDLReader(new StringReader(sb.toString()));
+                    reader = new MDLV2000Reader(new StringReader(sb.toString()));
 				} catch (UnsupportedFlavorException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -333,17 +331,12 @@ public class CopyPasteAction extends JCPAction{
                         toPaste = sp.parseSmiles(
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
-                        toPaste = new FixBondOrdersTool().kekuliseAromaticRings(toPaste);
 
                         IAtomContainerSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
                         for(int i=0;i<mols.getAtomContainerCount();i++)
                         {
                             StructureDiagramGenerator sdg =
                                 new StructureDiagramGenerator((IAtomContainer)mols.getAtomContainer(i));
-
-                            sdg.setTemplateHandler(
-                                    new TemplateHandler(toPaste.getBuilder())
-                            );
                             sdg.generateCoordinates();
                         }
                         //SMILES parser sets valencies, unset
@@ -569,7 +562,6 @@ public class CopyPasteAction extends JCPAction{
         jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);        
     }
 
-    @SuppressWarnings("unchecked")
     private void handleSystemClipboard(Clipboard clipboard) {
         Transferable clipboardContent = clipboard.getContents(this);
         DataFlavor flavors[]=clipboardContent.getTransferDataFlavors();
@@ -579,7 +571,7 @@ public class CopyPasteAction extends JCPAction{
             text+="\n\n Name: "+ flavors[i].getHumanPresentableName();
             text+="\n MIME Type: "+flavors[i].getMimeType();
             text+="\n Class: ";
-            Class cl = flavors[i].getRepresentationClass();
+            Class<?> cl = flavors[i].getRepresentationClass();
             if(cl==null) text+="null";
             else text+=cl.getName();
         }
@@ -595,16 +587,15 @@ public class CopyPasteAction extends JCPAction{
         String svg;
         String cml;
 
-        @SuppressWarnings("unchecked")
         public JcpSelection(IAtomContainer tocopy1) {
             IAtomContainer tocopy= tocopy1.getBuilder().newInstance(IAtomContainer.class,tocopy1);
             // MDL mol output
             StringWriter sw = new StringWriter();
-            try {
-				new MDLV2000Writer(sw).writeMolecule(tocopy);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+            try (MDLV2000Writer mdlWriter = new MDLV2000Writer(sw)) {
+				mdlWriter.writeMolecule(tocopy);
+			} catch (Exception ex) {
+			    logger.error("Could not write molecule to string: ", ex.getMessage());
+                logger.debug(ex);
 			}
             this.mol=sw.toString();
             SmilesGenerator sg=SmilesGenerator.isomeric();
@@ -618,13 +609,13 @@ public class CopyPasteAction extends JCPAction{
             svg=jcpPanel.getSVGString();
             // CML output
             sw = new StringWriter();
-            Class cmlWriterClass = null;
+            Class<?> cmlWriterClass = null;
             try {
                 cmlWriterClass = this.getClass().getClassLoader().loadClass(
                 "org.openscience.cdk.io.CMLWriter");
                 if (cmlWriterClass != null) {
                     IChemObjectWriter cow = (IChemObjectWriter)cmlWriterClass.newInstance();
-                    Constructor constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
+                    Constructor<? extends IChemObjectWriter> constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
                     cow = (IChemObjectWriter)constructor.newInstance(new Object[]{sw});
                     cow.write(tocopy);
                     cow.close();

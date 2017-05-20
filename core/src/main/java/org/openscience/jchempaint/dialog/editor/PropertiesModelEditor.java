@@ -63,7 +63,6 @@ import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  * @cdk.bug          1525961
@@ -140,9 +139,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
     private JTextField undoStackSize;
 
-    private JComboBox language;
+    private JComboBox<?> language;
 
-    private JComboBox lookAndFeel;
+    private JComboBox<?> lookAndFeel;
 
     private GT.Language[] gtlanguages = GT.getLanguageList();
 
@@ -327,7 +326,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
 		if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             String [] lookAndFeels = {GT.get("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
-		    lookAndFeel = new JComboBox(lookAndFeels);
+		    lookAndFeel = new JComboBox<Object>(lookAndFeels);
 		    addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
             addField("", new JSeparator(), otherOptionsPanel);
         }
@@ -336,7 +335,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         for(int i=0;i<gtlanguages.length;i++){
             languagesstrings[i] = gtlanguages[i].language;
         }
-        language = new JComboBox(languagesstrings);
+        language = new JComboBox<Object>(languagesstrings);
         language.setName("language");
         for(int i=0;i<languagesstrings.length;i++){
             if(gtlanguages[i].code.equals(GT.getLanguage()))

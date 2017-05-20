@@ -76,7 +76,7 @@ public class RGroupEditor extends ChemObjectEditor {
 			addField(GT.get("Occurrence"), occurrenceField, rgrpPanel,DEF_INSET);
 
 			String[] trueFalseStrings = { GT.get("True"), GT.get("False")};
-			JComboBox restHBox= new JComboBox(trueFalseStrings);
+			JComboBox<?> restHBox= new JComboBox<Object>(trueFalseStrings);
 			restHBox.setName("restH");
 			addField(GT.get("Rest H"), restHBox, rgrpPanel,DEF_INSET);
 
@@ -89,7 +89,7 @@ public class RGroupEditor extends ChemObjectEditor {
 				}
 			}
 			String[] ifThenStrings=(String[])(otherRnums.toArray(new String[otherRnums.size()]));
-			JComboBox ifThenBox = new JComboBox(ifThenStrings);
+			JComboBox<?> ifThenBox = new JComboBox<Object>(ifThenStrings);
 			ifThenBox.setName("ifThen");
 			addField(GT.get("If R" + r + " then "), ifThenBox, rgrpPanel,DEF_INSET);
 			panels.add(rgrpPanel);
@@ -110,12 +110,12 @@ public class RGroupEditor extends ChemObjectEditor {
 				String occ=rgrpList.getOccurrence();
 				occurrenceField.setText(occ);
 
-				JComboBox restHBox = (JComboBox) (rgrpPanel.getComponent(3));
+				JComboBox<?> restHBox = (JComboBox<?>) (rgrpPanel.getComponent(3));
 				boolean restH=rgrpList.isRestH();
 				String restHString= restH? GT.get("True"): GT.get("False");
 				restHBox.setSelectedItem(restHString);
 
-				JComboBox ifThenBox = (JComboBox) (rgrpPanel.getComponent(5));
+				JComboBox<?> ifThenBox = (JComboBox<?>) (rgrpPanel.getComponent(5));
 				int ifThenR = rgrpList.getRequiredRGroupNumber();
 				String ifThenRString= ifThenR==0?GT.get("None"):"R"+ifThenR; 
 				ifThenBox.setSelectedItem(ifThenRString);
@@ -157,7 +157,7 @@ public class RGroupEditor extends ChemObjectEditor {
 				e.printStackTrace();
 			}
 
-			JComboBox restHBox = (JComboBox) (rgrpPanel.getComponent(3));
+			JComboBox<?> restHBox = (JComboBox<?>) (rgrpPanel.getComponent(3));
 			String restHString= (String) (restHBox.getSelectedItem());
 			if (restHString.equals(GT.get("True")))
 				rgrpList.setRestH(true);
@@ -165,7 +165,7 @@ public class RGroupEditor extends ChemObjectEditor {
 				rgrpList.setRestH(false);
 
 
-			JComboBox ifThenBox = (JComboBox) (rgrpPanel.getComponent(5));
+			JComboBox<?> ifThenBox = (JComboBox<?>) (rgrpPanel.getComponent(5));
 			String ifThenR= (String) (ifThenBox.getSelectedItem());
 			if (ifThenR.equals(GT.get("None")))
 				rgrpList.setRequiredRGroupNumber(0);

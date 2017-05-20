@@ -18,7 +18,6 @@ import org.fest.swing.core.NameMatcher;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTabbedPaneFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
@@ -31,10 +30,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.cdk.io.CMLReader;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
@@ -384,7 +380,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
 			  if(file.exists())
 				  file.delete();
-			  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+			  JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
               int index = -1;
               for (int i = 0; i < combobox.getModel().getSize(); i++)
                   if (((JCPFileFilter)combobox.getModel().getElementAt(i)).getType() == JCPFileFilter.mol)
@@ -395,9 +391,9 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  text.setText(file.toString());
 			  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
 			  okbutton.click();
-			  MDLReader reader = null;
+			  MDLV2000Reader reader = null;
 				try {
-					reader = new MDLReader(new FileInputStream(file));
+					reader = new MDLV2000Reader(new FileInputStream(file));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					Assert.fail("File not found.");
@@ -408,6 +404,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 			  JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount(), mol.getAtomCount());
 			  Assert.assertEquals(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount(), mol.getBondCount());
+			  reader.close();
 		}
 		//TODO do this for all formats
 		
@@ -421,6 +418,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        FileOutputStream fos = new FileOutputStream(file);
     	        while(ins.available()>0)
     	        	fos.write(ins.read());
+    	        fos.close();
     			applet.menuItem("open").click();
     			DialogFixture dialog = applet.dialog();
     			JTextComponentFixture text = dialog.textBox();
@@ -430,6 +428,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
     	        MDLV2000Reader reader = new MDLV2000Reader(ins, Mode.STRICT);
     	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
+    	        reader.close();
     	        Assert.assertNotNull(chemFile);
     	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
     	        JPanelFixture jcppanel=applet.panel("appletframe");
@@ -485,6 +484,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         	        FileOutputStream fos = new FileOutputStream(file);
         	        while(ins.available()>0)
         	        	fos.write(ins.read());
+        	        fos.close();
         			applet.menuItem("open").click();
         			DialogFixture dialog = applet.dialog();
         			//it seems the Combo selection depends on if you run test as single test or all in class, no idea why
@@ -501,6 +501,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
         	        SMILESReader reader = new SMILESReader(ins);
         	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
         	        Assert.assertNotNull(chemFile);
+        	        reader.close();
         	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
         	        JPanelFixture jcppanel=applet.panel("appletframe");
         	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
@@ -527,7 +528,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
             DialogFixture dialog = applet.dialog();
             JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot,(JTabbedPane)dialog.robot.finder().findByName("tabs"));
             tabs.selectTab(1);
-            JComboBox combobox = (JComboBox)dialog.robot.finder().find(new NameMatcher("language"));
+            JComboBox<?> combobox = (JComboBox<?>)dialog.robot.finder().find(new NameMatcher("language"));
             for(int i=0;i<combobox.getItemCount();i++){
                 if(((String)combobox.getItemAt(i)).equals("German")){
                     combobox.setSelectedIndex(i);

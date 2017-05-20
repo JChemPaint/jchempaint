@@ -23,14 +23,6 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -50,7 +42,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	private String type;
 	private IChemModelRelay chemModelRelay = null;
 	private IAtomContainer containerToAddTo;
-	private IAtomContainer removedAtomContainer;
+	private IAtomContainer removedAtomContainer;   // TODO - remove this, also from constructor. see markr's comments
 
 	/**
 	 * @param chemModel

@@ -281,7 +281,7 @@ public class GT {
   }
 
   private void addBundle(String className, String name) {
-    Class bundleClass = null;
+    Class<?> bundleClass = null;
     className += ".Messages_" + name;
     //    if (languagePath != null
     //      && !ZipUtil.isZipFile(languagePath + "_i18n_" + name + ".jar"))
