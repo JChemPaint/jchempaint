@@ -418,9 +418,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         org.openscience.cdk.interfaces.IChemModel som = theJcpp.getChemModel();
 
     	if (theJcpp.get2DHub().getRGroupHandler()!=null) {
-    		RGroupQueryWriter rgw = new RGroupQueryWriter (sw);
-    		rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
-    		try {
+    		try (RGroupQueryWriter rgw = new RGroupQueryWriter(sw)) {
+    		    rgw.write(theJcpp.get2DHub().getRGroupHandler().getrGroupQuery());
                 rgw.close();
             } catch (IOException e) {
                 e.printStackTrace();
