@@ -42,6 +42,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
+import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -665,6 +666,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			IAtom connectedAtom = connectedAtoms.get(0);
 			Vector2d v = atomPlacer.getNextBondVector(atom, connectedAtom,
 					distanceMeasure, true);
+			atomPlacer.setMolecule(ac);
 			atomPlacer.placeLinearChain(ac, v, bondLength);
 		} else {
 			IAtomContainer placedAtoms = atomCon.getBuilder().newInstance(IAtomContainer.class);
@@ -1019,6 +1021,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			atom = newAtom;
 		} else {
 			atom.setSymbol(symbol);
+			atom.setAtomicNumber(Elements.ofString(symbol).number());
 		}
 		// configure the atom, so that the atomic number matches the symbol
 		try {

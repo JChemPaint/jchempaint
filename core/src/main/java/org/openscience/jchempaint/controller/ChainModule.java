@@ -161,7 +161,7 @@ public class ChainModule extends ControllerModuleAdapter {
             if(merge!=null){
             	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,phantoms.getAtom(phantoms.getAtomCount()-1));
             	chemModelRelay.getPhantoms().getConnectedBondsList(phantoms.getAtom(phantoms.getAtomCount()-1)).get(0).setAtom(merge,1);
-            	phantoms.removeAtom(phantoms.getAtomCount()-1);
+            	phantoms.removeAtomOnly(phantoms.getAtomCount()-1);
             }
         }
         chemModelRelay.updateView();
@@ -178,7 +178,7 @@ public class ChainModule extends ControllerModuleAdapter {
     	if(source != null){
 			fromContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, source);
 			if (chemModelRelay.getPhantoms().getAtomCount() > 0)
-				chemModelRelay.getPhantoms().removeAtom(0);
+				chemModelRelay.getPhantoms().removeAtomOnly(0);
 			if (merge != null)
 		    	toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
 	    	chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,
