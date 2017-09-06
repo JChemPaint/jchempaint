@@ -75,7 +75,6 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
              || (invisibleCarbon(atom, ac, model) && !model.getDrawNumbers()))
              && (atom.getMassNumber()==null 
             		 || atom.getMassNumber()==majorIsotopeNumber)
-             && atom.getValency()==(Integer)CDKConstants.UNSET
              && !atom.getFlag(CDKConstants.IS_TYPEABLE)) {
             return null;
         } else if (model.getIsCompact()) {
@@ -169,13 +168,7 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
             Position position = getNextPosition(unused);
             textGroup.addChild(chargeString, position);
         }
-
-        if(atom.getValency()!=null){
-        	String valencyString="(v"+atom.getValency().toString()+")";
-            Position position = getNextPosition(unused);
-            textGroup.addChild(valencyString, position);
-        }
-    
+      
         if(atom.getProperty(CDKConstants.COMMENT)!=null){
             //Position position = getNextPosition(unused);
             textGroup.addChild((String)atom.getProperty(CDKConstants.COMMENT),Position.S,true);
