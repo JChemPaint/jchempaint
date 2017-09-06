@@ -34,6 +34,7 @@ import javax.swing.undo.UndoableEdit;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.jchempaint.controller.undoredo.ChangeCoordsEdit;
 
 /**
@@ -42,8 +43,10 @@ import org.openscience.jchempaint.controller.undoredo.ChangeCoordsEdit;
  */
 public class SwingChangeCoordsEdit extends ChangeCoordsEdit implements UndoableEdit{
 
-	public SwingChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, String type) {
-		super(atomCoordsMap, type);
+	public SwingChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap,
+															 Map<IBond, IBond.Stereo> bondStereo,
+															 String type) {
+		super(atomCoordsMap, bondStereo, type);
 	}
 
 	public boolean addEdit(UndoableEdit arg0) {

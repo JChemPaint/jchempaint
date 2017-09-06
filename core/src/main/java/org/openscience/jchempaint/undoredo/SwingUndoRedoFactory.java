@@ -107,8 +107,9 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 	}
 
 	public IUndoRedoable getChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap,
+			Map<IBond, IBond.Stereo> bondStereo,
 			String type) {
-		return new SwingChangeCoordsEdit(atomCoordsMap, type);
+		return new SwingChangeCoordsEdit(atomCoordsMap, bondStereo, type);
 	}
 
 	public IUndoRedoable getMakeReactantOrProductInNewReactionEdit(IChemModel chemModel,

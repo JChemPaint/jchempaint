@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 
 /**
  * Undo/Redo Edit superclass for all edit classes for coordinate changing
@@ -44,6 +45,8 @@ public class ChangeCoordsEdit implements IUndoRedoable {
     
     private Map<IAtom, Point2d[]> atomCoordsMap;
 
+    private Map<IBond, IBond.Stereo> bondStereo;
+
     private String type;
 
     /**
@@ -51,8 +54,9 @@ public class ChangeCoordsEdit implements IUndoRedoable {
      *            A HashMap containing the changed atoms as key and an Array
      *            with the former and the changed coordinates as Point2ds
      */
-    public ChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, String type) {
+    public ChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, Map<IBond, IBond.Stereo> bondStereo, String type) {
         this.atomCoordsMap = atomCoordsMap;
+        this.bondStereo = bondStereo;
         this.type=type;
     }
 
@@ -66,6 +70,11 @@ public class ChangeCoordsEdit implements IUndoRedoable {
             atom.setPoint2d(coords[0]);
             atom.setNotification(true);
         }
+        for (Map.Entry<IBond, IBond.Stereo> e : bondStereo.entrySet()) {
+            IBond.Stereo prev = e.getKey().getStereo();
+            e.getKey().setStereo(e.getValue());
+            e.setValue(prev);
+        }
     }
 
     public void undo() {
@@ -75,6 +84,11 @@ public class ChangeCoordsEdit implements IUndoRedoable {
             IAtom atom = (IAtom) it.next();
             Point2d[] coords = atomCoordsMap.get(atom);
             atom.setPoint2d(coords[1]);
+        }
+        for (Map.Entry<IBond, IBond.Stereo> e : bondStereo.entrySet()) {
+            IBond.Stereo prev = e.getKey().getStereo();
+            e.getKey().setStereo(e.getValue());
+            e.setValue(prev);
         }
     }
 

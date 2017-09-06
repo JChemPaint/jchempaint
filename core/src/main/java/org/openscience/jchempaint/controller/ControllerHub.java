@@ -39,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import com.google.common.collect.FluentIterable;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
@@ -67,6 +68,8 @@ import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.stereo.Projection;
+import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
@@ -1248,13 +1251,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void cleanup() {
 		Map<IAtom, Point2d[]> coords = new HashMap<IAtom, Point2d[]>();
-		for (IAtomContainer container : ChemModelManipulator
-				.getAllAtomContainers(chemModel)) {
+		Map<IBond, IBond.Stereo> stereo = new HashMap<>();
+		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+
+			// ensure current stereo from 2D is set
+			container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
+																											.interpretProjections(Projection.Haworth, Projection.Chair)
+																											.createAll());
+
 			for (IAtom atom : container.atoms()) {
 				Point2d[] coordsforatom = new Point2d[2];
 				coordsforatom[1] = atom.getPoint2d();
 				coords.put(atom, coordsforatom);
 				atom.setPoint2d(null);
+			}
+			for (IBond bond : container.bonds()) {
+				stereo.put(bond, bond.getStereo());
+				bond.setStereo(Stereo.NONE);
 			}
 
 			if (ConnectivityChecker.isConnected(container)) {
@@ -1277,7 +1290,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		coordinatesChanged();
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			IUndoRedoable undoredo = getUndoRedoFactory().getChangeCoordsEdit(
-					coords, "Clean Up");
+					coords, stereo,"Clean Up");
 			getUndoRedoHandler().postEdit(undoredo);
 		}
 	}
@@ -1302,6 +1315,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (int i = 0; i < cleanedMol.getAtomCount(); i++) {
 				container.getAtom(i).setPoint2d(
 						cleanedMol.getAtom(i).getPoint2d());
+			}
+			for (int i = 0; i < cleanedMol.getBondCount(); i++) {
+				container.getBond(i).setStereo(
+								cleanedMol.getBond(i).getStereo());
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -2014,6 +2031,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void flip(boolean horizontal) {
 		HashMap<IAtom, Point2d[]> atomCoordsMap = new HashMap<IAtom, Point2d[]>();
+		Map<IBond, IBond.Stereo> bondStereo = new HashMap<IBond, IBond.Stereo>();
 		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
 		IAtomContainer toflip;
 		if (renderModel.getSelection().getConnectedAtomContainer() != null
@@ -2048,6 +2066,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		// Stereo bonds must be flipped as well to keep the structure
 		for (IBond bond : toflip.bonds()) {
+			bondStereo.put(bond, bond.getStereo());
 			if (bond.getStereo() == IBond.Stereo.UP)
 				bond.setStereo(IBond.Stereo.DOWN);
 			else if (bond.getStereo() == IBond.Stereo.DOWN)
@@ -2060,7 +2079,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		coordinatesChanged();
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			IUndoRedoable undoredo = getUndoRedoFactory().getChangeCoordsEdit(
-					atomCoordsMap, "Clean Up");
+					atomCoordsMap, bondStereo, "Clean Up");
 			getUndoRedoHandler().postEdit(undoredo);
 		}
 	}

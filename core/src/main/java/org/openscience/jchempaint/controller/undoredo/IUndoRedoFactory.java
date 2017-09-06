@@ -70,7 +70,7 @@ public interface IUndoRedoFactory {
 	public IUndoRedoable getSingleElectronEdit(IAtomContainer relevantContainer, IElectronContainer electronContainer, boolean add, IChemModelRelay chemModelRelay, IAtom atom, String type);
 	public IUndoRedoable getChangeIsotopeEdit(IAtom atom, Integer formerIsotopeNumber, Integer newIstopeNumber, String type);
 	public IUndoRedoable getClearAllEdit(IChemModel chemModel, IAtomContainerSet som, IReactionSet sor, String type);
-	public IUndoRedoable getChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, String type);
+	public IUndoRedoable getChangeCoordsEdit(Map<IAtom, Point2d[]> atomCoordsMap, Map<IBond, IBond.Stereo> bondStereo, String type);
 	public IUndoRedoable getMakeReactantOrProductInNewReactionEdit(IChemModel chemModel, IAtomContainer ac, IAtomContainer oldcontainer, boolean reactantOrProduct, String type);
 	public IUndoRedoable getMakeReactantOrProductInExistingReactionEdit(
 			IChemModel chemModel, IAtomContainer newContainer,
