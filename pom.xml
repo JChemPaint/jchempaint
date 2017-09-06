@@ -15,7 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>1.5.15</cdk.version>
+        <cdk.version>2.0</cdk.version>
     </properties>
 
     <prerequisites>
@@ -32,17 +32,6 @@
         <module>inchi-jni</module>
         <module>render</module>
     </modules>
-
-    <distributionManagement>
-        <repository>
-            <id>ebi-repo</id>
-            <url>${cdk.repo.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>ebi-repo-snapshots</id>
-            <url>${cdk.repo.snapshots.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
