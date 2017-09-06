@@ -33,9 +33,12 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
 
@@ -47,9 +50,13 @@ import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
  *
  */
 public class ExtendedAtomGenerator extends BasicAtomGenerator {
-    
-    public IRenderingElement generate(
-            IAtomContainer ac, IAtom atom, JChemPaintRendererModel model) {
+
+    @Override
+    public IRenderingElement generate(IAtomContainer ac, IAtom atom, RendererModel model) {
+      return generate(ac, atom, (JChemPaintRendererModel) model);
+    }
+
+    public IRenderingElement generate(IAtomContainer ac, IAtom atom, JChemPaintRendererModel model) {
         
         Integer majorIsotopeNumber = null;
         if(atom.getMassNumber()!=null){
