@@ -37,6 +37,8 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.stereo.Projection;
+import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.dialog.TextViewDialog;
@@ -89,8 +91,11 @@ public class CreateSmilesAction extends JCPAction
         
         SmilesGenerator smigen = SmilesGenerator.isomeric();
         
-		StringBuilder sb = new StringBuilder();
+				StringBuilder sb = new StringBuilder();
         for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(model)) {
+            container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
+                                                      .interpretProjections(Projection.Haworth, Projection.Chair)
+                                                      .createAll());
             if (sb.length() > 0)
                 sb.append('.');
             sb.append(smigen.create(container));
