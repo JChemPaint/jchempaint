@@ -82,8 +82,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     List<JMenuItem> menus=new ArrayList<JMenuItem>();
     Map<String, JChemPaintPopupMenu> popupmenuitems=new HashMap<String, JChemPaintPopupMenu>();
     protected InsertTextPanel insertTextPanel = null;
-    protected JCPStatusBar statusBar;
-    protected boolean showStatusBar = true;
     protected String guistring;
 	protected RenderPanel renderPanel;
     private FileFilter currentSaveFileFilter;
@@ -228,27 +226,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         if(insertTextPanel!=null){
             insertTextPanel.updateLanguage();
         }
-        if(showStatusBar)
-            this.updateStatusBar();
-    }    
-
-    /**
-     * Updates the status bar to the current values
-     */
-    public void updateStatusBar() {
-        if (showStatusBar) {
-            if (this.getChemModel() != null) {
-                for (int i = 0; i < 4; i++) {
-                    String status = renderPanel.getStatus(i);
-                    statusBar.setStatus(i + 1, status);
-                }
-            } else {
-                if (statusBar != null) {
-                    statusBar.setStatus(1, "no model");
-                }
-            }
-        }
-    }    
+    }
 
     public String getGuistring() {
         return guistring;
@@ -413,26 +391,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     }
 
     /**
-     * Sets if statusbar should be shown
-     *
-     *@param showStatusBar
-     *            The value to assign showStatusBar.
-     */
-    public void setShowStatusBar(boolean showStatusBar) {
-        this.showStatusBar = showStatusBar;
-        customizeView();
-    }
-
-    /**
-     * Tells if a status bar is shown
-     *
-     *@return The showStatusBar value
-     */
-    public boolean getShowStatusBar() {
-        return showStatusBar;
-    }
-    
-    /**
      * Sets the value of showToolbar.
      *
      *@param showToolBar
@@ -451,14 +409,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             topContainer.add(menu, BorderLayout.NORTH);
         } else {
             topContainer.remove(menu);
-        }
-        if (showStatusBar) {
-            if (statusBar == null) {
-                statusBar = new JCPStatusBar();
-            }
-            add(statusBar, BorderLayout.SOUTH);
-        } else {
-            remove(statusBar);
         }
         if (showToolBar) {
             if (uppertoolbar == null) {

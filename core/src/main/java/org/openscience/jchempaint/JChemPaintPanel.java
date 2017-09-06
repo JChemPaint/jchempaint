@@ -251,7 +251,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void coordinatesChanged() {
         setModified(true);
-        updateStatusBar();
         //move focus
         this.requestFocusInWindow();
     }
@@ -260,8 +259,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#selectionChanged()
      */
     public void selectionChanged() {
-        updateStatusBar();
-        
+
         if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null) {
         	IChemObjectSelection selection = this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
 
@@ -284,7 +282,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void structureChanged() {
         setModified(true);
-        updateStatusBar();
         //if something changed in the structure, selection should be cleared
         //this is behaviour like eg in word processors, if you type, selection goes away
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
@@ -300,7 +297,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      */
     public void structurePropertiesChanged() {
         setModified(true);
-        updateStatusBar();
         //if something changed in the structure, selection should be cleared
         //this is behaviour like eg in word processors, if you type, selection goes away
         this.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(AbstractSelection.EMPTY_SELECTION);
@@ -359,7 +355,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#zoomChanged()
      */
     public void zoomChanged() {
-        this.updateStatusBar();
         //move focus
         this.requestFocusInWindow();
     }
@@ -430,7 +425,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             this.renderPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             this.get2DHub().updateView();
         }
-        this.updateStatusBar();
 	}
 	
     /**

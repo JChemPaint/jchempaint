@@ -251,7 +251,6 @@ public class JCPToolBar
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
                         activeModule.setID(toolKeys[i]);
                         chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
-                        chemPaintPanel.updateStatusBar();
                     } else if (toolKeys[i].equals("C")) {
                         button.setBackground(Color.GRAY);
                         chemPaintPanel.setLastSecondaryButton(button);

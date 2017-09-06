@@ -58,7 +58,6 @@ public class UndoAction extends JCPAction
         jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
         	.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
         jcpPanel.updateUndoRedoControls();
-        jcpPanel.updateStatusBar();
         jcpPanel.get2DHub().updateView();
 	}
 

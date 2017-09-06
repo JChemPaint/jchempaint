@@ -97,7 +97,6 @@ public class JCPMenuTextMaker {
         entries.put("flip", GT.get("Flip"));
         entries.put("cleanup", GT.get("Clean Structure"));
         entries.put("toolbar", GT.get("Toolbar"));
-        entries.put("statusbar", GT.get("Statusbar"));
         entries.put("menubar", GT.get("Menubar"));
         entries.put("insertstructure", GT.get("Direct Entry as SMILES/InChI/CAS"));
         entries.put("zoomin", GT.get("Zoom In"));

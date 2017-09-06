@@ -495,7 +495,6 @@ public class CopyPasteAction extends JCPAction{
             }
         }
         jcpPanel.get2DHub().updateView();
-        jcpPanel.updateStatusBar();
 
     }
 

@@ -59,7 +59,6 @@ public class ZoomAction extends JCPAction {
         }
         zoomDone=true;
         jcpPanel.get2DHub().updateView();
-        jcpPanel.updateStatusBar();
         jcpPanel.getRenderPanel().update(jcpPanel.getRenderPanel().getGraphics());
 
     }

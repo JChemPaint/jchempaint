@@ -243,7 +243,6 @@ public class JChemPaint {
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
-        p.updateStatusBar();
         f.setPreferredSize(new Dimension(800, 494));    //1.618
         f.setJMenuBar(p.getJMenuBar());
         f.add(p);

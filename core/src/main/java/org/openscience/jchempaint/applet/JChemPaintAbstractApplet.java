@@ -696,7 +696,6 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                             final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug,JChemPaintAbstractApplet.this, blacklist);
                             p.setName("appletframe");
                             p.setShowInsertTextField(false);
-                            p.setShowStatusBar(false);
                             p.getChemModel().setID("JChemPaint Editor");
                             getJexf();
                             jexf.setTitle("JChemPaint Editor");
