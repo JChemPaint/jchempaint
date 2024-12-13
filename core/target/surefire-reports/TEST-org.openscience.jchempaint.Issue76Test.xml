@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.openscience.jchempaint.Issue76Test" time="2.793" tests="1" errors="1" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/rvdploeg_hu/Software/jchempaint/core/target/test-classes:/Users/rvdploeg_hu/Software/jchempaint/core/target/classes:/Users/rvdploeg_hu/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar:/Users/rvdploeg_hu/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-assert/1.2/fest-assert-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-util/1.1/fest-util-1.1.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-reflect/1.2/fest-reflect-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-swing/1.2/fest-swing-1.2.jar:/Users/rvdploeg_hu/.m2/repository/net/jcip/jcip-annotations/1.0/jcip-annotations-1.0.jar:/Users/rvdploeg_hu/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-annotation/2.9/cdk-annotation-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-atomtype/2.9/cdk-atomtype-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-core/2.9/cdk-core-2.9.jar:/Users/rvdploeg_hu/.m2/repository/javax/vecmath/vecmath/1.5.2/vecmath-1.5.2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-data/2.9/cdk-data-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-dict/2.9/cdk-dict-2.9.jar:/Users/rvdploeg_hu/.m2/repository/xom/xom/1.3.9/xom-1.3.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-formula/2.9/cdk-formula-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-render/2.9/cdk-render-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-renderbasic/2.9/cdk-renderbasic-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-renderextra/2.9/cdk-renderextra-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-interfaces/2.9/cdk-interfaces-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-ioformats/2.9/cdk-ioformats-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-io/2.9/cdk-io-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-libiocml/2.9/cdk-libiocml-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/blueobelisk/cmlxom/4.5/cmlxom-4.5.jar:/Users/rvdploeg_hu/.m2/repository/org/blueobelisk/euclid/2.5/euclid-2.5.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-core/2.20.0/log4j-core-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar:/Users/rvdploeg_hu/.m2/repository/joda-time/joda-time/2.12.5/joda-time-2.12.5.jar:/Users/rvdploeg_hu/.m2/repository/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-1.2-api/2.20.0/log4j-1.2-api-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-api/2.20.0/log4j-api-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar:/Users/rvdploeg_hu/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-ctab/2.9/cdk-ctab-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-isomorphism/2.9/cdk-isomorphism-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-reaction/2.9/cdk-reaction-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-sdg/2.9/cdk-sdg-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-smiles/2.9/cdk-smiles-2.9.jar:/Users/rvdploeg_hu/.m2/repository/uk/ac/ebi/beam/beam-core/1.3.5/beam-core-1.3.5.jar:/Users/rvdploeg_hu/.m2/repository/uk/ac/ebi/beam/beam-func/1.3.5/beam-func-1.3.5.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-standard/2.9/cdk-standard-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-valencycheck/2.9/cdk-valencycheck-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-extra/2.9/cdk-extra-2.9.jar:/Users/rvdploeg_hu/.m2/repository/gov/nist/math/jama/1.0.3/jama-1.0.3.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-legacy/2.9/cdk-legacy-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-smarts/2.9/cdk-smarts-2.9.jar:/Users/rvdploeg_hu/.m2/repository/jgrapht/jgrapht/0.6.0/jgrapht-0.6.0.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-signature/2.9/cdk-signature-2.9.jar:/Users/rvdploeg_hu/.m2/repository/com/github/gilleain/signatures/signatures/1.1/signatures-1.1.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-charges/2.9/cdk-charges-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-qsar/2.9/cdk-qsar-2.9.jar:/Users/rvdploeg_hu/Software/jchempaint/inchi/target/jchempaint-inchi-3.4-SNAPSHOT.jar:/Users/rvdploeg_hu/Software/jchempaint/render/target/jchempaint-render-3.4-SNAPSHOT.jar:"/>
+    <property name="sun.awt.enableExtraMouseButtons" value="true"/>
+    <property name="java.vm.vendor" value="Homebrew"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="user.timezone" value="Europe/Amsterdam"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="NL"/>
+    <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/rvdploeg_hu/Software/jchempaint/core/target/surefire/surefirebooter-20241213093241852_3.jar /Users/rvdploeg_hu/Software/jchempaint/core/target/surefire 2024-12-13T09-32-39_871-jvmRun1 surefire-20241213093241852_1tmp surefire_0-20241213093241852_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/rvdploeg_hu/Software/jchempaint/core/target/test-classes:/Users/rvdploeg_hu/Software/jchempaint/core/target/classes:/Users/rvdploeg_hu/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar:/Users/rvdploeg_hu/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-assert/1.2/fest-assert-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-util/1.1/fest-util-1.1.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-reflect/1.2/fest-reflect-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/easytesting/fest-swing/1.2/fest-swing-1.2.jar:/Users/rvdploeg_hu/.m2/repository/net/jcip/jcip-annotations/1.0/jcip-annotations-1.0.jar:/Users/rvdploeg_hu/.m2/repository/commons-cli/commons-cli/1.2/commons-cli-1.2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-annotation/2.9/cdk-annotation-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-atomtype/2.9/cdk-atomtype-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-core/2.9/cdk-core-2.9.jar:/Users/rvdploeg_hu/.m2/repository/javax/vecmath/vecmath/1.5.2/vecmath-1.5.2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-data/2.9/cdk-data-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-dict/2.9/cdk-dict-2.9.jar:/Users/rvdploeg_hu/.m2/repository/xom/xom/1.3.9/xom-1.3.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-formula/2.9/cdk-formula-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-render/2.9/cdk-render-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-renderbasic/2.9/cdk-renderbasic-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-renderextra/2.9/cdk-renderextra-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-interfaces/2.9/cdk-interfaces-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-ioformats/2.9/cdk-ioformats-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-io/2.9/cdk-io-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-libiocml/2.9/cdk-libiocml-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/blueobelisk/cmlxom/4.5/cmlxom-4.5.jar:/Users/rvdploeg_hu/.m2/repository/org/blueobelisk/euclid/2.5/euclid-2.5.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-core/2.20.0/log4j-core-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar:/Users/rvdploeg_hu/.m2/repository/joda-time/joda-time/2.12.5/joda-time-2.12.5.jar:/Users/rvdploeg_hu/.m2/repository/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-1.2-api/2.20.0/log4j-1.2-api-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/apache/logging/log4j/log4j-api/2.20.0/log4j-api-2.20.0.jar:/Users/rvdploeg_hu/.m2/repository/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar:/Users/rvdploeg_hu/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-ctab/2.9/cdk-ctab-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-isomorphism/2.9/cdk-isomorphism-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-reaction/2.9/cdk-reaction-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-sdg/2.9/cdk-sdg-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-smiles/2.9/cdk-smiles-2.9.jar:/Users/rvdploeg_hu/.m2/repository/uk/ac/ebi/beam/beam-core/1.3.5/beam-core-1.3.5.jar:/Users/rvdploeg_hu/.m2/repository/uk/ac/ebi/beam/beam-func/1.3.5/beam-func-1.3.5.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-standard/2.9/cdk-standard-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-valencycheck/2.9/cdk-valencycheck-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-extra/2.9/cdk-extra-2.9.jar:/Users/rvdploeg_hu/.m2/repository/gov/nist/math/jama/1.0.3/jama-1.0.3.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-legacy/2.9/cdk-legacy-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-smarts/2.9/cdk-smarts-2.9.jar:/Users/rvdploeg_hu/.m2/repository/jgrapht/jgrapht/0.6.0/jgrapht-0.6.0.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-signature/2.9/cdk-signature-2.9.jar:/Users/rvdploeg_hu/.m2/repository/com/github/gilleain/signatures/signatures/1.1/signatures-1.1.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-charges/2.9/cdk-charges-2.9.jar:/Users/rvdploeg_hu/.m2/repository/org/openscience/cdk/cdk-qsar/2.9/cdk-qsar-2.9.jar:/Users/rvdploeg_hu/Software/jchempaint/inchi/target/jchempaint-inchi-3.4-SNAPSHOT.jar:/Users/rvdploeg_hu/Software/jchempaint/render/target/jchempaint-render-3.4-SNAPSHOT.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/rvdploeg_hu"/>
+    <property name="user.language" value="nl"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/opt/homebrew/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/rvdploeg_hu/Software/jchempaint/core"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/rvdploeg_hu/Software/jchempaint/core/target/surefire/surefirebooter-20241213093241852_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="23.0.1"/>
+    <property name="user.name" value="rvdploeg_hu"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="15.1.1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Homebrew"/>
+    <property name="localRepository" value="/Users/rvdploeg_hu/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/15/w987lsvj33ngq_53y3hk4mw00000gp/T/"/>
+    <property name="java.version" value="23.0.1"/>
+    <property name="user.dir" value="/Users/rvdploeg_hu/Software/jchempaint/core"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/rvdploeg_hu/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Homebrew"/>
+    <property name="java.vm.version" value="23.0.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="testIssue76" classname="org.openscience.jchempaint.Issue76Test" time="0.333">
+    <error message="No atom at index: 3" type="java.lang.IndexOutOfBoundsException"><![CDATA[java.lang.IndexOutOfBoundsException: No atom at index: 3
+	at org.openscience.cdk.AtomContainer2.getAtom(AtomContainer2.java:509)
+	at org.openscience.jchempaint.Issue76Test.testIssue76(Issue76Test.java:31)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:316)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:240)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:214)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:155)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+]]></error>
+    <system-err><![CDATA[org.openscience.jchempaint.GT ERROR: GT could not find the class app.i18n.Messages_nl
+org.openscience.jchempaint.GT ERROR: GT could not find the class app.i18n.Messages_nl
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key newDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: newDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key openDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: openDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key saveDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: saveDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key saveAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: saveAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key exportImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: exportImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key printDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: printDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyAsSmilesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyAsSmilesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pasteDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pasteDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key optionsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: optionsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key zoominDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: zoominDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key zoomoutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: zoomoutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key zoomoriginalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: zoomoriginalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key flipHorizontalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: flipHorizontalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key flipVerticalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: flipVerticalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key plusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: plusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key minusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: minusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key convertToRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: convertToRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key convertFromRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: convertFromRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoRImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoRImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoRXImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoRXImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoStarImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoStarImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valenceOffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valenceOffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence5Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence5Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence6Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence6Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence7Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence7Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence8Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence8Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolOImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolOImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolLiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolLiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolKImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolKImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolScImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolScImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolVImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolVImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolZnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolZnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolYImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolYImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolZrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolZrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTcImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTcImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolWImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolWImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolReImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolReImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolOsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolOsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolDbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolDbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolDsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolDsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolGaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolGaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolInImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolInImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolGeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolGeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolArImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolArImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key double_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: double_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key triple_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: triple_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key quad_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: quad_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key createSMILESImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: createSMILESImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key createInChIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: createInChIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setRootImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setRootImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setSubstituteImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setSubstituteImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rgpAdvancedImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rgpAdvancedImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rgpGenerateImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rgpGenerateImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key clearRgroupImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: clearRgroupImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pasteTemplateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pasteTemplateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key alkaloidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: alkaloidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key amino_acidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: amino_acidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key beta_lactamsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: beta_lactamsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key carbohydratesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: carbohydratesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key inositolsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: inositolsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key lipidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: lipidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key nucleosidesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: nucleosidesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key porphyrinsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: porphyrinsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key protecting_groupsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: protecting_groupsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key steroidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: steroidsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pahsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pahsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key miscellaneousImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: miscellaneousImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key helpImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: helpImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key tutorialImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: tutorialImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rgpTutorialImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rgpTutorialImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key feedbackImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: feedbackImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key aboutImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: aboutImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key licenseImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: licenseImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key lassoDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: lassoDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key zoominDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: zoominDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key zoomoutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: zoomoutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pasteDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pasteDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key flipHorizontalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: flipHorizontalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key flipVerticalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: flipVerticalDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rotateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rotateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rotate3dDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rotate3dDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key double_bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: double_bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key triple_bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: triple_bondToolDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key chainDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: chainDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key reactionArrowDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: reactionArrowDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key triangleDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: triangleDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key squareDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: squareDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pentagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pentagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hexagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hexagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key benzeneDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: benzeneDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key octagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: octagonDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pasteTemplateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pasteTemplateDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key CDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: CDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key HDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: HDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key ODisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: ODisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key NDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: NDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key PDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: PDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key SDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: SDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key FDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: FDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key ClDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: ClDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key BrDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: BrDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key IDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: IDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key makeNormalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: makeNormalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key plusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: plusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key minusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: minusDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorPlusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorPlusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusOneImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusTwoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key majorMinusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: majorMinusThreeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key convertToRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: convertToRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key convertFromRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: convertFromRadicalImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoRImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoRImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoR4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoR4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoRXImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoRXImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setAtomApoAction1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setAtomApoAction1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setAtomApoAction2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setAtomApoAction2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key pseudoStarImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: pseudoStarImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valenceOffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valenceOffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence3Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence4Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence5Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence5Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence6Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence6Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence7Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence7Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key valence8Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: valence8Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: periodictableDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: enterelementDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolOImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolOImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolLiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolLiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolKImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolKImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolScImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolScImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolVImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolVImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolZnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolZnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolYImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolYImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolZrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolZrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTcImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTcImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolCdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolCdImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolWImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolWImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolReImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolReImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolOsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolOsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAuImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRfImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolDbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolDbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBhImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolMtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolMtImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolDsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolDsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolRgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolRgImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolGaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolGaImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolInImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolInImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSnImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTlImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSiImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolGeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolGeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolAsImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolSbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolSbImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolTeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolTeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolPoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolPoImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolFImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolClImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolBrImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolIImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolHeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolHeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolNeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolNeImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key symbolArImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: symbolArImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key double_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: double_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key triple_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: triple_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key quad_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: quad_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: up_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: down_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: undefined_stereo_bondDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setBondApoAction1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setBondApoAction1Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setBondApoAction2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setBondApoAction2Image
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addReactantToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToNewReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: addProductToExistingReactionImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showChemObjectPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: showACPropertiesImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydroonImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: hydrooffImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cleanupDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setRootImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setRootImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key setSubstituteImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: setSubstituteImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rgpAdvancedImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rgpAdvancedImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key rgpGenerateImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: rgpGenerateImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key clearRgroupImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: clearRgroupImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: cutDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: copyDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: eraserDisabledImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectFromChemObjectImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: Could not find resource: Can't find resource for bundle java.util.PropertyResourceBundle, key selectAllImage
+org.openscience.jchempaint.JCPPropertyHandler ERROR: ResourceString is null for: selectAllImage
+dec 13, 2024 9:32:53 A.M. org.fest.swing.monitor.ProtectingTimerTask handleException
+WARNING: Exception thrown by a TimerTask
+java.lang.reflect.InaccessibleObjectException: Unable to make field int java.util.TimerTask.state accessible: module java.base does not "opens java.util" to unnamed module @32e6e9c3
+	at java.base/java.lang.reflect.AccessibleObject.throwInaccessibleObjectException(AccessibleObject.java:388)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:364)
+	at java.base/java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:312)
+	at java.base/java.lang.reflect.Field.checkCanSetAccessible(Field.java:183)
+	at java.base/java.lang.reflect.Field.setAccessible(Field.java:177)
+	at org.fest.reflect.util.Accessibles$SetAccessibleAction.run(Accessibles.java:71)
+	at org.fest.reflect.util.Accessibles$SetAccessibleAction.run(Accessibles.java:61)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:319)
+	at org.fest.reflect.util.Accessibles.setAccessible(Accessibles.java:58)
+	at org.fest.reflect.util.Accessibles.makeAccessible(Accessibles.java:47)
+	at org.fest.reflect.field.Invoker.verifyCorrectType(Invoker.java:89)
+	at org.fest.reflect.field.Invoker.createInvoker(Invoker.java:65)
+	at org.fest.reflect.field.Invoker.newInvoker(Invoker.java:59)
+	at org.fest.reflect.field.FieldType.in(FieldType.java:61)
+	at org.fest.swing.monitor.ProtectingTimerTask.isCanceled(ProtectingTimerTask.java:58)
+	at org.fest.swing.monitor.ProtectingTimerTask.run(ProtectingTimerTask.java:44)
+	at java.base/java.util.TimerThread.mainLoop(Timer.java:572)
+	at java.base/java.util.TimerThread.run(Timer.java:522)
+
+]]></system-err>
+  </testcase>
+</testsuite>

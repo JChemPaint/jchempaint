@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+<title> JChemPaint Basic Tutorial</title>
+<link rel="stylesheet" type="text/css" href="../jcp.css" title="Style">
+</head>
+<body bgcolor="#ffffff">
+
+<div class="navheader">
+  <table width="100%">
+   <tr>
+    <th align="center" colspan="3"> JChemPaint Tutorial</th>
+   </tr>
+   <tr>
+    <td align="left" width="20%"><a href="aboutJCP.html">Prev</a>&nbsp;</td>
+     <th align="center" width="60%">&nbsp;</th>
+     <td align="right" width="20%">&nbsp;<a href="rgroup_tutorial.html">Next</a></td>
+     </tr>
+  </table>
+  <hr>
+</div>
+
+<h1>  JChemPaint Basic Tutorial</h1>
+<h3> General Usage</h3>
+<p>The general idea is that while using JChemPaint, the program always is in a 
+"drawing mode". This means that clicks somewhere on the panel will draw a certain 
+chemical entity. Examples for "drawing modes" are "single bond" or "Carbon atom". 
+Drawing modes can be changed by the buttons or via menus. In 
+addition to changing the mode, choosing a button or a menu item do also changes 
+the currently selected items (if any). Context menus (which appear right clicking 
+on the panel) change the element (atom, bond) on which you clicked for the 
+menu. Apart from these "mode changes", there are also some buttons/menu items, 
+which do a one-off action, but have no mode. Examples are "Cut" or "Generate 
+Smiles". Keeping this in mind, we now show you how to create a molecule.</p>
+<p>Another thing you should keep in mind is that JChemPaint is a "chemically aware 
+editor". This means that many things are not drawn, but assigned as properties 
+and then drawn by JChemPaint. The advantage is that import/exports to chemical 
+formats can be much richer, but the usage is sometimes not as straightforward 
+as with "direct" drawing. An example is if you want to have a title (like a name) 
+rendered next to a molecule: You do not draw a string on the canvas, but assign 
+the title to the menu and this is then rendered. Another example are reactions, 
+you do not draw an arrow, but declare molecules as products or reactants and 
+an arrow is then drawn between them.</p>
+
+<h3> Creating Molecules</h3>
+<p>When JChemPaint has been started, you automatically get an empty document.
+ In order to paint a structure the typical steps would be the following:
+<ul><li>Often it is the best to start with rings. Using the ring templates in
+the button bar (<img img src="../../../small-bin/triangle.gif">, <img img src="../../../small-bin/square.gif"> etc.) you can build the
+ring structures of the molecule. Click on a ring button (you switched to "Draw 
+x-membered ring mode") and then in the document. You can dock a ring to another ring by clicking
+ on an existing ring (the docking atom or bond will be highlighted while hovering over it). If the molecule
+has no rings, go to the next step.</li>
+<li>The next step are typically the chains. Choose the
+<img src="../../../small-bin/bond.gif"> button (your are in "single bond mode" then), click on the atom where the chain
+starts and then on the last atom of the chain to enlarge it. There are several 
+ways to draw bonds in this mode:
+  <ul>
+   <li>Directly click on an atom: A bond with default length will be drawn at a reasonable angle.</li>
+   <li>Drag from an atom: A bond with default length will be drawn at the angle to drag to. This makes it possible to exactly control the direction.</li>
+   <li>Drag from an atom to another atom: A bond will be drawn linking the two atoms. This 
+   way, you can also link fragments or close rings (for example, if you want a 
+   large ring which is not in the templates).</li>
+ </ul>
+</li>
+<li>After this, you can add double/triple bonds by using
+<img src="../../../small-bin/bond.gif"> again and clicking on the bonds to make
+double, triplei or quadruple. Alternatively you can use the bond context menu (right click on a bond) 
+to pick one of these bond orders by using the buttons <img src="../../../small-bin/doubleBond.gif">,<img src="../../../small-bin/tripleBond.gif"> or <img src="../../../small-bin/quadBond.gif">.<br>
+You can use <img src="../../../small-bin/up_bond.gif"> and
+<img src="../../../small-bin/down_bond.gif"> to make existing bonds wedge bonds or
+you can draw wedge bonds directly by clicking on an existing atom. The "wedge bond 
+mode" works same as the "single bond mode" with respect to dragging etc., just 
+that the bonds created are wedges.</li>
+<li>Finally the atoms need to be set. Either use one of the symbol buttons ("Element X mode") and
+click on an atom to change it to this symbol. For single-letter elements, you can 
+also just hit the key while an atom is highlighted. So to set all the Oxygens in your 
+molecule, hover over the atoms one after the other and hit "O" each time. 
+You can also use the periodic
+table <img src="../../../small-bin/element.gif"> to choose an element. With
+ <img src="../../../small-bin/plus_one.gif"> and
+ <img src="../../../small-bin/min_one.gif"> you can change the charge.</li>
+<li>If you want to have a title for your molecule right-click on any ator or bond, 
+choose "Molecule Properties" and enter the title.</li>
+</ul>
+
+Obviously the mentioned steps are only a suggestion.
+You can do them in any order. Have a look through the menus to see what is available 
+or read the <a href="referenceGuide.html">Reference Guide</a>.</p>
+
+<p>If you are interested in drawing reactions, see <a href="reactions.html">
+Drawing of Reactions</a>.</p>
+
+<div class="navfooter"><hr>
+ <table width="100%">
+  <tr>
+   <td align="left" width="40%"><a href="aboutJCP.html">Prev</a>&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Home</a></td>
+   <td align="right" width="40%"><a href="referenceGuide.html">Next</a></td>
+  </tr>
+  <tr>
+   <td align="left" width="40%">&nbsp;</td>
+   <td align="center" width="20%"><a href="../jcp.html">Up</a></td>
+   <td align="right" width="40%">&nbsp;</td>
+  </tr>
+ </table>
+</div>
+
+
+</body>
+</html>
