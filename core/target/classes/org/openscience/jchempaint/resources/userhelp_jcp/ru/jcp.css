@@ -1,0 +1,66 @@
+body
+{
+font-family: verdana,sans-serif;
+line-height: 140%;
+font-size: 11pt;
+margin: 0 0 1em 5%;
+}
+
+
+li {
+    margin-bottom:5pt;
+}
+
+pre {
+  font-family: Lucida Console,Courier New;
+  font-size: 11pt;
+  color: #00718D;
+}
+
+
+td {
+   font-size: 11pt;
+   border:solid 1px #DDDDDD;
+}
+
+
+
+a img
+{
+	border-style: none;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+h1 { font-size: 160%; line-height: normal;}
+h3 { margin-top: 1em; font-size: 120%; }
+h2 { margin-top: 1em; font-size: 140%; }
+
+
+div.left
+{
+	float: left;
+	margin-bottom: 5%;	
+}
+
+div.right
+{
+	float: left;
+	margin-left: 5%;
+	margin-bottom: 1%;
+	
+}
+
+div.farright
+{
+	float: right;
+	margin-bottom: 1%;
+	margin-right: 15px;
+}
+
+div.main
+{
+	float: left;
+	width: 90%;
+}
+
