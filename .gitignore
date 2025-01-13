@@ -8,5 +8,5 @@ MANIFEST.MF
 .classpath
 .project
 build.xml
-core/target/
+**/target/
 maven/jchempaint-nodeps/target/
