@@ -6,6 +6,9 @@ import javax.vecmath.Vector2d;
 import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
 /**
  * @cdk.module controlbasic
  */
@@ -20,13 +23,19 @@ public class ZoomModule extends ControllerModuleAdapter {
         super(chemModelRelay);
     }
 
-    public void mouseWheelMovedForward(int clicks) {
+    public void mouseWheelMovedForward(int modifiers, int clicks) {
+        // shift scroll to zoom
+        if ((modifiers & InputEvent.META_DOWN_MASK) == 0)
+            return;
         doZoom( .9 );
         chemModelRelay.fireZoomEvent();
         chemModelRelay.updateView();
     }
 
-    public void mouseWheelMovedBackward(int clicks) {
+    public void mouseWheelMovedBackward(int modifiers, int clicks) {
+        // shift scroll to zoom
+        if ((modifiers & InputEvent.META_DOWN_MASK) == 0)
+            return;
         doZoom( 1.1 );
         chemModelRelay.fireZoomEvent();
         chemModelRelay.updateView();
@@ -36,7 +45,6 @@ public class ZoomModule extends ControllerModuleAdapter {
 
         IRenderer renderer = chemModelRelay.getRenderer();
         double currentZoom = renderer.getRenderer2DModel().getZoomFactor();
-        System.err.println(z);
 
         if (currentZoom * z <= MIN_ZOOM_AMOUNT)
             return;

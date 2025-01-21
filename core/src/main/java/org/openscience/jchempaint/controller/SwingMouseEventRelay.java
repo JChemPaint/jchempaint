@@ -24,6 +24,7 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -110,10 +111,11 @@ public class SwingMouseEventRelay implements MouseMotionListener,
 
     public void mouseWheelMoved(MouseWheelEvent e) {
         int rotation = e.getWheelRotation();
+        int modifiers = e.getModifiersEx();
         if (rotation > 0) {
-            relay.mouseWheelMovedForward(rotation);
+            relay.mouseWheelMovedForward(modifiers, e.getClickCount());
         } else if (rotation < 0) {
-            relay.mouseWheelMovedBackward(rotation);
+            relay.mouseWheelMovedBackward(modifiers, e.getClickCount());
         }
     }
 
