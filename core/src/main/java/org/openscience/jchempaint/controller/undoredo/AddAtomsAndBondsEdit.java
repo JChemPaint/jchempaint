@@ -72,15 +72,17 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		//    chemModel.getMoleculeSet().removeAtomContainer(removedAtomContainer);
 		//}
 
-		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
-			IBond bond = undoRedoContainer.getBond(i);
-			containerToAddTo.addBond(bond);
-		}
 		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
 			IAtom atom = undoRedoContainer.getAtom(i);
 			containerToAddTo.addAtom(atom);
 			chemModelRelay.updateAtom(atom);
 		}
+
+		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
+			IBond bond = undoRedoContainer.getBond(i);
+			containerToAddTo.addBond(bond);
+		}
+
 	}
 
 	public void undo() {
