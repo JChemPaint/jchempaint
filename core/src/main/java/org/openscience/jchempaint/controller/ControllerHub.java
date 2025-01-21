@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
-import com.google.common.collect.FluentIterable;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;

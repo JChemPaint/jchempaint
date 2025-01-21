@@ -37,6 +37,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
+import org.openscience.cdk.isomorphism.matchers.IRGroupList;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
@@ -104,7 +105,7 @@ public class RGroupEditor extends ChemObjectEditor {
 				int r = rNumbers.get(i);
 				JPanel rgrpPanel = panels.get(i);
 
-				RGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
+				IRGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
 
 				JTextField occurrenceField = (JTextField) (rgrpPanel.getComponent(1));
 				String occ=rgrpList.getOccurrence();
@@ -133,7 +134,7 @@ public class RGroupEditor extends ChemObjectEditor {
 		for (int i=0; i< rNumbers.size(); i++) {
 			int r = rNumbers.get(i);
 			JPanel rgrpPanel = panels.get(i);
-			RGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
+			IRGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
 
 			JTextField occurrenceField = (JTextField) (rgrpPanel.getComponent(1));
 			String userOccurrenceText=occurrenceField.getText();
@@ -143,40 +144,41 @@ public class RGroupEditor extends ChemObjectEditor {
 		}
 
 		//Aply input to model
-		for (int i=0; i< rNumbers.size(); i++) {
+		for (int i = 0; i < rNumbers.size(); i++) {
 			int r = rNumbers.get(i);
 			JPanel rgrpPanel = panels.get(i);
-			RGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
-
-			JTextField occurrenceField = (JTextField) (rgrpPanel.getComponent(1));
-			String userOccurrenceText=occurrenceField.getText();
-			try {
-				rgrpList.setOccurrence(userOccurrenceText);
-			} catch (CDKException e) {
-				// won't happen - already checked in previous loop
-				e.printStackTrace();
-			}
-
-			JComboBox<?> restHBox = (JComboBox<?>) (rgrpPanel.getComponent(3));
-			String restHString= (String) (restHBox.getSelectedItem());
-			if (restHString.equals(GT.get("True")))
-				rgrpList.setRestH(true);
-			else
-				rgrpList.setRestH(false);
-
-
-			JComboBox<?> ifThenBox = (JComboBox<?>) (rgrpPanel.getComponent(5));
-			String ifThenR= (String) (ifThenBox.getSelectedItem());
-			if (ifThenR.equals(GT.get("None")))
-				rgrpList.setRequiredRGroupNumber(0);
-			else {
-				int userRnumInput = new Integer (ifThenR.substring(1));
-				rgrpList.setRequiredRGroupNumber(userRnumInput);
+			IRGroupList rgrpList = rgroupQuery.getRGroupDefinitions().get(r);
+		
+			if (rgrpList instanceof RGroupList) {
+				RGroupList rGroupList = (RGroupList) rgrpList;
+		
+				JTextField occurrenceField = (JTextField) (rgrpPanel.getComponent(1));
+				String userOccurrenceText = occurrenceField.getText();
+				try {
+					rGroupList.setOccurrence(userOccurrenceText);
+				} catch (CDKException e) {
+					e.printStackTrace();
+				}
+		
+				JComboBox<?> restHBox = (JComboBox<?>) (rgrpPanel.getComponent(3));
+				String restHString = (String) (restHBox.getSelectedItem());
+				if (restHString.equals(GT.get("True")))
+					rGroupList.setRestH(true);
+				else
+					rGroupList.setRestH(false);
+		
+				JComboBox<?> ifThenBox = (JComboBox<?>) (rgrpPanel.getComponent(5));
+				String ifThenR = (String) (ifThenBox.getSelectedItem());
+				if (ifThenR.equals(GT.get("None")))
+					rGroupList.setRequiredRGroupNumber(0);
+				else {
+					int userRnumInput = Integer.parseInt(ifThenR.substring(1));
+					rGroupList.setRequiredRGroupNumber(userRnumInput);
+				}
+			} else {
+				throw new IllegalStateException("rgrpList is not an instance of RGroupList");
 			}
 		}
 
-
 	}
-
-
 }

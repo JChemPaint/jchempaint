@@ -9,14 +9,14 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IRGroup;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
-import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.ElementGroup;
+import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.cdk.renderer.elements.ElementGroup;
-import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
@@ -130,7 +130,7 @@ public class RGroupGenerator implements IGenerator<IAtomContainer> {
 			if (rGroupQuery.getRGroupDefinitions().keySet()!=null) {
 				apo:
 				for(Iterator<Integer> itr =rGroupQuery.getRGroupDefinitions().keySet().iterator();itr.hasNext();) { 
-					for (RGroup rgrp :rGroupQuery.getRGroupDefinitions().get(itr.next()).getRGroups()) {
+					for (IRGroup rgrp :rGroupQuery.getRGroupDefinitions().get(itr.next()).getRGroups()) {
 						if(rgrp.getGroup()==ac) {
 							acDetachedFromRGroup=false;
 							if(ac.contains(rgrp.getFirstAttachmentPoint()))
