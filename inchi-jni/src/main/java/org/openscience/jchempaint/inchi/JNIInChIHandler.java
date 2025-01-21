@@ -1,12 +1,13 @@
 package org.openscience.jchempaint.inchi;
 
-import net.sf.jniinchi.INCHI_RET;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import io.github.dan2097.jnainchi.InchiStatus;
 
 /**
  * InChI handler that uses JNI-InChI.
@@ -21,7 +22,8 @@ public final class JNIInChIHandler implements InChIHandler {
         InChIToStructure its = igf.getInChIToStructure(inchi.getInChI(),
                                                        DefaultChemObjectBuilder.getInstance());
 
-        if (its.getReturnStatus() != INCHI_RET.OKAY && its.getReturnStatus() != INCHI_RET.WARNING)
+        InchiStatus status = its.getStatus();
+        if (status != InchiStatus.SUCCESS) 
             throw new CDKException("Could not parse InChI - " + its.getMessage());
 
         return its.getAtomContainer();
@@ -31,8 +33,9 @@ public final class JNIInChIHandler implements InChIHandler {
         InChIGeneratorFactory igf = InChIGeneratorFactory.getInstance();
         InChIGenerator its = igf.getInChIGenerator(container);
 
-        if (its.getReturnStatus() != INCHI_RET.OKAY && its.getReturnStatus() != INCHI_RET.WARNING)
-            throw new CDKException("Could not generate InChI - " + its.getMessage());
+        InchiStatus status = its.getStatus();
+        if (status != InchiStatus.SUCCESS)
+                    throw new CDKException("Could not generate InChI - " + its.getMessage());
 
         InChI inchi = new InChI();
         inchi.setInChI(its.getInchi());

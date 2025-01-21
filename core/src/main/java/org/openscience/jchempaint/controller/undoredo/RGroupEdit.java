@@ -31,6 +31,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.isomorphism.matchers.IRGroup;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
@@ -88,14 +89,15 @@ public class RGroupEdit implements IUndoRedoable {
 			redoRgroupLists = new HashMap<Integer,RGroupList>();
 			for (Iterator<Integer> itr=rgrpHandler.getrGroupQuery().getRGroupDefinitions().keySet().iterator(); itr.hasNext();) {
 				int rNum=itr.next();
-				redoRgroupLists.put(rNum, rgrpHandler.getrGroupQuery().getRGroupDefinitions().get(rNum));
+				redoRgroupLists.put(rNum, (RGroupList) rgrpHandler.getrGroupQuery().getRGroupDefinitions().get(rNum));
 			}
 		}
 		if(existingRGroupApo!=null) {
 			RGroup undoRGroup=existingRGroupApo.keySet().iterator().next();			
     		for (Iterator<Integer> rnumItr= hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-    			for (RGroup rgrp:  hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-    				if(rgrp.equals(undoRGroup)) {
+				for (IRGroup irgrp : hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
+    				RGroup rgrp = (RGroup) irgrp; 
+				if(rgrp.equals(undoRGroup)) {
     			        redoRGroupApo= new HashMap <RGroup,Map<Integer,IAtom>>();
     			        HashMap<Integer,IAtom> map = new HashMap<Integer,IAtom>();
     			        map.put(1, rgrp.getFirstAttachmentPoint());
@@ -154,17 +156,23 @@ public class RGroupEdit implements IUndoRedoable {
 		}
 
 		else if (type.startsWith("setAtomApoAction")) {
-			RGroup undoRGroup=existingRGroupApo.keySet().iterator().next();			
-    		for (Iterator<Integer> rnumItr= hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-    			for (RGroup rgrp:  hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-    				if(rgrp.equals(undoRGroup)) {
-    					IAtom apo1=existingRGroupApo.get(undoRGroup).get(1);
-    					IAtom apo2=existingRGroupApo.get(undoRGroup).get(2);
-    					rgrp.setFirstAttachmentPoint(apo1);
-    					rgrp.setSecondAttachmentPoint(apo2);
-    				}
-    			}
-    		}
+			RGroup undoRGroup = existingRGroupApo.keySet().iterator().next();			
+			for (Iterator<Integer> rnumItr = hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
+				for (IRGroup rgrp : hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
+					if (rgrp.equals(undoRGroup)) {
+						IAtom apo1 = existingRGroupApo.get(undoRGroup).get(1);
+						IAtom apo2 = existingRGroupApo.get(undoRGroup).get(2);
+						
+						if (rgrp instanceof RGroup) {
+							RGroup rGroup = (RGroup) rgrp;
+							rGroup.setFirstAttachmentPoint(apo1);
+							rGroup.setSecondAttachmentPoint(apo2);
+						} else {
+							throw new IllegalStateException("rgrp is not an instance of RGroup");
+						}
+					}
+				}
+			}
 		}
 		else if (type.startsWith("setBondApoAction")) {
 			for(Iterator<IAtom> atItr=existingRootAttachmentPoints.keySet().iterator(); atItr.hasNext();) {
@@ -194,7 +202,7 @@ public class RGroupEdit implements IUndoRedoable {
 			rgrpQ.getRootStructure().setProperty(CDKConstants.TITLE, RGroup.ROOT_LABEL);
     		for (Iterator<Integer> rnumItr= hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
     			int rNum=rnumItr.next();
-    			for (RGroup rgrp:  hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rNum).getRGroups()) {
+    			for (IRGroup rgrp:  hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rNum).getRGroups()) {
     				rgrp.getGroup().setProperty(CDKConstants.TITLE,RGroup.makeLabel(rNum));
     			}
     		}
@@ -239,17 +247,24 @@ public class RGroupEdit implements IUndoRedoable {
 			}
 		}
 		else if (type.startsWith("setAtomApoAction")) {
-			RGroup redoRGroup=redoRGroupApo.keySet().iterator().next();			
-    		for (Iterator<Integer> rnumItr= hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-    			for (RGroup rgrp:  hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-    				if(rgrp.equals(redoRGroup)) {
-    					IAtom apo1=redoRGroupApo.get(redoRGroup).get(1);
-    					IAtom apo2=redoRGroupApo.get(redoRGroup).get(2);
-    					rgrp.setFirstAttachmentPoint(apo1);
-    					rgrp.setSecondAttachmentPoint(apo2);
-    				}
-    			}
-    		}
+			RGroup redoRGroup = redoRGroupApo.keySet().iterator().next();
+			for (Iterator<Integer> rnumItr = hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
+				for (IRGroup rgrp : hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
+					if (rgrp.equals(redoRGroup)) {
+						IAtom apo1 = redoRGroupApo.get(redoRGroup).get(1);
+						IAtom apo2 = redoRGroupApo.get(redoRGroup).get(2);
+		
+						// Cast IRGroup to RGroup
+						if (rgrp instanceof RGroup) {
+							RGroup rGroup = (RGroup) rgrp;
+							rGroup.setFirstAttachmentPoint(apo1);
+							rGroup.setSecondAttachmentPoint(apo2);
+						} else {
+							throw new IllegalStateException("rgrp is not an instance of RGroup");
+						}
+					}
+				}
+			}
 		}
 		else if (type.startsWith("setBondApoAction")) {
 			for(Iterator<IAtom> atItr=redoRootAttachmentPoints.keySet().iterator(); atItr.hasNext();) {

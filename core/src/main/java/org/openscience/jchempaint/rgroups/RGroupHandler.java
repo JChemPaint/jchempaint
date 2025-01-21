@@ -43,7 +43,9 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
+import org.openscience.cdk.isomorphism.matchers.IRGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
+import org.openscience.cdk.isomorphism.matchers.IRGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
@@ -93,8 +95,8 @@ public class RGroupHandler  {
 		moleculeSet.addAtomContainer(rGroupQuery.getRootStructure());
 		chemModel.setMoleculeSet(moleculeSet);
 		for (int rgrpNum : sortRGroupNumbers()) {
-			RGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
-			for (RGroup rgrp : rgrpList.getRGroups()) {
+			IRGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
+			for (IRGroup rgrp : rgrpList.getRGroups()) {
 				chemModel.getMoleculeSet().addAtomContainer(rgrp.getGroup()); 
 			}
 		}
@@ -150,8 +152,8 @@ public class RGroupHandler  {
 		for (int rgrpNum : sortRGroupNumbers()) {
 			double listXRight=xLeft;
 
-			RGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
-			for (RGroup rgrp : rgrpList.getRGroups()) {
+			IRGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
+			for (IRGroup rgrp : rgrpList.getRGroups()) {
 
 				double rgrpXleft=(findBoundary(rgrp.getGroup(),true,true,Double.POSITIVE_INFINITY));
 				double rgrpYtop=(findBoundary(rgrp.getGroup(),false,false,Double.NEGATIVE_INFINITY));
@@ -209,11 +211,11 @@ public class RGroupHandler  {
 	public void cleanUpRGroup(IAtomContainerSet moleculeSet){
 		List<Integer> rgrpToRemove=new ArrayList<Integer>();
 		if (rGroupQuery!=null){
-			Map<Integer,RGroupList> def = rGroupQuery.getRGroupDefinitions();
+			Map<Integer,IRGroupList> def = rGroupQuery.getRGroupDefinitions();
 			for(Iterator<Integer> itr= def.keySet().iterator();itr.hasNext();) {
 				//Remove RGroups with empty atom containers from RGroupLists
 				int rgrpNum=itr.next();
-				List<RGroup> rgpList = def.get(rgrpNum).getRGroups();
+				List<IRGroup> rgpList = def.get(rgrpNum).getRGroups();
 				for (int i = 0; i < rgpList.size(); i++) {
 					if(!exists(rgpList.get(i).getGroup(),moleculeSet) || rgpList.get(i).getGroup().getAtomCount()==0) {
 						rgpList.remove(i);
@@ -221,7 +223,7 @@ public class RGroupHandler  {
 				}
 				//Drop RGroupLists that don't have any content atom-wise
 				int atomCount=0;
-				for (RGroup rgrp :rGroupQuery.getRGroupDefinitions().get(rgrpNum).getRGroups()) {
+				for (IRGroup rgrp :rGroupQuery.getRGroupDefinitions().get(rgrpNum).getRGroups()) {
 					atomCount+=rgrp.getGroup().getAtomCount();
 				}
 				if (atomCount==0) {
@@ -277,46 +279,53 @@ public class RGroupHandler  {
 							hasRoot=true;
 							break atoms;
 						}
-						else {
-							Map<Integer,RGroupList> def = rGroupQuery.getRGroupDefinitions();
-							for(Iterator<Integer> itr= def.keySet().iterator();itr.hasNext();) {
-								int rgrpNum=itr.next();
-								List<RGroup> rgpList = def.get(rgrpNum).getRGroups();
-								for (int i = 0; i < rgpList.size(); i++) {
+							else {Map<Integer, IRGroupList> def = rGroupQuery.getRGroupDefinitions();
+							for (Iterator<Integer> itr = def.keySet().iterator(); itr.hasNext();) {
+    							int rgrpNum = itr.next();
+    							List<IRGroup> rgpList = def.get(rgrpNum).getRGroups();
+    							for (int i = 0; i < rgpList.size(); i++) {
+        						IRGroup rgp = rgpList.get(i);
 
-									if(rgpList.get(i).getGroup().contains(movedAtom)||
-											(rgpList.get(i).getFirstAttachmentPoint()!=null && rgpList.get(i).getFirstAttachmentPoint().equals(movedAtom)))
-									{
-										rgpList.get(i).setGroup(newAtc);
-										/*
-										//makes undo of deleting all atoms seq work better.. never mind garbage
+        							// Check if rgp is of type RGroup before calling setGroup
+        							if (rgp != null && rgp.getGroup().contains(movedAtom) ||
+            							(rgp.getFirstAttachmentPoint() != null && rgp.getFirstAttachmentPoint().equals(movedAtom))) {
 
-										if (!newAtc.contains(rgpList.get(i).getFirstAttachmentPoint()) ) {
-											rgpList.get(i).setFirstAttachmentPoint(null);
-										}
-										if (!newAtc.contains(rgpList.get(i).getSecondAttachmentPoint()) ) {
-											rgpList.get(i).setSecondAttachmentPoint(null);
-										}
-										*/
-										newAtc.setProperty(CDKConstants.TITLE, RGroup.makeLabel(rgrpNum));
-										break atoms;
-									}
-								}
+						        	    // Safely cast to RGroup
+            							if (rgp instanceof RGroup) {
+                						RGroup concreteRgp = (RGroup) rgp;
+
+					    	            // Now you can safely call setGroup and other methods
+                						concreteRgp.setGroup(newAtc);
+
+                						// Optionally, if you want to clear attachment points if atoms are not in newAtc, uncomment the following lines:
+                						/*
+                						if (!newAtc.contains(concreteRgp.getFirstAttachmentPoint())) {
+                    					concreteRgp.setFirstAttachmentPoint(null);
+                						}
+                						if (!newAtc.contains(concreteRgp.getSecondAttachmentPoint())) {
+                    					concreteRgp.setSecondAttachmentPoint(null);
+                						}
+                						*/
+                						newAtc.setProperty(CDKConstants.TITLE, RGroup.makeLabel(rgrpNum));
+                						break atoms;
+            							}
+        							}
+    							}
 							}
 						}
 					}
-			}
-			if(!hasRoot) {
-				System.err.println(">>BAD: lost track of the R-group");
-				this.rGroupQuery=null;
-				for (IAtomContainer atc : newSet.atomContainers() ) {
-					atc.setProperty(CDKConstants.TITLE, null);
-				}
-				throw new CDKException ("R-group invalidated");
+						if(!hasRoot) {
+							System.err.println(">>BAD: lost track of the R-group");
+							this.rGroupQuery=null;
+								for (IAtomContainer atc : newSet.atomContainers() ) {
+									atc.setProperty(CDKConstants.TITLE, null);
+								}
+							throw new CDKException ("R-group invalidated");
+						}
 			}
 		}
 	}
-
+	
 	/**
 	 * Verifies if a merge is allowed from the R-Group's point of view.
 	 * Merging between the root structure and r-group substitutes is not allowed, 
@@ -356,11 +365,11 @@ public class RGroupHandler  {
     	Map<Integer,Map<Integer,Integer>> rgrpHash = new HashMap<Integer,Map<Integer,Integer>>();
     	
     	if(rGroupQuery!=null) {
-			Map<Integer,RGroupList> def = rGroupQuery.getRGroupDefinitions();
+			Map<Integer,IRGroupList> def = rGroupQuery.getRGroupDefinitions();
 			for(Iterator<Integer> itr= def.keySet().iterator();itr.hasNext();) {
 				int rgrpNum=itr.next();
-				List<RGroup> rgpList = def.get(rgrpNum).getRGroups();
-				for(RGroup rgp : rgpList) {
+				List<IRGroup> rgpList = def.get(rgrpNum).getRGroups();
+				for(IRGroup rgp : rgpList) {
 					if (rgp!=null) {
 						Map<Integer,Integer> hash = new HashMap<Integer,Integer>();
 						hash.put(0, rgp.getGroup()==null?null:rgp.getGroup().hashCode());
@@ -384,23 +393,30 @@ public class RGroupHandler  {
     		int rootHash = mash.get(-1).get(0);
     		rGroupQuery.setRootStructure(findContainer(rootHash,mset));
 
-    		Map<Integer,RGroupList> def = rGroupQuery.getRGroupDefinitions();
+    		Map<Integer,IRGroupList> def = rGroupQuery.getRGroupDefinitions();
     		for (Iterator<Integer>rgpHashItr=mash.keySet().iterator(); rgpHashItr.hasNext();) {
     			int rgpHash = rgpHashItr.next();
     			restore:
         		for(Iterator<Integer> itr= def.keySet().iterator();itr.hasNext();) {
     				int rgrpNum=itr.next();
-    				List<RGroup> rgpList = def.get(rgrpNum).getRGroups();
-    				for(RGroup rgp : rgpList) {
-    					if (rgp!=null && rgp.hashCode()==rgpHash) {
-    						rgp.setGroup(findContainer(mash.get(rgpHash).get(0),mset));
-    						if (rgp.getGroup()!=null) {
-    							rgp.setFirstAttachmentPoint(findAtom(mash.get(rgpHash).get(1),rgp.getGroup()));
-    							rgp.setSecondAttachmentPoint(findAtom(mash.get(rgpHash).get(2),rgp.getGroup()));
-    						}
-    						break restore;
-    					}
-    				}
+    				List<IRGroup> rgpList = def.get(rgrpNum).getRGroups();
+					for (IRGroup rgp : rgpList) {
+						if (rgp != null && rgp.hashCode() == rgpHash) {
+							// Ensure rgp is an instance of RGroup
+							if (rgp instanceof RGroup) {
+								RGroup concreteRgp = (RGroup) rgp;  // Cast rgp to RGroup
+					
+								// Now you can safely call setGroup
+								concreteRgp.setGroup(findContainer(mash.get(rgpHash).get(0), mset));
+					
+								if (concreteRgp.getGroup() != null) {
+									concreteRgp.setFirstAttachmentPoint(findAtom(mash.get(rgpHash).get(1), concreteRgp.getGroup()));
+									concreteRgp.setSecondAttachmentPoint(findAtom(mash.get(rgpHash).get(2), concreteRgp.getGroup()));
+								}
+							}
+							break restore;  // Exit the loop when done
+						}
+					}
     			}
     		}
     	}
@@ -483,9 +499,9 @@ public class RGroupHandler  {
     public boolean isAtomPartOfSubstitute(IAtom atom) {
     	if (rGroupQuery!=null && rGroupQuery.getRGroupDefinitions()!=null) {
 			for (Iterator<Integer> itr = rGroupQuery.getRGroupDefinitions().keySet().iterator(); itr.hasNext(); ) {
-				RGroupList rgpList =rGroupQuery.getRGroupDefinitions().get(itr.next());
+				IRGroupList rgpList =rGroupQuery.getRGroupDefinitions().get(itr.next());
 				if(rgpList!=null && rgpList.getRGroups()!=null) {
-					for (RGroup rgrp: rgpList.getRGroups() ) {
+					for (IRGroup rgrp: rgpList.getRGroups() ) {
 						if(rgrp.getGroup().contains(atom)) {
 							return true;
 						}
