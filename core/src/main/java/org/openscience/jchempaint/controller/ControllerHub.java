@@ -199,23 +199,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		generalModules.add(module);
 	}
 
-	public void mouseWheelMovedBackward(int clicks) {
+	public void mouseWheelMovedBackward(int modifiers, int clicks) {
 		for (IControllerModule module : generalModules) {
-			module.mouseWheelMovedBackward(clicks);
+			module.mouseWheelMovedBackward(modifiers, clicks);
 		}
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
-			activeModule.mouseWheelMovedBackward(clicks);
+			activeModule.mouseWheelMovedBackward(modifiers, clicks);
 
 	}
 
-	public void mouseWheelMovedForward(int clicks) {
+	public void mouseWheelMovedForward(int modifiers, int clicks) {
 		for (IControllerModule module : generalModules) {
-			module.mouseWheelMovedForward(clicks);
+			module.mouseWheelMovedForward(modifiers, clicks);
 		}
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
-			activeModule.mouseWheelMovedForward(clicks);
+			activeModule.mouseWheelMovedForward(modifiers, clicks);
 
 	}
 

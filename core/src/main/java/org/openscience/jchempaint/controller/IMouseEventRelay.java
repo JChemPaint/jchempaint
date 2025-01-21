@@ -30,9 +30,9 @@ package org.openscience.jchempaint.controller;
  */
 public interface IMouseEventRelay {
     
-    void mouseWheelMovedBackward(int clicks);
+    void mouseWheelMovedBackward(int modifiers, int clicks);
     
-    void mouseWheelMovedForward(int clicks);
+    void mouseWheelMovedForward(int modifiers, int clicks);
 
     void mouseClickedUp(int screenCoordX, int screenCoordY);
 

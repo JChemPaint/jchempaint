@@ -41,9 +41,9 @@ public interface IControllerModule {
 
 	public void setChemModelRelay(IChemModelRelay relay);
 	
-	public void mouseWheelMovedBackward(int clicks);
+	public void mouseWheelMovedBackward(int modifiers, int clicks);
 
-	public void mouseWheelMovedForward(int clicks);
+	public void mouseWheelMovedForward(int modifiers, int clicks);
 
 	
 	/**

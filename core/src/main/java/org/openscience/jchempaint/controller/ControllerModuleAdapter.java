@@ -58,10 +58,10 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
         return (dH == Double.POSITIVE_INFINITY) || (dA > dH && dB > dH);
     }
 
-	public void mouseWheelMovedBackward(int clicks) {
+	public void mouseWheelMovedBackward(int modifiers, int clicks) {
 	}
 
-	public void mouseWheelMovedForward(int clicks) {
+	public void mouseWheelMovedForward(int modifiers, int clicks) {
 	}
 
 	public void mouseClickedDouble(Point2d worldCoord) {
