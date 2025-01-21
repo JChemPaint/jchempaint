@@ -11,6 +11,8 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
  */
 public class ZoomModule extends ControllerModuleAdapter {
 
+    public static final int MAX_ZOOM_AMOUNT = 10;
+    public static final double MIN_ZOOM_AMOUNT = .1;
     private Point2d worldCoord = null;
     private String ID;
 
@@ -31,7 +33,16 @@ public class ZoomModule extends ControllerModuleAdapter {
     }
 
     private void doZoom(double z) {
+
         IRenderer renderer = chemModelRelay.getRenderer();
+        double currentZoom = renderer.getRenderer2DModel().getZoomFactor();
+        System.err.println(z);
+
+        if (currentZoom * z <= MIN_ZOOM_AMOUNT)
+            return;
+        if (currentZoom * z >= MAX_ZOOM_AMOUNT)
+            return;
+
         Point2d screenCoord = 
             renderer.toScreenCoordinates( worldCoord.x, worldCoord.y );
         zoom(z);
@@ -42,13 +53,15 @@ public class ZoomModule extends ControllerModuleAdapter {
         v.sub( screenCoord, newScreenCoords );
         renderer.shiftDrawCenter( v.x, v.y );
     }
-    
+
     private void zoom(double zoomFactor) {
         JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
         double zoom = model.getZoomFactor();
-        zoom = zoom * zoomFactor;
-        if (zoom < .1 && zoom > 100)
+        if (zoom <= MIN_ZOOM_AMOUNT || zoom >= MAX_ZOOM_AMOUNT)
             return;
+        zoom = zoom * zoomFactor;
+        // clamp
+        zoom = Math.max(MIN_ZOOM_AMOUNT, Math.min(zoom, MAX_ZOOM_AMOUNT));
         chemModelRelay.getRenderer().setZoom( zoom );
     }
 
