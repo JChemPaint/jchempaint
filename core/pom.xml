@@ -50,10 +50,6 @@
 
         <dependency>
             <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-annotation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-atomtype</artifactId>
         </dependency>
         <dependency>
