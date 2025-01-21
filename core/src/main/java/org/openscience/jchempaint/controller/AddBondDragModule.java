@@ -32,6 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
@@ -63,7 +64,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     /**
      * Constructor for the AddBondDragModule.
-     * 
+     *
      * @param chemModelRelay   The current chemModelRelay.
      * @param stereoForNewBond If a new bond is formed, which stereo specification should it have?
      * @param makeInitialBond  true=click on empty place gives bond, false=gives atom.
@@ -101,7 +102,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         // in case we are starting on an empty canvas
         if(bondLength==0|| Double.isNaN(bondLength))
             bondLength=1.5;
-        
+
         start = new Point2d(worldCoord);
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond( worldCoord );
@@ -168,6 +169,8 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             dest = roundAngle( start, worldCoordTo, bondLength );
             IAtom atom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
             IBond bond = getBuilder().newInstance(IBond.class, source,atom, orderForNewBond, stereoForNewBond );
+            chemModelRelay.addPhantomAtom( source );
+            chemModelRelay.addPhantomAtom( atom );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }
@@ -243,7 +246,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             handler.postEdit(undoredo);
         }
         chemModelRelay.updateView();
-    
+
     }
 
     public String getDrawModeString() {
@@ -254,7 +257,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         else
             return "Draw Bond";
     }
-    
+
     public String getID() {
         return ID;
     }
@@ -265,7 +268,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     /**
      * Tells which stereo info new bonds will get.
-     * 
+     *
      * @return The stereo which new bonds will have.
      */
     public IBond.Stereo getStereoForNewBond() {

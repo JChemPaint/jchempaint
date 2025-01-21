@@ -41,27 +41,17 @@ import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Element;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
-import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.interfaces.IPseudoAtom;
-import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.cdk.interfaces.IReactionSet;
-import org.openscience.cdk.interfaces.IRing;
-import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -750,7 +740,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         
         boolean expired(IBond bond) {
             long deltaT = System.nanoTime() - time;
-            return this.bond == null || bond != this.bond || TimeUnit.NANOSECONDS.toMillis(deltaT) > 2500;
+            return this.bond == null || !bond.equals(this.bond) || TimeUnit.NANOSECONDS.toMillis(deltaT) > 2500;
         }
     }
     
@@ -1410,7 +1400,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IAtomContainer sharedAtoms = atom.getBuilder().newInstance(IAtomContainer.class);
 		sharedAtoms.addAtom(atom);
 
-		IRing newRing = createAttachRing(sharedAtoms, ringSize, "C", phantom);
+		IRing newRing = createAttachRing(sharedAtoms, ringSize, IElement.C, phantom);
 		double bondLength = GeometryTools.getBondLengthAverage(sourceContainer);
 		Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms, chemModel);
 
@@ -1430,12 +1420,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					ringCenterVector, bondLength);
 
 			for (IAtom ringAtom : newRing.atoms()) {
-				if (ringAtom != atom) {
-					if (phantom)
-						this.addPhantomAtom(ringAtom);
-					else
-						sourceContainer.addAtom(ringAtom);
-				}
+				if (phantom)
+					this.addPhantomAtom(ringAtom);
+				else if (!ringAtom.equals(atom))
+					sourceContainer.addAtom(ringAtom);
 			}
 
 			for (IBond ringBond : newRing.bonds()) {
@@ -1450,7 +1438,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 			double d = rModel.getHighlightDistance() / rModel.getScale();
 			for (IAtom newatom : newRing.atoms()) {
-				if (atom != newatom && getClosestAtom(atom) != null) {
+				if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
 					atom.getPoint2d().x += d;
 				}
 			}
@@ -1474,7 +1462,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		sharedAtoms.addAtom(atom);
 
 		// make a benzene ring
-		IRing newRing = createAttachRing(sharedAtoms, 6, "C", phantom);
+		IRing newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
 		newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
 		newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
 		newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
@@ -1510,7 +1498,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// add the ring to the source container/phantoms
 		for (IAtom ringAtom : newRing.atoms()) {
-			if (ringAtom != atom) {
+			if (!ringAtom.equals(atom)) {
 				if (phantom)
 					this.addPhantomAtom(ringAtom);
 				else
@@ -1527,7 +1515,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (!phantom)
 			updateAtoms(sourceContainer, newRing.atoms());
 		for (IAtom newatom : newRing.atoms()) {
-			if (atom != newatom && getClosestAtom(atom) != null) {
+			if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
 				JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 				double d = rModel.getHighlightDistance() / rModel.getScale();
 				atom.getPoint2d().x += d;
@@ -1548,32 +1536,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 *            Ring
 	 * @param ringSize
 	 *            The size (number of Atoms) the Ring will have
-	 * @param symbol
-	 *            The element symbol the new atoms will have
+	 * @param atomicNum
+	 *            The element number the new atoms will have
 	 * @param phantom
 	 *            If true we assume this is a phantom ring and do not put it
 	 *            into undo.
 	 * @return The constructed Ring
 	 */
 	private IRing createAttachRing(IAtomContainer sharedAtoms, int ringSize,
-			String symbol, boolean phantom) {
+																 int atomicNum, boolean phantom) {
 		IRing newRing = sharedAtoms.getBuilder().newInstance(IRing.class,ringSize);
-		IAtom[] ringAtoms = new IAtom[ringSize];
 		for (int i = 0; i < sharedAtoms.getAtomCount(); i++) {
-			ringAtoms[i] = sharedAtoms.getAtom(i);
+			newRing.addAtom(sharedAtoms.getAtom(i));
 		}
 		for (int i = sharedAtoms.getAtomCount(); i < ringSize; i++) {
-			ringAtoms[i] = sharedAtoms.getBuilder().newInstance(IAtom.class,symbol);
+			newRing.newAtom(atomicNum);
 		}
 		for (IBond bond : sharedAtoms.bonds())
 			newRing.addBond(bond);
 		for (int i = sharedAtoms.getBondCount(); i < ringSize - 1; i++) {
-			newRing.addBond(sharedAtoms.getBuilder().newInstance(IBond.class,ringAtoms[i],
-					ringAtoms[i + 1], IBond.Order.SINGLE));
+			newRing.newBond(newRing.getAtom(i),newRing.getAtom(i + 1));
 		}
-		newRing.addBond(sharedAtoms.getBuilder().newInstance(IBond.class,
-				ringAtoms[ringSize - 1], ringAtoms[0], IBond.Order.SINGLE));
-		newRing.setAtoms(ringAtoms);
+		newRing.newBond(newRing.getAtom(ringSize-1),newRing.getAtom(0));
+
 		if (!phantom && getUndoRedoFactory() != null
 				&& getUndoRedoHandler() != null) {
 			IAtomContainer undoRedoContainer = newRing.getBuilder()
@@ -1632,7 +1617,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IAtomContainer sourceContainer = ChemModelManipulator
 				.getRelevantAtomContainer(chemModel, firstAtom);
 
-		Point2d sharedAtomsCenter = GeometryTools.get2DCenter(sharedAtoms);
+		Point2d sharedAtomsCenter = GeometryUtil.get2DCenter(sharedAtoms);
 
 		// calculate two points that are perpendicular to the highlighted bond
 		// and have a certain distance from the bond center
@@ -1641,7 +1626,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		Vector2d diff = new Vector2d(secondPoint);
 		diff.sub(firstPoint);
 		double bondLength = firstPoint.distance(secondPoint);
-		double angle = GeometryTools.getAngle(diff.x, diff.y);
+		double angle = GeometryUtil.getAngle(diff.x, diff.y);
 		Point2d newPoint1 = new Point2d( // FIXME: what is this point??
 				(Math.cos(angle + (Math.PI / 2)) * bondLength / 4)
 						+ sharedAtomsCenter.x, (Math.sin(angle + (Math.PI / 2))
@@ -1656,14 +1641,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// decide on which side to draw the ring??
 		IAtomContainer connectedAtoms = bond.getBuilder().newInstance(IAtomContainer.class);
 		for (IAtom atom : sourceContainer.getConnectedAtomsList(firstAtom)) {
-			if (atom != secondAtom)
+			if (!atom.equals(secondAtom))
 				connectedAtoms.addAtom(atom);
 		}
 		for (IAtom atom : sourceContainer.getConnectedAtomsList(secondAtom)) {
-			if (atom != firstAtom)
+			if (!atom.equals(firstAtom))
 				connectedAtoms.addAtom(atom);
 		}
-		Point2d conAtomsCenter = GeometryTools.get2DCenter(connectedAtoms);
+		Point2d conAtomsCenter = GeometryUtil.get2DCenter(connectedAtoms);
 		double distance1 = newPoint1.distance(conAtomsCenter);
 		double distance2 = newPoint2.distance(conAtomsCenter);
 		Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
@@ -1675,25 +1660,21 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
-		IRing newRing = createAttachRing(sharedAtoms, size, "C", phantom);
+		IRing newRing = createAttachRing(sharedAtoms, size, IElement.C, phantom);
 		ringPlacer.setMolecule(sourceContainer);
 		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		// add the new atoms and bonds
 		for (IAtom ringAtom : newRing.atoms()) {
-			if (ringAtom != firstAtom && ringAtom != secondAtom) {
-				if (phantom)
-					addPhantomAtom(ringAtom);
-				else
-					sourceContainer.addAtom(ringAtom);
-			}
+			if (phantom)
+				addPhantomAtom(ringAtom);
+			else if (!ringAtom.equals(firstAtom) && !ringAtom.equals(secondAtom))
+				sourceContainer.addAtom(ringAtom);
 		}
 		for (IBond ringBond : newRing.bonds()) {
-			if (ringBond != bond) {
-				if (phantom)
-					addPhantomBond(ringBond);
-				else
-					sourceContainer.addBond(ringBond);
-			}
+			if (phantom)
+				addPhantomBond(ringBond);
+			else if (!ringBond.equals(bond))
+				sourceContainer.addBond(ringBond);
 		}
 		if (!phantom)
 			updateAtoms(sourceContainer, newRing.atoms());
@@ -1701,7 +1682,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
 		for (IAtom atom : newRing.atoms()) {
-			if (atom != firstAtom && atom != secondAtom
+			if (!atom.equals(firstAtom) && !atom.equals(secondAtom)
 					&& getClosestAtom(atom) != null) {
 				atom.getPoint2d().x += d;
 			}
@@ -1788,11 +1769,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// decide on which side to draw the ring??
 		IAtomContainer connectedAtoms = bond.getBuilder().newInstance(IAtomContainer.class);
 		for (IAtom atom : sourceContainer.getConnectedAtomsList(firstAtom)) {
-			if (atom != secondAtom)
+			if (!atom.equals(secondAtom))
 				connectedAtoms.addAtom(atom);
 		}
 		for (IAtom atom : sourceContainer.getConnectedAtomsList(secondAtom)) {
-			if (atom != firstAtom)
+			if (!atom.equals(firstAtom))
 				connectedAtoms.addAtom(atom);
 		}
 		Point2d conAtomsCenter = GeometryTools.get2DCenter(connectedAtoms);
@@ -1807,7 +1788,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
-		IRing newRing = createAttachRing(sharedAtoms, 6, "C", phantom);
+		IRing newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
 		ringPlacer.setMolecule(sourceContainer);
 		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		if (sourceContainer.getMaximumBondOrder(bond.getAtom(0)) == IBond.Order.SINGLE
@@ -1821,7 +1802,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		// add the new atoms and bonds
 		for (IAtom ringAtom : newRing.atoms()) {
-			if (ringAtom != firstAtom && ringAtom != secondAtom) {
+			if (!ringAtom.equals(firstAtom) && !ringAtom.equals(secondAtom)) {
 				if (phantom)
 					this.addPhantomAtom(ringAtom);
 				else
@@ -1842,7 +1823,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
 		for (IAtom atom : newRing.atoms()) {
-			if (atom != firstAtom && atom != secondAtom
+			if (!atom.equals(firstAtom) && !atom.equals(secondAtom)
 					&& getClosestAtom(atom) != null) {
 				atom.getPoint2d().x += d;
 			}
@@ -2283,8 +2264,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	/**
 	 * Updates an atom with respect to its hydrogen count
 	 * 
-	 *@param container
-	 *            The AtomContainer to work on
 	 *@param atom
 	 *            The Atom to update
 	 */
@@ -2608,17 +2587,20 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	public double calculateAverageBondLength(IAtomContainerSet moleculeSet) {
 		Double averageBondModelLength = 0.0;
+		double DEFAULT_BOND_LENGTH = 1.5;
 		for (IAtomContainer atomContainer : ChemModelManipulator
 				.getAllAtomContainers(chemModel)) {
-			averageBondModelLength += GeometryTools
-					.getBondLengthAverage(atomContainer);
+			if (atomContainer.getBondCount() > 0)
+				averageBondModelLength += GeometryUtil.getBondLengthMedian(atomContainer);
+			else
+				averageBondModelLength = DEFAULT_BOND_LENGTH;
 		}
 		if (!averageBondModelLength.isNaN() && averageBondModelLength != 0) {
 			return averageBondModelLength
 					/ ChemModelManipulator.getAllAtomContainers(chemModel)
 							.size();
 		} else {
-			return 1.5; // some default value for an empty canvas
+			return DEFAULT_BOND_LENGTH; // some default value for an empty canvas
 		}
 	}
 
