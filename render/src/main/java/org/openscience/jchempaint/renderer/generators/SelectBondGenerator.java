@@ -21,9 +21,12 @@
 package org.openscience.jchempaint.renderer.generators;
 
 import java.awt.Color;
+import java.util.Collection;
 
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -55,12 +58,14 @@ public class SelectBondGenerator extends BasicBondGenerator {
         if(selection==null)
         	return selectionElements;
         if (this.autoUpdateSelection || selection.isFilled()) {
-            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
+            Collection<IBond> bonds = selection.elements(IBond.class);
             
-            if (selectedAC != null) {
+            if (!bonds.isEmpty()) {
             	super.setOverrideColor(selectionColor);
             	super.setOverrideBondWidth(model.getSelectionRadius());
-            	selectionElements.add(super.generate(selectedAC, model));
+                for (IBond bond : bonds) {
+                    selectionElements.add(super.generateBond(bond, model));
+                }
             }
         }
 

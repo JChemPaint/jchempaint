@@ -67,29 +67,27 @@ public class SingleSelection<T extends IChemObject> extends AbstractSelection
 	public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
 		if (selection == null)
 			return Collections.emptySet();
-        Set<E> set = new HashSet<E>();
-        if(clazz.isAssignableFrom( IAtom.class )) {
-        	if (selection instanceof IAtom || selection instanceof Atom) {
-	    		set.add((E) selection);
-	            return set;
-        	}
-        	else
-        		return Collections.emptySet();
-    	}
+		Set<E> set = new HashSet<E>();
+		if (IAtom.class.isAssignableFrom(clazz)) {
+			if (selection instanceof IAtom) {
+				set.add((E) selection);
+				return set;
+			} else
+				return Collections.emptySet();
+		}
 
-        if(clazz.isAssignableFrom( IBond.class )) {
-        	if (selection instanceof IBond || selection instanceof Bond) {
-	    		set.add((E) selection);
-	            return set;
-        	}
-        	else
-                return Collections.emptySet();
-    	}
-        
-        if(clazz.isAssignableFrom( IChemObject.class )) {
-    		set.add((E) selection);
-            return set;
-        }
-        return Collections.emptySet();
+		if (IBond.class.isAssignableFrom(clazz)) {
+			if (selection instanceof IBond) {
+				set.add((E) selection);
+				return set;
+			} else
+				return Collections.emptySet();
+		}
+
+		if (IChemObject.class.isAssignableFrom(clazz)) {
+			set.add((E) selection);
+			return set;
+		}
+		return Collections.emptySet();
 	}
 }

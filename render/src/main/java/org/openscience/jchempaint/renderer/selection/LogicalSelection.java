@@ -20,8 +20,13 @@
 package org.openscience.jchempaint.renderer.selection;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -43,7 +48,7 @@ public class LogicalSelection implements IChemObjectSelection {
     
     private Type type;
     
-    private IChemModel chemModel;
+    private Set<IChemObject> selected = new HashSet<>();
     
     public LogicalSelection(LogicalSelection.Type type) {
         this.type = type;
@@ -51,7 +56,7 @@ public class LogicalSelection implements IChemObjectSelection {
 
     public void clear() {
         this.type = Type.NONE;
-        this.chemModel = null;
+        this.selected.clear();
     }
     
     public Type getType() {
@@ -63,19 +68,25 @@ public class LogicalSelection implements IChemObjectSelection {
     }
 
     public IAtomContainer getConnectedAtomContainer() {
-        if (this.chemModel != null) {
-            IAtomContainer ac = this.chemModel.getBuilder().newInstance(IAtomContainer.class);
-            for (IAtomContainer other : 
-                ChemModelManipulator.getAllAtomContainers(chemModel)) {
-                ac.add(other);
-            }
-            return ac;
+        IAtomContainer result = null;
+        for (IAtom atom : elements(IAtom.class)) {
+            if (result == null) result = atom.getBuilder().newAtomContainer();
+            result.addAtom(atom);
         }
-        return null;
+
+        if (result != null) {
+            for (IBond bond : elements(IBond.class)) {
+                if (result.contains(bond.getBegin()) &&
+                    result.contains(bond.getEnd()))
+                    result.addBond(bond);
+            }
+        }
+
+        return result;
     }
 
     public boolean isFilled() {
-        return this.chemModel != null;
+        return this.selected != null;
     }
 
     public boolean isFinished() {
@@ -83,35 +94,41 @@ public class LogicalSelection implements IChemObjectSelection {
     }
 
     public void select(IChemModel chemModel) {
-        if (this.type == Type.ALL) { 
-            this.chemModel = chemModel;
+        if (this.type == Type.ALL) {
+            this.selected.addAll(ChemModelManipulator.getAllChemObjects(chemModel));
         }
     }
     
-    public void select(IAtomContainer atomContainer) {
-        this.chemModel = atomContainer.getBuilder().newInstance(IChemModel.class);
-        IAtomContainerSet molSet = atomContainer.getBuilder().newInstance(IAtomContainerSet.class);
-        molSet.addAtomContainer(atomContainer);
-        this.chemModel.setMoleculeSet(molSet);
+    public void select(Set<IChemObject> chemObjectSet) {
+        this.selected.addAll(chemObjectSet);
     }
 
     public boolean contains( IChemObject obj ) {
         if(type == Type.NONE)
             return false;
-        
-        for(IAtomContainer other:
-                    ChemModelManipulator.getAllAtomContainers( chemModel )) {
-            if(other == obj) return true;
-            
-            if(obj instanceof IBond)
-                if( other.contains( (IBond) obj)) return true;
-            if(obj instanceof IAtom)
-                if( other.contains( (IAtom) obj)) return true;
-        }
-        return false;
+        return selected.contains(obj);
     }
-    
-    public <E extends IChemObject> Collection<E> elements(Class<E> clazz){
-        throw new UnsupportedOperationException();
+
+    @SuppressWarnings("unchecked")
+    public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
+        Collection<E> result = new ArrayList<>();
+        if (IAtom.class.isAssignableFrom(clazz)) {
+            for (IChemObject chemObj : selected) {
+                if (chemObj instanceof IAtom)
+                    result.add((E)chemObj);
+            }
+        }
+        else if (IBond.class.isAssignableFrom(clazz)) {
+            for (IChemObject chemObj : selected) {
+                if (chemObj instanceof IBond)
+                    result.add((E)chemObj);
+            }
+        }
+        else if (IChemObject.class.isAssignableFrom(clazz)) {
+            for (IChemObject chemObj : selected) {
+                result.add((E)chemObj);
+            }
+        }
+        return result;
     }
 }

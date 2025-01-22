@@ -20,6 +20,7 @@
  */
 package org.openscience.jchempaint.renderer.selection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -83,7 +84,27 @@ public class AtomContainerSelection extends AbstractSelection {
     /* (non-Javadoc)
      * @see org.openscience.jchempaint.renderer.selection.IChemObjectSelection#elements(java.lang.Class)
      */
+    @SuppressWarnings("unchecked")
     public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
-        throw new UnsupportedOperationException();
+        Collection<E> result = new ArrayList<>();
+        if (IAtom.class.isAssignableFrom(clazz)) {
+            for (IAtom atom : getConnectedAtomContainer().atoms()) {
+                result.add((E)atom);
+            }
+        }
+        else if (IBond.class.isAssignableFrom(clazz)) {
+            for (IBond bond : getConnectedAtomContainer().bonds()) {
+                result.add((E)bond);
+            }
+        }
+        else if (IChemObject.class.isAssignableFrom(clazz)) {
+            for (IAtom atom : getConnectedAtomContainer().atoms()) {
+                result.add((E)atom);
+            }
+            for (IBond bond : getConnectedAtomContainer().bonds()) {
+                result.add((E)bond);
+            }
+        }
+        return result;
     }
 }

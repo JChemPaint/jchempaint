@@ -63,7 +63,7 @@ public class ChangeIsotopeAction extends JCPAction {
 		if (object == null){
 			//this means the main menu was used
 			if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().atoms().iterator();
+				atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IAtom.class).iterator();
 		}else if (object instanceof IAtom)
 		{
 			List<IAtom> atoms = new ArrayList<IAtom>();
