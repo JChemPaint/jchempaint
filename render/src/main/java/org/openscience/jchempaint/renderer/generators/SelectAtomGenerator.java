@@ -61,15 +61,12 @@ public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
             double r = model.getSelectionRadius() / model.getScale();
 
             double d = 4 * r;
-            IAtomContainer selectedAC = selection.getConnectedAtomContainer();
-            if (selectedAC != null) {
-                for (IAtom atom : selectedAC.atoms()) {
-                    Point2d p = atom.getPoint2d();
-                    IRenderingElement element;
-                    element = new OvalElement(
-                          p.x, p.y, d, false, selectionColor);
-                    selectionElements.add(element);
-                }
+            for (IAtom atom : selection.elements(IAtom.class)) {
+                Point2d p = atom.getPoint2d();
+                IRenderingElement element;
+                element = new OvalElement(
+                      p.x, p.y, d, false, selectionColor);
+                selectionElements.add(element);
             }
         }
         return selectionElements;

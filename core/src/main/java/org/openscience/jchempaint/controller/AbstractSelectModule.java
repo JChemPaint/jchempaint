@@ -24,6 +24,8 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.vecmath.Point2d;
 
@@ -206,26 +208,23 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
             IChemObjectSelection curSel = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
             IChemObjectSelection sel = null;
             if (shiftPressed && curSel != null && curSel.isFilled()) {
-                IAtomContainer container = new AtomContainer(curSel.getConnectedAtomContainer());                
+                Set<IChemObject> chemObjSet = new HashSet<>(curSel.elements(IChemObject.class));
                 if (singleSelection instanceof IAtom) {
                     IAtom atom = (IAtom) singleSelection;
-                    if (!container.contains(atom))  container.addAtom(atom);
-                    else container.removeAtom(atom);
+                    if (!chemObjSet.contains(atom))
+                        chemObjSet.add(atom);
+                    else
+                        chemObjSet.remove(atom);
                 } else if (singleSelection instanceof IBond) {
                     IBond bond = (IBond) singleSelection;
-                    if (!container.contains(bond)) {
-                      if (!container.contains(bond.getBegin()))
-                        container.addAtom(bond.getBegin());
-                      if (!container.contains(bond.getEnd()))
-                        container.addAtom(bond.getEnd());
-                      container.addBond(bond);
+                    if (!chemObjSet.contains(bond)) {
+                        chemObjSet.add(bond);
                     } else {
-                      // note we probably don't want a container here
-                      container.removeBond(bond);
+                        chemObjSet.remove(bond);
                     }
                 }
                 LogicalSelection logSel = new LogicalSelection(LogicalSelection.Type.ALL);
-                logSel.select(container);
+                logSel.select(chemObjSet);
                 sel = logSel;
             } else {
                 if (singleSelection == null) {

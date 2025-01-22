@@ -61,6 +61,7 @@ import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -263,12 +264,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null) {
         	IChemObjectSelection selection = this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
 
-        	if (selection.getConnectedAtomContainer()!=null && selection.getConnectedAtomContainer().getAtomCount()>0)
+        	if (!selection.elements(IAtom.class).isEmpty())
                 enOrDisableMenus(atomMenu,true);
             else
                 enOrDisableMenus(atomMenu,false);
 
-        	if (selection.getConnectedAtomContainer()!=null && selection.getConnectedAtomContainer().getBondCount()>0)
+        	if (!selection.elements(IBond.class).isEmpty())
                 enOrDisableMenus(bondMenu,true);
             else
                 enOrDisableMenus(bondMenu,false);

@@ -21,6 +21,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
@@ -155,11 +156,11 @@ public class JChemPaintMenuHelper {
                     //is empty, various commands return null
                     if((SwingPopupModule.lastAtomPopupedFor!=null && SwingPopupModule.lastAtomPopupedFor.getSymbol()!=null)
                             || (jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && 
-                                    jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null &&
-                                    jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)){
+                                    !jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IAtom.class).isEmpty())){
                         try {
                             String symbol;
-                            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount()>0)
+                            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer()!=null &&
+                               !jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IAtom.class).isEmpty())
                                 symbol = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol();
                             else
                                 symbol = SwingPopupModule.lastAtomPopupedFor.getSymbol();
