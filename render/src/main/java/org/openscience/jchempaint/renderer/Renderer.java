@@ -892,11 +892,17 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         // set the transform
         try {
             this.transform = new AffineTransform();
-            this.transform.translate(this.drawCenter.x, this.drawCenter.y);
+            // JWM 2024: we now zoom relative to one corner of the canvas if not
+            //           FitToScreen - this mirrors other sketchers and
+            //           make more sense IMO. The zoom relative to the center
+            //           is fine for normal CDK molecule rendering
+            if (rendererModel.isFitToScreen())
+                this.transform.translate(this.drawCenter.x, this.drawCenter.y);
             this.transform.scale(1, -1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
             this.transform.scale(this.scale, this.scale);
             this.transform.scale(this.zoom, this.zoom);
-            this.transform.translate(-this.modelCenter.x, -this.modelCenter.y);
+            if (rendererModel.isFitToScreen())
+                this.transform.translate(-this.modelCenter.x, -this.modelCenter.y); // JWM 2024
         } catch (NullPointerException npe) {
             // one of the drawCenter or modelCenter points have not been set!
             System.err.println(String.format(
