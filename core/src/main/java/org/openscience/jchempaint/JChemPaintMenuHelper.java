@@ -259,14 +259,14 @@ public class JChemPaintMenuHelper {
             mi = new JMenuItem(translation);
         }
         JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-        URL url = jcpph.getResource(cmd + JCPAction.imageSuffix);
+        URL url = jcpph.getOptionalResource(cmd + JCPAction.imageSuffix);
         if (url != null)
         {
             ImageIcon image = new ImageIcon(url);
             Image img = image.getImage();
             Image newimg = img.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
             mi.setIcon(new ImageIcon(newimg));
-            URL disabledurl = jcpph.getResource(cmd + JCPAction.disabled_imageSuffix);
+            URL disabledurl = jcpph.getOptionalResource(cmd + JCPAction.disabled_imageSuffix);
             if (disabledurl != null){
                 ImageIcon disabledimage = new ImageIcon(disabledurl);
                 if (image != null){
