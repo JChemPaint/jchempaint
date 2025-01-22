@@ -45,21 +45,11 @@ public class ZoomModule extends ControllerModuleAdapter {
 
         IRenderer renderer = chemModelRelay.getRenderer();
         double currentZoom = renderer.getRenderer2DModel().getZoomFactor();
-
         if (currentZoom * z <= MIN_ZOOM_AMOUNT)
             return;
         if (currentZoom * z >= MAX_ZOOM_AMOUNT)
             return;
-
-        Point2d screenCoord = 
-            renderer.toScreenCoordinates( worldCoord.x, worldCoord.y );
         zoom(z);
-        Point2d newScreenCoords = 
-            renderer.toScreenCoordinates( worldCoord.x, worldCoord.y );
-        
-        Vector2d v= new Vector2d();
-        v.sub( screenCoord, newScreenCoords );
-        renderer.shiftDrawCenter( v.x, v.y );
     }
 
     private void zoom(double zoomFactor) {
