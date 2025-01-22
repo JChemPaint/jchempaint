@@ -1802,13 +1802,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				sourceContainer.addAtom(ringAtom);
 		}
 		for (IBond ringBond : newRing.bonds()) {
-			if (ringBond != bond) {
+			if (!ringBond.equals(bond)) {
 				if (phantom)
 					this.addPhantomBond(ringBond);
 				else
 					sourceContainer.addBond(ringBond);
 			}
 		}
+
 		if (!phantom)
 			updateAtoms(sourceContainer, newRing.atoms());
 
