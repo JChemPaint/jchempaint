@@ -33,6 +33,13 @@
         <module>render</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>Sonatype Snapshots S01</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
