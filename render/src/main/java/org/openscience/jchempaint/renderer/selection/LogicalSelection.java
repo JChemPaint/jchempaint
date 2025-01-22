@@ -95,7 +95,12 @@ public class LogicalSelection implements IChemObjectSelection {
 
     public void select(IChemModel chemModel) {
         if (this.type == Type.ALL) {
-            this.selected.addAll(ChemModelManipulator.getAllChemObjects(chemModel));
+            for (IAtomContainer mol : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+                for (IAtom atom : mol.atoms())
+                    this.selected.add(atom);
+                for (IBond bond : mol.bonds())
+                    this.selected.add(bond);
+            }
         }
     }
     
