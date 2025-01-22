@@ -37,6 +37,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -205,7 +206,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param toRemove If not null, this atomcontainer will be added to moleculeToAddTo as well and removed from chemmodel (this is needed if a merge happens).
      */
     public void addFragment(IAtomContainer toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
-    public IAtomContainer deleteFragment(IAtomContainer toDelete);
+    public AtomBondSet deleteFragment(IAtomContainer toDelete);
     public void cleanup();
     public void flip(boolean horizontal);
     public void invertStereoInSelection();

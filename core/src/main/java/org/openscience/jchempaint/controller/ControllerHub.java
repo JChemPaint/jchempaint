@@ -2185,23 +2185,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public IAtomContainer deleteFragment(IAtomContainer selected) {
+	public AtomBondSet deleteFragment(IAtomContainer selected) {
 
-		IAtomContainer removed = selected.getBuilder().newAtomContainer();
+		AtomBondSet removed = new AtomBondSet();
 		if(rGroupHandler!=null && !rGroupHandler.checkRGroupOkayForDelete(selected, this))
 			return removed;
 
 		Set<IAtom> removedAtoms  = new HashSet<>();
 		Set<IAtom> affectedAtoms = new HashSet<>();
 		for (IAtom atom : selected.atoms()) {
-			removed.addAtom(atom);
+			removed.add(atom);
 			removedAtoms.add(atom);
 		}
 		for (IAtom atom : selected.atoms()) {
 			IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 			for (IBond bond : container.getConnectedBondsList(atom)) {
 				if (!removed.contains(bond)) {
-					removed.addBond(bond);
+					removed.add(bond);
 					affectedAtoms.add(bond.getOther(atom));
 				}
 			}
@@ -2216,7 +2216,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		removeEmptyContainers(chemModel);
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory
-					.getRemoveAtomsAndBondsEdit(chemModel, new AtomBondSet(removed), "Cut", this);
+					.getRemoveAtomsAndBondsEdit(chemModel, removed, "Cut", this);
 			undoredohandler.postEdit(undoredo);
 		}
 		adjustRgroup();
