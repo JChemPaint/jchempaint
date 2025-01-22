@@ -40,6 +40,7 @@ import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -48,6 +49,7 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -95,7 +97,7 @@ public class MoveModule extends ControllerModuleAdapter {
 
         //if we are outside bounding box, we deselect, else
         //we actually start a move.
-        IAtomContainer selectedAC = getSelectedAtomContainer(worldCoord );
+        AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
         if (selectedAC != null) {
 
             // It could be that only a  selected bond is going to be moved. 
@@ -109,11 +111,11 @@ public class MoveModule extends ControllerModuleAdapter {
             for (IBond bond : selectedAC.bonds()) {
                 for (IAtom atom : bond.atoms()){
                     atomsToMove.add(atom);
-                    selectedAC.addAtom(atom);
+                    selectedAC.add(atom);
                 }
             }
 
-            Point2d current = GeometryTools.get2DCenter(selectedAC);
+            Point2d current = GeometryUtil.get2DCenter(selectedAC.atoms());
             start2DCenter = current;
             offset = new Vector2d();
             offset.sub(current, worldCoord);

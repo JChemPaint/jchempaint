@@ -77,6 +77,7 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -221,15 +222,19 @@ public class CopyPasteAction extends JCPAction{
                 renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 jcpPanel.get2DHub().removeBond(bondInRange);
-            } else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
+            } else if (renderModel.getSelection() != null &&
+                       renderModel.getSelection().isFilled()) {
                 IChemObjectSelection selection = renderModel.getSelection();
-                IAtomContainer selected = selection.getConnectedAtomContainer();
-                jcpPanel.get2DHub().deleteFragment(selected);
-                renderModel.setSelection(new LogicalSelection(
-                        LogicalSelection.Type.NONE));
+                AtomBondSet atomBondSet = new AtomBondSet();
+                for (IAtom atom : selection.elements(IAtom.class))
+                    atomBondSet.add(atom);
+                for (IBond bond : selection.elements(IBond.class))
+                    atomBondSet.add(bond);
+                jcpPanel.get2DHub().deleteFragment(atomBondSet);
+                renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             }
-        } else if(type.indexOf("pasteTemplate")>-1){
+        } else if (type.indexOf("pasteTemplate")>-1){
             //if templates are shown, we extract the tab to show if any
             String templatetab="";
             if(type.indexOf("_")>-1){
@@ -394,7 +399,7 @@ public class CopyPasteAction extends JCPAction{
                 IChemObjectSelection selection = renderModel.getSelection();
                 IAtomContainer selected = selection.getConnectedAtomContainer();
                 tocopyclone.add(selected);
-                jcpPanel.get2DHub().deleteFragment(selected);
+                jcpPanel.get2DHub().deleteFragment(new AtomBondSet(selected));
                 renderModel.setSelection(new LogicalSelection(
                         LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();

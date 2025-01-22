@@ -31,6 +31,7 @@ import javax.vecmath.Vector2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 
 /**
@@ -41,8 +42,8 @@ import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
  */
 public interface IAtomBondEdits {
     /* Editing actions for atoms */
-    public IAtomContainer removeAtom(IAtom atom);
-    public IAtomContainer removeAtomWithoutUndo(IAtom atom);
+    public AtomBondSet removeAtom(IAtom atom);
+    public AtomBondSet removeAtomWithoutUndo(IAtom atom);
     public IAtom addAtom(String element, Point2d worldcoord, boolean makePseudoAtom);
     public IAtom addAtomWithoutUndo(String element, Point2d worldcoord, boolean makePseudoAtom);
     public IAtom addAtom(String element, IAtom atom, boolean makePseudoAtom);
