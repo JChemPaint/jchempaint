@@ -49,6 +49,7 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -244,8 +245,6 @@ public class CopyPasteAction extends JCPAction{
             if(templateBrowser.getChosenmolecule()!=null){
                 scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
-                jcpPanel.getRenderPanel().setZoomWide(true);
-                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
             }
         } else if ("paste".equals(type)) {
             handleSystemClipboard(sysClip);
@@ -356,8 +355,8 @@ public class CopyPasteAction extends JCPAction{
             }
             
             if (toPaste != null || rgrpQuery==true) {
-                jcpPanel.getRenderPanel().setZoomWide(true);
-                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+//                jcpPanel.getRenderPanel().setZoomWide(true);
+//                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
                 if ( rgrpQuery==true) {
                 	this.jcpPanel.setChemModel(chemModel);
                 }
@@ -509,7 +508,7 @@ public class CopyPasteAction extends JCPAction{
      */
     private void scaleStructure (IAtomContainer topaste)  {
         double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
-        double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
+        double bondLengthInsert = GeometryUtil.getBondLengthMedian(topaste);
         double scale=bondLengthModel/bondLengthInsert;
         for (IAtom atom : topaste.atoms()) {
             if (atom.getPoint2d()!=null) {
@@ -548,7 +547,7 @@ public class CopyPasteAction extends JCPAction{
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
 
         try {
-            JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+            JChemPaint.generateModel(jcpPanel, toPaste, false, true);
         } catch (CDKException e) {
 			e.printStackTrace();
         	return;

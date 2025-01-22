@@ -492,6 +492,20 @@ public class JChemPaint {
         return chemModel;
     }
 
+    private static void positionStructure(IAtomContainer mol)  {
+        double minX = Double.MAX_VALUE;
+        double maxY = -Double.MAX_VALUE;
+        for (IAtom atom : mol.atoms()) {
+            minX = Math.min(atom.getPoint2d().x, minX);
+            maxY = Math.max(atom.getPoint2d().y, maxY);
+        }
+        int MARGIN = 1;
+        for (IAtom atom : mol.atoms()) {
+            atom.getPoint2d().x -= minX - MARGIN;
+            atom.getPoint2d().y -= maxY + MARGIN;
+        }
+    }
+
     /**
      * Inserts a molecule into the current set, usually from Combobox or Insert field, with possible
      * shifting of the existing set.  
@@ -501,16 +515,36 @@ public class JChemPaint {
      * @param shiftPanel
      * @throws CDKException
      */
-    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel, IAtomContainer molecule, boolean generateCoordinates, boolean shiftPasted) 
+    public static void generateModel(AbstractJChemPaintPanel chemPaintPanel,
+                                     IAtomContainer molecule,
+                                     boolean generateCoordinates,
+                                     boolean shiftPasted)
     throws CDKException {
         if (molecule == null) return;
+
+        if (generateCoordinates) {
+            // now generate 2D coordinates
+            StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+            try {
+                sdg.setMolecule(molecule);
+                sdg.generateCoordinates();
+                molecule = sdg.getMolecule();
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(chemPaintPanel, GT.get("Structure could not be generated"));
+                throw new CDKException(
+                        "Cannot depict structure");
+            }
+        }
+
+        positionStructure(molecule);
 
         IChemModel chemModel = chemPaintPanel.getChemModel();
         IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
         if (moleculeSet == null) {
             moleculeSet = new AtomContainerSet();
         }
-        
+
+
         // On copy & paste on top of an existing drawn structure, prevent the
         // pasted section to be drawn exactly on top or to far away from the 
         // original by shifting it to a fixed position next to it.
@@ -542,19 +576,7 @@ public class JChemPaint {
             }
         }
 
-        if(generateCoordinates){
-            // now generate 2D coordinates
-            StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-            try {
-                sdg.setMolecule(molecule);
-                sdg.generateCoordinates();
-                molecule = sdg.getMolecule();
-            } catch (Exception exc) {
-                JOptionPane.showMessageDialog(chemPaintPanel, GT.get("Structure could not be generated"));
-                throw new CDKException(
-                        "Cannot depict structure");
-            }
-        }
+
 
         if(moleculeSet.getAtomContainer(0).getAtomCount()==0)
             moleculeSet.getAtomContainer(0).add(molecule);
