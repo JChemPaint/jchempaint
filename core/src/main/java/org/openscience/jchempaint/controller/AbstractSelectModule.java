@@ -213,8 +213,16 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                     else container.removeAtom(atom);
                 } else if (singleSelection instanceof IBond) {
                     IBond bond = (IBond) singleSelection;
-                    if (!container.contains(bond))  container.addBond(bond);
-                    else container.addBond(bond);
+                    if (!container.contains(bond)) {
+                      if (!container.contains(bond.getBegin()))
+                        container.addAtom(bond.getBegin());
+                      if (!container.contains(bond.getEnd()))
+                        container.addAtom(bond.getEnd());
+                      container.addBond(bond);
+                    } else {
+                      // note we probably don't want a container here
+                      container.removeBond(bond);
+                    }
                 }
                 LogicalSelection logSel = new LogicalSelection(LogicalSelection.Type.ALL);
                 logSel.select(container);

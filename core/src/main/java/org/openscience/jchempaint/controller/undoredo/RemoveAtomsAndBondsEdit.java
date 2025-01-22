@@ -33,6 +33,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -45,7 +46,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 
     private String type;
 
-	private IAtomContainer undoRedoContainer;
+	private AtomBondSet undoRedoSet;
 
 	private IChemModel chemModel;
 
@@ -54,9 +55,9 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 	private IChemModelRelay chemModelRelay=null;
 
 	public RemoveAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, String type, IChemModelRelay chemModelRelay) {
+								   AtomBondSet undoRedoSet, String type, IChemModelRelay chemModelRelay) {
 		this.chemModel = chemModel;
-		this.undoRedoContainer = undoRedoContainer;
+		this.undoRedoSet = undoRedoSet;
 		this.container = chemModel.getBuilder().newInstance(IAtomContainer.class);
     	Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
     	while (containers.hasNext()) {
@@ -67,12 +68,10 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
-		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
-			IBond bond = undoRedoContainer.getBond(i);
+		for (IBond bond : undoRedoSet.bonds()) {
 			container.removeBond(bond);
 		}
-		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
-			IAtom atom = undoRedoContainer.getAtom(i);
+		for (IAtom atom : undoRedoSet.atoms()) {
 			container.removeAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
@@ -91,13 +90,11 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void undo() {
-		for (int i = 0; i < undoRedoContainer.getBondCount(); i++) {
-			IBond bond = undoRedoContainer.getBond(i);
-			container.addBond(bond);
-		}
-		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
-			IAtom atom = undoRedoContainer.getAtom(i);
+		for (IAtom atom : undoRedoSet.atoms()) {
 			container.addAtom(atom);
+		}
+		for (IBond bond : undoRedoSet.bonds()) {
+			container.addBond(bond);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
 		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);

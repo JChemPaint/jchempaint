@@ -84,6 +84,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
@@ -564,8 +565,9 @@ public class JChemPaint {
         UndoRedoHandler undoRedoHandler= chemPaintPanel.get2DHub().getUndoRedoHandler();
         
         if (undoRedoFactory!=null) {
-            IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(), 
-            molecule, null, "Paste", chemPaintPanel.get2DHub());
+            IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(),
+                                                                             new AtomBondSet(molecule),
+                                                                             null, "Paste", chemPaintPanel.get2DHub());
             undoRedoHandler.postEdit(undoredo);
         }
         

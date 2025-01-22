@@ -29,9 +29,9 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -177,9 +177,9 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
             IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
             UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-            IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
+            AtomBondSet containerForUndoRedo = new AtomBondSet();
             IBond bond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond);
-            containerForUndoRedo.addBond(bond);
+            containerForUndoRedo.add(bond);
             if (factory != null && handler != null) {
                 IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
                 (chemModelRelay.getIChemModel(), containerForUndoRedo, null, "Add Bond",chemModelRelay);
