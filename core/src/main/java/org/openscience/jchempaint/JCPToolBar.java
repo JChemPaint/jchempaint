@@ -173,7 +173,7 @@ public class JCPToolBar
             logger.warn("Could not find Tooltip resource for: ", key);
             logger.debug(e);
         }
-        URL disabledurl = jcpph.getResource(key + JCPAction.disabled_imageSuffix);
+        URL disabledurl = jcpph.getOptionalResource(key + JCPAction.disabled_imageSuffix);
         logger.debug("Trying to find resource: ", url);
         if (disabledurl != null){
             ImageIcon disabledimage = new ImageIcon(disabledurl);

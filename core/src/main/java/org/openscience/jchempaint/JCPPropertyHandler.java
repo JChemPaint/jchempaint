@@ -286,11 +286,11 @@ public class JCPPropertyHandler
 
 
 	/**
-	 *  Returns an URL build from the path of this object and another part that is
-	 *  searched in the properties file. Used to find the images for the buttons.
+	 * Returns an URL build from the path of this object and another part that is
+	 * searched in the properties file. Used to find the images for the buttons.
 	 *
-	 *@param  key  String The String that says which image is searched
-	 *@return      URL The URL where the image is located
+	 * @param  key  String The String that says which image is searched
+	 * @return      URL The URL where the image is located
 	 */
 	public URL getResource(String key)
 	{
@@ -307,13 +307,29 @@ public class JCPPropertyHandler
 		return null;
 	}
 
+	/**
+	 * Returns the resource URL from the properties file that follows the given
+	 * String, if the resource is not found, no log message is emitted.
+	 *
+	 * @param  key  String The String to be looked after
+	 * @return      URL The URL where the image is located
+	 */
+	public URL getOptionalResource(String key)
+	{
+		try {
+			return getClass().getResource(getResources().getString(key));
+		} catch (MissingResourceException ignore) {
+			return null;
+		}
+	}
+
 
 	/**
-	 *  Returns the ResourceString from the properties file that follows the given
-	 *  String.
+	 * Returns the ResourceString from the properties file that follows the given
+	 * String.
 	 *
-	 *@param  key  String The String to be looked after
-	 *@return      String The String that follows the key in the properties file
+	 * @param  key  String The String to be looked after
+	 * @return      String The String that follows the key in the properties file
 	 */
 	public String getResourceString(String key)
 	{
