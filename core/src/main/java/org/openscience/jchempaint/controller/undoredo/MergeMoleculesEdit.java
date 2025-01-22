@@ -30,9 +30,11 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -89,17 +91,36 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	}
 
 	public void redo() throws CannotRedoException {
+		// put everything back together
+		for(int i=0;i<deletedAtoms.size();i++){
+			IAtomContainer containerWithMerge =containers.get(i);
+			IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
+
+			if (droppedContainer!=null) {
+				for (IAtom mAt : droppedContainer.atoms()) {
+					if (!containerWithMerge.contains(mAt)) {
+						containerWithMerge.addAtom(mAt);
+					}
+				}
+				for (IBond mBond : droppedContainer.bonds()) {
+					if (!containerWithMerge.contains(mBond)) {
+						containerWithMerge.addBond(mBond);
+					}
+				}
+				chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
+			}
+		}
+		// delete/update bonds as needed
 	    for(int i=0;i<deletedAtoms.size();i++){
         	IAtomContainer containerWithMerge =containers.get(i);
-        	IAtomContainer droppedContainer =droppedContainers.get(i); // can be null
+        	IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
 
-        	containerWithMerge.removeAtom(deletedAtoms.get(i));
-    		for(IBond bond : deletedBondss.get(i)){
-    			containerWithMerge.removeBond(bond);
-    		}
     		for(IBond bond : bondsWithReplacedAtoms.get(i).keySet()){
     			bond.setAtom(mergedPartnerAtoms.get(i), bondsWithReplacedAtoms.get(i).get(bond));
     		}
+			for(IBond bond : deletedBondss.get(i)){
+				containerWithMerge.removeBond(bond);
+			}
     		deletedAtoms.get(i).getPoint2d().x+=offset.x;
     		deletedAtoms.get(i).getPoint2d().y+=offset.y;
     		chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
@@ -118,6 +139,11 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	            chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
             }
 	    }
+		// now delete the atoms
+		for(int i=0;i<deletedAtoms.size();i++) {
+			IAtomContainer containerWithMerge = containers.get(i);
+			containerWithMerge.removeAtomOnly(deletedAtoms.get(i));
+		}
 	    if(moveundoredo!=null)
 	        moveundoredo.redo();
 
@@ -128,29 +154,41 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	}
 
 	public void undo() throws CannotUndoException {
-        for(int i=0;i<deletedAtoms.size();i++){
-        	IAtomContainer containerWithMerge =containers.get(i);
-        	IAtomContainer droppedContainer =droppedContainers.get(i); // can be null
+		assert deletedAtoms.size() == mergedPartnerAtoms.size();
+
+		// add all atoms back on first
+        for (int i=0; i<deletedAtoms.size(); i++) {
+			IAtomContainer containerWithMerge = containers.get(i);
+			containerWithMerge.addAtom(deletedAtoms.get(i));
+		}
+
+		for (int i=0; i<deletedAtoms.size(); i++){
+
+			IAtomContainer containerWithMerge = containers.get(i);
+        	IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
 
         	//Put dropped atom and bond back into atc1
-        	containerWithMerge.addAtom(deletedAtoms.get(i));
-        	for(IBond bond : deletedBondss.get(i)){
+			for (Map.Entry<IBond,Integer>  e : bondsWithReplacedAtoms.get(i).entrySet()) {
+				IBond bond = e.getKey();
+				int idx = e.getValue();
+				bond.setAtom(deletedAtoms.get(i), idx);
+			}
+			System.err.println(deletedBondss.get(i).size());
+        	for (IBond bond : deletedBondss.get(i)){
                 containerWithMerge.addBond(bond);
             }
-            for(IBond bond : bondsWithReplacedAtoms.get(i).keySet()){
-                bond.setAtom(deletedAtoms.get(i), bondsWithReplacedAtoms.get(i).get(bond));
-            }
+
             deletedAtoms.get(i).getPoint2d().x-=offset.x;
             deletedAtoms.get(i).getPoint2d().y-=offset.y;
             chemModelRelay.updateAtom(deletedAtoms.get(i));
             chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
 
             if (droppedContainer!=null) {
-            	
+
 	            //remove from atc1 what was merged in from atc2
 	            for (IAtom mAt : droppedContainer.atoms()) {
 	            	if (containerWithMerge.contains(mAt)) {
-	            		containerWithMerge.removeAtom(mAt);
+	            		containerWithMerge.removeAtomOnly(mAt);
 	            	}
 	            }
 	            for (IBond mBond : droppedContainer.bonds()) {
@@ -158,7 +196,7 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	            		containerWithMerge.removeBond(mBond);
 	            	}
 	            }
-	            //restore removed container atc2 
+	            //restore removed container atc2
 	            chemModelRelay.getChemModel().getMoleculeSet().addAtomContainer(droppedContainer);
             }
         }

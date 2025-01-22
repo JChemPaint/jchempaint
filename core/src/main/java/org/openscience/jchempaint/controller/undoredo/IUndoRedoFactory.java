@@ -45,6 +45,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
@@ -56,7 +57,10 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
  * @cdk.module control
  */
 public interface IUndoRedoFactory {
-	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel, IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay c2dm);
+	public IUndoRedoable getAddAtomsAndBondsEdit(IChemModel chemModel,
+												 AtomBondSet undoRedoSet,
+												 IAtomContainer removedAtomContainer,
+												 String type, IChemModelRelay c2dm);
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond,
 		IBond.Order[]> changedBonds,
 		Map<IBond, IBond.Stereo[]> changedBondsStereo, String type,
@@ -64,8 +68,8 @@ public interface IUndoRedoFactory {
 	);
 	public IUndoRedoable getChangeAtomSymbolEdit(IAtom atom, String formerSymbol, String symbol, String type, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getChangeChargeEdit(IAtom atomInRange, int formerCharge, int newCharge, String type, IChemModelRelay chemModelRelay);
-	public IUndoRedoable getMoveAtomEdit(IAtomContainer undoRedoContainer, Vector2d offset, String type);
-	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel, IAtomContainer undoRedoContainer, String type, IChemModelRelay chemModelRelay);
+	public IUndoRedoable getMoveAtomEdit(IAtomContainer undoRedoSet, Vector2d offset, String type);
+	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel, AtomBondSet undoRedoSet, String type, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel, IAtom oldAtom, IAtom newAtom, String type);
 	public IUndoRedoable getSingleElectronEdit(IAtomContainer relevantContainer, IElectronContainer electronContainer, boolean add, IChemModelRelay chemModelRelay, IAtom atom, String type);
 	public IUndoRedoable getChangeIsotopeEdit(IAtom atom, Integer formerIsotopeNumber, Integer newIstopeNumber, String type);

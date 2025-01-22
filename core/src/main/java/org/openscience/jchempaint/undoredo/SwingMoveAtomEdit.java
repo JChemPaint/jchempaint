@@ -40,8 +40,8 @@ import org.openscience.jchempaint.controller.undoredo.MoveAtomEdit;
  */
 public class SwingMoveAtomEdit extends MoveAtomEdit implements UndoableEdit{
 
-	public SwingMoveAtomEdit(IAtomContainer undoRedoContainer, Vector2d offset, String type) {
-		super(undoRedoContainer, offset, type);
+	public SwingMoveAtomEdit(IAtomContainer undoRedoSet, Vector2d offset, String type) {
+		super(undoRedoSet, offset, type);
 	}
 
 	public boolean addEdit(UndoableEdit arg0) {

@@ -32,8 +32,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -160,6 +160,8 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             dest = null;
         }else if (merge != null) {
             // set bond
+            chemModelRelay.addPhantomAtom(source);
+            chemModelRelay.addPhantomAtom(merge);
             chemModelRelay.addPhantomBond( getBuilder().newInstance(IBond.class,source,merge, orderForNewBond, stereoForNewBond) );
             dest = null;
             //we also remember the merge atom in the merges in the rendererModel,
@@ -199,12 +201,12 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
         IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
         UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-        IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
-        
+        AtomBondSet containerForUndoRedo = new AtomBondSet();
+
         IAtom newAtom;
         if(newSource) {
             newAtom = chemModelRelay.addAtomWithoutUndo( chemModelRelay.getController2DModel().getDrawElement(), start, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
-            containerForUndoRedo.addAtom(newAtom);
+            containerForUndoRedo.add(newAtom);
         }
         else
             newAtom = source;
@@ -215,28 +217,28 @@ public class AddBondDragModule extends ControllerModuleAdapter {
                 chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
                 removedContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), merge);
                 IBond newBond = chemModelRelay.addBond( newAtom , merge, stereoForNewBond, orderForNewBond );
-                containerForUndoRedo.addBond(newBond);
+                containerForUndoRedo.add(newBond);
         } else {
             if(start.distance( worldCoord )<getHighlightDistance()) {
                 if(!newSource) {
                     IAtom undoRedoAtom=chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), newAtom, stereoForNewBond, orderForNewBond, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
-                    containerForUndoRedo.addAtom(undoRedoAtom);
+                    containerForUndoRedo.add(undoRedoAtom);
                     IAtomContainer atomCon =
                         ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), undoRedoAtom);
-                    containerForUndoRedo.addElectronContainer(atomCon.getConnectedElectronContainersList(undoRedoAtom).get(0));
+                    containerForUndoRedo.add(atomCon.getConnectedBondsList(undoRedoAtom).get(0));
                 } else if(makeInitialBond){
                     IAtom undoRedoAtom=chemModelRelay.addAtomWithoutUndo(
                             chemModelRelay.getController2DModel().getDrawElement(),
                             new Point2d(newAtom.getPoint2d().x+1.5,newAtom.getPoint2d().y),
                             chemModelRelay.getController2DModel().getDrawPseudoAtom());
-                    containerForUndoRedo.addAtom(undoRedoAtom);
-                    containerForUndoRedo.addBond(chemModelRelay.addBond(newAtom, undoRedoAtom, stereoForNewBond, orderForNewBond));
+                    containerForUndoRedo.add(undoRedoAtom);
+                    containerForUndoRedo.add(chemModelRelay.addBond(newAtom, undoRedoAtom, stereoForNewBond, orderForNewBond));
                 }
             }else {
                 IAtom atom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), dest, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
-                containerForUndoRedo.addAtom(atom);
+                containerForUndoRedo.add(atom);
                 IBond newBond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond, orderForNewBond );
-                containerForUndoRedo.addBond(newBond);
+                containerForUndoRedo.add(newBond);
             }
         }
 

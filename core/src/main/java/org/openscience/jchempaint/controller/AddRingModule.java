@@ -27,14 +27,16 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.layout.RingPlacer;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
+
+import java.util.Map;
 
 /**
  * Adds an atom on the given location on mouseclick
@@ -49,7 +51,7 @@ public class AddRingModule extends ControllerModuleAdapter {
     private String ID;
     private RingPlacer ringPlacer = new RingPlacer();
     private static long drawTime = 0;
-    
+
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
             boolean addingBenzene) {
         super(chemModelRelay);
@@ -98,55 +100,55 @@ public class AddRingModule extends ControllerModuleAdapter {
 
         if (singleSelection == null) {
             //we add the ring
-    		IRing newRing = this.addRingToEmptyCanvas(worldCoord);
-            chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
+    		    IRing newRing = this.addRingToEmptyCanvas(worldCoord);
+
+            Map<IAtom,IAtom> mergeSet = chemModelRelay.getRenderer().getRenderer2DModel().getMerge();
+            mergeSet.clear();
+
             //we look if it would merge
-            for(IAtom atom : newRing.atoms()){
+            for (IAtom atom : newRing.atoms()) {
                 IAtom closestAtomInRing = this.chemModelRelay.getClosestAtom(atom);
-                if( closestAtomInRing != null) {
-                        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(atom, closestAtomInRing);
+                if (closestAtomInRing != null) {
+                    mergeSet.put(atom, closestAtomInRing);
                 }
             }
-            //if we need to merge, we first move the ring so that the merge atoms
-            //are exactly on top of each other - if not doing this, rings get distorted.
-            if(chemModelRelay.getRenderer().getRenderer2DModel().getMerge().size()>0){
-                try {
-                    IAtom toleave = chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet().iterator().next();
-                    IAtom toshift = (IAtom)chemModelRelay.getRenderer().getRenderer2DModel().getMerge().get(chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet().iterator().next()).clone();
-                    toleave.getPoint2d().sub(toshift.getPoint2d());
-                    Point2d pointSub = new Point2d(toleave.getPoint2d().x, toleave.getPoint2d().y);
-                    for(IAtom atom: newRing.atoms()){
-                        atom.getPoint2d().sub(pointSub);
-                    }
-                } catch (CloneNotSupportedException e) {
-                    //should not happen
+
+            // if we need to merge, we first move the ring so that the merge atoms
+            // are exactly on top of each other - if not doing this, rings get distorted.
+            for (Map.Entry<IAtom, IAtom> e : mergeSet.entrySet()) {
+                IAtom atomOut = e.getKey();
+                IAtom atomRep = e.getValue();
+                atomOut.getPoint2d().sub(atomRep.getPoint2d());
+                Point2d pointSub = new Point2d(atomOut.getPoint2d().x, atomOut.getPoint2d().y);
+                for (IAtom atom : newRing.atoms()) {
+                    atom.getPoint2d().sub(pointSub);
                 }
             }
-            
-            IAtomContainer undoredocontainer = newRing;
-            for(IAtom atom : chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet()){
-                undoredocontainer.removeAtom(atom);
-                for(IAtom innerAtom : chemModelRelay.getRenderer().getRenderer2DModel().getMerge().keySet()){
-                    IBond bond = undoredocontainer.getBond(atom, innerAtom);
-                    int bondIndex = undoredocontainer.indexOf(bond); 
-                    if (bondIndex > -1)
-                        undoredocontainer.removeBond(bondIndex);
+
+            AtomBondSet abset = new AtomBondSet(newRing);
+            for (IAtom atom : mergeSet.keySet()){
+                abset.remove(atom);
+                for (IBond bond : newRing.getConnectedBondsList(atom)){
+                    if (mergeSet.containsKey(bond.getOther(atom)))
+                        abset.remove(bond);
                 }
             }
-            if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), newRing, null, "Ring" + " " + ringSize, chemModelRelay);
+
+            if (chemModelRelay.getUndoRedoFactory() != null && chemModelRelay.getUndoRedoHandler() != null) {
+                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory()
+                                                       .getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), abset, null, "Ring" + " " + ringSize, chemModelRelay);
                 chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
             }
+
             //and perform the merge
             chemModelRelay.mergeMolecules(null);
-            
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
         } else if (singleSelection instanceof IAtom) {
             this.addRingToAtom((IAtom) singleSelection,false);
         } else if (singleSelection instanceof IBond) {
             this.addRingToBond((IBond) singleSelection,false);
-        }            
-		
+        }
+
 		if (singleSelection == null)
 			setSelection(AbstractSelection.EMPTY_SELECTION);
 		else
@@ -154,7 +156,7 @@ public class AddRingModule extends ControllerModuleAdapter {
 
 		chemModelRelay.updateView();
 	}
-    
+
 	public void mouseClickedDownRight(Point2d worldCoord) {
         this.chemModelRelay.clearPhantoms();
         this.setSelection(AbstractSelection.EMPTY_SELECTION);
@@ -182,9 +184,9 @@ public class AddRingModule extends ControllerModuleAdapter {
                 ring.getBond(4).setOrder(IBond.Order.DOUBLE);
             }
             double bondLength = ((ControllerHub)this.chemModelRelay).calculateAverageBondLength(this.chemModelRelay.getIChemModel().getMoleculeSet());
-            
+
             ringPlacer.placeRing(ring, worldCoord, bondLength, RingPlacer.jcpAngles);
-            
+
             for(IAtom atom : ring.atoms())
                 this.chemModelRelay.addPhantomAtom(atom);
             for(IBond atom : ring.bonds())
@@ -203,7 +205,7 @@ public class AddRingModule extends ControllerModuleAdapter {
             this.addRingToBond((IBond) singleSelection,true);
         }
         this.chemModelRelay.updateView();
-        drawTime = System.nanoTime();       
+        drawTime = System.nanoTime();
     }
 
     public String getDrawModeString() {
