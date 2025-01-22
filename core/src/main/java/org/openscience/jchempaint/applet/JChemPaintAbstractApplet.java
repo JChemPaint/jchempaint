@@ -210,7 +210,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                 for(int i=0;i<mol.getAtomCount();i++){
                 	mol.getAtom(i).setValency(null);
                 }
-		JChemPaint.generateModel(theJcpp, mol, true, false);
+		JChemPaint.generateModel(theJcpp, mol, true, true);
                 /*StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                 sdg.setMolecule(mol);
                 sdg.generateCoordinates(new Vector2d(0, 1));
@@ -491,7 +491,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         IAtomContainer cdkmol = (IAtomContainer) reader.read(DefaultChemObjectBuilder
                 .getInstance().newInstance(IAtomContainer.class));
         reader.close();
-        JChemPaint.generateModel(theJcpp, cdkmol, false,false);
+        JChemPaint.generateModel(theJcpp, cdkmol, false,true);
         theJcpp.get2DHub().updateView();
         // the newly opened file should nicely fit the screen
         theJcpp.getRenderPanel().setFitToScreen(true);
