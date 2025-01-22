@@ -231,6 +231,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new MergeAtomsGenerator());
         generators.add(new AtomContainerTitleGenerator());
         generators.add(new TooltipGenerator());
+        // phantom generators
         generators.add(pbg);
         generators.add(pag);
         generators.add(ptg);
