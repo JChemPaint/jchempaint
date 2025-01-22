@@ -32,7 +32,7 @@ import java.util.Set;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.renderer.selection.MultiSelection;
 
 /**
@@ -54,7 +54,7 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 
 	public void mouseClickedDown(Point2d worldCoord) {
 	    
-	    IAtomContainer selectedAC = getSelectedAtomContainer( worldCoord );
+	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
 	    if(selectedAC == null) return;
 	    Set<IAtom> newSelection = new HashSet<IAtom>();
 	    for(IAtom atom:selectedAC.atoms()) {

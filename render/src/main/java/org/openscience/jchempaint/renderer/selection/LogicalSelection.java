@@ -86,7 +86,7 @@ public class LogicalSelection implements IChemObjectSelection {
     }
 
     public boolean isFilled() {
-        return this.selected != null;
+        return !this.selected.isEmpty();
     }
 
     public boolean isFinished() {

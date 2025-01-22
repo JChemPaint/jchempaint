@@ -25,7 +25,7 @@ public class Issue32Test extends AbstractAppletTest {
 		IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 		IAtomContainer selected = ethane.getBuilder().newInstance(IAtomContainer.class);
 		selected.addAtom(ethane.getAtom(0));
-		panel.getRenderPanel().getHub().deleteFragment(selected);
+		panel.getRenderPanel().getHub().deleteFragment(new AtomBondSet(selected));
         
         /*
         applet.button("C").click();

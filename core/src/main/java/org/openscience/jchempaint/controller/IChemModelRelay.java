@@ -206,7 +206,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param toRemove If not null, this atomcontainer will be added to moleculeToAddTo as well and removed from chemmodel (this is needed if a merge happens).
      */
     public void addFragment(IAtomContainer toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
-    public AtomBondSet deleteFragment(IAtomContainer toDelete);
+    public AtomBondSet deleteFragment(AtomBondSet toDelete);
     public void cleanup();
     public void flip(boolean horizontal);
     public void invertStereoInSelection();

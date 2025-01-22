@@ -29,7 +29,7 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.jchempaint.AtomBondSet;
 
 /**
  * Changes (Increases or Decreases) single electrons of an atom
@@ -58,8 +58,8 @@ public class ChangeSingleElectronModule extends ControllerModuleAdapter {
 	 * @see org.openscience.cdk.controller.ControllerModuleAdapter#mouseClickedDown(javax.vecmath.Point2d)
 	 */
 	public void mouseClickedDown(Point2d worldCoord) {
-	    
-	    IAtomContainer selectedAC = getSelectedAtomContainer( worldCoord );
+
+		AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
 	    if(selectedAC == null) return;
 	    for(IAtom atom:selectedAC.atoms()) {
             if(add){

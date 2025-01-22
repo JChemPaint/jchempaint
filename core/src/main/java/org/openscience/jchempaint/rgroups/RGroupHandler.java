@@ -49,6 +49,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
@@ -430,7 +431,7 @@ public class RGroupHandler  {
 	 * @param hub
 	 * @return
 	 */
-	public boolean checkRGroupOkayForDelete(IAtomContainer atc,IChemModelRelay hub ) {
+	public boolean checkRGroupOkayForDelete(AtomBondSet atc, IChemModelRelay hub) {
 		//Check if the root would still remain there (partly) after a delete..
 		if(rGroupQuery!=null) {
 			boolean rootRemains=false;
@@ -457,8 +458,8 @@ public class RGroupHandler  {
 	 * @return
 	 */
 	public boolean checkRGroupOkayForDelete(IAtom at,IChemModelRelay hub ) {
-		IAtomContainer tmp = at.getBuilder().newInstance(IAtomContainer.class);
-		tmp.addAtom(at);
+		AtomBondSet tmp = new AtomBondSet();
+		tmp.add(at);
 		return (checkRGroupOkayForDelete(tmp,hub));
 	}
 
