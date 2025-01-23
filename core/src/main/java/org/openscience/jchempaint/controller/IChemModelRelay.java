@@ -227,9 +227,8 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public UndoRedoHandler getUndoRedoHandler();
     public IBond addBond(IAtom fromAtom, IAtom toAtom, Stereo stereo, Order order);
     public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
-    //public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, boolean makePseudoAtom);
-    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom,
-        Stereo stereo, Order order, boolean makePseudoAtom);
+    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, Order order, boolean makePseudoAtom, boolean phantom);
+    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereo, Order order, boolean makePseudoAtom);
     public void setValence(IAtom atom, Integer newValence);
     public IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start, boolean makePseudoAtom);
     public void removeBondAndLoneAtoms(IBond bond);
