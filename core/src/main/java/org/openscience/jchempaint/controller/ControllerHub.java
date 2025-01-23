@@ -1022,7 +1022,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// single bond acts as an increment if already single or recently
 		// incremented to double
-		if (order == Order.SINGLE) {
+		if (order == Order.SINGLE && stereo == Stereo.NONE) {
 
 			Long lastIncremented = bond.getProperty("timeSinceIncrement");
 			if (lastIncremented == null) lastIncremented = 0L;
