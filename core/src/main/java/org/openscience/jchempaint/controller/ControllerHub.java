@@ -1454,7 +1454,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			ringCenterVector.normalize();
 			ringCenterVector.scale(1.5);
 
-			newRing = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
+			newRing = chemModel.getBuilder().newInstance(IRing.class, ringSize, "C");
 
 			IAtom root = newRing.getAtom(0);
 			root.setPoint2d(new Point2d(atom.getPoint2d().x + ringCenterVector.x,
