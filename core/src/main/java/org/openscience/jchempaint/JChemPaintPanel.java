@@ -374,7 +374,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 IBond closestBond = model.getHighlightedBond();
                 changed = true;
                 switch (symbol) {
-                    case "1": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.NONE); break;
+                    case "1": relay.cycleBondValence(closestBond); break;
                     case "2": relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
                     case "3": relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
                     case "4": relay.changeBond(closestBond, IBond.Order.QUADRUPLE, IBond.Stereo.NONE); break;
