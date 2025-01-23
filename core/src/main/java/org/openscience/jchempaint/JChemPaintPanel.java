@@ -57,6 +57,7 @@ import org.openscience.cdk.Bond;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
@@ -334,22 +335,52 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
         boolean changed = relay.setAltInputMode(!((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) == 0));
-        if (model.getHighlightedAtom() != null) {
-            try {
-                IAtom closestAtom = model.getHighlightedAtom();
-                char x = e.getKeyChar();
-                if (Character.isLowerCase(x))
-                    x = Character.toUpperCase(x);
-                IsotopeFactory ifa;
-                ifa = XMLIsotopeFactory.getInstance(closestAtom.getBuilder());
-                IIsotope iso = ifa.getMajorIsotope(Character.toString(x));
-                if (iso != null) {
-                    relay.setSymbol(closestAtom, Character.toString(x));
-                }
-                changed = true;
-            } catch (IOException ex) {
-                announceError(ex);
+
+        char x = e.getKeyChar();
+        if (Character.isLowerCase(x))
+            x = Character.toUpperCase(x);
+
+        String symbol = Character.toString(x);
+        Integer massnum = null;
+
+        // Some single atom symbols don't have a symbol
+        // so we remap these to a sensible (common-ish) default
+        switch (symbol) {
+            case "A": symbol = "As"; break;
+            case "D": symbol = "H"; massnum = 2; break;
+            case "G": symbol = "Ge"; break;
+            case "L": symbol = "Li"; break;
+            case "M": symbol = "Mg"; break;
+            case "T": symbol = "Ti"; break; // perhaps 3H?
+            case "Z": symbol = "Zn"; break;
+        }
+
+        // holding shift you can have common (alternative) atom symbols
+        // from a single key press. e.g. SHIFT+C => Chlorine
+        if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+            switch (symbol) {
+                case "C": symbol = "Cl"; break;
+                case "B": symbol = "Br"; break;
+                case "S": symbol = "Si"; break;
+                case "N": symbol = "Na"; break;
+                case "Ti": symbol = "Te"; break;
             }
+        }
+
+        IIsotope iso = null;
+        try {
+            iso = Isotopes.getInstance().getMajorIsotope(symbol);
+        } catch (IOException ex) {
+            // ignored
+        }
+
+        if (model.getHighlightedAtom() != null) {
+            IAtom closestAtom = model.getHighlightedAtom();
+            if (iso != null)
+                relay.setSymbol(closestAtom, symbol);
+            if (massnum != null)
+                relay.setMassNumber(closestAtom, massnum);
+            changed = true;
         }
 
         if (changed) {

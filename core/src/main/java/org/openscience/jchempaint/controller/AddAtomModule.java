@@ -121,7 +121,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseMove(Point2d worldCoord) {
-        if ((System.nanoTime() - drawTime) < TimeUnit.MILLISECONDS.toNanos(40)) {
+        if ((System.nanoTime() - drawTime) < TimeUnit.MILLISECONDS.toNanos(5)) {
             return;
         }
         chemModelRelay.clearPhantoms();
