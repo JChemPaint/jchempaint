@@ -140,6 +140,8 @@ public class AddAtomModule extends ControllerModuleAdapter {
             	newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
             IBond bond = chemModelRelay.getIChemModel().getBuilder().
             	newInstance(IBond.class, source, atom, IBond.Order.SINGLE, stereoForNewBond );
+            chemModelRelay.addPhantomAtom( source );
+            chemModelRelay.addPhantomAtom( atom );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }
