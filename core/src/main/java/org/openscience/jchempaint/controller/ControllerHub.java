@@ -30,13 +30,14 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.vecmath.Point2d;
@@ -835,6 +836,44 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
     }
 
+	/**
+	 * Cycle to an alternative Kekulé form.
+	 *
+	 * @param bond a bond in the alternating path
+	 * @return the kekulé form was alternated
+	 */
+	private boolean cycleKekuleForm(IBond bond) {
+
+		List<IBond> path = new ArrayList<>(6);
+		if (ConjugationTools.findAlternating(path, bond)) {
+
+			Map<IBond,Order[]> changedBonds = new LinkedHashMap<>();
+
+			for (IBond b : path) {
+				if (b.getOrder() == Order.SINGLE) {
+					changedBonds.put(b, new IBond.Order[]{Order.DOUBLE, Order.SINGLE});
+					b.setOrder(Order.DOUBLE);
+				}
+				else if (b.getOrder() == Order.DOUBLE) {
+					changedBonds.put(b, new IBond.Order[]{Order.SINGLE, Order.DOUBLE});
+					b.setOrder(Order.SINGLE);
+				}
+			}
+
+			if (undoredofactory != null && undoredohandler != null) {
+				IUndoRedoable undoRedo = undoredofactory
+						.getAdjustBondOrdersEdit(changedBonds, Collections.emptyMap(),
+												 "Cycle Kekule Form", this);
+				undoredohandler.postEdit(undoRedo);
+			}
+
+			updateView();
+			return true;
+		}
+
+		return false;
+	}
+
     CycledBond cycledBond = new CycledBond(null);
 
 	// OK
@@ -847,6 +886,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IBond.Stereo[] stereos = new IBond.Stereo[2];
 		orders[1] = bond.getOrder();
 		stereos[1] = bond.getStereo();
+
+		if (altMode) {
+			if (cycleKekuleForm(bond))
+				return;
+		}
+
 		// special case : reset stereo bonds
 		if (bond.getStereo() != IBond.Stereo.NONE) {
 			bond.setStereo(IBond.Stereo.NONE);
