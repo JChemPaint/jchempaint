@@ -201,6 +201,7 @@ public class CopyPasteAction extends JCPAction{
                 e1.printStackTrace();
             }
         } else if ("eraser".equals(type)) {
+            jcpPanel.get2DHub().clearPhantoms();
             RemoveModule newActiveModule = new RemoveModule(jcpPanel.get2DHub());
             newActiveModule.setID(type);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
