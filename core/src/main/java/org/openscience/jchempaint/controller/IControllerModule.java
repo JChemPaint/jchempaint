@@ -39,17 +39,17 @@ import javax.vecmath.Point2d;
  */
 public interface IControllerModule {
 
-	public void setChemModelRelay(IChemModelRelay relay);
+	void setChemModelRelay(IChemModelRelay relay);
 	
-	public void mouseWheelMovedBackward(int modifiers, int clicks);
+	void mouseWheelMovedBackward(int modifiers, int clicks);
 
-	public void mouseWheelMovedForward(int modifiers, int clicks);
+	void mouseWheelMovedForward(int modifiers, int clicks);
 
 	
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseClickedUp(Point2d worldCoord);
+	void mouseClickedUp(Point2d worldCoord);
 
     public void mouseClickedUp(Point2d worldCoord, int modifies);
 
@@ -58,68 +58,74 @@ public interface IControllerModule {
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseClickedDown(Point2d worldCoord);
+	void mouseClickedDown(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseClickedUpRight(Point2d worldCoord);
+	void mouseClickedUpRight(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseClickedDownRight(Point2d worldCoord);
+	void mouseClickedDownRight(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseClickedDouble(Point2d worldCoord);
+	void mouseClickedDouble(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseMove(Point2d worldCoord);
+	void mouseMove(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseEnter(Point2d worldCoord);
+	void mouseEnter(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoord
 	 */
-	public void mouseExit(Point2d worldCoord);
+	void mouseExit(Point2d worldCoord);
 
 	/**
 	 * @param Point2d worldCoordFrom
 	 * @param Point2d worldCoordTo
 	 */
-	public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo);
+	void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo);
 
 	/**
 	 * @return A string describing this module e. g. for the status bar
 	 */
-	public String getDrawModeString();
+	String getDrawModeString();
 	
 	/**
 	 * @return Returns the ID attribute
 	 */
-	public String getID();
+	String getID();
 
 	/**
 	 * Sets the ID attribute
 	 * 
 	 * @param ID The ID attribute
 	 */
-	public void setID(String ID);
+	void setID(String ID);
 	
 	/**
 	 * Set wasEscaped flag to true
 	 */
-	public void escapeTheMode();
+	void escapeTheMode();
 	
 	/**
 	 * Returns wasEscaped attribute
 	 */
-	public boolean wasEscaped();
+	boolean wasEscaped();
+
+	/**
+	 * Update the module view, this is useful if alt mode is turned on/off
+	 * and we want to change what the phantom atoms are doing.
+	 */
+	void updateView();
 }

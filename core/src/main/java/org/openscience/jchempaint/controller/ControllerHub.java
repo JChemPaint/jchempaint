@@ -143,6 +143,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	private String phantomText = null;
 
+	/** Alternative input mode allow different actions when alt is held. */
+	private boolean altMode = false;
+
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
 			IChemModel chemModel, RenderPanel eventRelay,
 			UndoRedoHandler undoredohandler, IUndoRedoFactory undoredofactory,
@@ -724,7 +727,21 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-    /**
+	/**
+	 * Alternative input mode allow different actions when alt is held.
+	 * @param value activate/deactivate
+	 * @return mode was changed or not
+	 */
+	public boolean setAltInputMode(boolean value) {
+		if (altMode != value) {
+			altMode = value;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
      * Class tracks when a bond order is increased and when.
      */
     private static final class CycledBond {
@@ -1345,7 +1362,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public IRing addPhenyl(Point2d worldcoord, boolean undoable) {
-		IRing ring = chemModel.getBuilder().newInstance(IRing.class,6, "C");
+		IRing ring = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
 		ring.getBond(0).setOrder(IBond.Order.DOUBLE);
 		ring.getBond(2).setOrder(IBond.Order.DOUBLE);
 		ring.getBond(4).setOrder(IBond.Order.DOUBLE);
@@ -1390,56 +1407,107 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * .cdk.interfaces.IAtom, int, boolean)
 	 */
 	public IRing addRing(IAtom atom, int ringSize, boolean phantom) {
-		IAtomContainer sourceContainer = ChemModelManipulator
-				.getRelevantAtomContainer(chemModel, atom);
-		IAtomContainer sharedAtoms = atom.getBuilder().newInstance(IAtomContainer.class);
-		sharedAtoms.addAtom(atom);
 
-		IRing newRing = createAttachRing(sharedAtoms, ringSize, IElement.C, phantom);
-		double bondLength = Renderer.calculateBondLength(sourceContainer);
-		Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms, chemModel);
+		IAtomContainer sourceContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
+		IAtomContainer sharedAtoms = atom.getBuilder().newAtomContainer();
+		IRing newRing;
 
-		Point2d sharedAtomsCenter = atom.getPoint2d();
-		Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
-		ringCenterVector.sub(conAtomsCenter);
+		if (atom.getBondCount() > 1 && !altMode) {
+			Point2d conAtomsCenter    = getConnectedAtomsCenter(atom);
+			Point2d sharedAtomsCenter = atom.getPoint2d();
+			Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
+			ringCenterVector.sub(conAtomsCenter);
+			ringCenterVector.normalize();
+			ringCenterVector.scale(1.5);
 
-		if ((ringCenterVector.x == 0 && ringCenterVector.y == 0)) {
-			// Rare bug case:
-			// the spiro ring can not be attached, it will lead
-			// to NaN values deeper down and serious picture distortion.
-			// Instead, return empty ring, let user try otherwise..
-			return chemModel.getBuilder().newInstance(IRing.class);
+			newRing = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
+
+			IAtom root = newRing.getAtom(0);
+			root.setPoint2d(new Point2d(atom.getPoint2d().x + ringCenterVector.x,
+										atom.getPoint2d().y + ringCenterVector.y));
+
+			IAtomContainer tmp = chemModel.getBuilder().newAtomContainer();
+			tmp.addAtom(atom);
+			tmp.addAtom(root);
+			tmp.newBond(tmp.getAtom(0), tmp.getAtom(1));
+			sharedAtoms.addAtom(root);
+
+			conAtomsCenter    = getConnectedAtomsCenter(tmp.getAtom(tmp.indexOf(root)));
+			sharedAtomsCenter = root.getPoint2d();
+			ringCenterVector = new Vector2d(sharedAtomsCenter);
+			ringCenterVector.sub(conAtomsCenter);
+
+			double bondLength = GeometryUtil.getBondLengthMedian(sourceContainer);
+			ringPlacer.setMolecule(tmp);
+			ringPlacer.placeSpiroRing(newRing, sharedAtoms,
+									  sharedAtomsCenter, ringCenterVector, bondLength);
+
+			newRing.addAtom(atom);
+			newRing.addBond(tmp.getBond(0));
+
+			// normally the undo/redo is created by createAttached
+			if (!phantom && getUndoRedoFactory() != null
+				&& getUndoRedoHandler() != null) {
+				AtomBondSet undoRedoSet = new AtomBondSet(newRing);
+				undoRedoSet.remove(atom);
+				IUndoRedoable undoredo = getUndoRedoFactory()
+						.getAddAtomsAndBondsEdit(getIChemModel(),
+												 undoRedoSet, null,
+												 "Benzene", this);
+				getUndoRedoHandler().postEdit(undoredo);
+			}
+
 		} else {
-			ringPlacer.setMolecule(sourceContainer);
-			ringPlacer.placeSpiroRing(newRing, sharedAtoms, sharedAtomsCenter,
-					ringCenterVector, bondLength);
 
-			for (IAtom ringAtom : newRing.atoms()) {
-				if (phantom)
-					this.addPhantomAtom(ringAtom);
-				else if (!ringAtom.equals(atom))
-					sourceContainer.addAtom(ringAtom);
-			}
+			sharedAtoms.addAtom(atom);
 
-			for (IBond ringBond : newRing.bonds()) {
-				if (phantom)
-					this.addPhantomBond(ringBond);
-				else
-					sourceContainer.addBond(ringBond);
-			}
-			if (!phantom)
-				updateAtoms(sourceContainer, newRing.atoms());
+			newRing = createAttachRing(sharedAtoms, ringSize, IElement.C, phantom);
+			double bondLength = Renderer.calculateBondLength(sourceContainer);
+			Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms, chemModel);
 
-			JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
-			double d = rModel.getHighlightDistance() / rModel.getScale();
-			for (IAtom newatom : newRing.atoms()) {
-				if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
-					atom.getPoint2d().x += d;
-				}
+			Point2d sharedAtomsCenter = atom.getPoint2d();
+			Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
+			ringCenterVector.sub(conAtomsCenter);
+
+			if ((ringCenterVector.x == 0 && ringCenterVector.y == 0)) {
+				// Rare bug case:
+				// the spiro ring can not be attached, it will lead
+				// to NaN values deeper down and serious picture distortion.
+				// Instead, return empty ring, let user try otherwise..
+				return chemModel.getBuilder().newInstance(IRing.class);
+			} else {
+				ringPlacer.setMolecule(sourceContainer);
+				ringPlacer.placeSpiroRing(newRing, sharedAtoms, sharedAtomsCenter,
+										  ringCenterVector, bondLength);
 			}
-			structureChanged();
-			return newRing;
 		}
+
+		for (IAtom ringAtom : newRing.atoms()) {
+			if (phantom)
+				this.addPhantomAtom(ringAtom);
+			else if (!ringAtom.equals(atom))
+				sourceContainer.addAtom(ringAtom);
+		}
+
+		for (IBond ringBond : newRing.bonds()) {
+			if (phantom)
+				this.addPhantomBond(ringBond);
+			else
+				sourceContainer.addBond(ringBond);
+		}
+		if (!phantom)
+			updateAtoms(sourceContainer, newRing.atoms());
+
+		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
+		double d = rModel.getHighlightDistance() / rModel.getScale();
+		for (IAtom newatom : newRing.atoms()) {
+			if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
+				atom.getPoint2d().x += d;
+			}
+		}
+
+		structureChanged();
+		return newRing;
 	}
 
 	// OK
@@ -1451,43 +1519,95 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * .cdk.interfaces.IAtom, boolean)
 	 */
 	public IRing addPhenyl(IAtom atom, boolean phantom) {
-		IAtomContainer sourceContainer = ChemModelManipulator
-				.getRelevantAtomContainer(chemModel, atom);
+
+		IAtomContainer sourceContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		IAtomContainer sharedAtoms = atom.getBuilder().newInstance(IAtomContainer.class);
-		sharedAtoms.addAtom(atom);
+		IRing newRing;
 
-		// make a benzene ring
-		IRing newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
-		newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
-		newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
-		newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
-
-		double bondLength;
-		if (sourceContainer.getBondCount() == 0) {
-			/*
-			 * Special case of adding a ring to a single, unconnected atom -
-			 * places the ring centered on the place where the atom was.
-			 */
-			bondLength = Renderer.calculateBondLength(chemModel.getMoleculeSet());
-			Point2d ringCenter = new Point2d(atom.getPoint2d());
-			ringPlacer.setMolecule(sourceContainer);
-			ringPlacer.placeRing(newRing, ringCenter, bondLength,
-					RingPlacer.jcpAngles);
-		} else {
-			bondLength = GeometryUtil.getBondLengthMedian(sourceContainer);
-			Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms,
-					chemModel);
-
+		if (atom.getBondCount() > 1 && !altMode) {
+			Point2d conAtomsCenter    = getConnectedAtomsCenter(atom);
 			Point2d sharedAtomsCenter = atom.getPoint2d();
 			Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
 			ringCenterVector.sub(conAtomsCenter);
+			ringCenterVector.normalize();
+			ringCenterVector.scale(1.5);
 
-			if ((ringCenterVector.x == 0 && ringCenterVector.y == 0)) {
-				return chemModel.getBuilder().newInstance(IRing.class);
-			} else {
+			newRing = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
+			newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
+			newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+			newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+
+			IAtom root = newRing.getAtom(0);
+			root.setPoint2d(new Point2d(atom.getPoint2d().x + ringCenterVector.x,
+													  atom.getPoint2d().y + ringCenterVector.y));
+
+			IAtomContainer tmp = chemModel.getBuilder().newAtomContainer();
+			tmp.addAtom(atom);
+			tmp.addAtom(root);
+			tmp.newBond(tmp.getAtom(0), tmp.getAtom(1));
+			sharedAtoms.addAtom(root);
+
+			conAtomsCenter    = getConnectedAtomsCenter(tmp.getAtom(tmp.indexOf(root)));
+			sharedAtomsCenter = root.getPoint2d();
+			ringCenterVector = new Vector2d(sharedAtomsCenter);
+			ringCenterVector.sub(conAtomsCenter);
+
+			double bondLength = GeometryUtil.getBondLengthMedian(sourceContainer);
+			ringPlacer.setMolecule(tmp);
+			ringPlacer.placeSpiroRing(newRing, sharedAtoms,
+									  sharedAtomsCenter, ringCenterVector, bondLength);
+
+            newRing.addAtom(atom);
+            newRing.addBond(tmp.getBond(0));
+
+            // normally the undo/redo is created by createAttached
+            if (!phantom && getUndoRedoFactory() != null
+                && getUndoRedoHandler() != null) {
+                AtomBondSet undoRedoSet = new AtomBondSet(newRing);
+                undoRedoSet.remove(atom);
+                IUndoRedoable undoredo = getUndoRedoFactory()
+                        .getAddAtomsAndBondsEdit(getIChemModel(),
+                                                 undoRedoSet, null,
+                                                 "Benzene", this);
+                getUndoRedoHandler().postEdit(undoredo);
+            }
+
+		} else {
+			sharedAtoms.addAtom(atom);
+
+			// make a benzene ring
+			newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
+			newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
+			newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+			newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+
+			double bondLength;
+			if (sourceContainer.getBondCount() == 0) {
+				/*
+				 * Special case of adding a ring to a single, unconnected atom -
+				 * places the ring centered on the place where the atom was.
+				 */
+				bondLength = Renderer.calculateBondLength(chemModel.getMoleculeSet());
+				Point2d ringCenter = new Point2d(atom.getPoint2d());
 				ringPlacer.setMolecule(sourceContainer);
-				ringPlacer.placeSpiroRing(newRing, sharedAtoms,
-						sharedAtomsCenter, ringCenterVector, bondLength);
+				ringPlacer.placeRing(newRing, ringCenter, bondLength,
+									 RingPlacer.jcpAngles);
+			} else {
+				bondLength = GeometryUtil.getBondLengthMedian(sourceContainer);
+				Point2d conAtomsCenter = getConnectedAtomsCenter(sharedAtoms,
+																 chemModel);
+
+				Point2d sharedAtomsCenter = atom.getPoint2d();
+				Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
+				ringCenterVector.sub(conAtomsCenter);
+
+				if ((ringCenterVector.x == 0 && ringCenterVector.y == 0)) {
+					return chemModel.getBuilder().newInstance(IRing.class);
+				} else {
+					ringPlacer.setMolecule(sourceContainer);
+					ringPlacer.placeSpiroRing(newRing, sharedAtoms,
+											  sharedAtomsCenter, ringCenterVector, bondLength);
+				}
 			}
 		}
 
@@ -1587,6 +1707,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (IAtom atom : atomCon.getConnectedAtomsList(sharedAtom)) {
 				conAtoms.addAtom(atom);
 			}
+		}
+		return GeometryUtil.get2DCenter(conAtoms);
+	}
+
+
+	private Point2d getConnectedAtomsCenter(IAtom atom) {
+		IAtomContainer conAtoms = atom.getBuilder().newInstance(IAtomContainer.class);
+		conAtoms.addAtom(atom);
+		for (IBond bond : atom.bonds()) {
+			conAtoms.addAtom(bond.getOther(atom));
 		}
 		return GeometryUtil.get2DCenter(conAtoms);
 	}
@@ -2123,7 +2253,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.openscience.cdk.controller.IChemModelRelay#select(org.openscience
 	 * .cdk.renderer.selection.IncrementalSelection)
@@ -2136,7 +2266,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.openscience.cdk.controller.IChemModelRelay#select(org.openscience
 	 * .cdk.renderer.selection.IChemObjectSelection)
@@ -2250,7 +2380,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	/**
 	 * Updates an array of atoms with respect to its hydrogen count
-	 * 
+	 *
 	 *@param container
 	 *            The AtomContainer to work on
 	 *@param atoms
@@ -2265,7 +2395,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	/**
 	 * Updates an atom with respect to its hydrogen count
-	 * 
+	 *
 	 *@param atom
 	 *            The Atom to update
 	 */
@@ -2280,7 +2410,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	/**
 	 * Updates an atom with respect to its hydrogen count
-	 * 
+	 *
 	 *@param container
 	 *            The AtomContainer to work on
 	 *@param atom
@@ -2400,7 +2530,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	/**
 	 * Merge molecules when a selection is moved onto another part of the
 	 * molecule set
-	 * 
+	 *
 	 */
 	public void mergeMolecules(Vector2d movedDistance) {
 
@@ -2474,7 +2604,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				container1.removeBond(rb);
 				removedBonds.add(rb);
 			}
-				
+
 			// In the next loop we remove bonds that are redundant, that is
 			// to say bonds that exist on both sides of the parts to be merged
 			// and would cause duplicate bonding in the end result.
@@ -2599,14 +2729,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void removeChangeModeListener(IChangeModeListener listener) {
 		changeModeListeners.remove(listener);
 	}
-	
+
 	public void setFallbackModule (IControllerModule m) {
 		this.fallbackModule = m;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.openscience.cdk.controller.IChemModelRelay#removeBondAndLoneAtoms
 	 * (org.openscience.cdk.interfaces.IBond)
@@ -2633,18 +2763,18 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				.getRemoveAtomsAndBondsEdit(chemModel, undoRedoSet,
 						"Delete Bond", this);
 		getUndoRedoHandler().postEdit(undoredo);
-		
+
 		if(rGroupHandler!=null && !rGroupHandler.checkRGroupOkayForDelete(undoRedoSet, this)) {
 			undoredo.undo();
 			return;
 		}
-		
+
 	}
 
 	// OK
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.openscience.cdk.controller.IChemModelRelay#convertToPseudoAtom(org
 	 * .openscience.cdk.interfaces.IAtom, java.lang.String)
@@ -2685,7 +2815,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	/**
 	 * Sets the mouse cursor shown on the renderPanel.
-	 * 
+	 *
 	 * @param cursor One of the constants from java.awt.Cursor.
 	 */
 	public void setCursor(int cursor) {
@@ -2694,7 +2824,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	/**
 	 * Tells the mouse cursor shown on the renderPanel.
-	 * 
+	 *
 	 * @return One of the constants from java.awt.Cursor.
 	 */
 	public int getCursor() {
@@ -2704,7 +2834,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	/**
 	 * Tells the molecular formula of the model. This includes all fragments
 	 * currently displayed and all their implicit and explicit Hs.
-	 * 
+	 *
 	 * @return The formula.
 	 */
 	public String getFormula() {
@@ -2733,8 +2863,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return MolecularFormulaManipulator.getHTML(wholeModel, true, false);
 	}
 
-	
-	
+
+
 	public RGroupHandler getRGroupHandler() {
 		return rGroupHandler;
 	}

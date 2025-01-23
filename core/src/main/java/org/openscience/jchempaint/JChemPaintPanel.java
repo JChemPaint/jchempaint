@@ -317,32 +317,46 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     /* (non-Javadoc)
      * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
      */
-    public void keyPressed(KeyEvent arg0) {
+    public void keyPressed(KeyEvent e) {
+        ControllerHub relay = renderPanel.getHub();
+        if (relay.setAltInputMode((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0)) {
+            this.get2DHub().updateView();
+            IControllerModule module = this.get2DHub().getActiveDrawModule();
+            if (module != null)
+                module.updateView();
+        }
     }
 
     /* (non-Javadoc)
      * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
      */
-    public void keyReleased(KeyEvent arg0) {
+    public void keyReleased(KeyEvent e) {
         JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
+        boolean changed = relay.setAltInputMode(!((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) == 0));
         if (model.getHighlightedAtom() != null) {
             try {
                 IAtom closestAtom = model.getHighlightedAtom();
-                char x = arg0.getKeyChar();                
+                char x = e.getKeyChar();
                 if (Character.isLowerCase(x))
                     x = Character.toUpperCase(x);
-                System.out.println(x);
                 IsotopeFactory ifa;
                 ifa = XMLIsotopeFactory.getInstance(closestAtom.getBuilder());
                 IIsotope iso = ifa.getMajorIsotope(Character.toString(x));
                 if (iso != null) {
                     relay.setSymbol(closestAtom, Character.toString(x));
                 }
-                this.get2DHub().updateView();
-            } catch (IOException e) {
-                announceError(e);
+                changed = true;
+            } catch (IOException ex) {
+                announceError(ex);
             }
+        }
+
+        if (changed) {
+            this.get2DHub().updateView();
+            IControllerModule module = this.get2DHub().getActiveDrawModule();
+            if (module != null)
+                module.updateView();
         }
     }
 
