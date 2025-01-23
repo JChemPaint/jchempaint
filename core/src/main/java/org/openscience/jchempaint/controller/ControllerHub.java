@@ -698,12 +698,24 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 									atom.getPoint2d().y + v.y);
 			newAtom.setPoint2d(p);
 
-			// enforce zig-zag no matter which dirrection we are moving
-			boolean flip = flipChainAngle(connectedAtom, atom, newAtom);
-			if (altMode) flip = !flip; // alt-mode switches from the default
+			// if we place the bond flipped before and it was undo/redone
+			// (there is only a single atom connected) then we do the opposite
+			boolean flip = false;
+			if (atom.getProperty("placeFlipped") != null) {
+				flip = !atom.<Boolean>getProperty("placeFlipped");
+			}
+			// no previous default, first place should be a zig-zag
+			else if (flipChainAngle(connectedAtom, atom, newAtom)) {
+				flip = true;
+			}
+			// alt-mode switches from whatever has been decided
+			if (altMode)
+				flip = !flip;
 			if (flip)
 				reflect(newAtom.getPoint2d(), atom.getPoint2d(), connectedAtom.getPoint2d());
-			;
+			if (!phantom) {
+				atom.setProperty("placeFlipped", flip);
+			}
 		} else {
 			IAtomContainer placedAtoms = atomCon.getBuilder().newInstance(IAtomContainer.class);
 			for (IAtom conAtom : connectedAtoms)
