@@ -29,9 +29,9 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.jchempaint.AtomBondSet;
 
 
 /**
@@ -50,7 +50,7 @@ public class RemoveModule extends ControllerModuleAdapter {
 	}
 	
 	public void mouseClickedDown(Point2d worldCoordinate) {
-	    IAtomContainer selectedAC = getSelectedAtomContainer( worldCoordinate );
+	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoordinate);
 	    if(selectedAC == null)
 	        return;
 	    for(IAtom atom:selectedAC.atoms()) {

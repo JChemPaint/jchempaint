@@ -32,6 +32,7 @@ import javax.swing.undo.UndoableEdit;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 
@@ -42,8 +43,8 @@ import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 public class SwingAddAtomsAndBondsEdit extends AddAtomsAndBondsEdit implements UndoableEdit{
 
 	public SwingAddAtomsAndBondsEdit(IChemModel chemModel,
-			IAtomContainer undoRedoContainer, IAtomContainer removedAtomContainer, String type, IChemModelRelay c2dm) {
-		super(chemModel, undoRedoContainer, removedAtomContainer, type, c2dm);
+									 AtomBondSet undoRedoSet, IAtomContainer removedAtomContainer, String type, IChemModelRelay c2dm) {
+		super(chemModel, undoRedoSet, removedAtomContainer, type, c2dm);
 	}
 
 	public boolean addEdit(UndoableEdit arg0) {

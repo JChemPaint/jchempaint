@@ -4,8 +4,9 @@ dist/
 *~
 lib-licenses.txt
 MANIFEST.MF
-.gitignore
 .classpath
 .project
 build.xml
+**/*.class
+**/target/
 maven/jchempaint-nodeps/target/

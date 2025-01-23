@@ -53,7 +53,7 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 
 	/**
 	 * @param chemModel
-	 * @param undoRedoContainer
+	 * @param undoRedoSet
 	 * @param c2dm The controller model; if none, set to null
 	 */
 	public MakeReactantOrProductInExistingReactionEdit(IChemModel chemModel, IAtomContainer ac, IAtomContainer oldcontainer, String s, boolean reactantOrProduct, String type) {

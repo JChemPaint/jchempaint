@@ -45,7 +45,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 public abstract class ShapeSelection implements IncrementalSelection {
     
     public final List<IAtom> atoms = new ArrayList<IAtom>();
-    
+
     public final List<IBond> bonds = new ArrayList<IBond>();
     
     protected boolean finished = false;
@@ -114,17 +114,19 @@ public abstract class ShapeSelection implements IncrementalSelection {
     public IAtomContainer getConnectedAtomContainer() {
         
         IAtomContainer ac = new AtomContainer();
-        if (atoms.size() != 0) {
-           ac = atoms.get(0).getBuilder().newInstance(IAtomContainer.class);
+
+        if (!atoms.isEmpty()) {
+           ac = atoms.get(0).getBuilder().newAtomContainer();
            for (IAtom atom : atoms) {
               ac.addAtom(atom);
            }
         }
         
         for (IBond bond : bonds) {
-           ac.addBond(bond);
+           if (ac.contains(bond.getBegin()) && ac.contains(bond.getEnd()))
+               ac.addBond(bond);
         }
-        
+
         return ac;
     }
     
@@ -156,15 +158,15 @@ public abstract class ShapeSelection implements IncrementalSelection {
     @SuppressWarnings("unchecked")
     public <E extends IChemObject> Collection<E> elements(Class<E> clazz){
         Set<E> set = new HashSet<E>();
-        if(clazz.isAssignableFrom( IAtom.class )) {
+        if(IAtom.class.isAssignableFrom(clazz)) {
             set.addAll( (Collection<? extends E>) atoms );
             return set;
         }
-        if(clazz.isAssignableFrom( IBond.class )) {
+        if(IBond.class.isAssignableFrom(clazz)) {
             set.addAll( (Collection<? extends E>) bonds );
             return set;
         }
-        if(clazz.isAssignableFrom( IChemObject.class )) {
+        if(IChemObject.class.isAssignableFrom(clazz)) {
             set.addAll( (Collection<? extends E>) atoms );
             set.addAll( (Collection<? extends E>) bonds );
             return set;

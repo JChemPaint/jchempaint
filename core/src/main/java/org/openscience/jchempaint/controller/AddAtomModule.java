@@ -29,9 +29,9 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -40,6 +40,8 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import org.openscience.jchempaint.GT;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Adds an atom on the given location on mouseclick
@@ -60,6 +62,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
     boolean isBond = false;
     private double bondLength;
     private IBond.Stereo stereoForNewBond;
+    long drawTime = 0;
 
     public AddAtomModule(IChemModelRelay chemModelRelay, IBond.Stereo stereoForNewBond) {
 		super(chemModelRelay);
@@ -73,7 +76,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
         merge = null;
         isBond = false;
         newSource = false;
-        bondLength = Renderer.calculateAverageBondLength( chemModelRelay.getIChemModel() );
+        bondLength = Renderer.calculateBondLength(chemModelRelay.getIChemModel());
         // in case we are starting on an empty canvas
         if(bondLength==0 || Double.isNaN(bondLength))
             bondLength=1.5;
@@ -115,8 +118,23 @@ public class AddAtomModule extends ControllerModuleAdapter {
             isBond = true;
         }
 	}
-	
-    public void mouseDrag( Point2d worldCoordFrom, Point2d worldCoordTo ) {
+
+    @Override
+    public void mouseMove(Point2d worldCoord) {
+        if ((System.nanoTime() - drawTime) < TimeUnit.MILLISECONDS.toNanos(40)) {
+            return;
+        }
+        chemModelRelay.clearPhantoms();
+        IAtom atom = chemModelRelay.getChemModel().getBuilder().newAtom();
+        atom.setSymbol(chemModelRelay.getController2DModel().getDrawElement());
+        atom.setMassNumber(chemModelRelay.getController2DModel().getDrawIsotopeNumber());
+        atom.setPoint2d(new Point2d(worldCoord));
+        chemModelRelay.addPhantomAtom(atom);
+        chemModelRelay.updateView();
+        drawTime = System.nanoTime();
+    }
+
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
         if(isBond) return;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
 
@@ -140,6 +158,8 @@ public class AddAtomModule extends ControllerModuleAdapter {
             	newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
             IBond bond = chemModelRelay.getIChemModel().getBuilder().
             	newInstance(IBond.class, source, atom, IBond.Order.SINGLE, stereoForNewBond );
+            chemModelRelay.addPhantomAtom( source );
+            chemModelRelay.addPhantomAtom( atom );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }
@@ -177,9 +197,9 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
             IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
             UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
-            IAtomContainer containerForUndoRedo = chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
+            AtomBondSet containerForUndoRedo = new AtomBondSet();
             IBond bond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond);
-            containerForUndoRedo.addBond(bond);
+            containerForUndoRedo.add(bond);
             if (factory != null && handler != null) {
                 IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
                 (chemModelRelay.getIChemModel(), containerForUndoRedo, null, "Add Bond",chemModelRelay);

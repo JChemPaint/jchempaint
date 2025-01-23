@@ -15,7 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>2.0</cdk.version>
+        <cdk.version>2.11-SNAPSHOT</cdk.version>
     </properties>
 
     <prerequisites>
@@ -32,6 +32,13 @@
         <module>inchi-jni</module>
         <module>render</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>Sonatype Snapshots S01</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -168,8 +175,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

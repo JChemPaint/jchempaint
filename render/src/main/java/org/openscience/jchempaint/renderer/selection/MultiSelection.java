@@ -76,7 +76,7 @@ public class MultiSelection<T extends IChemObject> extends AbstractSelection {
 	@SuppressWarnings("unchecked")
 	public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
 		Set<E> set = new HashSet<E>();
-		if (clazz.isAssignableFrom(IChemObject.class)) {
+		if (IChemObject.class.isAssignableFrom(clazz)) {
 			set.addAll((Collection<E>) selection);
 			return set;
 		}

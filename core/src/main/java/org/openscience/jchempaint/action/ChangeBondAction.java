@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.controller.AddBondDragModule;
@@ -89,7 +90,7 @@ public class ChangeBondAction extends JCPAction
             //this means the main menu or toolbar was used
             if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
                     && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().bonds().iterator();
+                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class).iterator();
         }else if (object instanceof IBond)
         {
             List<IBond> bonds = new ArrayList<IBond>();

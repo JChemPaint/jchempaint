@@ -54,6 +54,7 @@ import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.ControllerModuleAdapter;
 import org.openscience.jchempaint.controller.IChemModelRelay;
@@ -178,7 +179,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                         lastplaced=null;
                 }
                 if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), ac.getBuilder().newInstance(IAtomContainer.class,ac), null, GT.get("Add Functional Group"), chemModelRelay);
+                    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), new AtomBondSet(ac), null, GT.get("Add Functional Group"), chemModelRelay);
                     chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
                 }
                 chemModelRelay.getController2DModel().setDrawElement(x);
@@ -189,8 +190,8 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
                 IIsotope iso=ifa.getMajorIsotope(x);
                 if(iso!=null){
                     if(closestAtom==null){
-                        IAtomContainer addatom=chemModelRelay.getIChemModel().getBuilder().newInstance(IAtomContainer.class);
-                        addatom.addAtom(chemModelRelay.addAtomWithoutUndo(x, worldCoord, false));
+                        AtomBondSet addatom=new AtomBondSet();
+                        addatom.add(chemModelRelay.addAtomWithoutUndo(x, worldCoord, false));
                         if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
                             IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, null, GT.get("Add Atom"), chemModelRelay);
                             chemModelRelay.getUndoRedoHandler().postEdit(undoredo);

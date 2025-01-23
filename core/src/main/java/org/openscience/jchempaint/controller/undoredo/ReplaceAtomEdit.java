@@ -47,7 +47,7 @@ public class ReplaceAtomEdit implements IUndoRedoable {
 	
 	/**
 	 * @param chemModel
-	 * @param undoRedoContainer
+	 * @param undoRedoSet
 	 * @param c2dm The controller model; if none, set to null
 	 */
 	public ReplaceAtomEdit(IChemModel chemModel,

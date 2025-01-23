@@ -66,7 +66,7 @@ public class HighlightModule extends ControllerModuleAdapter {
 	        updateBond((IBond)obj,model);
 	}
 	private void updateAtom(IAtom atom, JChemPaintRendererModel model) {
-	    if (prevHighlightAtom != atom) {
+	    if (!atom.equals(prevHighlightAtom)) {
             model.setHighlightedAtom(atom);
             prevHighlightAtom = atom;
             prevHighlightBond = null;
@@ -106,7 +106,7 @@ public class HighlightModule extends ControllerModuleAdapter {
 
 	
 	private void updateBond(IBond bond, JChemPaintRendererModel model) {
-	    if (prevHighlightBond != bond) {
+	    if (!bond.equals(prevHighlightBond)) {
             model.setHighlightedBond(bond);
             prevHighlightBond = bond;
             prevHighlightAtom = null;

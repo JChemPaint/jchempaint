@@ -36,29 +36,29 @@ public class MoveAtomEdit implements IUndoRedoable {
 
     private static final long serialVersionUID = -2277790465507859547L;
 
-    private IAtomContainer undoRedoContainer;
+    private IAtomContainer undoRedoSet;
 
 	private Vector2d offset;
 	
 	private String type;
 
-	public MoveAtomEdit(IAtomContainer undoRedoContainer, Vector2d offset, String type) {
-		this.undoRedoContainer = undoRedoContainer;
+	public MoveAtomEdit(IAtomContainer undoRedoSet, Vector2d offset, String type) {
+		this.undoRedoSet = undoRedoSet;
 		this.offset=offset;
 		this.type=type;
 	}
 
 	public void redo() {
-		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
-			IAtom atom=undoRedoContainer.getAtom(i);
+		for (int i = 0; i < undoRedoSet.getAtomCount(); i++) {
+			IAtom atom=undoRedoSet.getAtom(i);
 			atom.getPoint2d().x+=offset.x;
 			atom.getPoint2d().y+=offset.y;
 		}
 	}
 
 	public void undo() {
-		for (int i = 0; i < undoRedoContainer.getAtomCount(); i++) {
-			IAtom atom=undoRedoContainer.getAtom(i);
+		for (int i = 0; i < undoRedoSet.getAtomCount(); i++) {
+			IAtom atom=undoRedoSet.getAtom(i);
 			atom.getPoint2d().x-=offset.x;
 			atom.getPoint2d().y-=offset.y;
 		}

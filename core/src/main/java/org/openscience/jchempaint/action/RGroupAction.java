@@ -48,7 +48,9 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
+import org.openscience.cdk.isomorphism.matchers.IRGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
+import org.openscience.cdk.isomorphism.matchers.IRGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
@@ -170,22 +172,27 @@ public class RGroupAction extends JCPAction {
 				IAtom apoAtom = (IAtom) eventSource;
 				apoLoop:
 					for (Iterator<Integer> rnumItr=rGroupHandler.getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-						for (RGroup rgrp: rGroupHandler.getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-							if(rgrp.getGroup().contains(apoAtom)) {
-								existingRGroupApo= new HashMap <RGroup,Map<Integer,IAtom>>();
-								HashMap<Integer,IAtom> map = new HashMap<Integer,IAtom>();
-								map.put(1, rgrp.getFirstAttachmentPoint());
-								map.put(2, rgrp.getSecondAttachmentPoint());
-								existingRGroupApo.put(rgrp,map); 
-
-								boolean firstApo = type.endsWith("1");
-								if (firstApo) {
-									rgrp.setFirstAttachmentPoint(apoAtom);
+						for (IRGroup irgrp : rGroupHandler.getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
+							if (irgrp.getGroup().contains(apoAtom)) {
+								if (irgrp instanceof RGroup) { // Ensure it is an instance of RGroup
+									RGroup rgrp = (RGroup) irgrp; // Safe cast to RGroup
+						
+									existingRGroupApo = new HashMap<RGroup, Map<Integer, IAtom>>();
+									HashMap<Integer, IAtom> map = new HashMap<>();
+									map.put(1, rgrp.getFirstAttachmentPoint());
+									map.put(2, rgrp.getSecondAttachmentPoint());
+									existingRGroupApo.put(rgrp, map);
+						
+									boolean firstApo = type.endsWith("1");
+									if (firstApo) {
+										rgrp.setFirstAttachmentPoint(apoAtom); // Calls the RGroup method
+									} else {
+										rgrp.setSecondAttachmentPoint(apoAtom); // Calls the RGroup method
+									}
+									break apoLoop;
+								} else {
+									throw new IllegalStateException("Unexpected IRGroup implementation");
 								}
-								else {
-									rgrp.setSecondAttachmentPoint(apoAtom);
-								}
-								break apoLoop;
 							}
 						}
 					}
@@ -352,12 +359,12 @@ public class RGroupAction extends JCPAction {
 
 				rgrpQuery = hub.getRGroupHandler().getrGroupQuery();
 				if (rgrpQuery.getRGroupDefinitions()==null) {
-					rgrpQuery.setRGroupDefinitions(new HashMap<Integer, RGroupList>());
+					rgrpQuery.setRGroupDefinitions(new HashMap<Integer, IRGroupList>());
 				}
 
 				if (rgrpQuery.getRGroupDefinitions().get(rNum)==null) {
 					RGroupList rList = new RGroupList(rNum);
-					rList.setRGroups(new ArrayList<RGroup>());
+					rList.setRGroups(new ArrayList<IRGroup>());
 					rgrpQuery.getRGroupDefinitions().put(rNum, rList);
 				}
 
@@ -369,12 +376,12 @@ public class RGroupAction extends JCPAction {
 				// defined for the same atoms. 
 				for(Iterator<Integer> itr=rgrpQuery.getRGroupDefinitions().keySet().iterator();itr.hasNext();) {
 					int rgrpNum=itr.next();
-					RGroupList rgrpList = rgrpQuery.getRGroupDefinitions().get(rgrpNum);
+					RGroupList rgrpList = (RGroupList) rgrpQuery.getRGroupDefinitions().get(rgrpNum);
 					if(rgrpList!=null) {
 						existingRgroupLists.put(rgrpNum,  makeClone(rgrpList));
-						List<RGroup> cleanList = new ArrayList<RGroup>();
+						List<IRGroup> cleanList = new ArrayList<IRGroup>();
 						for (int j=0; j<rgrpList.getRGroups().size(); j++){
-							RGroup subst= rgrpList.getRGroups().get(j);
+							IRGroup subst= rgrpList.getRGroups().get(j);
 							boolean remove=false;
 							removeCheck:
 								for(IAtom atom : molecule.atoms()) {
@@ -437,7 +444,7 @@ public class RGroupAction extends JCPAction {
 		rgrpQuery.setRootStructure(builder.newInstance(IAtomContainer.class));
 		rgrpQuery
 				.setRootAttachmentPoints(new HashMap<IAtom, Map<Integer, IBond>>());
-		rgrpQuery.setRGroupDefinitions(new HashMap<Integer, RGroupList>());
+		rgrpQuery.setRGroupDefinitions(new HashMap<Integer, IRGroupList>());
 		return rgrpQuery;
 	}
 
@@ -543,17 +550,28 @@ public class RGroupAction extends JCPAction {
 	 * @param original
 	 * @return
 	 */
-	private static RGroupList makeClone(RGroupList original) {
+	private static RGroupList makeClone(IRGroupList original) {
+		// Ensure we are working with a valid RGroupList
+		if (!(original instanceof RGroupList)) {
+			throw new IllegalArgumentException("Expected an instance of RGroupList");
+		}
+	
 		RGroupList clone = new RGroupList(original.getRGroupNumber());
 		try {
 			clone.setOccurrence(original.getOccurrence());
 			clone.setRequiredRGroupNumber(original.getRequiredRGroupNumber());
 			clone.setRestH(original.isRestH());
-			List<RGroup> rgpList = new ArrayList<RGroup>();
-			for (RGroup r : original.getRGroups()) {
-				rgpList.add(r);
+			
+			// Clone the RGroups
+			List<IRGroup> rgpList = new ArrayList<>();
+			for (IRGroup r : original.getRGroups()) {
+				if (r instanceof RGroup) {
+					rgpList.add((RGroup) r); // Safely cast to RGroup
+				} else {
+					throw new IllegalStateException("Encountered non-RGroup instance in RGroups list");
+				}
 			}
-			clone.setRGroups(rgpList);
+			clone.setRGroups(rgpList); // Set the cloned list
 		} catch (CDKException e) {
 			e.printStackTrace();
 		}

@@ -48,7 +48,7 @@ import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -77,6 +77,7 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -88,6 +89,7 @@ import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;
@@ -221,15 +223,19 @@ public class CopyPasteAction extends JCPAction{
                 renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
                 jcpPanel.get2DHub().removeBond(bondInRange);
-            } else if(renderModel.getSelection()!=null && renderModel.getSelection().getConnectedAtomContainer()!=null){
+            } else if (renderModel.getSelection() != null &&
+                       renderModel.getSelection().isFilled()) {
                 IChemObjectSelection selection = renderModel.getSelection();
-                IAtomContainer selected = selection.getConnectedAtomContainer();
-                jcpPanel.get2DHub().deleteFragment(selected);
-                renderModel.setSelection(new LogicalSelection(
-                        LogicalSelection.Type.NONE));
+                AtomBondSet atomBondSet = new AtomBondSet();
+                for (IAtom atom : selection.elements(IAtom.class))
+                    atomBondSet.add(atom);
+                for (IBond bond : selection.elements(IBond.class))
+                    atomBondSet.add(bond);
+                jcpPanel.get2DHub().deleteFragment(atomBondSet);
+                renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             }
-        } else if(type.indexOf("pasteTemplate")>-1){
+        } else if (type.indexOf("pasteTemplate")>-1){
             //if templates are shown, we extract the tab to show if any
             String templatetab="";
             if(type.indexOf("_")>-1){
@@ -239,8 +245,6 @@ public class CopyPasteAction extends JCPAction{
             if(templateBrowser.getChosenmolecule()!=null){
                 scaleStructure(templateBrowser.getChosenmolecule());
                 insertStructure(templateBrowser.getChosenmolecule(), renderModel);
-                jcpPanel.getRenderPanel().setZoomWide(true);
-                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
             }
         } else if ("paste".equals(type)) {
             handleSystemClipboard(sysClip);
@@ -351,8 +355,8 @@ public class CopyPasteAction extends JCPAction{
             }
             
             if (toPaste != null || rgrpQuery==true) {
-                jcpPanel.getRenderPanel().setZoomWide(true);
-                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
+//                jcpPanel.getRenderPanel().setZoomWide(true);
+//                jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setZoomFactor(1);
                 if ( rgrpQuery==true) {
                 	this.jcpPanel.setChemModel(chemModel);
                 }
@@ -394,7 +398,7 @@ public class CopyPasteAction extends JCPAction{
                 IChemObjectSelection selection = renderModel.getSelection();
                 IAtomContainer selected = selection.getConnectedAtomContainer();
                 tocopyclone.add(selected);
-                jcpPanel.get2DHub().deleteFragment(selected);
+                jcpPanel.get2DHub().deleteFragment(new AtomBondSet(selected));
                 renderModel.setSelection(new LogicalSelection(
                         LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
@@ -503,8 +507,8 @@ public class CopyPasteAction extends JCPAction{
      * @param topaste
      */
     private void scaleStructure (IAtomContainer topaste)  {
-        double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
-        double bondLengthInsert = GeometryTools.getBondLengthAverage(topaste);
+        double bondLengthModel = Renderer.calculateBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
+        double bondLengthInsert = GeometryUtil.getBondLengthMedian(topaste);
         double scale=bondLengthModel/bondLengthInsert;
         for (IAtom atom : topaste.atoms()) {
             if (atom.getPoint2d()!=null) {
@@ -543,7 +547,7 @@ public class CopyPasteAction extends JCPAction{
             toPaste.getAtom(0).setPoint2d(new Point2d(0,0));
 
         try {
-            JChemPaint.generateModel(jcpPanel, toPaste, false,true);
+            JChemPaint.generateModel(jcpPanel, toPaste, false, true);
         } catch (CDKException e) {
 			e.printStackTrace();
         	return;
