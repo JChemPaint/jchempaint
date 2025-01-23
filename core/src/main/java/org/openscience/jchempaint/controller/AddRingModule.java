@@ -52,6 +52,7 @@ public class AddRingModule extends ControllerModuleAdapter {
     private String ID;
     private RingPlacer ringPlacer = new RingPlacer();
     private static long drawTime = 0;
+    private Point2d mouseLastMoved = null;
 
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
             boolean addingBenzene) {
@@ -73,7 +74,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         if (addingBenzene) {
            newring = chemModelRelay.addPhenyl(closestAtom, phantom);
         } else {
-            newring = chemModelRelay.addRing(closestAtom, ringSize, phantom);
+           newring = chemModelRelay.addRing(closestAtom, ringSize, phantom);
         }
         newring.removeAtom(closestAtom);
         return newring;
@@ -92,7 +93,8 @@ public class AddRingModule extends ControllerModuleAdapter {
         return newring;
     }
 
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
+        mouseLastMoved = null;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
 
@@ -170,6 +172,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         if ((System.nanoTime() - drawTime) < 4000000) {
             return;
         }
+        this.mouseLastMoved = worldCoord;
         this.chemModelRelay.clearPhantoms();
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
@@ -205,8 +208,14 @@ public class AddRingModule extends ControllerModuleAdapter {
         } else if (singleSelection instanceof IBond) {
             this.addRingToBond((IBond) singleSelection,true);
         }
-        this.chemModelRelay.updateView();
         drawTime = System.nanoTime();
+        this.chemModelRelay.updateView();
+    }
+
+    @Override
+    public void updateView() {
+        if (mouseLastMoved != null)
+            mouseMove(mouseLastMoved);
     }
 
     public String getDrawModeString() {

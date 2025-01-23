@@ -214,4 +214,6 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
         return this.wasEscaped;
     }
 
+    public void updateView() {}
+
 }
