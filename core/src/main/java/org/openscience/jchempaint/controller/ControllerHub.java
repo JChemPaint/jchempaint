@@ -984,6 +984,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void changeBond(IBond bond, Order order, Stereo stereo) {
+
+		// ignore no-ops
+		if (bond.getOrder().equals(order) &&
+			bond.getStereo().equals(stereo) && stereo == Stereo.NONE) {
+			return;
+		}
+
+		// flip wedges: if the bond is already wedged, and it is wedged the same
+		// wedge direction, the intention is to flip the ordering
+		// C < O (BegWedge) => C > O (EndWedge)
+		if (bond.getOrder().equals(order) &&
+			bond.getStereo().equals(stereo) &&
+			(stereo == Stereo.UP || stereo == Stereo.DOWN)) {
+			stereo = stereo == Stereo.UP ? Stereo.UP_INVERTED : Stereo.DOWN_INVERTED;
+		}
+
 		Map<IBond, IBond.Order[]> changedBonds = new HashMap<IBond, IBond.Order[]>();
 		changedBonds.put(bond, new Order[] { order, bond.getOrder() });
 
