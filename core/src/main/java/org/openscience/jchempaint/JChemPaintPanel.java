@@ -319,22 +319,9 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
      */
     public void keyPressed(KeyEvent e) {
-        ControllerHub relay = renderPanel.getHub();
-        if (relay.setAltInputMode((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0)) {
-            this.get2DHub().updateView();
-            IControllerModule module = this.get2DHub().getActiveDrawModule();
-            if (module != null)
-                module.updateView();
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
-     */
-    public void keyReleased(KeyEvent e) {
         JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
-        boolean changed = relay.setAltInputMode(!((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) == 0));
+        boolean changed = relay.setAltInputMode(((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0));
 
         // if shift or nothing pressed we do the shortcuts for atoms/bonds
         if (((e.getModifiersEx() & ~KeyEvent.SHIFT_DOWN_MASK) == 0)) {
@@ -400,6 +387,20 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
 
 
+        if (changed) {
+            this.get2DHub().updateView();
+            IControllerModule module = this.get2DHub().getActiveDrawModule();
+            if (module != null)
+                module.updateView();
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+     */
+    public void keyReleased(KeyEvent e) {
+        ControllerHub relay = renderPanel.getHub();
+        boolean changed = relay.setAltInputMode(!((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) == 0));
         if (changed) {
             this.get2DHub().updateView();
             IControllerModule module = this.get2DHub().getActiveDrawModule();
