@@ -81,8 +81,7 @@ public class InsertTextPanel extends JPanel implements ActionListener {
         textCombo = new JComboBox<String>(oldText.toArray(new String[]{}));
         textCombo.setEditable(true);
         textCombo.setToolTipText(GT.get("Enter a CAS, SMILES or InChI string"));
-
-        textCombo.addActionListener(this);
+        // textCombo.addActionListener(this); // this can cause double inserts
         editor = (JTextComponent) textCombo.getEditor().getEditorComponent();
 
         button.addActionListener(this);
