@@ -26,7 +26,6 @@ package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.Atom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -71,7 +70,7 @@ public class ChainModule extends ControllerModuleAdapter {
         start = null;
         dest = null;
         source = null;
-        bondLength = Renderer.calculateAverageBondLength( chemModelRelay.getIChemModel() );
+        bondLength = Renderer.calculateBondLength(chemModelRelay.getIChemModel());
         
         // in case we are starting on an empty canvas
         if (bondLength == 0 || Double.isNaN(bondLength))

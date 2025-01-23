@@ -97,7 +97,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         merge = null;
         isBond = false;
         newSource = false;
-        bondLength = Renderer.calculateAverageBondLength( chemModelRelay.getIChemModel() );
+        bondLength = Renderer.calculateBondLength(chemModelRelay.getIChemModel());
 
         // in case we are starting on an empty canvas
         if(bondLength==0|| Double.isNaN(bondLength))

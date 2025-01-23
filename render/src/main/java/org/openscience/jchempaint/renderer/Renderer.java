@@ -29,7 +29,6 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -106,6 +105,8 @@ import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
  * @cdk.module renderextra
  */
 public class Renderer extends AtomContainerRenderer implements IRenderer {
+
+    private static final double DEFAULT_BOND_LENGTH = 1.5;
 
     /**
      * Generators specific to reactions
@@ -193,7 +194,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param chemModel
      */
     public void setScale(IChemModel chemModel) {
-        double bondLength = Renderer.calculateAverageBondLength(chemModel);
+        double bondLength = Renderer.calculateBondLength(chemModel);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
@@ -208,7 +209,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param reactionSet
      */
     public void setScale(IReactionSet reactionSet) {
-        double bondLength = Renderer.calculateAverageBondLength(reactionSet);
+        double bondLength = Renderer.calculateBondLength(reactionSet);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
@@ -222,7 +223,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param reaction
      */
     public void setScale(IReaction reaction) {
-        double bondLength = Renderer.calculateAverageBondLength(reaction);
+        double bondLength = Renderer.calculateBondLength(reaction);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
@@ -236,7 +237,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param moleculeSet
      */
     public void setScale(IAtomContainerSet moleculeSet) {
-        double bondLength = Renderer.calculateAverageBondLength(moleculeSet);
+        double bondLength = Renderer.calculateBondLength(moleculeSet);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
@@ -388,7 +389,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         Rectangle2D modelBounds = Renderer.calculateBounds(moleculeSet);
 
         this.setupTransformToFit(bounds, modelBounds,
-                Renderer.calculateAverageBondLength(chemModel), resetCenter);
+                                 Renderer.calculateBondLength(chemModel), resetCenter);
 
         // generate the elements
         IRenderingElement diagram = this.generateDiagram(moleculeSet);
@@ -421,7 +422,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
 
         this.setupTransformToFit(bounds, totalBounds,
-                Renderer.calculateAverageBondLength(reactionSet), resetCenter);
+                                 Renderer.calculateBondLength(reactionSet), resetCenter);
 
         ElementGroup diagram = new ElementGroup();
         for (IReaction reaction : reactionSet.reactions()) {
@@ -449,7 +450,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         Rectangle2D modelBounds = Renderer.calculateBounds(reaction);
 
         this.setupTransformToFit(bounds, modelBounds,
-                Renderer.calculateAverageBondLength(reaction), resetCenter);
+                                 Renderer.calculateBondLength(reaction), resetCenter);
 
         // generate the elements
         IRenderingElement diagram = this.generateDiagram(reaction);
@@ -482,7 +483,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
 
         this.setupTransformToFit(bounds, totalBounds,
-                Renderer.calculateAverageBondLength(molecules), resetCenter);
+                                 Renderer.calculateBondLength(molecules), resetCenter);
 
         ElementGroup diagram = new ElementGroup();
         for (IAtomContainer molecule : molecules.atomContainers()) {
@@ -627,68 +628,72 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *
      *  @param model the model for which to calculate the average bond length
      */
-    public static double calculateAverageBondLength(IChemModel model) {
+    public static double calculateBondLength(IChemModel model) {
 
         // empty models have to have a scale
         IAtomContainerSet moleculeSet = model.getMoleculeSet();
         if (moleculeSet == null) {
             IReactionSet reactionSet = model.getReactionSet();
             if (reactionSet != null) {
-                return Renderer.calculateAverageBondLength(reactionSet);
+                return Renderer.calculateBondLength(reactionSet);
             }
             return 1.5;
         }
 
-        return Renderer.calculateAverageBondLength(moleculeSet);
+        return Renderer.calculateBondLength(moleculeSet);
     }
 
-    public static double calculateAverageBondLength(IReactionSet reactionSet) {
+    public static double calculateBondLength(IReactionSet reactionSet) {
         double averageBondModelLength = 0.0;
         for (IReaction reaction : reactionSet.reactions()) {
-            averageBondModelLength += Renderer.calculateAverageBondLength(reaction);
+            averageBondModelLength += Renderer.calculateBondLength(reaction);
         }
         if (reactionSet.getReactionCount() == 0)
             return 1.5;
         return averageBondModelLength / reactionSet.getReactionCount();
     }
 
-    public static double calculateAverageBondLength(IReaction reaction) {
-
-        IAtomContainerSet reactants = reaction.getReactants();
-        double reactantAverage = 0.0;
-        if (reactants != null) {
-            reactantAverage =
-                    Renderer.calculateAverageBondLength(reactants)
-                    / reactants.getAtomContainerCount();
+    public static double calculateBondLength(IReaction reaction) {
+        double avg = 0.0;
+        int count = 0;
+        for (IAtomContainer container : reaction.getReactants()) {
+            avg += calculateBondLength(container);
+            count++;
         }
-
-        IAtomContainerSet products = reaction.getProducts();
-        double productAverage = 0.0;
-        if (products != null) {
-            productAverage =
-                    Renderer.calculateAverageBondLength(products)
-                    / products.getAtomContainerCount();
+        for (IAtomContainer container : reaction.getProducts()) {
+            avg += calculateBondLength(container);
+            count++;
         }
-
-        if (productAverage == 0.0 && reactantAverage == 0.0) {
-            return 1.5;
-        } else {
-            return (productAverage + reactantAverage) / 2.0;
+        for (IAtomContainer container : reaction.getAgents()) {
+            avg += calculateBondLength(container);
+            count++;
         }
+        if (count == 0) return DEFAULT_BOND_LENGTH;
+        return avg / count;
     }
 
-    public static double calculateAverageBondLength(IAtomContainerSet moleculeSet) {
-        double averageBondModelLength = 0.0;
-        for (IAtomContainer atomContainer : moleculeSet.atomContainers()) {
-            if (atomContainer.getAtomCount() != 0) {
-                averageBondModelLength += GeometryUtil.getBondLengthMedian(atomContainer);
-            } else {
-                averageBondModelLength += 1.5;
-            }
+    /**
+     * Calculates average of the median bond length for a set of containers.
+     * Returns a default value when nothing has been drawn yet.
+     *
+     * @param containerSet the container set
+     * @return the bond length
+     */
+    public static double calculateBondLength(IAtomContainerSet containerSet) {
+        if (containerSet.isEmpty())
+            return DEFAULT_BOND_LENGTH;
+        double avg = 0.0;
+        for (IAtomContainer container : containerSet) {
+            avg += calculateBondLength(container);
         }
-        if (moleculeSet.getAtomContainerCount() == 0)
-            return 1.5;
-        return averageBondModelLength / moleculeSet.getAtomContainerCount();
+        return avg / containerSet.getAtomContainerCount();
+    }
+
+    public static double calculateBondLength(IAtomContainer container) {
+        if (container.getBondCount() > 0)
+            return GeometryUtil.getBondLengthMedian(container);
+        else
+            return DEFAULT_BOND_LENGTH;
     }
 
     public JChemPaintRendererModel getRenderer2DModel() {
