@@ -62,6 +62,7 @@ import org.openscience.jchempaint.controller.ControllerModel;
 import org.openscience.jchempaint.controller.IControllerModule;
 import org.openscience.jchempaint.controller.IViewEventRelay;
 import org.openscience.jchempaint.controller.PhantomArrowGenerator;
+import org.openscience.jchempaint.controller.PhantomAtomGenerator;
 import org.openscience.jchempaint.controller.PhantomBondGenerator;
 import org.openscience.jchempaint.controller.PhantomTextGenerator;
 import org.openscience.jchempaint.controller.SwingMouseEventRelay;
@@ -121,9 +122,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     private boolean debug = false;
 
+    private PhantomAtomGenerator pag = new PhantomAtomGenerator();
+
     private PhantomBondGenerator pbg = new PhantomBondGenerator();
-    
-    private PhantomArrowGenerator pag = new PhantomArrowGenerator();
+
+    private PhantomArrowGenerator prg = new PhantomArrowGenerator();
     
     private PhantomTextGenerator ptg = new PhantomTextGenerator();
 
@@ -184,6 +187,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                 this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
         pbg.setControllerHub(hub);
         pag.setControllerHub(hub);
+        prg.setControllerHub(hub);
         ptg.setControllerHub(hub);
 
         // connect mouse events from Panel to the Hub
@@ -234,6 +238,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         // phantom generators
         generators.add(pbg);
         generators.add(pag);
+        generators.add(prg);
         generators.add(ptg);
         return generators;
     }
