@@ -26,6 +26,7 @@ package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.Atom;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -33,6 +34,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 
@@ -70,10 +72,10 @@ public class ChainModule extends ControllerModuleAdapter {
         dest = null;
         source = null;
         bondLength = Renderer.calculateAverageBondLength( chemModelRelay.getIChemModel() );
-
+        
         // in case we are starting on an empty canvas
-        if(bondLength==0|| Double.isNaN(bondLength))
-            bondLength=1.5;
+        if (bondLength == 0 || Double.isNaN(bondLength))
+            bondLength = 1.5;
         
         start = new Point2d(worldCoord);
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
@@ -181,15 +183,12 @@ public class ChainModule extends ControllerModuleAdapter {
 				chemModelRelay.getPhantoms().removeAtomOnly(0);
 			if (merge != null)
 		    	toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
-	    	chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,
-	    			chemModelRelay.getPhantoms()),
-	    			fromContainer, toContainer==fromContainer ? null : toContainer);
+            AtomBondSet fragment = new AtomBondSet(chemModelRelay.getPhantoms());
+            chemModelRelay.addFragment(fragment, fromContainer, toContainer==fromContainer ? null : toContainer);
     	} else {
 			if (merge != null)
 		    		toContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, merge);
-	    	chemModelRelay.addFragment(getBuilder().newInstance(IAtomContainer.class,
-	    			chemModelRelay.getPhantoms()),
-	    			null, toContainer);
+	    	chemModelRelay.addFragment(new AtomBondSet(chemModelRelay.getPhantoms()), null, toContainer);
     	}
         if (merge != null)
         	chemModelRelay.updateAtom(merge);
