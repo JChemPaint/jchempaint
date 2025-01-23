@@ -30,6 +30,7 @@ import java.util.List;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -635,7 +636,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
             if (reactionSet != null) {
                 return Renderer.calculateAverageBondLength(reactionSet);
             }
-            return 0.0;
+            return 1.5;
         }
 
         return Renderer.calculateAverageBondLength(moleculeSet);
@@ -644,9 +645,10 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     public static double calculateAverageBondLength(IReactionSet reactionSet) {
         double averageBondModelLength = 0.0;
         for (IReaction reaction : reactionSet.reactions()) {
-            averageBondModelLength +=
-                    Renderer.calculateAverageBondLength(reaction);
+            averageBondModelLength += Renderer.calculateAverageBondLength(reaction);
         }
+        if (reactionSet.getReactionCount() == 0)
+            return 1.5;
         return averageBondModelLength / reactionSet.getReactionCount();
     }
 
@@ -669,7 +671,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
 
         if (productAverage == 0.0 && reactantAverage == 0.0) {
-            return 1.0;
+            return 1.5;
         } else {
             return (productAverage + reactantAverage) / 2.0;
         }
@@ -678,9 +680,14 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     public static double calculateAverageBondLength(IAtomContainerSet moleculeSet) {
         double averageBondModelLength = 0.0;
         for (IAtomContainer atomContainer : moleculeSet.atomContainers()) {
-            averageBondModelLength +=
-                    GeometryTools.getBondLengthAverage(atomContainer);
+            if (atomContainer.getAtomCount() != 0) {
+                averageBondModelLength += GeometryUtil.getBondLengthMedian(atomContainer);
+            } else {
+                averageBondModelLength += 1.5;
+            }
         }
+        if (moleculeSet.getAtomContainerCount() == 0)
+            return 1.5;
         return averageBondModelLength / moleculeSet.getAtomContainerCount();
     }
 
