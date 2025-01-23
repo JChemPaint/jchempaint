@@ -605,6 +605,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return addAtomWithoutUndo(atomType, atom, stereo, order, makePseudoAtom, false);
 	}
 
+	private static boolean isLeft(Point2d a, Point2d b, Point2d c) {
+		return (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x) > 0;
+	}
+
+	private static boolean isLeft(IAtom a, IAtom b, IAtom c) {
+		return isLeft(a.getPoint2d(), b.getPoint2d(), c.getPoint2d());
+	}
+
 	private static void reflect(Tuple2d p, Tuple2d base, double a, double b) {
 		double x = a * (p.x - base.x) + b * (p.y - base.y) + base.x;
 		double y = b * (p.x - base.x) - a * (p.y - base.y) + base.y;
@@ -688,9 +696,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			v.scale(bondLength);
 			Point2d p = new Point2d(atom.getPoint2d().x + v.x,
 									atom.getPoint2d().y + v.y);
-			if (altMode)
-				reflect(p, atom.getPoint2d(), connectedAtom.getPoint2d());
 			newAtom.setPoint2d(p);
+
+			// enforce zig-zag no matter which dirrection we are moving
+			boolean flip = flipChainAngle(connectedAtom, atom, newAtom);
+			if (altMode) flip = !flip; // alt-mode switches from the default
+			if (flip)
+				reflect(newAtom.getPoint2d(), atom.getPoint2d(), connectedAtom.getPoint2d());
+			;
 		} else {
 			IAtomContainer placedAtoms = atomCon.getBuilder().newInstance(IAtomContainer.class);
 			for (IAtom conAtom : connectedAtoms)
@@ -724,6 +737,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		structureChanged();
 		return newAtom;
+	}
+
+	private static boolean flipChainAngle(IAtom prevAtom, IAtom atom, IAtom newAtom) {
+		if (prevAtom.getBondCount() == 2) {
+			IAtom prevPrevAtom = null;
+			for (IBond bond : prevAtom.bonds()) {
+				if (!bond.getOther(prevAtom).equals(atom))
+					prevPrevAtom = bond.getOther(prevAtom);
+			}
+			if (prevPrevAtom != null &&
+				isLeft(atom, prevAtom, prevPrevAtom) ==
+				isLeft(atom, prevAtom, newAtom)) {
+				return true; // on same side so flip!
+			}
+		}
+		return false;
 	}
 
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
