@@ -41,6 +41,8 @@ import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import org.openscience.jchempaint.GT;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Adds an atom on the given location on mouseclick
  * 
@@ -60,6 +62,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
     boolean isBond = false;
     private double bondLength;
     private IBond.Stereo stereoForNewBond;
+    long drawTime = 0;
 
     public AddAtomModule(IChemModelRelay chemModelRelay, IBond.Stereo stereoForNewBond) {
 		super(chemModelRelay);
@@ -115,8 +118,23 @@ public class AddAtomModule extends ControllerModuleAdapter {
             isBond = true;
         }
 	}
-	
-    public void mouseDrag( Point2d worldCoordFrom, Point2d worldCoordTo ) {
+
+    @Override
+    public void mouseMove(Point2d worldCoord) {
+        if ((System.nanoTime() - drawTime) < TimeUnit.MILLISECONDS.toNanos(40)) {
+            return;
+        }
+        chemModelRelay.clearPhantoms();
+        IAtom atom = chemModelRelay.getChemModel().getBuilder().newAtom();
+        atom.setSymbol(chemModelRelay.getController2DModel().getDrawElement());
+        atom.setMassNumber(chemModelRelay.getController2DModel().getDrawIsotopeNumber());
+        atom.setPoint2d(new Point2d(worldCoord));
+        chemModelRelay.addPhantomAtom(atom);
+        chemModelRelay.updateView();
+        drawTime = System.nanoTime();
+    }
+
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
         if(isBond) return;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
 
