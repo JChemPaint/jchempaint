@@ -27,11 +27,13 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
@@ -41,6 +43,8 @@ import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
+import java.util.List;
+
 /**
  * Adds a bond at direction that is draged.
  *
@@ -48,6 +52,7 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
  */
 public class AddBondDragModule extends ControllerModuleAdapter {
 
+    Point2d lastMouseMove;
     Point2d start;
     Point2d dest;
     IAtom source = null;// either atom at mouse down or new atom
@@ -89,8 +94,33 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedDown( Point2d worldCoord ) {
+    public void mouseMove(Point2d worldCoord) {
 
+        lastMouseMove = worldCoord;
+
+        IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
+        IBond closestBond = chemModelRelay.getClosestBond( worldCoord );
+
+        IChemObject singleSelection = getHighlighted( worldCoord,
+                                                      closestAtom,
+                                                      closestBond );
+
+        chemModelRelay.clearPhantoms();
+        if (singleSelection instanceof IAtom) {
+            isBond = false;
+            source = (IAtom) singleSelection;
+            chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(),
+                                              source,
+                                              stereoForNewBond,
+                                              orderForNewBond,
+                                              chemModelRelay.getController2DModel().getDrawPseudoAtom(),
+                                              true);
+        }
+    }
+
+    @Override
+    public void mouseClickedDown( Point2d worldCoord ) {
+        lastMouseMove = null;
         start = null;
         dest = null;
         source = null;
@@ -146,6 +176,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
 	@Override
     public void mouseDrag( Point2d worldCoordFrom, Point2d worldCoordTo ) {
+        lastMouseMove = null;
         if(isBond) return;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
 
@@ -196,6 +227,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp( Point2d worldCoord ) {
+        lastMouseMove = null;
         chemModelRelay.clearPhantoms();
         if(isBond) return;
 
@@ -211,6 +243,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         else
             newAtom = source;
 
+
         // if merge is set either form a bond or add and form
         IAtomContainer removedContainer=null;
         if(merge!=null) {
@@ -221,10 +254,13 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         } else {
             if(start.distance( worldCoord )<getHighlightDistance()) {
                 if(!newSource) {
-                    IAtom undoRedoAtom=chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), newAtom, stereoForNewBond, orderForNewBond, chemModelRelay.getController2DModel().getDrawPseudoAtom() );
+                    IAtom undoRedoAtom=chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(),
+                                                                         newAtom,
+                                                                         stereoForNewBond,
+                                                                         orderForNewBond,
+                                                                         chemModelRelay.getController2DModel().getDrawPseudoAtom());
                     containerForUndoRedo.add(undoRedoAtom);
-                    IAtomContainer atomCon =
-                        ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), undoRedoAtom);
+                    IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), undoRedoAtom);
                     containerForUndoRedo.add(atomCon.getConnectedBondsList(undoRedoAtom).get(0));
                 } else if(makeInitialBond){
                     IAtom undoRedoAtom=chemModelRelay.addAtomWithoutUndo(
@@ -277,4 +313,9 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         return stereoForNewBond;
     }
 
+    @Override
+    public void updateView() {
+        if (lastMouseMove != null)
+            mouseMove(lastMouseMove);
+    }
 }

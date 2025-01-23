@@ -36,9 +36,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.vecmath.Point2d;
+import javax.vecmath.Tuple2d;
 import javax.vecmath.Vector2d;
 
 import org.apache.log4j.Logger;
@@ -598,6 +600,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				makePseudoAtom);
 	}
 
+	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
+									IBond.Stereo stereo, Order order, boolean makePseudoAtom) {
+		return addAtomWithoutUndo(atomType, atom, stereo, order, makePseudoAtom, false);
+	}
+
+	private static void reflect(Tuple2d p, Tuple2d base, double a, double b) {
+		double x = a * (p.x - base.x) + b * (p.y - base.y) + base.x;
+		double y = b * (p.x - base.x) - a * (p.y - base.y) + base.y;
+		p.x = x;
+		p.y = y;
+	}
+
+	private void reflect(Point2d p, Tuple2d begP, Tuple2d endP) {
+		double dx = endP.x - begP.x;
+		double dy = endP.y - begP.y;
+
+		double a = (dx * dx - dy * dy) / (dx * dx + dy * dy);
+		double b = 2 * dx * dy / (dx * dx + dy * dy);
+
+		reflect(p, begP, a, b);
+	}
+
+
 	// OK
 	/*
 	 * (non-Javadoc)
@@ -607,7 +632,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * .lang.String, org.openscience.cdk.interfaces.IAtom, int)
 	 */
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
-			IBond.Stereo stereo, Order order, boolean makePseudoAtom) {
+			                        IBond.Stereo stereo, Order order, boolean makePseudoAtom,
+									boolean phantom) {
+
 		IAtom newAtom;
 		if (makePseudoAtom) {
 			newAtom = chemModel.getBuilder().newInstance(IPseudoAtom.class,atomType);
@@ -618,8 +645,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		        chemModel.getBuilder().newInstance(
 		                IBond.class,atom, newAtom, order, stereo);
 
-		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(
-				chemModel, atom);
+		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		if (atomCon == null) {
 			atomCon = chemModel.getBuilder().newInstance(IAtomContainer.class);
 			IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
@@ -643,8 +669,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// determine the atoms which define where the
 		// new atom should not be placed
 		List<IAtom> connectedAtoms = atomCon.getConnectedAtomsList(atom);
-
-		if (connectedAtoms.size() == 0) {
+		if (connectedAtoms.isEmpty()) {
 			Point2d newAtomPoint = new Point2d(atom.getPoint2d());
 			double angle = Math.toRadians(-30);
 			Vector2d vec1 = new Vector2d(Math.cos(angle), Math.sin(angle));
@@ -658,10 +683,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			Point2d distanceMeasure = new Point2d(0, 0); // XXX not sure about
 			// this?
 			IAtom connectedAtom = connectedAtoms.get(0);
-			Vector2d v = atomPlacer.getNextBondVector(atom, connectedAtom,
-					distanceMeasure, true);
-			atomPlacer.setMolecule(ac);
-			atomPlacer.placeLinearChain(ac, v, bondLength);
+			Vector2d v = atomPlacer.getNextBondVector(atom, connectedAtom, distanceMeasure, true);
+			v.normalize();
+			v.scale(bondLength);
+			Point2d p = new Point2d(atom.getPoint2d().x + v.x,
+									atom.getPoint2d().y + v.y);
+			if (altMode)
+				reflect(p, atom.getPoint2d(), connectedAtom.getPoint2d());
+			newAtom.setPoint2d(p);
 		} else {
 			IAtomContainer placedAtoms = atomCon.getBuilder().newInstance(IAtomContainer.class);
 			for (IAtom conAtom : connectedAtoms)
@@ -676,10 +705,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					unplacedAtoms, bondLength);
 		}
 
-		atomCon.addAtom(newAtom);
-		atomCon.addBond(newBond);
-		updateAtom(newBond.getAtom(0));
-		updateAtom(newBond.getAtom(1));
+		if (phantom) {
+			phantoms.addAtom(atom);
+			phantoms.addAtom(newAtom);
+			phantoms.addBond(newBond);
+		} else {
+			atomCon.addAtom(newAtom);
+			atomCon.addBond(newBond);
+			updateAtom(newBond.getAtom(0));
+			updateAtom(newBond.getAtom(1));
+		}
 
 		// shift the new atom a bit if it is in range of another atom
 		JChemPaintRendererModel model = this.getRenderer().getRenderer2DModel();
