@@ -336,64 +336,69 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         ControllerHub relay = renderPanel.getHub();
         boolean changed = relay.setAltInputMode(!((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) == 0));
 
-        char x = e.getKeyChar();
-        if (Character.isLowerCase(x))
-            x = Character.toUpperCase(x);
+        // if shift or nothing pressed we do the shortcuts for atoms/bonds
+        if (((e.getModifiersEx() & ~KeyEvent.SHIFT_DOWN_MASK) == 0)) {
+            char x = e.getKeyChar();
+            if (Character.isLowerCase(x))
+                x = Character.toUpperCase(x);
 
-        String symbol = Character.toString(x);
-        Integer massnum = null;
+            String symbol = Character.toString(x);
+            Integer massnum = null;
 
-        // Some single atom symbols don't have a symbol
-        // so we remap these to a sensible (common-ish) default
-        switch (symbol) {
-            case "A": symbol = "As"; break;
-            case "D": symbol = "H"; massnum = 2; break;
-            case "G": symbol = "Ge"; break;
-            case "L": symbol = "Li"; break;
-            case "M": symbol = "Mg"; break;
-            case "T": symbol = "Ti"; break; // perhaps 3H?
-            case "Z": symbol = "Zn"; break;
-        }
-
-        // holding shift you can have common (alternative) atom symbols
-        // from a single key press. e.g. SHIFT+C => Chlorine
-        if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+            // Some single atom symbols don't have a symbol
+            // so we remap these to a sensible (common-ish) default
             switch (symbol) {
-                case "C": symbol = "Cl"; break;
-                case "B": symbol = "Br"; break;
-                case "S": symbol = "Si"; break;
-                case "N": symbol = "Na"; break;
-                case "Ti": symbol = "Te"; break;
+                case "A": symbol = "As"; break;
+                case "D": symbol = "H"; massnum = 2; break;
+                case "G": symbol = "Ge"; break;
+                case "L": symbol = "Li"; break;
+                case "M": symbol = "Mg"; break;
+                case "T": symbol = "Ti"; break; // perhaps 3H?
+                case "Z": symbol = "Zn"; break;
             }
+
+            // holding shift you can have common (alternative) atom symbols
+            // from a single key press. e.g. SHIFT+C => Chlorine
+            if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
+                switch (symbol) {
+                    case "C": symbol = "Cl"; break;
+                    case "B": symbol = "Br"; break;
+                    case "S": symbol = "Si"; break;
+                    case "N": symbol = "Na"; break;
+                    case "Ti": symbol = "Te"; break;
+                }
+            }
+
+            IIsotope iso = null;
+            try {
+                iso = Isotopes.getInstance().getMajorIsotope(symbol);
+            } catch (IOException ex) {
+                // ignored
+            }
+
+            if (model.getHighlightedAtom() != null) {
+                IAtom closestAtom = model.getHighlightedAtom();
+                if (iso != null)
+                    relay.setSymbol(closestAtom, symbol);
+                if (massnum != null)
+                    relay.setMassNumber(closestAtom, massnum);
+                changed = true;
+            } else if (model.getHighlightedBond() != null) {
+                IBond closestBond = model.getHighlightedBond();
+                changed = true;
+                switch (symbol) {
+                    case "1": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.NONE); break;
+                    case "2": relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
+                    case "3": relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
+                    case "4": relay.changeBond(closestBond, IBond.Order.QUADRUPLE, IBond.Stereo.NONE); break;
+                    case "W": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
+                    case "H": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
+                    default: changed = false;
+                }
+            }
+
         }
 
-        IIsotope iso = null;
-        try {
-            iso = Isotopes.getInstance().getMajorIsotope(symbol);
-        } catch (IOException ex) {
-            // ignored
-        }
-
-        if (model.getHighlightedAtom() != null) {
-            IAtom closestAtom = model.getHighlightedAtom();
-            if (iso != null)
-                relay.setSymbol(closestAtom, symbol);
-            if (massnum != null)
-                relay.setMassNumber(closestAtom, massnum);
-            changed = true;
-        } else if (model.getHighlightedBond() != null) {
-            IBond closestBond = model.getHighlightedBond();
-            changed = true;
-            switch (symbol) {
-                case "1": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.NONE); break;
-                case "2": relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
-                case "3": relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
-                case "4": relay.changeBond(closestBond, IBond.Order.QUADRUPLE, IBond.Stereo.NONE); break;
-                case "W": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
-                case "H": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
-                default: changed = false;
-            }
-        }
 
         if (changed) {
             this.get2DHub().updateView();
