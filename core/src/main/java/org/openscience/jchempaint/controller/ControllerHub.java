@@ -1064,19 +1064,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// single bond acts as an increment if already single or recently
 		// incremented to double
 		if (order == Order.SINGLE && stereo == Stereo.NONE) {
-
-			Long lastIncremented = bond.getProperty("timeSinceIncrement");
-			if (lastIncremented == null) lastIncremented = 0L;
-
-			// currently single => make it double!
-			if (bond.getOrder() == Order.SINGLE)
-				order = Order.DOUBLE;
-			// currently double => make it triple if it was changed recently
-			else if (bond.getOrder() == Order.DOUBLE &&
-					 System.nanoTime() - lastIncremented <= TimeUnit.SECONDS.toNanos(2))
-				order = Order.TRIPLE;
-
-			bond.setProperty("timeSinceIncrement", System.nanoTime());
+			cycleBondValence(bond);
+			return;
 		}
 
 		// ignore no-ops
