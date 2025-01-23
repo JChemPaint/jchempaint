@@ -988,16 +988,18 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// single bond acts as an increment if already single
 		if (order == Order.SINGLE) {
 
-			Double lastChanged = bond.getProperty("lastChangedTime");
-			if (lastChanged == null) lastChanged = 0d;
+			Long lastIncremented = bond.getProperty("timeSinceIncrement");
+			if (lastIncremented == null) lastIncremented = 0L;
 
 			// currently single => make it double!
 			if (bond.getOrder() == Order.SINGLE)
 				order = Order.DOUBLE;
 			// currently double => make it triple if it was changed recently
 			else if (bond.getOrder() == Order.DOUBLE &&
-					 System.nanoTime() - lastChanged <= TimeUnit.SECONDS.toNanos(2))
+					 System.nanoTime() - lastIncremented <= TimeUnit.SECONDS.toNanos(2))
 				order = Order.TRIPLE;
+
+			bond.setProperty("timeSinceIncrement", System.nanoTime());
 		}
 
 		// ignore no-ops
@@ -1021,7 +1023,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		Map<IBond, IBond.Stereo[]> changedStereo = new HashMap<IBond, IBond.Stereo[]>();
 		changedStereo.put(bond, new Stereo[] { stereo, bond.getStereo() });
 
-		bond.setProperty("lastChangedTime", System.nanoTime());
 		bond.setOrder(order);
 		bond.setStereo(stereo);
 
