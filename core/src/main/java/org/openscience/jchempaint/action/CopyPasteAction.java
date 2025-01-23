@@ -48,7 +48,6 @@ import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -90,6 +89,7 @@ import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.ShapeSelection;
@@ -507,7 +507,7 @@ public class CopyPasteAction extends JCPAction{
      * @param topaste
      */
     private void scaleStructure (IAtomContainer topaste)  {
-        double bondLengthModel = jcpPanel.get2DHub().calculateAverageBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
+        double bondLengthModel = Renderer.calculateBondLength(jcpPanel.get2DHub().getIChemModel().getMoleculeSet());
         double bondLengthInsert = GeometryUtil.getBondLengthMedian(topaste);
         double scale=bondLengthModel/bondLengthInsert;
         for (IAtom atom : topaste.atoms()) {

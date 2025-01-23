@@ -34,6 +34,7 @@ import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import java.util.Map;
@@ -183,7 +184,7 @@ public class AddRingModule extends ControllerModuleAdapter {
                 ring.getBond(2).setOrder(IBond.Order.DOUBLE);
                 ring.getBond(4).setOrder(IBond.Order.DOUBLE);
             }
-            double bondLength = ((ControllerHub)this.chemModelRelay).calculateAverageBondLength(this.chemModelRelay.getIChemModel().getMoleculeSet());
+            double bondLength = Renderer.calculateBondLength(this.chemModelRelay.getIChemModel().getMoleculeSet());
 
             ringPlacer.placeRing(ring, worldCoord, bondLength, RingPlacer.jcpAngles);
 
