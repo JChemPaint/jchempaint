@@ -68,7 +68,7 @@ public class ClearAllEdit implements IUndoRedoable {
 		return true;
 	}
 	
-	public String getPresentationName() {
+	public String description() {
 		return type;
 	}
 }

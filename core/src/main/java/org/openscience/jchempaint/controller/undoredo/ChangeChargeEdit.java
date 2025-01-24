@@ -82,7 +82,7 @@ public class ChangeChargeEdit implements IUndoRedoable {
 		return true;
 	}
 
-	public String getPresentationName() {
+	public String description() {
 		return type;
 	}
 }
