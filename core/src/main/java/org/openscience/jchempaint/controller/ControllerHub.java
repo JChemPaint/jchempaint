@@ -667,7 +667,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// The AtomPlacer generates coordinates for the new atom
 		AtomPlacer atomPlacer = new AtomPlacer();
-		atomPlacer.setMolecule(chemModel.getBuilder().newInstance(IAtomContainer.class,atomCon));
+
+		// need a temporary container for AtomPlacer to work correctly
+		IAtomContainer tmp = atomCon.getBuilder().newAtomContainer();
+		tmp.add(atomCon);
+		tmp.addAtom(newAtom);
+		tmp.newBond(atom, newAtom);
+
+		atomPlacer.setMolecule(tmp);
 		double bondLength;
 		if (atomCon.getBondCount() >= 1) {
 			bondLength = Renderer.calculateBondLength(atomCon);
@@ -718,7 +725,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				atom.setProperty("placeFlipped", flip);
 			}
 		} else {
-			IAtomContainer placedAtoms = atomCon.getBuilder().newInstance(IAtomContainer.class);
+			IAtomContainer placedAtoms = atomCon.getBuilder().newAtomContainer();
 			for (IAtom conAtom : connectedAtoms)
 				placedAtoms.addAtom(conAtom);
 			Point2d center2D = GeometryUtil.get2DCenter(placedAtoms);
