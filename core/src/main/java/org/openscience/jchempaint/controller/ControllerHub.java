@@ -2553,6 +2553,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+	public void updateAtoms(IBond bond) {
+		IAtomContainer container = ChemModelManipulator
+				.getRelevantAtomContainer(chemModel, bond);
+		if (container != null) {
+			updateAtom(container, bond.getBegin());
+			updateAtom(container, bond.getEnd());
+		}
+	}
+
 	// OK
 	/**
 	 * Updates an atom with respect to its hydrogen count

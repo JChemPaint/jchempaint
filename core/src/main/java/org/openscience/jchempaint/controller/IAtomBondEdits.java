@@ -60,6 +60,7 @@ public interface IAtomBondEdits {
     public void removeSingleElectron(IAtom atom);
     public void updateAtoms(IAtomContainer container, Iterable<IAtom> atoms);
     public void updateAtom(IAtom atom);
+    public void updateAtoms(IBond bond);
     public void mergeMolecules(Vector2d movedDistance);
 
     /* Editing actions for bonds */
