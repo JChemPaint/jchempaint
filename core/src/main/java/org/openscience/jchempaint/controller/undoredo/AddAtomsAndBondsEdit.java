@@ -78,11 +78,14 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 
 		for (IAtom atom : undoRedoSet.atoms()) {
 			containerToAddTo.addAtom(atom);
-			chemModelRelay.updateAtom(atom);
 		}
 
 		for (IBond bond : undoRedoSet.bonds()) {
 			containerToAddTo.addBond(bond);
+		}
+
+		for (IAtom atom : undoRedoSet.atoms()) {
+			chemModelRelay.updateAtom(atom);
 		}
 
 	}
