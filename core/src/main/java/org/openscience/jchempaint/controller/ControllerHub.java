@@ -861,11 +861,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		String description = tautomer
 							 ? "Tautomer 1," + (path.size() + 1) + "-shift"
 							 : "Alternative Kekule From";
+		AdjustBondOrdersEdit adjustBondOrders = new AdjustBondOrdersEdit(changedBonds,
+															   Collections.emptyMap(),
+															   "Change Bond Orders",
+															   this);
+
 		CompoundEdit edit = new CompoundEdit(description);
-		edit.add(new AdjustBondOrdersEdit(changedBonds,
-										  Collections.emptyMap(),
-										  "Change Bond Orders",
-										  this));
 		if (tautomer) {
 			// tautomers need their hydrogen count changed, note update atoms
 			// can get in the way here but seems to work okay on O,S,N,P
@@ -885,8 +886,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				changedAtoms.put(endAtom, new Integer[]{endAtom.getImplicitHydrogenCount()+1,
 														endAtom.getImplicitHydrogenCount()});
 			}
+			// we need to set the hydrogen counts forward/backwards because
+			// otherwise the automatic CDK atom typing messes things up
 			edit.add(new ChangeHydrogenCountEdit(changedAtoms,
 												 "Change Hydrogen Counts"));
+			edit.add(adjustBondOrders);
+			edit.add(new ChangeHydrogenCountEdit(changedAtoms,
+												 "Change Hydrogen Counts"));
+		} else {
+			edit.add(adjustBondOrders);
 		}
 
 		edit.redo(); // fire the changes
