@@ -2519,29 +2519,34 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (rGroupHandler != null && !rGroupHandler.checkRGroupOkayForDelete(selected, this))
 			return undoRedoSet;
 
-		Set<IAtom> removedAtoms  = new HashSet<>();
-		Set<IAtom> affectedAtoms = new HashSet<>();
+		Set<IAtom> adjacentAtoms = new HashSet<>();
 		for (IAtom atom : selected.atoms()) {
 			undoRedoSet.add(atom);
-			removedAtoms.add(atom);
 		}
-		for (IAtom atom : selected.atoms()) {
+		for (IAtom atom : undoRedoSet.atoms()) {
 			IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 			for (IBond bond : container.getConnectedBondsList(atom)) {
 				if (!undoRedoSet.contains(bond)) {
 					undoRedoSet.add(bond);
-					affectedAtoms.add(bond.getOther(atom));
+					adjacentAtoms.add(bond.getOther(atom));
 				}
 			}
-			ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, atom);
 		}
 		for (IBond bond : selected.bonds()) {
-			undoRedoSet.add(bond);
-			ChemModelManipulator.removeElectronContainer(chemModel, bond);
+			if (!undoRedoSet.contains(bond))
+				undoRedoSet.add(bond);
 		}
 
-		for (IAtom atom : affectedAtoms) {
-			if (!removedAtoms.contains(atom))
+
+		for (IBond bond : undoRedoSet.bonds()) {
+			ChemModelManipulator.removeElectronContainer(chemModel, bond);
+		}
+		for (IAtom atom : undoRedoSet.atoms()) {
+			ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, atom);
+		}
+
+		for (IAtom atom : adjacentAtoms) {
+			if (!undoRedoSet.contains(atom))
 				updateAtom(atom);
 		}
 
