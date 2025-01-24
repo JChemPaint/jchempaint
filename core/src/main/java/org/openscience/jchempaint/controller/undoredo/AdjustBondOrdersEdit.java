@@ -65,40 +65,37 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
-		Set<IBond> keys = changedBondOrders.keySet();
-		Iterator<IBond> it = keys.iterator();
-		while (it.hasNext()) {
-			IBond bond = (IBond) it.next();
-			IBond.Order[] bondOrders = changedBondOrders.get(bond);
+		for (Map.Entry<IBond, IBond.Order[]> e : changedBondOrders.entrySet()) {
+			IBond bond = e.getKey();
+			IBond.Order[] bondOrders = e.getValue();
 			bond.setOrder(bondOrders[0]);
-			chemModelRelay.updateAtom(bond.getAtom(0));
-			chemModelRelay.updateAtom(bond.getAtom(1));
 		}
-		Set<IBond> keysstereo = changedBondsStereo.keySet();
-		Iterator<IBond> itint = keysstereo.iterator();
-		while (itint.hasNext()) {
-			IBond bond = (IBond) itint.next();
-			IBond.Stereo[] bondStereos = changedBondsStereo.get(bond);
+		for (Map.Entry<IBond, IBond.Stereo[]> e : changedBondsStereo.entrySet()) {
+			IBond bond = e.getKey();
+			IBond.Stereo[] bondStereos = e.getValue();
 			bond.setStereo(bondStereos[0]);
+		}
+		// update once everything has changed
+		for (IBond bond : changedBondOrders.keySet()) {
+			chemModelRelay.updateAtoms(bond);
 		}
 	}
 
+
 	public void undo() throws CannotUndoException {
-		Set<IBond> keys = changedBondOrders.keySet();
-		Iterator<IBond> it = keys.iterator();
-		while (it.hasNext()) {
-			IBond bond = (IBond) it.next();
-			IBond.Order[] bondOrders = (IBond.Order[]) changedBondOrders.get(bond);
+		for (Map.Entry<IBond, IBond.Order[]> e : changedBondOrders.entrySet()) {
+			IBond bond = e.getKey();
+			IBond.Order[] bondOrders = e.getValue();
 			bond.setOrder(bondOrders[1]);
-			chemModelRelay.updateAtom(bond.getAtom(0));
-			chemModelRelay.updateAtom(bond.getAtom(1));
 		}
-		Set<IBond> keysstereo = changedBondsStereo.keySet();
-		Iterator<IBond> itint = keysstereo.iterator();
-		while (itint.hasNext()) {
-			IBond bond = (IBond) itint.next();
-			IBond.Stereo[] bondOrders = changedBondsStereo.get(bond);
-			bond.setStereo(bondOrders[1]);
+		for (Map.Entry<IBond, IBond.Stereo[]> e : changedBondsStereo.entrySet()) {
+			IBond bond = e.getKey();
+			IBond.Stereo[] bondStereos = e.getValue();
+			bond.setStereo(bondStereos[1]);
+		}
+		// update once everything has changed
+		for (IBond bond : changedBondOrders.keySet()) {
+			chemModelRelay.updateAtoms(bond);
 		}
 	}
 
