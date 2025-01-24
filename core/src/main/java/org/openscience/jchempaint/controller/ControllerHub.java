@@ -881,7 +881,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return false;
 	}
 
-    CycledBond cycledBond = new CycledBond(null);
+	CycledBond cycledBond = new CycledBond(null);
 
 	// OK
 	public void cycleBondValence(IBond bond) {
@@ -900,8 +900,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		// special case : reset stereo bonds
-		if (bond.getStereo() != IBond.Stereo.NONE) {
+		if (bond.getStereo() != IBond.Stereo.NONE ||
+			bond.getDisplay() != IBond.Display.Solid) {
 			bond.setStereo(IBond.Stereo.NONE);
+			bond.setDisplay(IBond.Display.Solid);
 			bond.setOrder(order);
 		} else {
 			if (order == IBond.Order.SINGLE) {
