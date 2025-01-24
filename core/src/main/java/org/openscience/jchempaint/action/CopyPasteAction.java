@@ -219,12 +219,7 @@ public class CopyPasteAction extends JCPAction{
             } else {
                 bondInRange = renderModel.getHighlightedBond();
             }
-            if (atomInRange != null) {
-                jcpPanel.get2DHub().removeAtom(atomInRange);
-                renderModel.setHighlightedAtom(null);
-            } else if (bondInRange != null) {
-                jcpPanel.get2DHub().removeBond(bondInRange);
-            } else if (renderModel.getSelection() != null &&
+            if (renderModel.getSelection() != null &&
                        renderModel.getSelection().isFilled()) {
                 IChemObjectSelection selection = renderModel.getSelection();
                 AtomBondSet atomBondSet = new AtomBondSet();
@@ -235,6 +230,11 @@ public class CopyPasteAction extends JCPAction{
                 jcpPanel.get2DHub().deleteFragment(atomBondSet);
                 renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
+            } else if (atomInRange != null) {
+                jcpPanel.get2DHub().removeAtom(atomInRange);
+                renderModel.setHighlightedAtom(null);
+            } else if (bondInRange != null) {
+                jcpPanel.get2DHub().removeBond(bondInRange);
             }
         } else if (type.indexOf("pasteTemplate")>-1){
             //if templates are shown, we extract the tab to show if any
