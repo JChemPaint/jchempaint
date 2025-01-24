@@ -27,6 +27,7 @@ package org.openscience.jchempaint.controller;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -63,7 +64,8 @@ public class PhantomAtomGenerator extends BasicAtomGenerator {
         // this is really only for showing individual atoms "in hand"
         for (IAtom atom : hub.getPhantoms().atoms()) {
             if (atom.getBondCount() > 1 ||
-                atom.getBondCount() == 1 && atom.getAtomicNumber() == IElement.C)
+                atom.getBondCount() == 1 && atom.getAtomicNumber() == IElement.C ||
+                atom.is(IChemObject.VISITED))
                 continue;
             IRenderingElement element = generateElement(atom, 1, jcpModel);
             group.add(element);
