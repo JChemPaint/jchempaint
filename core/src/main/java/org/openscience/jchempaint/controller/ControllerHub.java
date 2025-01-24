@@ -74,6 +74,9 @@ import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeHydrogenCountEdit;
+import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
@@ -843,6 +846,55 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
     }
 
+	private void flipBonds(List<IBond> path, boolean tautomer) {
+		Map<IBond,Order[]> changedBonds = new LinkedHashMap<>();
+		Map<IAtom,Integer[]> changedAtoms = new LinkedHashMap<>();
+
+		for (IBond b : path) {
+			if (b.getOrder() == Order.SINGLE)
+				changedBonds.put(b, new Order[]{Order.DOUBLE, Order.SINGLE});
+			else if (b.getOrder() == Order.DOUBLE)
+				changedBonds.put(b, new Order[]{Order.SINGLE, Order.DOUBLE});
+		}
+
+		String description = tautomer
+							 ? "Tautomer 1," + (path.size() + 1) + "-shift"
+							 : "Alternative Kekule From";
+		CompoundEdit edit = new CompoundEdit(description);
+		edit.add(new AdjustBondOrdersEdit(changedBonds,
+										  Collections.emptyMap(),
+										  "Change Bond Orders",
+										  this));
+		if (tautomer) {
+			// tautomers need their hydrogen count changed, note update atoms
+			// can get in the way here but seems to work okay on O,S,N,P
+			int last = path.size()-1;
+			IBond begBond = path.get(0);
+			IBond endBond = path.get(last);
+			IAtom begAtom = begBond.getOther(begBond.getConnectedAtom(path.get(1)));
+			IAtom endAtom = endBond.getOther(endBond.getConnectedAtom(path.get(last - 1)));
+			if (begBond.getOrder() == Order.DOUBLE) {
+				changedAtoms.put(begAtom, new Integer[]{begAtom.getImplicitHydrogenCount()+1,
+														begAtom.getImplicitHydrogenCount()});
+				changedAtoms.put(endAtom, new Integer[]{endAtom.getImplicitHydrogenCount()-1,
+														endAtom.getImplicitHydrogenCount()});
+			} else {
+				changedAtoms.put(begAtom, new Integer[]{begAtom.getImplicitHydrogenCount()-1,
+														begAtom.getImplicitHydrogenCount()});
+				changedAtoms.put(endAtom, new Integer[]{endAtom.getImplicitHydrogenCount()+1,
+														endAtom.getImplicitHydrogenCount()});
+			}
+			edit.add(new ChangeHydrogenCountEdit(changedAtoms,
+												 "Change Hydrogen Counts"));
+		}
+
+		edit.redo(); // fire the changes
+
+		if (undoredofactory != null && undoredohandler != null) {
+			undoredohandler.postEdit(edit);
+		}
+	}
+
 	/**
 	 * Cycle to an alternative Kekulé form.
 	 *
@@ -853,27 +905,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		List<IBond> path = new ArrayList<>(6);
 		if (ConjugationTools.findAlternating(path, bond)) {
+			flipBonds(path, false);
+			// atom update shouldn't be needed since we shifted the bonds
+			// but the hybridisation didn't change
+			updateView();
+			return true;
+		}
 
-			Map<IBond,Order[]> changedBonds = new LinkedHashMap<>();
-
-			for (IBond b : path) {
-				if (b.getOrder() == Order.SINGLE) {
-					changedBonds.put(b, new IBond.Order[]{Order.DOUBLE, Order.SINGLE});
-					b.setOrder(Order.DOUBLE);
-				}
-				else if (b.getOrder() == Order.DOUBLE) {
-					changedBonds.put(b, new IBond.Order[]{Order.SINGLE, Order.DOUBLE});
-					b.setOrder(Order.SINGLE);
-				}
-			}
-
-			if (undoredofactory != null && undoredohandler != null) {
-				IUndoRedoable undoRedo = undoredofactory
-						.getAdjustBondOrdersEdit(changedBonds, Collections.emptyMap(),
-												 "Cycle Kekule Form", this);
-				undoredohandler.postEdit(undoRedo);
-			}
-
+		if (ConjugationTools.findTautomerShift(path, bond)) {
+			flipBonds(path, true);
 			updateView();
 			return true;
 		}
@@ -889,14 +929,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void cycleBondValence(IBond bond, IBond.Order order) {
+
 		IBond.Order[] orders = new IBond.Order[2];
 		IBond.Stereo[] stereos = new IBond.Stereo[2];
 		orders[1] = bond.getOrder();
 		stereos[1] = bond.getStereo();
 
 		if (altMode) {
-			if (cycleKekuleForm(bond))
-				return;
+			cycleKekuleForm(bond);
+			return;
 		}
 
 		// special case : reset stereo bonds
@@ -931,6 +972,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				}
 			}
 		}
+
 		orders[0] = bond.getOrder();
 		stereos[0] = bond.getStereo();
 		Map<IBond, IBond.Order[]> changedBonds = new HashMap<IBond, IBond.Order[]>();
