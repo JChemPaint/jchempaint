@@ -73,7 +73,7 @@ public class MoveAtomEdit implements IUndoRedoable {
 	}
 
 
-	public String getPresentationName() {
+	public String description() {
 		return type;
 	}
 }

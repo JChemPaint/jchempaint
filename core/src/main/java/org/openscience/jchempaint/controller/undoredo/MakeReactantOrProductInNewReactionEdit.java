@@ -101,7 +101,7 @@ public class MakeReactantOrProductInNewReactionEdit implements IUndoRedoable {
 	 * 
 	 * @see javax.swing.undo.UndoableEdit#getPresentationName()
 	 */
-	public String getPresentationName() {
+	public String description() {
 		return type;
 	}
 }

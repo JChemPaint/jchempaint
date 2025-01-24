@@ -115,7 +115,7 @@ public class AddSingleElectronEdit implements IUndoRedoable {
 	 * 
 	 * @return The presentation string.
 	 */
-	public String getPresentationName() {
+	public String description() {
 		return type;
 	}
 }

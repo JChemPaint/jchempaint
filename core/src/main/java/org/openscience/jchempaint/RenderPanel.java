@@ -98,6 +98,7 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
+import org.openscience.jchempaint.undoredo.SwingUndoableEdit;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
         IUndoListener {
@@ -479,7 +480,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     public void doUndo(IUndoRedoable undoredo) {
-        undoManager.addEdit((UndoableEdit) undoredo);
+        if (undoredo instanceof UndoableEdit)
+            undoManager.addEdit((UndoableEdit) undoredo);
+        else
+            undoManager.addEdit(new SwingUndoableEdit(undoredo));
         Container root = this.getParent().getParent().getParent();
         if (root instanceof JChemPaintPanel)
             ((JChemPaintPanel) root).updateUndoRedoControls();
