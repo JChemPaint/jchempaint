@@ -29,6 +29,7 @@ import java.awt.Cursor;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1156,43 +1157,47 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void changeBond(IBond bond, Order order, Stereo stereo) {
+		changeBonds(Collections.singletonList(bond), order, stereo);
+	}
 
-		// ignore no-ops
-		if (bond.getOrder().equals(order) &&
-			bond.getStereo().equals(stereo) && stereo == Stereo.NONE) {
-			return;
+	public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo) {
+
+		Map<IBond, Order[]> orderChanges = new LinkedHashMap<>();
+		Map<IBond, Stereo[]> stereoChanges = new LinkedHashMap<>();
+
+		for (IBond bond : bonds) {
+			// ignore unchanged
+			if (bond.getOrder().equals(order) &&
+				bond.getStereo().equals(stereo) && stereo == Stereo.NONE) {
+				continue;
+			}
+
+			// flip wedges: if the bond is already wedged, and it is wedged the same
+			// wedge direction, the intention is to flip the ordering
+			// C < O (BegWedge) => C > O (EndWedge)
+			if (bond.getOrder().equals(order) &&
+				bond.getStereo().equals(stereo) &&
+				(stereo == Stereo.UP || stereo == Stereo.DOWN)) {
+				stereoChanges.put(bond, new Stereo[]{stereo == Stereo.UP ? Stereo.UP_INVERTED : Stereo.DOWN_INVERTED,
+													 bond.getStereo()});
+			} else {
+				if (bond.getOrder() != order)
+					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
+				if (bond.getStereo() != stereo)
+					stereoChanges.put(bond, new Stereo[]{stereo, bond.getStereo()});
+			}
 		}
 
-		// flip wedges: if the bond is already wedged, and it is wedged the same
-		// wedge direction, the intention is to flip the ordering
-		// C < O (BegWedge) => C > O (EndWedge)
-		if (bond.getOrder().equals(order) &&
-			bond.getStereo().equals(stereo) &&
-			(stereo == Stereo.UP || stereo == Stereo.DOWN)) {
-			stereo = stereo == Stereo.UP ? Stereo.UP_INVERTED : Stereo.DOWN_INVERTED;
-		}
 
-		Map<IBond, IBond.Order[]> changedBonds = new HashMap<IBond, IBond.Order[]>();
-		changedBonds.put(bond, new Order[] { order, bond.getOrder() });
-
-		Map<IBond, IBond.Stereo[]> changedStereo = new HashMap<IBond, IBond.Stereo[]>();
-		changedStereo.put(bond, new Stereo[] { stereo, bond.getStereo() });
-
-		bond.setOrder(order);
-		bond.setStereo(stereo);
-
-		updateAtom(bond.getAtom(0));
-		updateAtom(bond.getAtom(1));
+		AdjustBondOrdersEdit edit = new AdjustBondOrdersEdit(orderChanges,
+															 stereoChanges,
+															 "Set bond order/stereo",
+															 this);
+		edit.redo(); // make the changes
 		structurePropertiesChanged();
 
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-			IUndoRedoable undoredo = getUndoRedoFactory()
-					.getAdjustBondOrdersEdit(
-							changedBonds,
-							changedStereo,
-							"Changed Bond Order/Stereo to " + order + "/"
-									+ stereo, this);
-			getUndoRedoHandler().postEdit(undoredo);
+			getUndoRedoHandler().postEdit(edit);
 		}
 	}
 

@@ -31,6 +31,7 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,64 +85,57 @@ public class ChangeBondAction extends JCPAction
         
         //then handle selection or highlight if there is one
         IChemObject object = getSource(event);
-        Iterator<IBond> bondsInRange = null;
+        Collection<IBond> bondsInRange = null;
 
         if (object == null){
             //this means the main menu or toolbar was used
             if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
                     && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class).iterator();
+                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class);
         }else if (object instanceof IBond)
         {
             List<IBond> bonds = new ArrayList<IBond>();
             bonds.add((IBond) object);
-            bondsInRange = bonds.iterator();
+            bondsInRange = bonds;
         } else
         {
             List<IBond> bonds = new ArrayList<IBond>();
             bonds.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedBond());
-            bondsInRange = bonds.iterator();
+            bondsInRange = bonds;
         }
 
         if(bondsInRange==null)
             return;
-            
-        while(bondsInRange.hasNext()){
-            IBond bond = bondsInRange.next();
 
-            IBond.Stereo stereo=null;
-            IBond.Order order=null;
+        IBond.Stereo stereo=null;
+        IBond.Order order=null;
 
-            if(type.equals("bond")){
-                stereo=IBond.Stereo.NONE;
-                order=IBond.Order.SINGLE;
-            }else if(type.equals("double_bond")){
-                stereo=IBond.Stereo.NONE;
-                order=IBond.Order.DOUBLE;
-            }else if(type.equals("triple_bond")){
-                stereo=IBond.Stereo.NONE;
-                order=IBond.Order.TRIPLE;
-            }else if(type.equals("quad_bond")){
-                stereo=IBond.Stereo.NONE;
-                order=IBond.Order.QUADRUPLE;
-            }else if(type.equals("down_bond")){
-                stereo=IBond.Stereo.DOWN;
-                order=IBond.Order.SINGLE;
-            }else if(type.equals("up_bond")){
-                stereo=IBond.Stereo.UP;
-                order=IBond.Order.SINGLE;
-            }else if(type.equals("undefined_bond")){
-                stereo=IBond.Stereo.UP_OR_DOWN;
-                order=IBond.Order.SINGLE;
-            }else if(type.equals("undefined_stereo_bond")){
-                stereo=IBond.Stereo.E_OR_Z;
-                order=IBond.Order.SINGLE;
-            }
-
-            jcpPanel.get2DHub().changeBond(bond,order,stereo);
-            
-            
+        if(type.equals("bond")){
+            stereo=IBond.Stereo.NONE;
+            order=IBond.Order.SINGLE;
+        }else if(type.equals("double_bond")){
+            stereo=IBond.Stereo.NONE;
+            order=IBond.Order.DOUBLE;
+        }else if(type.equals("triple_bond")){
+            stereo=IBond.Stereo.NONE;
+            order=IBond.Order.TRIPLE;
+        }else if(type.equals("quad_bond")){
+            stereo=IBond.Stereo.NONE;
+            order=IBond.Order.QUADRUPLE;
+        }else if(type.equals("down_bond")){
+            stereo=IBond.Stereo.DOWN;
+            order=IBond.Order.SINGLE;
+        }else if(type.equals("up_bond")){
+            stereo=IBond.Stereo.UP;
+            order=IBond.Order.SINGLE;
+        }else if(type.equals("undefined_bond")){
+            stereo=IBond.Stereo.UP_OR_DOWN;
+            order=IBond.Order.SINGLE;
+        }else if(type.equals("undefined_stereo_bond")){
+            stereo=IBond.Stereo.E_OR_Z;
+            order=IBond.Order.SINGLE;
         }
+        jcpPanel.get2DHub().changeBonds(bondsInRange,order,stereo);
         jcpPanel.get2DHub().updateView();
 
     }
