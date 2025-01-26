@@ -70,6 +70,15 @@ public class ChangeAtomSymbolEdit implements IUndoRedoable {
 		this.chemModelRelay=chemModelRelay;
 	}
 
+	public ChangeAtomSymbolEdit(IAtom atomInRange,
+								String formerSymbol,
+								String symbol,
+								IChemModelRelay chemModelRelay) {
+		this(atomInRange, formerSymbol, symbol,
+			 "Change atom to " + symbol,
+			 chemModelRelay);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -77,19 +86,7 @@ public class ChangeAtomSymbolEdit implements IUndoRedoable {
 	 */
 	public void redo() throws CannotRedoException {
 		this.atom.setSymbol(symbol);
-		try {
-			IsotopeFactory ifac = XMLIsotopeFactory.getInstance(atom.getBuilder());
-			this.atom.setMassNumber(ifac.getMajorIsotope(symbol).getMassNumber());
-			chemModelRelay.updateAtom(atom);
-			ifac.configure(atom);
-		} catch (OptionalDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		chemModelRelay.updateAtom(atom);
     }
 
 	/*
@@ -99,19 +96,7 @@ public class ChangeAtomSymbolEdit implements IUndoRedoable {
 	 */
 	public void undo() throws CannotUndoException {
 		this.atom.setSymbol(formerSymbol);
-		try {
-			IsotopeFactory ifac = XMLIsotopeFactory.getInstance(atom.getBuilder());
-			this.atom.setMassNumber(ifac.getMajorIsotope(formerSymbol).getMassNumber());
-			chemModelRelay.updateAtom(atom);
-			ifac.configure(atom);
-		} catch (OptionalDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		chemModelRelay.updateAtom(atom);
     }
 
 	/*
