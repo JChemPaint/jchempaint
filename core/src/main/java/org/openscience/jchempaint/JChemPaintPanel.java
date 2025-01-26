@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -308,63 +309,63 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         ControllerHub relay = renderPanel.getHub();
         boolean changed = relay.setAltInputMode(((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0));
 
-        // if shift or nothing pressed we do the shortcuts for atoms/bonds
-        if (((e.getModifiersEx() & ~KeyEvent.SHIFT_DOWN_MASK) == 0)) {
+        /*
+         * ATOM/BOND Hotkeys
+         * This will be better as two config files
+         * - JCP_AtomHotKeys.properties
+         * - JCP_BondHotKeys.properties
+         * But is functional for now
+         */
+
+        // if shift or nothing pressed we do the hot keys for atoms/bonds
+        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK)) == 0)) {
             char x = e.getKeyChar();
-            if (Character.isLowerCase(x))
-                x = Character.toUpperCase(x);
-
-            String symbol = Character.toString(x);
-            Integer massnum = null;
-
-            // Some single atom symbols don't have a symbol
-            // so we remap these to a sensible (common-ish) default
-            switch (symbol) {
-                case "A": symbol = "As"; break;
-                case "D": symbol = "H"; massnum = 2; break;
-                case "G": symbol = "Ge"; break;
-                case "L": symbol = "Li"; break;
-                case "M": symbol = "Mg"; break;
-                case "T": symbol = "Ti"; break; // perhaps 3H?
-                case "Z": symbol = "Zn"; break;
-            }
-
-            // holding shift you can have common (alternative) atom symbols
-            // from a single key press. e.g. SHIFT+C => Chlorine
-            if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0) {
-                switch (symbol) {
-                    case "C": symbol = "Cl"; break;
-                    case "B": symbol = "Br"; break;
-                    case "S": symbol = "Si"; break;
-                    case "N": symbol = "Na"; break;
-                    case "Ti": symbol = "Te"; break;
-                }
-            }
-
-            IIsotope iso = null;
-            try {
-                iso = Isotopes.getInstance().getMajorIsotope(symbol);
-            } catch (IOException ex) {
-                // ignored
-            }
-
             if (model.getHighlightedAtom() != null) {
                 IAtom closestAtom = model.getHighlightedAtom();
-                if (iso != null)
-                    relay.setSymbol(closestAtom, symbol);
-                if (massnum != null)
-                    relay.setMassNumber(closestAtom, massnum);
                 changed = true;
+                switch (x) {
+                    case '0': relay.addAtom(closestAtom, IAtom.C, true); break;
+                    case '1': relay.addAtom(closestAtom, IAtom.C, false); break;
+                    case '3': // fall through 3/a
+                    case 'a': relay.addPhenyl(closestAtom, false); break;
+                    case '6': relay.addRing(closestAtom, 6, false); break;
+                    case '7': relay.addRing(closestAtom, 5, false); break;
+                    case 'b': relay.setSymbol(closestAtom, "B"); break;
+                    case 'c': relay.setSymbol(closestAtom, "C"); break;
+                    case 'd': relay.setSymbol(closestAtom, "H", 2); break;
+                    // case "e": break;
+                    case 'f': relay.setSymbol(closestAtom, "F"); break;
+                    case 'h': relay.setSymbol(closestAtom, "H"); break;
+                    case 'i': relay.setSymbol(closestAtom, "I"); break;
+                    case 'n': relay.setSymbol(closestAtom, "N"); break;
+                    case 'o': relay.setSymbol(closestAtom, "O"); break;
+                    case 's': relay.setSymbol(closestAtom, "S"); break;
+                    case 'p': relay.setSymbol(closestAtom, "P"); break;
+                    case 'r': relay.setSymbol(closestAtom, "R"); break;
+                    case 'B': relay.setSymbol(closestAtom, "Br"); break;
+                    case 'C': // fall through C/l
+                    case 'l': relay.setSymbol(closestAtom, "Cl"); break;
+                    case 'S': relay.setSymbol(closestAtom, "Si"); break;
+                    default:
+                        changed = false;
+                }
             } else if (model.getHighlightedBond() != null) {
                 IBond closestBond = model.getHighlightedBond();
                 changed = true;
-                switch (symbol) {
-                    case "1": relay.cycleBondValence(closestBond); break;
-                    case "2": relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
-                    case "3": relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
-                    case "4": relay.changeBond(closestBond, IBond.Order.QUADRUPLE, IBond.Stereo.NONE); break;
-                    case "W": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
-                    case "H": relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
+                switch (x) {
+                    case '1': relay.cycleBondValence(closestBond); break;
+                    case '2': relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
+                    case '3': relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
+                    case '4': relay.addRing(closestBond, 4, false); break;
+                    case '5': relay.addRing(closestBond, 5, false); break;
+                    case '6': relay.addRing(closestBond, 6, false); break;
+                    case '7': relay.addRing(closestBond, 7, false); break;
+                    case '8': relay.addRing(closestBond, 8, false); break;
+                    case 'a': relay.addPhenyl(closestBond, false); break;
+                    case 'w': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
+                    case 'W': // shift + W
+                    case 'h': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
+                    case 'y': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP_OR_DOWN); break;
                     default: changed = false;
                 }
             }
