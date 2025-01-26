@@ -50,6 +50,7 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -75,11 +76,15 @@ import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeAtomSymbolEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeHydrogenCountEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeIsotopeEdit;
 import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.ReplaceAtomEdit;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -636,17 +641,18 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 
-	// OK
+	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
+									IBond.Stereo stereo, Order order, boolean makePseudoAtom,
+									boolean phantom) {
+		return addAtomWithoutUndo(atomType, atom, stereo, order, makePseudoAtom, phantom, altMode);
+	}
+
 	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.openscience.cdk.controller.IChemModelRelay#addAtomWithoutUndo(java
-	 * .lang.String, org.openscience.cdk.interfaces.IAtom, int)
+	 * @param cyclicMode sprouts the bond in cyclic mode (as opposed to linear)
 	 */
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
 			                        IBond.Stereo stereo, Order order, boolean makePseudoAtom,
-									boolean phantom) {
+									boolean phantom, boolean cyclicMode) {
 
 		IAtom newAtom;
 		if (makePseudoAtom) {
@@ -721,7 +727,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				flip = true;
 			}
 			// alt-mode switches from whatever has been decided
-			if (altMode)
+			if (cyclicMode)
 				flip = !flip;
 			if (flip)
 				reflect(newAtom.getPoint2d(), atom.getPoint2d(), connectedAtom.getPoint2d());
@@ -826,6 +832,36 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	/**
+	 * Sprout a single atom
+	 * @param atom the atom
+	 * @param atno the atomic number
+	 * @param cyclicMode the cyclicMode mode, false = zig/zag chain.
+	 */
+	public void addAtom(IAtom atom, int atno, boolean cyclicMode) {
+		atom.removeProperty("placeFlipped");
+		IAtom newAtom = addAtomWithoutUndo(Elements.ofNumber(atno).symbol(),
+										   atom,
+										   Stereo.NONE,
+										   Order.SINGLE,
+										   false,
+										   false,
+										   cyclicMode);
+		if (getUndoRedoHandler() != null) {
+			IAtomContainer container = ChemModelManipulator
+					.getRelevantAtomContainer(getIChemModel(), newAtom);
+			AtomBondSet atomBondSet = new AtomBondSet();
+			atomBondSet.add(newAtom);
+			atomBondSet.add(container.getConnectedBondsList(newAtom).get(0));
+			IUndoRedoable undoredo = new AddAtomsAndBondsEdit(this.getIChemModel(),
+															  atomBondSet,
+															  container,
+															  "Add Bond",
+															  this);
+			getUndoRedoHandler().postEdit(undoredo);
 		}
 	}
 
@@ -1209,37 +1245,46 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+
+	public void setSymbol(IAtom atom, String symbol) {
+		setSymbol(atom, symbol, null);
+	}
+
 	/**
 	 * Change the Atom Symbol to the given element symbol, setting also its massNumber.
 	 * If an exception happens, the massNumber is set to null.
 	 * @see org.openscience.jchempaint.controller.IAtomBondEdits#setSymbol(org.openscience.cdk.interfaces.IAtom, java.lang.String)
 	 */
-	public void setSymbol(IAtom atom, String symbol) {
-		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-			IUndoRedoable undoredo = getUndoRedoFactory()
-					.getChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol,
-							"Change Atom Symbol to " + symbol, this);
-			getUndoRedoHandler().postEdit(undoredo);
-		}
-		if (atom instanceof IPseudoAtom) {
-			IAtom newAtom = atom.getBuilder()
-					.newInstance(IAtom.class,symbol, atom.getPoint2d());
-			replaceAtom(newAtom, atom);
-			atom = newAtom;
+	public void setSymbol(IAtom atom, String symbol, Integer massNumber) {
+		CompoundEdit edit = new CompoundEdit("Change atom to " + symbol);
+
+		boolean newIsPseudo = Elements.ofString(symbol) == Elements.Unknown;
+		boolean swap = atom instanceof IPseudoAtom || newIsPseudo;
+
+		if (swap) {
+			IAtom newAtom;
+			if (newIsPseudo) {
+				newAtom = atom.getBuilder().newInstance(IPseudoAtom.class, symbol);
+			} else {
+				newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
+			}
+			newAtom.setPoint2d(atom.getPoint2d());
+			edit.add(new ReplaceAtomEdit(this.getIChemModel(),
+										 atom,
+										 newAtom,
+										 "Change atom to " + symbol));
 		} else {
-			atom.setSymbol(symbol);
-			atom.setAtomicNumber(Elements.ofString(symbol).number());
+			edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
 		}
-		// configure the atom, so that the atomic number matches the symbol
-		try {
-			atom.setMassNumber(null);
-			XMLIsotopeFactory.getInstance(atom.getBuilder()).configure(atom);
-		} catch (Exception exception) {
-			atom.setMassNumber(null);
-			exception.printStackTrace();
-		}
-		updateAtom(atom);
+		edit.add(new ChangeIsotopeEdit(atom,
+									   atom.getMassNumber(), massNumber,
+									   "Change Mass Number to " + massNumber));
+
+		edit.redo();
 		structurePropertiesChanged();
+		if (getUndoRedoHandler() != null) {
+			getUndoRedoHandler().postEdit(edit);
+		}
 	}
 
 	// OK
