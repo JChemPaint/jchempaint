@@ -310,7 +310,7 @@ public class JChemPaintMenuHelper {
      *  for zooming is problematic.<br>
      *  More here: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4262044
      *
-     * @param  cmd  String The Strin to identify the MenuItem.
+     * @param  cmd  String The String to identify the MenuItem.
      * @param  mi   the regarding MenuItem.
      * @param  jcp  The JChemPaintPanel this menu is used for.
      */
