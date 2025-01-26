@@ -133,14 +133,6 @@ public class JChemPaintMenuHelper {
 	            }
         	}
         }
-        if(key.equals("atomMenu")){
-            jcpPanel.atomMenu=(JMenu)menu;
-            jcpPanel.enOrDisableMenus((JMenu)menu, false);
-        }
-        if(key.equals("bondMenu")){
-            jcpPanel.bondMenu=(JMenu)menu;
-            jcpPanel.enOrDisableMenus((JMenu)menu, false);
-        }
 
         if(key.equals("isotopeChange")){
             ((JMenu)menu).addMenuListener(new MenuListener(){

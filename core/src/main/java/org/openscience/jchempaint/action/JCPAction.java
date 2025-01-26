@@ -241,7 +241,7 @@ public class JCPAction extends AbstractAction
 						parent = ((JPopupMenu) parent).getInvoker().getParent();
 					} else if (parent instanceof JChemPaintMenuBar)
 					{
-						logger.warn(" Source is MenuBar. MenuBar items don't know about the source");
+						logger.info(" Source is MenuBar. MenuBar items don't know about the source");
 						return null;
 					} else
 					{

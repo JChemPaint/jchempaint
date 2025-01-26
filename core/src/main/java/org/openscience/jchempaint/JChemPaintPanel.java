@@ -261,21 +261,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see org.openscience.jchempaint.controller.IChemModelEventRelayHandler#selectionChanged()
      */
     public void selectionChanged() {
-
-        if(this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null) {
-        	IChemObjectSelection selection = this.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
-
-        	if (!selection.elements(IAtom.class).isEmpty())
-                enOrDisableMenus(atomMenu,true);
-            else
-                enOrDisableMenus(atomMenu,false);
-
-        	if (!selection.elements(IBond.class).isEmpty())
-                enOrDisableMenus(bondMenu,true);
-            else
-                enOrDisableMenus(bondMenu,false);
-
-        }
         this.requestFocusInWindow();
     }
 

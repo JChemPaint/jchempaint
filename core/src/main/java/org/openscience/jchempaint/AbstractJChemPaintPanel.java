@@ -99,8 +99,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     private JComponent lastActionButton;
     protected JMenuItem undoMenu;
     protected JMenuItem redoMenu;
-    protected JMenu atomMenu;
-    protected JMenu bondMenu;
     protected JMenu rgroupMenu;
     protected boolean debug=false;
     protected boolean modified = false;
