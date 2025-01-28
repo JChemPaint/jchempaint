@@ -98,7 +98,7 @@ public class MoveModule extends ControllerModuleAdapter {
         //if we are outside bounding box, we deselect, else
         //we actually start a move.
         AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
-        if (selectedAC != null) {
+        if (selectedAC != null && !selectedAC.isEmpty()) {
 
             // It could be that only a  selected bond is going to be moved. 
             // So make sure that the attached atoms are included, otherwise
