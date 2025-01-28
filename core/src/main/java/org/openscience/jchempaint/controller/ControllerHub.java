@@ -289,14 +289,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (activeModule != null) {
 			activeModule.mouseClickedDown(modelCoord, modifiers);
 		}
-
-		if (getCursor() == Cursor.HAND_CURSOR
-				|| getCursor() == Cursor.HAND_CURSOR) {
+		
+		if (getCursor() == Cursor.HAND_CURSOR) {
 			setCursor(Cursor.MOVE_CURSOR);
 			oldMouseCursor = Cursor.HAND_CURSOR;
-		} else {
+		} else if (getCursor() != Cursor.DEFAULT_CURSOR) {
 			oldMouseCursor = Cursor.DEFAULT_CURSOR;
-
 		}
 	}
 
