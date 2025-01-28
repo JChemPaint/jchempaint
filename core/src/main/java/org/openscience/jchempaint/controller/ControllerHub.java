@@ -2380,11 +2380,21 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		HashMap<IAtom, Point2d[]> atomCoordsMap = new HashMap<IAtom, Point2d[]>();
 		Map<IBond, IBond.Stereo> bondStereo = new HashMap<IBond, IBond.Stereo>();
 		JChemPaintRendererModel renderModel = renderer.getRenderer2DModel();
+
+		Set<IBond> anchors = new HashSet<>();
 		IAtomContainer toflip;
-		if (renderModel.getSelection().getConnectedAtomContainer() != null
-				&& renderModel.getSelection().getConnectedAtomContainer()
-						.getAtomCount() != 0) {
-			toflip = renderModel.getSelection().getConnectedAtomContainer();
+		IChemObjectSelection select = renderModel.getSelection();
+		if (select.getConnectedAtomContainer() != null
+			&& select.getConnectedAtomContainer().getAtomCount() != 0) {
+
+			for (IAtom atom : select.elements(IAtom.class)) {
+				for (IBond bond : atom.bonds()) {
+					if (!select.contains(bond.getOther(atom))) {
+						anchors.add(bond);
+					}
+				}
+			}
+			toflip = select.getConnectedAtomContainer();
 		} else {
 			List<IAtomContainer> toflipall = ChemModelManipulator
 					.getAllAtomContainers(chemModel);
@@ -2393,24 +2403,35 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				toflip.add(atomContainer);
 			}
 		}
-		Point2d center = GeometryUtil.get2DCenter(toflip);
-		for (int i = 0; i < toflip.getAtomCount(); i++) {
-			IAtom atom = toflip.getAtom(i);
-			Point2d p2d = atom.getPoint2d();
-			Point2d oldCoord = new Point2d(p2d.x, p2d.y);
-			if (horizontal) {
-				p2d.y = 2.0 * center.y - p2d.y;
-			} else {
-				p2d.x = 2.0 * center.x - p2d.x;
+
+		if (anchors.size() == 1 && !altMode) {
+			IBond bond = anchors.iterator().next();
+			for (IAtom atom : toflip.atoms()) {
+				Point2d p = atom.getPoint2d();
+				Point2d backup = new Point2d(p);
+				reflect(p, bond.getBegin().getPoint2d(), bond.getEnd().getPoint2d());
+				atomCoordsMap.put(atom, new Point2d[]{new Point2d(p), backup});
 			}
-			Point2d newCoord = p2d;
-			if (!oldCoord.equals(newCoord)) {
-				Point2d[] coords = new Point2d[2];
-				coords[0] = newCoord;
-				coords[1] = oldCoord;
-				atomCoordsMap.put(atom, coords);
+		} else {
+			Point2d center = GeometryUtil.get2DCenter(toflip);
+			for (IAtom atom : toflip.atoms()) {
+				Point2d p2d = atom.getPoint2d();
+				Point2d oldCoord = new Point2d(p2d.x, p2d.y);
+				if (horizontal) {
+					p2d.y = 2.0 * center.y - p2d.y;
+				} else {
+					p2d.x = 2.0 * center.x - p2d.x;
+				}
+				Point2d newCoord = p2d;
+				if (!oldCoord.equals(newCoord)) {
+					Point2d[] coords = new Point2d[2];
+					coords[0] = newCoord;
+					coords[1] = oldCoord;
+					atomCoordsMap.put(atom, coords);
+				}
 			}
 		}
+
 		// Stereo bonds must be flipped as well to keep the structure
 		for (IBond bond : toflip.bonds()) {
 			bondStereo.put(bond, bond.getStereo());
