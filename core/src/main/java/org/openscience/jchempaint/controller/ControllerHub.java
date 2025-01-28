@@ -3190,5 +3190,26 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public String getPhantomText() {
 		return phantomText;
 	}
+
+	@Override
+	public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle) {
+
+		// by default snap to 30 degress (PI/6 radians)
+		if (!altMode)
+			angle = (Math.PI/6) * Math.round(angle / (Math.PI/6));
+
+		/* For more info on the mathematics, see Wiki at
+		 * http://en.wikipedia.org/wiki/Coordinate_rotation
+		 */
+		double cosine = java.lang.Math.cos(angle);
+		double sine = java.lang.Math.sin(angle);
+		for (Map.Entry<IAtom,Point2d> e : atoms.entrySet()) {
+			Point2d refPoint = e.getValue();
+			double newX = (refPoint.x * cosine) - (refPoint.y * sine);
+			double newY = (refPoint.x * sine) + (refPoint.y * cosine);
+			Point2d newCoords = new Point2d(newX + center.x, newY + center.y);
+			e.getKey().setPoint2d(newCoords);
+		}
+	}
 }
 

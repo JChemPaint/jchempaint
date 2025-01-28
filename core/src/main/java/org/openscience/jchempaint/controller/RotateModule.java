@@ -25,21 +25,31 @@
 package org.openscience.jchempaint.controller;
 
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.ISetting;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**
  * Module to rotate a selection of atoms (and their bonds).
@@ -51,11 +61,12 @@ public class RotateModule extends ControllerModuleAdapter {
     protected static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(RotateModule.class);
 
+    private static final double SNAP_ANGLE = (Math.PI/6);
     private double rotationAngle;
     protected boolean selectionMade = false;
     protected IChemObjectSelection selection;
     protected Point2d rotationCenter;
-    protected Point2d[] startCoordsRelativeToRotationCenter;
+    protected Map<IAtom, Point2d>  startCoordsRelativeToRotationCenter;
     protected Map<IAtom, Point2d[]> atomCoordsMap;
     protected boolean rotationPerformed;
     protected String ID;
@@ -114,34 +125,43 @@ public class RotateModule extends ControllerModuleAdapter {
              * Determine rotationCenter as the middle of a region defined by
              * min(x,y) and max(x,y) of coordinates of the selected atoms.
              */
-            IAtomContainer selectedAtoms = 
-                selection.getConnectedAtomContainer();
-
+            Set<IAtom> anchors = new HashSet<>();
 
             Double upperX = null, lowerX = null, upperY = null, lowerY = null;
-            for (int i = 0; i < selectedAtoms.getAtomCount(); i++) {
+            Collection<IAtom> selectedAtoms = selection.elements(IAtom.class);
+            for (IAtom atom : selectedAtoms) {
                 if (upperX == null) {
-                    upperX = selectedAtoms.getAtom(i).getPoint2d().x;
+                    upperX = atom.getPoint2d().x;
                     lowerX = upperX;
-                    upperY = selectedAtoms.getAtom(i).getPoint2d().y;
-                    lowerY = selectedAtoms.getAtom(i).getPoint2d().y;
+                    upperY = atom.getPoint2d().y;
+                    lowerY = atom.getPoint2d().y;
                 } else {
-                    double currX = selectedAtoms.getAtom(i).getPoint2d().x;
+                    double currX = atom.getPoint2d().x;
                     if (currX > upperX)
                         upperX = currX;
                     if (currX < lowerX)
                         lowerX = currX;
 
-                    double currY = selectedAtoms.getAtom(i).getPoint2d().y;
+                    double currY = atom.getPoint2d().y;
                     if (currY > upperY)
                         upperY = currY;
                     if (currY < lowerY)
                         lowerY = currY;
                 }
+
+                for (IBond bond : atom.bonds()) {
+                    if (!selection.contains(bond.getOther(atom)))
+                        anchors.add(atom);
+                }
             }
-            rotationCenter = new Point2d();
-            rotationCenter.x = (upperX + lowerX) / 2;
-            rotationCenter.y = (upperY + lowerY) / 2;
+
+            if (anchors.size() == 1) {
+                rotationCenter = new Point2d(anchors.iterator().next().getPoint2d());
+            } else {
+                rotationCenter = new Point2d();
+                rotationCenter.x = (upperX + lowerX) / 2;
+                rotationCenter.y = (upperY + lowerY) / 2;
+            }
             logger.debug("rotationCenter " 
                     + rotationCenter.x + " "
                     + rotationCenter.y);
@@ -149,15 +169,14 @@ public class RotateModule extends ControllerModuleAdapter {
             /* Store the original coordinates relative to the rotation center.
              * These are necessary to rotate around the center of the
              * selection rather than the draw center. */
-            startCoordsRelativeToRotationCenter = new Point2d[selectedAtoms
-                                                              .getAtomCount()];
-            for (int i = 0; i < selectedAtoms.getAtomCount(); i++) {
-                Point2d relativeAtomPosition = new Point2d();
-                relativeAtomPosition.x = selectedAtoms.getAtom(i).getPoint2d().x
-                - rotationCenter.x;
-                relativeAtomPosition.y = selectedAtoms.getAtom(i).getPoint2d().y
-                - rotationCenter.y;
-                startCoordsRelativeToRotationCenter[i] = relativeAtomPosition;
+            startCoordsRelativeToRotationCenter = new HashMap<>();
+
+            int i = 0;
+            for (IAtom atom : selectedAtoms) {
+                Point2d relPoint = new Point2d();
+                relPoint.x = atom.getPoint2d().x - rotationCenter.x;
+                relPoint.y = atom.getPoint2d().y - rotationCenter.y;
+                startCoordsRelativeToRotationCenter.put(atom, relPoint);
             }
         }
     }
@@ -208,33 +227,19 @@ public class RotateModule extends ControllerModuleAdapter {
                 break;
             }
 
-            /* For more info on the mathematics, see Wiki at 
-             * http://en.wikipedia.org/wiki/Coordinate_rotation
-             */
-            double cosine = java.lang.Math.cos(rotationAngle);
-            double sine = java.lang.Math.sin(rotationAngle);
-            IAtomContainer atc = selection.getConnectedAtomContainer();
-            for (int i = 0; i < startCoordsRelativeToRotationCenter.length; i++) {
-                double newX = (startCoordsRelativeToRotationCenter[i].x * cosine)
-                        - (startCoordsRelativeToRotationCenter[i].y * sine);
-                double newY = (startCoordsRelativeToRotationCenter[i].x * sine)
-                        + (startCoordsRelativeToRotationCenter[i].y * cosine);
-
-                Point2d newCoords = new Point2d(newX + rotationCenter.x, newY
-                        + rotationCenter.y);
-
-                atc.getAtom(i).setPoint2d(newCoords);
-            }
+            chemModelRelay.rotate(startCoordsRelativeToRotationCenter,
+                                  rotationCenter,
+                                  rotationAngle);
         }
         chemModelRelay.updateView();
     }
-    
+
     /**
      * After the rotation (=mouse up after drag), post the undo/redo information
      * with the old and the new coordinates
      */
     public void mouseClickedUp(Point2d worldCoord) {
-        if(rotationPerformed && atomCoordsMap!=null && selection.getConnectedAtomContainer()!=null) {
+        if(rotationPerformed && atomCoordsMap!=null && selection.isFilled()) {
             logger.debug("posting undo/redo for rotation");
 
             /* Keep new coordinates for the sake of possible undo/redo */
@@ -251,6 +256,9 @@ public class RotateModule extends ControllerModuleAdapter {
                         atomCoordsMap, new HashMap<IBond, IBond.Stereo>(), "Rotation");
                 handler.postEdit(undoredo);
             }
+        } else {
+            chemModelRelay.select(AbstractSelection.EMPTY_SELECTION);
+            chemModelRelay.updateView();
         }
     }
 

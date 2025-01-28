@@ -26,6 +26,7 @@ package org.openscience.jchempaint.controller;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.vecmath.Point2d;
 
@@ -240,5 +241,5 @@ public interface IChemModelRelay extends IAtomBondEdits {
     public RGroupHandler getRGroupHandler();
 	public void setRGroupHandler(RGroupHandler rGroupHandler);
 	public void unsetRGroupHandler();
-
+    public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle);
 }

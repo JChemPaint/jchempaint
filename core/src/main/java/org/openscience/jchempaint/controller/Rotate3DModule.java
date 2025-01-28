@@ -26,7 +26,10 @@ package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import java.util.Map;
 
 
 public class Rotate3DModule extends RotateModule {
@@ -70,16 +73,13 @@ public class Rotate3DModule extends RotateModule {
             double cosinePsi = java.lang.Math.cos(rotationAnglePsi);
             double sinePsi = java.lang.Math.sin(rotationAnglePsi);
             
-            IAtomContainer atc = selection.getConnectedAtomContainer();
-            for (int i = 0; i < startCoordsRelativeToRotationCenter.length; i++) {
-                double newX = startCoordsRelativeToRotationCenter[i].x*cosinePhi
-                        + startCoordsRelativeToRotationCenter[i].y*sinePhi*sinePsi; 
-                double newY = startCoordsRelativeToRotationCenter[i].y*cosinePsi;
-
-                Point2d newCoords = new Point2d(newX + rotationCenter.x, newY
-                        + rotationCenter.y);
-
-                atc.getAtom(i).setPoint2d(newCoords);
+            for (Map.Entry<IAtom,Point2d> e : startCoordsRelativeToRotationCenter.entrySet()) {
+                Point2d p = e.getValue();
+                double newX = p.x*cosinePhi + p.y*sinePhi*sinePsi;
+                double newY = p.y*cosinePsi;
+                Point2d newCoords = new Point2d(newX + rotationCenter.x,
+                                                newY + rotationCenter.y);
+                e.getKey().setPoint2d(newCoords);
             }
 
             if ((cosinePhi < 0) && (!horizontalFlip)) {
