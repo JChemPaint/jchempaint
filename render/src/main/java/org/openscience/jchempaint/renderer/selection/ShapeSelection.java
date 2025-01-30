@@ -31,11 +31,13 @@ import java.util.Set;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 
@@ -44,9 +46,9 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
  */
 public abstract class ShapeSelection implements IncrementalSelection {
     
-    public final List<IAtom> atoms = new ArrayList<IAtom>();
+    public final Set<IAtom> atoms = new HashSet<>();
 
-    public final List<IBond> bonds = new ArrayList<IBond>();
+    public final Set<IBond> bonds = new HashSet<>();
     
     protected boolean finished = false;
     
@@ -113,18 +115,18 @@ public abstract class ShapeSelection implements IncrementalSelection {
      */
     public IAtomContainer getConnectedAtomContainer() {
         
-        IAtomContainer ac = new AtomContainer();
-
-        if (!atoms.isEmpty()) {
-           ac = atoms.get(0).getBuilder().newAtomContainer();
-           for (IAtom atom : atoms) {
-              ac.addAtom(atom);
-           }
+        IAtomContainer ac = null;
+        for (IAtom atom : atoms) {
+            if (ac == null) ac = atom.getBuilder().newAtomContainer();
+            ac.addAtom(atom);
         }
-        
+
+        if (ac == null)
+            return new AtomContainer();
+
         for (IBond bond : bonds) {
-           if (ac.contains(bond.getBegin()) && ac.contains(bond.getEnd()))
-               ac.addBond(bond);
+            if (ac.contains(bond.getBegin()) && ac.contains(bond.getEnd()))
+                ac.addBond(bond);
         }
 
         return ac;
@@ -133,15 +135,14 @@ public abstract class ShapeSelection implements IncrementalSelection {
     private void select(IAtomContainer atomContainer) {
     	
         for (IAtom atom : atomContainer.atoms()) {
-            if (contains(atom.getPoint2d()) && !atoms.contains(atom)) {
+            if (contains(atom.getPoint2d())) {
                 atoms.add(atom); 
              }
         }
         
         for (IBond bond : atomContainer.bonds()) {
             if (contains(bond.getAtom(0).getPoint2d())
-            		&& contains(bond.getAtom(1).getPoint2d())
-            		&& !bonds.contains(bond)) {
+            		&& contains(bond.getAtom(1).getPoint2d())) {
                 bonds.add(bond); 
              }
         }
@@ -152,6 +153,21 @@ public abstract class ShapeSelection implements IncrementalSelection {
         for (IAtomContainer atomContainer : 
             ChemModelManipulator.getAllAtomContainers(chemModel)) {
             select(atomContainer);
+        }
+    }
+
+    public void difference(IChemObjectSelection selection) {
+        for (IAtom atom : selection.elements(IAtom.class)) {
+            if (atoms.contains(atom))
+                atoms.remove(atom);
+            else
+                atoms.add(atom);
+        }
+        for (IBond bond : selection.elements(IBond.class)) {
+            if (bonds.contains(bond))
+                bonds.remove(bond);
+            else
+                bonds.add(bond);
         }
     }
     
