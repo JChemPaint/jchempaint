@@ -29,6 +29,32 @@
  */
 package org.openscience.jchempaint;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
+import org.openscience.cdk.ChemModel;
+import org.openscience.cdk.PseudoAtom;
+import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
+import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.IChangeModeListener;
+import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
+import org.openscience.jchempaint.controller.IControllerModule;
+import org.openscience.jchempaint.controller.MoveModule;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -44,39 +70,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
-import java.util.Locale;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
-import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.config.Isotopes;
-import org.openscience.cdk.config.XMLIsotopeFactory;
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IIsotope;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
-import org.openscience.jchempaint.application.JChemPaint;
-import org.openscience.jchempaint.controller.ControllerHub;
-import org.openscience.jchempaint.controller.IChangeModeListener;
-import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
-import org.openscience.jchempaint.controller.IControllerModule;
-import org.openscience.jchempaint.controller.MoveModule;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.cdk.renderer.selection.AbstractSelection;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
@@ -307,7 +300,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     public void keyPressed(KeyEvent e) {
         JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
-        boolean changed = relay.setAltInputMode(((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0));
+
+        if (relay.setAltInputMode(((e.getModifiersEx() & KeyEvent.ALT_DOWN_MASK) != 0))) {
+            IControllerModule module = this.get2DHub().getActiveDrawModule();
+            if (module != null)
+                module.updateView();
+            return;
+        }
+
+        this.get2DHub().clearPhantoms();
 
         /*
          * ATOM/BOND Hotkeys
@@ -317,35 +318,76 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
          * But is functional for now
          */
 
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_RIGHT:
+
+                // re-sync - make sure the highlighted atom has the correct
+                //           context (e.g. bonding) based on the current model
+                if (model.getHighlightedAtom() != null) {
+                    IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
+                                                                                             model.getHighlightedAtom());
+                    if (container != null)
+                        model.setHighlightedAtom(container.getAtom(container.indexOf(model.getHighlightedAtom())));
+                    else
+                        model.setHighlightedAtom(null);
+                }
+                if (model.getHighlightedBond() != null) {
+                    IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
+                                                                                             model.getHighlightedBond());
+                    if (container != null)
+                        model.setHighlightedBond(container.getBond(container.indexOf(model.getHighlightedBond())));
+                    else
+                        model.setHighlightedBond(null);
+                }
+
+                model.moveHighlight(e.getKeyCode());
+                if ((e.getModifiersEx()&KeyEvent.SHIFT_DOWN_MASK) != 0)
+                    model.moveHighlight(e.getKeyCode());
+                this.get2DHub().updateView();
+                return;
+        }
+
+        boolean changed = false;
+
         // if shift or nothing pressed we do the hot keys for atoms/bonds
-        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK)) == 0)) {
-            char x = e.getKeyChar();
+        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK)) == 0)) {
+            char x = (char)(e.getKeyCode() >= 'A' && e.getKeyCode() <= 'Z' ? e.getKeyChar() : e.getKeyCode());
             if (model.getHighlightedAtom() != null) {
-                IAtom closestAtom = model.getHighlightedAtom();
+                IAtom hotspot = model.getHighlightedAtom();
                 changed = true;
                 switch (x) {
-                    case '0': relay.addAtom(closestAtom, IAtom.C, true); break;
-                    case '1': relay.addAtom(closestAtom, IAtom.C, false); break;
+                    case '0': relay.addAtom(hotspot, IAtom.C, true); break;
+                    case '1': relay.addAtom(hotspot, IAtom.C, false); break;
+                    case '2': relay.addAcetyl(hotspot); break;
                     case '3': // fall through 3/a
-                    case 'a': relay.addPhenyl(closestAtom, false); break;
-                    case '6': relay.addRing(closestAtom, 6, false); break;
-                    case '7': relay.addRing(closestAtom, 5, false); break;
-                    case 'b': relay.setSymbol(closestAtom, "B"); break;
-                    case 'c': relay.setSymbol(closestAtom, "C"); break;
-                    case 'd': relay.setSymbol(closestAtom, "H", 2); break;
-                    // case "e": break;
-                    case 'f': relay.setSymbol(closestAtom, "F"); break;
-                    case 'h': relay.setSymbol(closestAtom, "H"); break;
-                    case 'i': relay.setSymbol(closestAtom, "I"); break;
-                    case 'n': relay.setSymbol(closestAtom, "N"); break;
-                    case 'o': relay.setSymbol(closestAtom, "O"); break;
-                    case 's': relay.setSymbol(closestAtom, "S"); break;
-                    case 'p': relay.setSymbol(closestAtom, "P"); break;
-                    case 'r': relay.setSymbol(closestAtom, "R"); break;
-                    case 'B': relay.setSymbol(closestAtom, "Br"); break;
+                    case 'a': relay.addPhenyl(hotspot, false); break;
+                    case '4': relay.addDimethyl(hotspot, IBond.Stereo.UP); break;
+                    case '5': relay.addDimethyl(hotspot, IBond.Stereo.DOWN); break;
+                    case '6': relay.addRing(hotspot, 6, false); break;
+                    case '7': relay.addRing(hotspot, 5, false); break;
+                    case '8': relay.addAtom(hotspot, IAtom.C, IBond.Order.DOUBLE, false); break;
+                    case '9': relay.addDimethyl(hotspot, IBond.Stereo.NONE); break;
+                    case 'b': relay.setSymbol(hotspot, "B"); break;
+                    case 'c': relay.setSymbol(hotspot, "C"); break;
+                    case 'd': relay.setSymbol(hotspot, "H", 2); break;
+                    // case "e": break; // ethyl
+                    case 'f': relay.setSymbol(hotspot, "F"); break;
+                    case 'h': relay.setSymbol(hotspot, "H"); break;
+                    case 'i': relay.setSymbol(hotspot, "I"); break;
+                    case 'n':
+                    case 'w': relay.setSymbol(hotspot, "N"); break;
+                    case 'q':
+                    case 'o': relay.setSymbol(hotspot, "O"); break;
+                    case 's': relay.setSymbol(hotspot, "S"); break;
+                    case 'p': relay.setSymbol(hotspot, "P"); break;
+                    case 'r': relay.setSymbol(hotspot, "R"); break;
+                    case 'B': relay.setSymbol(hotspot, "Br"); break;
                     case 'C': // fall through C/l
-                    case 'l': relay.setSymbol(closestAtom, "Cl"); break;
-                    case 'S': relay.setSymbol(closestAtom, "Si"); break;
+                    case 'l': relay.setSymbol(hotspot, "Cl"); break;
+                    case 'S': relay.setSymbol(hotspot, "Si"); break;
                     default:
                         changed = false;
                 }
@@ -369,15 +411,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     default: changed = false;
                 }
             }
-
         }
 
 
         if (changed) {
+            this.get2DHub().setActiveDrawModule(null);
             this.get2DHub().updateView();
-            IControllerModule module = this.get2DHub().getActiveDrawModule();
-            if (module != null)
-                module.updateView();
+            this.get2DHub().clearPhantoms();
         }
     }
 
