@@ -64,6 +64,7 @@ public class JCPToolBar
     private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JCPToolBar.class);
     public static Color BUTTON_INACTIVE_COLOR=Color.WHITE;//new Color(230,230,230);
+    public static Color BUTON_ACTIVE_COLOR=new Color(98, 182, 207, 111);
     /**
      *  Gets the toolbar attribute of the MainContainerPanel object
      *
@@ -247,6 +248,7 @@ public class JCPToolBar
                     if (toolKeys[i].equals("bondTool")) {
                         //button.setBackground(Color.GRAY);
                         button.setBackground(new Color(238, 238, 238));
+                        button.setOpaque(true);
                         chemPaintPanel.setLastActionButton(button);
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
                         activeModule.setID(toolKeys[i]);
@@ -254,6 +256,7 @@ public class JCPToolBar
                     } else if (toolKeys[i].equals("C")) {
                         button.setBackground(Color.GRAY);
                         chemPaintPanel.setLastSecondaryButton(button);
+                        button.setOpaque(true);
                     } else {
                         button.setBackground(BUTTON_INACTIVE_COLOR);
                     }

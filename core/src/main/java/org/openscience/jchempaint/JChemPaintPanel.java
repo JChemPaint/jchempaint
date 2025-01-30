@@ -417,10 +417,14 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         //move focus
         this.requestFocusInWindow();
 	    //we set the old button to inactive colour
-        if (this.getLastActionButton() != null )
+        if (this.getLastActionButton() != null ) {
+            this.getLastActionButton().setOpaque(false);
             this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
-        if (this.lastSecondaryButton != null)
+        }
+        if (this.lastSecondaryButton != null) {
+            this.lastSecondaryButton.setOpaque(false);
             this.lastSecondaryButton.setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+        }
         String actionid = newActiveModule.getID();
         //this is because move mode does not have a button
         if(actionid.equals("move"))
@@ -432,7 +436,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         JButton newActionButton=buttons.get(actionid);
         if(newActionButton!=null){
             this.setLastActionButton(newActionButton);
-            newActionButton.setBackground(Color.GRAY);
+            newActionButton.setOpaque(true);
+            newActionButton.setBackground(JCPToolBar.BUTON_ACTIVE_COLOR);
         }
         if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1 && !newActiveModule.getID().equals("reactionArrow")){
             if(this.buttons.get(this.get2DHub().getController2DModel().getDrawElement())!=null){
