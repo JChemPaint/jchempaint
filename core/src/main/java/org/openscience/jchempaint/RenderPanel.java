@@ -28,31 +28,16 @@
  */
 package org.openscience.jchempaint;
 
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.JPanel;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
@@ -69,6 +54,7 @@ import org.openscience.jchempaint.controller.SwingMouseEventRelay;
 import org.openscience.jchempaint.controller.undoredo.IUndoListener;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.generators.AtomContainerBoundsGenerator;
 import org.openscience.jchempaint.renderer.generators.AtomContainerTitleGenerator;
@@ -78,7 +64,6 @@ import org.openscience.jchempaint.renderer.generators.ExternalHighlightAtomGener
 import org.openscience.jchempaint.renderer.generators.ExternalHighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightBondGenerator;
-import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
 import org.openscience.jchempaint.renderer.generators.LonePairGenerator;
 import org.openscience.jchempaint.renderer.generators.MappingGenerator;
@@ -92,13 +77,30 @@ import org.openscience.jchempaint.renderer.generators.ReactionBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionPlusGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
+import org.openscience.jchempaint.renderer.generators.SelectControlGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectionToolGenerator;
 import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.renderer.visitor.SVGGenerator;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 import org.openscience.jchempaint.undoredo.SwingUndoableEdit;
+
+import javax.swing.JPanel;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
         IUndoListener {
@@ -232,6 +234,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new HighlightBondGenerator());
         generators.add(new SelectAtomGenerator());
         generators.add(new SelectBondGenerator());
+        generators.add(new SelectControlGenerator());
         generators.add(new SelectionToolGenerator());
         generators.add(new MergeAtomsGenerator());
         generators.add(new AtomContainerTitleGenerator());
