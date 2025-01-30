@@ -26,6 +26,27 @@
  */
 package org.openscience.jchempaint.controller;
 
+import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
+import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.AtomBondSet;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
+import org.openscience.jchempaint.renderer.selection.SingleSelection;
+
+import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
 import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,23 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
-
-import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.geometry.GeometryUtil;
-import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.tools.ILoggingTool;
-import org.openscience.cdk.tools.LoggingToolFactory;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.cdk.renderer.selection.AbstractSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
+import static org.openscience.jchempaint.controller.AbstractSelectModule.getSelectionControlType;
 
 /**
  * Module to move around a selection of atoms and bonds.
@@ -77,7 +82,22 @@ public class MoveModule extends ControllerModuleAdapter {
     private String ID;
 
     private ControllerModuleAdapter switchtowhenoutside;
-    
+
+    private enum Transform {
+        Move,
+        Rotate,
+        Scale
+    }
+
+    private Transform transform = Transform.Move;
+
+    private double transformAmmount;
+    protected Point2d transformOrigin;
+    protected IChemModelRelay.Scale scaleDir = IChemModelRelay.Scale.Both;
+    protected Map<IAtom, Point2d> relativeAtomCoords;
+    protected Map<IAtom, Point2d[]> atomCoordsMap;
+    protected boolean transformMade;
+
     /**
      * Constructor for the MoveModule. Gets passed an instance of another module
      * to which mode switches if clicked outside the selection.
@@ -93,10 +113,69 @@ public class MoveModule extends ControllerModuleAdapter {
 
     // if anything is selected, set offset, start2DCenter, and atomsToMove.
     // if not, switch to other mode and reset mouse cursor.
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
-        //if we are outside bounding box, we deselect, else
-        //we actually start a move.
+        JChemPaintRendererModel jcpModel = chemModelRelay.getRenderer().getRenderer2DModel();
+
+        // move/rotate/scales works on atom coords, a bond may be selected
+        // without its end points so we expand the selection to include
+        // those atoms
+        selection = getExpandedSelection(jcpModel.getSelection());
+
+        IChemModelRelay.CursorType cursor = getSelectionControlType(worldCoord, chemModelRelay);
+        if (cursor == IChemModelRelay.CursorType.ROTATE) {
+
+            transformMade = false;
+            transformAmmount = 0;
+            transformOrigin = RotateModule.getRotationCenter(selection);
+
+            /* Keep original coordinates for possible undo/redo */
+            atomCoordsMap = new HashMap<>();
+            /* Store the original coordinates relative to the rotation center.
+             * These are necessary to rotate around the center of the
+             * selection rather than the draw center. */
+            relativeAtomCoords = new HashMap<>();
+            for (IAtom atom : selection.elements(IAtom.class)) {
+                Point2d relPoint = new Point2d();
+                relPoint.x = atom.getPoint2d().x - transformOrigin.x;
+                relPoint.y = atom.getPoint2d().y - transformOrigin.y;
+                relativeAtomCoords.put(atom, relPoint);
+                atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
+            }
+
+            transform = Transform.Rotate;
+            jcpModel.setRotating(true);
+            return;
+        } else if (cursor.isResize()) {
+
+            transformMade = false;
+            transformOrigin = RotateModule.getRotationCenter(selection);
+            transformAmmount = worldCoord.distance(transformOrigin);
+
+            /* Keep original coordinates for possible undo/redo */
+            atomCoordsMap = new HashMap<>();
+            /* Store the original coordinates relative to the rotation center.
+             * These are necessary to rotate around the center of the
+             * selection rather than the draw center. */
+            relativeAtomCoords = new HashMap<>();
+            for (IAtom atom : selection.elements(IAtom.class)) {
+                Point2d relPoint = new Point2d();
+                relPoint.x = atom.getPoint2d().x - transformOrigin.x;
+                relPoint.y = atom.getPoint2d().y - transformOrigin.y;
+                relativeAtomCoords.put(atom, relPoint);
+                atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
+            }
+
+            transform = Transform.Scale;
+            scaleDir = cursor.getScaleDirection();
+            return;
+        } else {
+            transform = Transform.Move;
+        }
+
+
+        // if we are outside bounding box, we deselect, else
+        // we actually start a move.
         AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
         if (selectedAC != null && !selectedAC.isEmpty()) {
 
@@ -121,7 +200,7 @@ public class MoveModule extends ControllerModuleAdapter {
             offset.sub(current, worldCoord);
 
          } else if(switchtowhenoutside!=null){
-            this.chemModelRelay.getRenderer().getRenderer2DModel()
+            jcpModel
                 .setSelection(AbstractSelection.EMPTY_SELECTION);
             this.chemModelRelay
                     .setActiveDrawModule(switchtowhenoutside);
@@ -131,13 +210,51 @@ public class MoveModule extends ControllerModuleAdapter {
             chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
-    
+
+    private IChemObjectSelection getExpandedSelection(IChemObjectSelection selection) {
+        LogicalSelection expandSelection = new LogicalSelection(LogicalSelection.Type.ALL);
+        for (IAtom atom : selection.elements(IAtom.class)) {
+            expandSelection.select(atom);
+        }
+        for (IBond bond : selection.elements(IBond.class)) {
+            expandSelection.select(bond.getBegin());
+            expandSelection.select(bond.getEnd());
+        }
+        return expandSelection;
+    }
+
     public void mouseMove(Point2d p){
         AbstractSelectModule.showMouseCursor(p, this.chemModelRelay);
     }
 
 
     public void mouseClickedUp(Point2d worldCoord) {
+
+        if (transform == Transform.Rotate ||
+            transform == Transform.Scale) {
+
+            if (transformMade && atomCoordsMap != null && selection.isFilled()) {
+
+                /* Keep new coordinates for the sake of possible undo/redo */
+                for (IAtom atom : selection.getConnectedAtomContainer().atoms()) {
+                    atomCoordsMap.get(atom)[0] = atom.getPoint2d();
+                }
+
+                /* Post the rotation/scale */
+                IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
+                UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
+                if (factory != null && handler != null) {
+                    handler.postEdit(factory.getChangeCoordsEdit(atomCoordsMap, new HashMap<>(), transform.name()));
+                }
+            }
+
+            chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
+            chemModelRelay.getRenderer().getRenderer2DModel().setRotating(false);
+            chemModelRelay.updateView();
+
+            return;
+        }
+
     	if (start2DCenter != null) {
             Vector2d end = new Vector2d();
 
@@ -167,8 +284,7 @@ public class MoveModule extends ControllerModuleAdapter {
     	}
         IControllerModule newActiveModule = new SelectSquareModule(this.chemModelRelay);
         newActiveModule.setID("select");
-        this.chemModelRelay
-                .setActiveDrawModule(newActiveModule);
+        this.chemModelRelay.setActiveDrawModule(newActiveModule);
     
     	endMove();
     }
@@ -183,6 +299,26 @@ public class MoveModule extends ControllerModuleAdapter {
      * Most move mode calculations are done in this routine.
      */
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+
+        if (transform == Transform.Rotate) {
+            transformMade = true;
+            transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
+            chemModelRelay.rotate(relativeAtomCoords,
+                                  transformOrigin,
+                                  transformAmmount);
+            chemModelRelay.updateView();
+            return;
+        } else if (transform == Transform.Scale) {
+            transformMade = true;
+            double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
+            chemModelRelay.scale(relativeAtomCoords,
+                                 transformOrigin,
+                                 dist,
+                                 scaleDir);
+            chemModelRelay.updateView();
+            return;
+        }
+
     	end2DCenter = worldCoordTo;
         Point2d atomCoord = new Point2d();
         atomCoord.add(worldCoordTo, offset);
