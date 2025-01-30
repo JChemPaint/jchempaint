@@ -832,6 +832,69 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 	    flags.put(identifier, flag);
     }
 
+    /**
+     * Get the highlighted atom or bond.
+     * @return the highlighted atom or bond.
+     */
+    IChemObject getHighlight() {
+        return getHighlightedAtom() != null ? getHighlightedAtom()
+                                            : getHighlightedBond();
+    }
+
+    /**
+     * Set the highlighted atom or bond.
+     * @return the highlighted atom or bond.
+     */
+    void setHighlight(IChemObject chemObject) {
+        if (chemObject instanceof IAtom) {
+            setHighlightedAtom((IAtom) chemObject);
+        } else if (chemObject instanceof IBond) {
+            setHighlightedBond((IBond) chemObject);
+        }
+    }
+
+    /**
+     * Change the highlighted atom/bond with arrow keys.
+     */
+    public void moveHighlight(int key) {
+        IChemObject hotspot = getHighlight();
+        if (hotspot instanceof IAtom) {
+            Point2d p = new Point2d(((IAtom) hotspot).getPoint2d());
+            switch (key) {
+                case KeyEvent.VK_UP: p.y++; break;
+                case KeyEvent.VK_DOWN: p.y--; break;
+                case KeyEvent.VK_LEFT: p.x--; break;
+                case KeyEvent.VK_RIGHT: p.x++; break;
+            }
+            IBond best = null;
+            double bestDist = Double.NaN;
+            for (IBond bond : ((IAtom) hotspot).bonds()) {
+                double dist = bond.get2DCenter().distanceSquared(p);
+                if (best == null || dist <= bestDist) {
+                    best = bond;
+                    bestDist = dist;
+                }
+            }
+            if (best != null)
+                setHighlight(best);
+        }
+        else if (hotspot instanceof IBond) {
+            IBond bond = (IBond) hotspot;
+            Point2d p = new Point2d(bond.get2DCenter());
+            switch (key) {
+                case KeyEvent.VK_UP: p.y++; break;
+                case KeyEvent.VK_DOWN: p.y--; break;
+                case KeyEvent.VK_LEFT: p.x--; break;
+                case KeyEvent.VK_RIGHT: p.x++; break;
+            }
+            if (bond.getBegin().getPoint2d().distanceSquared(p) <
+                bond.getEnd().getPoint2d().distanceSquared(p))
+                setHighlight(bond.getBegin());
+            else
+                setHighlight(bond.getEnd());
+        }
+    }
+
     public void setRotating(boolean b) {
         rotating = b;
     }
