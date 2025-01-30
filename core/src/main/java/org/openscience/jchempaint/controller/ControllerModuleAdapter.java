@@ -91,6 +91,10 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
     }
 
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
+        mouseDrag(worldCoordFrom, worldCoordTo);
+    }
+
     public void mouseEnter(Point2d worldCoord) {
     }
 
