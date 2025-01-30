@@ -28,6 +28,8 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.LineElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -35,6 +37,7 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.RenderingParameters;
 
 /**
  * @cdk.module rendercontrol
@@ -53,23 +56,29 @@ public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
     }
     
     protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, JChemPaintRendererModel model){
-        ElementGroup selectionElements = new ElementGroup();
-
+        ElementGroup result = new ElementGroup();
         if(selection==null)
-            return selectionElements;
+            return result;
         if (this.autoUpdateSelection || selection.isFilled()) {
+            RenderingParameters.AtomShape shape = model.getSelectionShape();
             double r = model.getSelectionRadius() / model.getScale();
-
-            double d = 4 * r;
-            for (IAtom atom : selection.elements(IAtom.class)) {
-                Point2d p = atom.getPoint2d();
-                IRenderingElement element;
-                element = new OvalElement(
-                      p.x, p.y, d, false, selectionColor);
-                selectionElements.add(element);
+            if (shape != RenderingParameters.AtomShape.NONE) {
+                double d = 4 * r;
+                for (IAtom atom : selection.elements(IAtom.class)) {
+                    Point2d p = atom.getPoint2d();
+                    IRenderingElement element;
+                    switch (shape) {
+                        case OVAL:
+                            result.add(new OvalElement(p.x, p.y, d, false, selectionColor));
+                            break;
+                        case SQUARE:
+                            result.add(new RectangleElement(p.x - d, p.y + d, 2 * d, -2 * d, false, selectionColor));
+                            break;
+                    }
+                }
             }
         }
-        return selectionElements;
+        return result;
     }
 
     public List<IGeneratorParameter<?>> getParameters() {
