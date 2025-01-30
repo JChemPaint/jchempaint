@@ -90,6 +90,7 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -174,8 +175,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         // setup the Renderer and the controller 'model'
 
         if (this.renderer == null) {
-            this.renderer = new Renderer(makeGenerators(chemModel),
-                    makeReactionGenerators(), new AWTFontManager());
+            this.renderer = new Renderer(
+                    makeGenerators(chemModel, false),
+                    makeReactionGenerators(),
+                    new AWTFontManager());
             // any specific rendering settings defaults that overwrite user settings should go here
             //this.renderer.getRenderer2DModel().setShowEndCarbons(false);
             //this.renderer.getRenderer2DModel().setShowAromaticity(false);
@@ -199,6 +202,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.addMouseMotionListener(mouseEventRelay);
         this.addMouseWheelListener(mouseEventRelay);
         this.isNewChemModel = true;
+
+        // tweaks the standard generator stroke options
+        JChemPaintRendererModel model = this.renderer.getRenderer2DModel();
+        if (model.hasParameter(StandardGenerator.StrokeRatio.class)) {
+            model.getParameter(StandardGenerator.StrokeRatio.class)
+                 .setValue(1.3d);
+        }
     }
 
     private List<IReactionGenerator> makeReactionGenerators() {
@@ -216,24 +226,38 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return generators;
     }
 
-    private List<IGenerator<IAtomContainer>> makeGenerators(IChemModel chemModel)
+    // useSeparateGenerators:
+    // in CDK 2.x we have StandardGenerator which does everything at once
+    // atoms/bonds/Sgroups etc. This is because you need all the information
+    // to correctly place/backoff bonds etc
+    //
+    // It would be nice if this was a preference but we don't configure
+    // until after the generators are setup
+    private List<IGenerator<IAtomContainer>> makeGenerators(IChemModel chemModel,
+                                                            boolean useSeparateGenerators)
             throws IOException {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         if (debug) {
             generators.add(new AtomContainerBoundsGenerator());
         }
         generators.add(new BasicSceneGenerator());
-        generators.add(new RGroupGenerator());
-        generators.add(new RingGenerator());
-        generators.add(new ExtendedAtomGenerator());
-        generators.add(new LonePairGenerator());
-        generators.add(new RadicalGenerator());
-        generators.add(new ExternalHighlightAtomGenerator());
-        generators.add(new ExternalHighlightBondGenerator());
+        generators.add(new RGroupGenerator()); // JWM tweaks needed ???
+        if (useSeparateGenerators) {
+            generators.add(new RingGenerator());
+            generators.add(new ExtendedAtomGenerator());
+            generators.add(new LonePairGenerator());
+            generators.add(new RadicalGenerator());
+            generators.add(new ExternalHighlightAtomGenerator());
+            generators.add(new ExternalHighlightBondGenerator());
+        } else {
+            generators.add(new StandardGenerator(new Font("Arial", Font.PLAIN, 22)));
+        }
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
-        generators.add(new SelectAtomGenerator());
-        generators.add(new SelectBondGenerator());
+        if (useSeparateGenerators) {
+            generators.add(new SelectAtomGenerator());
+            generators.add(new SelectBondGenerator());
+        }
         generators.add(new SelectControlGenerator());
         generators.add(new SelectionToolGenerator());
         generators.add(new MergeAtomsGenerator());
