@@ -2596,12 +2596,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		Set<IBond> anchors = new HashSet<>();
 		IAtomContainer toflip;
 		IChemObjectSelection select = renderModel.getSelection();
-		if (select.getConnectedAtomContainer() != null
-			&& select.getConnectedAtomContainer().getAtomCount() != 0) {
-
-			for (IAtom atom : select.elements(IAtom.class)) {
-				for (IBond bond : atom.bonds()) {
-					if (!select.contains(bond.getOther(atom))) {
+		if (select.isFilled()) {
+			for (IAtomContainer container : getChemModel().getMoleculeSet()) {
+				for (IBond bond : container.bonds()) {
+					if (select.contains(bond.getBegin()) && !select.contains(bond.getEnd())) {
+						anchors.add(bond);
+					} else if (select.contains(bond.getEnd()) && !select.contains(bond.getBegin())) {
 						anchors.add(bond);
 					}
 				}
@@ -2614,6 +2614,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (IAtomContainer atomContainer : toflipall) {
 				toflip.add(atomContainer);
 			}
+		}
+
+		// if we have two "leaving" bonds, check if there is a common atom,
+		// we then move the anchor to that bond.
+		if (anchors.size() > 1) {
+			Set<IAtom> anchorAtoms = new HashSet<>();
+			for (IBond anchor : anchors) {
+				for (IAtom a : anchor.atoms()) {
+					if (select.contains(a))
+						anchorAtoms.add(a);
+				}
+			}
+			if (anchorAtoms.size() == 1) {
+				anchors.clear();
+				IAtom anchorAtom = anchorAtoms.iterator().next();
+				for (IBond bond : ChemModelManipulator.getRelevantAtomContainer(getChemModel(),
+																				anchorAtom)
+													  .getConnectedBondsList(anchorAtom)) {
+					if (select.contains(bond))
+						anchors.add(bond);
+				}
+			}
+			System.err.println(anchors.size());
 		}
 
 		if (anchors.size() == 1 && !altMode) {
