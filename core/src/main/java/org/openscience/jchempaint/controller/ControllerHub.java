@@ -2933,6 +2933,22 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					}
 				}
 			}
+
+			// remove multi-edges
+			if (container1.equals(container2)) {
+				for (IBond bond : atomRemoved.bonds()) {
+					IAtom nbor = bond.getOther(atomRemoved);
+					for (IBond bond2 : bond.getOther(atomRemoved).bonds()) {
+						if (bond2.getOther(nbor).equals(atomMerged)) {
+							container2.removeBond(bond2);
+							removedBonds.add(bond2);
+							atomsToUpdate.add(nbor);
+							break;
+						}
+					}
+				}
+			}
+
 			removedBondss.add(removedBonds);
 
 			// After the removal of redundant bonds, the actual merge is done.
