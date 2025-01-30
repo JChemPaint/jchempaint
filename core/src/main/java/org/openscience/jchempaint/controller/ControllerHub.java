@@ -1595,39 +1595,63 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-	public IRing addRing(int ringSize, Point2d worldcoord, boolean undoable) {
+	public IRing addRing(int ringSize, Point2d worldcoord, boolean phantom) {
 
 		IRing ring = chemModel.getBuilder().newInstance(IRing.class, ringSize, "C");
 		double bondLength = Renderer.calculateBondLength(chemModel.getMoleculeSet());
 		ringPlacer.placeRing(ring, worldcoord, bondLength, RingPlacer.jcpAngles);
-		IAtomContainerSet set = chemModel.getMoleculeSet();
-		// the molecule set should not be null, but just in case...
-		if (set == null) {
-			set = chemModel.getBuilder().newInstance(IAtomContainerSet.class);
-			chemModel.setMoleculeSet(set);
+
+		if (altMode) {
+			GeometryUtil.rotate(ring, GeometryUtil.get2DCenter(ring), Math.toRadians(360d/(2*ringSize)));
 		}
-		IAtomContainer newAtomContainer = chemModel.getBuilder().newInstance(IAtomContainer.class);
-		if (chemModel.getMoleculeSet().getAtomContainer(0).isEmpty())
-			newAtomContainer = (IAtomContainer) chemModel.getMoleculeSet().getAtomContainer(0);
-		else
-			chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
 
-		newAtomContainer.add(ring);
-		updateAtoms(ring, ring.atoms());
-		structureChanged();
+		if (phantom) {
+			phantoms.add(ring);
 
-		if (undoable && getUndoRedoFactory() != null
+			//and look if it would merge somewhere
+            getRenderer().getRenderer2DModel().getMerge().clear();
+            for(IAtom atom : ring.atoms()){
+                IAtom closestAtomInRing = this.getClosestAtom(atom);
+                if( closestAtomInRing != null) {
+					getRenderer().getRenderer2DModel().getMerge().put(closestAtomInRing, atom);
+                }
+            }
+		} else {
+			IAtomContainerSet set = chemModel.getMoleculeSet();
+			// the molecule set should not be null, but just in case...
+			if (set == null) {
+				set = chemModel.getBuilder().newInstance(IAtomContainerSet.class);
+				chemModel.setMoleculeSet(set);
+			}
+			IAtomContainer newAtomContainer = chemModel.getBuilder().newInstance(IAtomContainer.class);
+			if (chemModel.getMoleculeSet().getAtomContainer(0).isEmpty())
+				newAtomContainer = (IAtomContainer) chemModel.getMoleculeSet().getAtomContainer(0);
+			else
+				chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
+
+			newAtomContainer.add(ring);
+			updateAtoms(ring, ring.atoms());
+			structureChanged();
+
+			if (getUndoRedoFactory() != null
 				&& getUndoRedoHandler() != null) {
-			IUndoRedoable undoredo = getUndoRedoFactory()
-					.getAddAtomsAndBondsEdit(getIChemModel(), new AtomBondSet(ring), null,
-							"Ring" + " " + ringSize, this);
-			getUndoRedoHandler().postEdit(undoredo);
+				IUndoRedoable undoredo = getUndoRedoFactory()
+						.getAddAtomsAndBondsEdit(getIChemModel(), new AtomBondSet(ring), null,
+												 "Ring" + " " + ringSize, this);
+				getUndoRedoHandler().postEdit(undoredo);
+			}
+
+			renderer.getRenderer2DModel()
+					.setHighlightedAtom(newAtomContainer.getAtom(ring.indexOf(ring.getAtom((ringSize/2)-1))));
+			clearPhantoms();
 		}
+
 		return ring;
 	}
 
 	// OK
-	public IRing addPhenyl(Point2d worldcoord, boolean undoable) {
+	public IRing addPhenyl(Point2d worldcoord, boolean phantom) {
+
 		IRing ring = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
 		ring.getBond(0).setOrder(IBond.Order.DOUBLE);
 		ring.getBond(2).setOrder(IBond.Order.DOUBLE);
@@ -1637,30 +1661,56 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				.getMoleculeSet());
 		ringPlacer
 				.placeRing(ring, worldcoord, bondLength, RingPlacer.jcpAngles);
-		IAtomContainerSet set = chemModel.getMoleculeSet();
 
-		// the molecule set should not be null, but just in case...
-		if (set == null) {
-			set = chemModel.getBuilder().newInstance(IAtomContainerSet.class);
-			chemModel.setMoleculeSet(set);
+		if (altMode) {
+			GeometryUtil.rotate(ring, GeometryUtil.get2DCenter(ring), Math.toRadians(30));
 		}
-		IAtomContainer newAtomContainer = chemModel.getBuilder().newInstance(IAtomContainer.class);
-		if (chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount() == 0)
-			newAtomContainer = (IAtomContainer) chemModel.getMoleculeSet()
-					.getAtomContainer(0);
-		else
-			chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
-		newAtomContainer.add(ring);
-		updateAtoms(ring, ring.atoms());
-		structureChanged();
-		if (undoable && getUndoRedoFactory() != null
+
+		if (phantom) {
+			phantoms.add(ring);
+
+			//and look if it would merge somewhere
+			getRenderer().getRenderer2DModel().getMerge().clear();
+			for(IAtom atom : ring.atoms()){
+				IAtom closestAtomInRing = this.getClosestAtom(atom);
+				if( closestAtomInRing != null) {
+					getRenderer().getRenderer2DModel().getMerge().put(closestAtomInRing, atom);
+				}
+			}
+		} else {
+			IAtomContainerSet set = chemModel.getMoleculeSet();
+
+			// the molecule set should not be null, but just in case...
+			if (set == null) {
+				set = chemModel.getBuilder().newInstance(IAtomContainerSet.class);
+				chemModel.setMoleculeSet(set);
+			}
+
+			IAtomContainer newAtomContainer = chemModel.getBuilder().newInstance(IAtomContainer.class);
+			if (chemModel.getMoleculeSet().getAtomContainer(0).getAtomCount() == 0)
+				newAtomContainer = (IAtomContainer) chemModel.getMoleculeSet()
+															 .getAtomContainer(0);
+			else
+				chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
+			newAtomContainer.add(ring);
+			updateAtoms(ring, ring.atoms());
+			structureChanged();
+
+			if (getUndoRedoFactory() != null
 				&& getUndoRedoHandler() != null) {
-			IUndoRedoable undoredo = getUndoRedoFactory()
-					.getAddAtomsAndBondsEdit(getIChemModel(),
-											 new AtomBondSet(ring), null,
-											 "Benzene", this);
-			getUndoRedoHandler().postEdit(undoredo);
+				IUndoRedoable undoredo = getUndoRedoFactory()
+						.getAddAtomsAndBondsEdit(getIChemModel(),
+												 new AtomBondSet(ring), null,
+												 "Benzene", this);
+				getUndoRedoHandler().postEdit(undoredo);
+			}
+
+			renderer.getRenderer2DModel()
+					.setHighlightedAtom(newAtomContainer.getAtom(ring.indexOf(ring.getAtom(2))));
+			clearPhantoms();
 		}
+
+
 		return ring;
 	}
 
