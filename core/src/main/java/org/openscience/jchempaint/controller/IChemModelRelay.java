@@ -5,7 +5,7 @@
  * Contact: cdk-devel@lists.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
+ * modify it under the terms of the GNU Lesser General  License
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
  * All I ask is that proper credit is given for my work, which includes
@@ -16,9 +16,9 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General  License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU Lesser General  License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
@@ -49,17 +49,71 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
 /**
  * @cdk.module control
  */
-public interface IChemModelRelay extends IAtomBondEdits {
+ public interface IChemModelRelay extends IAtomBondEdits {
 
-    public enum Direction { UP, DOWN, UNDEFINED, EZ_UNDEFINED };
+     enum Direction { UP, DOWN, UNDEFINED, EZ_UNDEFINED };
+
+     enum Scale {
+         Horizontal,
+         Vertical,
+         Both
+     }
+
+     enum CursorType {
+         DEFAULT,
+         MOVE,
+         ROTATE,
+         RESIZE_N,
+         RESIZE_NE,
+         RESIZE_E,
+         RESIZE_SE,
+         RESIZE_S,
+         RESIZE_SW,
+         RESIZE_W,
+         RESIZE_NW;
+
+         boolean isResize() {
+             switch (this) {
+                 case RESIZE_N:
+                 case RESIZE_NE:
+                 case RESIZE_E:
+                 case RESIZE_SE:
+                 case RESIZE_S:
+                 case RESIZE_SW:
+                 case RESIZE_W:
+                 case RESIZE_NW:
+                     return true;
+                 default:
+                     return false;
+             }
+         }
+
+         Scale getScaleDirection() {
+             switch (this) {
+                 case RESIZE_N:
+                 case RESIZE_S:
+                     return Scale.Vertical;
+                 case RESIZE_E:
+                 case RESIZE_W:
+                     return Scale.Horizontal;
+                 case RESIZE_NE:
+                 case RESIZE_SE:
+                 case RESIZE_SW:
+                 case RESIZE_NW:
+                     return Scale.Both;
+                 default:
+                     throw new IllegalStateException();
+             }
+         }
+     };
 
     /* Interaction*/
-    public IControllerModel getController2DModel();
-    public IRenderer getRenderer();
-    public IChemModel getIChemModel();
-    public void setChemModel(IChemModel model);
-    public IAtom getClosestAtom(Point2d worldCoord);
-    public IBond getClosestBond(Point2d worldCoord);
+     IControllerModel getController2DModel();
+     IRenderer getRenderer();
+     IChemModel getIChemModel();
+     void setChemModel(IChemModel model);
+     IAtom getClosestAtom(Point2d worldCoord);
+     IBond getClosestBond(Point2d worldCoord);
     
     /**
      * Get the closest atom that is in 'range' (highlight distance) of the
@@ -69,7 +123,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param atom the atom to use as the base of the search
      * @return the closest atom that is in highlight distance
      */
-    public IAtom getAtomInRange(Collection<IAtom> toIgnore, IAtom atom);
+     IAtom getAtomInRange(Collection<IAtom> toIgnore, IAtom atom);
     
     
     /**
@@ -78,35 +132,35 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param atom the atom around which to search
      * @return the nearest atom other than 'atom'
      */
-    public IAtom getClosestAtom(IAtom atom);
+     IAtom getClosestAtom(IAtom atom);
     
-    public void updateView();
+     void updateView();
     
     /**
      * Sets the active controller module.
      * 
      * @param activeDrawModule The new controller module.^M
      */
-    public void setActiveDrawModule(IControllerModule activeDrawModule);
+     void setActiveDrawModule(IControllerModule activeDrawModule);
     
     /**
      * Fills an IncrementalSelection and sets it as selction in the model.
      *
      * @param selection The selection to fill and to set.
      */
-    public void select(IncrementalSelection selection);
+     void select(IncrementalSelection selection);
     
     /**
      * Sets a selection as selection in the model.
      * 
      * @param selection The selection to set.
      */
-    public void select(IChemObjectSelection selection);
+     void select(IChemObjectSelection selection);
 
     /* Event model */
-    public void setEventHandler(IChemModelEventRelayHandler handler);
-    public void fireZoomEvent();
-    public void fireStructureChangedEvent();
+     void setEventHandler(IChemModelEventRelayHandler handler);
+     void fireZoomEvent();
+     void fireStructureChangedEvent();
     /**
      * Adds an temporary atom which might be cleared later, when the final
      * atom is added. Controllers can use this to draw temporary atoms, for
@@ -114,7 +168,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      *
      * @param atom atom to add as phantom
      */
-    public void addPhantomAtom(IAtom atom);
+     void addPhantomAtom(IAtom atom);
     
     /**
      * Sets a phantom = temporary arrow, e. g. for reaction drawing.
@@ -122,14 +176,14 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param start The start point.
      * @param end   The end point (if startt and end are null, no arrow is drawn).
      */
-    public void setPhantomArrow(Point2d start, Point2d end);
+     void setPhantomArrow(Point2d start, Point2d end);
     
     /**
      * Gets start and end for a phantom arrow.
      * 
      * @return [0]=start, [1]=end. Can be null, nothing to be done then.
      */
-    public Point2d[] getPhantomArrow();
+     Point2d[] getPhantomArrow();
     /**
      * Adds an temporary bond which might be cleared later, when the final
      * bond is added. Controllers can use this to draw temporary bonds, for
@@ -137,33 +191,33 @@ public interface IChemModelRelay extends IAtomBondEdits {
      *
      * @param bond bond to add as phantom
      */
-    public void addPhantomBond(IBond bond);
+     void addPhantomBond(IBond bond);
 	/**
 	 * Replaces the phantom bonds/atoms with this atomcontainer.
 	 * 
 	 * @param phantoms The new phantoms
 	 */
-	public void setPhantoms(IAtomContainer phantoms);
+	 void setPhantoms(IAtomContainer phantoms);
 	/**
 	 * Sets a text to be rendered as a phantom at a certain position.
 	 * 
 	 * @param text The text.
 	 * @param position The position.
 	 */
-	public void setPhantomText(String text, Point2d position);
+	 void setPhantomText(String text, Point2d position);
 	/**
      * Returns an IAtomContainer containing all phantom atoms and bonds.
      */
-    public IAtomContainer getPhantoms();
+     IAtomContainer getPhantoms();
     /**
      * Deletes all temporary atoms.
      */
-    public void clearPhantoms();
+     void clearPhantoms();
 
     /* Editing actions for the complete model */
-    public void updateImplicitHydrogenCounts();
-    public void zap();
-    public IRing addRing(int size, Point2d worldcoord, boolean undoable);
+     void updateImplicitHydrogenCounts();
+     void zap();
+     IRing addRing(int size, Point2d worldcoord, boolean undoable);
     /**
      * Adds a ring to an atom.
      * 
@@ -172,7 +226,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-    public IRing addRing(IAtom atom, int size, boolean phantom);
+     IRing addRing(IAtom atom, int size, boolean phantom);
     /**
      * Adds a phenyl ring to an atom.
      * 
@@ -180,8 +234,8 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-    public IRing addPhenyl(IAtom atom, boolean phantom);
-    public IRing addPhenyl(Point2d worldcoord, boolean undoable);
+     IRing addPhenyl(IAtom atom, boolean phantom);
+     IRing addPhenyl(Point2d worldcoord, boolean phantom);
     /**
      * Adds a ring to an bond.
      * 
@@ -190,7 +244,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-    public IRing addRing(IBond bond, int size, boolean phantom);
+     IRing addRing(IBond bond, int size, boolean phantom);
     /**
      * Adds a phenyl ring to an atom.
      * 
@@ -198,7 +252,7 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-    public IRing addPhenyl(IBond bond, boolean phantom);
+     IRing addPhenyl(IBond bond, boolean phantom);
     /**
      * Adds a fragment to the chemmodel.
      * 
@@ -206,40 +260,42 @@ public interface IChemModelRelay extends IAtomBondEdits {
      * @param moleculeToAddTo If null, a new molecule in the setOfMolecules will be made, if not null, it will be added to moleculeToAddTo.
      * @param toRemove If not null, this atomcontainer will be added to moleculeToAddTo as well and removed from chemmodel (this is needed if a merge happens).
      */
-    public void addFragment(AtomBondSet toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
-    public AtomBondSet deleteFragment(AtomBondSet toDelete);
-    public void cleanup();
-    public void flip(boolean horizontal);
-    public void invertStereoInSelection();
+     void addFragment(AtomBondSet toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
+     AtomBondSet deleteFragment(AtomBondSet toDelete);
+     void cleanup();
+     void flip(boolean horizontal);
+     void invertStereoInSelection();
     /**
      * Adjusts all bond orders to fit valency
      */
-    public void adjustBondOrders() throws IOException, ClassNotFoundException, CDKException;
+     void adjustBondOrders() throws IOException, ClassNotFoundException, CDKException;
     /**
      * Sets all bond order to single
      */
-    public void resetBondOrders();
-    public void clearValidation();
-    public void makeAllImplicitExplicit();
-    public void makeAllExplicitImplicit();
-//    public  void cleanupSelection(Selector sectionIdentifier);
+     void resetBondOrders();
+     void clearValidation();
+     void makeAllImplicitExplicit();
+     void makeAllExplicitImplicit();
+//      void cleanupSelection(Selector sectionIdentifier);
 
-    public IUndoRedoFactory getUndoRedoFactory();
-    public UndoRedoHandler getUndoRedoHandler();
-    public IBond addBond(IAtom fromAtom, IAtom toAtom, Stereo stereo, Order order);
-    public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
-    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, Order order, boolean makePseudoAtom, boolean phantom);
-    public IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereo, Order order, boolean makePseudoAtom);
-    public void setValence(IAtom atom, Integer newValence);
-    public IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start, boolean makePseudoAtom);
-    public void removeBondAndLoneAtoms(IBond bond);
-    public IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
+     IUndoRedoFactory getUndoRedoFactory();
+     UndoRedoHandler getUndoRedoHandler();
+     IBond addBond(IAtom fromAtom, IAtom toAtom, Stereo stereo, Order order);
+     IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
+     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, Order order, boolean makePseudoAtom, boolean phantom);
+     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereo, Order order, boolean makePseudoAtom);
+     void setValence(IAtom atom, Integer newValence);
+     IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start, boolean makePseudoAtom);
+     void removeBondAndLoneAtoms(IBond bond);
+     IAtom convertToPseudoAtom(IAtom newAtom, String drawElement);
 
-    public void setCursor(int cursor);
-    public int getCursor();
-    public IChemModel getChemModel();
-    public RGroupHandler getRGroupHandler();
-	public void setRGroupHandler(RGroupHandler rGroupHandler);
-	public void unsetRGroupHandler();
-    public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle);
+     void setCursor(CursorType type);
+     void setCursor(int cursor);
+     int getCursor();
+     IChemModel getChemModel();
+     RGroupHandler getRGroupHandler();
+	   void setRGroupHandler(RGroupHandler rGroupHandler);
+	   void unsetRGroupHandler();
+     void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle);
+     void scale(Map<IAtom,Point2d> atoms, Point2d center, double dist, Scale scale);
 }
