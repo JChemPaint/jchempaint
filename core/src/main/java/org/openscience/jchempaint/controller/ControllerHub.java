@@ -25,40 +25,32 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.awt.Cursor;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import javax.vecmath.Point2d;
-import javax.vecmath.Tuple2d;
-import javax.vecmath.Vector2d;
-
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
-import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.config.XMLIsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.*;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.interfaces.IPseudoAtom;
+import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.IReactionSet;
+import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -73,8 +65,8 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
-import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.AtomBondSet;
+import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
@@ -93,6 +85,27 @@ import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
+
+import javax.vecmath.Point2d;
+import javax.vecmath.Tuple2d;
+import javax.vecmath.Vector2d;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that will central interaction point between a mouse event throwing
@@ -158,6 +171,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	/** Alternative input mode allow different actions when alt is held. */
 	private boolean altMode = false;
 
+    private Cursor rotateCursor;
+
 	public ControllerHub(IControllerModel controllerModel, IRenderer renderer,
 			IChemModel chemModel, RenderPanel eventRelay,
 			UndoRedoHandler undoredohandler, IUndoRedoFactory undoredofactory,
@@ -175,6 +190,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		registerGeneralControllerModule(new HighlightModule(this, applet));
 		matcher = CDKAtomTypeMatcher.getInstance(chemModel.getBuilder());
+
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        rotateCursor = toolkit.createCustomCursor(toolkit.getImage(getClass().getResource("cursors/rotate.png"))
+                                                         .getScaledInstance(16, 16, Image.SCALE_SMOOTH),
+                                                  new Point(8, 8),
+                                                  "rotate");
 	}
 
 	public IControllerModel getController2DModel() {
@@ -289,7 +310,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (activeModule != null) {
 			activeModule.mouseClickedDown(modelCoord, modifiers);
 		}
-		
+
 		if (getCursor() == Cursor.HAND_CURSOR) {
 			setCursor(Cursor.MOVE_CURSOR);
 			oldMouseCursor = Cursor.HAND_CURSOR;
@@ -324,7 +345,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     }
 
 	public void mouseDrag(int screenXFrom, int screenYFrom, int screenXTo,
-			int screenYTo) {
+			int screenYTo, int modifiers) {
 		Point2d modelCoordFrom = renderer.toModelCoordinates(screenXFrom,
 				screenYFrom);
 		Point2d modelCoordTo = renderer
@@ -332,13 +353,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseDrag(modelCoordFrom, modelCoordTo);
+			module.mouseDrag(modelCoordFrom, modelCoordTo, modifiers);
 		}
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null) {
-			activeModule.mouseDrag(modelCoordFrom, modelCoordTo);
+			activeModule.mouseDrag(modelCoordFrom, modelCoordTo, modifiers);
 		}
 	}
 
@@ -394,6 +415,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void setActiveDrawModule(IControllerModule activeDrawModule) {
+		clearPhantoms();
 		if (activeDrawModule == null)
 			activeDrawModule = this.fallbackModule;
 		this.activeDrawModule = activeDrawModule;
@@ -2932,6 +2954,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			bondsWithReplacedAtoms.add(bondsWithReplacedAtom);
 		}
 
+		for (IAtom atom : atomsToUpdate) {
+			updateAtom(atom);
+		}
+
 		Map<Integer, Map<Integer, Integer>> oldRGroupHash = null;
 		Map<Integer, Map<Integer, Integer>> newRGroupHash = null;
 
@@ -3099,6 +3125,44 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	public void setCursor(int cursor) {
 		eventRelay.setCursor(new Cursor(cursor));
+	}
+
+	public void setCursor(CursorType type) {
+		switch (type) {
+			case DEFAULT:
+				setCursor(Cursor.DEFAULT_CURSOR);
+				break;
+			case MOVE:
+				setCursor(Cursor.HAND_CURSOR);
+				break;
+			case ROTATE:
+				eventRelay.setCursor(rotateCursor);
+				break;
+			case RESIZE_N:
+				setCursor(Cursor.N_RESIZE_CURSOR);
+				break;
+			case RESIZE_NE:
+				setCursor(Cursor.NE_RESIZE_CURSOR);
+				break;
+			case RESIZE_E:
+				setCursor(Cursor.E_RESIZE_CURSOR);
+				break;
+			case RESIZE_SE:
+				setCursor(Cursor.SE_RESIZE_CURSOR);
+				break;
+			case RESIZE_S:
+				setCursor(Cursor.S_RESIZE_CURSOR);
+				break;
+			case RESIZE_SW:
+				setCursor(Cursor.SW_RESIZE_CURSOR);
+				break;
+			case RESIZE_W:
+				setCursor(Cursor.W_RESIZE_CURSOR);
+				break;
+			case RESIZE_NW:
+				setCursor(Cursor.NW_RESIZE_CURSOR);
+				break;
+		}
 	}
 
 	/**
