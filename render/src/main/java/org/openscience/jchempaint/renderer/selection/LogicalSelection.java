@@ -54,6 +54,11 @@ public class LogicalSelection implements IChemObjectSelection {
         this.type = type;
     }
 
+    public LogicalSelection(IChemObjectSelection sel) {
+        this.type = Type.ALL;
+        select(sel.elements(IChemObject.class));
+    }
+
     public void clear() {
         this.type = Type.NONE;
         this.selected.clear();
@@ -104,8 +109,12 @@ public class LogicalSelection implements IChemObjectSelection {
         }
     }
     
-    public void select(Set<IChemObject> chemObjectSet) {
+    public void select(Collection<IChemObject> chemObjectSet) {
         this.selected.addAll(chemObjectSet);
+    }
+
+    public void select(IChemObject chemObject) {
+        this.selected.add(chemObject);
     }
 
     public boolean contains( IChemObject obj ) {
