@@ -24,19 +24,17 @@
  */
 package org.openscience.jchempaint.controller;
 
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.layout.RingPlacer;
+import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
-import org.openscience.cdk.renderer.selection.AbstractSelection;
-import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
+import javax.vecmath.Point2d;
 import java.util.Map;
 
 /**
@@ -55,26 +53,26 @@ public class AddRingModule extends ControllerModuleAdapter {
     private Point2d mouseLastMoved = null;
 
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
-            boolean addingBenzene) {
+                         boolean addingBenzene) {
         super(chemModelRelay);
         this.ringSize = ringSize;
         this.addingBenzene = addingBenzene;
     }
 
-    private IRing addRingToEmptyCanvas(Point2d p) {
+    private IRing addRingToEmptyCanvas(Point2d p, boolean phantom) {
         if (addingBenzene) {
-            return chemModelRelay.addPhenyl(p, false);
+            return chemModelRelay.addPhenyl(p, phantom);
         } else {
-            return chemModelRelay.addRing(ringSize, p, false);
+            return chemModelRelay.addRing(ringSize, p, phantom);
         }
     }
 
     private IRing addRingToAtom(IAtom closestAtom, boolean phantom) {
         IRing newring;
         if (addingBenzene) {
-           newring = chemModelRelay.addPhenyl(closestAtom, phantom);
+            newring = chemModelRelay.addPhenyl(closestAtom, phantom);
         } else {
-           newring = chemModelRelay.addRing(closestAtom, ringSize, phantom);
+            newring = chemModelRelay.addRing(closestAtom, ringSize, phantom);
         }
         newring.removeAtom(closestAtom);
         return newring;
@@ -85,7 +83,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         if (addingBenzene) {
             newring = chemModelRelay.addPhenyl(bond, phantom);
         } else {
-           newring = chemModelRelay.addRing(bond, ringSize, phantom);
+            newring = chemModelRelay.addRing(bond, ringSize, phantom);
         }
         newring.removeAtom(bond.getAtom(0));
         newring.removeAtom(bond.getAtom(1));
@@ -98,14 +96,14 @@ public class AddRingModule extends ControllerModuleAdapter {
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
 
-        IChemObject singleSelection = getHighlighted( worldCoord,
-                                                      closestAtom,closestBond );
+        IChemObject singleSelection = getHighlighted(worldCoord,
+                                                     closestAtom, closestBond);
 
         if (singleSelection == null) {
             //we add the ring
-    		    IRing newRing = this.addRingToEmptyCanvas(worldCoord);
+            IRing newRing = this.addRingToEmptyCanvas(worldCoord, false);
 
-            Map<IAtom,IAtom> mergeSet = chemModelRelay.getRenderer().getRenderer2DModel().getMerge();
+            Map<IAtom, IAtom> mergeSet = chemModelRelay.getRenderer().getRenderer2DModel().getMerge();
             mergeSet.clear();
 
             //we look if it would merge
@@ -129,9 +127,9 @@ public class AddRingModule extends ControllerModuleAdapter {
             }
 
             AtomBondSet abset = new AtomBondSet(newRing);
-            for (IAtom atom : mergeSet.keySet()){
+            for (IAtom atom : mergeSet.keySet()) {
                 abset.remove(atom);
-                for (IBond bond : newRing.getConnectedBondsList(atom)){
+                for (IBond bond : newRing.getConnectedBondsList(atom)) {
                     if (mergeSet.containsKey(bond.getOther(atom)))
                         abset.remove(bond);
                 }
@@ -147,26 +145,26 @@ public class AddRingModule extends ControllerModuleAdapter {
             chemModelRelay.mergeMolecules(null);
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
         } else if (singleSelection instanceof IAtom) {
-            this.addRingToAtom((IAtom) singleSelection,false);
+            this.addRingToAtom((IAtom) singleSelection, false);
         } else if (singleSelection instanceof IBond) {
-            this.addRingToBond((IBond) singleSelection,false);
+            this.addRingToBond((IBond) singleSelection, false);
         }
 
-		if (singleSelection == null)
-			setSelection(AbstractSelection.EMPTY_SELECTION);
-		else
-			setSelection(new SingleSelection<IChemObject>(singleSelection));
+        if (singleSelection == null)
+            setSelection(AbstractSelection.EMPTY_SELECTION);
+        else
+            setSelection(new SingleSelection<IChemObject>(singleSelection));
 
-		chemModelRelay.updateView();
-	}
+        chemModelRelay.updateView();
+    }
 
-	public void mouseClickedDownRight(Point2d worldCoord) {
+    public void mouseClickedDownRight(Point2d worldCoord) {
         this.chemModelRelay.clearPhantoms();
         this.setSelection(AbstractSelection.EMPTY_SELECTION);
         chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
         this.chemModelRelay.updateView();
         this.escapeTheMode();
-	}
+    }
 
     public void mouseMove(Point2d worldCoord) {
         if ((System.nanoTime() - drawTime) < 4000000) {
@@ -176,37 +174,15 @@ public class AddRingModule extends ControllerModuleAdapter {
         this.chemModelRelay.clearPhantoms();
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
-        IChemObject singleSelection = getHighlighted( worldCoord,
-                closestAtom,closestBond );
+        IChemObject singleSelection = getHighlighted(worldCoord,
+                                                     closestAtom, closestBond);
 
         if (singleSelection == null) {
-            //we build a phantom ring
-            IRing ring = this.chemModelRelay.getIChemModel().getBuilder().newInstance(IRing.class,ringSize, "C");
-            if (addingBenzene) {
-                ring.getBond(0).setOrder(IBond.Order.DOUBLE);
-                ring.getBond(2).setOrder(IBond.Order.DOUBLE);
-                ring.getBond(4).setOrder(IBond.Order.DOUBLE);
-            }
-            double bondLength = Renderer.calculateBondLength(this.chemModelRelay.getIChemModel().getMoleculeSet());
-
-            ringPlacer.placeRing(ring, worldCoord, bondLength, RingPlacer.jcpAngles);
-
-            for(IAtom atom : ring.atoms())
-                this.chemModelRelay.addPhantomAtom(atom);
-            for(IBond atom : ring.bonds())
-                this.chemModelRelay.addPhantomBond(atom);
-            //and look if it would merge somewhere
-            chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
-            for(IAtom atom : ring.atoms()){
-                IAtom closestAtomInRing = this.chemModelRelay.getClosestAtom(atom);
-                if( closestAtomInRing != null) {
-                        chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(closestAtomInRing, atom);
-                }
-            }
+            this.addRingToEmptyCanvas(worldCoord, true);
         } else if (singleSelection instanceof IAtom) {
-            this.addRingToAtom((IAtom) singleSelection,true);
+            this.addRingToAtom((IAtom) singleSelection, true);
         } else if (singleSelection instanceof IBond) {
-            this.addRingToBond((IBond) singleSelection,true);
+            this.addRingToBond((IBond) singleSelection, true);
         }
         drawTime = System.nanoTime();
         this.chemModelRelay.updateView();
@@ -219,11 +195,11 @@ public class AddRingModule extends ControllerModuleAdapter {
     }
 
     public String getDrawModeString() {
-    	if (addingBenzene) {
-			return "Benzene";
-    	} else {
-			return "Ring" + " " + ringSize;
-    	}
+        if (addingBenzene) {
+            return "Benzene";
+        } else {
+            return "Ring" + " " + ringSize;
+        }
     }
 
     public String getID() {
@@ -231,7 +207,7 @@ public class AddRingModule extends ControllerModuleAdapter {
     }
 
     public void setID(String ID) {
-        this.ID=ID;
+        this.ID = ID;
     }
 
 }
