@@ -87,7 +87,7 @@ public interface IMouseEventRelay {
 	 * @param screenCoordYTo
 	 */
 	void mouseDrag(int screenCoordXFrom, int screenCoordYFrom, 
-	        int screenCoordXTo, int screenCoordYTo);
+	        int screenCoordXTo, int screenCoordYTo, int modifiers);
 	
 	
 }
