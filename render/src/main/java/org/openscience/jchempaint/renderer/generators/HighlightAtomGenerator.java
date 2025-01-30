@@ -52,7 +52,7 @@ public class HighlightAtomGenerator extends BasicAtomGenerator {
             // the element size has to be scaled to model space 
             // so that it can be scaled back to screen space...
             double radius = jcpModel.getHighlightDistance() / jcpModel.getScale();
-            radius /= 2.0;
+            radius /= 1.5;
             boolean filled = jcpModel.getHighlightShapeFilled();
             Color highlightColor = jcpModel.getHoverOverColor(); 
             return new OvalElement(p.x, p.y, radius, filled, highlightColor);

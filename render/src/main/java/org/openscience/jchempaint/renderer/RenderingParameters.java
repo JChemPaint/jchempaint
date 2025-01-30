@@ -27,12 +27,12 @@ import java.awt.Color;
  * @cdk.module render
  */
 public class RenderingParameters {
-    
+
     /**
      * When atoms are selected or in compact mode, they will
      * be covered by a shape determined by this enumeration
      */
-    public enum AtomShape { OVAL, SQUARE };
+    public enum AtomShape { OVAL, SQUARE, NONE};
 
     /**
      * The color used for underlining not typeable atoms.
@@ -52,7 +52,7 @@ public class RenderingParameters {
                             
     private Color externalHighlightColor = Color.RED;
 
-    private Color hoverOverColor = Color.BLUE;
+    private Color hoverOverColor = new Color(112, 181, 235); // light blue
 
     /**
      * The maximum distance on the screen the mouse pointer has to be to
@@ -60,16 +60,16 @@ public class RenderingParameters {
      */
     private double highlightDistance;
 
-    private boolean highlightShapeFilled = false;
+    private boolean highlightShapeFilled = true;
 
     private Color mappingColor = Color.gray;
    
-    private Color selectedPartColor = new Color(00, 153, 204); //Color.lightGray;
+    private Color selectedPartColor = new Color(112, 181, 235); // light blue
 
     /**
      * The shape to display over selected atoms
      */
-    private AtomShape selectionShape = AtomShape.SQUARE;
+    private AtomShape selectionShape = AtomShape.NONE;
 
     /**
      * The radius on screen of the selection shape
@@ -96,6 +96,7 @@ public class RenderingParameters {
 
     private boolean willDrawNumbers;
 
+    private AtomShape highlightBondShape = AtomShape.SQUARE;
 
     public boolean isHighlightShapeFilled() {
         return highlightShapeFilled;
@@ -111,6 +112,10 @@ public class RenderingParameters {
 
     public void setHighlightDistance(double highlightDistance) {
         this.highlightDistance = highlightDistance;
+    }
+
+    public AtomShape getHighlightBondShape() {
+        return highlightBondShape;
     }
 
     public AtomShape getSelectionShape() {
