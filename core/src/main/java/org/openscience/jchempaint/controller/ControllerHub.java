@@ -3213,7 +3213,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	@Override
 	public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle) {
 
-		// by default snap to 30 degress (PI/6 radians)
+		// by default snap to 30 degrees (PI/6 radians)
+		// alt mode allows free rotation
 		if (!altMode)
 			angle = (Math.PI/6) * Math.round(angle / (Math.PI/6));
 
@@ -3226,6 +3227,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			Point2d refPoint = e.getValue();
 			double newX = (refPoint.x * cosine) - (refPoint.y * sine);
 			double newY = (refPoint.x * sine) + (refPoint.y * cosine);
+			Point2d newCoords = new Point2d(newX + center.x, newY + center.y);
+			e.getKey().setPoint2d(newCoords);
+		}
+	}
+
+	@Override
+	public void scale(Map<IAtom,Point2d> atoms, Point2d center, double amount,
+					  Scale direction) {
+
+		// in alt mode snap to 1.5 increments
+		if (altMode)
+			amount = Math.round(2 * amount) / 2d;
+
+		for (Map.Entry<IAtom,Point2d> e : atoms.entrySet()) {
+			Point2d refPoint = e.getValue();
+			double newX = direction != Scale.Vertical ? (refPoint.x * amount) : refPoint.x;
+			double newY = direction != Scale.Horizontal ? (refPoint.y * amount) : refPoint.y;
 			Point2d newCoords = new Point2d(newX + center.x, newY + center.y);
 			e.getKey().setPoint2d(newCoords);
 		}
