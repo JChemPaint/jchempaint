@@ -31,6 +31,12 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @cdk.module controlbasic @cdk.svnrev $Revision: 13311 $
@@ -84,8 +90,8 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 			containerToAddTo.addBond(bond);
 		}
 
-		for (IAtom atom : undoRedoSet.atoms()) {
-			chemModelRelay.updateAtom(atom);
+		for (IBond bond : undoRedoSet.bonds()) {
+			chemModelRelay.updateAtoms(bond);
 		}
 
 	}
@@ -103,10 +109,21 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		for (IBond bond : undoRedoSet.bonds()) {
 			bonds[idx++] = bond;
 		}
+
+		List<IAtom> leftOver = new ArrayList<>();
+
 		for (IBond bond : bonds) {
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, bond);
 			if (containerToAddTo != null) {
 				containerToAddTo.removeBond(bond);
+
+				if (undoRedoSet.contains(bond.getBegin()) &&
+						!undoRedoSet.contains(bond.getEnd())) {
+					leftOver.add(bond.getEnd());
+				} else if (undoRedoSet.contains(bond.getEnd()) &&
+							     !undoRedoSet.contains(bond.getBegin())) {
+					leftOver.add(bond.getBegin());
+				}
 			}
 		}
 
@@ -125,9 +142,31 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		if (chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainerCount() > 1) {
 			ControllerHub.removeEmptyContainers(chemModelRelay.getIChemModel());
 		}
+
 		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
 			chemModelRelay.updateAtoms(container, container.atoms());
 		}
+
+
+		// select the last atom if the hotspot was deleted by this undo
+		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+
+		if (!leftOver.isEmpty()) {
+			leftOver.sort(Comparator.comparing(IAtom::getIndex));
+			IAtom hgAtom = leftOver.get(leftOver.size() - 1);
+			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, hgAtom);
+			model.setHighlightedAtom(containerToAddTo.getAtom(containerToAddTo.indexOf(hgAtom)));
+		} else {
+			if (undoRedoSet.contains(model.getHighlightedAtom())) {
+				for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModelRelay.getIChemModel())) {
+					if (!container.isEmpty()) {
+						chemModelRelay.getRenderer().getRenderer2DModel()
+													.setHighlightedAtom(container.getAtom(container.getAtomCount() - 1));
+					}
+				}
+			}
+		}
+
 	}
 
 	public boolean canRedo() {
