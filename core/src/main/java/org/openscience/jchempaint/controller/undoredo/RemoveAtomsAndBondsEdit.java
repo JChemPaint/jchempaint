@@ -23,7 +23,10 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -35,6 +38,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * @cdk.module controlbasic
@@ -68,8 +72,17 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
+		List<IAtom> leftOver = new ArrayList<>();
 		for (IBond bond : undoRedoSet.bonds()) {
 			container.removeBond(bond);
+
+			if (undoRedoSet.contains(bond.getBegin()) &&
+					!undoRedoSet.contains(bond.getEnd())) {
+				leftOver.add(bond.getEnd());
+			} else if (undoRedoSet.contains(bond.getEnd()) &&
+								 !undoRedoSet.contains(bond.getBegin())) {
+				leftOver.add(bond.getBegin());
+			}
 		}
 		for (IAtom atom : undoRedoSet.atoms()) {
 			container.removeAtom(atom);
@@ -87,6 +100,26 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 				chemModelRelay.unsetRGroupHandler();
 			}
 		}
+
+		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+		if (undoRedoSet.contains(model.getHighlightedAtom())) {
+			// select the last atom if the hotspot was deleted by this redo
+			if (!leftOver.isEmpty()) {
+				leftOver.sort(Comparator.comparing(IAtom::getIndex));
+				IAtom hgAtom = leftOver.get(leftOver.size() - 1);
+				IAtomContainer containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, hgAtom);
+				model.setHighlightedAtom(containerToAddTo.getAtom(containerToAddTo.indexOf(hgAtom)));
+			} else {
+				for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModelRelay.getIChemModel())) {
+					if (!container.isEmpty()) {
+						chemModelRelay.getRenderer().getRenderer2DModel()
+													.setHighlightedAtom(container.getAtom(container.getAtomCount() - 1));
+					}
+				}
+			}
+		}
+
+
 	}
 
 	public void undo() {
