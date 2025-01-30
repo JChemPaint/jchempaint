@@ -25,20 +25,28 @@
 package org.openscience.jchempaint.renderer;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.color.IAtomColorer;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+
+import javax.vecmath.Point2d;
 
 /**
  * Model for {@link Renderer} that contains settings for drawing objects.
@@ -51,6 +59,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     private static final long serialVersionUID = -4420308906715213445L;
 
     private RenderingParameters parameters;
+
+    private boolean rotating = false;
 
     private Map<Integer, Boolean> flags = new HashMap<Integer, Boolean>();
     /**
@@ -77,7 +87,50 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     public JChemPaintRendererModel(RenderingParameters parameters, boolean useUserSettings) {
         this.parameters = parameters;
     }
-    
+
+    public Point2d getSelectionRotateControl() {
+        return getSelection() != null && getSelection().isFilled()
+               ? determineRotateControlPoint(getSelectionBounds())
+               : null;
+    }
+
+    public RectangleElement getSelectionBounds() {
+        return determineSelectionBounds(getSelection());
+    }
+
+    private Point2d determineRotateControlPoint(RectangleElement bounds) {
+        double centerX = bounds.xCoord + (bounds.width/2);
+        return new Point2d(centerX, bounds.yCoord + 3*(getHighlightDistance()/getScale()));
+    }
+
+    private RectangleElement determineSelectionBounds(IChemObjectSelection selection) {
+        Collection<IAtom> atoms = new HashSet<>(selection.elements(IAtom.class));
+        for (IBond bond : selection.elements(IBond.class)) {
+            atoms.add(bond.getBegin());
+            atoms.add(bond.getEnd());
+        }
+
+        double minX = Double.MAX_VALUE;
+        double maxX = -Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = -Double.MAX_VALUE;
+        for (IAtom atom : atoms) {
+            Point2d p = atom.getPoint2d();
+            minX = Math.min(p.x, minX);
+            minY = Math.min(p.y, minY);
+            maxX = Math.max(p.x, maxX);
+            maxY = Math.max(p.y, maxY);
+        }
+
+        return new RectangleElement(minX, maxY, maxX - minX, - (maxY - minY),
+                                    false, getSelectedPartColor());
+    }
+
+    @Override
+    public void setSelection(IChemObjectSelection selection) {
+        super.setSelection(selection);
+    }
+
     public int getArrowHeadWidth() {
         if (hasParameter(BasicSceneGenerator.ArrowHeadWidth.class))
             return get(BasicSceneGenerator.ArrowHeadWidth.class).intValue();
@@ -777,5 +830,13 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
 	public void setFlag(int identifier, boolean flag) {
 	    flags.remove(identifier);
 	    flags.put(identifier, flag);
+    }
+
+    public void setRotating(boolean b) {
+        rotating = b;
+    }
+
+    public boolean isRotating() {
+        return rotating;
     }
 }
