@@ -97,6 +97,10 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
         this.parameters.setHighlightShapeFilled(highlightShapeFilled);
     }
 
+    public RenderingParameters.AtomShape getHighlightBondShape() {
+        return this.parameters.getHighlightBondShape();
+    }
+
     public double getWedgeWidth() {
         if (hasParameter(BasicBondGenerator.WedgeWidth.class))
             return get(BasicBondGenerator.WedgeWidth.class);
