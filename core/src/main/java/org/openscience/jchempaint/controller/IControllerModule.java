@@ -96,6 +96,8 @@ public interface IControllerModule {
 	 */
 	void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo);
 
+	void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers);
+
 	/**
 	 * @return A string describing this module e. g. for the status bar
 	 */

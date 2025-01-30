@@ -65,7 +65,7 @@ public class SwingMouseEventRelay implements MouseMotionListener,
         // check
         // http://www.leepoint.net/notes-java/examples/mouse/020dragdemo.html
         // for implementation
-        relay.mouseDrag(dragFromX, dragFromY, event.getX(), event.getY());
+        relay.mouseDrag(dragFromX, dragFromY, event.getX(), event.getY(), event.getModifiersEx());
         dragFromX = event.getX();
         dragFromY = event.getY();
     }
