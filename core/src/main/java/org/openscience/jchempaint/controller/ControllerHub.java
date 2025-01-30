@@ -674,6 +674,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			                        IBond.Stereo stereo, Order order, boolean makePseudoAtom,
 									boolean phantom, boolean cyclicMode) {
 
+		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
+
 		IAtom newAtom;
 		if (makePseudoAtom) {
 			newAtom = chemModel.getBuilder().newInstance(IPseudoAtom.class,atomType);
@@ -681,10 +683,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			newAtom = chemModel.getBuilder().newInstance(IAtom.class,atomType);
 		}
 		IBond newBond =
-		        chemModel.getBuilder().newInstance(
-		                IBond.class,atom, newAtom, order, stereo);
+		        chemModel.getBuilder().newInstance(IBond.class,atom, newAtom, order);
+		newBond.setStereo(stereo);
 
-		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		if (atomCon == null) {
 			atomCon = chemModel.getBuilder().newInstance(IAtomContainer.class);
 			IAtomContainerSet moleculeSet = chemModel.getMoleculeSet();
@@ -777,6 +778,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			atomCon.addBond(newBond);
 			updateAtom(newBond.getAtom(0));
 			updateAtom(newBond.getAtom(1));
+			newAtom = atomCon.getAtom(atomCon.getAtomCount()-1);
 		}
 
 		// shift the new atom a bit if it is in range of another atom
@@ -790,17 +792,40 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	private static boolean flipChainAngle(IAtom prevAtom, IAtom atom, IAtom newAtom) {
+		IAtom reference = null;
 		if (prevAtom.getBondCount() == 2) {
-			IAtom prevPrevAtom = null;
 			for (IBond bond : prevAtom.bonds()) {
-				if (!bond.getOther(prevAtom).equals(atom))
-					prevPrevAtom = bond.getOther(prevAtom);
+				IAtom nbor = bond.getOther(prevAtom);
+				if (!nbor.equals(atom))
+					reference = nbor;
 			}
-			if (prevPrevAtom != null &&
-				isLeft(atom, prevAtom, prevPrevAtom) ==
-				isLeft(atom, prevAtom, newAtom)) {
-				return true; // on same side so flip!
+		} else if (prevAtom.getBondCount() > 2) {
+			for (IBond bond : prevAtom.bonds()) {
+				IAtom nbor = bond.getOther(prevAtom);
+				if (!nbor.equals(atom) && nbor.getBondCount() != 1) {
+					if (reference != null) {
+						reference = null;
+						break;
+					}
+					reference = nbor;
+				}
 			}
+
+			// relative to the first placed
+			if (reference == null) {
+				for (IBond bond : prevAtom.bonds()) {
+					IAtom nbor = bond.getOther(prevAtom);
+					if (!nbor.equals(atom)) {
+						reference = nbor;
+						break;
+					}
+				}
+			}
+		}
+		if (reference != null &&
+			isLeft(atom, prevAtom, reference) ==
+			isLeft(atom, prevAtom, newAtom)) {
+			return true; // on same side so flip!
 		}
 		return false;
 	}
@@ -855,21 +880,36 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+
+	public void addAtom(IAtom atom, int atno, boolean cyclicMode) {
+		addAtom(atom, atno, Order.SINGLE, cyclicMode);
+	}
+
+	public void addAtom(IAtom atom, int atno, IBond.Order order, boolean cyclicMode) {
+		addAtom(atom, atno, order, Stereo.NONE, cyclicMode);
+	}
+
 	/**
 	 * Sprout a single atom
+	 *
 	 * @param atom the atom
 	 * @param atno the atomic number
 	 * @param cyclicMode the cyclicMode mode, false = zig/zag chain.
 	 */
-	public void addAtom(IAtom atom, int atno, boolean cyclicMode) {
+	public void addAtom(IAtom atom,
+						int atno,
+						IBond.Order order,
+						IBond.Stereo stereo,
+						boolean cyclicMode) {
 		atom.removeProperty("placeFlipped");
 		IAtom newAtom = addAtomWithoutUndo(Elements.ofNumber(atno).symbol(),
 										   atom,
-										   Stereo.NONE,
-										   Order.SINGLE,
+										   stereo,
+										   order,
 										   false,
 										   false,
 										   cyclicMode);
+		renderer.getRenderer2DModel().setHighlightedAtom(newAtom);
 		if (getUndoRedoHandler() != null) {
 			IAtomContainer container = ChemModelManipulator
 					.getRelevantAtomContainer(getIChemModel(), newAtom);
@@ -882,6 +922,94 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 															  "Add Bond",
 															  this);
 			getUndoRedoHandler().postEdit(undoredo);
+		}
+	}
+
+	public void addAcetyl(IAtom atom) {
+		AtomBondSet undoRedoSet = new AtomBondSet();
+		int freeValence = atom.getImplicitHydrogenCount();
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
+		if (freeValence == 1) {
+			clearPhantoms();
+			IAtom c1 = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
+			IAtom c2 = addAtomWithoutUndo("C", c1, Stereo.NONE, Order.SINGLE, false, false, false);
+			IAtom o = addAtomWithoutUndo("O", c1, Stereo.NONE, Order.DOUBLE, false, false, false);
+			undoRedoSet.add(c1);
+			undoRedoSet.add(c2);
+			undoRedoSet.add(o);
+			for (IBond bond : container.getConnectedBondsList(c1))
+				undoRedoSet.add(bond);
+			getRenderer().getRenderer2DModel().setHighlightedAtom(c2);
+		}
+		else if (freeValence == 2) {
+			clearPhantoms();
+			IAtom o = addAtomWithoutUndo("O", atom, Stereo.NONE, Order.DOUBLE, false, false, false);
+			undoRedoSet.add(o);
+			for (IBond bond : container.getConnectedBondsList(o))
+				undoRedoSet.add(bond);
+		}
+		else if (freeValence > 2) {
+			clearPhantoms();
+			IAtom c = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
+			IAtom o = addAtomWithoutUndo("O", atom, Stereo.NONE, Order.DOUBLE, false, false, false);
+			undoRedoSet.add(c);
+			undoRedoSet.add(o);
+			for (IBond bond : container.getConnectedBondsList(c))
+				undoRedoSet.add(bond);
+			for (IBond bond : container.getConnectedBondsList(o))
+				undoRedoSet.add(bond);
+			getRenderer().getRenderer2DModel().setHighlightedAtom(c);
+
+		}
+
+		if (getUndoRedoHandler() != null) {
+			getUndoRedoHandler().postEdit(new AddAtomsAndBondsEdit(getIChemModel(),
+																   undoRedoSet,
+																   null,
+																   "Acetyl",
+																   this));
+		}
+	}
+
+	public void addDimethyl(IAtom atom, IBond.Stereo stereo) {
+		AtomBondSet undoRedoSet = new AtomBondSet();
+		int freeValence = atom.getImplicitHydrogenCount();
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
+		if (freeValence == 1) {
+			if (stereo == Stereo.NONE) {
+				clearPhantoms();
+				IAtom c = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
+				IAtom me1 = addAtomWithoutUndo("C", c, Stereo.NONE, Order.SINGLE, false, false, false);
+				IAtom me2 = addAtomWithoutUndo("C", c, stereo, Order.SINGLE, false, false, false);
+				undoRedoSet.add(c);
+				undoRedoSet.add(me1);
+				undoRedoSet.add(me2);
+				for (IBond bond : container.getConnectedBondsList(c))
+					undoRedoSet.add(bond);
+				getRenderer().getRenderer2DModel().setHighlightedAtom(me1);
+			} else {
+				addAtom(atom, IAtom.C, Order.SINGLE, stereo, false);
+			}
+		}
+		else if (freeValence >= 2) {
+			clearPhantoms();
+			IAtom me1 = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
+			IAtom me2 = addAtomWithoutUndo("C", atom, stereo, Order.SINGLE, false, false, false);
+			undoRedoSet.add(me1);
+			undoRedoSet.add(me2);
+			for (IBond bond : container.getConnectedBondsList(me1))
+				undoRedoSet.add(bond);
+			for (IBond bond : container.getConnectedBondsList(me2))
+				undoRedoSet.add(bond);
+			getRenderer().getRenderer2DModel().setHighlightedAtom(me1);
+		}
+
+		if (getUndoRedoHandler() != null) {
+			getUndoRedoHandler().postEdit(new AddAtomsAndBondsEdit(getIChemModel(),
+																   undoRedoSet,
+																   null,
+																   "Dimethyl",
+																   this));
 		}
 	}
 
@@ -1728,7 +1856,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IAtomContainer sharedAtoms = atom.getBuilder().newAtomContainer();
 		IRing newRing;
 
-		if (atom.getBondCount() > 1 && !altMode) {
+		if (sourceContainer.getConnectedBondsCount(atom) > 1 && !altMode) {
 			Point2d conAtomsCenter    = getConnectedAtomsCenter(atom);
 			Point2d sharedAtomsCenter = atom.getPoint2d();
 			Vector2d ringCenterVector = new Vector2d(sharedAtomsCenter);
@@ -1769,7 +1897,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				IUndoRedoable undoredo = getUndoRedoFactory()
 						.getAddAtomsAndBondsEdit(getIChemModel(),
 												 undoRedoSet, null,
-												 "Benzene", this);
+												 "Add Ring", this);
 				getUndoRedoHandler().postEdit(undoredo);
 			}
 
@@ -1811,8 +1939,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			else
 				sourceContainer.addBond(ringBond);
 		}
-		if (!phantom)
+		if (!phantom) {
 			updateAtoms(sourceContainer, newRing.atoms());
+			int atomToHighlight = newRing.getAtomCount() / 2;
+			IAtom hgAtom = sourceContainer.getAtom(sourceContainer.indexOf(newRing.getAtom(atomToHighlight)));
+			renderer.getRenderer2DModel().setHighlightedAtom(hgAtom);
+		}
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
@@ -1941,8 +2073,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			else
 				sourceContainer.addBond(ringBond);
 		}
-		if (!phantom)
+		if (!phantom) {
 			updateAtoms(sourceContainer, newRing.atoms());
+			int atomToHighlight = newRing.getAtomCount() / 2;
+			IAtom hgAtom = sourceContainer.getAtom(sourceContainer.indexOf(newRing.getAtom(atomToHighlight)));
+			renderer.getRenderer2DModel().setHighlightedAtom(hgAtom);
+		}
 		for (IAtom newatom : newRing.atoms()) {
 			if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
 				JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
@@ -2114,8 +2250,11 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			else if (!ringBond.equals(bond))
 				sourceContainer.addBond(ringBond);
 		}
-		if (!phantom)
+
+		if (!phantom) {
+			renderer.getRenderer2DModel().setHighlightedBond(newRing.getBond(size/2));
 			updateAtoms(sourceContainer, newRing.atoms());
+		}
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
@@ -2125,6 +2264,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				atom.getPoint2d().x += d;
 			}
 		}
+
+
+
 		structureChanged();
 		return newRing;
 	}
@@ -2514,6 +2656,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			else if (bond.getStereo() == IBond.Stereo.DOWN_INVERTED)
 				bond.setStereo(IBond.Stereo.UP_INVERTED);
 		}
+
 		coordinatesChanged();
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			IUndoRedoable undoredo = getUndoRedoFactory().getChangeCoordsEdit(
@@ -2913,6 +3056,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				}
 			}
 		}
+
 		List<IAtom> mergedAtoms = new ArrayList<IAtom>();
 		List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
 		List<IAtomContainer> droppedContainers = new ArrayList<IAtomContainer>();
@@ -2920,6 +3064,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		List<List<IBond>> removedBondss = new ArrayList<List<IBond>>();
 		List<Map<IBond, Integer>> bondsWithReplacedAtoms = new ArrayList<Map<IBond, Integer>>();
 		List<IAtom> mergedPartnerAtoms = new ArrayList<IAtom>();
+		List<IAtom> atomsToUpdate = new ArrayList<>();
+
 
 		// Done shifting, now the actual merging
 		for (Map.Entry<IAtom,IAtom> e : mergeMap.entrySet()) {
