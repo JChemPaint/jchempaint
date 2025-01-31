@@ -8,34 +8,34 @@ import org.junit.Test;
 public class Issue4Test extends AbstractAppletTest {
 
     @Test public void testIssue4() {
-        applet.button("C").click();
-        applet.button("C").click();
+        applet.button("C").target.doClick();
+        applet.button("C").target.doClick();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
-        applet.button("select").click();
+        applet.button("select").target.doClick();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
         applet.panel("renderpanel").robot.waitForIdle();
         try {
-	        applet.button("H").click();
+	        applet.button("H").target.doClick();
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("select").click();
+	        applet.button("select").target.doClick();
 	        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("N").click();
+	        applet.button("N").target.doClick();
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("select").click();
+	        applet.button("select").target.doClick();
 	        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("I").click();
+	        applet.button("I").target.doClick();
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("select").click();
+	        applet.button("select").target.doClick();
 	        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("S").click();
+	        applet.button("S").target.doClick();
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("select").click();
+	        applet.button("select").target.doClick();
 	        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
 	        applet.panel("renderpanel").robot.waitForIdle();
-	        applet.button("C").click();
+	        applet.button("C").target.doClick();
 	        applet.panel("renderpanel").robot.waitForIdle();
         } catch(Exception e) {
         	Assert.fail();

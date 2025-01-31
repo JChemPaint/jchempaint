@@ -17,8 +17,8 @@ public class Issue40Test extends AbstractAppletTest {
     @Test public void testIssue40() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("C").click();
-        applet.button("chain").click();
+        applet.button("C").target.doClick();
+        applet.button("chain").target.doClick();
         panel.get2DHub().mouseClickedDown(100, 100);
         panel.get2DHub().mouseDrag(100, 100, 300, 100, 0);
         panel.get2DHub().mouseClickedUp(300, 100);

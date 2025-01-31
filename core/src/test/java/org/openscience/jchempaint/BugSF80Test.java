@@ -33,12 +33,12 @@ public class BugSF80Test extends AbstractAppletTest {
 				dialog.robot.finder().find(
 						new ButtonTextComponentMatcher("Caffeine")));
 		templateButton.click();
-		applet.button("select").click();
+		applet.button("select").target.doClick();
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), 
 				new Point(0,0), MouseButton.LEFT_BUTTON,1);
 */
         //Delete the double bonds connecting the two oxygen atoms:
-		applet.button("eraser").click();
+		applet.button("eraser").target.doClick();
 		for (IBond bond : panel.getChemModel().getMoleculeSet().getAtomContainer(0).bonds()) 
 			if (bond.getOrder().equals(IBond.Order.DOUBLE) && 
 					(bond.getAtom(0).getSymbol().equals("O")||bond.getAtom(1).getSymbol().equals("O"))) {

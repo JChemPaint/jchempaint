@@ -223,7 +223,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
     private void genericValenceTest(int valence){
         //we go to select mode
         restoreModelWithBasicmol();
-        applet.button("select").click();
+        applet.button("select").target.doClick();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         applet.menuItem("isotopeChange").click();
@@ -291,7 +291,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest{
 		panel.selectionChanged();
 		applet.menuItem("periodictable").click();
 		DialogFixture dialog = applet.dialog();
-		dialog.button("Li").click();
+		dialog.button("Li").target.doClick();
 		Assert.assertEquals("Li", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		panel.get2DHub().setSymbol(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0),"C");
         Assert.assertEquals("periodictable",panel.get2DHub().getActiveDrawModule().getID());

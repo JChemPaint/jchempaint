@@ -19,10 +19,10 @@ public class Issue58Test extends AbstractAppletTest {
     @Test public void testIssue58() throws AWTException {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("C").click();
-        applet.button("bondTool").click();
+        applet.button("C").target.doClick();
+        applet.button("bondTool").target.doClick();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
-        applet.button("select").click();
+        applet.button("select").target.doClick();
 		IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 		Point2d p1 = ethane.getAtom(0).getPoint2d();
 		p1 = panel.getRenderPanel().getRenderer().toScreenCoordinates(p1.x, p1.y);

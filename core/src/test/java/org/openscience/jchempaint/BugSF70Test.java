@@ -32,7 +32,7 @@ public class BugSF70Test extends AbstractAppletTest {
 	@Test public void testBug70() throws CDKException, IOException{
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("hexagon").click();
+        applet.button("hexagon").target.doClick();
         applet.click();
         Point2d point = getAtomPoint(panel,0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);

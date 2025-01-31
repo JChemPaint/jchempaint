@@ -27,7 +27,7 @@ public class Issue137Test extends AbstractAppletTest {
         applet.panel("renderpanel").robot.waitForIdle();
 
         // For some reason this does not work
-        // applet.button("select").click();
+        // applet.button("select").target.doClick();
         // panel.get2DHub().updateView();
         // so we crank the lever manually
         JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.ChangeModeAction@select");

@@ -19,7 +19,7 @@ public class Issue8Test extends AbstractAppletTest {
 	@Test public void testIssue8() {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
-		applet.button("chain").click();
+		applet.button("chain").target.doClick();
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		pane.get2DHub().mouseClickedDown(100, 100);
@@ -32,7 +32,7 @@ public class Issue8Test extends AbstractAppletTest {
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		
-		applet.button("H").click();
+		applet.button("H").target.doClick();
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		pane.get2DHub().mouseClickedDown(180, 100);
@@ -44,7 +44,7 @@ public class Issue8Test extends AbstractAppletTest {
 		
         try {
             // For some reason this does not work
-            // applet.button("cleanup").click();
+            // applet.button("cleanup").target.doClick();
             // panel.get2DHub().updateView();
             // so we crank the lever manually
             JCPAction act = new JCPAction().getAction(panel, "org.openscience.jchempaint.action.CleanupAction");

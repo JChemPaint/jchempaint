@@ -20,8 +20,8 @@ public class Issue82Test extends AbstractAppletTest {
 	@Test public void testIssue82() {
 		JPanelFixture jcppanel=applet.panel("appletframe");
 		JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
-		applet.button("C").click();
-		applet.button("bondTool").click();
+		applet.button("C").target.doClick();
+		applet.button("bondTool").target.doClick();
 		pane.get2DHub().mouseClickedDown(300, 100);
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
@@ -31,7 +31,7 @@ public class Issue82Test extends AbstractAppletTest {
 		try { applet.panel("renderpanel").robot.wait(100);}
 		catch (Exception e) {}
 
-		applet.button("chain").click();
+		applet.button("chain").target.doClick();
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		pane.get2DHub().mouseClickedDown(200, 100);
@@ -60,7 +60,7 @@ public class Issue82Test extends AbstractAppletTest {
 		Assert.assertEquals(3, bondCount);
 		Assert.assertEquals(10, implicitHCount);
 		
-		applet.button("undo").click();
+		applet.button("undo").target.doClick();
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		atomCount=0; bondCount=0; implicitHCount=0;
@@ -75,7 +75,7 @@ public class Issue82Test extends AbstractAppletTest {
 		Assert.assertEquals(6, implicitHCount);
 		
 		try {
-			applet.button("undo").click();
+			applet.button("undo").target.doClick();
 			pane.get2DHub().updateView();
 			applet.panel("renderpanel").robot.waitForIdle();
 		} catch (Exception e) 
