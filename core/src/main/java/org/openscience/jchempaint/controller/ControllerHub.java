@@ -3512,10 +3512,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	@Override
 	public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle) {
 
-		// by default snap to 30 degrees (PI/6 radians)
-		// alt mode allows free rotation
+		// by default snap to 10 degrees (PI/18 radians)
+		// in alt mode we allow free rotation
 		if (!altMode)
-			angle = (Math.PI/6) * Math.round(angle / (Math.PI/6));
+			angle = (Math.PI/18) * Math.round(angle / (Math.PI/18));
 
 		/* For more info on the mathematics, see Wiki at
 		 * http://en.wikipedia.org/wiki/Coordinate_rotation
