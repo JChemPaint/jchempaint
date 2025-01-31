@@ -2421,8 +2421,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 
-		if (!phantom)
+		if (!phantom) {
+			renderer.getRenderer2DModel().setHighlightedBond(newRing.getBond(3));
 			updateAtoms(sourceContainer, newRing.atoms());
+		}
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
 		double d = rModel.getHighlightDistance() / rModel.getScale();
