@@ -43,31 +43,31 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         drawRing(300,200);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
         models.add((IChemModel)panel.getChemModel());
-        applet.button("undo").click();
+        applet.button("undo").target.doClick();
         compare(3);
-        applet.button("undo").click();
+        applet.button("undo").target.doClick();
         compare(2);
-        applet.button("undo").click();
+        applet.button("undo").target.doClick();
         compare(1);
-        applet.button("undo").click();
+        applet.button("undo").target.doClick();
         compare(0);
     }
 
     private void deleteAtom() {
-        applet.button("eraser").click();
+        applet.button("eraser").target.doClick();
         Point2d moveto=getAtomPoint(panel, 0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);        
     }
 
     @Test public void testRedo(){
         try {
-			applet.button("redo").click();
+			applet.button("redo").target.doClick();
 			compare(1);
-			applet.button("redo").click();
+			applet.button("redo").target.doClick();
 			compare(2);
-			applet.button("redo").click();
+			applet.button("redo").target.doClick();
 			compare(3);
-			applet.button("redo").click();
+			applet.button("redo").target.doClick();
 			compare(4);
 		} catch (IllegalStateException e) {
 			Assert.fail("Redo button disabled");
@@ -75,13 +75,13 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     }
     
     private void attachRing() {
-        applet.button("hexagon").click();
+        applet.button("hexagon").target.doClick();
         Point2d moveto=getBondPoint(panel, 0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);        
     }
 
     public void drawRing(int x, int y){
-        applet.button("hexagon").click();
+        applet.button("hexagon").target.doClick();
         Point2d moveto=new Point2d(x, y);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
     }
@@ -116,7 +116,7 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         Assert.assertEquals(16,totalAtomCount());
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
 
-        applet.button("undo").click();
+        applet.button("undo").target.doClick();
         Assert.assertEquals(7,totalAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
     }

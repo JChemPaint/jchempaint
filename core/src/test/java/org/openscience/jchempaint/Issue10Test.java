@@ -25,7 +25,7 @@ public class Issue10Test extends AbstractAppletTest {
 		} catch (Exception e) {
 			Assert.fail();
 		}
-	applet.button("undo").click();
+	applet.button("undo").target.doClick();
 	pane.get2DHub().updateView();
 
         int atomCount=0, bondCount=0;
@@ -36,7 +36,7 @@ public class Issue10Test extends AbstractAppletTest {
 	Assert.assertEquals(0, atomCount);
         Assert.assertEquals(0, bondCount);
 
-	applet.button("redo").click();
+	applet.button("redo").target.doClick();
 	pane.get2DHub().updateView();
 
 	atomCount=0; bondCount=0;

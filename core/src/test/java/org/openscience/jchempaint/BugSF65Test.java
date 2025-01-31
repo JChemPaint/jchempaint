@@ -15,9 +15,9 @@ public class BugSF65Test extends AbstractAppletTest {
     @Test public void testBug65() {
         JPanelFixture jcppanel=applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("hexagon").click();
+        applet.button("hexagon").target.doClick();
         applet.click();
-        applet.button("eraser").click();
+        applet.button("eraser").target.doClick();
         Point2d point = getBondPoint(panel,0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
         point = getBondPoint(panel,2);

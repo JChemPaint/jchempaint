@@ -35,7 +35,7 @@ public class MenuIsotopeTest extends AbstractAppletTest {
 	private void genericIsotopeTest(int isotopeNumber){
 	    //we go to select mode
 	    restoreModelWithBasicmol();
-        applet.button("select").click();
+        applet.button("select").target.doClick();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
