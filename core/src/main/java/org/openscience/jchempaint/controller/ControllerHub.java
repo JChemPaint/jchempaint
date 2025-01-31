@@ -2470,6 +2470,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void clearPhantoms() {
+		getRenderer().getRenderer2DModel().getMerge().clear();
 		this.phantoms.removeAllElements();
 	}
 
