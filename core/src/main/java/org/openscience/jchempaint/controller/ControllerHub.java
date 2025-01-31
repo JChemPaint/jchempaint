@@ -84,6 +84,7 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 import javax.vecmath.Point2d;
@@ -1011,6 +1012,30 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 																   "Dimethyl",
 																   this));
 		}
+	}
+
+	/**
+	 * Select all atoms which are in the same container as the provided atom.
+	 * @param atom an atom
+	 */
+	public void selectFragment(IAtom atom) {
+		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
+		if (container != null)
+			selection.select(container);
+		select(selection);
+	}
+
+	/**
+	 * Select all bonds which are in the same container as the provided bond.
+	 * @param bond a atom
+	 */
+	public void selectFragment(IBond bond) {
+		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), bond);
+		if (container != null)
+			selection.select(container);
+		select(selection);
 	}
 
 	/**

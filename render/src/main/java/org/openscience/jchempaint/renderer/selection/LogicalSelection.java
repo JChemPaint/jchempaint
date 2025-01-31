@@ -117,6 +117,13 @@ public class LogicalSelection implements IChemObjectSelection {
         this.selected.add(chemObject);
     }
 
+    public void select(IAtomContainer container) {
+        for (IAtom atom : container.atoms())
+            this.selected.add(atom);
+        for (IBond bond : container.bonds())
+            this.selected.add(bond);
+    }
+
     public boolean contains( IChemObject obj ) {
         if(type == Type.NONE)
             return false;
