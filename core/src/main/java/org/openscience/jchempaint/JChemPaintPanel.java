@@ -356,60 +356,60 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK)) == 0)) {
             char x = (char)(e.getKeyCode() >= 'A' && e.getKeyCode() <= 'Z' ? e.getKeyChar() : e.getKeyCode());
             if (model.getHighlightedAtom() != null) {
-                IAtom hotspot = model.getHighlightedAtom();
+                IAtom hgAtom = model.getHighlightedAtom();
                 changed = true;
                 switch (x) {
-                    case ' ': relay.selectFragment(hotspot); break;
-                    case '0': relay.addAtom(hotspot, IAtom.C, true); break;
-                    case '1': relay.addAtom(hotspot, IAtom.C, false); break;
-                    case '2': relay.addAcetyl(hotspot); break;
+                    case ' ': relay.selectFragment(hgAtom); break;
+                    case '0': relay.addAtom(hgAtom, IAtom.C, true); break;
+                    case '1': relay.addAtom(hgAtom, IAtom.C, false); break;
+                    case '2': relay.addAcetyl(hgAtom); break;
                     case '3': // fall through 3/a
-                    case 'a': relay.addPhenyl(hotspot, false); break;
-                    case '4': relay.addDimethyl(hotspot, IBond.Stereo.UP); break;
-                    case '5': relay.addDimethyl(hotspot, IBond.Stereo.DOWN); break;
-                    case '6': relay.addRing(hotspot, 6, false); break;
-                    case '7': relay.addRing(hotspot, 5, false); break;
-                    case '8': relay.addAtom(hotspot, IAtom.C, IBond.Order.DOUBLE, false); break;
-                    case '9': relay.addDimethyl(hotspot, IBond.Stereo.NONE); break;
-                    case 'b': relay.setSymbol(hotspot, "B"); break;
-                    case 'c': relay.setSymbol(hotspot, "C"); break;
-                    case 'd': relay.setSymbol(hotspot, "H", 2); break;
+                    case 'a': relay.addPhenyl(hgAtom, false); break;
+                    case '4': relay.addDimethyl(hgAtom, IBond.Stereo.UP); break;
+                    case '5': relay.addDimethyl(hgAtom, IBond.Stereo.DOWN); break;
+                    case '6': relay.addRing(hgAtom, 6, false); break;
+                    case '7': relay.addRing(hgAtom, 5, false); break;
+                    case '8': relay.addAtom(hgAtom, IAtom.C, IBond.Order.DOUBLE, false); break;
+                    case '9': relay.addDimethyl(hgAtom, IBond.Stereo.NONE); break;
+                    case 'b': relay.setSymbol(hgAtom, "B"); break;
+                    case 'c': relay.setSymbol(hgAtom, "C"); break;
+                    case 'd': relay.setSymbol(hgAtom, "H", 2); break;
                     // case "e": break; // ethyl
-                    case 'f': relay.setSymbol(hotspot, "F"); break;
-                    case 'h': relay.setSymbol(hotspot, "H"); break;
-                    case 'i': relay.setSymbol(hotspot, "I"); break;
+                    case 'f': relay.setSymbol(hgAtom, "F"); break;
+                    case 'h': relay.setSymbol(hgAtom, "H"); break;
+                    case 'i': relay.setSymbol(hgAtom, "I"); break;
                     case 'n':
-                    case 'w': relay.setSymbol(hotspot, "N"); break;
+                    case 'w': relay.setSymbol(hgAtom, "N"); break;
                     case 'q':
-                    case 'o': relay.setSymbol(hotspot, "O"); break;
-                    case 's': relay.setSymbol(hotspot, "S"); break;
-                    case 'p': relay.setSymbol(hotspot, "P"); break;
-                    case 'r': relay.setSymbol(hotspot, "R"); break;
-                    case 'B': relay.setSymbol(hotspot, "Br"); break;
+                    case 'o': relay.setSymbol(hgAtom, "O"); break;
+                    case 's': relay.setSymbol(hgAtom, "S"); break;
+                    case 'p': relay.setSymbol(hgAtom, "P"); break;
+                    case 'r': relay.setSymbol(hgAtom, "R"); break;
+                    case 'B': relay.setSymbol(hgAtom, "Br"); break;
                     case 'C': // fall through C/l
-                    case 'l': relay.setSymbol(hotspot, "Cl"); break;
-                    case 'S': relay.setSymbol(hotspot, "Si"); break;
+                    case 'l': relay.setSymbol(hgAtom, "Cl"); break;
+                    case 'S': relay.setSymbol(hgAtom, "Si"); break;
                     default:
                         changed = false;
                 }
             } else if (model.getHighlightedBond() != null) {
-                IBond closestBond = model.getHighlightedBond();
+                IBond hgBond = model.getHighlightedBond();
                 changed = true;
                 switch (x) {
-                    case ' ': relay.selectFragment(closestBond); break;
-                    case '1': relay.cycleBondValence(closestBond); break;
-                    case '2': relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
-                    case '3': relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
-                    case '4': relay.addRing(closestBond, 4, false); break;
-                    case '5': relay.addRing(closestBond, 5, false); break;
-                    case '6': relay.addRing(closestBond, 6, false); break;
-                    case '7': relay.addRing(closestBond, 7, false); break;
-                    case '8': relay.addRing(closestBond, 8, false); break;
-                    case 'a': relay.addPhenyl(closestBond, false); break;
-                    case 'w': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
+                    case ' ': relay.selectFragment(hgBond); break;
+                    case '1': relay.cycleBondValence(hgBond); break;
+                    case '2': relay.changeBond(hgBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
+                    case '3': relay.changeBond(hgBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
+                    case '4': relay.addRing(hgBond, 4, false); break;
+                    case '5': relay.addRing(hgBond, 5, false); break;
+                    case '6': relay.addRing(hgBond, 6, false); break;
+                    case '7': relay.addRing(hgBond, 7, false); break;
+                    case '8': relay.addRing(hgBond, 8, false); break;
+                    case 'a': relay.addPhenyl(hgBond, false); break;
+                    case 'w': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
                     case 'W': // shift + W
-                    case 'h': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
-                    case 'y': relay.changeBond(closestBond, IBond.Order.SINGLE, IBond.Stereo.UP_OR_DOWN); break;
+                    case 'h': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
+                    case 'y': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP_OR_DOWN); break;
                     default: changed = false;
                 }
             }
