@@ -28,35 +28,20 @@
  */
 package org.openscience.jchempaint.action;
 
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Constructor;
-
-import javax.swing.JOptionPane;
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.CMLReader;
@@ -69,6 +54,7 @@ import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -88,7 +74,6 @@ import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
@@ -96,10 +81,27 @@ import org.openscience.jchempaint.renderer.selection.ShapeSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
+import javax.swing.JOptionPane;
+import javax.vecmath.Point2d;
+import java.awt.Image;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Constructor;
+
 /**
  * Action to copy/paste structures.
  */
-public class CopyPasteAction extends JCPAction{
+public class CopyPasteAction extends JCPAction {
 
     private static final long serialVersionUID = -3343207264261279526L;
 
@@ -219,23 +221,64 @@ public class CopyPasteAction extends JCPAction{
             } else {
                 bondInRange = renderModel.getHighlightedBond();
             }
-            if (renderModel.getSelection() != null &&
-                       renderModel.getSelection().isFilled()) {
+
+            IAtom newHighlightAtom = null;
+
+            if (renderModel.getSelection() != null && renderModel.getSelection().isFilled()) {
+
                 IChemObjectSelection selection = renderModel.getSelection();
                 AtomBondSet atomBondSet = new AtomBondSet();
-                for (IAtom atom : selection.elements(IAtom.class))
+                for (IAtom atom : selection.elements(IAtom.class)) {
                     atomBondSet.add(atom);
+
+                    // set the hot spot to the attached atom with the highest index
+                    for (IBond bond : atom.bonds()) {
+                        IAtom nbor = bond.getOther(atom);
+                        if (!selection.contains(nbor) &&
+                            (newHighlightAtom == null || nbor.getIndex() > newHighlightAtom.getIndex()))
+                            newHighlightAtom = nbor;
+                    }
+                }
                 for (IBond bond : selection.elements(IBond.class))
                     atomBondSet.add(bond);
                 jcpPanel.get2DHub().deleteFragment(atomBondSet);
                 renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
                 jcpPanel.get2DHub().updateView();
             } else if (atomInRange != null) {
+
+                if (atomInRange.equals(renderModel.getHighlightedAtom())) {
+                    IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atomInRange);
+                    if (container != null) {
+                        for (IBond bond : container.getConnectedBondsList(atomInRange))
+                            newHighlightAtom = bond.getOther(atomInRange);
+                    }
+                }
+
                 jcpPanel.get2DHub().removeAtom(atomInRange);
-                renderModel.setHighlightedAtom(null);
             } else if (bondInRange != null) {
+
+                IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), bondInRange);
+                if (container != null) {
+                    for (IBond bond : container.getConnectedBondsList(bondInRange.getBegin()))
+                        newHighlightAtom = bond.getOther(bondInRange.getBegin());
+                    for (IBond bond : container.getConnectedBondsList(bondInRange.getEnd()))
+                        newHighlightAtom = bond.getOther(bondInRange.getEnd());
+                }
+
                 jcpPanel.get2DHub().removeBond(bondInRange);
             }
+
+            // no new hotspot? go to last atom added
+            if (newHighlightAtom == null) {
+                for (IAtomContainer ac : jcpPanel.getChemModel().getMoleculeSet()) {
+                    if (!ac.isEmpty())
+                        newHighlightAtom = ac.getAtom(ac.getAtomCount()-1);
+                }
+            }
+
+            jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedAtom(newHighlightAtom);
+            jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
+
         } else if (type.indexOf("pasteTemplate")>-1){
             //if templates are shown, we extract the tab to show if any
             String templatetab="";
