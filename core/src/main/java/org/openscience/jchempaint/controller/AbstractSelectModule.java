@@ -223,15 +223,26 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     RectangleElement rect = jcpModel.getSelectionBounds();
     if (rect == null)
       return IChemModelRelay.CursorType.DEFAULT;
-    if (rect.width <= 0.001 || rect.height >= -0.001)
+    if (rect.width <= 0.001 || rect.height >= -0.001 ||
+        jcpModel.getSelection().elements(IAtom.class).size() == 1)
       return IChemModelRelay.CursorType.DEFAULT;
 
-    double hgDist = 1.5 * (jcpModel.getHighlightDistance() / jcpModel.getScale() / jcpModel.getZoomFactor());
+    double hgDist = (jcpModel.getHighlightDistance() / jcpModel.getScale() / jcpModel.getZoomFactor());
 
     Point2d rotateControl = jcpModel.getSelectionRotateControl();
     if (rotateControl != null &&
         rotateControl.distance(p) <= hgDist)
       return IChemModelRelay.CursorType.ROTATE;
+
+    // do the point testing towards the outside of the rect, basically we
+    // expand by half the highlight distance, this allows single bonds to
+    // still be controlled
+    rect = new RectangleElement(rect.xCoord - hgDist/2,
+                                rect.yCoord + hgDist/2,
+                                rect.width + hgDist,
+                                rect.height - hgDist,
+                                false,
+                                rect.color);
 
     Point2d nw = new Point2d(rect.xCoord, rect.yCoord);
     Point2d ne = new Point2d(rect.xCoord + rect.width, rect.yCoord);
