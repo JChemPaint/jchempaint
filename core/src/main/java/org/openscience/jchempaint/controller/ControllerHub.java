@@ -812,15 +812,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				}
 			}
 
-			// relative to the first placed
 			if (reference == null) {
-				for (IBond bond : prevAtom.bonds()) {
-					IAtom nbor = bond.getOther(prevAtom);
-					if (!nbor.equals(atom)) {
-						reference = nbor;
-						break;
-					}
-				}
+				// no reference, avoid sprouting directly up/down
+				if (Math.abs(atom.getPoint2d().x - newAtom.getPoint2d().x) <= 0.01)
+					return true;
 			}
 		}
 		if (reference != null &&
