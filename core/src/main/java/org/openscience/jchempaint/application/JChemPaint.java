@@ -29,24 +29,6 @@
  */
 package org.openscience.jchempaint.application;
 
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.vecmath.Point2d;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -55,21 +37,21 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
@@ -96,6 +78,24 @@ import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.inchi.InChITool;
 import org.openscience.jchempaint.io.FileHandler;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.vecmath.Point2d;
+import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class JChemPaint {
 
@@ -244,7 +244,12 @@ public class JChemPaint {
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
-        f.setPreferredSize(new Dimension(800, 494));    //1.618
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int height = gd.getDisplayMode().getHeight();
+        int width = (int)( gd.getDisplayMode().getHeight() / 1.414); // A4 ratio 1.414
+
+        f.setPreferredSize(new Dimension((int)(width * .95), (int)(height * .95)));
         f.setJMenuBar(p.getJMenuBar());
         f.add(p);
         f.pack();
