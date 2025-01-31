@@ -41,19 +41,19 @@ import java.util.Set;
  * @cdk.module rendercontrol
  */
 public abstract class ShapeSelection implements IncrementalSelection {
-    
+
     public final Set<IAtom> atoms = new HashSet<>();
 
     public final Set<IBond> bonds = new HashSet<>();
-    
+
     protected boolean finished = false;
-    
+
     public abstract boolean contains(Point2d p);
-    
+
     public abstract void addPoint(Point2d p);
 
     public abstract boolean isEmpty();
-    
+
     public void addAtom(IAtom atom) {
         atoms.add(atom);
     }
@@ -66,29 +66,23 @@ public abstract class ShapeSelection implements IncrementalSelection {
      * Call this after the drawing has finished
      */
     public abstract void reset();
-    
+
     public abstract IRenderingElement generate(Color color);
-    
+
     public boolean isFinished() {
         return this.finished;
     }
-    
-    public boolean contains( IChemObject obj ) {
-        if(obj instanceof IAtom) {
-            for(IChemObject selected:atoms) {
-                if(selected == obj)
-                    return true;
-            }
+
+    public boolean contains(IChemObject obj) {
+        if (obj instanceof IAtom) {
+            return atoms.contains(obj);
         }
-        if(obj instanceof IBond) {
-            for(IChemObject selected:bonds) {
-                if(selected == obj)
-                    return true;
-            } 
+        if (obj instanceof IBond) {
+            return bonds.contains(obj);
         }
         return false;
     }
-    
+
     /**
      * Call this before starting a new selection.
      */
@@ -97,20 +91,20 @@ public abstract class ShapeSelection implements IncrementalSelection {
         this.bonds.clear();
         this.finished = false;
     }
-    
+
     public boolean isFilled() {
         return !atoms.isEmpty() || !bonds.isEmpty();
     }
-    
-    /* 
-     * Get an IAtomContainer where all the bonds have atoms in 
+
+    /*
+     * Get an IAtomContainer where all the bonds have atoms in
      * the AtomContainer (no dangling bonds).
-     * 
+     *
      * (non-Javadoc)
      * @see org.openscience.cdk.renderer.ISelection#getConnectedAtomContainer()
      */
     public IAtomContainer getConnectedAtomContainer() {
-        
+
         IAtomContainer ac = null;
         for (IAtom atom : atoms) {
             if (ac == null) ac = atom.getBuilder().newAtomContainer();
@@ -127,27 +121,27 @@ public abstract class ShapeSelection implements IncrementalSelection {
 
         return ac;
     }
-    
+
     private void select(IAtomContainer atomContainer) {
-    	
+
         for (IAtom atom : atomContainer.atoms()) {
             if (contains(atom.getPoint2d())) {
-                atoms.add(atom); 
-             }
+                atoms.add(atom);
+            }
         }
-        
+
         for (IBond bond : atomContainer.bonds()) {
             if (contains(bond.getAtom(0).getPoint2d())
-            		&& contains(bond.getAtom(1).getPoint2d())) {
-                bonds.add(bond); 
-             }
+                && contains(bond.getAtom(1).getPoint2d())) {
+                bonds.add(bond);
+            }
         }
     }
-    
+
     public void select(IChemModel chemModel) {
         clear();
-        for (IAtomContainer atomContainer : 
-            ChemModelManipulator.getAllAtomContainers(chemModel)) {
+        for (IAtomContainer atomContainer :
+                ChemModelManipulator.getAllAtomContainers(chemModel)) {
             select(atomContainer);
         }
     }
@@ -166,21 +160,21 @@ public abstract class ShapeSelection implements IncrementalSelection {
                 bonds.add(bond);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    public <E extends IChemObject> Collection<E> elements(Class<E> clazz){
+    public <E extends IChemObject> Collection<E> elements(Class<E> clazz) {
         Set<E> set = new HashSet<E>();
-        if(IAtom.class.isAssignableFrom(clazz)) {
-            set.addAll( (Collection<? extends E>) atoms );
+        if (IAtom.class.isAssignableFrom(clazz)) {
+            set.addAll((Collection<? extends E>) atoms);
             return set;
         }
-        if(IBond.class.isAssignableFrom(clazz)) {
-            set.addAll( (Collection<? extends E>) bonds );
+        if (IBond.class.isAssignableFrom(clazz)) {
+            set.addAll((Collection<? extends E>) bonds);
             return set;
         }
-        if(IChemObject.class.isAssignableFrom(clazz)) {
-            set.addAll( (Collection<? extends E>) atoms );
-            set.addAll( (Collection<? extends E>) bonds );
+        if (IChemObject.class.isAssignableFrom(clazz)) {
+            set.addAll((Collection<? extends E>) atoms);
+            set.addAll((Collection<? extends E>) bonds);
             return set;
         }
         return Collections.emptySet();
