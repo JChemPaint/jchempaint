@@ -48,7 +48,7 @@ public class Issue137Test extends AbstractAppletTest {
 		panel.get2DHub().mouseClickedDown((int)atompos0.x, (int)atompos0.y);
 		panel.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
-		panel.get2DHub().mouseDrag((int)atompos0.x, (int)atompos0.y, (int)atompos1.x, (int)atompos1.y);
+		panel.get2DHub().mouseDrag((int)atompos0.x, (int)atompos0.y, (int)atompos1.x, (int)atompos1.y, 0);
 		panel.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		panel.get2DHub().mouseClickedUp((int)atompos1.x, (int)atompos1.y);

@@ -37,7 +37,7 @@ public class Issue82Test extends AbstractAppletTest {
 		pane.get2DHub().mouseClickedDown(200, 100);
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
-		pane.get2DHub().mouseDrag(200, 100, 300, 100);
+		pane.get2DHub().mouseDrag(200, 100, 300, 100, 0);
 		pane.get2DHub().updateView();
 		applet.panel("renderpanel").robot.waitForIdle();
 		try {

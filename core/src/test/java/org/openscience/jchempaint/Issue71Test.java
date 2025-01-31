@@ -39,7 +39,7 @@ public class Issue71Test extends AbstractAppletTest {
 		double d = r.getRenderer2DModel().getSelectionRadius() / r.getRenderer2DModel().getScale();
     	panel.get2DHub().mouseClickedDown((int)(p1.x+d/2), (int)(p1.y+d/2));
         applet.panel("renderpanel").robot.waitForIdle();
-    	panel.get2DHub().mouseDrag((int)(p1.x+d/2), (int)(p1.y+d/2),(int)p1.x+100, (int)p1.y+100);
+    	panel.get2DHub().mouseDrag((int)(p1.x+d/2), (int)(p1.y+d/2),(int)p1.x+100, (int)p1.y+100, 0);
     	panel.get2DHub().mouseClickedUp((int)p1.x+100, (int)p1.y+100);
         panel.get2DHub().updateView();
         applet.panel("renderpanel").robot.waitForIdle();
