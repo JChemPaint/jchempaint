@@ -19,8 +19,11 @@
  */
 package org.openscience.jchempaint.renderer.generators;
 
+import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
@@ -56,7 +59,7 @@ public class SelectControlGenerator implements IGenerator<IAtomContainer> {
         return generate(selection, selectionColor, jcpModel);
     }
     
-    protected IRenderingElement generate(IChemObjectSelection selection, Color selectionColor, JChemPaintRendererModel model){
+    protected IRenderingElement generate(IChemObjectSelection selection, Color color, JChemPaintRendererModel model){
         ElementGroup selectionControls = new ElementGroup();
         if(selection==null)
             return selectionControls;
@@ -66,9 +69,9 @@ public class SelectControlGenerator implements IGenerator<IAtomContainer> {
             if (!model.isRotating()) {
                 RectangleElement box = model.getSelectionBounds();
                 selectionControls.add(box);
-                Color color = model.getSelectedPartColor();
 
-                if (box.width > 0.001 && box.height < -0.001) {
+                if (box.width > 0.001 && box.height < -0.001 &&
+                    selection.elements(IAtom.class).size() != 1) {
 
                     // rotation handle
                     Point2d p = model.getSelectionRotateControl();
