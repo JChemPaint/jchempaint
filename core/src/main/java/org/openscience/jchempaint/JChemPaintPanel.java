@@ -359,6 +359,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 IAtom hotspot = model.getHighlightedAtom();
                 changed = true;
                 switch (x) {
+                    case ' ': relay.selectFragment(hotspot); break;
                     case '0': relay.addAtom(hotspot, IAtom.C, true); break;
                     case '1': relay.addAtom(hotspot, IAtom.C, false); break;
                     case '2': relay.addAcetyl(hotspot); break;
@@ -395,6 +396,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 IBond closestBond = model.getHighlightedBond();
                 changed = true;
                 switch (x) {
+                    case ' ': relay.selectFragment(closestBond); break;
                     case '1': relay.cycleBondValence(closestBond); break;
                     case '2': relay.changeBond(closestBond, IBond.Order.DOUBLE, IBond.Stereo.NONE); break;
                     case '3': relay.changeBond(closestBond, IBond.Order.TRIPLE, IBond.Stereo.NONE); break;
