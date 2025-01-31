@@ -403,8 +403,8 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         if (showMenuBar) {
             if (menu == null) {
                 menu = new JChemPaintMenuBar(this, this.guistring, blacklist);
+                topContainer.add(menu, BorderLayout.NORTH);
             }
-            topContainer.add(menu, BorderLayout.NORTH);
         } else {
             topContainer.remove(menu);
         }
@@ -448,6 +448,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             if (insertTextPanel != null)
                 centerContainer.remove(insertTextPanel);
         }
+        topContainer.revalidate();
         revalidate();
     }
 
