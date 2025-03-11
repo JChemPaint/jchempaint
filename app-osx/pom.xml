@@ -21,7 +21,7 @@
                         <!-- https://github.com/federkasten/appbundle-maven-plugin/ -->
                         <groupId>sh.tak.appbundler</groupId>
                         <artifactId>appbundle-maven-plugin</artifactId>
-                        <version>1.1.1-SNAPSHOT</version>
+                        <version>1.2.1-SNAPSHOT</version>
                         <configuration>
                             <bundleName>JChemPaint</bundleName>
                             <mainClass>org.openscience.jchempaint.application.JChemPaint</mainClass>
@@ -52,5 +52,50 @@
             <version>3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>JChemPaint</finalName>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>LICENSE</exclude>
+                                        <exclude>NOTICE</exclude>
+                                        <exclude>*.javafiles</exclude>
+                                        <exclude>log4j.properties</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.openscience.jchempaint.application.JChemPaint
+                                    </mainClass>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
