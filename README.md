@@ -2,7 +2,7 @@
 
 # JChemPaint
 
-'''''JChemPaint''''' (or JCP for short here) is the editor and viewer for 2D chemical structures developed using [http://sourceforge.net/apps/mediawiki/cdk/index.php?title=Main_Page CDK].
+***JChemPaint*** (or JCP for short here) is the editor and viewer for 2D chemical structures developed using [CDK](https://cdk.github.io/].
 It is implemented in several forms: a Java application and two varieties of Java applet.
 
 Please see the documentation at
@@ -11,7 +11,7 @@ for more information.
 
 The issue tracker here (on top of this page) is for specific
 JCP-related bugs. For problems in CDK proper, please use
-http://sourceforge.net/tracker/?group_id=20024&atid=120024
+https://github.com/JChemPaint/jchempaint/issues
 
 
 Build requirements (need installation)
@@ -20,7 +20,10 @@ Build requirements (need installation)
 
 Build with the following commands
 
- `mvn install -DskipTests`
- `mvn install -DskipTests -Posx-app` to build an OS X application bundle (.app)
- `mvn install -DskipTests -Pwindows-app` to build a windows executable (.exe)
+```
+mvn install -DskipTests
+mvn install -DskipTests -Posx-app
+mvn install -DskipTests -Pwindows-app
+```
 
+The second and third option are to build an OS X application bundle (.app), and to build a windows executable (.exe).
