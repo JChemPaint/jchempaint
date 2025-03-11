@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: Please cite the following works when using this software.
+type: software
+authors:
+  - family-names: Krause
+    given-names: Stefan
+  - family-names: Willighagen
+    given-names: Egon
+  - family-names: Steinbeck
+    given-names: Christoph
+doi: 10.3390/50100093
+identifiers:
+  - type: doi
+    value: 10.3390/50100093
+  - type: other
+    value: urn:issn:1420-3049
+keywords:
+  - organic chemistry
+  - cheminformatics
+  - Internet
+  - collaboration
+  - JChemPaint
+title: >-
+  JChemPaint - Using the Collaborative Forces of the Internet to Develop a Free
+  Editor for 2D Chemical Structures
