@@ -1,3 +1,7 @@
+[![build](https://github.com/JChemPaint/jchempaint/actions/workflows/maven.yml/badge.svg)](https://github.com/JChemPaint/jchempaint/actions/workflows/maven.yml)
+
+# JChemPaint
+
 '''''JChemPaint''''' (or JCP for short here) is the editor and viewer for 2D chemical structures developed using [http://sourceforge.net/apps/mediawiki/cdk/index.php?title=Main_Page CDK].
 It is implemented in several forms: a Java application and two varieties of Java applet.
 
