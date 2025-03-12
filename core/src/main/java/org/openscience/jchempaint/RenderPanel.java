@@ -28,18 +28,28 @@
  */
 package org.openscience.jchempaint;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openscience.cdk.depict.DepictionGenerator;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.SymbolVisibility;
+import org.openscience.cdk.renderer.color.UniColor;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
+import org.openscience.cdk.renderer.generators.standard.SelectionVisibility;
 import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.ControllerHub;
@@ -88,6 +98,7 @@ import org.openscience.jchempaint.undoredo.SwingUndoableEdit;
 import javax.swing.JPanel;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -106,6 +117,7 @@ import java.util.List;
 public class RenderPanel extends JPanel implements IViewEventRelay,
         IUndoListener {
 
+    private static final Logger log = LogManager.getLogger(RenderPanel.class);
     protected Renderer renderer;
 
     private boolean isNewChemModel;
@@ -207,7 +219,23 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         JChemPaintRendererModel model = this.renderer.getRenderer2DModel();
         if (model.hasParameter(StandardGenerator.StrokeRatio.class)) {
             model.getParameter(StandardGenerator.StrokeRatio.class)
-                 .setValue(1.3d);
+                 .setValue(1d);
+        }
+        if (model.hasParameter(StandardGenerator.Visibility.class)) {
+            model.getParameter(StandardGenerator.Visibility.class)
+                 .setValue(SymbolVisibility.iupacRecommendationsWithoutTerminalCarbon());
+        }
+        if (model.hasParameter(StandardGenerator.AtomColor.class)) {
+            model.getParameter(StandardGenerator.AtomColor.class)
+                 .setValue(new UniColor(Color.BLACK));
+        }
+        if (model.hasParameter(RendererModel.SelectionColor.class)) {
+            model.getParameter(RendererModel.SelectionColor.class)
+                 .setValue(Color.BLACK);
+        }
+        if (model.hasParameter(BasicSceneGenerator.ZoomFactor.class)) {
+            model.getParameter(BasicSceneGenerator.ZoomFactor.class)
+                 .setValue(0.8);
         }
     }
 
@@ -250,7 +278,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             generators.add(new ExternalHighlightAtomGenerator());
             generators.add(new ExternalHighlightBondGenerator());
         } else {
-            generators.add(new StandardGenerator(new Font("Arial", Font.PLAIN, 22)));
+            generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 22)));
         }
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
@@ -276,14 +304,35 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.setPreferredSize(new Dimension(width, height));
     }
 
-    public String toSVG() {
-        IChemModel chemModel = this.hub.getIChemModel();
-        if (chemModel != null && chemModel.getMoleculeSet() != null) {
-            SVGGenerator svgGenerator = new SVGGenerator();
-            this.renderer.paintChemModel(chemModel, svgGenerator);
-            return svgGenerator.getResult();
-        } else {
+    /**
+     * Render the entire sketch as an SVG string, currently this uses the CDK
+     * depiction generator as we don't want to get the controls.
+     * @return the SVG
+     */
+    String toSVG() {
+        IAtomContainer combined = SilentChemObjectBuilder.getInstance().newAtomContainer();
+        for (IAtomContainer mol : hub.getChemModel().getMoleculeSet())
+            combined.add(mol);
+        try {
+            return new DepictionGenerator().depict(combined).toSvgStr();
+        } catch (CDKException e) {
             return "<svg></svg>";
+        }
+    }
+
+    /**
+     * Render the entire sketch as a PDF (byte[]), currently this uses the CDK
+     * depiction generator as we don't want to get the controls.
+     * @return the PDF
+     */
+    byte[] toPDF() {
+        IAtomContainer combined = SilentChemObjectBuilder.getInstance().newAtomContainer();
+        for (IAtomContainer mol : hub.getChemModel().getMoleculeSet())
+            combined.add(mol);
+        try {
+            return new DepictionGenerator().depict(combined).toPdf();
+        } catch (CDKException e) {
+            return new byte[0];
         }
     }
 

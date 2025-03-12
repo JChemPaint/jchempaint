@@ -31,6 +31,7 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -117,17 +118,24 @@ public class ExportAction extends SaveAsAction {
                 }
     
                 if (type.equals(JCPExportFileFilter.svg)) {
-                    try {
-                    	String svg = this.jcpPanel.getSVGString();
-                    	FileWriter writer = new FileWriter(outFile);
-                    	writer.append(svg);
-                    	writer.flush();
-                    	writer.close();
+                    try (FileWriter writer = new FileWriter(outFile)) {
+                    	writer.write(this.jcpPanel.getSVGString());
                         JOptionPane.showMessageDialog(jcpPanel,
                                 GT.get("Exported image to {0}", outFile.getName()));
                         return;
                     } catch (IOException e) {
                         String error = GT.get("Problem exporting to SVG");
+                        JOptionPane.showMessageDialog(jcpPanel, error);
+                        return;
+                    }
+                } else if (type.equals(JCPExportFileFilter.pdf)) {
+                    try (FileOutputStream writer = new FileOutputStream(outFile)){
+                        writer.write(this.jcpPanel.getPDF());
+                        JOptionPane.showMessageDialog(jcpPanel,
+                                                      GT.get("Exported image to {0}", outFile.getName()));
+                        return;
+                    } catch (IOException e) {
+                        String error = GT.get("Problem exporting to PDF");
                         JOptionPane.showMessageDialog(jcpPanel, error);
                         return;
                     }

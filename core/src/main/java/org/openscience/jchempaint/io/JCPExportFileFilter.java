@@ -47,6 +47,7 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
     public final static String png = "png";
     public final static String jpg = "jpg";
     public final static String svg = "svg";
+    public final static String pdf = "pdf";
 
     protected List<String> types;
 
@@ -60,6 +61,7 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
      * Adds the JCPFileFilter to the JFileChooser object.
      */
     public static void addChoosableFileFilters(JFileChooser chooser) {
+        chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.pdf));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.svg));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.png));
         chooser.addChoosableFileFilter(new JCPExportFileFilter(JCPExportFileFilter.bmp));
@@ -80,6 +82,8 @@ public class JCPExportFileFilter extends javax.swing.filechooser.FileFilter impl
             result = "JPEG";
         } else if (type.equals(svg)) {
             result = "Scalable Vector Graphics";
+        } else if (type.equals(pdf)) {
+            result = "PDF";
         }
         return result;
     }

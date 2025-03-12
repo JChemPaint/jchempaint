@@ -250,6 +250,10 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         return this.renderPanel.toSVG();
     }
 
+    public byte[] getPDF() {
+        return this.renderPanel.toPDF();
+    }
+
     public Image takeSnapshot() {
         return this.renderPanel.takeSnapshot();
     }
