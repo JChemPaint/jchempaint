@@ -3,7 +3,9 @@
     <id>io.github.jchempaint.JChemPaint</id>
     <name>JChemPaint</name>
     <summary>Chemical 2D structure editor</summary>
-    <developer_name>Lablicate GmbH</developer_name>
+    <developer id="org.openscience">
+        <name>The OpenScience Project</name>
+    </developer>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>EPL-1.0</project_license>
     <description>
