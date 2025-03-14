@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-27 02:36+0400\n"
-"PO-Revision-Date: 2025-03-13 11:10-0300\n"
+"PO-Revision-Date: 2025-03-14 15:54-0300\n"
 "Last-Translator: John peter sa <johnppetersa@gmail.com>\n"
 "Language-Team: Project-Id-Version: gtranslatorReport-Msgid-Bugs-To: POT-"
 "Creation-Date: 2004-07-27 14:56-0400PO-Revision-Date: 2004-07-27 "
@@ -629,7 +629,7 @@ msgstr "Exceção de instanciação:"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:521
 msgid "Illegal Access: "
-msgstr "Acesso ilegal:"
+msgstr "Acesso ilegal: "
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:570
 msgid "Choose Background Color"
@@ -1292,156 +1292,151 @@ msgstr "Néon"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:509
 msgid "Sodium"
-msgstr ""
+msgstr "Sódio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:512
 msgid "Magnesium"
-msgstr ""
+msgstr "Magnésio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:515
 msgid "Aluminum"
-msgstr ""
+msgstr "Alumínio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:518
 msgid "Silicon"
-msgstr ""
+msgstr "Silício"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:521
 msgid "Phosphorus"
-msgstr ""
+msgstr "Fósforo"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:524
 msgid "Sulfur"
-msgstr ""
+msgstr "Enxofre"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:527
-#, fuzzy
 msgid "Chlorine"
-msgstr "Fechar"
+msgstr "Cloro"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:530
 msgid "Argon"
-msgstr ""
+msgstr "Argônio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:533
 msgid "Potassium"
-msgstr ""
+msgstr "Potássio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:536
 msgid "Calcium"
-msgstr ""
+msgstr "Cálcio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:539
 msgid "Scandium"
-msgstr ""
+msgstr "Escândio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:542
 msgid "Titanium"
-msgstr ""
+msgstr "Titânio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:545
 msgid "Vanadium"
-msgstr ""
+msgstr "Vanádio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:548
 msgid "Chromium"
-msgstr ""
+msgstr "Cromo"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:551
 msgid "Manganese"
-msgstr ""
+msgstr "Manganês"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:554
 msgid "Iron"
-msgstr ""
+msgstr "Ferro"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:557
 msgid "Cobalt"
-msgstr ""
+msgstr "Cobalto"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:560
 msgid "Nickel"
-msgstr ""
+msgstr "Níquel"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:563
-#, fuzzy
 msgid "Copper"
-msgstr "Copiar"
+msgstr "Cobre"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:566
 msgid "Zinc"
-msgstr ""
+msgstr "Zinco"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:569
 msgid "Gallium"
-msgstr ""
+msgstr "Gálio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:572
-#, fuzzy
 msgid "Germanium"
-msgstr "Alemão"
+msgstr "Germânia"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:575
-#, fuzzy
 msgid "Arsenic"
-msgstr "Francês"
+msgstr "Arsênico"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:578
 msgid "Selenium"
-msgstr ""
+msgstr "Selênio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:581
 msgid "Bromine"
-msgstr ""
+msgstr "Bromo"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:584
 msgid "Krypton"
-msgstr ""
+msgstr "Cripton"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:587
 msgid "Rubidium"
-msgstr ""
+msgstr "Rubídio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:590
 msgid "Strontium"
-msgstr ""
+msgstr "Estrôncio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:593
 msgid "Yttrium"
-msgstr ""
+msgstr "Ítrio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:596
 msgid "Zirconium"
-msgstr ""
+msgstr "Zircônio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:599
 msgid "Niobium"
-msgstr ""
+msgstr "Nióbio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:602
 msgid "Molybdenum"
-msgstr ""
+msgstr "Molibdênio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:605
 msgid "Technetium"
-msgstr ""
+msgstr "Tecnécio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:608
 msgid "Ruthenium"
-msgstr ""
+msgstr "Rutênio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:611
 msgid "Rhodium"
-msgstr ""
+msgstr "Ródio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:614
 msgid "Palladium"
-msgstr ""
+msgstr "Paládio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:617
-#, fuzzy
 msgid "Silver"
-msgstr "Arquivo"
+msgstr "Prata"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:620
 msgid "Cadmium"
@@ -1496,9 +1491,8 @@ msgid "Neodymium"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:659
-#, fuzzy
 msgid "Promethium"
-msgstr "Propriedades"
+msgstr "Promécio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:662
 msgid "Samarium"
@@ -1581,9 +1575,8 @@ msgid "Thallium"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:722
-#, fuzzy
 msgid "Lead"
-msgstr "Recarregar"
+msgstr "Liderar"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:725
 msgid "Bismuth"
@@ -1598,9 +1591,8 @@ msgid "Astatine"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:734
-#, fuzzy
 msgid "Radon"
-msgstr "Refazer"
+msgstr "Radônio"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:737
 msgid "Francium"
@@ -1737,15 +1729,13 @@ msgid "Unknown"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:849
-#, fuzzy
 msgid "Noble Gases"
-msgstr "Gases Nobres..."
+msgstr "Gases nobres"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:851
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:132
-#, fuzzy
 msgid "Halogens"
-msgstr "Halogênios..."
+msgstr "Halogênios"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:853
 msgid "Nonmetals"
@@ -1796,18 +1786,16 @@ msgid "Solid"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1010
-#, fuzzy
 msgid "Atomic number"
-msgstr "Desenhar número dos átomos"
+msgstr "Número atômico"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1011
 msgid "Group"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1012
-#, fuzzy
 msgid "Period"
-msgstr "Tabela Periódica do JChemPaint"
+msgstr "Período"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1017
 msgid "CAS RN:"
@@ -1818,9 +1806,8 @@ msgid "Element Category:"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1019
-#, fuzzy
 msgid "State:"
-msgstr "Salvar"
+msgstr "Estada:"
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1020
 msgid "Electronegativity:"
@@ -1831,9 +1818,8 @@ msgid "undefined"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/PeriodicTablePanel.java:1029
-#, fuzzy
 msgid "Periodic Table of elements"
-msgstr "Tabela Periódica do JChemPaint"
+msgstr "Tabela de elementos periódicos"
 
 #: src/main/org/openscience/jchempaint/GT.java:123
 msgid "American English"
@@ -1852,9 +1838,8 @@ msgid "Catalan"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:127
-#, fuzzy
 msgid "Chinese"
-msgstr "Fechar"
+msgstr "Chinês"
 
 #: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Czech"
@@ -1873,7 +1858,6 @@ msgid "Hungarian"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/GT.java:132
-#, fuzzy
 msgid "Polish"
 msgstr "Polonês"
 
@@ -1902,9 +1886,8 @@ msgid "Atom Popup Menu"
 msgstr "Menu popup de Átomo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:60
-#, fuzzy
 msgid "Pseudo Atom Popup Menu"
-msgstr "Menu popup de Átomo"
+msgstr "Pseudo -Atom Popup Menu"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:61
 msgid "Open"
@@ -1923,9 +1906,8 @@ msgid "Print..."
 msgstr "Imprimir..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:65
-#, fuzzy
 msgid "Save As Image..."
-msgstr "Salvar como..."
+msgstr "Salvar como imagem ..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:66
 msgid "Save"
@@ -1987,19 +1969,16 @@ msgid "Cut"
 msgstr "Recortar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:80
-#, fuzzy
 msgid "Atom"
-msgstr "Adicionar Átomo"
+msgstr "Átomo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:81
-#, fuzzy
 msgid "Bond"
-msgstr "Desenha Ligação"
+msgstr "Ligação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:82
-#, fuzzy
 msgid "Tools"
-msgstr "Barra de Ferramentas"
+msgstr "Ferramentas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:83
 msgid "Templates"
@@ -2030,27 +2009,24 @@ msgid "Charge"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:94
-#, fuzzy
 msgid "Plus"
-msgstr "Polonês"
+msgstr "Mais"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:95
 msgid "Minus"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:96
-#, fuzzy
 msgid "Implicit Hydrogens"
-msgstr "Mostrar hidrogênios implícitos"
+msgstr "Hidrogênios implícitos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:97
 msgid "Flip"
 msgstr "Girar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:98
-#, fuzzy
 msgid "Clean Structure"
-msgstr "Estrutura"
+msgstr "Estrutura limpa"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:99
 msgid "Toolbar"
@@ -2069,9 +2045,8 @@ msgid "Direct Entry as SMILES/InChI/CAS"
 msgstr "Entrar diretamente como SMILES/InChI/CAS"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:103
-#, fuzzy
 msgid "Zoom In"
-msgstr "Aproximar Zoom"
+msgstr "Zoom entre"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:104
 msgid "Zoom Out"
@@ -2082,9 +2057,8 @@ msgid "Zoom 100%"
 msgstr "100% de Zoom"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:106
-#, fuzzy
 msgid "Preferences..."
-msgstr "Preferências"
+msgstr "Preferências ..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:107
 msgid "Create SMILES"
@@ -2099,14 +2073,12 @@ msgid "Help"
 msgstr "Ajuda"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:110
-#, fuzzy
 msgid "Basic Tutorial"
-msgstr "Tutorial"
+msgstr "Tutorial básico"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:111
-#, fuzzy
 msgid "R-group Tutorial"
-msgstr "Tutorial"
+msgstr "Tutorial do R-Grupo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:112
 msgid "Report Feedback"
@@ -2141,24 +2113,20 @@ msgid "Select"
 msgstr "Selecionar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:120
-#, fuzzy
 msgid "Change Element"
-msgstr "Mudar Elemento..."
+msgstr "Mudar elemento"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:121
-#, fuzzy
 msgid "Periodic Table"
-msgstr "Tabela Periódica do JChemPaint"
+msgstr "Tabela periódica"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:122
-#, fuzzy
 msgid "Custom"
-msgstr "Recortar"
+msgstr "Personalizado"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:123
-#, fuzzy
 msgid "Isotopes"
-msgstr "Isótopo Majoritário"
+msgstr "Isótopos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:124
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:125
@@ -2179,14 +2147,12 @@ msgid "Convert to Regular Atom"
 msgstr "Converter em Átomo Regular"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:131
-#, fuzzy
 msgid "Common Elements"
-msgstr "Elementos Comuns...."
+msgstr "Elementos comuns"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:133
-#, fuzzy
 msgid "Nobel Gases"
-msgstr "Gases Nobres..."
+msgstr "Gases nobres"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:136
 msgid "Transition Metals"
@@ -2203,9 +2169,9 @@ msgstr "Pseudo Átomos"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:141
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:142
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:143
-#, fuzzy, java-format
+#, java-format
 msgid "Major Plus {0}"
-msgstr "O majoritário mais dois"
+msgstr "Maior Mais {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:144
 msgid "Major Isotope"
@@ -2214,14 +2180,13 @@ msgstr "Isótopo Majoritário"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:145
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:146
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:147
-#, fuzzy, java-format
+#, java-format
 msgid "Major Minus {0}"
-msgstr "O majoritário menos um"
+msgstr "Maior Menos {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:148
-#, fuzzy
 msgid "Valence"
-msgstr "Cancelar"
+msgstr "Valência"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:149
 msgid "Valence Off"
@@ -2248,9 +2213,8 @@ msgid "R"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:237
-#, fuzzy
 msgid "Other..."
-msgstr "Outros"
+msgstr "Outro..."
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:238
 msgid "R1"
@@ -2273,19 +2237,16 @@ msgid "Draw Bonds and Atoms"
 msgstr "Desenhar Ligações e Átomos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:243
-#, fuzzy
 msgid "Makes a Reaction by Drawing a Reaction Arrow"
-msgstr "Fazer como Reagente em nova Reação"
+msgstr "Faz uma reação desenhando uma seta de reação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:244
-#, fuzzy
 msgid "Draw Double Bonds"
-msgstr "Desenha Ligação"
+msgstr "Desenhe ligações duplas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:245
-#, fuzzy
 msgid "Draw Triple Bonds"
-msgstr "Desenha Ligação"
+msgstr "Desenhe títulos triplos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:246
 msgid "Change the Atom's Symbol"
@@ -2316,19 +2277,16 @@ msgid "Decrease the charge on an Atom"
 msgstr "Diminui a carga de um Átomo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:253
-#, fuzzy
 msgid "Delete atoms and bonds"
-msgstr "Apaga Átomos e Ligações"
+msgstr "Excluir átomos e ligações"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:254
-#, fuzzy
 msgid "Select atoms and bonds in a free-form region"
-msgstr "Seleciona Átomos e Ligações em uma região quadrada"
+msgstr "Selecione átomos e ligações em uma região de forma livre"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:255
-#, fuzzy
 msgid "Select atoms and bonds in a rectangular region"
-msgstr "Seleciona Átomos e Ligações em uma região quadrada"
+msgstr "Selecione átomos e ligações em uma região retangular"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:256
 msgid "Add a propane ring"
@@ -2367,19 +2325,16 @@ msgid "Clear"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:267
-#, fuzzy
 msgid "Create new file"
-msgstr "Cria um novo arquivo"
+msgstr "Crie novo arquivo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:268
-#, fuzzy
 msgid "Open existing file"
-msgstr "Abre um arquivo"
+msgstr "Abra o arquivo existente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:269
-#, fuzzy
 msgid "Save current file"
-msgstr "Salvar para um arquivo"
+msgstr "Salvar o arquivo atual"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:270
 msgid "Print current file"
@@ -2402,9 +2357,8 @@ msgid "Zoom in"
 msgstr "Aproximar Zoom"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:275
-#, fuzzy
 msgid "Zoom out"
-msgstr "Afastar Zoom"
+msgstr "Amplie o zoom"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:276
 msgid "Stereo up or stereo down bond"
@@ -2447,9 +2401,8 @@ msgid "Choose from complex templates"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:286
-#, fuzzy
 msgid " Menu"
-msgstr "Barra de Menu"
+msgstr " Menu"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:287
 msgid "ChemModel Popup Menu"
@@ -2469,19 +2422,16 @@ msgid "Draw Bond"
 msgstr "Desenha Ligação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:291
-#, fuzzy
 msgid "Draw Double Bond"
-msgstr "Desenha Ligação"
+msgstr "Desenhe uma ligação dupla"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:292
-#, fuzzy
 msgid "Draw Triple Bond"
-msgstr "Desenha Ligação"
+msgstr "Desenhe um título triplo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:293
-#, fuzzy
 msgid "Draw Quadruple Bond"
-msgstr "Desenha Ligação"
+msgstr "Desenhe uma ligação quadruplicada"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:294
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:295
@@ -2489,9 +2439,9 @@ msgstr "Desenha Ligação"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:297
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:298
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:299
-#, fuzzy, java-format
+#, java-format
 msgid "Ring {0}"
-msgstr "Anel 3"
+msgstr "Anel {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:300
 msgid "Add or convert to bond up"
@@ -2518,9 +2468,8 @@ msgid "Move"
 msgstr "Mover"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:307
-#, fuzzy
 msgid "Rotate"
-msgstr "Salvar"
+msgstr "Girar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:308
 msgid "Rotate in space"
@@ -2535,9 +2484,8 @@ msgid "Select in Free Form"
 msgstr "Selecionar de forma livre"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:311
-#, fuzzy
 msgid "Select Rectangle"
-msgstr "Selecionar apenas os reagentes"
+msgstr "Selecione o retângulo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:312
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:313
@@ -2549,49 +2497,41 @@ msgstr "Selecionar apenas os reagentes"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:319
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:320
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:321
-#, fuzzy, java-format
+#, java-format
 msgid "Change drawing symbol to {0}"
-msgstr "Mudar simbolo de desenho para"
+msgstr "Alterar o símbolo de desenho para {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:322
-#, fuzzy
 msgid "Draw any functional group"
-msgstr "Adicionar Grupo Funcional"
+msgstr "Desenhe qualquer grupo funcional"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:323
-#, fuzzy
 msgid "Reaction"
-msgstr "Reação..."
+msgstr "Reação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:324
-#, fuzzy
 msgid "Make Reactant in New Reaction"
-msgstr "Fazer como Reagente em nova Reação"
+msgstr "Faça reagente em nova reação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:325
-#, fuzzy
 msgid "Make Reactant in Existing Reaction"
-msgstr "Fazer como Reagente em uma Reação existente"
+msgstr "Fazer reagente na reação existente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:326
-#, fuzzy
 msgid "Make Product in New Reaction"
-msgstr "Fazer Prtoduto em uma Nova Reação"
+msgstr "Faça produto em nova reação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:327
-#, fuzzy
 msgid "Make Product in Existing Reaction"
-msgstr "Fazer Produto em uma Reação existente"
+msgstr "Faça o produto na reação existente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:328
-#, fuzzy
 msgid "Select Reactants"
-msgstr "Selecionar apenas os reagentes"
+msgstr "Selecione reagentes"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:329
-#, fuzzy
 msgid "Select Products"
-msgstr "Selecionar Molécula"
+msgstr "Selecione produtos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:330
 msgid "Reaction Popup Menu"
@@ -2630,9 +2570,8 @@ msgid "Nucleosides"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
-#, fuzzy
 msgid "Porphyrins"
-msgstr "Propriedades"
+msgstr "Porfirinas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:340
 msgid "Protecting Groups"
@@ -2661,9 +2600,8 @@ msgid "R-group attachment"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:348
-#, fuzzy
 msgid "Define as Root Structure"
-msgstr "Estrutura"
+msgstr "Definir como Estrutura Raiz"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:349
 msgid "Define as Substituent"
