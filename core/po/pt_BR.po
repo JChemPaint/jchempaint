@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: JChemPaint\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-27 02:36+0400\n"
-"PO-Revision-Date: 2025-03-15 23:00-0300\n"
+"PO-Revision-Date: 2025-03-16 10:11-0300\n"
 "Last-Translator: John peter sa <johnppetersa@gmail.com>\n"
 "Language-Team: Project-Id-Version: gtranslatorReport-Msgid-Bugs-To: POT-"
 "Creation-Date: 2004-07-27 14:56-0400PO-Revision-Date: 2004-07-27 "
@@ -1827,7 +1827,7 @@ msgstr "Inglês (EUA)"
 
 #: src/main/org/openscience/jchempaint/GT.java:124
 msgid "Arabic"
-msgstr "árabe"
+msgstr "Árabe"
 
 #: src/main/org/openscience/jchempaint/GT.java:125
 msgid "Brazilian Portuguese"
@@ -1835,7 +1835,7 @@ msgstr "Português (Brasil)"
 
 #: src/main/org/openscience/jchempaint/GT.java:126
 msgid "Catalan"
-msgstr ""
+msgstr "Catalão"
 
 #: src/main/org/openscience/jchempaint/GT.java:127
 msgid "Chinese"
@@ -1843,7 +1843,7 @@ msgstr "Chinês"
 
 #: src/main/org/openscience/jchempaint/GT.java:128
 msgid "Czech"
-msgstr ""
+msgstr "Checo"
 
 #: src/main/org/openscience/jchempaint/GT.java:129
 msgid "Dutch"
@@ -1855,7 +1855,7 @@ msgstr "Alemão"
 
 #: src/main/org/openscience/jchempaint/GT.java:131
 msgid "Hungarian"
-msgstr ""
+msgstr "Húngaro"
 
 #: src/main/org/openscience/jchempaint/GT.java:132
 msgid "Polish"
@@ -1863,7 +1863,7 @@ msgstr "Polonês"
 
 #: src/main/org/openscience/jchempaint/GT.java:133
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: src/main/org/openscience/jchempaint/GT.java:134
 msgid "Spanish"
@@ -1871,7 +1871,7 @@ msgstr "Espanhol"
 
 #: src/main/org/openscience/jchempaint/GT.java:135
 msgid "Thai"
-msgstr ""
+msgstr "Tailandês"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:57
 msgid "File"
@@ -1949,7 +1949,7 @@ msgstr "Copiar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:75
 msgid "Copy As SMILES"
-msgstr ""
+msgstr "Copiar como SMILES"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:76
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:305
@@ -1962,7 +1962,7 @@ msgstr "Colar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:78
 msgid "All Templates"
-msgstr ""
+msgstr "Todos os modelos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:79
 msgid "Cut"
@@ -1982,31 +1982,31 @@ msgstr "Ferramentas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:83
 msgid "Templates"
-msgstr ""
+msgstr "Modelos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:84
 msgid "Radical"
-msgstr ""
+msgstr "Radical"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:89
 msgid "Stereo Down"
-msgstr ""
+msgstr "Estéreo para baixo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:90
 msgid "Stereo Up"
-msgstr ""
+msgstr "Estéreo para cima"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:91
 msgid "Undefined Stereo"
-msgstr ""
+msgstr "Estéreo indefinido"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:92
 msgid "Undefined E/Z"
-msgstr ""
+msgstr "E/Z indefinido"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:93
 msgid "Charge"
-msgstr ""
+msgstr "Cobrar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:94
 msgid "Plus"
@@ -2014,7 +2014,7 @@ msgstr "Mais"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:95
 msgid "Minus"
-msgstr ""
+msgstr "Menos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:96
 msgid "Implicit Hydrogens"
@@ -2082,7 +2082,7 @@ msgstr "Tutorial do R-Grupo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:112
 msgid "Report Feedback"
-msgstr ""
+msgstr "Relatar Feedback"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:113
 msgid "License"
@@ -2094,19 +2094,19 @@ msgstr "Sobre"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:115
 msgid "On All"
-msgstr ""
+msgstr "Em todos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:116
 msgid "Off"
-msgstr ""
+msgstr "Desligado"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:117
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:118
 msgid "Vertical"
-msgstr ""
+msgstr "Vertical"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:119
 msgid "Select"
@@ -2131,12 +2131,12 @@ msgstr "Isótopos"
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:124
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:125
 msgid "Add Single Electron"
-msgstr ""
+msgstr "Adicionar elétron único"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:126
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:127
 msgid "Remove Single Electron"
-msgstr ""
+msgstr "Remover elétron único"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:129
 msgid "Molecule Properties"
@@ -2156,11 +2156,11 @@ msgstr "Gases nobres"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:136
 msgid "Transition Metals"
-msgstr ""
+msgstr "Metais de transição"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:139
 msgid "Non-Metals"
-msgstr ""
+msgstr "Não-metais"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:140
 msgid "Pseudo Atoms"
@@ -2190,7 +2190,7 @@ msgstr "Valência"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:149
 msgid "Valence Off"
-msgstr ""
+msgstr "Valência Desligada"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:150
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:151
@@ -2202,11 +2202,11 @@ msgstr ""
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:157
 #, java-format
 msgid "Valence {0}"
-msgstr ""
+msgstr "Valência {0}"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:235
 msgid "Variable Attachment Point *"
-msgstr ""
+msgstr "Ponto de fixação variável *"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:236
 msgid "R"
@@ -2322,7 +2322,7 @@ msgstr "Refaz o layout das estruturas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:265
 msgid "Clear"
-msgstr ""
+msgstr "Claro"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:267
 msgid "Create new file"
@@ -2338,7 +2338,7 @@ msgstr "Salvar o arquivo atual"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:270
 msgid "Print current file"
-msgstr ""
+msgstr "Imprimir arquivo atual"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:271
 msgid "Redo Action"
@@ -2362,43 +2362,43 @@ msgstr "Amplie o zoom"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:276
 msgid "Stereo up or stereo down bond"
-msgstr ""
+msgstr "Ligação estéreo para cima ou para baixo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:277
 msgid "Any stereo bond"
-msgstr ""
+msgstr "Qualquer ligação estéreo"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:278
 msgid "Rotate selection"
-msgstr ""
+msgstr "Girar seleção"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:279
 msgid "Rotate selection in space"
-msgstr ""
+msgstr "Girar seleção no espaço"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:280
 msgid "Cut selection"
-msgstr ""
+msgstr "Seleção de corte"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:281
 msgid "Copy selection to clipboard"
-msgstr ""
+msgstr "Copiar seleção para área de transferência"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:282
 msgid "Paste from clipboard"
-msgstr ""
+msgstr "Colar da área de transferência"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:283
 msgid "Flip vertical"
-msgstr ""
+msgstr "Inverter verticalmente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:284
 msgid "Flip horizontal"
-msgstr ""
+msgstr "Inverter horizontalmente"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:285
 msgid "Choose from complex templates"
-msgstr ""
+msgstr "Escolha entre modelos complexos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:286
 msgid " Menu"
@@ -2473,7 +2473,7 @@ msgstr "Girar"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:308
 msgid "Rotate in space"
-msgstr ""
+msgstr "Girar no espaço"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:309
 msgid "Benzene"
@@ -2539,35 +2539,35 @@ msgstr "Menu popup de reações"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:331
 msgid "Alkaloids"
-msgstr ""
+msgstr "Alcalóides"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:332
 msgid "Amino Acids"
-msgstr ""
+msgstr "Aminoácidos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:333
 msgid "Beta Lactams"
-msgstr ""
+msgstr "Beta-lactâmicos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:334
 msgid "Carbohydrates"
-msgstr ""
+msgstr "Carboidratos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:335
 msgid "Inositols"
-msgstr ""
+msgstr "Inositóis"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:336
 msgid "Lipids"
-msgstr ""
+msgstr "Lipídios"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:337
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Variado"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:338
 msgid "Nucleosides"
-msgstr ""
+msgstr "Nucleosídeos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:339
 msgid "Porphyrins"
@@ -2575,29 +2575,29 @@ msgstr "Porfirinas"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:340
 msgid "Protecting Groups"
-msgstr ""
+msgstr "Protegendo Grupos"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:341
 msgid "Steroids"
-msgstr ""
+msgstr "Esteroides"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:342
 msgid "PAHs"
-msgstr ""
+msgstr "PAHs"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:343
 msgid "Language"
-msgstr ""
+msgstr "Linguagem"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:344
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:345
 msgid "R-groups"
-msgstr ""
+msgstr "Grupos R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:346
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:347
 msgid "R-group attachment"
-msgstr ""
+msgstr "Anexo do grupo R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:348
 msgid "Define as Root Structure"
@@ -2605,35 +2605,35 @@ msgstr "Definir como Estrutura Raiz"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:349
 msgid "Define as Substituent"
-msgstr ""
+msgstr "Definir como Substituinte"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:350
 msgid "Set as first attachment point"
-msgstr ""
+msgstr "Definir como primeiro ponto de fixação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:351
 msgid "Set as second attachment point"
-msgstr ""
+msgstr "Definir como segundo ponto de fixação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:352
 msgid "Set as bond for first attachment point"
-msgstr ""
+msgstr "Definir como vínculo para o primeiro ponto de fixação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:353
 msgid "Set as bond for second attachment point"
-msgstr ""
+msgstr "Definir como ligação para o segundo ponto de fixação"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:354
 msgid "Advanced R-group logic"
-msgstr ""
+msgstr "Lógica avançada do grupo R"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:355
 msgid "Generate possible configurations (sdf) "
-msgstr ""
+msgstr "Gerar configurações possíveis (sdf) "
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:356
 msgid "Remove R-group aspects"
-msgstr ""
+msgstr "Remover aspectos do grupo R"
 
 #: src/main/org/openscience/jchempaint/InsertTextPanel.java:72
 #: src/main/org/openscience/jchempaint/InsertTextPanel.java:115
@@ -2668,23 +2668,27 @@ msgstr "Hs implícitos"
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:175
 msgid "The error was:"
-msgstr ""
+msgstr "O erro foi:"
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:175
 msgid ""
 "\n"
 "You can file a bug report at "
 msgstr ""
+"\n"
+"Você pode registrar um relatório de bug em "
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:177
 msgid ""
 "\n"
 "We apologize for any inconvenience!"
 msgstr ""
+"\n"
+"Pedimos desculpas por qualquer inconveniente!"
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:177
 msgid "Error occured"
-msgstr ""
+msgstr "Ocorreu um erro"
 
 #: src/main/org/openscience/jchempaint/AbstractJChemPaintPanel.java:525
 msgid "has unsaved data. Do you want to save it?"
