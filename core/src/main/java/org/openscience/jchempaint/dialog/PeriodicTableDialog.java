@@ -28,22 +28,21 @@
  */
 package org.openscience.jchempaint.dialog;
 
+import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.jchempaint.GT;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.EventObject;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.jchempaint.GT;
-
 /**
  * Dialog that shows a periodic table. The selected symbol
- * can be derived with getChoosenSymbol after the dialog has been shown.
- * getChoosenSymbol will be "" if dialog has been cancelled.
+ * can be derived with getChooenSymbol after the dialog has been shown.
+ * getChosenSymbol will be "" if dialog has been cancelled.
  */
 public class PeriodicTableDialog extends JDialog {
 
@@ -52,7 +51,7 @@ public class PeriodicTableDialog extends JDialog {
 	private PeriodicTablePanel ptp;
     private String symbolfromtable="";
     
-    public String getChoosenSymbol() {
+    public String getChosenSymbol() {
 		return symbolfromtable;
 	}
 
@@ -65,7 +64,6 @@ public class PeriodicTableDialog extends JDialog {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Color.white);
         setTitle(GT.get("Choose an element..."));
-        
         ptp = new PeriodicTablePanel();
         ptp.addCDKChangeListener(new PTDialogChangeListener());
         getContentPane().add("Center",ptp);
