@@ -95,7 +95,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             // open PeriodicTable panel
             PeriodicTableDialog dialog = new PeriodicTableDialog();
             dialog.setName("periodictabledialog");
-            symbol=dialog.getChoosenSymbol();
+            symbol=dialog.getChosenSymbol();
             if(symbol.equals(""))
                 return;
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
