@@ -93,13 +93,17 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Collections;
 
 /**
  * Action to copy/paste/cut/erase/select structures.
@@ -125,6 +129,7 @@ public final class CopyPasteAction extends JCPAction {
     public static final DataFlavor SMI_FLAVOR = new DataFlavor("chemical/x-daylight-smiles", "SMILES");
 
     public static final DataFlavor SVG_FLAVOR = new DataFlavor("image/svg+xml; class=java.io.InputStream", "Scalable Vector Graphics");
+    public static final DataFlavor INKSCAPE_SVG_FLAVOR = new DataFlavor("image/x-inkscape-svg; class=java.io.InputStream", "Scalable Vector Graphics");
     public static final DataFlavor PDF_FLAVOR = new DataFlavor("application/pdf; class=java.io.InputStream", "Portable Document Format");
 
     private Class<? extends Clipboard> clipboardWrapper;
@@ -134,6 +139,7 @@ public final class CopyPasteAction extends JCPAction {
 
         SystemFlavorMap systemFlavorMap = (SystemFlavorMap) SystemFlavorMap.getDefaultFlavorMap();
         systemFlavorMap.addUnencodedNativeForFlavor(SVG_FLAVOR, "image/svg+xml");
+        systemFlavorMap.addUnencodedNativeForFlavor(INKSCAPE_SVG_FLAVOR, "image/svg+xml");
         systemFlavorMap.addUnencodedNativeForFlavor(PDF_FLAVOR, "application/pdf");
 
         // The SystemFlavorMap is ineffective on OS X (https://bugs.openjdk.org/browse/JDK-8136781)
@@ -647,9 +653,11 @@ public final class CopyPasteAction extends JCPAction {
 
         private final DataFlavor[] flavors = {
                 SVG_FLAVOR,
+                INKSCAPE_SVG_FLAVOR,
                 PDF_FLAVOR,
                 DataFlavor.imageFlavor,
                 DataFlavor.stringFlavor,
+                DataFlavor.javaFileListFlavor,
                 MOL_FLAVOR,
                 CML_FLAVOR,
                 SMI_FLAVOR
@@ -661,6 +669,7 @@ public final class CopyPasteAction extends JCPAction {
         String smiles;
         String svg;
         String cml;
+        File file;
 
         public JcpSelection(IAtomContainer container) {
             IAtomContainer tocopy = container.getBuilder()
@@ -689,11 +698,18 @@ public final class CopyPasteAction extends JCPAction {
                 image = depiction.toImg();
                 pdf = depiction.toPdf();
                 svg = depiction.toSvgStr();
+                file = File.createTempFile("jcp-selection", ".svg");
+                try (OutputStream out = Files.newOutputStream(file.toPath())) {
+                    out.write(svg.getBytes(StandardCharsets.UTF_8));
+                }
             } catch (CDKException e) {
                 logger.error("Could not generate depiction for selection");
                 image = null;
                 pdf = null;
                 svg = null;
+                file = null;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             // CML output
@@ -728,24 +744,26 @@ public final class CopyPasteAction extends JCPAction {
             return false;
         }
 
-        public synchronized Object getTransferData(DataFlavor parFlavor)
+        public synchronized Object getTransferData(DataFlavor flavor)
                 throws UnsupportedFlavorException {
-            if (parFlavor.equals(MOL_FLAVOR)) {
+            if (flavor.equals(MOL_FLAVOR)) {
                 return mol;
-            } else if (parFlavor.equals(SMI_FLAVOR)) {
+            } else if (flavor.equals(SMI_FLAVOR)) {
                 return new StringReader(smiles);
-            } else if (parFlavor.equals(DataFlavor.stringFlavor)) {
+            } else if (flavor.equals(DataFlavor.stringFlavor)) {
                 return smiles;
-            } else if (parFlavor.equals(CML_FLAVOR)) {
+            } else if (flavor.equals(CML_FLAVOR)) {
                 return new StringReader(cml);
-            } else if (parFlavor.equals(SVG_FLAVOR)) {
+            } else if (flavor.equals(SVG_FLAVOR) || flavor.equals(INKSCAPE_SVG_FLAVOR)) {
                 return svg != null ? new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8)) : null;
-            } else if (parFlavor.equals(DataFlavor.imageFlavor)) {
+            } else if (flavor.equals(DataFlavor.imageFlavor)) {
                 return image;
-            } else if (parFlavor.equals(PDF_FLAVOR)) {
+            } else if (flavor.equals(PDF_FLAVOR)) {
                 return pdf != null ? new ByteArrayInputStream(pdf) : null;
+            } else if (flavor.equals(DataFlavor.javaFileListFlavor)) {
+                return Collections.singletonList(file);
             } else {
-                throw new UnsupportedFlavorException(parFlavor);
+                throw new UnsupportedFlavorException(flavor);
             }
         }
 
