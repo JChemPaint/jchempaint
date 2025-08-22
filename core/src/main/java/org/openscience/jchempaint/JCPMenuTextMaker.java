@@ -73,6 +73,7 @@ public class JCPMenuTextMaker {
         entries.put("selectAll", GT.get("Select All"));
         entries.put("copy", GT.get("Copy"));
         entries.put("copyAsSmiles", GT.get("Copy As SMILES"));
+        entries.put("copyAsMolfile", GT.get("Copy As MOLfile"));
         entries.put("eraser", GT.get("Delete"));
         entries.put("paste", GT.get("Paste"));
         entries.put("pasteTemplate", GT.get("All Templates"));
