@@ -1683,19 +1683,97 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void cleanup() {
+
 		Map<IAtom, Point2d[]> coords = new HashMap<IAtom, Point2d[]>();
 		Map<IBond, IBond.Stereo> stereo = new HashMap<>();
+
+		// if there is a selection we clean up in-place
+		IChemObjectSelection selection = getRenderer().getRenderer2DModel().getSelection();
+		if (selection.isFilled()) {
+
+			Set<IAtom> selectedAtoms = new HashSet<>();
+			for (IBond bond : selection.elements(IBond.class)) {
+				selectedAtoms.add(bond.getBegin());
+				selectedAtoms.add(bond.getEnd());
+			}
+			selectedAtoms.addAll(selection.elements(IAtom.class));
+
+			// crossing atoms/bonds
+			Set<IAtom> xatoms = new HashSet<>();
+			Set<IBond> xbonds = new HashSet<>();
+			for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+				for (IBond bond : container.bonds()) {
+					if (selectedAtoms.contains(bond.getBegin()) !=
+						selectedAtoms.contains(bond.getEnd()))
+						xbonds.add(bond);
+				}
+			}
+
+			for (IBond xbond : xbonds) {
+				for (IAtom a : xbond.atoms()) {
+					if (selectedAtoms.contains(a))
+						xatoms.add(a);
+				}
+			}
+
+			if (xbonds.size() > 1) {
+				// if we have two "leaving" bonds, check if there is a common atom,
+				// we then move the anchor to that bond.
+				if (xatoms.size() == 1) {
+					xbonds.clear();
+					IAtom anchorAtom = xatoms.iterator().next();
+					for (IBond bond : ChemModelManipulator.getRelevantAtomContainer(getChemModel(),
+																					anchorAtom)
+														  .getConnectedBondsList(anchorAtom)) {
+						if (selection.contains(bond))
+							xbonds.add(bond);
+					}
+				}
+			}
+
+			if (xatoms.size() > 1)
+				return;
+
+			IAtomContainer selected = selection.getConnectedAtomContainer();
+			if (!ConnectivityChecker.isConnected(selected))
+				return;
+
+			Point2d oldCenter = GeometryUtil.get2DCenter(selected);
+
+			for (IAtom atom : selected.atoms()) {
+				coords.put(atom, new Point2d[]{ null, atom.getPoint2d()});
+				atom.setPoint2d(null);
+			}
+			for (IBond bond : selected.bonds()) {
+				stereo.put(bond, bond.getStereo());
+				bond.setStereo(Stereo.NONE);
+			}
+
+			generateNewCoordinates(selected, xatoms, xbonds);
+
+			// put the molecule back where it was
+			Point2d newCenter = GeometryUtil.get2DCenter(selected);
+			GeometryUtil.translate2D(selected,
+									 oldCenter.x - newCenter.x,
+									 oldCenter.y - newCenter.y);
+
+			coordinatesChanged();
+			if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
+				IUndoRedoable undoredo = getUndoRedoFactory().getChangeCoordsEdit(
+						coords, stereo,"Clean Up Selection");
+				getUndoRedoHandler().postEdit(undoredo);
+			}
+			return;
+		}
+
 		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
 
 			// ensure current stereo from 2D is set
 			container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
-																											.interpretProjections(Projection.Haworth, Projection.Chair)
-																											.createAll());
-
+															.interpretProjections(Projection.Haworth, Projection.Chair)
+															.createAll());
 			for (IAtom atom : container.atoms()) {
-				Point2d[] coordsforatom = new Point2d[2];
-				coordsforatom[1] = atom.getPoint2d();
-				coords.put(atom, coordsforatom);
+				coords.put(atom, new Point2d[]{ null, atom.getPoint2d()});
 				atom.setPoint2d(null);
 			}
 			for (IBond bond : container.bonds()) {
@@ -1703,16 +1781,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				bond.setStereo(Stereo.NONE);
 			}
 
-			if (ConnectivityChecker.isConnected(container)) {
-				generateNewCoordinates(container);
-			} else {
-				// deal with disconnected atom containers
-				IAtomContainerSet molecules = ConnectivityChecker
-						.partitionIntoMolecules(container);
-				for (IAtomContainer subContainer : molecules.atomContainers()) {
-					generateNewCoordinates(subContainer);
-				}
-			}
+			generateNewCoordinates(container);
 
 			for (IAtom atom : container.atoms()) {
 				Point2d[] coordsforatom = coords.get(atom);
@@ -1729,30 +1798,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public static void generateNewCoordinates(IAtomContainer container) {
-		IChemObjectBuilder builder = DefaultChemObjectBuilder
-				.getInstance();
+		generateNewCoordinates(container, Collections.emptySet(), Collections.emptySet());
+	}
 
+	public static void generateNewCoordinates(IAtomContainer container, Set<IAtom> afix, Set<IBond> bifx) {
 		if (diagramGenerator == null) {
 			diagramGenerator = new StructureDiagramGenerator();
 		}
-		if (container instanceof IAtomContainer) {
-			diagramGenerator.setMolecule((IAtomContainer) container);
-		} else {
-			diagramGenerator.setMolecule(builder.newInstance(IAtomContainer.class,container));
-		}
-
 		try {
+			diagramGenerator.setMolecule(container, false, afix, bifx);
 			diagramGenerator.generateCoordinates();
-			IAtomContainer cleanedMol = diagramGenerator.getMolecule();
-			// now copy/paste coordinates
-			for (int i = 0; i < cleanedMol.getAtomCount(); i++) {
-				container.getAtom(i).setPoint2d(
-						cleanedMol.getAtom(i).getPoint2d());
-			}
-			for (int i = 0; i < cleanedMol.getBondCount(); i++) {
-				container.getBond(i).setStereo(
-								cleanedMol.getBond(i).getStereo());
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
