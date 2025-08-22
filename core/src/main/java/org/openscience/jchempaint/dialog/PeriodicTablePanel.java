@@ -28,20 +28,10 @@
  */
 package org.openscience.jchempaint.dialog;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import org.openscience.cdk.event.ICDKChangeListener;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
+import org.openscience.jchempaint.GT;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -52,11 +42,21 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-
-import org.openscience.cdk.event.ICDKChangeListener;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.tools.periodictable.PeriodicTable;
-import org.openscience.jchempaint.GT;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 /**
  * JPanel version of the periodic system.
  *
@@ -99,14 +99,33 @@ public class PeriodicTablePanel extends JPanel
         setLayout( new BorderLayout());
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(581, 435));
-        JPanel tp = PTPanel();
-        tp.setBounds(8,85,570, 340);
-
+        final JPanel tp = PTPanel();
+        tp.setBounds(8,85,570,340);
         panel = CreateLabelProperties(null);
-
-        layeredPane.add(tp, new Integer(0));
-        layeredPane.add(panel, new Integer(1));
+        layeredPane.add(tp, Integer.valueOf(0));
+        layeredPane.add(panel, Integer.valueOf(1));
         add(layeredPane);
+
+        // JWM handling resizing nicely:
+        // JLayeredPane does not resize, we can sort of fix it with
+        // an OverlayLayout but the panel is regenerated on mouse-over
+        // and so it is simpler to set the bounds for each component
+        // based on the current size
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Dimension d = getSize();
+                tp.setBounds(8,85,d.width-11,d.height-95);
+                int boxWidth = (int)Math.ceil((d.width-11) / 19f);
+                int boxHeight = (int)Math.ceil((d.height-11) / 12f);
+                panel.setBounds(4*boxWidth, (int)(0.5*boxHeight),
+                                8*boxWidth, (int)(4*boxHeight));
+            }
+        });
+    }
+
+    private void resize() {
+
     }
 
     private JPanel PTPanel()
@@ -323,7 +342,16 @@ public class PeriodicTablePanel extends JPanel
         panel.add(createButton(GT.get("Mt")));
         panel.add(createButton(GT.get("Ds")));
         panel.add(createButton(GT.get("Rg")));
-        for (int i = 0; i < 10; i++)
+        panel.add(createButton(GT.get("Cn")));
+        panel.add(createButton(GT.get("Nh")));
+        panel.add(createButton(GT.get("Fl")));
+        panel.add(createButton(GT.get("Mc")));
+        panel.add(createButton(GT.get("Lv")));
+        panel.add(createButton(GT.get("Ts")));
+        panel.add(createButton(GT.get("Og")));
+
+
+        for (int i = 0; i < 3; i++)
         {
             panel.add(Box.createHorizontalGlue());
         }
@@ -377,27 +405,41 @@ public class PeriodicTablePanel extends JPanel
         Color colorF = new Color(0,0,0);
 
         Color colorB = null;
-        String serie = PeriodicTable.getChemicalSeries(elementS);
-        if(serie.equals("Noble Gasses"))
-            colorB = new Color(255,153,255);
-        else if(serie.equals("Halogens"))
-            colorB = new Color(255,153,153); 
-        else if(serie.equals("Nonmetals"))
-            colorB = new Color(255,152,90);
-        else if(serie.equals("Metalloids"))
-            colorB = new Color(255,80,80);
-        else if(serie.equals("Metals"))
-            colorB = new Color(255,50,0);
-        else if(serie.equals("Alkali Earth Metals"))
-            colorB = new Color(102,150,255);
-        else if(serie.equals("Alkali Metals"))
-            colorB = new Color(130,130,255);
-        else if(serie.equals("Transition metals"))
-            colorB = new Color(255,255,110);
-        else if(serie.equals("Lanthanides"))
-            colorB = new Color(255,255,150);
-        else if(serie.equals("Actinides"))
-            colorB = new Color(255,255,200);
+        String type = PeriodicTable.getChemicalSeries(elementS);
+        if (type != null) {
+            switch (type) {
+                case "Noble Gasses":
+                    colorB = new Color(255, 153, 255);
+                    break;
+                case "Halogens":
+                    colorB = new Color(255, 153, 153);
+                    break;
+                case "Nonmetals":
+                    colorB = new Color(255, 152, 90);
+                    break;
+                case "Metalloids":
+                    colorB = new Color(255, 80, 80);
+                    break;
+                case "Metals":
+                    colorB = new Color(255, 50, 0);
+                    break;
+                case "Alkali Earth Metals":
+                    colorB = new Color(102, 150, 255);
+                    break;
+                case "Alkali Metals":
+                    colorB = new Color(130, 130, 255);
+                    break;
+                case "Transition metals":
+                    colorB = new Color(255, 255, 110);
+                    break;
+                case "Lanthanides":
+                    colorB = new Color(255, 255, 150);
+                    break;
+                case "Actinides":
+                    colorB = new Color(255, 255, 200);
+                    break;
+            }
+        }
 
         JButton button = new ElementButton(elementS, new ElementMouseAction(), elementS, colorF);
         button.setBackground(colorB);
@@ -809,25 +851,25 @@ public class PeriodicTablePanel extends JPanel
             result = GT.get("Roentgenium");
             break;
         case 112:
-            result = GT.get("Ununbium");
+            result = GT.get("Copernicium");
             break;
         case 113:
-            result = GT.get("Ununtrium");
+            result = GT.get("Nihonium");
             break;
         case 114:
-            result = GT.get("Ununquadium");
+            result = GT.get("Flerovium");
             break;
         case 115:
-            result = GT.get("Ununpentium");
+            result = GT.get("Moscovium");
             break;
         case 116:
-            result = GT.get("Ununhexium");
+            result = GT.get("Livermorium");
             break;
         case 117:
-            result = GT.get("Ununseptium");
+            result = GT.get("Tennessine");
             break;
         case 118:
-            result = GT.get("Ununoctium");
+            result = GT.get("Oganesson");
             break;
 
         default:
@@ -844,26 +886,26 @@ public class PeriodicTablePanel extends JPanel
      * @param  chemical serie to translate
      * @return the String to show
      */
-    public String serieTranslator(String serie) {
-        if(serie.equals("Noble Gasses"))
+    public String serieTranslator(String type) {
+        if("Noble Gasses".equals(type))
             return GT.get("Noble Gases");
-        else if(serie.equals("Halogens"))
+        else if("Halogens".equals(type))
             return GT.get("Halogens"); 
-        else if(serie.equals("Nonmetals"))
+        else if("Nonmetals".equals(type))
             return GT.get("Nonmetals");
-        else if(serie.equals("Metalloids"))
+        else if("Metalloids".equals(type))
             return GT.get("Metalloids");
-        else if(serie.equals("Metals"))
+        else if("Metals".equals(type))
             return GT.get("Metals");
-        else if(serie.equals("Alkali Earth Metals"))
+        else if("Alkali Earth Metals".equals(type))
             return GT.get("Alkali Earth Metals");
-        else if(serie.equals("Alkali Metals"))
+        else if("Alkali Metals".equals(type))
             return GT.get("Alkali Metals");
-        else if(serie.equals("Transition metals"))
+        else if("Transition metals".equals(type))
             return GT.get("Transition metals");
-        else if(serie.equals("Lanthanides"))
+        else if("Lanthanides".equals(type))
             return GT.get("Lanthanides");
-        else if(serie.equals("Actinides"))
+        else if("Actinides".equals(type))
             return GT.get("Actinides");
         else
             return GT.get("Unknown");
@@ -1001,13 +1043,12 @@ public class PeriodicTablePanel extends JPanel
         JPanel pan = new JPanel();
         pan.setLayout(new BorderLayout());
         Color color = new Color(255,255,255);
-        Point origin = new Point(120, 20);   
         JLabel label;
         if(elementSymbol != null){
             Integer group = PeriodicTable.getGroup(elementSymbol);
             label = new JLabel("<html><FONT SIZE=+2>"
                     +elementTranslator(PeriodicTable.getAtomicNumber(elementSymbol))+" ("+elementSymbol+")</FONT><br> "
-                    +GT.get("Atomic number")+" "+PeriodicTable.getAtomicNumber(elementSymbol)
+                    +GT.get("Atomic No.")+" "+PeriodicTable.getAtomicNumber(elementSymbol)
                     + (group!=null ? ", "+GT.get("Group")+" "+group : "")
                     +", "+GT.get("Period")+" "+ PeriodicTable.getPeriod(elementSymbol)+"</html>");
             label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -1037,7 +1078,10 @@ public class PeriodicTablePanel extends JPanel
         pan.setBackground(color);
         pan.setForeground(Color.black);
         pan.setBorder(BorderFactory.createLineBorder(Color.black));
-        pan.setBounds(origin.x, origin.y, 255, 160);
+        Dimension d = getSize();
+        int boxWidth = (int)Math.ceil((d.width-11) / 19f);
+        int boxHeight = (int)Math.ceil((d.height-11) / 12f);
+        pan.setBounds(4*boxWidth, (int)(0.5*boxHeight), 8*boxWidth, (int)(4*boxHeight));
         return pan;
     }
 }
