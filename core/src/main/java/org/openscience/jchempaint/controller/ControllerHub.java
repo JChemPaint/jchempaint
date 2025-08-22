@@ -1628,20 +1628,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         //then we shift the molecules not to overlap
         Rectangle2D usedBounds = null;
         if(chemModel.getMoleculeSet()!=null){
-            for (IAtomContainer container :
-                AtomContainerSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet())) {
+			List<IAtomContainer> containers = AtomContainerSetManipulator.getAllAtomContainers(chemModel.getMoleculeSet());
+			for (IAtomContainer container : containers) {
                 // now move it so that they don't overlap
                 Rectangle2D bounds = BoundsCalculator.calculateBounds(container);
                 if (usedBounds != null) {
                     double bondLength = Renderer.calculateBondLength(container);
                     Rectangle2D shiftedBounds =
-                        GeometryTools.shiftContainer(
-                                container, bounds, usedBounds, bondLength);
+                        GeometryTools.shiftContainer(container, bounds, usedBounds, bondLength);
                     usedBounds = usedBounds.createUnion(shiftedBounds);
                 } else {
-                    usedBounds = bounds;
+					usedBounds = bounds;
                 }
             }
+
+			if (usedBounds != null) {
+				double BOND_LENGTH = 1.5;
+				for (IAtomContainer container : containers) {
+					GeometryUtil.translate2D(container,
+											 -(usedBounds.getX() - BOND_LENGTH),
+											 -usedBounds.getY() - usedBounds.getHeight() - BOND_LENGTH);
+				}
+			}
+
         }
         //and the products/reactants in every reaction
         if(chemModel.getReactionSet()!=null){
