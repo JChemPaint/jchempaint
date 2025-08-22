@@ -160,24 +160,22 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(LineElement line) {
         Stroke savedStroke = this.g.getStroke();
         
-        int w = (int) (line.width * this.transform.getScaleX());
-        if (w < 1) {
-            w=1;
-        }
+        double w = line.width * this.transform.getScaleX();
+//        if (w <= 1f) w = 1; // mine stoke of 1
+        int key = (int)(10*w);
 
-        if (strokeMap.containsKey(w)) {
-            this.g.setStroke(strokeMap.get(w));
+        if (strokeMap.containsKey(key)) {
+            this.g.setStroke(strokeMap.get(key));
         } else {
-            BasicStroke stroke = new BasicStroke(w, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            BasicStroke stroke = new BasicStroke((float)w, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
             this.g.setStroke(stroke);
-            strokeMap.put(w, stroke);
+            strokeMap.put(key, stroke);
         }
         
         this.g.setColor(line.color);
         double[] a = this.transformPointD(line.firstPointX, line.firstPointY);
         double[] b = this.transformPointD(line.secondPointX, line.secondPointY);
         this.g.draw(new Line2D.Double(a[0], a[1], b[0], b[1]));
-        
         this.g.setStroke(savedStroke);
     }
 
@@ -646,6 +644,7 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         this.rendererModel = rendererModel;
         if (rendererModel.getUseAntiAliasing()) {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             
 //            g.setStroke(new BasicStroke((int)rendererModel.getBondWidth()));
         }
