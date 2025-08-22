@@ -40,6 +40,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Display;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -97,6 +98,7 @@ import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1155,9 +1157,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// special case : reset stereo bonds
 		if (bond.getStereo() != IBond.Stereo.NONE ||
-			bond.getDisplay() != IBond.Display.Solid) {
+			bond.getDisplay() != Display.Solid) {
 			bond.setStereo(IBond.Stereo.NONE);
-			bond.setDisplay(IBond.Display.Solid);
+			bond.setDisplay(Display.Solid);
 			bond.setOrder(order);
 		} else {
 			if (order == IBond.Order.SINGLE) {
@@ -1368,19 +1370,30 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public void changeBond(IBond bond, Order order, Stereo stereo) {
-		changeBonds(Collections.singletonList(bond), order, stereo);
+    public void changeBond(IBond bond, Order order, Stereo stereo) {
+        changeBonds(Collections.singletonList(bond), order, stereo, null);
+    }
+
+	public void changeBond(IBond bond, Order order, Stereo stereo, Display disp) {
+		changeBonds(Collections.singletonList(bond), order, stereo, disp);
 	}
 
-	public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo) {
+    public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo) {
+        changeBonds(bonds, order, stereo, null);
+    }
+
+	public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo, Display disp) {
 
 		Map<IBond, Order[]> orderChanges = new LinkedHashMap<>();
 		Map<IBond, Stereo[]> stereoChanges = new LinkedHashMap<>();
+		Map<IBond, Display[]> displayChanges = new LinkedHashMap<>();
 
 		for (IBond bond : bonds) {
 			// ignore unchanged
 			if (bond.getOrder().equals(order) &&
-				bond.getStereo().equals(stereo) && stereo == Stereo.NONE) {
+				bond.getStereo().equals(stereo) &&
+                stereo == Stereo.NONE &&
+                (bond.getDisplay().equals(disp) || disp == null)) {
 				continue;
 			}
 
@@ -1397,12 +1410,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
 				if (bond.getStereo() != stereo)
 					stereoChanges.put(bond, new Stereo[]{stereo, bond.getStereo()});
+                else if (bond.getDisplay() != disp)
+                    displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
 			}
 		}
 
 
 		AdjustBondOrdersEdit edit = new AdjustBondOrdersEdit(orderChanges,
 															 stereoChanges,
+                                                             displayChanges,
 															 "Set bond order/stereo",
 															 this);
 		edit.redo(); // make the changes
