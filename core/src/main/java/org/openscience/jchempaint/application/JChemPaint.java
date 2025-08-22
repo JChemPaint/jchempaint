@@ -237,12 +237,8 @@ public class JChemPaint {
         }
     }
 
-    public static JChemPaintPanel showInstance(IChemModel chemModel,
+    public static JChemPaintPanel showInstance(JFrame f, IChemModel chemModel,
             String title, boolean debug) {
-        JFrame f = new JFrame(title + " - JChemPaint");
-        chemModel.setID(title);
-        f.addWindowListener(new JChemPaintPanel.AppCloser());
-        f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -261,6 +257,14 @@ public class JChemPaint {
         f.setVisible(true);
 		frameList.add(f);
         return p;
+    }
+
+    public static JChemPaintPanel showInstance(IChemModel chemModel, String title, boolean debug) {
+        JFrame f = new JFrame(title + " - JChemPaint");
+        chemModel.setID(title);
+        f.addWindowListener(new JChemPaintPanel.AppCloser());
+        f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        return showInstance(f, chemModel, title, debug);
     }
 
     
