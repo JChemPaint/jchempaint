@@ -30,12 +30,14 @@ package org.openscience.jchempaint.action;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import javax.swing.JFrame;
 
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
@@ -82,6 +84,14 @@ public class CreateSmilesAction extends JCPAction
 	public static String getSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
 		return getChiralSmiles(model);
 	}
+
+    public static String getMolfile(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
+        StringWriter sw = new StringWriter();
+        try (SDFWriter sdfw = new SDFWriter(sw)) {
+            sdfw.write(model);
+        }
+        return sw.toString();
+    }
 
     /**
      * @deprecated no such thing as chiral SMILES use {@link #getSmiles} for 'a' SMILES.
