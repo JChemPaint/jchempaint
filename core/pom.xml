@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-depict</artifactId>
-            <version>2.11-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
