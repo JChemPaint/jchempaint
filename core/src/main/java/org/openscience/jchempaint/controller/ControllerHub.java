@@ -27,7 +27,6 @@ package org.openscience.jchempaint.controller;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.config.XMLIsotopeFactory;
@@ -44,7 +43,6 @@ import org.openscience.cdk.interfaces.IBond.Display;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -98,7 +96,6 @@ import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1382,6 +1379,23 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         changeBonds(bonds, order, stereo, null);
     }
 
+    private static boolean atWideEndOfAnotherWedge(IAtom atom) {
+        for (IBond bond : atom.bonds()) {
+            switch (bond.getDisplay()) {
+                case Bold:
+                case Hash:
+                    return true;
+                case WedgeBegin:
+                case WedgedHashBegin:
+                    return bond.getEnd().equals(atom);
+                case WedgeEnd:
+                case WedgedHashEnd:
+                    return bond.getBegin().equals(atom);
+            }
+        }
+        return false;
+    }
+
 	public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo, Display disp) {
 
 		Map<IBond, Order[]> orderChanges = new LinkedHashMap<>();
@@ -1408,13 +1422,40 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			} else {
 				if (bond.getOrder() != order)
 					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
-				if (bond.getStereo() != stereo)
-					stereoChanges.put(bond, new Stereo[]{stereo, bond.getStereo()});
-                else if (bond.getDisplay() != disp)
+				if (bond.getStereo() != stereo) {
+
+                    // try to guess which way a wedge should be placed.
+                    boolean flipped = false;
+                    if (bond.getStereo() == Stereo.NONE) {
+                        IAtom begin = bond.getBegin();
+                        IAtom end = bond.getEnd();
+
+                        // end has more bonds => more likely tetrahedral, or
+                        // we allready have a wide of a wedge next to us
+                        if (end.getBondCount() > begin.getBondCount() ||
+                            end.getBondCount() == begin.getBondCount() && atWideEndOfAnotherWedge(begin))
+                            flipped = true;
+                    }
+
+                    System.err.println(flipped);
+
+                    switch (stereo) {
+                        case UP:
+                            stereoChanges.put(bond, new Stereo[]{flipped ? Stereo.UP_INVERTED : Stereo.UP, bond.getStereo()});
+                            break;
+                        case DOWN:
+                            stereoChanges.put(bond, new Stereo[]{flipped ? Stereo.DOWN_INVERTED : Stereo.DOWN, bond.getStereo()});
+                            break;
+                        default:
+                            stereoChanges.put(bond, new Stereo[]{stereo, bond.getStereo()});
+                            break;
+                    }
+                }
+                else if (bond.getDisplay() != disp) {
                     displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
+                }
 			}
 		}
-
 
 		AdjustBondOrdersEdit edit = new AdjustBondOrdersEdit(orderChanges,
 															 stereoChanges,
