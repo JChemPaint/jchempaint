@@ -23,6 +23,7 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +46,8 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
     
     private Map<IBond, IBond.Order[]> changedBondOrders;
     private Map<IBond, IBond.Stereo[]> changedBondsStereo;
-    
+    private Map<IBond, IBond.Display[]> changedBondsDisplay;
+
     private String type;
     
     private IChemModelRelay chemModelRelay=null;
@@ -55,14 +57,26 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
 	 *            A HashMap containing the changed atoms as key and an Array
 	 *            with the former and the changed bondOrder
 	 */
-	public AdjustBondOrdersEdit(Map<IBond, IBond.Order[]> changedBondsOrder,
-			Map<IBond, IBond.Stereo[]> changedBondsStereo, String type,
+	public AdjustBondOrdersEdit(
+            Map<IBond, IBond.Order[]> changedBondsOrder,
+			Map<IBond, IBond.Stereo[]> changedBondsStereo,
+            Map<IBond, IBond.Display[]> changedBondsDisplay,
+            String type,
 			IChemModelRelay chemModelRelay) {
 		this.changedBondOrders = changedBondsOrder;
 		this.changedBondsStereo = changedBondsStereo;
+		this.changedBondsDisplay = changedBondsDisplay;
 		this.type=type;
 		this.chemModelRelay=chemModelRelay;
 	}
+
+    public AdjustBondOrdersEdit(
+            Map<IBond, IBond.Order[]> changedBondsOrder,
+            Map<IBond, IBond.Stereo[]> changedBondsStereo,
+            String type,
+            IChemModelRelay chemModelRelay) {
+        this(changedBondsOrder, changedBondsStereo, Collections.emptyMap(), type, chemModelRelay);
+    }
 
 	public void redo() {
 		for (Map.Entry<IBond, IBond.Order[]> e : changedBondOrders.entrySet()) {
@@ -75,6 +89,11 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
 			IBond.Stereo[] bondStereos = e.getValue();
 			bond.setStereo(bondStereos[0]);
 		}
+        for (Map.Entry<IBond, IBond.Display[]> e : changedBondsDisplay.entrySet()) {
+            IBond bond = e.getKey();
+            IBond.Display[] bondStereos = e.getValue();
+            bond.setDisplay(bondStereos[0]);
+        }
 		// update once everything has changed
 		for (IBond bond : changedBondOrders.keySet()) {
 			chemModelRelay.updateAtoms(bond);
@@ -93,6 +112,11 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
 			IBond.Stereo[] bondStereos = e.getValue();
 			bond.setStereo(bondStereos[1]);
 		}
+        for (Map.Entry<IBond, IBond.Display[]> e : changedBondsDisplay.entrySet()) {
+            IBond bond = e.getKey();
+            IBond.Display[] bondStereos = e.getValue();
+            bond.setDisplay(bondStereos[1]);
+        }
 		// update once everything has changed
 		for (IBond bond : changedBondOrders.keySet()) {
 			chemModelRelay.updateAtoms(bond);
