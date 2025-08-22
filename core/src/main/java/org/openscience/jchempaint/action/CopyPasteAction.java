@@ -227,9 +227,11 @@ public final class CopyPasteAction extends JCPAction {
             }
         } else if (ERASER.equals(type)) {
             jcpPanel.get2DHub().clearPhantoms();
-            RemoveModule newActiveModule = new RemoveModule(jcpPanel.get2DHub());
-            newActiveModule.setID(type);
-            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+
+            // JWM: we do not "switch" to delete mode, this means you can
+            // quick delete (by key press) and then carry on drawing without
+            // having to switch back to the tool you were using
+
             IAtom atomInRange = null;
             IBond bondInRange = null;
             IChemObject object = getSource(e);
