@@ -518,11 +518,11 @@ msgid "Draw atom numbers"
 msgstr "Atomszámok rajzolása"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:181
-msgid "Explicit carbons"
+msgid "All Carbons Explicit"
 msgstr "Az összes szénatom megjelenítése"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:185
-msgid "Show explicit methyl groups"
+msgid "Terminal Carbons Explicit"
 msgstr "Az összes metilcsoport megjelenítése"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:189
@@ -566,15 +566,15 @@ msgid "Atom size"
 msgstr "Atomméret"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:261
-msgid "Bond width"
+msgid "Bond Width"
 msgstr "Kötés szélessége"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:280
-msgid "Highlight/Select diameter"
+msgid "Highlight Distance"
 msgstr "Átmérő kiválasztása/megjelenítése"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:290
-msgid "Wedge width"
+msgid "Wedge Width"
 msgstr "Ék szélessége"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:305
@@ -2812,7 +2812,7 @@ msgstr "Visszavonás nem lehetséges"
 #~ msgid "Font name"
 #~ msgstr "Betűkészlet neve"
 
-#~ msgid "Choose Color..."
+#~ msgid "Choose"
 #~ msgstr "Szín választás...."
 
 #~ msgid "Oval Compact Atoms"

@@ -483,11 +483,11 @@ msgid "Draw atom numbers"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:181
-msgid "Explicit carbons"
+msgid "All Carbons Explicit"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:185
-msgid "Show explicit methyl groups"
+msgid "Terminal Carbons Explicit"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:189
@@ -531,15 +531,15 @@ msgid "Atom size"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:261
-msgid "Bond width"
+msgid "Bond Width"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:280
-msgid "Highlight/Select diameter"
+msgid "Highlight Distance"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:290
-msgid "Wedge width"
+msgid "Wedge Width"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:305

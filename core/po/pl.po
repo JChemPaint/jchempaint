@@ -512,11 +512,11 @@ msgid "Draw atom numbers"
 msgstr "Dorysuj numery atomów"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:181
-msgid "Explicit carbons"
+msgid "All Carbons Explicit"
 msgstr "Jawne atomy węgla"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:185
-msgid "Show explicit methyl groups"
+msgid "Terminal Carbons Explicit"
 msgstr "Pokaż jawne grupy metylowe"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:189
@@ -561,15 +561,15 @@ msgid "Atom size"
 msgstr "Rozmiar atomu"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:261
-msgid "Bond width"
+msgid "Bond Width"
 msgstr "Szerokość wiązania"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:280
-msgid "Highlight/Select diameter"
+msgid "Highlight Distance"
 msgstr "Podświetl/Wybierz średnicę"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:290
-msgid "Wedge width"
+msgid "Wedge Width"
 msgstr "Szerokość klina"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:305

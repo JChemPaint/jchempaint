@@ -179,7 +179,8 @@ public class JChemPaint {
             }
 
             // Language
-            props.setProperty("General.language", System.getProperty("user.language", "en"));
+            props.setProperty("General.language",
+                              System.getProperty("user.language", "en"));
 
             // Process command line arguments
             String modelFilename = "";

@@ -44,69 +44,73 @@ import javax.swing.JTabbedPane;
 /**
  * Swing class that allows easy building of edit forms.
  *
- * @cdk.svnrev  $Revision: 11740 $
+ * @cdk.svnrev $Revision: 11740 $
  */
 public class FieldTablePanel extends JPanel {
-        
-	private static final long serialVersionUID = -697566299504877020L;
 
-	protected static final int DEF_INSET=10;
+    private static final long serialVersionUID = -697566299504877020L;
 
-	protected int rows;
+    protected static final int DEF_INSET = 10;
+
+    protected int rows;
 
     protected JTabbedPane tabbedPane;
-    
+
     /**
      * Constructor for field table panel.
-     * 
+     *
      * @param hasTabs True=tabs are added, false=fields go directly on here.
      */
     public FieldTablePanel(boolean hasTabs) {
-        if(hasTabs){
+        if (hasTabs) {
             setLayout(new BorderLayout());
             tabbedPane = new JTabbedPane();
             tabbedPane.setName("tabs");
-            add( tabbedPane, BorderLayout.CENTER );
-        }else{
+            add(tabbedPane, BorderLayout.CENTER);
+        } else {
             setLayout(new GridBagLayout());
         }
         rows = 0;
     }
-    
+
     /**
      * Adds a tab.
-     * 
+     *
      * @param header The header for the tab.
      * @return A JPanel, which you will need later to add fields.
      */
-    public JPanel addTab(String header){
+    public JPanel addTab(String header) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        tabbedPane.addTab(header, panel );
+        tabbedPane.addTab(header, panel);
         return panel;
     }
-    
+
     /**
      * Adds a new JComponent to the 2 column table layout. Both
      * elements will be layed out in the same row. For larger
      * <code>JComponent</code>s the addArea() can be used.
-     * 
+     *
      * @param labelText The text in left column.
      * @param component The control to add.
      * @param panel     The panel to add to. This must be either a panel you got from addTab or null if in no tab mode.
-     * @param inset     Spacing distance between objects on the panel 
+     * @param inset     Spacing distance between objects on the panel
      */
     public void addField(String labelText, JComponent component, JPanel panel, int inset) {
-        if(panel==null)
-            panel=this;
+        if (panel == null)
+            panel = this;
         rows++;
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(inset,inset,inset,inset);
         JLabel label = new JLabel("", JLabel.TRAILING);
-        if (labelText != null && labelText.length() > 0) {
+        if (labelText != null && !labelText.isEmpty()) {
             label = new JLabel(labelText + ": ", JLabel.TRAILING);
         }
         label.setLabelFor(component);
+        addField(label, component, panel, inset);
+    }
+
+    public void addField(JLabel label, JComponent component, JPanel panel, int inset) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(inset, inset, inset, inset);
         constraints.gridx = 0;
         constraints.gridy = rows;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -117,12 +121,12 @@ public class FieldTablePanel extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         panel.add(component, constraints);
     }
-    
+
     public void addField(String labelText, JComponent component, JPanel panel) {
-    	addField(labelText, component, panel, 0);
+        addField(labelText, component, panel, 0);
     }
 
-    
+
     /**
      * Adds a new JComponent to the 2 column table layout. The JLabel
      * will be placed in one row, while the <code>JComponent</code>
@@ -150,7 +154,7 @@ public class FieldTablePanel extends JPanel {
         editorScrollPane.setMinimumSize(new Dimension(10, 10));
         add(editorScrollPane, constraints);
     }
-    
+
 }
 
 

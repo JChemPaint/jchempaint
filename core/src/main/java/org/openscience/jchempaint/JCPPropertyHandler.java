@@ -362,6 +362,10 @@ public class JCPPropertyHandler
                                                                  .getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB())))));
         model.setBondWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
                                                                 .getJCPProperties().getProperty("BondWidth")));
+        model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                .getJCPProperties().getProperty("WedgeWidth")));
+        model.setHashSpacing(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                .getJCPProperties().getProperty("HashSpacing")));
         model.setCompactShape(JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
                                          .getProperty("CompactShape").equals("square") ? BasicAtomGenerator.Shape.SQUARE : BasicAtomGenerator.Shape.OVAL);
         model.setIsCompact(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
@@ -387,6 +391,7 @@ public class JCPPropertyHandler
         model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
                                                           .getJCPProperties().getProperty("WedgeWidth")));
         model.setShowReactionBoxes(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                   .getJCPProperties().getProperty("ShowReactionBoxes")));    
+                                                                   .getJCPProperties().getProperty("ShowReactionBoxes")));
+
     }
 }

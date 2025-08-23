@@ -510,11 +510,11 @@ msgid "Draw atom numbers"
 msgstr "Zobrazit atomová čísla"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:181
-msgid "Explicit carbons"
+msgid "All Carbons Explicit"
 msgstr "Zobrazovat uhlíky explicitně"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:185
-msgid "Show explicit methyl groups"
+msgid "Terminal Carbons Explicit"
 msgstr "Zobrazovat metylové skupiny explicitně"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:189
@@ -558,15 +558,15 @@ msgid "Atom size"
 msgstr "Velikost atomu"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:261
-msgid "Bond width"
+msgid "Bond Width"
 msgstr "Šířka vazby"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:280
-msgid "Highlight/Select diameter"
+msgid "Highlight Distance"
 msgstr ""
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:290
-msgid "Wedge width"
+msgid "Wedge Width"
 msgstr "Šířka klínu"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:305
@@ -2798,7 +2798,7 @@ msgstr "Nelze vzít zpět"
 #~ msgid "Font name"
 #~ msgstr "Název písma"
 
-#~ msgid "Choose Color..."
+#~ msgid "Choose"
 #~ msgstr "Vybrat barvu..."
 
 #~ msgid "BACKCOLOR"

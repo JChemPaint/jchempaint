@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.SymbolVisibility;
+import org.openscience.cdk.renderer.color.CDK2DAtomColors;
 import org.openscience.cdk.renderer.color.UniColor;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
@@ -112,7 +113,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
-        IUndoListener {
+                                                   IUndoListener {
 
     private static final Logger log = LogManager.getLogger(RenderPanel.class);
     protected Renderer renderer;
@@ -140,21 +141,24 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private PhantomBondGenerator pbg = new PhantomBondGenerator();
 
     private PhantomArrowGenerator prg = new PhantomArrowGenerator();
-    
+
     private PhantomTextGenerator ptg = new PhantomTextGenerator();
 
     boolean isFirstDrawing = true;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
-            boolean fitToScreen, boolean debug, boolean isViewer, JChemPaintAbstractApplet applet) throws IOException {
+                       boolean fitToScreen, boolean debug, boolean isViewer, JChemPaintAbstractApplet applet) throws IOException {
         this.debug = debug;
         this.setupMachinery(chemModel, fitToScreen, isViewer, applet);
         this.setupPanel(width, height);
         this.fitToScreen = fitToScreen;
         int limit = Integer.parseInt(JCPPropertyHandler.getInstance(true)
-                .getJCPProperties().getProperty("General.UndoStackSize"));
+                                                       .getJCPProperties().getProperty("General.UndoStackSize"));
         undoManager.setLimit(limit);
-        JCPPropertyHandler.getInstance(true).setRenderingPreferences(this.renderer.getRenderer2DModel());
+
+        JCPPropertyHandler.getInstance(true).
+                           setRenderingPreferences(this.renderer.getRenderer2DModel());
+        updateDisplayOptions();
     }
 
     public void setFitToScreen(boolean fitToScreen) {
@@ -162,10 +166,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     public void setZoomWide(boolean zoomWide) {
-        this.zoomWide=zoomWide;
+        this.zoomWide = zoomWide;
     }
 
-    
+
     public IChemModel getChemModel() {
         return this.hub.getIChemModel();
     }
@@ -178,8 +182,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return hub;
     }
 
-    private void setupMachinery(IChemModel chemModel, boolean fitToScreen, 
-            boolean isViewer, JChemPaintAbstractApplet applet)
+    private void setupMachinery(IChemModel chemModel, boolean fitToScreen,
+                                boolean isViewer, JChemPaintAbstractApplet applet)
             throws IOException {
         // setup the Renderer and the controller 'model'
 
@@ -199,7 +203,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         undoredohandler.addIUndoListener(this);
         // connect the Renderer to the Hub
         this.hub = new ControllerHub(controllerModel, renderer, chemModel,
-                this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
+                                     this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
         pbg.setControllerHub(hub);
         pag.setControllerHub(hub);
         prg.setControllerHub(hub);
@@ -212,29 +216,47 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         this.addMouseWheelListener(mouseEventRelay);
         this.isNewChemModel = true;
 
+        updateDisplayOptions();
+    }
+
+    public RendererModel getRendererModel() {
+        return renderer.getRenderer2DModel();
+    }
+
+    public void updateDisplayOptions() {
         // tweaks the standard generator stroke options
         JChemPaintRendererModel model = this.renderer.getRenderer2DModel();
-        if (model.hasParameter(StandardGenerator.StrokeRatio.class)) {
-            model.getParameter(StandardGenerator.StrokeRatio.class)
-                 .setValue(1d);
-        }
+
         if (model.hasParameter(StandardGenerator.Visibility.class)) {
-            model.getParameter(StandardGenerator.Visibility.class)
-                 .setValue(SymbolVisibility.iupacRecommendationsWithoutTerminalCarbon());
+            if (model.getKekuleStructure()) {
+                model.getParameter(StandardGenerator.Visibility.class)
+                     .setValue(SymbolVisibility.all());
+            } else if (model.getShowEndCarbons()) {
+                model.getParameter(StandardGenerator.Visibility.class)
+                     .setValue(SymbolVisibility.iupacRecommendations());
+            } else {
+                model.getParameter(StandardGenerator.Visibility.class)
+                     .setValue(SymbolVisibility.iupacRecommendationsWithoutTerminalCarbon());
+            }
+        }
+        if (model.hasParameter(StandardGenerator.DelocalisedDonutsBondDisplay.class)) {
+            model.getParameter(StandardGenerator.DelocalisedDonutsBondDisplay.class)
+                 .setValue(model.getShowAromaticity());
         }
         if (model.hasParameter(StandardGenerator.AtomColor.class)) {
-            model.getParameter(StandardGenerator.AtomColor.class)
-                 .setValue(new UniColor(Color.BLACK));
+            if (model.getColorAtomsByType())
+                model.getParameter(StandardGenerator.AtomColor.class)
+                     .setValue(new CDK2DAtomColors());
+            else
+                model.getParameter(StandardGenerator.AtomColor.class)
+                     .setValue(new UniColor(Color.BLACK));
         }
         if (model.hasParameter(RendererModel.SelectionColor.class)) {
             model.getParameter(RendererModel.SelectionColor.class)
-                 .setValue(Color.BLACK);
-        }
-        if (model.hasParameter(BasicSceneGenerator.ZoomFactor.class)) {
-            model.getParameter(BasicSceneGenerator.ZoomFactor.class)
-                 .setValue(0.8);
+                 .setValue(null);
         }
     }
+
 
     private List<IReactionGenerator> makeReactionGenerators() {
         List<IReactionGenerator> generators = new ArrayList<IReactionGenerator>();
@@ -275,7 +297,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             generators.add(new ExternalHighlightAtomGenerator());
             generators.add(new ExternalHighlightBondGenerator());
         } else {
-            generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 22)));
+            generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 14)));
         }
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
@@ -304,6 +326,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     /**
      * Render the entire sketch as an SVG string, currently this uses the CDK
      * depiction generator as we don't want to get the controls.
+     *
      * @return the SVG
      */
     String toSVG() {
@@ -311,7 +334,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         for (IAtomContainer mol : hub.getChemModel().getMoleculeSet())
             combined.add(mol);
         try {
-            return new DepictionGenerator().depict(combined).toSvgStr();
+            return new DepictionGenerator().withParams(renderer.getRenderer2DModel())
+                                           .depict(combined)
+                                           .toSvgStr();
         } catch (CDKException e) {
             return "<svg></svg>";
         }
@@ -320,6 +345,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     /**
      * Render the entire sketch as a PDF (byte[]), currently this uses the CDK
      * depiction generator as we don't want to get the controls.
+     *
      * @return the PDF
      */
     byte[] toPDF() {
@@ -327,7 +353,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         for (IAtomContainer mol : hub.getChemModel().getMoleculeSet())
             combined.add(mol);
         try {
-            return new DepictionGenerator().depict(combined).toPdf();
+            return new DepictionGenerator().withParams(renderer.getRenderer2DModel())
+                                           .depict(combined).toPdf();
         } catch (CDKException e) {
             return new byte[0];
         }
@@ -338,11 +365,11 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (isValidChemModel(chemModel)) {
             Rectangle2D modelBounds = Renderer.calculateBounds(chemModel);
             Rectangle bounds = renderer.calculateScreenBounds(modelBounds);
-            bounds.height *=1.1;
-            bounds.width *=1.1;
+            bounds.height *= 1.1;
+            bounds.width *= 1.1;
             Image image = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getScreenDevices()[0].getDefaultConfiguration()
-                    .createCompatibleImage(bounds.width, bounds.height);
+                                             .getScreenDevices()[0].getDefaultConfiguration()
+                                                                   .createCompatibleImage(bounds.width, bounds.height);
             Graphics2D g = (Graphics2D) image.getGraphics();
             takeSnapshot(g, chemModel, bounds, modelBounds);
             return image;
@@ -359,7 +386,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     public void takeSnapshot(Graphics2D g, IChemModel chemModel, Rectangle s,
-            Rectangle2D m) {
+                             Rectangle2D m) {
         g.setColor(renderer.getRenderer2DModel().getBackColor());
         g.fillRect(0, 0, s.width, s.height);
 
@@ -371,8 +398,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     protected boolean isValidChemModel(IChemModel chemModel) {
         return chemModel != null
-                && (chemModel.getMoleculeSet() != null || chemModel
-                        .getReactionSet() != null);
+               && (chemModel.getMoleculeSet() != null || chemModel
+                                                                 .getReactionSet() != null);
     }
 
     public void paint(Graphics g) {
@@ -396,13 +423,13 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
              * its parent.
              */
             Rectangle screen = new Rectangle(0, 0, getParent().getWidth() - 20,
-                    getParent().getHeight() - 20);
+                                             getParent().getHeight() - 20);
 
-            if (renderer.getRenderer2DModel().isFitToScreen()||zoomWide) {
+            if (renderer.getRenderer2DModel().isFitToScreen() || zoomWide) {
                 this.paintChemModelFitToScreen(chemModel, g2, screen);
-                if(zoomWide)
-                    zoomWide=false;
-                
+                if (zoomWide)
+                    zoomWide = false;
+
             } else {
                 this.paintChemModel(chemModel, g2, screen);
             }
@@ -421,14 +448,14 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     /**
      * Paint the chem model not fit-to-screen
-     * 
+     *
      * @param chemModel
      * @param g
      * @param screen
      */
     private void paintChemModel(
 
-    IChemModel chemModel, Graphics2D g, Rectangle screen) {
+            IChemModel chemModel, Graphics2D g, Rectangle screen) {
 
         if (isNewChemModel) {
             renderer.setup(chemModel, screen);
@@ -452,7 +479,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     private void paintChemModelFitToScreen(IChemModel chemModel, Graphics2D g,
-            Rectangle screen) {
+                                           Rectangle screen) {
 
         renderer.paintChemModel(chemModel, new AWTDrawVisitor(g), screen, true);
 
@@ -478,7 +505,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     /**
      * Returns one of the status strings at the given position
-     * 
+     *
      * @param position
      * @return the current status
      */
@@ -514,7 +541,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             // depict brutto formula of the selected molecule or part of
             // molecule
             IChemObjectSelection selection = renderer.getRenderer2DModel()
-                    .getSelection();
+                                                     .getSelection();
 
             if (selection != null) {
                 IAtomContainer ac = selection.getConnectedAtomContainer();
@@ -527,15 +554,15 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                     }
                     String formula = MolecularFormulaManipulator
                             .getHTML(MolecularFormulaManipulator
-                                    .getMolecularFormula(ac), true, false);
+                                             .getMolecularFormula(ac), true, false);
                     status = makeStatusBarString(formula, implicitHs);
                 }
             }
         } else if (position == 3) {
             status = GT.get("Zoomfactor")
-                    + ": "
-                    + NumberFormat.getPercentInstance().format(
-                            renderer.getRenderer2DModel().getZoomFactor());
+                     + ": "
+                     + NumberFormat.getPercentInstance().format(
+                    renderer.getRenderer2DModel().getZoomFactor());
         }
         return status;
     }
@@ -564,9 +591,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
     public Rectangle shift(Rectangle screenBounds, Rectangle diagramBounds) {
 
-    	final int LABEL_MARGIN=50; // prevents text or labels from dropping off screen
-        int screenMaxX = screenBounds.x + screenBounds.width-LABEL_MARGIN;
-        int screenMaxY = screenBounds.y + screenBounds.height-LABEL_MARGIN;
+        final int LABEL_MARGIN = 50; // prevents text or labels from dropping off screen
+        int screenMaxX = screenBounds.x + screenBounds.width - LABEL_MARGIN;
+        int screenMaxY = screenBounds.y + screenBounds.height - LABEL_MARGIN;
         int diagramMaxX = diagramBounds.x + diagramBounds.width;
         int diagramMaxY = diagramBounds.y + diagramBounds.height;
         int leftOverlap = screenBounds.x - diagramBounds.x;
@@ -598,9 +625,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         if (dx != 0 || dy != 0) {
             // System.out.println("shifting "+dx+" "+dy);
             this.renderer.shiftDrawCenter(dx, dy);
-        }
-
-        else {
+        } else {
             int dxShiftBack = 0, dyShiftBack = 0;
             if (diagramBounds.x > screenMaxX / 3) {
                 /* prevent drifting off horizontally */

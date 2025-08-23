@@ -37,6 +37,7 @@ import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.RingGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 import javax.vecmath.Point2d;
@@ -167,14 +168,25 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     public double getWedgeWidth() {
-        if (hasParameter(BasicBondGenerator.WedgeWidth.class))
-            return get(BasicBondGenerator.WedgeWidth.class);
-        return new BasicBondGenerator.WedgeWidth().getDefault();
+        if (hasParameter(StandardGenerator.WedgeRatio.class))
+            return get(StandardGenerator.WedgeRatio.class);
+        return new StandardGenerator.WedgeRatio().getDefault();
     }
 
     public void setWedgeWidth(double wedgeWidth) {
-        if (hasParameter(BasicBondGenerator.WedgeWidth.class))
-            set(BasicBondGenerator.WedgeWidth.class, wedgeWidth);
+        if (hasParameter(StandardGenerator.WedgeRatio.class))
+            set(StandardGenerator.WedgeRatio.class, wedgeWidth);
+    }
+
+    public double getHashSpacing() {
+        if (hasParameter(StandardGenerator.HashSpacing.class))
+            return get(StandardGenerator.HashSpacing.class);
+        return new StandardGenerator.HashSpacing().getDefault();
+    }
+
+    public void setHashSpacing(double wedgeWidth) {
+        if (hasParameter(StandardGenerator.HashSpacing.class))
+            set(StandardGenerator.HashSpacing.class, wedgeWidth);
     }
 
     public double getRingProportion() {
@@ -351,9 +363,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the thickness of a bond line
      */
     public double getBondWidth() {
-        if (hasParameter(BasicBondGenerator.BondWidth.class))
-            return get(BasicBondGenerator.BondWidth.class);
-        return new BasicBondGenerator.BondWidth().getDefault();
+        if (hasParameter(StandardGenerator.StrokeRatio.class))
+            return get(StandardGenerator.StrokeRatio.class);
+        return new StandardGenerator.StrokeRatio().getDefault();
     }
 
     /**
@@ -363,8 +375,31 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      *            the thickness of a bond line
      */
     public void setBondWidth(double bondWidth) {
-        if (hasParameter(BasicBondGenerator.BondWidth.class))
-            set(BasicBondGenerator.BondWidth.class, bondWidth);
+        if (hasParameter(StandardGenerator.StrokeRatio.class))
+            set(StandardGenerator.StrokeRatio.class, bondWidth);
+    }
+
+
+    /**
+     * Returns the thickness of a bond line.
+     *
+     * @return the thickness of a bond line
+     */
+    public double getBondSeparation() {
+        if (hasParameter(StandardGenerator.BondSeparation.class))
+            return get(StandardGenerator.BondSeparation.class);
+        return new StandardGenerator.BondSeparation().getDefault();
+    }
+
+    /**
+     * Sets the thickness of a bond line.
+     *
+     * @param bondSeparation
+     *            the thickness of a bond line
+     */
+    public void setBondSeparation(double bondSeparation) {
+        if (hasParameter(StandardGenerator.BondSeparation.class))
+            set(StandardGenerator.BondSeparation.class, bondSeparation);
     }
 
     /**

@@ -507,11 +507,11 @@ msgid "Draw atom numbers"
 msgstr "วาดเลขอะตอม"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:181
-msgid "Explicit carbons"
+msgid "All Carbons Explicit"
 msgstr "คาร์บอนแบบแยกกัน"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:185
-msgid "Show explicit methyl groups"
+msgid "Terminal Carbons Explicit"
 msgstr "แสดงหมู่เมธิลแบบแยกกัน"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:189
@@ -555,15 +555,15 @@ msgid "Atom size"
 msgstr "ขนาดอะตอม"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:261
-msgid "Bond width"
+msgid "Bond Width"
 msgstr "ความกว้างพันธะ"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:280
-msgid "Highlight/Select diameter"
+msgid "Highlight Distance"
 msgstr "เฉดสี/เลือกเส้นผ่าศูนย์กลาง"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:290
-msgid "Wedge width"
+msgid "Wedge Width"
 msgstr "ความกว้างลิ่ม"
 
 #: src/main/org/openscience/jchempaint/dialog/editor/PropertiesModelEditor.java:305
@@ -2792,7 +2792,7 @@ msgstr "ไม่มีการเลิกทำ ที่เป็นไป�
 #~ msgid "Font name"
 #~ msgstr "ชื่อแบบอักษร"
 
-#~ msgid "Choose Color..."
+#~ msgid "Choose"
 #~ msgstr "เลือกสี..."
 
 #~ msgid "General Settings"

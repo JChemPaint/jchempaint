@@ -55,6 +55,8 @@ import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -160,7 +162,8 @@ public final class CopyPasteAction extends JCPAction {
                     || !container.contains(bond.getAtom(1)))
                     container.removeBond(bond);
             if (container.getAtomCount() > 0) {
-                JcpSelection jcpselection = new JcpSelection(container.clone());
+                JcpSelection jcpselection = new JcpSelection(container.clone(),
+                                                             jcpPanel.getRenderPanel().getRendererModel());
                 clipboard.setContents(jcpselection, null);
             }
         } catch (CloneNotSupportedException ex) {
@@ -673,7 +676,7 @@ public final class CopyPasteAction extends JCPAction {
         String cml;
         File file;
 
-        public JcpSelection(IAtomContainer container) {
+        public JcpSelection(IAtomContainer container, RendererModel model) {
             IAtomContainer tocopy = container.getBuilder()
                                              .newInstance(IAtomContainer.class,
                                                           container);
@@ -696,7 +699,10 @@ public final class CopyPasteAction extends JCPAction {
 
             Depiction depiction = null;
             try {
-                depiction = new DepictionGenerator().depict(container);
+                depiction = new DepictionGenerator().withParams(model)
+                                                    .withParam(BasicSceneGenerator.Margin.class,
+                                                               DepictionGenerator.AUTOMATIC)
+                                                    .depict(container);
                 image = depiction.toImg();
                 pdf = depiction.toPdf();
                 svg = depiction.toSvgStr();
