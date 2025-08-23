@@ -1419,6 +1419,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				(stereo == Stereo.UP || stereo == Stereo.DOWN)) {
 				stereoChanges.put(bond, new Stereo[]{stereo == Stereo.UP ? Stereo.UP_INVERTED : Stereo.DOWN_INVERTED,
 													 bond.getStereo()});
+                displayChanges.put(bond, new Display[]{stereo == Stereo.UP ? Display.WedgeEnd : Display.WedgedHashEnd,
+                                                       bond.getDisplay()});
 			} else {
 				if (bond.getOrder() != order)
 					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
@@ -1437,8 +1439,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                             flipped = true;
                     }
 
-                    System.err.println(flipped);
-
                     switch (stereo) {
                         case UP:
                             stereoChanges.put(bond, new Stereo[]{flipped ? Stereo.UP_INVERTED : Stereo.UP, bond.getStereo()});
@@ -1451,7 +1451,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                             break;
                     }
                 }
-                else if (bond.getDisplay() != disp) {
+
+                if (bond.getDisplay() != disp && disp != null) {
                     displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
                 }
 			}

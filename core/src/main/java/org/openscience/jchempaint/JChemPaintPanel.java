@@ -406,10 +406,10 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case '7': relay.addRing(hgBond, 7, false); break;
                     case '8': relay.addRing(hgBond, 8, false); break;
                     case 'a': relay.addPhenyl(hgBond, false); break;
-                    case 'w': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP); break;
+                    case 'w': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP, IBond.Display.WedgeBegin); break;
                     case 'W': // shift + W
-                    case 'h': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.DOWN); break;
-                    case 'y': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP_OR_DOWN); break;
+                    case 'h': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.DOWN, IBond.Display.WedgedHashBegin); break;
+                    case 'y': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.UP_OR_DOWN, IBond.Display.Wavy); break;
                     case 'b': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.NONE, IBond.Display.Bold); break;
                     default: changed = false;
                 }
