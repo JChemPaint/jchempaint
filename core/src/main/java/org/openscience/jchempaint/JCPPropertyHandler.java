@@ -364,6 +364,8 @@ public class JCPPropertyHandler
                                                                 .getJCPProperties().getProperty("BondWidth")));
         model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
                                                                 .getJCPProperties().getProperty("WedgeWidth")));
+        model.setBondSeparation(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
+                                                                  .getJCPProperties().getProperty("BondSpacing")));
         model.setHashSpacing(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
                                                                 .getJCPProperties().getProperty("HashSpacing")));
         model.setCompactShape(JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
