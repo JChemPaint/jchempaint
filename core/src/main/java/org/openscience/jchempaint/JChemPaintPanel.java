@@ -42,6 +42,7 @@ import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.controller.AddRingModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
 import org.openscience.jchempaint.controller.IChemModelEventRelayHandler;
@@ -55,10 +56,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
+import javax.vecmath.Point2d;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -68,6 +73,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.List;
 
@@ -413,6 +419,23 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case 'b': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.NONE, IBond.Display.Bold); break;
                     default: changed = false;
                 }
+            } else if (!model.getSelection().isFilled()) {
+                changed = true;
+                switch (x) {
+                    case 'a': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, true, "benzene")); break;
+                    case '3': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 3, false, "triangle")); break;
+                    case '4': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 4, false, "square")); break;
+                    case '5': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 5, false, "pentagon")); break;
+                    case '6': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, false, "hexagon"));  break;
+                    case '7': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 7, false, "heptagon"));  break;
+                    case '8': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 8, false, "octagon"));  break;
+                    default: changed = false;
+                    break;
+               }
+               if (changed) {
+                   this.get2DHub().updateView();
+                   changed = false;
+               }
             }
         }
 
@@ -452,8 +475,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.requestFocusInWindow();
     }
 
-
-	/* (non-Javadoc)
+    /* (non-Javadoc)
 	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
 	 */
 	public void modeChanged(IControllerModule newActiveModule) {
@@ -461,12 +483,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         this.requestFocusInWindow();
 	    //we set the old button to inactive colour
         if (this.getLastActionButton() != null ) {
-            this.getLastActionButton().setOpaque(false);
-            this.getLastActionButton().setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+//            this.getLastActionButton().setOpaque(false);
+            this.getLastActionButton().setBackground(UIManager.getColor("Button.background"));
         }
         if (this.lastSecondaryButton != null) {
-            this.lastSecondaryButton.setOpaque(false);
-            this.lastSecondaryButton.setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+//            this.lastSecondaryButton.setOpaque(false);
+            this.getLastActionButton().setBackground(UIManager.getColor("Button.background"));
         }
         String actionid = newActiveModule.getID();
         //this is because move mode does not have a button
@@ -479,7 +501,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         JButton newActionButton=buttons.get(actionid);
         if(newActionButton!=null){
             this.setLastActionButton(newActionButton);
-            newActionButton.setOpaque(true);
+//            newActionButton.setOpaque(true);
+            newActionButton.getBackground();
             newActionButton.setBackground(JCPToolBar.BUTON_ACTIVE_COLOR);
         }
         if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1 && !newActiveModule.getID().equals("reactionArrow")){
@@ -495,7 +518,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             lastSecondaryButton = this.buttons.get("enterR");
         }
         if(JCPToolBar.getToolbarResourceString("lowertoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
-                    this.buttons.get("bondTool").setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
+//                    this.buttons.get("bondTool").setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
             //the newActiveModule should always be an AddAtomModule, but we still check
             /* if(newActiveModule instanceof AddAtomModule){
                 if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.NONE)){
