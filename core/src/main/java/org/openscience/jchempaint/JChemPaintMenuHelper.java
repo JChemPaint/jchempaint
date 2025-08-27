@@ -252,7 +252,7 @@ public class JChemPaintMenuHelper {
             mi = new JMenuItem(translation);
         }
         JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-        URL url = jcpph.getOptionalResource(cmd + JCPAction.imageSuffix);
+        URL url = jcpph.getOptionalImageResource(cmd);
         if (url != null)
         {
             ImageIcon image = new ImageIcon(url);

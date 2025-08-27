@@ -81,9 +81,8 @@ public class AboutDialog extends JDialog {
 
 		try {
 			JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-			URL url = jcpph.getResource("jcplogo" + JCPAction.imageSuffix);
+			URL url = jcpph.getImageResource("jcplogo");
 			ImageIcon icon = new ImageIcon(url);
-			//ImageIcon icon = new ImageIcon(../resources/);
 			label1 = new JLabel(icon);
 		} catch (Exception exception) {
 			logger.error("Cannot add JCP logo: " + exception.getMessage());

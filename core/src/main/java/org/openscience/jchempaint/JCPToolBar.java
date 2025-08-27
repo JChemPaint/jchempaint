@@ -32,6 +32,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
@@ -41,10 +42,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicBorders;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -59,12 +56,34 @@ import org.openscience.jchempaint.controller.SelectSquareModule;
  *  This class makes the JCPToolBar
  *
  */
-public class JCPToolBar
+public class JCPToolBar extends JToolBar
 {
     private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JCPToolBar.class);
-    public static Color BUTTON_INACTIVE_COLOR=Color.WHITE;//new Color(230,230,230);
-    public static Color BUTON_ACTIVE_COLOR=new Color(98, 182, 207, 111);
+    public static Color BUTTON_INACTIVE_COLOR = new Color(230,230,230);
+    public static Color BUTON_ACTIVE_COLOR = new Color(98, 182, 207, 111);
+
+    private final List<JButton> buttons = new ArrayList<>();
+
+    public JCPToolBar(int orientation) {
+        super(orientation);
+    }
+
+    public void registerButton(JButton button) {
+        buttons.add(button);
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if (buttons != null) {
+            JCPPropertyHandler props = JCPPropertyHandler.getInstance(true);
+            for (JButton button : buttons) {
+                button.setIcon(new ImageIcon(props.getImageResource(button.getName())));
+            }
+        }
+    }
+
     /**
      *  Gets the toolbar attribute of the MainContainerPanel object
      *
@@ -73,8 +92,7 @@ public class JCPToolBar
      */
     public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel, String key, int horizontalorvertical, List<String> blacklist)
     {
-        JToolBar maintoolbar=(JToolBar)createToolbar(horizontalorvertical, key, chemPaintPanel, blacklist, 1);
-        return maintoolbar;
+        return createToolbar(horizontalorvertical, key, chemPaintPanel, blacklist, 1);
     }
 
 
@@ -116,11 +134,11 @@ public class JCPToolBar
         /*if(!elementtype){ */
 
         logger.debug("Trying to find resource for key: ", key);
-        URL url = jcpph.getResource(key + JCPAction.imageSuffix);
+        URL url = jcpph.getImageResource(key);
         logger.debug("Trying to find resource: ", url);
         if (url == null)
         {
-            logger.error("Cannot find resource: ", key, JCPAction.imageSuffix);
+            logger.error("Cannot find resource: ", key, JCPAction.imageSuffix + "." + jcpph.getResourceString(JCPAction.iconSet));
             return null;
         }
         ImageIcon image = new ImageIcon(url);
@@ -129,8 +147,7 @@ public class JCPToolBar
             logger.error("Cannot find image: ", url);
             return null;
         }
-        b =
-            new JButton(image)
+        b = new JButton(image)
         {
             private static final long serialVersionUID = 1478990892406874403L;
 
@@ -139,6 +156,7 @@ public class JCPToolBar
                 return 0.5f;
             }
         };
+
         String astr=null;
         if (elementtype)
             astr = jcpph.getResourceString("symbol"+key + JCPAction.actionSuffix);
@@ -187,10 +205,6 @@ public class JCPToolBar
         b.setName(key);
         chemPaintPanel.buttons.put(key, b);
 
-        CompoundBorder compBorder1 = new CompoundBorder(new EmptyBorder(0,0,0,0), new LineBorder(new Color(164,164,164),1, true));
-        Color highlighter = new Color(80,144,166);
-        CompoundBorder compBorder2 = new CompoundBorder(new BasicBorders.RolloverButtonBorder(highlighter, highlighter, highlighter, highlighter),compBorder1);
-        b.setBorder(compBorder2); 
         return b;
     }
 
@@ -205,8 +219,8 @@ public class JCPToolBar
      * building gui.
      * @return Component The created toolbar
      */
-    public static Component createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines) {
-        JToolBar toolbar2 = new JToolBar(orientation);
+    public static JToolBar createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines) {
+        JCPToolBar toolbar2 = new JCPToolBar(orientation);
         String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
         if (resource_string == null) {
             return null;
@@ -244,11 +258,12 @@ public class JCPToolBar
                  * if (toolKeys[i].equals("lasso")) { selectButton = button; }
                  */
                 if (button != null) {
+                    toolbar2.registerButton((button));
                     box.add(button);
                     if (toolKeys[i].equals("bondTool")) {
                         //button.setBackground(Color.GRAY);
-                        button.setBackground(new Color(238, 238, 238));
-                        button.setOpaque(true);
+                        //button.setBackground(new Color(238, 238, 238));
+//                        button.setOpaque(true);
                         chemPaintPanel.setLastActionButton(button);
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
                         activeModule.setID(toolKeys[i]);
@@ -256,9 +271,9 @@ public class JCPToolBar
                     } else if (toolKeys[i].equals("C")) {
                         button.setBackground(Color.GRAY);
                         chemPaintPanel.setLastSecondaryButton(button);
-                        button.setOpaque(true);
+                        //button.setOpaque(true);
                     } else {
-                        button.setBackground(BUTTON_INACTIVE_COLOR);
+//                        button.setBackground(BUTTON_INACTIVE_COLOR);
                     }
                 } else {
                     logger.error("Could not create button" + toolKeys[i]);
