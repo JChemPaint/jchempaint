@@ -29,6 +29,8 @@
  */
 package org.openscience.jchempaint.application;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.util.SystemInfo;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -105,6 +107,7 @@ public class JChemPaint {
 
     @SuppressWarnings("static-access")
     public static void main(String[] args) {
+
         try {
             String vers = System.getProperty("java.version");
             String requiredJVM = "1.5.0";
@@ -167,7 +170,7 @@ public class JChemPaint {
             if (line.hasOption("d")) {
                 debug = true;
             }
-            
+
             // Set Look&Feel
             Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
             try {
@@ -265,6 +268,11 @@ public class JChemPaint {
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        if (SystemInfo.isMacFullWindowContentSupported) {
+            f.getRootPane().putClientProperty("apple.awt.transparentTitleBar", true);
+        }
+
         return showInstance(f, chemModel, title, debug);
     }
 

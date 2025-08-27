@@ -52,21 +52,18 @@ public class JCPAction extends AbstractAction
 
 	private static final long serialVersionUID = -4056416630614934238L;
 	
-	/**
-	 *  Description of the Field
-	 */
 	public final static String actionSuffix = "Action";
-	/**
-	 *  Description of the Field
-	 */
-	public final static String imageSuffix = "Image";
+    public final static String imageSuffix = "Image";
 	public final static String disabled_imageSuffix = "DisabledImage";
-	/**
+
+    public static String iconSet = "IconSet";
+
+    /**
 	 *  Description of the Field
 	 */
 	public final static String TIPSUFFIX = "Tooltip";
-	
-	/**
+
+    /**
 	 *  Description of the Field
 	 */
 	protected static ILoggingTool logger =

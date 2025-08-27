@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
@@ -306,6 +307,22 @@ public class JCPPropertyHandler
 		}
 		return null;
 	}
+
+    public URL getOptionalImageResource(String key)
+    {
+        key += JCPAction.imageSuffix + "." + currentProperties.getProperty(JCPAction.iconSet);
+        ResourceBundle bundle = getResources();
+        if (!bundle.containsKey(key))
+            return null;
+        return this.getClass().getResource(bundle.getString(key));
+    }
+
+    public URL getImageResource(String key) {
+        URL res = getOptionalImageResource(key);
+        if (res == null)
+            logger.error("ResourceString is null for: ", key);
+        return res;
+    }
 
 	/**
 	 * Returns the resource URL from the properties file that follows the given
