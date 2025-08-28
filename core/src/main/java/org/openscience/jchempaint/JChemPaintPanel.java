@@ -42,6 +42,7 @@ import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.controller.AddRingModule;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.IChangeModeListener;
@@ -419,9 +420,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case 'b': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Stereo.NONE, IBond.Display.Bold); break;
                     default: changed = false;
                 }
-            } else if (!model.getSelection().isFilled()) {
+            } else if (model.getSelection() == null || !model.getSelection().isFilled()) {
                 changed = true;
                 switch (x) {
+                    case '1': this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.SINGLE, true, "bondTool")); break;
+                    case '2': this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.DOUBLE, true, "double_bondTool")); break;
                     case 'a': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, true, "benzene")); break;
                     case '3': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 3, false, "triangle")); break;
                     case '4': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 4, false, "square")); break;
