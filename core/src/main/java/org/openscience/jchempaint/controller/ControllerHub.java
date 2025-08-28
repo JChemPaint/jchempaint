@@ -1424,14 +1424,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			} else {
 				if (bond.getOrder() != order)
 					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
+
+                boolean flipped = false;
+
 				if (bond.getStereo() != stereo) {
 
                     // try to guess which way a wedge should be placed.
-                    boolean flipped = false;
+
                     if (bond.getStereo() == Stereo.NONE) {
                         IAtom begin = bond.getBegin();
                         IAtom end = bond.getEnd();
-
                         // end has more bonds => more likely tetrahedral, or
                         // we allready have a wide of a wedge next to us
                         if (end.getBondCount() > begin.getBondCount() ||
@@ -1453,7 +1455,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 }
 
                 if (bond.getDisplay() != disp && disp != null) {
-                    displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
+                    switch (disp) {
+                        case WedgeBegin:
+                            displayChanges.put(bond, new Display[]{flipped ? Display.WedgeEnd : Display.WedgeBegin, bond.getDisplay()});
+                            break;
+                        case WedgedHashBegin:
+                            displayChanges.put(bond, new Display[]{flipped ? Display.WedgedHashEnd : Display.WedgedHashBegin, bond.getDisplay()});
+                            break;
+                        default:
+                            displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
+                            break;
+                    }
                 }
 			}
 		}
