@@ -1913,12 +1913,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 			newAtomContainer.add(ring);
 			updateAtoms(ring, ring.atoms());
+            AtomBondSet abset = handleMerge(ring);
 			structureChanged();
 
 			if (getUndoRedoFactory() != null
 				&& getUndoRedoHandler() != null) {
 				IUndoRedoable undoredo = getUndoRedoFactory()
-						.getAddAtomsAndBondsEdit(getIChemModel(), new AtomBondSet(ring), null,
+						.getAddAtomsAndBondsEdit(getIChemModel(), abset, null,
 												 "Ring" + " " + ringSize, this);
 				getUndoRedoHandler().postEdit(undoredo);
 			}
@@ -1976,13 +1977,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				chemModel.getMoleculeSet().addAtomContainer(newAtomContainer);
 			newAtomContainer.add(ring);
 			updateAtoms(ring, ring.atoms());
-			structureChanged();
+			AtomBondSet abset = handleMerge(ring);
+            structureChanged();
 
-			if (getUndoRedoFactory() != null
+            if (getUndoRedoFactory() != null
 				&& getUndoRedoHandler() != null) {
 				IUndoRedoable undoredo = getUndoRedoFactory()
 						.getAddAtomsAndBondsEdit(getIChemModel(),
-												 new AtomBondSet(ring), null,
+												 abset, null,
 												 "Benzene", this);
 				getUndoRedoHandler().postEdit(undoredo);
 			}
@@ -1996,7 +1998,46 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return ring;
 	}
 
-	// OK
+    private AtomBondSet handleMerge(IRing ring) {
+        Map<IAtom, IAtom> mergeSet = getRenderer().getRenderer2DModel().getMerge();
+        mergeSet.clear();
+
+        //we look if it would merge
+        for (IAtom atom : ring.atoms()) {
+            IAtom closestAtomInRing = getClosestAtom(atom);
+            if (closestAtomInRing != null) {
+                mergeSet.put(atom, closestAtomInRing);
+            }
+        }
+
+        // if we need to merge, we first move the ring so that the merge atoms
+        // are exactly on top of each other - if not doing this, rings get distorted.
+        for (Map.Entry<IAtom, IAtom> e : mergeSet.entrySet()) {
+            IAtom atomOut = e.getKey();
+            IAtom atomRep = e.getValue();
+            atomOut.getPoint2d().sub(atomRep.getPoint2d());
+            Point2d pointSub = new Point2d(atomOut.getPoint2d().x, atomOut.getPoint2d().y);
+            for (IAtom atom : ring.atoms()) {
+                atom.getPoint2d().sub(pointSub);
+            }
+        }
+
+        AtomBondSet abset = new AtomBondSet(ring);
+        for (IAtom atom : mergeSet.keySet()) {
+            abset.remove(atom);
+            for (IBond bond : ring.getConnectedBondsList(atom)) {
+                if (mergeSet.containsKey(bond.getOther(atom)))
+                    abset.remove(bond);
+            }
+        }
+
+        //and perform the merge
+        mergeMolecules(null);
+        getRenderer().getRenderer2DModel().getMerge().clear();
+        return abset;
+    }
+
+    // OK
 	/*
 	 * (non-Javadoc)
 	 *
