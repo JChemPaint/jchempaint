@@ -81,7 +81,7 @@ public class AboutDialog extends JDialog {
 
 		try {
 			JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-			URL url = jcpph.getImageResource("jcplogo");
+			URL url = jcpph.getResource("jcplogo");
 			ImageIcon icon = new ImageIcon(url);
 			label1 = new JLabel(icon);
 		} catch (Exception exception) {

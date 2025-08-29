@@ -141,7 +141,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JComboBox<?> language;
 
     private JComboBox<?> lookAndFeel;
-    private JComboBox<?> iconSet;
+    private JCheckBox fontIcons;
 
     String[] lookAndFeels = {GT.get("System"),
                              "Metal",
@@ -153,10 +153,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                              "FlatDarkLaf",
                              "FlatMacLightLaf",
                              "FlatMacDarkLaf"};
-
-    List<String> iconSets = Arrays.asList("Classic",
-                                          "FlatLight",
-                                          "FlatDark");
 
     private GT.Language[] gtlanguages = GT.getLanguageList();
 
@@ -273,8 +269,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel = new JComboBox<Object>(lookAndFeels);
             addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
-            iconSet = new JComboBox<Object>(iconSets.toArray(new String[0]));
-            addField(GT.get("Icon Set"), iconSet, otherOptionsPanel);
+            fontIcons = new JCheckBox();
+            addField(GT.get("Font Icons (restart required)"), fontIcons, otherOptionsPanel);
             addField("", new JSeparator(), otherOptionsPanel);
         }
 
@@ -326,12 +322,13 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             color.setBackground(currentColor);
         }
         //the general settings
-        Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
+        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
+        Properties props = jcpph.getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("General.askForIOSettings").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
-            iconSet.setSelectedIndex(iconSets.indexOf(props.getProperty(JCPAction.iconSet)));
+            fontIcons.setSelected(jcpph.getBool("useFontIcons", true));
         }
         language.setSelectedItem(props.getProperty("General.language"));
         validate();
@@ -407,66 +404,48 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         }
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
 
-            String newIconSet = iconSets.get(iconSet.getSelectedIndex());
-            boolean iconSetChange = !props.getProperty(JCPAction.iconSet).equals(newIconSet);
+            boolean useFontIcons = fontIcons.isSelected();
 
             String lnfName = "";
             try {
                 switch (lookAndFeel.getSelectedIndex()) {
                     case 0:
                         lnfName = UIManager.getSystemLookAndFeelClassName();
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // System
                     case 1:
                         lnfName = UIManager.getCrossPlatformLookAndFeelClassName();
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // Metal
                     case 2:
                         lnfName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // Nimbus
                     case 3:
                         lnfName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // Motif
                     case 4:
                         lnfName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // GTK
                     case 5:
                         lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-                        if (!iconSetChange && newIconSet.equals("FlatDark"))
-                            newIconSet = "FlatLight";
                         break; // Windows
                     case 6:
                         lnfName = FlatLightLaf.class.getName();
-                        if (!iconSetChange) newIconSet = "FlatLight";
                         break; // FlatLightLaf
                     case 7:
                         lnfName = FlatDarkLaf.class.getName();
-                        if (!iconSetChange) newIconSet = "FlatDark";
                         break; // FlatDarkLaf
                     case 8:
                         lnfName = FlatMacLightLaf.class.getName();
-                        if (!iconSetChange) newIconSet = "FlatLight";
                         break; // FlatMacLightLaf
                     case 9:
                         lnfName = FlatMacDarkLaf.class.getName();
-                        if (!iconSetChange) newIconSet = "FlatDark";
                         break; // FlatMacDarkLaf
                     default:
                         lnfName = "";
                 }
                 UIManager.setLookAndFeel(lnfName);
 
-                iconSet.setSelectedIndex(iconSets.indexOf(newIconSet));
-                props.setProperty(JCPAction.iconSet,
-                                  newIconSet);
+                props.setProperty("useFontIcons",
+                                  Boolean.toString(useFontIcons));
 
                 // when switching UI theme we also set the background color
                 // unless it was changed explicitly

@@ -30,19 +30,30 @@ package org.openscience.jchempaint;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Objects;
+import java.util.Properties;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 
+import com.formdev.flatlaf.util.UIScale;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
@@ -63,25 +74,33 @@ public class JCPToolBar extends JToolBar
     public static Color BUTTON_INACTIVE_COLOR = new Color(230,230,230);
     public static Color BUTON_ACTIVE_COLOR = new Color(98, 182, 207, 111);
 
-    private final List<JButton> buttons = new ArrayList<>();
+    private static final float ICON_FONT_SIZE = 22.0f;
+    private static Font iconFont;
+    private static Properties iconFontMap;
+
+    static {
+        try (InputStream in = JCPToolBar.class.getResourceAsStream("fonts/JCPIcons.ttf")) {
+            if (in != null) iconFont = Font.createFont(Font.TRUETYPE_FONT, in)
+                                           .deriveFont(UIScale.scale(ICON_FONT_SIZE));
+        } catch (FontFormatException | IOException e) {
+            logger.error("Could not load JCP Icon font: " + e.getMessage());
+        }
+        try (InputStream in = JCPToolBar.class.getResourceAsStream("fonts/JCPIcons.map")) {
+            if (in != null) {
+                iconFontMap = new Properties();
+                iconFontMap.load(in);
+            }
+        } catch (IOException e) {
+            logger.error("Could not load JCP Icon font: " + e.getMessage());
+        }
+        if (iconFont == null || iconFontMap == null) {
+            iconFont = null;
+            iconFontMap = null;
+        }
+    }
 
     public JCPToolBar(int orientation) {
         super(orientation);
-    }
-
-    public void registerButton(JButton button) {
-        buttons.add(button);
-    }
-
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        if (buttons != null) {
-            JCPPropertyHandler props = JCPPropertyHandler.getInstance(true);
-            for (JButton button : buttons) {
-                button.setIcon(new ImageIcon(props.getImageResource(button.getName())));
-            }
-        }
     }
 
     /**
@@ -129,42 +148,55 @@ public class JCPToolBar extends JToolBar
     static JButton createToolbarButton(String key, AbstractJChemPaintPanel chemPaintPanel, boolean elementtype)
     {
         JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-        JButton b = null;
+        JButton b;
 
-        /*if(!elementtype){ */
+        String symbol = iconFont != null ? iconFontMap.getProperty(key, null)
+                                         : null;
 
-        logger.debug("Trying to find resource for key: ", key);
-        URL url = jcpph.getImageResource(key);
-        logger.debug("Trying to find resource: ", url);
-        if (url == null)
-        {
-            logger.error("Cannot find resource: ", key, JCPAction.imageSuffix + "." + jcpph.getResourceString(JCPAction.iconSet));
-            return null;
-        }
-        ImageIcon image = new ImageIcon(url);
-        if (image.getImage() == null)
-        {
-            logger.error("Cannot find image: ", url);
-            return null;
-        }
-        b = new JButton(image)
-        {
-            private static final long serialVersionUID = 1478990892406874403L;
-
-            public float getAlignmentY()
-            {
-                return 0.5f;
+        if (symbol != null && jcpph.getBool("useFontIcons", true))  {
+            b = new JButton(symbol);
+            b.setFont(iconFont);
+            b.setVerticalTextPosition(SwingConstants.CENTER);
+            b.setHorizontalTextPosition(SwingConstants.CENTER);
+            b.setMargin(new Insets(2, 0, 0, 0));
+        } else {
+            // image icon
+            logger.debug("Trying to find resource for key: ", key);
+            URL url = jcpph.getResource(key + JCPAction.imageSuffix);
+            logger.debug("Trying to find resource: ", url);
+            if (url == null) {
+                logger.error("Cannot find resource: ", key, JCPAction.imageSuffix);
+                return null;
             }
-        };
+            ImageIcon image = new ImageIcon(url);
+            if (image.getImage() == null) {
+                logger.error("Cannot find image: ", url);
+                return null;
+            }
 
-        String astr=null;
+            b = new JButton(image) {
+                private static final long serialVersionUID = 1478990892406874403L;
+
+                public float getAlignmentY() {
+                    return 0.5f;
+                }
+            };
+
+            URL disabledurl = jcpph.getOptionalResource(key + JCPAction.disabled_imageSuffix);
+            logger.debug("Trying to find resource: ", url);
+            if (disabledurl != null){
+                b.setDisabledIcon(new ImageIcon(disabledurl));
+            }
+            b.setMargin(new Insets(1, 1, 1, 1));
+        }
+
+        String astr = null;
         if (elementtype)
-            astr = jcpph.getResourceString("symbol"+key + JCPAction.actionSuffix);
+            astr = jcpph.getResourceString("symbol" + key + JCPAction.actionSuffix);
         else
             astr = jcpph.getResourceString(key + JCPAction.actionSuffix);
             
-        if (astr == null)
-        {
+        if (astr == null) {
             astr = key;
         }
         JCPAction a = new JCPAction().getAction(chemPaintPanel, astr);
@@ -179,8 +211,7 @@ public class JCPToolBar extends JToolBar
             logger.error("Could not find JCPAction class for:", astr);
             b.setEnabled(false);
         }
-        try
-        {
+        try {
             // TODO: use getMenuTextMaker?
             String tip = JCPMenuTextMaker.getInstance("applet").getText(key + JCPAction.TIPSUFFIX);
             if (tip != null)
@@ -192,16 +223,8 @@ public class JCPToolBar extends JToolBar
             logger.warn("Could not find Tooltip resource for: ", key);
             logger.debug(e);
         }
-        URL disabledurl = jcpph.getOptionalResource(key + JCPAction.disabled_imageSuffix);
-        logger.debug("Trying to find resource: ", url);
-        if (disabledurl != null){
-            ImageIcon disabledimage = new ImageIcon(disabledurl);
-            if (image != null){
-                b.setDisabledIcon(disabledimage);
-            }
-        }
+
         b.setRequestFocusEnabled(false);
-        b.setMargin(new Insets(1, 1, 1, 1));
         b.setName(key);
         chemPaintPanel.buttons.put(key, b);
 
@@ -229,12 +252,12 @@ public class JCPToolBar extends JToolBar
         JButton button = null;
         Box box = null;
         int counter = 0;
-        for (int i = 0; i < toolKeys.length; i++) {
-            if (toolKeys[i].equals("|")) {
+        for (String toolKey : toolKeys) {
+            if (toolKey.equals("|")) {
                 toolbar2.add(box);
                 box = null;
                 toolbar2.addSeparator();
-            } else if (toolKeys[i].equals("-")) {
+            } else if (toolKey.equals("-")) {
                 toolbar2.add(box);
                 if (orientation == SwingConstants.HORIZONTAL) {
                     toolbar2.add(Box.createHorizontalStrut(5));
@@ -242,7 +265,7 @@ public class JCPToolBar extends JToolBar
                     toolbar2.add(Box.createVerticalStrut(5));
                 }
                 counter = 0;
-            } else if (!blacklist.contains(toolKeys[i])) {
+            } else if (!blacklist.contains(toolKey)) {
                 if (counter % lines == 0) {
                     if (box != null) {
                         toolbar2.add(box);
@@ -253,30 +276,23 @@ public class JCPToolBar extends JToolBar
                         box = new Box(BoxLayout.Y_AXIS);
                     }
                 }
-                button = (JButton) createToolbarButton(toolKeys[i], chemPaintPanel, toolKeys[i].length() < 3);
+                button = (JButton) createToolbarButton(toolKey, chemPaintPanel, toolKey.length() < 3);
                 /*
                  * if (toolKeys[i].equals("lasso")) { selectButton = button; }
                  */
                 if (button != null) {
-                    toolbar2.registerButton((button));
                     box.add(button);
-                    if (toolKeys[i].equals("bondTool")) {
-                        //button.setBackground(Color.GRAY);
-                        //button.setBackground(new Color(238, 238, 238));
-//                        button.setOpaque(true);
+                    if (toolKey.equals("bondTool")) {
                         chemPaintPanel.setLastActionButton(button);
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
-                        activeModule.setID(toolKeys[i]);
+                        activeModule.setID(toolKey);
                         chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
-                    } else if (toolKeys[i].equals("C")) {
+                    } else if (toolKey.equals("C")) {
                         button.setBackground(Color.GRAY);
                         chemPaintPanel.setLastSecondaryButton(button);
-                        //button.setOpaque(true);
-                    } else {
-//                        button.setBackground(BUTTON_INACTIVE_COLOR);
                     }
                 } else {
-                    logger.error("Could not create button" + toolKeys[i]);
+                    logger.error("Could not create button" + toolKey);
                 }
                 counter++;
             }

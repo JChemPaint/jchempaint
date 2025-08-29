@@ -56,8 +56,6 @@ public class JCPAction extends AbstractAction
     public final static String imageSuffix = "Image";
 	public final static String disabled_imageSuffix = "DisabledImage";
 
-    public static String iconSet = "IconSet";
-
     /**
 	 *  Description of the Field
 	 */
