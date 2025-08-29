@@ -285,6 +285,11 @@ public class JCPPropertyHandler
 		return resources;
 	}
 
+    public boolean getBool(String key, boolean defaultValue)
+    {
+        String val = currentProperties.getProperty(key);
+        return val != null ? "true".equalsIgnoreCase(val) : defaultValue;
+    }
 
 	/**
 	 * Returns an URL build from the path of this object and another part that is
@@ -307,22 +312,6 @@ public class JCPPropertyHandler
 		}
 		return null;
 	}
-
-    public URL getOptionalImageResource(String key)
-    {
-        key += JCPAction.imageSuffix + "." + currentProperties.getProperty(JCPAction.iconSet);
-        ResourceBundle bundle = getResources();
-        if (!bundle.containsKey(key))
-            return null;
-        return this.getClass().getResource(bundle.getString(key));
-    }
-
-    public URL getImageResource(String key) {
-        URL res = getOptionalImageResource(key);
-        if (res == null)
-            logger.error("ResourceString is null for: ", key);
-        return res;
-    }
 
 	/**
 	 * Returns the resource URL from the properties file that follows the given

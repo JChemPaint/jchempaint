@@ -231,7 +231,8 @@ public class JChemPaintMenuHelper {
             cmd=cmd.substring(0, cmd.length() - 1);
         }
 
-        Properties userProps = JCPPropertyHandler.getInstance(true).getJCPProperties();
+        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
+        Properties userProps = jcpph.getJCPProperties();
         if (userProps.containsKey(cmd + ".value")) {
             isChecked = Boolean.parseBoolean(userProps.getProperty(cmd + ".value"));
         }
@@ -251,21 +252,22 @@ public class JChemPaintMenuHelper {
         else {
             mi = new JMenuItem(translation);
         }
-        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
-        URL url = jcpph.getOptionalImageResource(cmd);
-        if (url != null)
-        {
-            ImageIcon image = new ImageIcon(url);
-            Image img = image.getImage();
-            Image newimg = img.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
-            mi.setIcon(new ImageIcon(newimg));
-            URL disabledurl = jcpph.getOptionalResource(cmd + JCPAction.disabled_imageSuffix);
-            if (disabledurl != null){
-                ImageIcon disabledimage = new ImageIcon(disabledurl);
-                if (image != null){
-                    Image disabledimg = disabledimage.getImage();
-                    Image disablednewimg = disabledimg.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
-                    mi.setDisabledIcon(new ImageIcon(disablednewimg));
+
+        if (!jcpph.getBool("useFontIcons", true)) {
+            URL url = jcpph.getOptionalResource(cmd + JCPAction.imageSuffix);
+            if (url != null) {
+                ImageIcon image = new ImageIcon(url);
+                Image img = image.getImage();
+                Image newimg = img.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+                mi.setIcon(new ImageIcon(newimg));
+                URL disabledurl = jcpph.getOptionalResource(cmd + JCPAction.disabled_imageSuffix);
+                if (disabledurl != null) {
+                    ImageIcon disabledimage = new ImageIcon(disabledurl);
+                    if (image != null) {
+                        Image disabledimg = disabledimage.getImage();
+                        Image disablednewimg = disabledimg.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+                        mi.setDisabledIcon(new ImageIcon(disablednewimg));
+                    }
                 }
             }
         }
