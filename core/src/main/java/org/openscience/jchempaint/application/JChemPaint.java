@@ -253,9 +253,8 @@ public class JChemPaint {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Rectangle bounds = gd.getDefaultConfiguration().getBounds();
 
-        // A4 = 1.414
-        float height = UIScale.scale((float)bounds.getHeight()) / 1.4f;
-        f.setPreferredSize(new Dimension((int)Math.floor(height / 1.414f),
+        float height = UIScale.scale((float)bounds.getHeight()) / 1.2f;
+        f.setPreferredSize(new Dimension((int)Math.floor(height / 1.2f),
                                          (int)Math.floor(height)));
         f.setJMenuBar(p.getJMenuBar());
         f.add(p);

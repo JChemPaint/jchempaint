@@ -34,9 +34,10 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @cdk.module controlbasic @cdk.svnrev $Revision: 13311 $
@@ -72,8 +73,13 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 
 	public void redo() {
 
-		if (containerToAddTo != null && chemModel.getMoleculeSet().getMultiplier(containerToAddTo) == -1) {
+        IAtomContainer connectedContainer = isConnectedToExistingFragment(undoRedoSet);
+
+        if (connectedContainer == null &&
+            containerToAddTo != null &&
+            chemModel.getMoleculeSet().getMultiplier(containerToAddTo) == -1) {
 			chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
+            connectedContainer = containerToAddTo;
 		}
 
 		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
@@ -83,20 +89,33 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		//}
 
 		for (IAtom atom : undoRedoSet.atoms()) {
-			containerToAddTo.addAtom(atom);
+            connectedContainer.addAtom(atom);
 		}
 
 		for (IBond bond : undoRedoSet.bonds()) {
-			containerToAddTo.addBond(bond);
+            connectedContainer.addBond(bond);
 		}
 
 		for (IBond bond : undoRedoSet.bonds()) {
 			chemModelRelay.updateAtoms(bond);
 		}
-
+        for (IAtom atom : undoRedoSet.atoms()) {
+            chemModelRelay.updateAtom(atom);
+        }
 	}
 
-	public void undo() {
+    // JWM: this is really dodgey, we need to ditch ChemModel!
+    private IAtomContainer isConnectedToExistingFragment(AtomBondSet undoRedoSet) {
+        for (IBond bond : undoRedoSet.bonds()) {
+            if (!undoRedoSet.contains(bond.getBegin()))
+                return ChemModelManipulator.getRelevantAtomContainer(chemModel, bond.getBegin());
+            if (!undoRedoSet.contains(bond.getEnd()))
+                return ChemModelManipulator.getRelevantAtomContainer(chemModel, bond.getEnd());
+        }
+        return null;
+    }
+
+    public void undo() {
 
 		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
 		//if(removedAtomContainer!=null){
