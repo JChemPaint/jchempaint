@@ -29,6 +29,9 @@
  */
 package org.openscience.jchempaint.application;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -84,9 +87,13 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.vecmath.Point2d;
 import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -105,6 +112,7 @@ public class JChemPaint {
 
     @SuppressWarnings("static-access")
     public static void main(String[] args) {
+
         try {
             String vers = System.getProperty("java.version");
             String requiredJVM = "1.5.0";
@@ -167,7 +175,7 @@ public class JChemPaint {
             if (line.hasOption("d")) {
                 debug = true;
             }
-            
+
             // Set Look&Feel
             Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
             try {
@@ -243,10 +251,11 @@ public class JChemPaint {
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int height = gd.getDisplayMode().getHeight();
-        int width = (int)( gd.getDisplayMode().getHeight() / 1.414); // A4 ratio 1.414
+        Rectangle bounds = gd.getDefaultConfiguration().getBounds();
 
-        f.setPreferredSize(new Dimension((int)(width * .95), (int)(height * .95)));
+        float height = UIScale.scale((float)bounds.getHeight()) / 1.2f;
+        f.setPreferredSize(new Dimension((int)Math.floor(height / 1.2f),
+                                         (int)Math.floor(height)));
         f.setJMenuBar(p.getJMenuBar());
         f.add(p);
         f.pack();
@@ -265,6 +274,13 @@ public class JChemPaint {
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        if (SystemInfo.isMacFullWindowContentSupported) {
+            f.getRootPane().putClientProperty("apple.awt.transparentTitleBar", true);
+        } else if (SystemInfo.isWindows) {
+            f.getRootPane().putClientProperty("JRootPane.menuBarEmbedded", false);
+        }
+
         return showInstance(f, chemModel, title, debug);
     }
 

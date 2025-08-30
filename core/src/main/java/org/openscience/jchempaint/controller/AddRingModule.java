@@ -31,7 +31,6 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.vecmath.Point2d;
@@ -47,16 +46,22 @@ public class AddRingModule extends ControllerModuleAdapter {
 
     private int ringSize;
     private boolean addingBenzene = false;
-    private String ID;
+    private String id;
     private RingPlacer ringPlacer = new RingPlacer();
     private static long drawTime = 0;
     private Point2d mouseLastMoved = null;
 
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
-                         boolean addingBenzene) {
+                         boolean addingBenzene, String id) {
         super(chemModelRelay);
         this.ringSize = ringSize;
         this.addingBenzene = addingBenzene;
+        this.id = id;
+    }
+
+    public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
+                         boolean addingBenzene) {
+        this(chemModelRelay, ringSize, addingBenzene, null);
     }
 
     private IRing addRingToEmptyCanvas(Point2d p, boolean phantom) {
@@ -135,12 +140,6 @@ public class AddRingModule extends ControllerModuleAdapter {
                 }
             }
 
-            if (chemModelRelay.getUndoRedoFactory() != null && chemModelRelay.getUndoRedoHandler() != null) {
-                IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory()
-                                                       .getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), abset, null, "Ring" + " " + ringSize, chemModelRelay);
-                chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
-            }
-
             //and perform the merge
             chemModelRelay.mergeMolecules(null);
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().clear();
@@ -203,11 +202,11 @@ public class AddRingModule extends ControllerModuleAdapter {
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
 }

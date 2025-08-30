@@ -111,6 +111,8 @@ public class AdjustBondOrdersEdit implements IUndoRedoable {
 			IBond bond = e.getKey();
 			IBond.Stereo[] bondStereos = e.getValue();
 			bond.setStereo(bondStereos[1]);
+            if (bondStereos[1] == IBond.Stereo.NONE)
+                bond.setDisplay(IBond.Display.Solid);
 		}
         for (Map.Entry<IBond, IBond.Display[]> e : changedBondsDisplay.entrySet()) {
             IBond bond = e.getKey();

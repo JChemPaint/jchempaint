@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.SymbolVisibility;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
+import org.openscience.cdk.renderer.color.IAtomColorer;
 import org.openscience.cdk.renderer.color.UniColor;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
@@ -244,12 +245,35 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                  .setValue(model.getShowAromaticity());
         }
         if (model.hasParameter(StandardGenerator.AtomColor.class)) {
-            if (model.getColorAtomsByType())
-                model.getParameter(StandardGenerator.AtomColor.class)
-                     .setValue(new CDK2DAtomColors());
-            else
-                model.getParameter(StandardGenerator.AtomColor.class)
-                     .setValue(new UniColor(Color.BLACK));
+            Color color = model.getBackColor();
+            double darkness = 1-(0.299*color.getRed() +
+                                 0.587*color.getGreen() +
+                                 0.114*color.getBlue())/255;
+            if (darkness < 0.5) {
+                if (model.getColorAtomsByType())
+                    model.getParameter(StandardGenerator.AtomColor.class)
+                         .setValue(new CDK2DAtomColors());
+                else
+                    model.getParameter(StandardGenerator.AtomColor.class)
+                         .setValue(new UniColor(Color.BLACK));
+            } else {
+                if (model.getColorAtomsByType()) {
+                    model.getParameter(StandardGenerator.AtomColor.class)
+                         .setValue(new IAtomColorer() {
+                             private final CDK2DAtomColors base = new CDK2DAtomColors();
+                             @Override
+                             public Color getAtomColor(IAtom atom) {
+                                 if (atom.getAtomicNumber() != null &&
+                                     atom.getAtomicNumber() == IAtom.C)
+                                     return Color.WHITE;
+                                 return base.getAtomColor(atom);
+                             }
+                         });
+                } else {
+                    model.getParameter(StandardGenerator.AtomColor.class)
+                         .setValue(new UniColor(Color.WHITE));
+                }
+            }
         }
         if (model.hasParameter(RendererModel.SelectionColor.class)) {
             model.getParameter(RendererModel.SelectionColor.class)

@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
@@ -284,6 +285,11 @@ public class JCPPropertyHandler
 		return resources;
 	}
 
+    public boolean getBool(String key, boolean defaultValue)
+    {
+        String val = currentProperties.getProperty(key);
+        return val != null ? "true".equalsIgnoreCase(val) : defaultValue;
+    }
 
 	/**
 	 * Returns an URL build from the path of this object and another part that is

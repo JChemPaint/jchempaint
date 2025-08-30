@@ -136,10 +136,10 @@ public class EnterElementOrGroupDialog extends JDialog implements ActionListener
     //Handle clicks on the Set and Cancel buttons.
     public void actionPerformed(ActionEvent e) {
         if ("Set".equals(e.getActionCommand())) {
-            EnterElementOrGroupDialog.value = (String)(list.getSelectedItem());
+            EnterElementOrGroupDialog.value = (String) (list.getSelectedItem());
         }
-        if(e.getActionCommand().equals("Cancel")){
-        	EnterElementOrGroupDialog.value="";
+        if (e.getActionCommand().equals("Cancel")) {
+            EnterElementOrGroupDialog.value = "";
         }
         EnterElementOrGroupDialog.dialog.setVisible(false);
     }

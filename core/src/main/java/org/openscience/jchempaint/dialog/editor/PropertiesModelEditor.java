@@ -29,14 +29,19 @@
  */
 package org.openscience.jchempaint.dialog.editor;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Properties;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import org.openscience.jchempaint.AbstractJChemPaintPanel;
+import org.openscience.jchempaint.GT;
+import org.openscience.jchempaint.JCPPropertyHandler;
+import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.action.JCPAction;
+import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.dialog.FieldTablePanel;
+import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -49,22 +54,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import org.openscience.jchempaint.AbstractJChemPaintPanel;
-import org.openscience.jchempaint.GT;
-import org.openscience.jchempaint.JCPPropertyHandler;
-import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-import org.openscience.jchempaint.dialog.FieldTablePanel;
-import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @cdk.bug 1525961
@@ -138,6 +141,18 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JComboBox<?> language;
 
     private JComboBox<?> lookAndFeel;
+    private JCheckBox fontIcons;
+
+    String[] lookAndFeels = {GT.get("System"),
+                             "Metal",
+                             "Nimbus",
+                             "Motif",
+                             "GTK",
+                             "Windows",
+                             "FlatLightLaf",
+                             "FlatDarkLaf",
+                             "FlatMacLightLaf",
+                             "FlatMacDarkLaf"};
 
     private GT.Language[] gtlanguages = GT.getLanguageList();
 
@@ -204,7 +219,6 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         showReactionBoxes = new JCheckBox(GT.get("Show boxes around reactions"));
         options1.add(showReactionBoxes);
 
-
         isFitToScreen = new JCheckBox(GT.get("Set fit to screen"));
         options1.add(isFitToScreen);
         //addField(GT._("Set fit to screen"), isFitToScreen, options1);
@@ -253,9 +267,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         addField(GT.get("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            String[] lookAndFeels = {GT.get("System"), "Metal", "Nimbus", "Motif", "GTK", "Windows"};
             lookAndFeel = new JComboBox<Object>(lookAndFeels);
             addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
+            fontIcons = new JCheckBox();
+            addField(GT.get("Font Icons (restart required)"), fontIcons, otherOptionsPanel);
             addField("", new JSeparator(), otherOptionsPanel);
         }
 
@@ -307,11 +322,13 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             color.setBackground(currentColor);
         }
         //the general settings
-        Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
+        JCPPropertyHandler jcpph = JCPPropertyHandler.getInstance(true);
+        Properties props = jcpph.getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("General.askForIOSettings").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
             lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
+            fontIcons.setSelected(jcpph.getBool("useFontIcons", true));
         }
         language.setSelectedItem(props.getProperty("General.language"));
         validate();
@@ -366,7 +383,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         props.setProperty("HashSpacing", String.valueOf(hashSpacing.getValue()));
 
         //props.setFontName(currentFontName);
-        props.setProperty("BackColor", String.valueOf(currentColor.getRGB()));
+        String backColorVal = String.valueOf(currentColor.getRGB());
+        boolean backColorChanged = !backColorVal.equals(props.getProperty("BackColor"));
+        props.setProperty("BackColor", backColorVal);
 
         //the general settings
         props.setProperty("General.askForIOSettings",
@@ -384,6 +403,9 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             JOptionPane.showMessageDialog(this, GT.get("Number of undoable operations") + " " + GT.get("must be a number from 1 to 100"), GT.get("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
         if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
+
+            boolean useFontIcons = fontIcons.isSelected();
+
             String lnfName = "";
             try {
                 switch (lookAndFeel.getSelectedIndex()) {
@@ -405,10 +427,35 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                     case 5:
                         lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
                         break; // Windows
+                    case 6:
+                        lnfName = FlatLightLaf.class.getName();
+                        break; // FlatLightLaf
+                    case 7:
+                        lnfName = FlatDarkLaf.class.getName();
+                        break; // FlatDarkLaf
+                    case 8:
+                        lnfName = FlatMacLightLaf.class.getName();
+                        break; // FlatMacLightLaf
+                    case 9:
+                        lnfName = FlatMacDarkLaf.class.getName();
+                        break; // FlatMacDarkLaf
                     default:
                         lnfName = "";
                 }
                 UIManager.setLookAndFeel(lnfName);
+
+                props.setProperty("useFontIcons",
+                                  Boolean.toString(useFontIcons));
+
+                // when switching UI theme we also set the background color
+                // unless it was changed explicitly
+                if (!backColorChanged) {
+                    currentColor = lnfName.contains("Dark") ? new Color(51, 51, 51) : Color.white;
+                    color.setBackground(currentColor);
+                    model.setBackColor(currentColor);
+                    props.setProperty("BackColor", Integer.toString(currentColor.getRGB()));
+                }
+
                 SwingUtilities.updateComponentTreeUI(frame);
                 frame.pack();
                 // Apply to all instances of JChemPaint
@@ -420,6 +467,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                         f.pack();
                     }
                 }
+
                 props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
                 props.setProperty("LookAndFeelClass", lnfName);
             } catch (UnsupportedLookAndFeelException e) {

@@ -402,8 +402,6 @@ public class PeriodicTablePanel extends JPanel
      */
     private JButton createButton(String elementS)
     {
-        Color colorF = new Color(0,0,0);
-
         Color colorB = null;
         String type = PeriodicTable.getChemicalSeries(elementS);
         if (type != null) {
@@ -441,7 +439,7 @@ public class PeriodicTablePanel extends JPanel
             }
         }
 
-        JButton button = new ElementButton(elementS, new ElementMouseAction(), elementS, colorF);
+        JButton button = new ElementButton(elementS, new ElementMouseAction(), elementS);
         button.setBackground(colorB);
         button.setName(elementS);
         buttoncolors.put(button,colorB);
@@ -1011,10 +1009,9 @@ public class PeriodicTablePanel extends JPanel
          * @param controlViewer Description of the Parameter
          */
         public ElementButton(
-                String element, MouseListener e,String buttonString, Color color)
+                String element, MouseListener e,String buttonString)
         {
             super(buttonString);
-            setForeground(color);
             this.element = element;
             setFont(new Font("Times-Roman",Font.BOLD, 15));
             setBorder( new BevelBorder(BevelBorder.RAISED) );
