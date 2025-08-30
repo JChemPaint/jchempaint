@@ -23,6 +23,7 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -81,6 +82,12 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 			chemModel.getMoleculeSet().addAtomContainer(containerToAddTo);
             connectedContainer = containerToAddTo;
 		}
+
+        if (connectedContainer == null) {
+            connectedContainer = DefaultChemObjectBuilder.getInstance()
+                                                         .newAtomContainer();
+            chemModel.getMoleculeSet().addAtomContainer(connectedContainer);
+        }
 
 		//markr: this code creates problems when dragging a bond across a structure, so that it merges with itself.. 
 		//if(removedAtomContainer!=null){
