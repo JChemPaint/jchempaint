@@ -28,12 +28,17 @@
  */
 package org.openscience.jchempaint.dialog;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
@@ -41,173 +46,218 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.XMLIsotopeFactory;
-import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.graph.Cycles;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
-import org.openscience.cdk.interfaces.IRing;
-import org.openscience.cdk.interfaces.IRingSet;
-import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.ControllerModuleAdapter;
 import org.openscience.jchempaint.controller.IChemModelRelay;
+import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
+import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 
 public class EnterElementSwingModule extends ControllerModuleAdapter {
 
-    private HashMap<String,IAtomContainer> funcgroupsmap=new HashMap<String,IAtomContainer>();
+    private final SmilesParser smipar = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+    private List<String> funcgroupnames = new ArrayList<>();
+    private HashMap<String, String> funcgroupsmap = new HashMap<>();
     private final static RingPlacer ringPlacer = new RingPlacer();
     private String ID;
-    
+
     public EnterElementSwingModule(IChemModelRelay chemModelRelay) {
         super(chemModelRelay);
         String filename = "org/openscience/jchempaint/resources/funcgroups.txt";
-        InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
-        SmilesParser sp=new SmilesParser(DefaultChemObjectBuilder.getInstance());
-        StringBuffer sb=new StringBuffer();
-        InputStreamReader isr = new InputStreamReader(ins);
-        try{
-            while(true){
-                int i=isr.read();
-                if(i==-1){
-                    break;
-                }else if(((char)i)=='\n' || ((char)i)=='\r'){
-                    if(!sb.toString().equals("")){
-                        StringTokenizer st=new StringTokenizer(sb.toString());
-                        String key=(String)st.nextElement();
-                        String value=(String)st.nextElement();
-                        IAtomContainer mol = sp.parseSmiles(value);
-                        //for some reason, smilesparser sets valencies, which we don't want in jcp
-                        for(int k=0;k<mol.getAtomCount();k++){
-                            mol.getAtom(k).setValency(null);
-                        }
-                        funcgroupsmap.put(key, mol);
-                        sb=new StringBuffer();
-                    }
-                }else{
-                    sb.append((char)i);
+
+        Set<String> uniq = new HashSet<>();
+        try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(filename);
+             InputStreamReader rdr = new InputStreamReader(in, StandardCharsets.UTF_8);
+             BufferedReader brdr = new BufferedReader(rdr)) {
+            String line;
+            while ((line = brdr.readLine()) != null) {
+                if (line.isEmpty() || line.charAt(0) == '#')
+                    continue;
+                String[] fields = line.split("\t", 2);
+                if (fields.length != 2) {
+                    System.err.println("Bad line in funcgroups.txt: " + line);
+                    continue;
                 }
+
+                String abbr = fields[0];
+                String value = fields[1];
+                if (uniq.add(value))
+                    funcgroupnames.add(abbr);
+                funcgroupsmap.put(abbr.toLowerCase(Locale.ROOT), value);
             }
-            if(!sb.toString().equals("")){
-                StringTokenizer st=new StringTokenizer(sb.toString());
-                String key=(String)st.nextElement();
-                String value=(String)st.nextElement();
-                IAtomContainer mol = sp.parseSmiles(value);
-                //for some reason, smilesparser sets valencies, which we don't want in jcp
-                for(int k=0;k<mol.getAtomCount();k++){
-                    mol.getAtom(k).setValency(null);
-                }
-                funcgroupsmap.put(key, mol);
-            }
-        }catch(Exception ex){
-            ex.printStackTrace();
+        } catch (IOException ex) {
+            // ignored
+        }
+    }
+
+    private boolean isSmilesFrag(String str) {
+        if (str.isEmpty() || str.charAt(0) != '*')
+            return false;
+        try {
+            smipar.parseSmiles(str);
+            return true;
+        } catch (InvalidSmilesException e) {
+            return false;
         }
     }
 
     public void mouseClickedDown(Point2d worldCoord) {
 
-        IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
-        double dA = super.distanceToAtom(closestAtom, worldCoord);
-        if(dA>getHighlightDistance())
-            closestAtom=null;
-        String[] funcGroupsKeys=new String[funcgroupsmap.keySet().size()+1];
-        Iterator<String> it=funcgroupsmap.keySet().iterator();
-        int h=1;
-        funcGroupsKeys[0]="";
-        while(it.hasNext()){
-            funcGroupsKeys[h]=(String)it.next();
-            h++;
+        IAtom atom = chemModelRelay.getRenderer()
+                                          .getRenderer2DModel()
+                                          .getHighlightedAtom();
+
+        String[] funcGroupsKeys = new String[funcgroupnames.size() + 1];
+        funcGroupsKeys[0] = "";
+
+        // fow now presume only terminal atoms can have functional groups, so
+        // we populate the selection box
+        if (atom.getBondCount() == 1) {
+            int h = 1;
+            for (String name : funcgroupnames) {
+                funcGroupsKeys[h++] = name;
+            }
         }
-        String x=EnterElementOrGroupDialog.showDialog(null,null, "Enter an element symbol or choose/enter a functional group abbreviation:", "Enter element", funcGroupsKeys, "","");
-        try{
-            IAtomContainer ac=(IAtomContainer)funcgroupsmap.get(x.toLowerCase());
+
+        String label = EnterElementOrGroupDialog.showDialog(null, null,
+                                                        "Enter an element symbol or choose/enter a functional group abbreviation:",
+                                                        "Enter element",
+                                                        funcGroupsKeys,
+                                                        "", "");
+        try {
+
+            String smiles = funcgroupsmap.get(label.toLowerCase(Locale.ROOT));
+
             //this means a functional group was entered
-            if(ac!=null && !x.equals("")){
-                IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), closestAtom);
-                IAtom lastplaced=null;
-                int counter=0;
-                //this is the starting point for placing
-                lastplaced=closestAtom;
-                counter=1;
-                if(container==null){
-                    if(chemModelRelay.getIChemModel().getMoleculeSet()==null)
-                        chemModelRelay.getIChemModel().setMoleculeSet(ac.getBuilder().newInstance(IAtomContainerSet.class));
-                    chemModelRelay.getIChemModel().getMoleculeSet().addAtomContainer(ac);
-                    ac.getAtom(0).setPoint2d(new Point2d(0,0));
-                    lastplaced = ac.getAtom(0);
-                    container = ac;
-                }else{
-                    container.add(ac);
-                    List<IBond> connbonds=container.getConnectedBondsList(ac.getAtom(0));
-                    for(int i=0;i<connbonds.size();i++){
-                        IBond bond=connbonds.get(i);
-                        if(bond.getAtom(0)==ac.getAtom(0)){
-                            bond.setAtom(closestAtom, 0);
-                        }else{
-                            bond.setAtom(closestAtom, 1);
-                        }
-                    }
-                    container.removeAtomAndConnectedElectronContainers(ac.getAtom(0));
-                    ac.removeAtom(ac.getAtom(0));
-                }
-                AtomPlacer ap=new AtomPlacer();
-                while(lastplaced!=null){
-                    IAtomContainer placedNeighbours=ac.getBuilder().newInstance(IAtomContainer.class);
-                    IAtomContainer unplacedNeighbours=ac.getBuilder().newInstance(IAtomContainer.class);
-                    List<IAtom> l=container.getConnectedAtomsList(lastplaced);
-                    for(int i=0;i<l.size();i++){
-                        if(l.get(i).getPoint2d()!=null)
-                            placedNeighbours.addAtom((IAtom)l.get(i));
-                        else
-                            unplacedNeighbours.addAtom((IAtom)l.get(i));
-                    }
-                    ap.distributePartners(lastplaced, placedNeighbours, GeometryTools.get2DCenter(placedNeighbours), unplacedNeighbours, 1.4);
-                    IRingSet ringset = Cycles.sssr(container).toRingSet();
-                    for(IAtomContainer ring:ringset.atomContainers()){
-                        ringPlacer.placeRing((IRing)ring, GeometryTools.get2DCenter(container), chemModelRelay.getRenderer().getRenderer2DModel().getBondLength() / chemModelRelay.getRenderer().getRenderer2DModel().getScale());
-                    }
-                    lastplaced=container.getAtom(counter);
-                    counter++;
-                    if(counter==container.getAtomCount())
-                        lastplaced=null;
-                }
-                if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                    IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), new AtomBondSet(ac), null, GT.get("Add Functional Group"), chemModelRelay);
-                    chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
-                }
-                chemModelRelay.getController2DModel().setDrawElement(x);
-            }else if(x!=null && x.length()>0){
-                if(Character.isLowerCase(x.toCharArray()[0]))
-                    x=Character.toUpperCase(x.charAt(0))+x.substring(1);
-                IsotopeFactory ifa=XMLIsotopeFactory.getInstance(chemModelRelay.getIChemModel().getBuilder());
-                IIsotope iso=ifa.getMajorIsotope(x);
-                if(iso!=null){
-                    if(closestAtom==null){
-                        AtomBondSet addatom=new AtomBondSet();
-                        addatom.add(chemModelRelay.addAtomWithoutUndo(x, worldCoord, false));
-                        if(chemModelRelay.getUndoRedoFactory()!=null && chemModelRelay.getUndoRedoHandler()!=null){
-                            IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), addatom, null, GT.get("Add Atom"), chemModelRelay);
+            IChemModel chemModel = chemModelRelay.getIChemModel();
+            if (smiles != null && !smiles.isEmpty()) {
+                if (addSmiles(smiles, chemModel, atom, label))
+                    return;
+            } else if (isSmilesFrag(label)) {
+                if (addSmiles(label, chemModel, atom, label))
+                    return;
+            } else if (!label.isEmpty()) {
+                if (Character.isLowerCase(label.toCharArray()[0]))
+                    label = Character.toUpperCase(label.charAt(0)) + label.substring(1);
+                IsotopeFactory ifa = XMLIsotopeFactory.getInstance(chemModel.getBuilder());
+                IIsotope iso = ifa.getMajorIsotope(label);
+                if (iso != null) {
+                    if (atom == null) {
+                        AtomBondSet addatom = new AtomBondSet();
+                        addatom.add(chemModelRelay.addAtomWithoutUndo(label, worldCoord, false));
+                        if (chemModelRelay.getUndoRedoFactory() != null && chemModelRelay.getUndoRedoHandler() != null) {
+                            IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModel, addatom, null, GT.get("Add Atom"), chemModelRelay);
                             chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
                         }
-                    }else{
-                        chemModelRelay.setSymbol(closestAtom, x);
+                    } else {
+                        chemModelRelay.setSymbol(atom, label);
                     }
-                    chemModelRelay.getController2DModel().setDrawElement(x);
-                }else{
-                    JOptionPane.showMessageDialog(null, GT.get("{0} is not a valid element symbol or functional group.", x), GT.get("No valid input"), JOptionPane.WARNING_MESSAGE);
+                    chemModelRelay.getController2DModel().setDrawElement(label);
+                } else {
+                    JOptionPane.showMessageDialog(null, GT.get("{0} is not a valid element symbol or functional group.", label), GT.get("No valid input"), JOptionPane.WARNING_MESSAGE);
                 }
             }
-            chemModelRelay.updateView();                
-        }catch(Exception ex){
+            chemModelRelay.updateView();
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private boolean addSmiles(String smiles, IChemModel chemModel, IAtom highlightAtom, String label) throws CDKException {
+        IAtomContainer funcgroup = smipar.parseSmiles(smiles);
+        IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel,
+                                                                                 highlightAtom);
+
+        AtomBondSet added = new AtomBondSet();
+        AtomBondSet deleted = new AtomBondSet();
+        Set<IAtom> afix = new HashSet<>();
+        Set<IBond> bfix = new HashSet<>();
+        IUndoRedoable delEdit = null;
+
+        IAtom lastplaced = null;
+        if (container == null) {
+            if (chemModel.getMoleculeSet() == null)
+                chemModel.setMoleculeSet(funcgroup.getBuilder().newInstance(IAtomContainerSet.class));
+            chemModel.getMoleculeSet().addAtomContainer(funcgroup);
+            funcgroup.getAtom(0).setPoint2d(new Point2d(0, 0));
+            lastplaced = funcgroup.getAtom(0);
+            container = funcgroup;
+        } else {
+
+            if (highlightAtom.getBondCount() != 1) {
+                JOptionPane.showMessageDialog(null,
+                                              GT.get("Incorrect number of bonds to function group {1}", label),
+                                              GT.get("No valid input"), JOptionPane.WARNING_MESSAGE);
+                return true;
+            }
+
+            for (IAtom atom : container.atoms())
+                afix.add(atom);
+            for (IBond bond : container.bonds())
+                bfix.add(bond);
+
+            IBond bondToDelete = highlightAtom.bonds().iterator().next();
+            deleted.add(bondToDelete);
+            deleted.add(highlightAtom);
+            container.removeAtom(highlightAtom);
+
+            // JWM: we need to capture the delete NOW before adding
+            // anything else otherwise we get in an inconsistent state
+            IUndoRedoFactory undoRedoFactory = chemModelRelay.getUndoRedoFactory();
+            if (undoRedoFactory != null && chemModelRelay.getUndoRedoHandler() != null) {
+                delEdit = undoRedoFactory.getRemoveAtomsAndBondsEdit(chemModel, deleted, "", chemModelRelay);
+            }
+
+            container.add(funcgroup);
+            IAtom attachmentStar = funcgroup.getAtom(0);
+            IAtom attachmentAtom = attachmentStar.bonds().iterator().next().getOther(attachmentStar);
+
+            container.removeAtom(attachmentStar);
+            IBond newBond = null;
+            if (bondToDelete.getBegin().equals(highlightAtom))
+                newBond = container.newBond(attachmentAtom, bondToDelete.getOther(highlightAtom), bondToDelete.getOrder());
+            else if (bondToDelete.getEnd().equals(highlightAtom))
+                newBond = container.newBond(bondToDelete.getOther(highlightAtom), attachmentAtom, bondToDelete.getOrder());
+            else
+                throw new IllegalStateException("attachmentAtom is not at either end of one if it's bonds");
+            newBond.setStereo(bondToDelete.getStereo());
+            newBond.setDisplay(bondToDelete.getDisplay());
+
+            for (IAtom atom : container.atoms()) {
+                if (!afix.contains(atom))
+                    added.add(atom);
+            }
+            for (IBond bond : container.bonds()) {
+                if (!bfix.contains(bond))
+                    added.add(bond);
+            }
+        }
+
+        StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+        sdg.setMolecule(container, false, afix, bfix);
+        sdg.generateCoordinates();
+
+        IUndoRedoFactory undoRedoFactory = chemModelRelay.getUndoRedoFactory();
+        if (undoRedoFactory != null && chemModelRelay.getUndoRedoHandler() != null) {
+            IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(chemModel, added, null, GT.get("Add Functional Group"), chemModelRelay);
+            if (delEdit != null)
+                undoredo = new CompoundEdit(GT.get("Add Functional Group"), delEdit, undoredo);
+            chemModelRelay.getUndoRedoHandler().postEdit(undoredo);
+        }
+        return false;
     }
 
     public String getDrawModeString() {
@@ -219,6 +269,6 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
     }
 
     public void setID(String ID) {
-        this.ID=ID;     
+        this.ID = ID;
     }
 }

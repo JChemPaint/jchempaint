@@ -81,4 +81,12 @@ public class AtomBondSet {
         if (atoms.size() != 1) throw new IllegalArgumentException();
         return atoms.get(0);
     }
+
+    @Override
+    public String toString() {
+        return "AtomBondSet{" +
+               "atoms=" + atoms.size() +
+               ", bonds=" + bonds.size() +
+               '}';
+    }
 }
