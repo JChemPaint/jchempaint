@@ -1151,7 +1151,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			cycleKekuleForm(bond);
 			return;
 		}
-        
+
 		// special case : reset stereo bonds
 		if (bond.getDisplay() != Display.Solid ) {
 			bond.setDisplay(Display.Solid);
@@ -1424,7 +1424,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 															 "Set bond order/stereo",
 															 this);
 		edit.redo(); // make the changes
-		structurePropertiesChanged();
+		structureChanged();
 
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			getUndoRedoHandler().postEdit(edit);
