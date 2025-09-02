@@ -62,6 +62,21 @@ public class ChangeBondAction extends JCPAction {
             case "up_bond":
                 newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Up, true);
                 break;
+            case "hollow_wedge_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.HollowWedgeBegin, true);
+                break;
+            case "hash_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Hash, true);
+                break;
+            case "bold_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Bold, true);
+                break;
+            case "dash_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Dash, true);
+                break;
+            case "coordination_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.ArrowEnd, true);
+                break;
             case "undefined_bond":
                 newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Wavy, true);
                 break;
@@ -138,6 +153,26 @@ public class ChangeBondAction extends JCPAction {
             case "up_bond":
                 display = IBond.Display.Up;
                 order = IBond.Order.SINGLE;
+                break;
+            case "hollow_wedge_bond":
+                display = IBond.Display.HollowWedgeBegin;
+                order = IBond.Order.SINGLE;
+                break;
+            case "hash_bond":
+                display = IBond.Display.Hash;
+                order = IBond.Order.SINGLE;
+                break;
+            case "bold_bond":
+                display = IBond.Display.Bold;
+                order = IBond.Order.SINGLE;
+                break;
+            case "dash_bond":
+                display = IBond.Display.Dash;
+                order = IBond.Order.SINGLE;
+                break;
+            case "coordination_bond":
+                display = IBond.Display.ArrowEnd;
+                order = IBond.Order.UNSET;
                 break;
             case "undefined_bond":
                 display = IBond.Display.Wavy;
