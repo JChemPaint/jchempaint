@@ -136,31 +136,31 @@ public class BondEditor extends ChemObjectEditor {
                 break;
         }
 
-        Stereo stereo = null;
+        IBond.Display display = null;
         if (order != Order.SINGLE || stereoField == null) {
-            stereo = Stereo.NONE;
+            display = IBond.Display.Solid;
         }
         else {
             int newStereo = stereoField.getSelectedIndex();
             switch (newStereo) {
                 case 0:
-                    stereo = Stereo.NONE;
+                    display = IBond.Display.Solid;
                     break;
                 case 1:
-                    stereo = Stereo.UP;
+                    display = IBond.Display.Up;
                     break;
                 case 2:
-                    stereo = Stereo.DOWN;
+                    display = IBond.Display.Down;
                     break;
                 case 3:
-                    stereo = Stereo.UP_OR_DOWN;
+                    display = IBond.Display.Wavy;
                     break;
                 case 4:
-                    stereo = Stereo.E_OR_Z;
+                    display = IBond.Display.Crossed;
                     break;
             }
         }
 
-        hub.changeBond(bond, order, stereo);
+        hub.changeBond(bond, order, display);
     }
 }

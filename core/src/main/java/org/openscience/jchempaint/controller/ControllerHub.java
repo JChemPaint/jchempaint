@@ -626,13 +626,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
 			boolean makePseudoAtom) {
-		return addAtomWithoutUndo(atomType, atom, IBond.Stereo.NONE,
+		return addAtomWithoutUndo(atomType, atom, Display.Solid,
 				makePseudoAtom);
 	}
 
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
-									IBond.Stereo stereo, Order order, boolean makePseudoAtom) {
-		return addAtomWithoutUndo(atomType, atom, stereo, order, makePseudoAtom, false);
+									IBond.Display display, Order order, boolean makePseudoAtom) {
+		return addAtomWithoutUndo(atomType, atom, display, order, makePseudoAtom, false);
 	}
 
 	private static boolean isLeft(Point2d a, Point2d b, Point2d c) {
@@ -662,16 +662,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
-									IBond.Stereo stereo, Order order, boolean makePseudoAtom,
+									IBond.Display display, Order order, boolean makePseudoAtom,
 									boolean phantom) {
-		return addAtomWithoutUndo(atomType, atom, stereo, order, makePseudoAtom, phantom, altMode);
+		return addAtomWithoutUndo(atomType, atom, display, order, makePseudoAtom, phantom, altMode);
 	}
 
 	/*
 	 * @param cyclicMode sprouts the bond in cyclic mode (as opposed to linear)
 	 */
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
-			                        IBond.Stereo stereo, Order order, boolean makePseudoAtom,
+			                        IBond.Display display, Order order, boolean makePseudoAtom,
 									boolean phantom, boolean cyclicMode) {
 
 		IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
@@ -684,7 +684,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		IBond newBond =
 		        chemModel.getBuilder().newInstance(IBond.class,atom, newAtom, order);
-		newBond.setStereo(stereo);
+		newBond.setDisplay(display);
 
 		if (atomCon == null) {
 			atomCon = chemModel.getBuilder().newInstance(IAtomContainer.class);
@@ -826,8 +826,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public IAtom addAtomWithoutUndo(String atomType, IAtom atom,
-			IBond.Stereo stereo, boolean makePseudoAtom) {
-		return addAtomWithoutUndo(atomType, atom, stereo, IBond.Order.SINGLE,
+			IBond.Display display, boolean makePseudoAtom) {
+		return addAtomWithoutUndo(atomType, atom, display, IBond.Order.SINGLE,
 				makePseudoAtom);
 	}
 
@@ -881,7 +881,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	public void addAtom(IAtom atom, int atno, IBond.Order order, boolean cyclicMode) {
-		addAtom(atom, atno, order, Stereo.NONE, cyclicMode);
+		addAtom(atom, atno, order, Display.Solid, cyclicMode);
 	}
 
 	/**
@@ -894,7 +894,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void addAtom(IAtom atom,
 						int atno,
 						IBond.Order order,
-						IBond.Stereo stereo,
+						IBond.Display stereo,
 						boolean cyclicMode) {
 		atom.removeProperty("placeFlipped");
 		IAtom newAtom = addAtomWithoutUndo(Elements.ofNumber(atno).symbol(),
@@ -926,9 +926,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
 		if (freeValence == 1) {
 			clearPhantoms();
-			IAtom c1 = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
-			IAtom c2 = addAtomWithoutUndo("C", c1, Stereo.NONE, Order.SINGLE, false, false, false);
-			IAtom o = addAtomWithoutUndo("O", c1, Stereo.NONE, Order.DOUBLE, false, false, false);
+			IAtom c1 = addAtomWithoutUndo("C", atom, Display.Solid, Order.SINGLE, false, false, false);
+			IAtom c2 = addAtomWithoutUndo("C", c1, Display.Solid, Order.SINGLE, false, false, false);
+			IAtom o = addAtomWithoutUndo("O", c1, Display.Solid, Order.DOUBLE, false, false, false);
 			undoRedoSet.add(c1);
 			undoRedoSet.add(c2);
 			undoRedoSet.add(o);
@@ -938,15 +938,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		else if (freeValence == 2) {
 			clearPhantoms();
-			IAtom o = addAtomWithoutUndo("O", atom, Stereo.NONE, Order.DOUBLE, false, false, false);
+			IAtom o = addAtomWithoutUndo("O", atom, Display.Solid, Order.DOUBLE, false, false, false);
 			undoRedoSet.add(o);
 			for (IBond bond : container.getConnectedBondsList(o))
 				undoRedoSet.add(bond);
 		}
 		else if (freeValence > 2) {
 			clearPhantoms();
-			IAtom c = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
-			IAtom o = addAtomWithoutUndo("O", atom, Stereo.NONE, Order.DOUBLE, false, false, false);
+			IAtom c = addAtomWithoutUndo("C", atom, Display.Solid, Order.SINGLE, false, false, false);
+			IAtom o = addAtomWithoutUndo("O", atom, Display.Solid, Order.DOUBLE, false, false, false);
 			undoRedoSet.add(c);
 			undoRedoSet.add(o);
 			for (IBond bond : container.getConnectedBondsList(c))
@@ -966,16 +966,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-	public void addDimethyl(IAtom atom, IBond.Stereo stereo) {
+	public void addDimethyl(IAtom atom, IBond.Display display) {
 		AtomBondSet undoRedoSet = new AtomBondSet();
 		int freeValence = atom.getImplicitHydrogenCount();
 		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
 		if (freeValence == 1) {
-			if (stereo == Stereo.NONE) {
+			if (display == Display.Solid) {
 				clearPhantoms();
-				IAtom c = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
-				IAtom me1 = addAtomWithoutUndo("C", c, Stereo.NONE, Order.SINGLE, false, false, false);
-				IAtom me2 = addAtomWithoutUndo("C", c, stereo, Order.SINGLE, false, false, false);
+				IAtom c = addAtomWithoutUndo("C", atom, Display.Solid, Order.SINGLE, false, false, false);
+				IAtom me1 = addAtomWithoutUndo("C", c, Display.Solid, Order.SINGLE, false, false, false);
+				IAtom me2 = addAtomWithoutUndo("C", c, Display.Solid, Order.SINGLE, false, false, false);
 				undoRedoSet.add(c);
 				undoRedoSet.add(me1);
 				undoRedoSet.add(me2);
@@ -983,13 +983,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					undoRedoSet.add(bond);
 				getRenderer().getRenderer2DModel().setHighlightedAtom(me1);
 			} else {
-				addAtom(atom, IAtom.C, Order.SINGLE, stereo, false);
+				addAtom(atom, IAtom.C, Order.SINGLE, display, false);
 			}
 		}
 		else if (freeValence >= 2) {
 			clearPhantoms();
-			IAtom me1 = addAtomWithoutUndo("C", atom, Stereo.NONE, Order.SINGLE, false, false, false);
-			IAtom me2 = addAtomWithoutUndo("C", atom, stereo, Order.SINGLE, false, false, false);
+			IAtom me1 = addAtomWithoutUndo("C", atom, Display.Solid, Order.SINGLE, false, false, false);
+			IAtom me2 = addAtomWithoutUndo("C", atom, display, Order.SINGLE, false, false, false);
 			undoRedoSet.add(me1);
 			undoRedoSet.add(me2);
 			for (IBond bond : container.getConnectedBondsList(me1))
@@ -1143,19 +1143,17 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	public void cycleBondValence(IBond bond, IBond.Order order) {
 
 		IBond.Order[] orders = new IBond.Order[2];
-		IBond.Stereo[] stereos = new IBond.Stereo[2];
+		IBond.Display[] stereos = new IBond.Display[2];
 		orders[1] = bond.getOrder();
-		stereos[1] = bond.getStereo();
+		stereos[1] = bond.getDisplay();
 
 		if (altMode) {
 			cycleKekuleForm(bond);
 			return;
 		}
-
+        
 		// special case : reset stereo bonds
-		if (bond.getStereo() != IBond.Stereo.NONE ||
-			bond.getDisplay() != Display.Solid) {
-			bond.setStereo(IBond.Stereo.NONE);
+		if (bond.getDisplay() != Display.Solid ) {
 			bond.setDisplay(Display.Solid);
 			bond.setOrder(order);
 		} else {
@@ -1186,9 +1184,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		orders[0] = bond.getOrder();
-		stereos[0] = bond.getStereo();
+		stereos[0] = bond.getDisplay();
 		Map<IBond, IBond.Order[]> changedBonds = new HashMap<IBond, IBond.Order[]>();
-		Map<IBond, IBond.Stereo[]> changedBondsStereo = new HashMap<IBond, IBond.Stereo[]>();
+		Map<IBond, IBond.Display[]> changedBondsStereo = new HashMap<IBond, IBond.Display[]>();
 		changedBonds.put(bond, orders);
 		changedBondsStereo.put(bond, stereos);
 		// set hybridization from bond order
@@ -1199,7 +1197,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structureChanged();
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory
-					.getAdjustBondOrdersEdit(changedBonds, changedBondsStereo,
+					.getAdjustBondOrdersEdit(changedBonds,
+                                             changedBondsStereo,
 							"Adjust Bond Order", this);
 			undoredohandler.postEdit(undoredo);
 		}
@@ -1218,13 +1217,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IBond newBond = atomContainer.getBond(atom, newAtom);
 
 		if (desiredDirection == Direction.UP) {
-			newBond.setStereo(IBond.Stereo.UP);
+			newBond.setDisplay(IBond.Display.Up);
 		} else if (desiredDirection == Direction.DOWN) {
-			newBond.setStereo(IBond.Stereo.DOWN);
+			newBond.setDisplay(IBond.Display.Down);
 		} else if (desiredDirection == Direction.UNDEFINED) {
-			newBond.setStereo(IBond.Stereo.UP_OR_DOWN);
+			newBond.setDisplay(IBond.Display.Wavy);
 		} else {
-			newBond.setStereo(IBond.Stereo.E_OR_Z);
+			newBond.setDisplay(IBond.Display.Crossed);
 		}
 		undoRedoSet.add(newAtom);
 		undoRedoSet.add(newBond);
@@ -1304,10 +1303,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * org.openscience.cdk.controller.IChemModelRelay#addBond(org.openscience
 	 * .cdk.interfaces.IAtom, org.openscience.cdk.interfaces.IAtom, int)
 	 */
-	public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo,
+	public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Display display,
 			IBond.Order order) {
-		IBond newBond = chemModel.getBuilder().newInstance(IBond.class,fromAtom, toAtom, order,
-				stereo);
+		IBond newBond = chemModel.getBuilder().newInstance(IBond.class,fromAtom, toAtom, order);
+        newBond.setDisplay(display);
 		IAtomContainer fromContainer = ChemModelManipulator
 				.getRelevantAtomContainer(chemModel, fromAtom);
 		IAtomContainer toContainer = ChemModelManipulator
@@ -1325,7 +1324,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		return newBond;
 	}
 
-	public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo) {
+	public IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Display stereo) {
 		return addBond(fromAtom, toAtom, stereo, IBond.Order.SINGLE);
 	}
 
@@ -1338,7 +1337,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * .cdk.interfaces.IAtom, org.openscience.cdk.interfaces.IAtom)
 	 */
 	public IBond addBond(IAtom fromAtom, IAtom toAtom) {
-		return addBond(fromAtom, toAtom, IBond.Stereo.NONE, IBond.Order.SINGLE);
+		return addBond(fromAtom, toAtom, Display.Solid, IBond.Order.SINGLE);
 	}
 
 	// OK
@@ -1366,18 +1365,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structurePropertiesChanged();
 	}
 
-	// OK
-    public void changeBond(IBond bond, Order order, Stereo stereo) {
-        changeBonds(Collections.singletonList(bond), order, stereo, null);
-    }
-
-	public void changeBond(IBond bond, Order order, Stereo stereo, Display disp) {
-		changeBonds(Collections.singletonList(bond), order, stereo, disp);
+	public void changeBond(IBond bond, Order order, Display display) {
+		changeBonds(Collections.singletonList(bond), order, display);
 	}
-
-    public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo) {
-        changeBonds(bonds, order, stereo, null);
-    }
 
     private static boolean atWideEndOfAnotherWedge(IAtom atom) {
         for (IBond bond : atom.bonds()) {
@@ -1396,77 +1386,35 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         return false;
     }
 
-	public void changeBonds(Collection<IBond> bonds, Order order, Stereo stereo, Display disp) {
+	public void changeBonds(Collection<IBond> bonds, Order order, Display display) {
 
-		Map<IBond, Order[]> orderChanges = new LinkedHashMap<>();
+        Map<IBond, Order[]> orderChanges = new LinkedHashMap<>();
 		Map<IBond, Stereo[]> stereoChanges = new LinkedHashMap<>();
 		Map<IBond, Display[]> displayChanges = new LinkedHashMap<>();
 
 		for (IBond bond : bonds) {
-			// ignore unchanged
-			if (bond.getOrder().equals(order) &&
-				bond.getStereo().equals(stereo) &&
-                stereo == Stereo.NONE &&
-                (bond.getDisplay().equals(disp) || disp == null)) {
-				continue;
-			}
+
+            if (bond.getOrder() != order)
+                orderChanges.put(bond, new Order[]{order, bond.getOrder()});
 
 			// flip wedges: if the bond is already wedged, and it is wedged the same
 			// wedge direction, the intention is to flip the ordering
-			// C < O (BegWedge) => C > O (EndWedge)
-			if (bond.getOrder().equals(order) &&
-				bond.getStereo().equals(stereo) &&
-				(stereo == Stereo.UP || stereo == Stereo.DOWN)) {
-				stereoChanges.put(bond, new Stereo[]{stereo == Stereo.UP ? Stereo.UP_INVERTED : Stereo.DOWN_INVERTED,
-													 bond.getStereo()});
-                displayChanges.put(bond, new Display[]{stereo == Stereo.UP ? Display.WedgeEnd : Display.WedgedHashEnd,
-                                                       bond.getDisplay()});
-			} else {
-				if (bond.getOrder() != order)
-					orderChanges.put(bond, new Order[]{order, bond.getOrder()});
+			// C < O (WedgeBegin) => C > O (WedgeEnd)
+			if (display == bond.getDisplay() && display.flip() != display) {
+				displayChanges.put(bond, new Display[]{display.flip(), bond.getDisplay()});
+			} else if (display != bond.getDisplay()) {
 
-                boolean flipped = false;
-
-				if (bond.getStereo() != stereo) {
-
-                    // try to guess which way a wedge should be placed.
-
-                    if (bond.getStereo() == Stereo.NONE) {
-                        IAtom begin = bond.getBegin();
-                        IAtom end = bond.getEnd();
-                        // end has more bonds => more likely tetrahedral, or
-                        // we allready have a wide of a wedge next to us
-                        if (end.getBondCount() > begin.getBondCount() ||
-                            end.getBondCount() == begin.getBondCount() && atWideEndOfAnotherWedge(begin))
-                            flipped = true;
-                    }
-
-                    switch (stereo) {
-                        case UP:
-                            stereoChanges.put(bond, new Stereo[]{flipped ? Stereo.UP_INVERTED : Stereo.UP, bond.getStereo()});
-                            break;
-                        case DOWN:
-                            stereoChanges.put(bond, new Stereo[]{flipped ? Stereo.DOWN_INVERTED : Stereo.DOWN, bond.getStereo()});
-                            break;
-                        default:
-                            stereoChanges.put(bond, new Stereo[]{stereo, bond.getStereo()});
-                            break;
-                    }
+                if (display != Display.Solid && bond.getDisplay() == Display.Solid) {
+                    IAtom begin = bond.getBegin();
+                    IAtom end = bond.getEnd();
+                    // end has more bonds => more likely tetrahedral, or
+                    // we already have a wide of a wedge next to us
+                    if (end.getBondCount() > begin.getBondCount() ||
+                        end.getBondCount() == begin.getBondCount() && atWideEndOfAnotherWedge(begin))
+                        display = display.flip();
                 }
 
-                if (bond.getDisplay() != disp && disp != null) {
-                    switch (disp) {
-                        case WedgeBegin:
-                            displayChanges.put(bond, new Display[]{flipped ? Display.WedgeEnd : Display.WedgeBegin, bond.getDisplay()});
-                            break;
-                        case WedgedHashBegin:
-                            displayChanges.put(bond, new Display[]{flipped ? Display.WedgedHashEnd : Display.WedgedHashBegin, bond.getDisplay()});
-                            break;
-                        default:
-                            displayChanges.put(bond, new Display[]{disp, bond.getDisplay()});
-                            break;
-                    }
-                }
+                displayChanges.put(bond, new Display[]{display, bond.getDisplay()});
 			}
 		}
 
@@ -1587,7 +1535,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void makeBondStereo(IBond bond, Direction desiredDirection) {
-		IBond.Stereo stereo = bond.getStereo();
+		IBond.Display stereo = bond.getDisplay();
 		boolean isUp = isUp(stereo);
 		boolean isDown = isDown(stereo);
 		boolean isUndefined = isUndefined(stereo);
@@ -1598,20 +1546,20 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		} else if (isUndefined && desiredDirection == Direction.UNDEFINED) {
 			flipDirection(bond, stereo);
 		} else if (desiredDirection == Direction.EZ_UNDEFINED) {
-			bond.setStereo(Stereo.E_OR_Z);
+			bond.setDisplay(Display.Crossed);
 		} else if (desiredDirection == Direction.UNDEFINED) {
-			bond.setStereo(Stereo.UP_OR_DOWN);
+			bond.setDisplay(Display.Wavy);
 		} else if (desiredDirection == Direction.UP) {
-			bond.setStereo(Stereo.UP);
+			bond.setDisplay(Display.Up);
 		} else if (desiredDirection == Direction.DOWN) {
-			bond.setStereo(Stereo.DOWN);
+			bond.setDisplay(Display.Down);
 		}
-		IBond.Stereo[] stereos = new IBond.Stereo[2];
-		stereos[1] = stereo;
-		stereos[0] = bond.getStereo();
+		IBond.Display[] displays = new IBond.Display[2];
+		displays[1] = stereo;
+		displays[0] = bond.getDisplay();
 		Map<IBond, IBond.Order[]> changedBonds = new HashMap<IBond, IBond.Order[]>();
-		Map<IBond, IBond.Stereo[]> changedBondsStereo = new HashMap<IBond, IBond.Stereo[]>();
-		changedBondsStereo.put(bond, stereos);
+		Map<IBond, IBond.Display[]> changedBondsStereo = new HashMap<IBond, IBond.Display[]>();
+		changedBondsStereo.put(bond, displays);
 		updateAtom(bond.getAtom(0));
 		updateAtom(bond.getAtom(1));
 		structureChanged();
@@ -1631,38 +1579,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * @param stereo
 	 *            the current stereo of that bond
 	 */
-	private void flipDirection(IBond bond, IBond.Stereo stereo) {
-		if (stereo == IBond.Stereo.UP)
-			bond.setStereo(IBond.Stereo.UP_INVERTED);
-		else if (stereo == IBond.Stereo.UP_INVERTED)
-			bond.setStereo(IBond.Stereo.UP);
-		else if (stereo == IBond.Stereo.DOWN_INVERTED)
-			bond.setStereo(IBond.Stereo.DOWN);
-		else if (stereo == IBond.Stereo.DOWN)
-			bond.setStereo(IBond.Stereo.DOWN_INVERTED);
-		else if (stereo == IBond.Stereo.UP_OR_DOWN)
-			bond.setStereo(IBond.Stereo.UP_OR_DOWN_INVERTED);
-		else if (stereo == IBond.Stereo.UP_OR_DOWN_INVERTED)
-			bond.setStereo(IBond.Stereo.UP_OR_DOWN);
+	private void flipDirection(IBond bond, IBond.Display stereo) {
+        bond.setDisplay(stereo.flip());
 	}
 
-	private boolean isUp(IBond.Stereo stereo) {
-		return stereo == IBond.Stereo.UP || stereo == IBond.Stereo.UP_INVERTED;
+	private boolean isUp(IBond.Display stereo) {
+		return stereo == Display.WedgeBegin ||
+               stereo == Display.WedgeEnd ||
+               stereo == Display.HollowWedgeBegin ||
+               stereo == Display.HollowWedgeEnd;
 	}
 
-	private boolean isDown(IBond.Stereo stereo) {
-		return stereo == IBond.Stereo.DOWN
-				|| stereo == IBond.Stereo.DOWN_INVERTED;
+	private boolean isDown(IBond.Display stereo) {
+		return stereo == Display.WedgedHashBegin
+				|| stereo == Display.WedgedHashEnd;
 	}
 
-	private boolean isUndefined(IBond.Stereo stereo) {
-		return stereo == IBond.Stereo.UP_OR_DOWN
-				|| stereo == IBond.Stereo.UP_OR_DOWN_INVERTED;
+	private boolean isUndefined(IBond.Display stereo) {
+		return stereo == Display.Wavy;
 	}
 
 	public static void avoidOverlap(IChemModel chemModel){
         //we avoid overlaps
-        //first we we shift down the reactions
+        //first we shift down the reactions
         Rectangle2D usedReactionbounds=null;
         if(chemModel.getReactionSet()!=null){
             for(IReaction reaction : chemModel.getReactionSet().reactions()){
@@ -2682,7 +2621,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateImplicitHydrogenCounts();
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getAdjustBondOrdersEdit(
-					changedBonds, new HashMap<IBond, IBond.Stereo[]>(),
+					changedBonds, Collections.emptyMap(),
 					"Adjust Bond Order of Molecules", this);
 			undoredohandler.postEdit(undoredo);
 		}
@@ -2708,7 +2647,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateImplicitHydrogenCounts();
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getAdjustBondOrdersEdit(
-					changedBonds, new HashMap<IBond, IBond.Stereo[]>(),
+					changedBonds, Collections.emptyMap(),
 					"Reset Bond Order of Molecules", this);
 			undoredohandler.postEdit(undoredo);
 		}

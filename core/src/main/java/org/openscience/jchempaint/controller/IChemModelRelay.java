@@ -280,10 +280,10 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
 
      IUndoRedoFactory getUndoRedoFactory();
      UndoRedoHandler getUndoRedoHandler();
-     IBond addBond(IAtom fromAtom, IAtom toAtom, Stereo stereo, Order order);
-     IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Stereo stereo);
-     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereoForNewBond, Order order, boolean makePseudoAtom, boolean phantom);
-     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, Stereo stereo, Order order, boolean makePseudoAtom);
+     IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Display display, Order order);
+     IBond addBond(IAtom fromAtom, IAtom toAtom, IBond.Display display);
+     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, IBond.Display display, Order order, boolean makePseudoAtom, boolean phantom);
+     IAtom addAtomWithoutUndo(String drawElement, IAtom newAtom, IBond.Display stereo, Order order, boolean makePseudoAtom);
      void setValence(IAtom atom, Integer newValence);
      IAtom addAtom(String drawElement, int drawIsotopeNumber, Point2d start, boolean makePseudoAtom);
      void removeBondAndLoneAtoms(IBond bond);

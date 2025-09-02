@@ -44,98 +44,111 @@ import org.openscience.jchempaint.controller.AddBondDragModule;
 /**
  * changes the atom symbol
  */
-public class ChangeBondAction extends JCPAction
-{
+public class ChangeBondAction extends JCPAction {
 
     private static final long serialVersionUID = -8502905723573311893L;
 
-    public void actionPerformed(ActionEvent event)
-    {
-        
+    public void actionPerformed(ActionEvent event) {
+
         String s = event.getActionCommand();
         String type = s.substring(s.indexOf("@") + 1);
-        
+
         //first switch mode
-        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);;
-        if(type.equals("down_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.DOWN, true);
-        }else if(type.equals("up_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.UP, true);
-        }else if(type.equals("undefined_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.UP_OR_DOWN, true);
-        }else if(type.equals("undefined_stereo_bond")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.E_OR_Z, true);
-        }else if(type.equals("bondTool")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Stereo.NONE, true);
-        }else if(type.equals("double_bondTool")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Order.DOUBLE, true);
-        }else if(type.equals("triple_bondTool")){
-            newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(),IBond.Order.TRIPLE, true);
+        AddBondDragModule newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Solid, true);
+        switch (type) {
+            case "down_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Down, true);
+                break;
+            case "up_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Up, true);
+                break;
+            case "undefined_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Display.Wavy, true);
+                break;
+            case "undefined_stereo_bond":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Order.DOUBLE, IBond.Display.Crossed, true, "undefined_stereo_bond");
+                break;
+            case "bondTool":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Order.SINGLE, true);
+                break;
+            case "double_bondTool":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Order.DOUBLE, true);
+                break;
+            case "triple_bondTool":
+                newActiveModule = new AddBondDragModule(jcpPanel.get2DHub(), IBond.Order.TRIPLE, true);
+                break;
         }
 
         if (newActiveModule != null) { // null means that menu was used => don't change module            
             newActiveModule.setID(type);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         }
-        
+
         // xxxTool -> xxx
         int l = type.length();
-        if (type.substring(l-4,l).equals("Tool"))
-            type = type.substring(0,l-4);
-        
+        if (type.substring(l - 4, l).equals("Tool"))
+            type = type.substring(0, l - 4);
+
         //then handle selection or highlight if there is one
         IChemObject object = getSource(event);
         Collection<IBond> bondsInRange = null;
 
-        if (object == null){
+        if (object == null) {
             //this means the main menu or toolbar was used
-            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null 
-                    && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-                bondsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class);
-        }else if (object instanceof IBond)
-        {
+            if (jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection() != null
+                && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
+                bondsInRange = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class);
+        } else if (object instanceof IBond) {
             List<IBond> bonds = new ArrayList<IBond>();
             bonds.add((IBond) object);
             bondsInRange = bonds;
-        } else
-        {
+        } else {
             List<IBond> bonds = new ArrayList<IBond>();
             bonds.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedBond());
             bondsInRange = bonds;
         }
 
-        if(bondsInRange==null)
+        if (bondsInRange == null)
             return;
 
-        IBond.Stereo stereo=null;
-        IBond.Order order=null;
+        IBond.Display display = null;
+        IBond.Order order = null;
 
-        if(type.equals("bond")){
-            stereo=IBond.Stereo.NONE;
-            order=IBond.Order.SINGLE;
-        }else if(type.equals("double_bond")){
-            stereo=IBond.Stereo.NONE;
-            order=IBond.Order.DOUBLE;
-        }else if(type.equals("triple_bond")){
-            stereo=IBond.Stereo.NONE;
-            order=IBond.Order.TRIPLE;
-        }else if(type.equals("quad_bond")){
-            stereo=IBond.Stereo.NONE;
-            order=IBond.Order.QUADRUPLE;
-        }else if(type.equals("down_bond")){
-            stereo=IBond.Stereo.DOWN;
-            order=IBond.Order.SINGLE;
-        }else if(type.equals("up_bond")){
-            stereo=IBond.Stereo.UP;
-            order=IBond.Order.SINGLE;
-        }else if(type.equals("undefined_bond")){
-            stereo=IBond.Stereo.UP_OR_DOWN;
-            order=IBond.Order.SINGLE;
-        }else if(type.equals("undefined_stereo_bond")){
-            stereo=IBond.Stereo.E_OR_Z;
-            order=IBond.Order.SINGLE;
+        switch (type) {
+            case "bond":
+                display = IBond.Display.Solid;
+                order = IBond.Order.SINGLE;
+                break;
+            case "double_bond":
+                display = IBond.Display.Solid;
+                order = IBond.Order.DOUBLE;
+                break;
+            case "triple_bond":
+                display = IBond.Display.Solid;
+                order = IBond.Order.TRIPLE;
+                break;
+            case "quad_bond":
+                display = IBond.Display.Solid;
+                order = IBond.Order.QUADRUPLE;
+                break;
+            case "down_bond":
+                display = IBond.Display.Down;
+                order = IBond.Order.SINGLE;
+                break;
+            case "up_bond":
+                display = IBond.Display.Up;
+                order = IBond.Order.SINGLE;
+                break;
+            case "undefined_bond":
+                display = IBond.Display.Wavy;
+                order = IBond.Order.SINGLE;
+                break;
+            case "undefined_stereo_bond":
+                display = IBond.Display.Crossed;
+                order = IBond.Order.DOUBLE;
+                break;
         }
-        jcpPanel.get2DHub().changeBonds(bondsInRange,order,stereo);
+        jcpPanel.get2DHub().changeBonds(bondsInRange, order, display);
         jcpPanel.get2DHub().updateView();
 
     }
