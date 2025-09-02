@@ -89,7 +89,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
             newActiveModule.setID(symbol);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
             // open PeriodicTable panel
@@ -132,7 +132,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
 
             jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
             newActiveModule.setID(symbol);

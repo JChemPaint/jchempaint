@@ -284,7 +284,7 @@ public class JCPToolBar extends JToolBar
                     box.add(button);
                     if (toolKey.equals("bondTool")) {
                         chemPaintPanel.setLastActionButton(button);
-                        AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Stereo.NONE, true);
+                        AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Display.Solid, true);
                         activeModule.setID(toolKey);
                         chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
                     } else if (toolKey.equals("C")) {

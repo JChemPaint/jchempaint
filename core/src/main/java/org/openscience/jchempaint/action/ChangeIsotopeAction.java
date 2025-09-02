@@ -51,7 +51,7 @@ public class ChangeIsotopeAction extends JCPAction {
 
     public void actionPerformed(ActionEvent event) {
         //first switch draw mode
-        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Stereo.NONE);
+        AddAtomModule newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
         if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
             newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
         else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)

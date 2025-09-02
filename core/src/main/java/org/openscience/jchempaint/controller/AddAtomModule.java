@@ -61,12 +61,12 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
     boolean isBond = false;
     private double bondLength;
-    private IBond.Stereo stereoForNewBond;
+    private IBond.Display displayForNewBond;
     long drawTime = 0;
 
-    public AddAtomModule(IChemModelRelay chemModelRelay, IBond.Stereo stereoForNewBond) {
+    public AddAtomModule(IChemModelRelay chemModelRelay, IBond.Display stereoForNewBond) {
 		super(chemModelRelay);
-		this.stereoForNewBond = stereoForNewBond;
+		this.displayForNewBond = stereoForNewBond;
 	}
 
 	public void mouseClickedDown(Point2d worldCoord) {
@@ -102,17 +102,17 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	        }
         }
         else if (singleSelection instanceof IBond) {
-            if(stereoForNewBond==IBond.Stereo.NONE){
+            if (displayForNewBond == IBond.Display.Solid) {
                 chemModelRelay.cycleBondValence((IBond) singleSelection);
-            }else{
+            } else {
                 IChemModelRelay.Direction direction = Direction.DOWN;
-                if(stereoForNewBond==IBond.Stereo.UP)
-                    direction=Direction.UP;
-                else if(stereoForNewBond== IBond.Stereo.UP_OR_DOWN)
-                    direction=Direction.UNDEFINED;
-                else if(stereoForNewBond== IBond.Stereo.E_OR_Z)
-                    direction=Direction.EZ_UNDEFINED;
-                chemModelRelay.makeBondStereo((IBond)singleSelection, direction);
+                if (displayForNewBond == IBond.Display.Up)
+                    direction = Direction.UP;
+                else if (displayForNewBond == IBond.Display.Wavy)
+                    direction = Direction.UNDEFINED;
+                else if (displayForNewBond == IBond.Display.Crossed)
+                    direction = Direction.EZ_UNDEFINED;
+                chemModelRelay.makeBondStereo((IBond) singleSelection, direction);
             }
             setSelection(new SingleSelection<IChemObject>(singleSelection));
             isBond = true;
@@ -157,7 +157,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
             IAtom atom = chemModelRelay.getIChemModel().getBuilder().
             	newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest );
             IBond bond = chemModelRelay.getIChemModel().getBuilder().
-            	newInstance(IBond.class, source, atom, IBond.Order.SINGLE, stereoForNewBond );
+            	newInstance(IBond.class, source, atom, IBond.Order.SINGLE, displayForNewBond);
             chemModelRelay.addPhantomAtom( source );
             chemModelRelay.addPhantomAtom( atom );
             chemModelRelay.addPhantomBond( bond );
@@ -198,7 +198,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
             IUndoRedoFactory factory = chemModelRelay.getUndoRedoFactory();
             UndoRedoHandler handler = chemModelRelay.getUndoRedoHandler();
             AtomBondSet containerForUndoRedo = new AtomBondSet();
-            IBond bond = chemModelRelay.addBond( newAtom, atom, stereoForNewBond);
+            IBond bond = chemModelRelay.addBond(newAtom, atom, displayForNewBond);
             containerForUndoRedo.add(bond);
             if (factory != null && handler != null) {
                 IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
@@ -248,7 +248,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
      * 
      * @return The stereo which new bonds will have.
      */
-    public IBond.Stereo getStereoForNewBond() {
-        return stereoForNewBond;
+    public IBond.Display getStereoForNewBond() {
+        return displayForNewBond;
     }
 }

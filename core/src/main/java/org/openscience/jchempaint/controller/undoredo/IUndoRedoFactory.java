@@ -63,7 +63,7 @@ public interface IUndoRedoFactory {
 												 String type, IChemModelRelay c2dm);
 	public IUndoRedoable getAdjustBondOrdersEdit(Map<IBond,
 		IBond.Order[]> changedBonds,
-		Map<IBond, IBond.Stereo[]> changedBondsStereo, String type,
+		Map<IBond, IBond.Display[]> changedBondDisplay, String type,
 		IChemModelRelay chemModelRelay
 	);
 	public IUndoRedoable getChangeAtomSymbolEdit(IAtom atom, String formerSymbol, String symbol, String type, IChemModelRelay chemModelRelay);

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009  Arvid Berg <goglepox@users.sourceforge.net>
+ * Copyright (C) 2025  John Mayfield
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -42,7 +43,7 @@ import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 /**
- * Adds a bond at direction that is draged.
+ * Adds a bond at direction that is dragged.
  *
  * @cdk.module controlbasic
  */
@@ -57,7 +58,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     boolean isBond = false;
     private double bondLength;
     private String id;
-    IBond.Stereo stereoForNewBond;
+    IBond.Display displayForNewBond;
     IBond.Order orderForNewBond;
 
     //if this is true, initally a bond will be drawn, if not, just an atom
@@ -67,23 +68,24 @@ public class AddBondDragModule extends ControllerModuleAdapter {
      * Constructor for the AddBondDragModule.
      *
      * @param chemModelRelay   The current chemModelRelay.
-     * @param stereoForNewBond If a new bond is formed, which stereo specification should it have?
+     * @param display If a new bond is formed, which stereo specification should it have?
      * @param makeInitialBond  true=click on empty place gives bond, false=gives atom.
      */
 
-    public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Stereo stereoForNewBond, boolean makeInitialBond) {
+    public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Order order, IBond.Display display, boolean makeInitialBond, String id) {
         super(chemModelRelay);
-        this.stereoForNewBond = stereoForNewBond;
-        this.orderForNewBond = IBond.Order.SINGLE;
-        this.makeInitialBond = makeInitialBond;
-    }
-
-    public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Order orderForNewBond, boolean makeInitialBond, String id) {
-        super(chemModelRelay);
-        this.stereoForNewBond = IBond.Stereo.NONE;
-        this.orderForNewBond = orderForNewBond;
+        this.orderForNewBond = order;
+        this.displayForNewBond = display;
         this.makeInitialBond = makeInitialBond;
         this.id = id;
+    }
+
+    public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Display display, boolean makeInitialBond) {
+        this(chemModelRelay, IBond.Order.SINGLE, display, makeInitialBond, null);
+    }
+
+    public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Order order, boolean makeInitialBond, String id) {
+        this(chemModelRelay, order, IBond.Display.Solid, makeInitialBond, id);
     }
 
     public AddBondDragModule(IChemModelRelay chemModelRelay, IBond.Order orderForNewBond, boolean makeInitialBond) {
@@ -102,9 +104,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
 
-        IChemObject singleSelection = getHighlighted(worldCoord,
-                                                     closestAtom,
-                                                     closestBond);
+        IChemObject singleSelection = getHighlighted(worldCoord, closestAtom, closestBond);
 
         chemModelRelay.clearPhantoms();
         if (singleSelection instanceof IAtom) {
@@ -112,7 +112,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             source = (IAtom) singleSelection;
             chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(),
                                               source,
-                                              stereoForNewBond,
+                                              displayForNewBond,
                                               orderForNewBond,
                                               chemModelRelay.getController2DModel().getDrawPseudoAtom(),
                                               true);
@@ -131,16 +131,13 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         bondLength = Renderer.calculateBondLength(chemModelRelay.getIChemModel());
 
         // in case we are starting on an empty canvas
-        if (bondLength == 0 || Double.isNaN(bondLength))
-            bondLength = 1.5;
+        if (bondLength == 0 || Double.isNaN(bondLength)) bondLength = 1.5;
 
         start = new Point2d(worldCoord);
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
 
-        IChemObject singleSelection = getHighlighted(worldCoord,
-                                                     closestAtom,
-                                                     closestBond);
+        IChemObject singleSelection = getHighlighted(worldCoord, closestAtom, closestBond);
 
         if (singleSelection == null || singleSelection instanceof IAtom) {
             isBond = false;
@@ -156,17 +153,10 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             }
 
         } else if (singleSelection instanceof IBond) {
-            if (stereoForNewBond == IBond.Stereo.NONE) {
+            if (displayForNewBond == IBond.Display.Solid) {
                 chemModelRelay.cycleBondValence((IBond) singleSelection, orderForNewBond);
             } else {
-                IChemModelRelay.Direction direction = Direction.DOWN;
-                if (stereoForNewBond == IBond.Stereo.UP)
-                    direction = Direction.UP;
-                else if (stereoForNewBond == IBond.Stereo.UP_OR_DOWN)
-                    direction = Direction.UNDEFINED;
-                else if (stereoForNewBond == IBond.Stereo.E_OR_Z)
-                    direction = Direction.EZ_UNDEFINED;
-                chemModelRelay.makeBondStereo((IBond) singleSelection, direction);
+                chemModelRelay.changeBond((IBond) singleSelection, orderForNewBond, displayForNewBond);
             }
             setSelection(new SingleSelection<IChemObject>(singleSelection));
             isBond = true;
@@ -192,7 +182,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             // set bond
             chemModelRelay.addPhantomAtom(source);
             chemModelRelay.addPhantomAtom(merge);
-            chemModelRelay.addPhantomBond(getBuilder().newInstance(IBond.class, source, merge, orderForNewBond, stereoForNewBond));
+            chemModelRelay.addPhantomBond(getBuilder().newInstance(IBond.class, source, merge, orderForNewBond, displayForNewBond));
             dest = null;
             //we also remember the merge atom in the merges in the rendererModel,
             //in case an application uses these.
@@ -200,7 +190,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         } else {
             dest = roundAngle(start, worldCoordTo, bondLength);
             IAtom atom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest);
-            IBond bond = getBuilder().newInstance(IBond.class, source, atom, orderForNewBond, stereoForNewBond);
+            IBond bond = getBuilder().newInstance(IBond.class, source, atom, orderForNewBond, displayForNewBond);
             chemModelRelay.addPhantomAtom(source);
             chemModelRelay.addPhantomAtom(atom);
             chemModelRelay.addPhantomBond(bond);
@@ -238,8 +228,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         if (newSource) {
             newAtom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), start, chemModelRelay.getController2DModel().getDrawPseudoAtom());
             containerForUndoRedo.add(newAtom);
-        } else
-            newAtom = source;
+        } else newAtom = source;
 
 
         // if merge is set either form a bond or add and form
@@ -247,38 +236,30 @@ public class AddBondDragModule extends ControllerModuleAdapter {
         if (merge != null) {
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
             removedContainer = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), merge);
-            IBond newBond = chemModelRelay.addBond(newAtom, merge, stereoForNewBond, orderForNewBond);
+            IBond newBond = chemModelRelay.addBond(newAtom, merge, displayForNewBond, orderForNewBond);
             containerForUndoRedo.add(newBond);
         } else {
             if (start.distance(worldCoord) < getHighlightDistance()) {
                 if (!newSource) {
-                    IAtom undoRedoAtom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(),
-                                                                           newAtom,
-                                                                           stereoForNewBond,
-                                                                           orderForNewBond,
-                                                                           chemModelRelay.getController2DModel().getDrawPseudoAtom());
+                    IAtom undoRedoAtom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), newAtom, displayForNewBond, orderForNewBond, chemModelRelay.getController2DModel().getDrawPseudoAtom());
                     containerForUndoRedo.add(undoRedoAtom);
                     IAtomContainer atomCon = ChemModelManipulator.getRelevantAtomContainer(chemModelRelay.getIChemModel(), undoRedoAtom);
                     containerForUndoRedo.add(atomCon.getConnectedBondsList(undoRedoAtom).get(0));
                 } else if (makeInitialBond) {
-                    IAtom undoRedoAtom = chemModelRelay.addAtomWithoutUndo(
-                            chemModelRelay.getController2DModel().getDrawElement(),
-                            new Point2d(newAtom.getPoint2d().x + 1.5, newAtom.getPoint2d().y),
-                            chemModelRelay.getController2DModel().getDrawPseudoAtom());
+                    IAtom undoRedoAtom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), new Point2d(newAtom.getPoint2d().x + 1.5, newAtom.getPoint2d().y), chemModelRelay.getController2DModel().getDrawPseudoAtom());
                     containerForUndoRedo.add(undoRedoAtom);
-                    containerForUndoRedo.add(chemModelRelay.addBond(newAtom, undoRedoAtom, stereoForNewBond, orderForNewBond));
+                    containerForUndoRedo.add(chemModelRelay.addBond(newAtom, undoRedoAtom, displayForNewBond, orderForNewBond));
                 }
             } else {
                 IAtom atom = chemModelRelay.addAtomWithoutUndo(chemModelRelay.getController2DModel().getDrawElement(), dest, chemModelRelay.getController2DModel().getDrawPseudoAtom());
                 containerForUndoRedo.add(atom);
-                IBond newBond = chemModelRelay.addBond(newAtom, atom, stereoForNewBond, orderForNewBond);
+                IBond newBond = chemModelRelay.addBond(newAtom, atom, displayForNewBond, orderForNewBond);
                 containerForUndoRedo.add(newBond);
             }
         }
 
         if (factory != null && handler != null) {
-            IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit
-                    (chemModelRelay.getIChemModel(), containerForUndoRedo, removedContainer, "Add Bond", chemModelRelay);
+            IUndoRedoable undoredo = chemModelRelay.getUndoRedoFactory().getAddAtomsAndBondsEdit(chemModelRelay.getIChemModel(), containerForUndoRedo, removedContainer, "Add Bond", chemModelRelay);
             handler.postEdit(undoredo);
         }
         chemModelRelay.updateView();
@@ -286,12 +267,9 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     public String getDrawModeString() {
-        if (orderForNewBond == IBond.Order.DOUBLE)
-            return "Draw Double Bond";
-        else if (orderForNewBond == IBond.Order.TRIPLE)
-            return "Draw Triple Bond";
-        else
-            return "Draw Bond";
+        if (orderForNewBond == IBond.Order.DOUBLE) return "Draw Double Bond";
+        else if (orderForNewBond == IBond.Order.TRIPLE) return "Draw Triple Bond";
+        else return "Draw Bond";
     }
 
     public String getID() {
@@ -307,13 +285,12 @@ public class AddBondDragModule extends ControllerModuleAdapter {
      *
      * @return The stereo which new bonds will have.
      */
-    public IBond.Stereo getStereoForNewBond() {
-        return stereoForNewBond;
+    public IBond.Display getStereoForNewBond() {
+        return displayForNewBond;
     }
 
     @Override
     public void updateView() {
-        if (lastMouseMove != null)
-            mouseMove(lastMouseMove);
+        if (lastMouseMove != null) mouseMove(lastMouseMove);
     }
 }
