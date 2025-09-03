@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
@@ -184,13 +185,13 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
   	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      */
     public void setupPopupMenus(SwingPopupModule inputAdapter, Set<String> blocked) {
-    	inputAdapter.setPopupMenu(PseudoAtom.class,
-    			new JChemPaintPopupMenu(this, "pseudo", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this,
+    	inputAdapter.setPopupMenu(IPseudoAtom.class,
+                                  new JChemPaintPopupMenu(this, "pseudo", this.guistring, blocked));
+    	inputAdapter.setPopupMenu(IAtom.class, new JChemPaintPopupMenu(this,
     			"atom", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this,
+    	inputAdapter.setPopupMenu(IBond.class, new JChemPaintPopupMenu(this,
     			"bond", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
+    	inputAdapter.setPopupMenu(IChemModel.class, new JChemPaintPopupMenu(
     			this, "chemmodel", this.guistring, blocked));
     }
 

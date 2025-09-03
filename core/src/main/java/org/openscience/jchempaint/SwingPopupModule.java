@@ -35,7 +35,9 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
@@ -91,7 +93,17 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 */
 	public JChemPaintPopupMenu getPopupMenu(Class<?> classSearched,IChemObject objectInRange) {
 		logger.debug("Searching popup for: ", classSearched.getName());
-        while (classSearched.getName().startsWith("org.openscience.cdk")) {
+
+        if (IBond.class.isAssignableFrom(classSearched))
+            classSearched = IBond.class;
+        else if (IAtom.class.isAssignableFrom(classSearched))
+            classSearched = IAtom.class;
+        else if (IChemModel.class.isAssignableFrom(classSearched))
+            classSearched = IChemModel.class;
+        else if (IPseudoAtom.class.isAssignableFrom(classSearched))
+            classSearched = IPseudoAtom.class;
+
+        if (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());
             if (SwingPopupModule.popupMenus.containsKey(classSearched.getName())) {
             	JChemPaintPopupMenu pop =(JChemPaintPopupMenu) SwingPopupModule.popupMenus.get(classSearched.getName());
@@ -113,9 +125,6 @@ public class SwingPopupModule extends ControllerModuleAdapter {
             	}
             	return pop;
             	
-            } else {
-                logger.debug("  recursing into super class");
-                classSearched = classSearched.getSuperclass();
             }
 		}
         return null;
@@ -148,7 +157,8 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 			objectInRange = chemModelRelay.getIChemModel();
 		if (objectInRange instanceof IAtom)
 		    lastAtomPopupedFor = (IAtom)objectInRange;
-		
+
+
 		JChemPaintPopupMenu popupMenu = getPopupMenu(objectInRange.getClass(), objectInRange);
 		if (popupMenu != null) {
 			popupMenu.setSource(objectInRange);
