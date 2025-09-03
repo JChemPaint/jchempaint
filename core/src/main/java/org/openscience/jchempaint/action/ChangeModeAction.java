@@ -79,6 +79,9 @@ public class ChangeModeAction extends JCPAction {
         } else if (type.equals("benzene")) {
         	newActiveModule=new AddRingModule(hub, 6, true);
             hub.getController2DModel().setDrawElement("C");
+        } else if (type.equals("cyclopentadiene")) {
+            newActiveModule=new AddRingModule(hub, 5, true);
+            hub.getController2DModel().setDrawElement("C");
         } else if (type.equals("atomatommapping")) {
         	newActiveModule=new AtomAtomMappingModule(hub);
             hub.getController2DModel().setDrawElement("C");

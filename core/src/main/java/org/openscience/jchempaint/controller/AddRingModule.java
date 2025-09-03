@@ -45,28 +45,29 @@ import java.util.Map;
 public class AddRingModule extends ControllerModuleAdapter {
 
     private int ringSize;
-    private boolean addingBenzene = false;
+    private boolean unsaturated = false;
     private String id;
     private RingPlacer ringPlacer = new RingPlacer();
     private static long drawTime = 0;
     private Point2d mouseLastMoved = null;
 
     public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
-                         boolean addingBenzene, String id) {
+                         boolean unsaturated, String id) {
         super(chemModelRelay);
         this.ringSize = ringSize;
-        this.addingBenzene = addingBenzene;
+        this.unsaturated = unsaturated;
         this.id = id;
     }
 
-    public AddRingModule(IChemModelRelay chemModelRelay, int ringSize,
-                         boolean addingBenzene) {
-        this(chemModelRelay, ringSize, addingBenzene, null);
+    public AddRingModule(IChemModelRelay chemModelRelay,
+                         int ringSize,
+                         boolean unsaturated) {
+        this(chemModelRelay, ringSize, unsaturated, null);
     }
 
     private IRing addRingToEmptyCanvas(Point2d p, boolean phantom) {
-        if (addingBenzene) {
-            return chemModelRelay.addPhenyl(p, phantom);
+        if (unsaturated) {
+            return chemModelRelay.addPhenyl(p, ringSize, phantom);
         } else {
             return chemModelRelay.addRing(ringSize, p, phantom);
         }
@@ -74,8 +75,8 @@ public class AddRingModule extends ControllerModuleAdapter {
 
     private IRing addRingToAtom(IAtom closestAtom, boolean phantom) {
         IRing newring;
-        if (addingBenzene) {
-            newring = chemModelRelay.addPhenyl(closestAtom, phantom);
+        if (unsaturated) {
+            newring = chemModelRelay.addPhenyl(closestAtom, ringSize, phantom);
         } else {
             newring = chemModelRelay.addRing(closestAtom, ringSize, phantom);
         }
@@ -85,8 +86,8 @@ public class AddRingModule extends ControllerModuleAdapter {
 
     private IRing addRingToBond(IBond bond, boolean phantom) {
         IRing newring;
-        if (addingBenzene) {
-            newring = chemModelRelay.addPhenyl(bond, phantom);
+        if (unsaturated) {
+            newring = chemModelRelay.addPhenyl(bond, ringSize, phantom);
         } else {
             newring = chemModelRelay.addRing(bond, ringSize, phantom);
         }
@@ -194,7 +195,7 @@ public class AddRingModule extends ControllerModuleAdapter {
     }
 
     public String getDrawModeString() {
-        if (addingBenzene) {
+        if (unsaturated) {
             return "Benzene";
         } else {
             return "Ring" + " " + ringSize;

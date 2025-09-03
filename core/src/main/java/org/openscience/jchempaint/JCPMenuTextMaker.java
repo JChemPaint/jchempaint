@@ -91,6 +91,12 @@ public class JCPMenuTextMaker {
         entries.put("up_bond", GT.get("Stereo Up"));
         entries.put("undefined_bond", GT.get("Undefined Stereo"));
         entries.put("undefined_stereo_bond", GT.get("Undefined E/Z"));
+        entries.put("hollow_wedge_bond", GT.get("Hollow Wedge"));
+        entries.put("bold_bond", GT.get("Bold Bond"));
+        entries.put("hash_bond", GT.get("Hashed Bond"));
+        entries.put("dash_bond", GT.get("Dashed Bond"));
+        entries.put("arom_bond", GT.get("Aromatic Bond"));
+        entries.put("coordination_bond", GT.get("Coordination Bond"));
         entries.put("formalCharge", GT.get("Charge"));
         entries.put("plus", GT.get("Plus"));
         entries.put("minus", GT.get("Minus"));
@@ -247,6 +253,12 @@ public class JCPMenuTextMaker {
         entries.put("periodictableTooltip", GT.get("Select new drawing symbol from periodic table"));
         entries.put("enterelementTooltip", GT.get("Enter an element symbol via keyboard"));
         entries.put("up_bondTooltip", GT.get("Make the Bonds Stereo Up"));
+        entries.put("hollow_wedge_bondTooltip", GT.get("Make/add a hollow Wedge"));
+        entries.put("bold_bondTooltip", GT.get("Make a bold bond"));
+        entries.put("hash_bondTooltip", GT.get("Make a hashed bond"));
+        entries.put("dash_bondTooltip", GT.get("Make a dashed bond"));
+        entries.put("arom_bondTooltip", GT.get("Make a aromatic bond"));
+        entries.put("coordination_bondTooltip", GT.get("Make a coordination bond"));
         entries.put("chainTooltip", GT.get("Draw a chain"));
         entries.put("down_bondTooltip", GT.get("Make the Bonds Stereo Down"));
         entries.put("plusTooltip", GT.get("Increase the charge on an Atom"));
@@ -260,6 +272,9 @@ public class JCPMenuTextMaker {
         entries.put("hexagonTooltip", GT.get("Add a hexane ring"));
         entries.put("heptagonTooltip", GT.get("Add a heptane ring"));
         entries.put("octagonTooltip", GT.get("Add a octane ring"));
+        entries.put("cyclopentadieneTooltip", GT.get("Add a cyclopentadiene ring"));
+        entries.put("chairleftTooltip", GT.get("Add a left handed cyclohexane chair"));
+        entries.put("chairrightTooltip", GT.get("Add a right handed cyclohexane chair"));
         entries.put("benzeneTooltip", GT.get("Add a benzene ring"));
         entries.put("cleanupTooltip", GT.get("Relayout the structures"));
         if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET))
@@ -354,7 +369,6 @@ public class JCPMenuTextMaker {
         entries.put("setBondApoAction2", GT.get("Set as bond for second attachment point"));
         entries.put("rgpAdvanced", GT.get("Advanced R-group logic"));
         entries.put("rgpGenerate", GT.get("Generate possible configurations (sdf) "));
-        entries.put("clearRgroup", GT.get("Remove R-group aspects"));
     }
 
     /**
