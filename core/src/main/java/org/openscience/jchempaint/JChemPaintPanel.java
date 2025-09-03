@@ -57,14 +57,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.vecmath.Point2d;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -74,9 +70,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
@@ -92,7 +89,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param chemModel The model to display.
      */
     public JChemPaintPanel(IChemModel chemModel) {
-        this(chemModel, JChemPaint.GUI_APPLICATION, false, null, new ArrayList<String>());
+        this(chemModel, JChemPaint.GUI_APPLICATION, false, null, Collections.emptySet());
     }
 
     /**
@@ -102,12 +99,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param gui         The gui configuration string
      * @param debug       Should we be in debug mode?
      * @param applet      If this panel is to be in an applet, pass the applet here, else null.
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet, List<String> blacklist) {
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet, Set<String> blocked) {
         GT.setLanguage(JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("General.language"));
         this.guistring = gui;
-        this.blacklist = blacklist;
+        this.blockList = blocked;
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
         try {
@@ -139,7 +136,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         updateUndoRedoControls();
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel,
                 renderPanel.getHub());
-        setupPopupMenus(inputAdapter, blacklist);
+        setupPopupMenus(inputAdapter, blockList);
         renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
         renderPanel.getHub().setEventHandler(this);
         renderPanel.getRenderer().getRenderer2DModel().addCDKChangeListener(
@@ -184,17 +181,17 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * Installs popup menus for this panel.
      * 
      * @param inputAdapter The SwingPopupModule to use for the popup menus.
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      */
-    public void setupPopupMenus(SwingPopupModule inputAdapter, List<String> blacklist) {
+    public void setupPopupMenus(SwingPopupModule inputAdapter, Set<String> blocked) {
     	inputAdapter.setPopupMenu(PseudoAtom.class,
-    			new JChemPaintPopupMenu(this, "pseudo", this.guistring, blacklist));
+    			new JChemPaintPopupMenu(this, "pseudo", this.guistring, blocked));
     	inputAdapter.setPopupMenu(Atom.class, new JChemPaintPopupMenu(this,
-    			"atom", this.guistring, blacklist));
+    			"atom", this.guistring, blocked));
     	inputAdapter.setPopupMenu(Bond.class, new JChemPaintPopupMenu(this,
-    			"bond", this.guistring, blacklist));
+    			"bond", this.guistring, blocked));
     	inputAdapter.setPopupMenu(ChemModel.class, new JChemPaintPopupMenu(
-    			this, "chemmodel", this.guistring, blacklist));
+    			this, "chemmodel", this.guistring, blocked));
     }
 
 

@@ -101,6 +101,7 @@ import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -248,7 +249,7 @@ public class JChemPaint {
 
     public static JChemPaintPanel showInstance(JFrame f, IChemModel chemModel,
             String title, boolean debug) {
-        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new ArrayList<String>());
+        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new HashSet<>());
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Rectangle bounds = gd.getDefaultConfiguration().getBounds();

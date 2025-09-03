@@ -38,6 +38,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -65,7 +66,6 @@ public class JCPToolBar extends JToolBar
 {
     private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(JCPToolBar.class);
-    public static Color BUTTON_INACTIVE_COLOR = new Color(230,230,230);
     public static Color BUTON_ACTIVE_COLOR = new Color(98, 182, 207, 111);
 
     private static final float ICON_FONT_SIZE = 22.0f;
@@ -103,12 +103,15 @@ public class JCPToolBar extends JToolBar
     /**
      *  Gets the toolbar attribute of the MainContainerPanel object
      *
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      *@return    The toolbar value
      */
-    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel, String key, int horizontalorvertical, List<String> blacklist)
+    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel,
+                                      String key,
+                                      int horizontalorvertical,
+                                      Set<String> blocked)
     {
-        return createToolbar(horizontalorvertical, key, chemPaintPanel, blacklist, 1);
+        return createToolbar(horizontalorvertical, key, chemPaintPanel, blocked);
     }
 
 
@@ -237,11 +240,15 @@ public class JCPToolBar extends JToolBar
      *
      * @param orientation int The orientation of the toolbar
      * @param kind String The String used to identify the toolbar
-     * @param blacklist A list of menuitems/buttons which should be ignored when
+     * @param blocked A list of menuitems/buttons which should be ignored when
      * building gui.
      * @return Component The created toolbar
      */
-    public static JToolBar createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines) {
+    public static JToolBar createToolbar(int orientation,
+                                         String kind,
+                                         AbstractJChemPaintPanel chemPaintPanel,
+                                         Set<String> blocked) {
+
         JCPToolBar toolbar = new JCPToolBar(orientation);
         String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
         if (resource_string == null) {
@@ -260,7 +267,7 @@ public class JCPToolBar extends JToolBar
                 toolbar.addSeparator();
             } else if (toolKey.equals("-")) {
                 toolbar.add(createSpacerButton());
-            } else if (!blacklist.contains(toolKey)) {
+            } else if (!blocked.contains(toolKey)) {
                 button = createToolbarButton(toolKey, chemPaintPanel, toolKey.length() < 3);
                 /*
                  * if (toolKeys[i].equals("lasso")) { selectButton = button; }
@@ -284,6 +291,8 @@ public class JCPToolBar extends JToolBar
 
         if (orientation == SwingConstants.HORIZONTAL) {
             toolbar.add(Box.createHorizontalGlue());
+        } else {
+            toolbar.add(Box.createVerticalGlue());
         }
 
         ControllerHub relay = chemPaintPanel.get2DHub();

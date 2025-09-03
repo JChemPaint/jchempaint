@@ -41,10 +41,13 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.JApplet;
@@ -89,7 +92,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
     private AbstractJChemPaintPanel theJcpp = null;
     private JExternalFrame jexf;
     protected boolean debug = false;
-    protected List<String> blacklist = new ArrayList<String>();
+    protected Set<String> blocked = new HashSet<>();
     
     private static String appletInfo = "JChemPaint Applet. See http://jchempaint.github.com "
             + "for more information";
@@ -373,11 +376,9 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         	String feature = featuresit.next();
         	if (getParameter(feature) != null
                     && getParameter(feature).equals("off")) {
-        		blacklist.add(feature);
+        		blocked.add(feature);
         		String[] members = StringHelper.tokenize(featuresDefinition.getString(feature));
-        		for(int i=0;i<members.length;i++){
-        			blacklist.add(members[i]);
-        		}
+                Collections.addAll(blocked, members);
         	}
         }
         prepareExternalFrame();
@@ -693,7 +694,7 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
                     }
                     if (e.getButton() == 1 && e.getClickCount() == 2 && applet instanceof JChemPaintViewerApplet)
                         if (!getJexf().isShowing()) {
-                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(),JChemPaintEditorApplet.GUI_APPLET,debug,JChemPaintAbstractApplet.this, blacklist);
+                            final JChemPaintPanel p = new JChemPaintPanel(theJcpp.getChemModel(), JChemPaintEditorApplet.GUI_APPLET, debug, JChemPaintAbstractApplet.this, blocked);
                             p.setName("appletframe");
                             p.setShowInsertTextField(false);
                             p.getChemModel().setID("JChemPaint Editor");

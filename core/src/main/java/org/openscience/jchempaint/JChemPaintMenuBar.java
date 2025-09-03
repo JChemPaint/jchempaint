@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -56,14 +57,13 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 *
 	 * @param  jcpPanel        Description of the Parameter
 	 * @param  guiString       Description of the Parameter
-	 * @param  menuDefinition  Description of the Parameter
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+	 * @param  blocked         A list of menuitesm/buttons which should be ignored when building gui.
 	 */
-	public JChemPaintMenuBar(AbstractJChemPaintPanel jcpPanel, String guiString, List<String> blacklist) {
+	public JChemPaintMenuBar(AbstractJChemPaintPanel jcpPanel, String guiString, Set<String> blocked) {
 		this.guiString = guiString;
-		addNormalMenuBar(jcpPanel, menuHelper.getMenuResourceString("menubar", guiString), blacklist);
+		addNormalMenuBar(jcpPanel, menuHelper.getMenuResourceString("menubar", guiString), blocked);
 		this.add(Box.createHorizontalGlue());
-		this.add(menuHelper.createMenu(jcpPanel, "help", false, guiString, blacklist));
+		this.add(menuHelper.createMenu(jcpPanel, "help", false, guiString, blocked));
 	}
 
 
@@ -75,9 +75,9 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 *      attribute
 	 * @param  menuDefinition  The feature to be added to the NormalMenuBar
 	 *      attribute
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
 	 */
-	private void addNormalMenuBar(AbstractJChemPaintPanel jcpPanel, String menuDefinition, List<String> blacklist) {
+	private void addNormalMenuBar(AbstractJChemPaintPanel jcpPanel, String menuDefinition, Set<String> blocked) {
 		String definition = menuDefinition;
 		String[] menuKeys = StringHelper.tokenize(definition);
 		for (int i = 0; i < menuKeys.length; i++) {
@@ -85,7 +85,7 @@ public class JChemPaintMenuBar extends JMenuBar {
 		    if(menuHelper.getMenuResourceString(menuKeys[i], guiString)==null)
 		        m = menuHelper.createMenuItem(jcpPanel, menuKeys[i], false);
 		    else
-		        m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString, blacklist);
+		        m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString, blocked);
 			if (m != null) {
 				this.add(m);
 			}
@@ -98,14 +98,14 @@ public class JChemPaintMenuBar extends JMenuBar {
 	 *
 	 * @param  jcpPanel   Description of the Parameter
 	 * @return            The created JMenu
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
 	 */
-	public JMenu getMenuForEmbedded(JChemPaintPanel jcpPanel, List<String> blacklist) {
+	public JMenu getMenuForEmbedded(JChemPaintPanel jcpPanel, Set<String> blocked) {
 		String definition = menuHelper.getMenuResourceString("menubar", guiString);
 		String[] menuKeys = StringHelper.tokenize(definition);
 		JMenu superMenu = new JMenu("JChemPaint");
 		for (int i = 0; i < menuKeys.length; i++) {
-			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString, blacklist);
+			JComponent m = menuHelper.createMenu(jcpPanel, menuKeys[i], false, guiString, blocked);
 			if (m != null) {
 				superMenu.add(m);
 			}
