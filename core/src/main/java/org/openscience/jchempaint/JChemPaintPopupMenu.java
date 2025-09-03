@@ -29,6 +29,7 @@
 package org.openscience.jchempaint;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -60,9 +61,9 @@ public class JChemPaintPopupMenu extends JPopupMenu
 	 * @param  jcpPanel  The JChemPaintPanel this menu is used for.
 	 * @param  type      The String used to identify the Menu
 	 * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
 	 */
-	JChemPaintPopupMenu(JChemPaintPanel jcpPanel, String type, String guiString, List<String> blacklist)
+	JChemPaintPopupMenu(JChemPaintPanel jcpPanel, String type, String guiString, Set<String> blocked)
 	{
 		String menuTitle = jcpPanel.getMenuTextMaker().getText(type + "MenuTitle");
 		JMenuItem titleMenuItem = new JMenuItem(menuTitle);
@@ -71,7 +72,7 @@ public class JChemPaintPopupMenu extends JPopupMenu
 		this.add(titleMenuItem);
 		this.addSeparator();
 		this.setLabel(type);
-		menuHelper.createMenu(jcpPanel, type + "popup", true, guiString, this, blacklist);
+		menuHelper.createMenu(jcpPanel, type + "popup", true, guiString, this, blocked);
 	}
 	
 	

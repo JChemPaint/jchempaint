@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -85,14 +86,14 @@ public class JChemPaintMenuHelper {
      * @param  jcpPanel  Description of the Parameter
      * @param  isPopup   Tells if this menu will be a popup one or not
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      * @return           The created JMenu
      */
-    protected JComponent createMenu(AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, List<String> blacklist) {
+    protected JComponent createMenu(AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, Set<String> blocked) {
         logger.debug("Creating menu: ", key);
         JMenu menu = new JMenu(jcpPanel.getMenuTextMaker().getText(key));
         menu.setName(key);
-        return createMenu(jcpPanel, key, isPopup, guiString, menu, blacklist);
+        return createMenu(jcpPanel, key, isPopup, guiString, menu, blocked);
     }
 
 
@@ -105,18 +106,18 @@ public class JChemPaintMenuHelper {
      * @param  isPopup   Tells if this menu will be a popup one or not
      * @param  guiString The string identifying the gui to build (i. e. the properties file to use)
      * @param  menu		 The menu to add the new menu to (must either be JMenu or JPopupMenu)
-  	 * @param  blacklist       A list of menuitesm/buttons which should be ignored when building gui.
+  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      * @return           The created JMenu
      */
-    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu, List<String> blacklist) {
-    	// Blacklist entire menu
-    	if (blacklist.contains(key)){
+    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu, Set<String> blocked) {
+    	// block entire menu
+    	if (blocked.contains(key)){
     		return null;
     	}
 
     	String[] itemKeys = StringHelper.tokenize(getMenuResourceString(key, guiString));
         for (int i = 0; i < itemKeys.length; i++) {
-        	if (!blacklist.contains(itemKeys[i]) && !blacklist.contains(itemKeys[i].substring(1))){
+        	if (!blocked.contains(itemKeys[i]) && !blocked.contains(itemKeys[i].substring(1))){
 	            if (itemKeys[i].equals("-")) {
 	                if(menu instanceof JMenu)
 	                    ((JMenu)menu).addSeparator();
@@ -124,7 +125,7 @@ public class JChemPaintMenuHelper {
 	                    ((JPopupMenu)menu).addSeparator();
 	            }
 	            else if (itemKeys[i].startsWith("@")) {
-	                JComponent me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString, blacklist);
+	                JComponent me = createMenu(jcpPanel, itemKeys[i].substring(1), isPopup, guiString, blocked);
 	                menu.add(me);
 	            }
 	            else {

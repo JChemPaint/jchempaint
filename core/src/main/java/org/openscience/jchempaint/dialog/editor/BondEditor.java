@@ -30,6 +30,7 @@
 package org.openscience.jchempaint.dialog.editor;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComboBox;
 
@@ -49,12 +50,12 @@ public class BondEditor extends ChemObjectEditor {
 	JComboBox<?> orderField;
 	JComboBox<?> stereoField;
 	IChemModelRelay hub;
-	List<String> blacklist;
+	Set<String> blocked;
 
-	public BondEditor(IChemModelRelay hub, List<String> blacklist) {
+	public BondEditor(IChemModelRelay hub, Set<String> blocked) {
 		super(false);
 		this.hub = hub;
-		this.blacklist = blacklist;
+		this.blocked = blocked;
 		constructPanel();
 	}
 
@@ -97,7 +98,7 @@ public class BondEditor extends ChemObjectEditor {
         orderField = new JComboBox<Object>(orderString);
         addField(GT.get("Bond order"), orderField, this);
 
-        if (!blacklist.contains("stereochemistry")) {
+        if (!blocked.contains("stereochemistry")) {
             stereoField = new JComboBox<Object>(stereoString);
             addField(GT.get("Bond stereo"), stereoField, this);
         }
@@ -108,7 +109,7 @@ public class BondEditor extends ChemObjectEditor {
             source = object;
             IBond bond = (IBond) source;
             orderField.setSelectedIndex(bondOrderIndex(bond.getOrder()));
-            if (!blacklist.contains("stereochemistry"))
+            if (!blocked.contains("stereochemistry"))
                 stereoField.setSelectedIndex(bondStereoIndex(bond.getStereo()));
         }
         else {

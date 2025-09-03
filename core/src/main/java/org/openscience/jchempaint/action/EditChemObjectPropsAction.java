@@ -66,7 +66,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 			editor = new ReactionEditor();
 		}
 		else if (object instanceof IBond) {
-			editor = new BondEditor(jcpPanel.get2DHub(), jcpPanel.getBlacklist());
+			editor = new BondEditor(jcpPanel.get2DHub(), jcpPanel.getBlockedActions());
 		}
 		
 		if (editor != null) {
