@@ -29,29 +29,23 @@
 package org.openscience.jchempaint;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Objects;
 import java.util.Properties;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.util.UIScale;
 import org.openscience.cdk.interfaces.IBond;
@@ -75,6 +69,7 @@ public class JCPToolBar extends JToolBar
     public static Color BUTON_ACTIVE_COLOR = new Color(98, 182, 207, 111);
 
     private static final float ICON_FONT_SIZE = 22.0f;
+
     private static Font iconFont;
     private static Properties iconFontMap;
 
@@ -195,7 +190,7 @@ public class JCPToolBar extends JToolBar
             astr = jcpph.getResourceString("symbol" + key + JCPAction.actionSuffix);
         else
             astr = jcpph.getResourceString(key + JCPAction.actionSuffix);
-            
+
         if (astr == null) {
             astr = key;
         }
@@ -226,6 +221,8 @@ public class JCPToolBar extends JToolBar
 
         b.setRequestFocusEnabled(false);
         b.setName(key);
+        b.setOpaque(false);
+        b.setBackground(null);
         chemPaintPanel.buttons.put(key, b);
 
         return b;
@@ -243,45 +240,31 @@ public class JCPToolBar extends JToolBar
      * @return Component The created toolbar
      */
     public static JToolBar createToolbar(int orientation, String kind, AbstractJChemPaintPanel chemPaintPanel, List<String> blacklist, int lines) {
-        JCPToolBar toolbar2 = new JCPToolBar(orientation);
+        JCPToolBar toolbar = new JCPToolBar(orientation);
         String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
         if (resource_string == null) {
             return null;
         }
+        if (orientation == SwingConstants.HORIZONTAL) {
+            toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.LINE_AXIS));
+        } else if (orientation == SwingConstants.VERTICAL) {
+            toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.PAGE_AXIS));
+        }
+
         String[] toolKeys = StringHelper.tokenize(resource_string);
         JButton button = null;
-        Box box = null;
-        int counter = 0;
         for (String toolKey : toolKeys) {
             if (toolKey.equals("|")) {
-                toolbar2.add(box);
-                box = null;
-                toolbar2.addSeparator();
+                toolbar.addSeparator();
             } else if (toolKey.equals("-")) {
-                toolbar2.add(box);
-                if (orientation == SwingConstants.HORIZONTAL) {
-                    toolbar2.add(Box.createHorizontalStrut(5));
-                } else if (orientation == SwingConstants.VERTICAL) {
-                    toolbar2.add(Box.createVerticalStrut(5));
-                }
-                counter = 0;
+                toolbar.add(createSpacerButton());
             } else if (!blacklist.contains(toolKey)) {
-                if (counter % lines == 0) {
-                    if (box != null) {
-                        toolbar2.add(box);
-                    }
-                    if (orientation == SwingConstants.HORIZONTAL) {
-                        box = new Box(BoxLayout.X_AXIS);
-                    } else if (orientation == SwingConstants.VERTICAL) {
-                        box = new Box(BoxLayout.Y_AXIS);
-                    }
-                }
-                button = (JButton) createToolbarButton(toolKey, chemPaintPanel, toolKey.length() < 3);
+                button = createToolbarButton(toolKey, chemPaintPanel, toolKey.length() < 3);
                 /*
                  * if (toolKeys[i].equals("lasso")) { selectButton = button; }
                  */
                 if (button != null) {
-                    box.add(button);
+                    toolbar.add(button);
                     if (toolKey.equals("bondTool")) {
                         chemPaintPanel.setLastActionButton(button);
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Display.Solid, true);
@@ -294,19 +277,31 @@ public class JCPToolBar extends JToolBar
                 } else {
                     logger.error("Could not create button" + toolKey);
                 }
-                counter++;
             }
         }
-        if (box != null) {
-            toolbar2.add(box);
-        }
+
         if (orientation == SwingConstants.HORIZONTAL) {
-            toolbar2.add(Box.createHorizontalGlue());
+            toolbar.add(Box.createHorizontalGlue());
         }
+
         ControllerHub relay = chemPaintPanel.get2DHub();
         IControllerModule m = new SelectSquareModule(relay);
         m.setID("select");
         relay.setFallbackModule(m);
-        return toolbar2;
+        return toolbar;
+    }
+
+    private static JButton createSpacerButton() {
+        JButton blank = new JButton(" ");
+        if (iconFont != null)
+            blank.setFont(iconFont);
+        blank.setVerticalTextPosition(SwingConstants.CENTER);
+        blank.setHorizontalTextPosition(SwingConstants.CENTER);
+        blank.setMargin(new Insets(2, 0, 0, 0));
+        blank.setEnabled(false);
+        blank.setOpaque(false);
+        blank.setBorder(new EmptyBorder(2,2,2,2));
+        blank.setBackground(null);
+        return blank;
     }
 }
