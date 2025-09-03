@@ -69,6 +69,8 @@ public class JCPToolBar extends JToolBar
     public static Color BUTON_ACTIVE_COLOR = new Color(98, 182, 207, 111);
 
     private static final float ICON_FONT_SIZE = 22.0f;
+    // JWM: not entirely sure how to get the text centered correctly
+    public static final Insets ICON_FONT_INSETS = new Insets(2, 0, 0, 0);
 
     private static Font iconFont;
     private static Properties iconFontMap;
@@ -153,7 +155,7 @@ public class JCPToolBar extends JToolBar
             b.setFont(iconFont);
             b.setVerticalTextPosition(SwingConstants.CENTER);
             b.setHorizontalTextPosition(SwingConstants.CENTER);
-            b.setMargin(new Insets(2, 0, 0, 0));
+            b.setMargin(ICON_FONT_INSETS);
         } else {
             // image icon
             logger.debug("Trying to find resource for key: ", key);
@@ -297,7 +299,7 @@ public class JCPToolBar extends JToolBar
             blank.setFont(iconFont);
         blank.setVerticalTextPosition(SwingConstants.CENTER);
         blank.setHorizontalTextPosition(SwingConstants.CENTER);
-        blank.setMargin(new Insets(2, 0, 0, 0));
+        blank.setMargin(ICON_FONT_INSETS);
         blank.setEnabled(false);
         blank.setOpaque(false);
         blank.setBorder(new EmptyBorder(2,2,2,2));
