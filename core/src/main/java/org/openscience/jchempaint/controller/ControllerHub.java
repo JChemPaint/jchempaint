@@ -1872,20 +1872,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public IRing addPhenyl(Point2d worldcoord, boolean phantom) {
+	public IRing addPhenyl(Point2d worldcoord, int ringSize, boolean phantom) {
 
-		IRing ring = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
-		ring.getBond(0).setOrder(IBond.Order.DOUBLE);
-		ring.getBond(2).setOrder(IBond.Order.DOUBLE);
-		ring.getBond(4).setOrder(IBond.Order.DOUBLE);
+		IRing ring = chemModel.getBuilder().newInstance(IRing.class, ringSize, "C");
+        if (ringSize == 5) {
+            if (altMode) {
+                ring.getBond(1).setOrder(IBond.Order.DOUBLE);
+                ring.getBond(4).setOrder(IBond.Order.DOUBLE);
+            } else {
+                ring.getBond(1).setOrder(IBond.Order.DOUBLE);
+                ring.getBond(3).setOrder(IBond.Order.DOUBLE);
+            }
+        } else if (ringSize == 6) {
+            ring.getBond(0).setOrder(IBond.Order.DOUBLE);
+            ring.getBond(2).setOrder(IBond.Order.DOUBLE);
+            ring.getBond(4).setOrder(IBond.Order.DOUBLE);
+        }
 
 		double bondLength = Renderer.calculateBondLength(chemModel
 				.getMoleculeSet());
-		ringPlacer
-				.placeRing(ring, worldcoord, bondLength, RingPlacer.jcpAngles);
+		ringPlacer.placeRing(ring, worldcoord, bondLength, RingPlacer.jcpAngles);
 
 		if (altMode) {
-			GeometryUtil.rotate(ring, GeometryUtil.get2DCenter(ring), Math.toRadians(30));
+			GeometryUtil.rotate(ring, GeometryUtil.get2DCenter(ring), Math.PI/ringSize);
 		}
 
 		if (phantom) {
@@ -2100,7 +2109,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * org.openscience.cdk.controller.IChemModelRelay#addPhenyl(org.openscience
 	 * .cdk.interfaces.IAtom, boolean)
 	 */
-	public IRing addPhenyl(IAtom atom, boolean phantom) {
+	public IRing addPhenyl(IAtom atom, int ringSize, boolean phantom) {
 
 		IAtomContainer sourceContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		IAtomContainer sharedAtoms = atom.getBuilder().newInstance(IAtomContainer.class);
@@ -2114,10 +2123,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			ringCenterVector.normalize();
 			ringCenterVector.scale(1.5);
 
-			newRing = chemModel.getBuilder().newInstance(IRing.class, 6, "C");
-			newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+			newRing = chemModel.getBuilder().newInstance(IRing.class, ringSize, "C");
+            if (ringSize == 5) {
+                newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
+            } else if (ringSize == 6) {
+                newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+            }
 
 			IAtom root = newRing.getAtom(0);
 			root.setPoint2d(new Point2d(atom.getPoint2d().x + ringCenterVector.x,
@@ -2158,10 +2172,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			sharedAtoms.addAtom(atom);
 
 			// make a benzene ring
-			newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
-			newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+			newRing = createAttachRing(sharedAtoms, ringSize, IElement.C, phantom);
+            if (ringSize == 5) {
+                newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
+            } else if (ringSize == 6) {
+                newRing.getBond(0).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+            }
 
 			double bondLength;
 			if (sourceContainer.getBondCount() == 0) {
@@ -2449,7 +2468,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * org.openscience.cdk.controller.IChemModelRelay#addPhenyl(org.openscience
 	 * .cdk.interfaces.IBond, boolean)
 	 */
-	public IRing addPhenyl(IBond bond, boolean phantom) {
+	public IRing addPhenyl(IBond bond, int ringSize, boolean phantom) {
 		IAtomContainer sharedAtoms = bond.getBuilder().newInstance(IAtomContainer.class);
 		IAtom firstAtom = bond.getAtom(0); // Assumes two-atom bonds only
 		IAtom secondAtom = bond.getAtom(1);
@@ -2502,17 +2521,41 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// construct a new Ring that contains the highlighted bond an its two
 		// atoms
-		IRing newRing = createAttachRing(sharedAtoms, 6, IElement.C, phantom);
+		IRing newRing = createAttachRing(sharedAtoms, ringSize, IElement.C, phantom);
 		ringPlacer.setMolecule(sourceContainer);
 		ringPlacer.placeFusedRing(newRing, sharedAtoms, ringCenterVector, bondLength);
 		if (sourceContainer.getMaximumBondOrder(bond.getAtom(0)) == IBond.Order.SINGLE
 				&& sourceContainer.getMaximumBondOrder(bond.getAtom(1)) == IBond.Order.SINGLE) {
-			newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(5).setOrder(IBond.Order.DOUBLE);
+            if (ringSize == 5) {
+                if (altMode) {
+                    newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
+                    newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+                } else {
+                    newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
+                    newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
+                }
+            } else if (ringSize == 6) {
+                if (altMode) {
+                    newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+                    newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+                }
+                else {
+                    newRing.getBond(1).setOrder(IBond.Order.DOUBLE);
+                    newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
+                    newRing.getBond(5).setOrder(IBond.Order.DOUBLE);
+                }
+            }
+
 		} else { // assume Order.DOUBLE, so only need to add 2 double bonds
-			newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
-			newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+            if (ringSize == 5) {
+                if (altMode)
+                    newRing.getBond(3).setOrder(IBond.Order.DOUBLE);
+                else
+                    newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+            } else if (ringSize == 6) {
+                newRing.getBond(2).setOrder(IBond.Order.DOUBLE);
+                newRing.getBond(4).setOrder(IBond.Order.DOUBLE);
+            }
 		}
 		// add the new atoms and bonds
 		for (IAtom ringAtom : newRing.atoms()) {

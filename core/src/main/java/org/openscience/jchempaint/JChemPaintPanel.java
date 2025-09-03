@@ -371,7 +371,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case '1': relay.addAtom(hgAtom, IAtom.C, false); break;
                     case '2': relay.addAcetyl(hgAtom); break;
                     case '3': // fall through 3/a
-                    case 'a': relay.addPhenyl(hgAtom, false); break;
+                    case 'a': relay.addPhenyl(hgAtom, 6, false); break;
                     case '4': relay.addDimethyl(hgAtom, IBond.Display.WedgeBegin); break;
                     case '5': relay.addDimethyl(hgAtom, IBond.Display.WedgeEnd); break;
                     case '6': relay.addRing(hgAtom, 6, false); break;
@@ -412,7 +412,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case '6': relay.addRing(hgBond, 6, false); break;
                     case '7': relay.addRing(hgBond, 7, false); break;
                     case '8': relay.addRing(hgBond, 8, false); break;
-                    case 'a': relay.addPhenyl(hgBond, false); break;
+                    case 'a': relay.addPhenyl(hgBond, 6, false); break;
                     case 'w': relay.changeBond(hgBond, IBond.Order.SINGLE,  IBond.Display.WedgeBegin); break;
                     case 'W': // shift + W
                     case 'h': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgedHashBegin); break;

@@ -234,8 +234,8 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-     IRing addPhenyl(IAtom atom, boolean phantom);
-     IRing addPhenyl(Point2d worldcoord, boolean phantom);
+     IRing addPhenyl(IAtom atom, int ringSize, boolean phantom);
+     IRing addPhenyl(Point2d worldcoord, int ringSize, boolean phantom);
     /**
      * Adds a ring to an bond.
      * 
@@ -252,7 +252,7 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
      * @param phantom Should this become a phantom bond or real one?
      * @return The new bond.
      */
-     IRing addPhenyl(IBond bond, boolean phantom);
+     IRing addPhenyl(IBond bond, int size, boolean phantom);
     /**
      * Adds a fragment to the chemmodel.
      * 
