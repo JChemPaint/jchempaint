@@ -215,7 +215,8 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     }
 
     startPoint = p;
-    currentSelection = new LogicalSelection(chemModelRelay.getRenderer().getRenderer2DModel().getSelection());
+      IChemObjectSelection chemObjSelection = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
+      currentSelection = chemObjSelection != null ? new LogicalSelection(chemObjSelection) : null;
   }
 
   protected static IChemModelRelay.CursorType getSelectionControlType(Point2d p, IChemModelRelay relay) {

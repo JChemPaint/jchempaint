@@ -106,6 +106,7 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
     }
 
     private RectangleElement determineSelectionBounds(IChemObjectSelection selection) {
+        if (selection == null) return null;
         Collection<IAtom> atoms = new HashSet<>(selection.elements(IAtom.class));
         for (IBond bond : selection.elements(IBond.class)) {
             atoms.add(bond.getBegin());
