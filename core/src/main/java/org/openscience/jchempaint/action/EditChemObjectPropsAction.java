@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.IReaction;
@@ -70,7 +71,7 @@ public class EditChemObjectPropsAction extends JCPAction {
 		}
 		
 		if (editor != null) {
-			editor.setChemObject((org.openscience.cdk.ChemObject)object);
+			editor.setChemObject(object);
 			ChemObjectPropertyDialog frame =
 					new ChemObjectPropertyDialog(JOptionPane.getFrameForComponent(editor), jcpPanel.get2DHub(),editor);
 			frame.pack();
