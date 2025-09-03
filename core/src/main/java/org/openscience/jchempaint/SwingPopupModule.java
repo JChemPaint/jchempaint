@@ -96,12 +96,13 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
         if (IBond.class.isAssignableFrom(classSearched))
             classSearched = IBond.class;
+        else if (IPseudoAtom.class.isAssignableFrom(classSearched))
+            classSearched = IPseudoAtom.class; // need to get before IAtom!
         else if (IAtom.class.isAssignableFrom(classSearched))
             classSearched = IAtom.class;
         else if (IChemModel.class.isAssignableFrom(classSearched))
             classSearched = IChemModel.class;
-        else if (IPseudoAtom.class.isAssignableFrom(classSearched))
-            classSearched = IPseudoAtom.class;
+
 
         if (classSearched.getName().startsWith("org.openscience.cdk")) {
             logger.debug("Searching popup for: ", classSearched.getName());
