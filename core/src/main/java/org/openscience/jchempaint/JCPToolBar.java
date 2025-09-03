@@ -35,15 +35,18 @@ import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -101,25 +104,49 @@ public class JCPToolBar extends JToolBar
     }
 
     /**
-     *  Gets the toolbar attribute of the MainContainerPanel object
+     * Gets the toolbar attribute of the MainContainerPanel object
      *
-  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
-     *@return    The toolbar value
+     * @param chemPaintPanel the application/applet panel
+     * @param key the toolbar key (the properties file is used to determine the items)
+     * @param direction {@link SwingConstants#HORIZONTAL} or {@link SwingConstants#VERTICAL}
+     * @param blocked A list of menuitesm/buttons which should be ignored when building gui.
+     * @return The toolbar value
      */
-    public static JToolBar getToolbar(AbstractJChemPaintPanel chemPaintPanel,
-                                      String key,
-                                      int horizontalorvertical,
-                                      Set<String> blocked)
+    public static JComponent getToolbar(AbstractJChemPaintPanel chemPaintPanel,
+                                        String key,
+                                        int direction,
+                                        Set<String> blocked)
     {
-        return createToolbar(horizontalorvertical, key, chemPaintPanel, blocked);
+        ResourceBundle bundle = JCPPropertyHandler.getInstance(true)
+                                                  .getGUIDefinition(chemPaintPanel.getGuistring());
+        if (!bundle.containsKey(key))
+            return null;
+        String[] resourceStrings = bundle.getString(key).split(",");
+        List<JToolBar> toolBars = new ArrayList<>();
+        for (String resourceString : resourceStrings) {
+            JToolBar toolbar = createToolbar(direction, resourceString.trim(), chemPaintPanel, blocked);
+            if (toolbar != null)
+                toolBars.add(toolbar);
+        }
+
+        if (toolBars.isEmpty())
+            return null;
+        else if (toolBars.size() == 1)
+            return toolBars.get(0);
+        else {
+            // we make the box in the opposite orientation
+            Box box = new Box(direction ^ 0x1);
+            for (JToolBar toolBar : toolBars)
+                box.add(toolBar);
+            return box;
+        }
     }
 
-
     /**
-     *  Gets the menuResourceString attribute of the JChemPaint object
+     * Gets the menuResourceString attribute of the JChemPaint object
      *
-     *@param  key  Description of the Parameter
-     *@return      The menuResourceString value
+     * @param  key  Description of the Parameter
+     * @return      The menuResourceString value
      */
     static String getToolbarResourceString(String key, String guistring)
     {
@@ -239,19 +266,18 @@ public class JCPToolBar extends JToolBar
      * specified in the properties file.
      *
      * @param orientation int The orientation of the toolbar
-     * @param kind String The String used to identify the toolbar
+     * @param resourceString string used to configure the toolbar items
      * @param blocked A list of menuitems/buttons which should be ignored when
      * building gui.
      * @return Component The created toolbar
      */
-    public static JToolBar createToolbar(int orientation,
-                                         String kind,
-                                         AbstractJChemPaintPanel chemPaintPanel,
-                                         Set<String> blocked) {
+    private static JToolBar createToolbar(int orientation,
+                                          String resourceString,
+                                          AbstractJChemPaintPanel chemPaintPanel,
+                                          Set<String> blocked) {
 
         JCPToolBar toolbar = new JCPToolBar(orientation);
-        String resource_string = getToolbarResourceString(kind, chemPaintPanel.getGuistring());
-        if (resource_string == null) {
+        if (resourceString == null) {
             return null;
         }
         if (orientation == SwingConstants.HORIZONTAL) {
@@ -260,7 +286,7 @@ public class JCPToolBar extends JToolBar
             toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.PAGE_AXIS));
         }
 
-        String[] toolKeys = StringHelper.tokenize(resource_string);
+        String[] toolKeys = StringHelper.tokenize(resourceString);
         JButton button = null;
         for (String toolKey : toolKeys) {
             if (toolKey.equals("|")) {
