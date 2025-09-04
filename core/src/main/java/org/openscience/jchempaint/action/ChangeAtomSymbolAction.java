@@ -34,7 +34,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.XMLIsotopeFactory;
@@ -92,11 +94,13 @@ public class ChangeAtomSymbolAction extends JCPAction
                 newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
             newActiveModule.setID(symbol);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+
             // open PeriodicTable panel
-            PeriodicTableDialog dialog = new PeriodicTableDialog();
+            PeriodicTableDialog dialog = new PeriodicTableDialog((JFrame)SwingUtilities.getWindowAncestor(jcpPanel));
             dialog.setName("periodictabledialog");
+            dialog.setVisible(true);
             symbol=dialog.getChosenSymbol();
-            if(symbol.equals(""))
+            if(symbol.isEmpty())
                 return;
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);

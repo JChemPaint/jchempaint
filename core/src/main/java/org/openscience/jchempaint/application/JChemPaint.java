@@ -250,6 +250,7 @@ public class JChemPaint {
     public static JChemPaintPanel showInstance(JFrame f, IChemModel chemModel,
             String title, boolean debug) {
         JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new HashSet<>());
+        p.setName("JChemPaintPanel");
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         Rectangle bounds = gd.getDefaultConfiguration().getBounds();
@@ -272,6 +273,7 @@ public class JChemPaint {
 
     public static JChemPaintPanel showInstance(IChemModel chemModel, String title, boolean debug) {
         JFrame f = new JFrame(title + " - JChemPaint");
+        f.setName("JChemPaint");
         chemModel.setID(title);
         f.addWindowListener(new JChemPaintPanel.AppCloser());
         f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
