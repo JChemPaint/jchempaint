@@ -126,6 +126,7 @@ public class SaveAsAction extends JCPAction
             IChemModel model = jcpPanel.getChemModel();
 
             JFileChooser chooser = new JFileChooser();
+            chooser.setName("save");
             chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
             chooser.setAcceptAllFileFilterUsed(false);
             JCPSaveFileFilter.addChoosableFileFilters(chooser);

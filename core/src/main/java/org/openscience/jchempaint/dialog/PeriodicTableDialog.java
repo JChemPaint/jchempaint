@@ -46,60 +46,30 @@ import java.util.EventObject;
  */
 public class PeriodicTableDialog extends JDialog {
 
-	private static final long serialVersionUID = -1136319713943259980L;
-	
-	private PeriodicTablePanel ptp;
-    private String symbolfromtable="";
-    
-    public String getChosenSymbol() {
-		return symbolfromtable;
-	}
+    private static final long serialVersionUID = -1136319713943259980L;
 
-	public PeriodicTableDialog() {
-     	super((JFrame)null,true);
+    private PeriodicTablePanel ptp;
+
+    public PeriodicTableDialog(JFrame frame) {
+        super(frame, true);
         doInit();
     }
-    
-    public void doInit(){
+
+    public void doInit() {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().setBackground(Color.white);
         setTitle(GT.get("Choose an element..."));
         ptp = new PeriodicTablePanel();
-        ptp.addCDKChangeListener(new PTDialogChangeListener());
-        getContentPane().add("Center",ptp);
+        getContentPane().add("Center", ptp);
         pack();
-		setVisible(true);
-  }
-    
-  class PTDialogChangeListener implements ICDKChangeListener {
+    }
 
-        /**
-         * Constructor for the PTDialogChangeListener object
-         * 
-         */
-        public PTDialogChangeListener() {
+    public String getChosenSymbol() {
+        try {
+            return ptp.getSelectedElement();
+        } catch (IOException | CDKException ignore) {
+            return "";
         }
 
-        public void stateChanged(EventObject event) {
-            if (event.getSource() instanceof PeriodicTablePanel) {
-                PeriodicTablePanel source = (PeriodicTablePanel)event.getSource();
-                String symbol=null;
-                try {
-                     symbol = source.getSelectedElement();
-                } catch (CDKException e) {
-                    throw new RuntimeException(e);
-                }
-                catch (IOException e) {
-                    throw new RuntimeException(e);
-                   
-                }
-                symbolfromtable=symbol;
-                setVisible(false);
-            } else {
-            }
-        }
-
-		public void zoomFactorChanged(EventObject event) {
-		}
     }
 }

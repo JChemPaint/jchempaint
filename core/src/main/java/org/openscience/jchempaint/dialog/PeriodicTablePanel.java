@@ -1017,6 +1017,14 @@ public class PeriodicTablePanel extends JPanel
             setBorder( new BevelBorder(BevelBorder.RAISED) );
             setToolTipText(elementTranslator(PeriodicTable.getAtomicNumber(element) ));
             addMouseListener(e);
+            setAction(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ElementButton button = (ElementButton) e.getSource();
+                    setSelectedElement(button.getElement());
+                }
+            });
+            setText(buttonString);
         }
         /**
          *  Gets the element attribute of the ElementButton object
