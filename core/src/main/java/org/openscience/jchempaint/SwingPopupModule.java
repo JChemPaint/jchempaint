@@ -166,7 +166,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 			logger.debug("Set popup menu source to: ", objectInRange);
 			popupMenu.show(rendererPanel, (int)mouseCoords.x, (int)mouseCoords.y);
 		} else {
-			logger.warn("Popup menu is null! Could not set source!");
+			logger.warn("Popup menu is null! Could not set source: " + objectInRange.getClass());
 		}
 	}
 	
