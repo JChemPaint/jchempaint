@@ -346,6 +346,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
 
     @Test
     public void testMenuBondStereoUp() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
         JPanelFixture jcppanel = applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
@@ -373,6 +374,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
 
     @Test
     public void testMenuBondUndefinedEZ() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+        restoreModelWithBasicmol();
         JPanelFixture jcppanel = applet.panel("appletframe");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
@@ -561,6 +563,8 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
         Assert.assertEquals(22, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
     }
 
+    // This test seems to be problematic, the preferences are non-modal and
+    // doesn't get closed - likely an issue with dialog being redisplayed
     @Test
     public void testSwitchLanguage() {
         applet.menuItem("options").target.doClick();
@@ -576,16 +580,18 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
         }
         JButtonFixture applybutton = new JButtonFixture(dialog.robot, (JButton) dialog.robot.finder().find(new NameMatcher("apply", true)));
         applybutton.target.doClick();
+        
         Assert.assertEquals("Neu", applet.menuItem("new").component().getText());
 
+        // setting the language resets the whole tree so we do some
         for (int i = 0; i < combobox.getItemCount(); i++) {
             if (((String) combobox.getItemAt(i)).equals("American English")) {
                 combobox.setSelectedIndex(i);
                 break;
             }
         }
-
         applybutton.target.doClick();
+
         dialog.target.setVisible(false);
         applet.robot.waitForIdle();
 
