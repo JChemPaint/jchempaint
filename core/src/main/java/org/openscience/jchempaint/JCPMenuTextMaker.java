@@ -143,7 +143,8 @@ public class JCPMenuTextMaker {
         entries.put("metals", GT.get("Metals"));
         entries.put("metalloids", GT.get("Metalloids"));
         entries.put("Transition m", GT.get("Non-Metals"));
-        entries.put("pseudoSymbols", GT.get("Pseudo Atoms"));
+        entries.put("pseudoSymbols", GT.get("R Group"));
+        entries.put("attachmentPoints", GT.get("Attachment Point"));
         entries.put("majorPlusThree", GT.get("Major Plus {0}", "3"));
         entries.put("majorPlusTwo", GT.get("Major Plus {0}", "2"));
         entries.put("majorPlusOne", GT.get("Major Plus {0}", "1"));
@@ -244,7 +245,10 @@ public class JCPMenuTextMaker {
         entries.put("pseudoR1", GT.get("R1"));	
         entries.put("pseudoR2", GT.get("R2"));	
         entries.put("pseudoR3", GT.get("R3"));	
-        entries.put("pseudoR4", GT.get("R4"));	
+        entries.put("pseudoR4", GT.get("R4"));
+        entries.put("pseudoAP1", GT.get("1"));
+        entries.put("pseudoAP2", GT.get("2"));
+        entries.put("pseudoAP3", GT.get("3"));
         entries.put("bondToolTooltip", GT.get("Draw Bonds and Atoms"));
         entries.put("reactionArrowTooltip", GT.get("Makes a Reaction by Drawing a Reaction Arrow"));
         entries.put("double_bondToolTooltip", GT.get("Draw Double Bonds"));
@@ -299,7 +303,7 @@ public class JCPMenuTextMaker {
         entries.put("flipVerticalTooltip", GT.get("Flip vertical"));
         entries.put("flipHorizontalTooltip", GT.get("Flip horizontal"));
         entries.put("pasteTemplateTooltip", GT.get("Choose from complex templates"));
-        entries.put("bondMenuTitle", GT.get(" Menu"));
+        entries.put("bondMenuTitle", GT.get("Bond Popup Menu"));
         entries.put("chemmodelMenuTitle", GT.get("ChemModel Popup Menu"));
         entries.put("Enter Element or Group", GT.get("Enter Element or Group"));
         entries.put("Add Atom Or Change Element", GT.get("Add Atom Or Change Element"));
@@ -369,6 +373,8 @@ public class JCPMenuTextMaker {
         entries.put("setBondApoAction2", GT.get("Set as bond for second attachment point"));
         entries.put("rgpAdvanced", GT.get("Advanced R-group logic"));
         entries.put("rgpGenerate", GT.get("Generate possible configurations (sdf) "));
+        entries.put("rgpGenerateSmi", GT.get("Generate possible configurations (SMILES) "));
+        entries.put("clearRgroup", GT.get("Clear R-Group"));
     }
 
     /**

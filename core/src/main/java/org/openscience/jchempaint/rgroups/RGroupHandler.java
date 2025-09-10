@@ -24,6 +24,7 @@
 package org.openscience.jchempaint.rgroups;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -144,31 +146,46 @@ public class RGroupHandler  {
 		 *    ....
 		 *    ..
 		 */
-		final double MARGIN=2;
+        final double MARGIN = 3;
 		IAtomContainer rootStruct=rGroupQuery.getRootStructure();
 		double xLeft=(findBoundary(rootStruct,true,true,Double.POSITIVE_INFINITY));
 		double yBottom=(findBoundary(rootStruct,false,true,Double.POSITIVE_INFINITY))-MARGIN;
 		double minListYBottom=yBottom;
 
-		for (int rgrpNum : sortRGroupNumbers()) {
-			double listXRight=xLeft;
+        for (int rgrpNum : sortRGroupNumbers()) {
+            double listXRight = xLeft;
 
-			IRGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
-			for (IRGroup rgrp : rgrpList.getRGroups()) {
+            IRGroupList rgrpList = rGroupQuery.getRGroupDefinitions().get(rgrpNum);
+            List<IRGroup> rGroups = rgrpList.getRGroups();
+            List<double[]> bounds = new ArrayList<>();
 
-				double rgrpXleft=(findBoundary(rgrp.getGroup(),true,true,Double.POSITIVE_INFINITY));
-				double rgrpYtop=(findBoundary(rgrp.getGroup(),false,false,Double.NEGATIVE_INFINITY));
-				double shiftX= (listXRight - rgrpXleft);
-				double shiftY= (yBottom - rgrpYtop);
-				for (IAtom atom : rgrp.getGroup().atoms()) {
-					atom.setPoint2d(new Point2d (atom.getPoint2d().x+shiftX, atom.getPoint2d().y+shiftY ));
-				}
-				minListYBottom=(findBoundary(rgrp.getGroup(),false,true,minListYBottom));
-				double rgrpXRight=(findBoundary(rgrp.getGroup(),true,false,Double.NEGATIVE_INFINITY));
-				listXRight=rgrpXRight+MARGIN;
-			}
-			yBottom=minListYBottom-MARGIN;
-		}
+            double maxHeight = 0;
+            for (IRGroup rgrp : rGroups) {
+                double[] minMax = GeometryUtil.getMinMax(rgrp.getGroup());
+                bounds.add(minMax);
+                maxHeight = Math.max(minMax[3] - minMax[1], maxHeight);
+            }
+
+            for (int i = 0; i < rGroups.size(); i++) {
+                IRGroup rgrp = rGroups.get(i);
+                double[] minmax = bounds.get(i);
+                double rgrpXleft = minmax[0];
+                double rgrpYtop = minmax[3];
+                double rgrpHeight = minmax[3] - minmax[1];
+
+                double shiftX = (listXRight - rgrpXleft);
+                double shiftY = (yBottom - rgrpYtop) - (maxHeight - rgrpHeight) / 2;
+
+                for (IAtom atom : rgrp.getGroup().atoms()) {
+                    atom.setPoint2d(new Point2d(atom.getPoint2d().x + shiftX, atom.getPoint2d().y + shiftY));
+                }
+
+                minListYBottom = (findBoundary(rgrp.getGroup(), false, true, minListYBottom));
+                double rgrpXRight = (findBoundary(rgrp.getGroup(), true, false, Double.NEGATIVE_INFINITY));
+                listXRight = rgrpXRight + MARGIN;
+            }
+            yBottom = minListYBottom - MARGIN;
+        }
 	}
 
 	/**
@@ -409,11 +426,6 @@ public class RGroupHandler  {
 					
 								// Now you can safely call setGroup
 								concreteRgp.setGroup(findContainer(mash.get(rgpHash).get(0), mset));
-					
-								if (concreteRgp.getGroup() != null) {
-									concreteRgp.setFirstAttachmentPoint(findAtom(mash.get(rgpHash).get(1), concreteRgp.getGroup()));
-									concreteRgp.setSecondAttachmentPoint(findAtom(mash.get(rgpHash).get(2), concreteRgp.getGroup()));
-								}
 							}
 							break restore;  // Exit the loop when done
 						}

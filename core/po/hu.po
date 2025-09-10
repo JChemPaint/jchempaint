@@ -2180,7 +2180,7 @@ msgid "Non-Metals"
 msgstr "Nem fémek"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:140
-msgid "Pseudo Atoms"
+msgid "R Group"
 msgstr "Látszólagos atomok"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:141

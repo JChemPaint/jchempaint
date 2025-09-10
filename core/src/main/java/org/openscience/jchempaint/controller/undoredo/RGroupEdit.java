@@ -51,7 +51,8 @@ public class RGroupEdit implements IUndoRedoable {
 	private Map<IAtom,IAtomContainer> existingAtomDistr;
 	private Map<IBond,IAtomContainer> existingBondDistr;
 	private IAtomContainer existingRoot;
-    private Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints;
+    private Map<IAtom, Map<Integer, IBond>> oldRootAttachmentPoints;
+    private Map<IAtom, Map<Integer, IBond>> newRootAttachmentPoints;
     private Map<Integer,RGroupList> existingRgroupLists =null;
     private Map<RGroup, Map<Integer,IAtom>> existingRGroupApo;
     private IAtomContainer redoRootStructure;
@@ -67,7 +68,8 @@ public class RGroupEdit implements IUndoRedoable {
 			        , Map<IAtom,IAtomContainer> _existingAtomDistr
 			        , Map<IBond,IAtomContainer> _existingBondDistr
 			        , IAtomContainer _existingRoot
-			        , Map<IAtom, Map<Integer, IBond>> _existingRootAttachmentPoints
+			        , Map<IAtom, Map<Integer, IBond>> oldBondApos
+			        , Map<IAtom, Map<Integer, IBond>> newBondApos
 			        , Map<RGroup, Map<Integer,IAtom>> _existingRGroupApo
 			        , Map<Integer,RGroupList> _existingRgroupLists
 			        , IAtomContainer _userSelection
@@ -78,7 +80,8 @@ public class RGroupEdit implements IUndoRedoable {
 		this.hub=_hub;
 		this.rgrpHandler=_rgrpHandler;
 		this.existingRoot=_existingRoot;
-		this.existingRootAttachmentPoints=_existingRootAttachmentPoints;
+		this.oldRootAttachmentPoints =oldBondApos;
+		this.newRootAttachmentPoints =newBondApos;
 		this.existingRGroupApo=_existingRGroupApo;
 		this.existingAtomDistr=_existingAtomDistr;
 		this.existingBondDistr=_existingBondDistr;
@@ -113,9 +116,9 @@ public class RGroupEdit implements IUndoRedoable {
 	/**
 	 * Undo actions
 	 */
-	public void undo() { 
+	public void undo() {
 
-		IRGroupQuery rgrpQ= rgrpHandler.getrGroupQuery();
+        IRGroupQuery rgrpQ = rgrpHandler.getrGroupQuery();
 
 		if (type.equals("setSubstitute")||type.equals("setRoot")) {
 			this.redoRootAttachmentPoints=rgrpHandler.getrGroupQuery().getRootAttachmentPoints();
@@ -141,7 +144,7 @@ public class RGroupEdit implements IUndoRedoable {
 				else {
 					existingRoot.setProperty(CDKConstants.TITLE,RGroup.ROOT_LABEL);	
 					rgrpQ.setRootStructure(existingRoot);
-					rgrpQ.setRootAttachmentPoints(existingRootAttachmentPoints);
+					rgrpQ.setRootAttachmentPoints(oldRootAttachmentPoints);
 				}
 			}
 	
@@ -154,48 +157,8 @@ public class RGroupEdit implements IUndoRedoable {
 				}
 			}
 		}
-
-		else if (type.startsWith("setAtomApoAction")) {
-			RGroup undoRGroup = existingRGroupApo.keySet().iterator().next();			
-			for (Iterator<Integer> rnumItr = hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-				for (IRGroup rgrp : hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-					if (rgrp.equals(undoRGroup)) {
-						IAtom apo1 = existingRGroupApo.get(undoRGroup).get(1);
-						IAtom apo2 = existingRGroupApo.get(undoRGroup).get(2);
-						
-						if (rgrp instanceof RGroup) {
-							RGroup rGroup = (RGroup) rgrp;
-							rGroup.setFirstAttachmentPoint(apo1);
-							rGroup.setSecondAttachmentPoint(apo2);
-						} else {
-							throw new IllegalStateException("rgrp is not an instance of RGroup");
-						}
-					}
-				}
-			}
-		}
 		else if (type.startsWith("setBondApoAction")) {
-			for(Iterator<IAtom> atItr=existingRootAttachmentPoints.keySet().iterator(); atItr.hasNext();) {
-				IAtom rAtom= atItr.next();
-				Map<Integer,IBond> undoApo = existingRootAttachmentPoints.get(rAtom);
-				Map<Integer,IBond> apoBonds = rgrpQ.getRootAttachmentPoints().get(rAtom);
-
-				redoRootAttachmentPoints= new HashMap<IAtom, Map<Integer, IBond>>();
-				Map<Integer,IBond> redoApo = new HashMap<Integer,IBond>(); 
-				if(apoBonds.get(1)!=null)
-					redoApo.put(1, apoBonds.get(1));
-				if(apoBonds.get(2)!=null)
-					redoApo.put(2, apoBonds.get(2));
-				redoRootAttachmentPoints.put(rAtom, redoApo);
-				
-				apoBonds.remove(1); apoBonds.remove(2);
-				if(undoApo.get(1)!=null) {
-					apoBonds.put(1, undoApo.get(1));
-				}
-				if(undoApo.get(2)!=null) {
-					apoBonds.put(2, undoApo.get(2));
-				}
-			}
+            rgrpQ.setRootAttachmentPoints(oldRootAttachmentPoints);
 		}
 		else if (type.equals("clearRgroup")) {
 			hub.setRGroupHandler(rgrpHandler);
@@ -246,41 +209,9 @@ public class RGroupEdit implements IUndoRedoable {
 				}
 			}
 		}
-		else if (type.startsWith("setAtomApoAction")) {
-			RGroup redoRGroup = redoRGroupApo.keySet().iterator().next();
-			for (Iterator<Integer> rnumItr = hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().keySet().iterator(); rnumItr.hasNext();) {
-				for (IRGroup rgrp : hub.getRGroupHandler().getrGroupQuery().getRGroupDefinitions().get(rnumItr.next()).getRGroups()) {
-					if (rgrp.equals(redoRGroup)) {
-						IAtom apo1 = redoRGroupApo.get(redoRGroup).get(1);
-						IAtom apo2 = redoRGroupApo.get(redoRGroup).get(2);
-		
-						// Cast IRGroup to RGroup
-						if (rgrp instanceof RGroup) {
-							RGroup rGroup = (RGroup) rgrp;
-							rGroup.setFirstAttachmentPoint(apo1);
-							rGroup.setSecondAttachmentPoint(apo2);
-						} else {
-							throw new IllegalStateException("rgrp is not an instance of RGroup");
-						}
-					}
-				}
-			}
-		}
 		else if (type.startsWith("setBondApoAction")) {
-			for(Iterator<IAtom> atItr=redoRootAttachmentPoints.keySet().iterator(); atItr.hasNext();) {
-				IAtom rAtom= atItr.next();
-				Map<Integer,IBond> apoBonds = hub.getRGroupHandler().getrGroupQuery().getRootAttachmentPoints().get(rAtom);
-
-				apoBonds.remove(1); apoBonds.remove(2);
-				Map<Integer,IBond> redoApo = redoRootAttachmentPoints.get(rAtom);
-
-				if(redoApo.get(1)!=null) {
-					apoBonds.put(1, redoApo.get(1));
-				}
-				if(redoApo.get(2)!=null) {
-					apoBonds.put(2, redoApo.get(2));
-				}
-			}
+            IRGroupQuery rgrpQ = rgrpHandler.getrGroupQuery();
+            rgrpQ.setRootAttachmentPoints(newRootAttachmentPoints);
 		}
 		else if (type.equals("clearRgroup")) {
 			hub.unsetRGroupHandler();
