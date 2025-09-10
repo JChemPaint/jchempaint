@@ -20,89 +20,60 @@
  */
 package org.openscience.jchempaint.renderer.selection;
 
-import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 
+import javax.vecmath.Point2d;
+import java.awt.Color;
+
 /**
+ * Rectangle selection is defined by two points. Adding extra points will update
+ * the second coordinate but the first point is fixed.
+ *
  * @cdk.module rendercontrol
  */
 public class RectangleSelection extends ShapeSelection {
-    
-    private Rectangle2D rectangle;
-    double startX=0;
-    double startY=0;
-   
+
+    private Point2d first;
+    private Point2d second;
+
     public RectangleSelection() {
-        this.rectangle = new Rectangle2D.Double();
     }
-    
+
     public IRenderingElement generate(Color color) {
-        return new RectangleElement(
-                this.rectangle.getMinX(),
-                this.rectangle.getMaxY(),
-                this.rectangle.getMaxX(),
-                this.rectangle.getMinY(),
-                color);
+        if (first == null || second == null)
+            return null;
+        double minX = Math.min(first.x, second.x);
+        double maxY = Math.max(first.y, second.y);
+        double maxX = Math.max(first.x, second.x);
+        double minY = Math.min(first.y, second.y);
+        return new RectangleElement(minX, maxY, maxX, minY, color);
     }
-        
+
     public boolean contains(Point2d p) {
-        return this.rectangle.contains(p.x, p.y);
+        if (first == null || second == null)
+            return false;
+        double minX = Math.min(first.x, second.x);
+        double maxY = Math.max(first.y, second.y);
+        double maxX = Math.max(first.x, second.x);
+        double minY = Math.min(first.y, second.y);
+        return p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY;
     }
 
-    // x will be the smallest x around (the base..)
-    // and negative width is not allowed 
-    // adding points always works, but setRect goes wrong. 
-    // .. the x is actually p.x 
-    
     public void addPoint(Point2d p) {
-        if (rectangle.getHeight() == 0 && rectangle.getWidth() == 0) {
-            rectangle = new Rectangle2D.Double(p.x, p.y, 0.1, 0.1);
-            startX=p.x;
-            startY=p.y;
-        } 
-
-        else {
-            if (rectangle.contains(new Point2D.Double(p.x, p.y))) {
-                double width=0, height=0;
-                double x = rectangle.getX();
-                if (x == startX) {
-                    width=p.x - x;
-                }
-                else {
-                    x=p.x;
-                    width=Math.abs(startX-p.x);
-                }
-                
-                double y = rectangle.getY();
-                if (y == startY) {
-                    height=p.y - y;
-                }
-                else {
-                    y=p.y;
-                    height=Math.abs(startY-p.y);
-                }
-                rectangle.setRect(x, y, width, height);
-
-            } else {
-                rectangle.add(new Point2D.Double(p.x, p.y));
-            }
-            
-        }
+        if (first == null)
+            first = p;
+        else
+            second = p;
     }
-
 
     public boolean isEmpty() {
-        return this.rectangle.isEmpty();
+        return first == null || second == null;
     }
 
     public void reset() {
         this.finished = true;
-        this.rectangle.setRect(rectangle.getX(), rectangle.getY(), 0, 0);
+        first = null;
+        second = null;
     }
 }
