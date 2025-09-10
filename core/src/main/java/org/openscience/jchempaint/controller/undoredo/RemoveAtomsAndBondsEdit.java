@@ -89,17 +89,15 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
 		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);
-		IAtomContainerSet moleculeSet = ConnectivityChecker
-				.partitionIntoMolecules(molecule);
+		IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);
-		if (chemModelRelay.getRGroupHandler()!=null) {
-			try {
-				chemModelRelay.getRGroupHandler().adjustAtomContainers(moleculeSet);
-			} catch (CDKException e) {
-				e.printStackTrace();
-				chemModelRelay.unsetRGroupHandler();
-			}
-		}
+        if (chemModelRelay.getRGroupHandler() != null) {
+            try {
+                chemModelRelay.getRGroupHandler().adjustAtomContainers(moleculeSet);
+            } catch (CDKException e) {
+                chemModelRelay.unsetRGroupHandler();
+            }
+        }
 
 		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		if (undoRedoSet.contains(model.getHighlightedAtom())) {
