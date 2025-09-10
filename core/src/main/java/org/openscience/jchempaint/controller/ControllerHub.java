@@ -104,6 +104,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class that will central interaction point between a mouse event throwing
@@ -564,8 +566,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			Point2d worldCoord, boolean makePseudoAtom) {
 		IAtom newAtom;
 		if (makePseudoAtom) {
-			newAtom = chemModel.getBuilder()
-					.newInstance(IPseudoAtom.class,atomType, worldCoord);
+			newAtom = makePseudoAtom(atomType, worldCoord);
 		} else {
 			newAtom = chemModel.getBuilder().newInstance(IAtom.class,atomType, worldCoord);
 		}
@@ -676,7 +677,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		IAtom newAtom;
 		if (makePseudoAtom) {
-			newAtom = chemModel.getBuilder().newInstance(IPseudoAtom.class,atomType);
+			newAtom = makePseudoAtom(atomType, null);
 		} else {
 			newAtom = chemModel.getBuilder().newInstance(IAtom.class,atomType);
 		}
@@ -1448,7 +1449,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (swap) {
 			IAtom newAtom;
 			if (newIsPseudo) {
-				newAtom = atom.getBuilder().newInstance(IPseudoAtom.class, symbol);
+				newAtom = makePseudoAtom(symbol, null);
 			} else {
 				newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
 			}
@@ -1689,7 +1690,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// if there is a selection we clean up in-place
 		IChemObjectSelection selection = getRenderer().getRenderer2DModel().getSelection();
-		if (selection.isFilled()) {
+        IAtomContainer selected = selection.getConnectedAtomContainer();
+        if (selection.isFilled() && ConnectivityChecker.isConnected(selected)) {
 
 			Set<IAtom> selectedAtoms = new HashSet<>();
 			for (IBond bond : selection.elements(IBond.class)) {
@@ -1734,9 +1736,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			if (xatoms.size() > 1)
 				return;
 
-			IAtomContainer selected = selection.getConnectedAtomContainer();
-			if (!ConnectivityChecker.isConnected(selected))
-				return;
+
 
 			Point2d oldCenter = GeometryUtil.get2DCenter(selected);
 
@@ -1788,7 +1788,15 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				coordsforatom[0] = atom.getPoint2d();
 			}
 		}
-		avoidOverlap(chemModel);
+
+        avoidOverlap(chemModel);
+        if (rGroupHandler != null) {
+            try {
+                rGroupHandler.layoutRgroup();
+            } catch (CDKException ignore) {
+            }
+        }
+
 		coordinatesChanged();
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 			IUndoRedoable undoredo = getUndoRedoFactory().getChangeCoordsEdit(
@@ -3268,6 +3276,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		List<IAtom> atomsToUpdate = new ArrayList<>();
 
 
+        if (mergeMap.isEmpty())
+            return;
+
 		// Done shifting, now the actual merging
 		for (Map.Entry<IAtom,IAtom> e : mergeMap.entrySet()) {
 			List<IBond> removedBonds = new ArrayList<IBond>();
@@ -3385,7 +3396,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				for (IAtomContainer atc : droppedContainers) {
 					atc.setProperty(CDKConstants.TITLE, null);
 				}
-				e.printStackTrace();
 			}
 		}
 
@@ -3489,6 +3499,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	}
 
+    private static final Pattern ATTACH_POINT_REGEX = Pattern.compile("_AP([1-9])");
+
 	// OK
 	/*
 	 * (non-Javadoc)
@@ -3498,13 +3510,32 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * .openscience.cdk.interfaces.IAtom, java.lang.String)
 	 */
 	public IPseudoAtom convertToPseudoAtom(IAtom atom, String label) {
-		IPseudoAtom pseudo = atom.getBuilder().newInstance(IPseudoAtom.class,atom);
-		pseudo.setLabel(label);
-		replaceAtom(pseudo, atom);
+        IPseudoAtom pseudo = makePseudoAtom(label, atom.getPoint2d());
+
+        // attachment points only replace atoms if they have a single
+        // bond attached, else we sprout off a new atom
+        if (pseudo.getAttachPointNum() != 0 && atom.getBondCount() != 1) {
+            addAtom(label, atom, true);
+        } else {
+            replaceAtom(pseudo, atom);
+        }
 		return pseudo;
 	}
 
-	// OK
+    private IPseudoAtom makePseudoAtom(String label, Point2d p) {
+        IPseudoAtom pseudo = chemModel.getBuilder()
+                                      .newInstance(IPseudoAtom.class);
+        Matcher matcher = ATTACH_POINT_REGEX.matcher(label);
+        if (matcher.matches()) {
+            pseudo.setAttachPointNum(Integer.parseInt(matcher.group(1)));
+        } else {
+            pseudo.setLabel(label);
+        }
+        pseudo.setPoint2d(p);
+        return pseudo;
+    }
+
+    // OK
 	public void moveBy(Collection<IAtom> atoms, Vector2d move,
 			Vector2d totalmove) {
 		if (totalmove != null && getUndoRedoFactory() != null

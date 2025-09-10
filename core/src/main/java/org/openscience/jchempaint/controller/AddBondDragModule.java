@@ -28,11 +28,13 @@ package org.openscience.jchempaint.controller;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 
+import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
@@ -144,7 +146,11 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             source = (IAtom) getHighlighted(worldCoord, closestAtom);
 
             if (source == null) {
-                source = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), start);
+                String symbol = chemModelRelay.getController2DModel().getDrawElement();
+                if (Elements.ofString(symbol) != Elements.Unknown)
+                    source = getBuilder().newInstance(IAtom.class, symbol, start);
+                else
+                    source = getBuilder().newInstance(IPseudoAtom.class, symbol, start);
                 newSource = true;
             } else {
                 // Take the true (x,y) of the atom, not the click point
@@ -189,7 +195,12 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge, merge);
         } else {
             dest = roundAngle(start, worldCoordTo, bondLength);
-            IAtom atom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), dest);
+            IAtom atom;
+            String symbol = chemModelRelay.getController2DModel().getDrawElement();
+            if (Elements.ofString(symbol) != Elements.Unknown)
+                atom = getBuilder().newInstance(IAtom.class, symbol, dest);
+            else
+                atom = getBuilder().newInstance(IPseudoAtom.class, symbol, start);
             IBond bond = getBuilder().newInstance(IBond.class, source, atom, orderForNewBond, displayForNewBond);
             chemModelRelay.addPhantomAtom(source);
             chemModelRelay.addPhantomAtom(atom);
