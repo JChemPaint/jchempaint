@@ -394,6 +394,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case 'C': // fall through C/l
                     case 'l': relay.setSymbol(hgAtom, "Cl"); break;
                     case 'S': relay.setSymbol(hgAtom, "Si"); break;
+                    case '.': relay.convertToPseudoAtom(hgAtom, "_AP1"); break;
                     default:
                         changed = false;
                 }
