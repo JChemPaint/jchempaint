@@ -2154,7 +2154,7 @@ msgid "Non-Metals"
 msgstr "Nichtmetalle"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:140
-msgid "Pseudo Atoms"
+msgid "R Group"
 msgstr "Pseudo-Atome"
 
 #: src/main/org/openscience/jchempaint/JCPMenuTextMaker.java:141

@@ -153,10 +153,12 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 
     public IUndoRedoable getRGroupEdit(String type, boolean isNewRGroup, IChemModelRelay hub, RGroupHandler rgrpHandler
             , Map<IAtom, IAtomContainer> existingAtomDistr, Map<IBond, IAtomContainer> existingBondDistr
-            , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints, Map<RGroup, Map<Integer, IAtom>> existingRGroupApo
-            , Map<Integer, RGroupList> rgroupLists, IAtomContainer userSelection) {
+            , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> oldRootApos,
+                                       Map<IAtom, Map<Integer, IBond>> newRootApos,
+                                       Map<RGroup, Map<Integer, IAtom>> existingRGroupApo,
+                                       Map<Integer, RGroupList> rgroupLists, IAtomContainer userSelection) {
         return new SwingUndoableEdit(new RGroupEdit(type, isNewRGroup, hub, rgrpHandler
-                , existingAtomDistr, existingBondDistr, existingRoot, existingRootAttachmentPoints
+                , existingAtomDistr, existingBondDistr, existingRoot, oldRootApos, newRootApos
                 , existingRGroupApo, rgroupLists, userSelection));
 
     }

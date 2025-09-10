@@ -91,7 +91,7 @@ public interface IUndoRedoFactory {
 			Integer valence, String text, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getRGroupEdit(String type, boolean isNewRGroup,IChemModelRelay hub,RGroupHandler rgrpHandler
 	        , Map<IAtom,IAtomContainer> existingAtomDistr, Map<IBond,IAtomContainer> existingBondDistr
-	        , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints, Map<RGroup, Map<Integer,IAtom>> existingRGroupApo
+	        , IAtomContainer existingRoot, Map<IAtom, Map<Integer, IBond>> existingRootAttachmentPoints, Map<IAtom, Map<Integer, IBond>> newRootAttachmentPoints, Map<RGroup, Map<Integer,IAtom>> existingRGroupApo
 	        , Map<Integer,RGroupList> rgroupLists,IAtomContainer userSelection);
 
 }
