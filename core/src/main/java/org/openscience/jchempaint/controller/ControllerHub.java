@@ -53,7 +53,6 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
@@ -81,7 +80,6 @@ import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
-import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
@@ -3632,22 +3630,10 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 */
 	public void setRGroupHandler(RGroupHandler rGroupHandler) {
 		ControllerHub.rGroupHandler = rGroupHandler;
-		if (rGroupHandler != null) {
-			for (IGenerator<?> generator : renderer.getGenerators())
-				if (generator instanceof RGroupGenerator) {
-					((RGroupGenerator) generator).setRGroupQuery(rGroupHandler
-							.getrGroupQuery());
-				}
-		}
 	}
 
 	public void unsetRGroupHandler() {
 		ControllerHub.rGroupHandler = null;
-		for (IGenerator<?> generator : this.getRenderer().getGenerators()) {
-			if (generator instanceof RGroupGenerator) {
-				((RGroupGenerator) generator).setRGroupQuery(null);
-			}
-		}
 		if (chemModel.getMoleculeSet()!=null)
 			for (IAtomContainer atc : chemModel.getMoleculeSet().atomContainers()) {
 				atc.removeProperty(CDKConstants.TITLE);

@@ -79,7 +79,6 @@ import org.openscience.jchempaint.renderer.generators.LonePairGenerator;
 import org.openscience.jchempaint.renderer.generators.MappingGenerator;
 import org.openscience.jchempaint.renderer.generators.MergeAtomsGenerator;
 import org.openscience.jchempaint.renderer.generators.ProductsBoxGenerator;
-import org.openscience.jchempaint.renderer.generators.RGroupGenerator;
 import org.openscience.jchempaint.renderer.generators.RadicalGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactantsBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionArrowGenerator;
@@ -312,7 +311,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             generators.add(new AtomContainerBoundsGenerator());
         }
         generators.add(new BasicSceneGenerator());
-        generators.add(new RGroupGenerator()); // JWM tweaks needed ???
         if (useSeparateGenerators) {
             generators.add(new RingGenerator());
             generators.add(new ExtendedAtomGenerator());
