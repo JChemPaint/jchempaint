@@ -24,8 +24,7 @@
  */
 package org.openscience.jchempaint.controller;
 
-import javax.vecmath.Point2d;
-
+import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -36,6 +35,8 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
+
+import javax.vecmath.Point2d;
 
 /**
  * Adds a bond at direction that is dragged.
@@ -109,15 +110,22 @@ public class ChainModule extends ControllerModuleAdapter {
         	//add start atom
         	IAtomContainer phantoms = getBuilder().newInstance(IAtomContainer.class);
         	IAtom startAtom;
-        	if(source==null){
-        		startAtom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), start );
-        	}else{
-        		startAtom=source;
-        	}   
+            if (source == null) {
+                if (Elements.ofString(chemModelRelay.getController2DModel().getDrawElement()) == Elements.Unknown)
+                    startAtom = getBuilder().newInstance(IAtom.class, "C", start);
+                else
+                    startAtom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), start);
+            } else {
+                startAtom = source;
+            }
         	phantoms.addAtom(startAtom);
         	//make atoms and bonds as needed
         	for(int i=0;i<numberofbonds;i++){
-        		IAtom nextAtom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), new Point2d(startAtom.getPoint2d().x+bondLength, startAtom.getPoint2d().y));
+        		IAtom nextAtom;
+                if (Elements.ofString(chemModelRelay.getController2DModel().getDrawElement()) == Elements.Unknown)
+                    nextAtom = getBuilder().newInstance(IAtom.class, "C", new Point2d(startAtom.getPoint2d().x+bondLength, startAtom.getPoint2d().y));
+                else
+                    nextAtom = getBuilder().newInstance(IAtom.class, chemModelRelay.getController2DModel().getDrawElement(), new Point2d(startAtom.getPoint2d().x+bondLength, startAtom.getPoint2d().y));
         		phantoms.addAtom(nextAtom);
         		phantoms.addBond(getBuilder().newInstance(IBond.class, startAtom, nextAtom, IBond.Order.SINGLE));
         		startAtom = nextAtom;
