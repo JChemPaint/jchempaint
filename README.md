@@ -16,7 +16,7 @@ https://github.com/JChemPaint/jchempaint/issues
 ## Download
 Compiled program as a *.jar* file can be downloaded from https://github.com/JChemPaint/jchempaint/releases
 
-**Note!** Prerequisite for running **JChemPaint** *.jar* program file is having Java Runtime Environment (JRE) which can be downloaded from https://sap.github.io/SapMachine/ or other sources.
+**Note!** Prerequisite for running **JChemPaint** *.jar* program file is having either Java Runtime Environment (JRE) or Java Development Kit (JDK) installed  which can be downloaded from multiple vendors: [Eclipse Temurin](https://adoptium.net/temurin/releases/), [Azul Zulu](https://www.azul.com/downloads), [Amazon Corretto](https://aws.amazon.com/corretto/), [SAP SapMachine](https://sap.github.io/SapMachine/) or other sources.
 
 ## Build
 
