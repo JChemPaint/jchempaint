@@ -3525,6 +3525,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     private IPseudoAtom makePseudoAtom(String label, Point2d p) {
         IPseudoAtom pseudo = chemModel.getBuilder()
                                       .newInstance(IPseudoAtom.class);
+        pseudo.setAtomicNumber(IAtom.Wildcard);
+        pseudo.setImplicitHydrogenCount(0);
         Matcher matcher = ATTACH_POINT_REGEX.matcher(label);
         if (matcher.matches()) {
             pseudo.setAttachPointNum(Integer.parseInt(matcher.group(1)));
