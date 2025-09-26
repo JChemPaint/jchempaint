@@ -34,6 +34,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -43,6 +44,7 @@ import org.openscience.cdk.interfaces.IBond.Display;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -93,9 +95,11 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1008,27 +1012,80 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	/**
-	 * Select all atoms which are in the same container as the provided atom.
-	 * @param atom an atom
+	 * Select all atoms which are in the same container as the provided root
+     * atom. In altMode the fragment is flood-filled based on weather the
+     * provided atom is acyclic/acyclic.
+     *
+	 * @param root an atom to select from
 	 */
-	public void selectFragment(IAtom atom) {
+	public void selectFragment(IAtom root) {
 		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
-		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
-		if (container != null)
-			selection.select(container);
-		select(selection);
+        IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
+        if (container != null) {
+            if (altMode) {
+                // flood fill atoms/bonds which are cyclic/acyclic
+                Cycles.markRingAtomsAndBonds(container);
+                Set<IChemObject> set = new HashSet<>();
+                Deque<IAtom> queue = new ArrayDeque<>();
+                queue.add(root);
+                while (!queue.isEmpty()) {
+                    IAtom atom = queue.poll();
+                    set.add(atom);
+                    for (IBond bond : atom.bonds()) {
+                        if (bond.isInRing() == root.isInRing()) {
+                            set.add(bond);
+                            IAtom nbor = bond.getOther(atom);
+                            if (!set.contains(nbor))
+                                queue.add(nbor);
+                        }
+                    }
+                }
+                for (IChemObject obj : set)
+                    selection.select(obj);
+            } else {
+                selection.select(container);
+            }
+        }
+        select(selection);
 	}
 
 	/**
 	 * Select all bonds which are in the same container as the provided bond.
-	 * @param bond a atom
+     * In altMode the fragment is flood-filled based on weather the
+     * provided bond is acyclic/acyclic.
+     * 
+	 * @param root the bond to select from
 	 */
-	public void selectFragment(IBond bond) {
-		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
-		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), bond);
-		if (container != null)
-			selection.select(container);
-		select(selection);
+	public void selectFragment(IBond root) {
+        LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
+        IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
+        if (container != null) {
+            if (altMode) {
+                // flood fill atoms/bonds which are cyclic/acyclic
+                Cycles.markRingAtomsAndBonds(container);
+                Set<IChemObject> set = new HashSet<>();
+                Deque<IAtom> queue = new ArrayDeque<>();
+                queue.add(root.getBegin());
+                queue.add(root.getEnd());
+                while (!queue.isEmpty()) {
+                    IAtom atom = queue.poll();
+                    set.add(atom);
+                    for (IBond bond : atom.bonds()) {
+                        if (bond.isInRing() == root.isInRing()) {
+                            set.add(bond);
+                            IAtom nbor = bond.getOther(atom);
+                            if (!set.contains(nbor))
+                                queue.add(nbor);
+                        }
+                    }
+                }
+                for (IChemObject obj : set)
+                    selection.select(obj);
+            } else {
+                selection.select(container);
+            }
+        }
+        select(selection);
 	}
 
 	/**
