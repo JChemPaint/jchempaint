@@ -262,8 +262,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                              private final CDK2DAtomColors base = new CDK2DAtomColors();
                              @Override
                              public Color getAtomColor(IAtom atom) {
-                                 if (atom.getAtomicNumber() != null &&
-                                     atom.getAtomicNumber() == IAtom.C)
+                                 if (atom.getAtomicNumber() == null ||
+                                     atom.getAtomicNumber() == IAtom.C ||
+                                     atom.getAtomicNumber() == IAtom.Wildcard ||
+                                     atom.getAtomicNumber() == IAtom.H)
                                      return Color.WHITE;
                                  return base.getAtomColor(atom);
                              }
