@@ -68,18 +68,20 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
     public void mouseClickedDouble(Point2d worldCoord) {
     }
 
-    public void mouseClickedDown(Point2d worldCoord) {
+    public final void mouseClickedDown(Point2d worldCoord) {
+        mouseClickedDown(worldCoord, 0);
     }
 
-    public void mouseClickedUp(Point2d worldCoord) {
+    public final void mouseClickedUp(Point2d worldCoord) {
+        mouseClickedUp(worldCoord, 0);
     }
 
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
-        mouseClickedDown(worldCoord);
+
     }
 
     public void mouseClickedUp(Point2d worldCoord, int modifiers) {
-        mouseClickedUp(worldCoord);
+
     }
 
     public void mouseClickedDownRight(Point2d worldCoord) {
@@ -88,11 +90,12 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
     public void mouseClickedUpRight(Point2d worldCoord) {
     }
 
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public final void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+        mouseDrag(worldCoordFrom, worldCoordTo, 0);
     }
 
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
-        mouseDrag(worldCoordFrom, worldCoordTo);
+
     }
 
     public void mouseEnter(Point2d worldCoord) {

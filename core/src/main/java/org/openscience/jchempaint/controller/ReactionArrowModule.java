@@ -55,12 +55,12 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedDown(Point2d worldCoordFrom) {
+    public void mouseClickedDown(Point2d worldCoordFrom, int modifiers) {
         startPoint = worldCoordFrom;
     }
 
     @Override
-    public void mouseClickedUp(Point2d endPoint) {
+    public void mouseClickedUp(Point2d endPoint, int modifiers) {
         //first, we get rid of the phantom arrow
         chemModelRelay.setPhantomArrow(null, null);
         chemModelRelay.updateView();
@@ -177,7 +177,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
      * matrix to 2x2)
      */
     @Override
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         chemModelRelay.setPhantomArrow(startPoint, worldCoordTo);
         chemModelRelay.updateView();
     }

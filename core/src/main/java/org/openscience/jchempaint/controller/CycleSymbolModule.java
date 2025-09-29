@@ -47,7 +47,7 @@ public class CycleSymbolModule extends ControllerModuleAdapter {
         super(chemModelRelay);
     }
 
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
         
         IChemObject singleSelected = getHighlighted( worldCoord, 
                                                      chemModelRelay.getClosestAtom(worldCoord) );

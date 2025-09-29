@@ -77,7 +77,7 @@ public class RotateModule extends ControllerModuleAdapter {
      * coordinates of atoms to be rotated. These stored coordinates are relative
      * to the rotation center.
      */
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
         logger.debug("rotate mouseClickedDown, initializing rotation");
         rotationCenter = null;
         selection = super.chemModelRelay.getRenderer().getRenderer2DModel()
@@ -171,7 +171,7 @@ public class RotateModule extends ControllerModuleAdapter {
     /**
      * On mouse drag, actual rotation around the center is done
      */
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         if (selectionMade) {
             rotationPerformed = true;
             rotationAngle += getRotationAmount(rotationCenter, worldCoordFrom, worldCoordTo);
@@ -229,7 +229,7 @@ public class RotateModule extends ControllerModuleAdapter {
      * After the rotation (=mouse up after drag), post the undo/redo information
      * with the old and the new coordinates
      */
-    public void mouseClickedUp(Point2d worldCoord) {
+    public void mouseClickedUp(Point2d worldCoord, int modifiers) {
         if (rotationPerformed && atomCoordsMap != null && selection.isFilled()) {
             logger.debug("posting undo/redo for rotation");
 

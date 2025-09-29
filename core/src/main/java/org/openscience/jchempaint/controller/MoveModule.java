@@ -228,7 +228,7 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
 
-    public void mouseClickedUp(Point2d worldCoord) {
+    public void mouseClickedUp(Point2d worldCoord, int modifiers) {
 
         if (transform == Transform.Rotate ||
             transform == Transform.Scale) {
@@ -303,7 +303,7 @@ public class MoveModule extends ControllerModuleAdapter {
     /**
      * Most move mode calculations are done in this routine.
      */
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
 
         if (transform == Transform.Rotate) {
             transformMade = true;
