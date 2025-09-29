@@ -146,7 +146,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 
 
         chemModelRelay.clearPhantoms();
-        if(start.distance( worldCoordTo )<getHighlightDistance()) {
+        if (start == null || start.distance(worldCoordTo) < getHighlightDistance()) {
             // clear phantom
             merge = null;
             dest = null;

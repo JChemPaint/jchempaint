@@ -1053,7 +1053,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * Select all bonds which are in the same container as the provided bond.
      * In altMode the fragment is flood-filled based on weather the
      * provided bond is acyclic/acyclic.
-     * 
+     *
 	 * @param root the bond to select from
 	 */
 	public void selectFragment(IBond root) {
@@ -3592,6 +3592,44 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
         pseudo.setPoint2d(p);
         return pseudo;
+    }
+
+
+    public void moveTo(IAtom atom, Point2d from, Point2d to, boolean finished) {
+
+        if (!altMode && atom.getBondCount() == 1) {
+            IBond bond = atom.bonds().iterator().next();
+            IAtom nbor = bond.getOther(atom);
+
+            Vector2d a = new Vector2d(from.x - nbor.getPoint2d().x,
+                                      from.y - nbor.getPoint2d().y);
+            Vector2d b = new Vector2d(to.x - nbor.getPoint2d().x,
+                                      to.y - nbor.getPoint2d().y);
+            double angle = Math.atan2(a.x*b.y - a.y*b.x, a.x*b.x + a.y*b.y);
+
+            double snapAngle = (Math.PI/12) * Math.round(angle / (Math.PI/12));
+
+            double cos = Math.cos(snapAngle);
+            double sin = Math.sin(snapAngle);
+
+            double x = a.x * cos - a.y * sin;
+            double y = a.x * sin + a.y * cos;
+            Vector2d c = new Vector2d(x, y);
+
+            to.x = nbor.getPoint2d().x + c.x;
+            to.y = nbor.getPoint2d().y + c.y;
+        }
+
+        moveToWithoutUndo(atom, to);
+
+        if (finished) {
+            IAtomContainer undoRedoSet = chemModel.getBuilder().newInstance(IAtomContainer.class);
+            undoRedoSet.addAtom(atom);
+            IUndoRedoable undoredo = getUndoRedoFactory().getMoveAtomEdit(
+                    undoRedoSet, new Vector2d(to.x - from.x, to.y - from.y),
+                    "Move atom(s)");
+            getUndoRedoHandler().postEdit(undoredo);
+        }
     }
 
     // OK
