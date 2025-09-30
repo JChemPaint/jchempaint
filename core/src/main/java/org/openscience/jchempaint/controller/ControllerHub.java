@@ -2879,7 +2879,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 						anchors.add(bond);
 				}
 			}
-			System.err.println(anchors.size());
 		}
 
 		if (anchors.size() == 1 && !altMode) {
