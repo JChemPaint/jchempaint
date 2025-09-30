@@ -305,9 +305,6 @@ public class JCPToolBar extends JToolBar
                         AddBondDragModule activeModule = new AddBondDragModule(chemPaintPanel.get2DHub(), IBond.Display.Solid, true);
                         activeModule.setID(toolKey);
                         chemPaintPanel.get2DHub().setActiveDrawModule(activeModule);
-                    } else if (toolKey.equals("C")) {
-                        button.setBackground(Color.GRAY);
-                        chemPaintPanel.setLastSecondaryButton(button);
                     }
                 } else {
                     logger.error("Could not create button" + toolKey);

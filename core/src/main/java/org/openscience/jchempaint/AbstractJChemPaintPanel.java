@@ -104,7 +104,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     protected boolean modified = false;
     private File isAlreadyAFile;
     private File lastOpenedFile;
-    protected JComponent lastSecondaryButton;
 	private static ILoggingTool logger =
         LoggingToolFactory.createLoggingTool(AbstractJChemPaintPanel.class);
     protected static String appTitle = "";
@@ -576,9 +575,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         return isAlreadyAFile;
     }
 
-    public void setLastSecondaryButton(JComponent lastSecondaryButton) {
-        this.lastSecondaryButton = lastSecondaryButton;
-    }
 
     public void updateUndoRedoControls() {
         UndoManager undoManager = renderPanel.getUndoManager();
