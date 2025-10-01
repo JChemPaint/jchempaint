@@ -77,4 +77,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
+          mv app-osx/target/*.dmg app-osx/target/JChemPaint.dmg
           gh release upload nightly app-osx/target/*.dmg
