@@ -64,21 +64,38 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Import signing certificate
+        run: |
+          echo "${{ secrets.MACOS_DEVELOPER_CERTIFICATE_BASE64 }}" | base64 --decode > build.p12
+          security create-keychain -p build build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p build build.keychain
+          security import build.p12 -k build.keychain -P "${{ secrets.MACOS_DEVELOPER_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign >/dev/null 2>&1
+          security set-key-partition-list -S apple-tool:,apple: -s -k build build.keychain >/dev/null 2>&1
+          rm -fr build.p12
+
       - name: Package Disk Image
         env:
-          MACOS_DEVELOPER_IDENTITY: ${{ secrets.MACOS_DEVELOPER_IDENTITY }}
-          MACOS_DEVELOPER_CERTIFICATE_BASE64: ${{ secrets.MACOS_DEVELOPER_CERTIFICATE_BASE64 }}
-          MACOS_DEVELOPER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_DEVELOPER_CERTIFICATE_PASSWORD }}
-          MACOS_DEVELOPER_USERNAME: ${{ secrets.MACOS_DEVELOPER_USERNAME }}
-          MACOS_DEVELOPER_PASSWORD: ${{ secrets.MACOS_DEVELOPER_PASSWORD }}
           MAVEN_ARGS: "--batch-mode --no-transfer-progress -Dstyle.color=always"
         run: |
-          mvn install -DskipTests -Posx-app
+          mvn install -DskipTests -Posx-app -Dcodesign.identity="${{ secrets.MACOS_DEVELOPER_IDENTITY }}"
+          mv app-osx/target/*.dmg JChemPaint.dmg
+
+        # Fails because the step above does not codesign the included native dependencies.
+      - name: Notarize
+        if: false
+        run: |
+          xcrun notarytool submit JChemPaint.dmg --wait --apple-id "${{ secrets.MACOS_DEVELOPER_USERNAME }}" --password "${{ secrets.MACOS_DEVELOPER_PASSWORD }}" --team-id "${{ secrets.MACOS_DEVELOPER_IDENTITY }}" > result.txt 2>&1
+          SUBMISSION_ID=`awk '/id: / { print $2;exit; }' result.txt`
+          xcrun notarytool log "$SUBMISSION_ID" --apple-id ${{ secrets.MACOS_DEVELOPER_USERNAME }} --password ${{ secrets.MACOS_DEVELOPER_PASSWORD }} --team-id ${{ secrets.MACOS_DEVELOPER_IDENTITY }} log.json
+          cat log.json
+
+          xcrun stapler staple JChemPaint.dmg
+          xcrun stapler validate JChemPaint.dmg
 
       - name: Upload Package
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          mv app-osx/target/*.dmg app-osx/target/JChemPaint.dmg
-          gh release upload nightly app-osx/target/*.dmg
+          gh release upload nightly JChemPaint.dmg
