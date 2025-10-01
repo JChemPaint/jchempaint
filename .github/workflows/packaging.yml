@@ -20,6 +20,7 @@ jobs:
 
   linux:
     name: Linux JAR
+    needs: release
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
@@ -41,10 +42,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          gh release upload nightly app-jar/target/*.jar
+          gh release upload nightly app-jar/target/JChemPaint.jar
 
   macos:
     name: macOS Disk Image
+    needs: release
     runs-on: macos-13
     steps:
       - name: Clone Repository
