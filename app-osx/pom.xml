@@ -38,6 +38,9 @@
                       <dmg>
                         <generate>true</generate>
                       </dmg>
+                      <codesign>
+                        <identity>${codesign.identity}</identity>
+                      </codesign>
                     </configuration>
                     <executions>
                       <execution>
