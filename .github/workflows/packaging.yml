@@ -33,10 +33,12 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Install gettext      
+      - name: Install gettext
         run: sudo apt install -y gettext
 
       - name: Package JAR
+        env:
+          MAVEN_ARGS: "--batch-mode --no-transfer-progress -Dstyle.color=always"
         run: |
           mvn install -DskipTests
 
@@ -69,6 +71,7 @@ jobs:
           MACOS_DEVELOPER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_DEVELOPER_CERTIFICATE_PASSWORD }}
           MACOS_DEVELOPER_USERNAME: ${{ secrets.MACOS_DEVELOPER_USERNAME }}
           MACOS_DEVELOPER_PASSWORD: ${{ secrets.MACOS_DEVELOPER_PASSWORD }}
+          MAVEN_ARGS: "--batch-mode --no-transfer-progress -Dstyle.color=always"
         run: |
           mvn install -DskipTests -Posx-app
 
