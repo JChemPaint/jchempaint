@@ -3,8 +3,6 @@ name: Release Packaging
 on:
   workflow_dispatch
 
-# TODO install gettext
-
 jobs:
   macos:
     name: macOS Disk Image
@@ -30,9 +28,19 @@ jobs:
         run: |
           mvn install -DskipTests -Posx-app
 
+      - name: Update Nightly Release
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          name: 'Desktop App Nightly Release $$'
+          prerelease: true
+          body: 'Nightly build of JChemPaint'
+
       - name: Upload Package
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          gh release upload Nightly app-osx/target/*.dmg
+          gh release upload nightly app-osx/target/*.dmg
