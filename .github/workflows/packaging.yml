@@ -4,6 +4,45 @@ on:
   workflow_dispatch
 
 jobs:
+  release:
+    name: Make Nightly release
+    runs-on: ubuntu-22.04
+    steps:
+     - name: Update Nightly Release
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: nightly
+          name: 'Desktop App Nightly Release $$'
+          prerelease: true
+          body: 'Nightly build of JChemPaint'
+
+  linux:
+    name: Linux JAR
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: maven
+
+      - name: Package JAR
+        run: |
+          mvn install -DskipTests
+
+      - name: Upload Package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release upload nightly app-jar/target/*.jar
+
   macos:
     name: macOS Disk Image
     runs-on: macos-13
@@ -27,16 +66,6 @@ jobs:
           MACOS_DEVELOPER_PASSWORD: ${{ secrets.MACOS_DEVELOPER_PASSWORD }}
         run: |
           mvn install -DskipTests -Posx-app
-
-      - name: Update Nightly Release
-        uses: andelf/nightly-release@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: nightly
-          name: 'Desktop App Nightly Release $$'
-          prerelease: true
-          body: 'Nightly build of JChemPaint'
 
       - name: Upload Package
         env:
