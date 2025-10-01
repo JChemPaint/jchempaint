@@ -8,7 +8,7 @@ jobs:
     name: Make Nightly release
     runs-on: ubuntu-22.04
     steps:
-     - name: Update Nightly Release
+      - name: Update Nightly Release
         uses: andelf/nightly-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
