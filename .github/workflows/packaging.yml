@@ -1,5 +1,8 @@
 name: Release Packaging
 
+on:
+  workflow_dispatch
+
 # TODO install gettext
 
 jobs:
