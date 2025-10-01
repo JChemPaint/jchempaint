@@ -33,6 +33,9 @@ jobs:
           java-version: 17
           cache: maven
 
+      - name: Install gettext      
+        run: sudo apt install -y gettext
+
       - name: Package JAR
         run: |
           mvn install -DskipTests
