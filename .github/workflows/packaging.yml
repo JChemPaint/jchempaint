@@ -40,7 +40,7 @@ jobs:
         env:
           MAVEN_ARGS: "--batch-mode --no-transfer-progress -Dstyle.color=always"
         run: |
-          mvn install -DskipTests
+          mvn install -DskipTests -pl '!app-windows,!app-osx'
 
       - name: Upload Package
         env:
