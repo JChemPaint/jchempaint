@@ -31,8 +31,8 @@ for JARFILE in "${JARFILES[@]}"; do
     mkdir -p $TMPDIR
     pushd $TMPDIR
     jar xf $JARFILE
-    find . -name "*.dylib" -exec codesign --verbose --force --timestamp --options=runtime --entitlements entitlements.plist --sign $MACOS_DEVELOPER_IDENTITY --deep {} \;
-    find . -name "*.jnilib" -exec codesign --verbose --force --timestamp --options=runtime --entitlements entitlements.plist --sign $MACOS_DEVELOPER_IDENTITY --deep {} \;
+    find . -name "*.dylib" -exec codesign --verbose --force --timestamp --options=runtime --entitlements $DIR/entitlements.plist --sign $MACOS_DEVELOPER_IDENTITY --deep {} \;
+    find . -name "*.jnilib" -exec codesign --verbose --force --timestamp --options=runtime --entitlements $DIR/entitlements.plist --sign $MACOS_DEVELOPER_IDENTITY --deep {} \;
     rm $JARFILE
     jar cf $JARFILE *
     popd
