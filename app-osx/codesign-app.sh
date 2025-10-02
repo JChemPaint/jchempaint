@@ -39,5 +39,7 @@ for JARFILE in "${JARFILES[@]}"; do
     rm -rf $TMPDIR
 done
 
+codesign --verbose --force --timestamp --options=runtime --entitlements $DIR/entitlements.plist --sign $MACOS_DEVELOPER_IDENTITY --deep $APPNAME
+
 
 

@@ -39,9 +39,6 @@
                         <!-- We need to sign some extra parts so we will build DMG our self -->
                         <generate>false</generate>
                       </dmg>
-                      <codesign>
-                        <identity>${codesign.identity}</identity>
-                      </codesign>
                     </configuration>
                     <executions>
                       <execution>
