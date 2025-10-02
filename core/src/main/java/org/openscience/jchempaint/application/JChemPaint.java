@@ -29,7 +29,6 @@
  */
 package org.openscience.jchempaint.application;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import org.apache.commons.cli.CommandLine;
@@ -47,7 +46,7 @@ import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -87,13 +86,10 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.vecmath.Point2d;
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -701,7 +697,7 @@ public class JChemPaint {
             throws CDKException {
         for (IAtomContainer next : ChemModelManipulator
                 .getAllAtomContainers(chemModel)) {
-            if (!GeometryTools.has2DCoordinates(next)) {
+            if (!GeometryUtil.has2DCoordinates(next)) {
                 String error = GT.get("Not all atoms have 2D coordinates."
                                               + " JCP can only show full 2D specified structures."
                                               + " Shall we lay out the structure?");

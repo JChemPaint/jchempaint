@@ -72,7 +72,6 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.MoveModule;
-import org.openscience.jchempaint.controller.RemoveModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;

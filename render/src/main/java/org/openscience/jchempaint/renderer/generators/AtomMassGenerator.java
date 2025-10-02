@@ -22,7 +22,7 @@ package org.openscience.jchempaint.renderer.generators;
 
 import java.io.IOException;
 
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
@@ -62,7 +62,7 @@ public class AtomMassGenerator extends BasicAtomGenerator {
 		if (massNumber != null) {
 			try {
 				Integer expectedMassNumber 
-						= XMLIsotopeFactory.getInstance(ac.getBuilder())
+						= Isotopes.getInstance()
 							.getMajorIsotope(atom.getSymbol())
 								.getMassNumber(); 
 				if (massNumber != expectedMassNumber)

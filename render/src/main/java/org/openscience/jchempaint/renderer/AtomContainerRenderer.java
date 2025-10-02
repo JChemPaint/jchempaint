@@ -29,7 +29,7 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.font.IFontManager;
@@ -175,7 +175,7 @@ public class AtomContainerRenderer implements IRenderer {
      * @param atomContainer
      */
     public void setScale(IAtomContainer atomContainer) {
-        double bondLength = GeometryTools.getBondLengthAverage(atomContainer);
+        double bondLength = GeometryUtil.getBondLengthAverage(atomContainer);
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
@@ -213,7 +213,7 @@ public class AtomContainerRenderer implements IRenderer {
         Rectangle2D modelBounds = calculateBounds(atomContainer);
 
         this.setupTransformToFit(bounds, modelBounds,
-                                 GeometryTools.getBondLengthAverage(atomContainer), resetCenter);
+                                 GeometryUtil.getBondLengthAverage(atomContainer), resetCenter);
 
         // the diagram to draw
         IRenderingElement diagram = this.generateDiagram(atomContainer);

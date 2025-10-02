@@ -45,7 +45,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -152,7 +152,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
             } else if (!label.isEmpty()) {
                 if (Character.isLowerCase(label.toCharArray()[0]))
                     label = Character.toUpperCase(label.charAt(0)) + label.substring(1);
-                IsotopeFactory ifa = XMLIsotopeFactory.getInstance(chemModel.getBuilder());
+                IsotopeFactory ifa = Isotopes.getInstance();
                 IIsotope iso = ifa.getMajorIsotope(label);
                 if (iso != null) {
                     if (atom == null) {

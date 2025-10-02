@@ -29,9 +29,8 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.graph.Cycles;
@@ -92,6 +91,7 @@ import javax.vecmath.Vector2d;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -1666,8 +1666,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 if(usedReactionbounds!=null){
                     double bondLength = Renderer.calculateBondLength(reaction);
                     Rectangle2D shiftedBounds =
-                        GeometryTools.shiftReactionVertical(
-                                reaction, reactionbounds, usedReactionbounds, bondLength);
+                        toRect(GeometryUtil.shiftReactionVertical(
+                                reaction, toArray(reactionbounds), toArray(usedReactionbounds), bondLength));
                     usedReactionbounds = usedReactionbounds.createUnion(shiftedBounds);
                 } else {
                     usedReactionbounds = reactionbounds;
@@ -1684,7 +1684,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 if (usedBounds != null) {
                     double bondLength = Renderer.calculateBondLength(container);
                     Rectangle2D shiftedBounds =
-                        GeometryTools.shiftContainer(container, bounds, usedBounds, bondLength);
+                        toRect(GeometryUtil.shiftContainer(container, toArray(bounds), toArray(usedBounds), bondLength));
                     usedBounds = usedBounds.createUnion(shiftedBounds);
                 } else {
 					usedBounds = bounds;
@@ -1718,8 +1718,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                                 gap = 1.5;
                         }
                         Rectangle2D shiftedBounds =
-                            GeometryTools.shiftContainer(
-                                    container, bounds, usedBounds, gap*2);
+                            toRect(GeometryUtil.shiftContainer(
+                                    container, toArray(bounds), toArray(usedBounds), gap*2));
                         double yshift=centerY - bounds.getCenterY();
                         Vector2d shift = new Vector2d(0.0, yshift);
                         GeometryUtil.translate2D(container, shift);
@@ -1737,6 +1737,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             }
         }
         //TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
+    }
+
+    private static double[] toArray(Rectangle2D rect) {
+        return new double[]{rect.getMinX(), rect.getMinY(), rect.getMaxX(), rect.getMaxY()};
+    }
+
+    private static Rectangle2D toRect(double[] bounds) {
+        return new Rectangle2D.Double(bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1]);
     }
 
 	// OK
@@ -3737,9 +3745,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		try {
 			if (implicitHs > 0)
 				wholeModel
-						.addIsotope(XMLIsotopeFactory.getInstance(
-								wholeModel.getBuilder()).getMajorIsotope(1),
-								implicitHs);
+						.addIsotope(Isotopes.getInstance().getMajorIsotope(1),
+                                    implicitHs);
 		} catch (IOException e) {
 			// do nothing
 		}

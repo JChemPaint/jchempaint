@@ -18,29 +18,26 @@
  */
 package org.openscience.jchempaint.renderer.generators;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.IGeneratorParameter;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 import org.openscience.jchempaint.renderer.elements.TextGroupElement.Position;
+
+import javax.vecmath.Point2d;
+import java.awt.Color;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * A generator for atoms with mass, charge, etc.
@@ -61,9 +58,7 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
         Integer majorIsotopeNumber = null;
         if(atom.getMassNumber()!=null){
             try {
-    			IIsotope isotope = XMLIsotopeFactory.getInstance(
-                        atom.getBuilder()).getMajorIsotope(
-                            atom.getSymbol());
+    			IIsotope isotope = Isotopes.getInstance().getMajorIsotope(atom.getSymbol());
     			if(isotope!=null)
     				majorIsotopeNumber = isotope.getMassNumber();
     		} catch (IOException e) {
@@ -138,8 +133,7 @@ public class ExtendedAtomGenerator extends BasicAtomGenerator {
         Integer massNumber = atom.getMassNumber();
         if (massNumber != null) {
             try {
-                IsotopeFactory factory = 
-                    XMLIsotopeFactory.getInstance(ac.getBuilder());
+                IsotopeFactory factory = Isotopes.getInstance();
                 if(factory.getMajorIsotope(atom.getSymbol())!=null){
 	                int majorMass = 
 	                    factory.getMajorIsotope(atom.getSymbol()).getMassNumber();

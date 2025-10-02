@@ -15,38 +15,22 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-render</artifactId>
-            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-renderbasic</artifactId>
-            
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-renderextra</artifactId>
-            
-        </dependency>
-        <!-- TODO remove cdk-extra and cdk-legacy -->
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-extra</artifactId>
-            
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-legacy</artifactId>
-            
         </dependency>
     </dependencies>
 

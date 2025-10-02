@@ -39,7 +39,7 @@ import javax.swing.text.Document;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
@@ -99,8 +99,7 @@ public class AtomEditor extends ChemObjectEditor {
             
             try {
                 IIsotope isotope = 
-                    XMLIsotopeFactory.getInstance(
-                                atom.getBuilder()).getMajorIsotope(
+                    Isotopes.getInstance().getMajorIsotope(
                                 atom.getSymbol());
                 majorIsotopeNumber = isotope.getMassNumber();
                 isotopeField.setValue(atom.getMassNumber()-majorIsotopeNumber);
@@ -117,7 +116,7 @@ public class AtomEditor extends ChemObjectEditor {
     public void applyChanges() {
         IAtom atom = (IAtom)source;
         try{
-	        if(XMLIsotopeFactory.getInstance(atom.getBuilder()).getElement(symbolField.getText())!=null){
+	        if(Isotopes.getInstance().getElement(symbolField.getText())!=null){
 	        	if(atom.getImplicitHydrogenCount()==null || atom.getImplicitHydrogenCount()!=((Integer)hCountField.getValue()).intValue())
 	        		hub.setImplicitHydrogenCount(atom,((Integer)hCountField.getValue()).intValue());
 	        	if(atom.getFormalCharge()==null || atom.getFormalCharge()!=((Integer)formalChargeField.getValue()).intValue())

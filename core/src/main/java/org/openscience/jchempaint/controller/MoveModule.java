@@ -26,7 +26,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;

@@ -54,7 +54,7 @@ import javax.swing.JApplet;
 
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -634,9 +634,8 @@ public abstract class JChemPaintAbstractApplet extends JApplet {
         }
         try {
             if (implicitHs > 0)
-                wholeModel.addIsotope(XMLIsotopeFactory.getInstance(
-                        wholeModel.getBuilder()).getMajorIsotope(1),
-                        implicitHs);
+                wholeModel.addIsotope(Isotopes.getInstance().getMajorIsotope(1),
+                                      implicitHs);
         } catch (IOException e) {
         // do nothing
         }

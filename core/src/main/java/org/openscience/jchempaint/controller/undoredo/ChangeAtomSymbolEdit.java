@@ -23,16 +23,11 @@
  */
 package org.openscience.jchempaint.controller.undoredo;
 
-import java.io.IOException;
-import java.io.OptionalDataException;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-
-import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.config.XMLIsotopeFactory;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  * Undo/Redo Edit class for the ChangeAtomSymbolAction, containing the methods
