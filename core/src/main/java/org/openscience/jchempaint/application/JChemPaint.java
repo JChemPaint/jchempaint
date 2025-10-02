@@ -606,11 +606,12 @@ public class JChemPaint {
         }
 
 
-
-        if(moleculeSet.getAtomContainer(0).getAtomCount()==0)
+        if (moleculeSet.getAtomContainer(0).getAtomCount() == 0) {
             moleculeSet.getAtomContainer(0).add(molecule);
-        else
+            moleculeSet.getAtomContainer(0).setTitle(molecule.getTitle());
+        } else {
             moleculeSet.addAtomContainer(molecule);
+        }
 
         IUndoRedoFactory undoRedoFactory= chemPaintPanel.get2DHub().getUndoRedoFactory();
         UndoRedoHandler undoRedoHandler= chemPaintPanel.get2DHub().getUndoRedoHandler();
