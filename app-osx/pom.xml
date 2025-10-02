@@ -14,7 +14,7 @@
 
     <profiles>
         <profile>
-            <id>osx-app</id>
+            <id>app-bundle</id>
             <build>
                 <plugins>
                   <plugin>
@@ -36,7 +36,8 @@
                         </JVMOptions>
                       </plist>
                       <dmg>
-                        <generate>true</generate>
+                        <!-- We need to sign some extra parts so we will build DMG our self -->
+                        <generate>false</generate>
                       </dmg>
                       <codesign>
                         <identity>${codesign.identity}</identity>
@@ -68,50 +69,4 @@
             <version>3.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-shade-plugin</artifactId>-->
-<!--                <version>2.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>shade</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <finalName>JChemPaint</finalName>-->
-<!--                            <createDependencyReducedPom>false</createDependencyReducedPom>-->
-<!--                            <filters>-->
-<!--                                <filter>-->
-<!--                                    <artifact>*:*</artifact>-->
-<!--                                    <excludes>-->
-<!--                                        <exclude>LICENSE</exclude>-->
-<!--                                        <exclude>NOTICE</exclude>-->
-<!--                                        <exclude>*.javafiles</exclude>-->
-<!--                                        <exclude>log4j.properties</exclude>-->
-<!--                                        <exclude>META-INF/*.SF</exclude>-->
-<!--                                        <exclude>META-INF/*.DSA</exclude>-->
-<!--                                        <exclude>META-INF/*.RSA</exclude>-->
-<!--                                    </excludes>-->
-<!--                                </filter>-->
-<!--                            </filters>-->
-<!--                            <transformers>-->
-<!--                                <transformer-->
-<!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
-<!--                                    <mainClass>org.openscience.jchempaint.application.JChemPaint-->
-<!--                                    </mainClass>-->
-<!--                                </transformer>-->
-<!--                                <transformer-->
-<!--                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>-->
-<!--                            </transformers>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
-
 </project>
