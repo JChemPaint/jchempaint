@@ -25,7 +25,7 @@ JCPAPPOSX=$CLSPATH/org/openscience/jchempaint/jchempaint-app-osx/*/jchempaint-ap
 TMPDIR=$TARGETDIR/tmp
 [[ -e $TMPDIR ]] && rm -rf $TMPDIR
 
-JARFILES=($JNA $JNAINCHI_AARCH64 $JNAINCHI_X86_64 $FLATLAF $JCCPAPPOSX)
+JARFILES=($JNA $JNAINCHI_AARCH64 $JNAINCHI_X86_64 $FLATLAF $JCPAPPOSX)
 for JARFILE in "${JARFILES[@]}"; do
     echo "Repacking $JARFILE"
     
