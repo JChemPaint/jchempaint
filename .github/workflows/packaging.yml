@@ -79,6 +79,7 @@ jobs:
           MAVEN_ARGS: "--batch-mode --no-transfer-progress -Dstyle.color=always"
         run: |
           mvn install -DskipTests -Papp-bundle -Dcodesign.identity="${{ secrets.MACOS_DEVELOPER_IDENTITY }}"
+          bash app-osx/codesign-dep.sh ${{ secrets.MACOS_DEVELOPER_IDENTITY }} 
           bash app-osx/make-dmg.sh
           mv app-osx/target/*.dmg JChemPaint.dmg
 
