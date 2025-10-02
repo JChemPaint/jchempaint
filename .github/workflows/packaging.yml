@@ -85,7 +85,7 @@ jobs:
 
         # Fails because the step above does not codesign the included native dependencies.
       - name: Notarize
-        if: false
+        if: true
         run: |
           xcrun notarytool submit JChemPaint.dmg --wait --apple-id "${{ secrets.MACOS_DEVELOPER_USERNAME }}" --password "${{ secrets.MACOS_DEVELOPER_PASSWORD }}" --team-id "${{ secrets.MACOS_DEVELOPER_IDENTITY }}" > result.txt 2>&1
           SUBMISSION_ID=`awk '/id: / { print $2;exit; }' result.txt`
