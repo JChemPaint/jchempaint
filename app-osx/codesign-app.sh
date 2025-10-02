@@ -20,11 +20,12 @@ JNA=$CLSPATH/net/java/dev/jna/jna/*/jna-*.jar
 JNAINCHI_AARCH64=$CLSPATH/io/github/dan2097/jna-inchi-darwin-aarch64/*/jna-inchi-darwin-aarch64-*.jar
 JNAINCHI_X86_64=$CLSPATH/io/github/dan2097/jna-inchi-darwin-x86-64/*/jna-inchi-darwin-x86-64-*.jar
 FLATLAF=$CLSPATH/com/formdev/flatlaf/*/flatlaf-*.jar
+JCPAPPOSX=org/openscience/jchempaint/jchempaint-app-osx/*/jchempaint-app-osx-*-SNAPSHOT.jar
 
 TMPDIR=$TARGETDIR/tmp
 [[ -e $TMPDIR ]] && rm -rf $TMPDIR
 
-JARFILES=($JNA $JNAINCHI_AARCH64 $JNAINCHI_X86_64 $FLATLAF)
+JARFILES=($JNA $JNAINCHI_AARCH64 $JNAINCHI_X86_64 $FLATLAF $JCCPAPPOSX)
 for JARFILE in "${JARFILES[@]}"; do
     echo "Repacking $JARFILE"
     
