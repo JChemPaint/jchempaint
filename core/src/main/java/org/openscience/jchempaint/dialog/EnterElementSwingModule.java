@@ -125,7 +125,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 
         // fow now presume only terminal atoms can have functional groups, so
         // we populate the selection box
-        if (atom.getBondCount() == 1) {
+        if (atom != null && atom.getBondCount() == 1) {
             int h = 1;
             for (String name : funcgroupnames) {
                 funcGroupsKeys[h++] = name;
