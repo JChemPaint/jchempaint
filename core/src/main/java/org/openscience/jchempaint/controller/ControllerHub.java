@@ -25,7 +25,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
@@ -57,6 +56,8 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
@@ -91,7 +92,6 @@ import javax.vecmath.Vector2d;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -130,7 +130,7 @@ import java.util.regex.Pattern;
  */
 public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
-	private static final Logger log = Logger.getLogger(ControllerHub.class);
+	private static final ILoggingTool log = LoggingToolFactory.createLoggingTool(ControllerHub.class);
 	private IChemModel chemModel;
 
 	private IControllerModel controllerModel;

@@ -57,19 +57,11 @@
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-atomtype</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-dict</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
@@ -99,17 +91,10 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
         </dependency>
+        <!-- JWM: CMLWriter - adds ~7MB of dependencies, should optimize -->
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-libiocml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-isomorphism</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-reaction</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
