@@ -40,6 +40,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
@@ -939,7 +940,6 @@ public class PeriodicTablePanel extends JPanel
         private static final long serialVersionUID = 6176240749900870566L;
 
         public void mouseClicked(MouseEvent e) {
-            fireChange();
         }
 
         public void mouseEntered(MouseEvent e) {
@@ -1022,6 +1022,7 @@ public class PeriodicTablePanel extends JPanel
                 public void actionPerformed(ActionEvent e) {
                     ElementButton button = (ElementButton) e.getSource();
                     setSelectedElement(button.getElement());
+                    SwingUtilities.getWindowAncestor(button).setVisible(false);
                 }
             });
             setText(buttonString);

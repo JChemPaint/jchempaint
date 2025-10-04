@@ -25,15 +25,14 @@
  */
 package org.openscience.jchempaint.controller;
 
-import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.config.Elements;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -43,6 +42,7 @@ import org.openscience.cdk.interfaces.IBond.Display;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -56,6 +56,8 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.SaturationChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
@@ -93,9 +95,11 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -126,7 +130,7 @@ import java.util.regex.Pattern;
  */
 public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
-	private static final Logger log = Logger.getLogger(ControllerHub.class);
+	private static final ILoggingTool log = LoggingToolFactory.createLoggingTool(ControllerHub.class);
 	private IChemModel chemModel;
 
 	private IControllerModel controllerModel;
@@ -1008,27 +1012,80 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	/**
-	 * Select all atoms which are in the same container as the provided atom.
-	 * @param atom an atom
+	 * Select all atoms which are in the same container as the provided root
+     * atom. In altMode the fragment is flood-filled based on weather the
+     * provided atom is acyclic/acyclic.
+     *
+	 * @param root an atom to select from
 	 */
-	public void selectFragment(IAtom atom) {
+	public void selectFragment(IAtom root) {
 		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
-		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), atom);
-		if (container != null)
-			selection.select(container);
-		select(selection);
+        IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
+        if (container != null) {
+            if (altMode) {
+                // flood fill atoms/bonds which are cyclic/acyclic
+                Cycles.markRingAtomsAndBonds(container);
+                Set<IChemObject> set = new HashSet<>();
+                Deque<IAtom> queue = new ArrayDeque<>();
+                queue.add(root);
+                while (!queue.isEmpty()) {
+                    IAtom atom = queue.poll();
+                    set.add(atom);
+                    for (IBond bond : atom.bonds()) {
+                        if (bond.isInRing() == root.isInRing()) {
+                            set.add(bond);
+                            IAtom nbor = bond.getOther(atom);
+                            if (!set.contains(nbor))
+                                queue.add(nbor);
+                        }
+                    }
+                }
+                for (IChemObject obj : set)
+                    selection.select(obj);
+            } else {
+                selection.select(container);
+            }
+        }
+        select(selection);
 	}
 
 	/**
 	 * Select all bonds which are in the same container as the provided bond.
-	 * @param bond a atom
+     * In altMode the fragment is flood-filled based on weather the
+     * provided bond is acyclic/acyclic.
+     *
+	 * @param root the bond to select from
 	 */
-	public void selectFragment(IBond bond) {
-		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
-		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), bond);
-		if (container != null)
-			selection.select(container);
-		select(selection);
+	public void selectFragment(IBond root) {
+        LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
+        IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
+        if (container != null) {
+            if (altMode) {
+                // flood fill atoms/bonds which are cyclic/acyclic
+                Cycles.markRingAtomsAndBonds(container);
+                Set<IChemObject> set = new HashSet<>();
+                Deque<IAtom> queue = new ArrayDeque<>();
+                queue.add(root.getBegin());
+                queue.add(root.getEnd());
+                while (!queue.isEmpty()) {
+                    IAtom atom = queue.poll();
+                    set.add(atom);
+                    for (IBond bond : atom.bonds()) {
+                        if (bond.isInRing() == root.isInRing()) {
+                            set.add(bond);
+                            IAtom nbor = bond.getOther(atom);
+                            if (!set.contains(nbor))
+                                queue.add(nbor);
+                        }
+                    }
+                }
+                for (IChemObject obj : set)
+                    selection.select(obj);
+            } else {
+                selection.select(container);
+            }
+        }
+        select(selection);
 	}
 
 	/**
@@ -1609,8 +1666,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 if(usedReactionbounds!=null){
                     double bondLength = Renderer.calculateBondLength(reaction);
                     Rectangle2D shiftedBounds =
-                        GeometryTools.shiftReactionVertical(
-                                reaction, reactionbounds, usedReactionbounds, bondLength);
+                        toRect(GeometryUtil.shiftReactionVertical(
+                                reaction, toArray(reactionbounds), toArray(usedReactionbounds), bondLength));
                     usedReactionbounds = usedReactionbounds.createUnion(shiftedBounds);
                 } else {
                     usedReactionbounds = reactionbounds;
@@ -1627,7 +1684,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                 if (usedBounds != null) {
                     double bondLength = Renderer.calculateBondLength(container);
                     Rectangle2D shiftedBounds =
-                        GeometryTools.shiftContainer(container, bounds, usedBounds, bondLength);
+                        toRect(GeometryUtil.shiftContainer(container, toArray(bounds), toArray(usedBounds), bondLength));
                     usedBounds = usedBounds.createUnion(shiftedBounds);
                 } else {
 					usedBounds = bounds;
@@ -1661,8 +1718,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                                 gap = 1.5;
                         }
                         Rectangle2D shiftedBounds =
-                            GeometryTools.shiftContainer(
-                                    container, bounds, usedBounds, gap*2);
+                            toRect(GeometryUtil.shiftContainer(
+                                    container, toArray(bounds), toArray(usedBounds), gap*2));
                         double yshift=centerY - bounds.getCenterY();
                         Vector2d shift = new Vector2d(0.0, yshift);
                         GeometryUtil.translate2D(container, shift);
@@ -1680,6 +1737,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
             }
         }
         //TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
+    }
+
+    private static double[] toArray(Rectangle2D rect) {
+        return new double[]{rect.getMinX(), rect.getMinY(), rect.getMaxX(), rect.getMaxY()};
+    }
+
+    private static Rectangle2D toRect(double[] bounds) {
+        return new Rectangle2D.Double(bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1]);
     }
 
 	// OK
@@ -2822,7 +2887,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 						anchors.add(bond);
 				}
 			}
-			System.err.println(anchors.size());
 		}
 
 		if (anchors.size() == 1 && !altMode) {
@@ -3525,6 +3589,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     private IPseudoAtom makePseudoAtom(String label, Point2d p) {
         IPseudoAtom pseudo = chemModel.getBuilder()
                                       .newInstance(IPseudoAtom.class);
+        pseudo.setAtomicNumber(IAtom.Wildcard);
+        pseudo.setImplicitHydrogenCount(0);
         Matcher matcher = ATTACH_POINT_REGEX.matcher(label);
         if (matcher.matches()) {
             pseudo.setAttachPointNum(Integer.parseInt(matcher.group(1)));
@@ -3533,6 +3599,44 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         }
         pseudo.setPoint2d(p);
         return pseudo;
+    }
+
+
+    public void moveTo(IAtom atom, Point2d from, Point2d to, boolean finished) {
+
+        if (!altMode && atom.getBondCount() == 1) {
+            IBond bond = atom.bonds().iterator().next();
+            IAtom nbor = bond.getOther(atom);
+
+            Vector2d a = new Vector2d(from.x - nbor.getPoint2d().x,
+                                      from.y - nbor.getPoint2d().y);
+            Vector2d b = new Vector2d(to.x - nbor.getPoint2d().x,
+                                      to.y - nbor.getPoint2d().y);
+            double angle = Math.atan2(a.x*b.y - a.y*b.x, a.x*b.x + a.y*b.y);
+
+            double snapAngle = (Math.PI/12) * Math.round(angle / (Math.PI/12));
+
+            double cos = Math.cos(snapAngle);
+            double sin = Math.sin(snapAngle);
+
+            double x = a.x * cos - a.y * sin;
+            double y = a.x * sin + a.y * cos;
+            Vector2d c = new Vector2d(x, y);
+
+            to.x = nbor.getPoint2d().x + c.x;
+            to.y = nbor.getPoint2d().y + c.y;
+        }
+
+        moveToWithoutUndo(atom, to);
+
+        if (finished) {
+            IAtomContainer undoRedoSet = chemModel.getBuilder().newInstance(IAtomContainer.class);
+            undoRedoSet.addAtom(atom);
+            IUndoRedoable undoredo = getUndoRedoFactory().getMoveAtomEdit(
+                    undoRedoSet, new Vector2d(to.x - from.x, to.y - from.y),
+                    "Move atom(s)");
+            getUndoRedoHandler().postEdit(undoredo);
+        }
     }
 
     // OK
@@ -3641,9 +3745,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		try {
 			if (implicitHs > 0)
 				wholeModel
-						.addIsotope(XMLIsotopeFactory.getInstance(
-								wholeModel.getBuilder()).getMajorIsotope(1),
-								implicitHs);
+						.addIsotope(Isotopes.getInstance().getMajorIsotope(1),
+                                    implicitHs);
 		} catch (IOException e) {
 			// do nothing
 		}

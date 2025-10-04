@@ -1,6 +1,5 @@
 package org.openscience.jchempaint;
 
-import org.apache.commons.io.IOUtils;
 import org.openscience.jchempaint.action.CopyPasteAction;
 
 import java.awt.datatransfer.Clipboard;
@@ -9,12 +8,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorListener;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 public class OsxClipboard extends Clipboard {
 
@@ -138,13 +136,26 @@ public class OsxClipboard extends Clipboard {
                 InputStream pdfData = (InputStream) contents.getTransferData(CopyPasteAction.PDF_FLAVOR);
                 InputStream svgData = (InputStream) contents.getTransferData(CopyPasteAction.SVG_FLAVOR);
                 String strData = (String) contents.getTransferData(DataFlavor.stringFlavor);
-                setClipboard(IOUtils.toByteArray(pdfData),
-                             IOUtils.toByteArray(svgData),
+                setClipboard(toByteArray(pdfData),
+                             toByteArray(svgData),
                              new byte[0],
                              strData);
             }
         } catch (UnsupportedFlavorException | IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private byte[] toByteArray(InputStream is) {
+        try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = is.read(buffer)) >= 0) {
+                bout.write(buffer, 0, read);
+            }
+            return bout.toByteArray();
+        } catch (IOException e) {
+            return new byte[0];
         }
     }
 }

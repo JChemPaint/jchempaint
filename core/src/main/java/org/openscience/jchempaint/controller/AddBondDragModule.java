@@ -122,7 +122,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
         lastMouseMove = null;
         start = null;
         dest = null;
@@ -170,7 +170,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         lastMouseMove = null;
         if (isBond) return;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
@@ -226,7 +226,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedUp(Point2d worldCoord) {
+    public void mouseClickedUp(Point2d worldCoord, int modifiers) {
         lastMouseMove = null;
         chemModelRelay.clearPhantoms();
         if (isBond) return;

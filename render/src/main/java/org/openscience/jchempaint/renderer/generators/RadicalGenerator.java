@@ -27,7 +27,7 @@ import java.util.Map;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ISingleElectron;
@@ -68,7 +68,7 @@ public class RadicalGenerator implements IGenerator<IAtomContainer> {
             if(singleElectronsPerAtom.get(atom)==null)
                 singleElectronsPerAtom.put(atom,0);
             Point2d p = atom.getPoint2d();
-            int align = GeometryTools.getBestAlignmentForLabelXY(ac, atom);
+            int align = GeometryUtil.getBestAlignmentForLabelXY(ac, atom);
             double rx = p.x;
             double ry = p.y;
             if (align == 1) {

@@ -28,8 +28,6 @@
  */
 package org.openscience.jchempaint;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -48,6 +46,8 @@ import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
@@ -115,7 +115,7 @@ import java.util.List;
 public class RenderPanel extends JPanel implements IViewEventRelay,
                                                    IUndoListener {
 
-    private static final Logger log = LogManager.getLogger(RenderPanel.class);
+    private static final ILoggingTool log = LoggingToolFactory.createLoggingTool(RenderPanel.class);
     protected Renderer renderer;
 
     private boolean isNewChemModel;
@@ -262,8 +262,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                              private final CDK2DAtomColors base = new CDK2DAtomColors();
                              @Override
                              public Color getAtomColor(IAtom atom) {
-                                 if (atom.getAtomicNumber() != null &&
-                                     atom.getAtomicNumber() == IAtom.C)
+                                 if (atom.getAtomicNumber() == null ||
+                                     atom.getAtomicNumber() == IAtom.C ||
+                                     atom.getAtomicNumber() == IAtom.Wildcard ||
+                                     atom.getAtomicNumber() == IAtom.H)
                                      return Color.WHITE;
                                  return base.getAtomColor(atom);
                              }

@@ -65,5 +65,36 @@
             <artifactId>jchempaint-inchi-jni</artifactId>
             <version>3.4-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-inchi</artifactId>
+            <!-- Mac OS/darwin build does not need inchi support for other platforms -->
+            <exclusions>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-linux-aarch64</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-linux-x86-64</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-linux-arm</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-linux-x86</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-win32-x86</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>io.github.dan2097</groupId>
+                <artifactId>jna-inchi-win32-x86-64</artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

@@ -49,7 +49,7 @@ public class RemoveModule extends ControllerModuleAdapter {
 		super(chemObjectRelay);
 	}
 	
-	public void mouseClickedDown(Point2d worldCoordinate) {
+	public void mouseClickedDown(Point2d worldCoordinate, int modifiers) {
 	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoordinate);
 	    if(selectedAC == null)
 	        return;

@@ -52,7 +52,7 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 		this.change = change;
 	}
 
-	public void mouseClickedDown(Point2d worldCoord) {
+	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 	    
 	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
 	    if(selectedAC == null) return;

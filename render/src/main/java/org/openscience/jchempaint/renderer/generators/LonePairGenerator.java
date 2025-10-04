@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ILonePair;
@@ -68,7 +68,7 @@ public class LonePairGenerator implements IGenerator<IAtomContainer> {
         for (ILonePair lp : ac.lonePairs()) {
             IAtom atom = lp.getAtom();
             Point2d p = atom.getPoint2d();
-            int align = GeometryTools.getBestAlignmentForLabelXY(ac, atom);
+            int align = GeometryUtil.getBestAlignmentForLabelXY(ac, atom);
             double rx = p.x;
             double ry = p.y;
             double dx = 0;

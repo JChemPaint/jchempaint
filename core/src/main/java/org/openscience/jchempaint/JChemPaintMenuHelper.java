@@ -21,7 +21,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -157,7 +157,7 @@ public class JChemPaintMenuHelper {
                                 symbol = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtom(0).getSymbol();
                             else
                                 symbol = SwingPopupModule.lastAtomPopupedFor.getSymbol();
-                            IIsotope[] isotopes = XMLIsotopeFactory.getInstance(jcpPanel.getChemModel().getBuilder()).getIsotopes(symbol);
+                            IIsotope[] isotopes = Isotopes.getInstance().getIsotopes(symbol);
                             for(int i=0;i<isotopes.length;i++){
                                 String cmd=isotopes[i].getSymbol()+isotopes[i].getMassNumber();
                                 JMenuItem mi = new JMenuItem(cmd);

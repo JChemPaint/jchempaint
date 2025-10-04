@@ -77,7 +77,7 @@ import java.util.List;
 import java.util.Set;
 
 public class JChemPaintPanel extends AbstractJChemPaintPanel implements
-        IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
+                                                             IChemModelEventRelayHandler, ICDKChangeListener, KeyListener, IChangeModeListener {
 
     private static final long serialVersionUID = 7810772571955039160L;
     public static List<JChemPaintPanel> instances = new ArrayList<JChemPaintPanel>();
@@ -86,7 +86,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Builds a JCPPanel with a certain model. GUI is that of the application.
-     * 
+     *
      * @param chemModel The model to display.
      */
     public JChemPaintPanel(IChemModel chemModel) {
@@ -96,11 +96,11 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     /**
      * Builds a JCPPanel with a certain model and a certain gui.
      *
-     * @param chemModel   The model to display.
-     * @param gui         The gui configuration string
-     * @param debug       Should we be in debug mode?
-     * @param applet      If this panel is to be in an applet, pass the applet here, else null.
-  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
+     * @param chemModel The model to display.
+     * @param gui       The gui configuration string
+     * @param debug     Should we be in debug mode?
+     * @param applet    If this panel is to be in an applet, pass the applet here, else null.
+     * @param blocked   A list of menuitesm/buttons which should be ignored when building gui.
      */
     public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet, Set<String> blocked) {
         GT.setLanguage(JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("General.language"));
@@ -109,15 +109,15 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
         try {
-			renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug, false, applet);
-		} catch (IOException e) {
-			announceError(e);
-		}
-		if (gui.equals("application")) {
-			setAppTitle(" - "+
-			        new JChemPaintMenuHelper().getMenuResourceString("Title", guistring));
-		}
-        init();        
+            renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug, false, applet);
+        } catch (IOException e) {
+            announceError(e);
+        }
+        if (gui.equals("application")) {
+            setAppTitle(" - " +
+                        new JChemPaintMenuHelper().getMenuResourceString("Title", guistring));
+        }
+        init();
     }
 
     protected void init() {
@@ -128,7 +128,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
         renderPanel.getHub().addChangeModeListener(this);
         renderPanel.setName("renderpanel");
-        centerContainer=new JPanel();
+        centerContainer = new JPanel();
         centerContainer.setLayout(new BorderLayout());
         centerContainer.add(new JScrollPane(renderPanel), BorderLayout.CENTER);
         this.add(centerContainer);
@@ -136,7 +136,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         customizeView();
         updateUndoRedoControls();
         SwingPopupModule inputAdapter = new SwingPopupModule(renderPanel,
-                renderPanel.getHub());
+                                                             renderPanel.getHub());
         setupPopupMenus(inputAdapter, blockList);
         renderPanel.getHub().registerGeneralControllerModule(inputAdapter);
         renderPanel.getHub().setEventHandler(this);
@@ -146,12 +146,12 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         //we set this to true always, the user should have no option to switch it off
         renderPanel.getHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         this.addKeyListener(this);
-        renderPanel.addMouseListener(new MouseAdapter(){
+        renderPanel.addMouseListener(new MouseAdapter() {
             public void mouseExited(MouseEvent e) {
                 //this avoids ghost phantom rings if the user leaves the panel
                 JChemPaintPanel.this.get2DHub().clearPhantoms();
                 JChemPaintPanel.this.get2DHub().updateView();
-            }            
+            }
         });
         handler = new JCPTransferHandler(this);
         renderPanel.setTransferHandler(handler);
@@ -159,7 +159,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Gets the top level container (JFrame, Applet) of this panel.
-     * 
+     *
      * @return The top level container.
      */
     public Container getTopLevelContainer() {
@@ -168,7 +168,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * If this panel is in a JFrame, sets the title of the JFrame.
-     * 
+     *
      * @param title The title to set.
      */
     public void setTitle(String title) {
@@ -180,27 +180,27 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
     /**
      * Installs popup menus for this panel.
-     * 
+     *
      * @param inputAdapter The SwingPopupModule to use for the popup menus.
-  	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
+     * @param blocked      A list of menuitesm/buttons which should be ignored when building gui.
      */
     public void setupPopupMenus(SwingPopupModule inputAdapter, Set<String> blocked) {
-    	inputAdapter.setPopupMenu(IPseudoAtom.class,
+        inputAdapter.setPopupMenu(IPseudoAtom.class,
                                   new JChemPaintPopupMenu(this, "pseudo", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(IAtom.class, new JChemPaintPopupMenu(this,
-    			"atom", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(IBond.class, new JChemPaintPopupMenu(this,
-    			"bond", this.guistring, blocked));
-    	inputAdapter.setPopupMenu(IChemModel.class, new JChemPaintPopupMenu(
-    			this, "chemmodel", this.guistring, blocked));
+        inputAdapter.setPopupMenu(IAtom.class, new JChemPaintPopupMenu(this,
+                                                                       "atom", this.guistring, blocked));
+        inputAdapter.setPopupMenu(IBond.class, new JChemPaintPopupMenu(this,
+                                                                       "bond", this.guistring, blocked));
+        inputAdapter.setPopupMenu(IChemModel.class, new JChemPaintPopupMenu(
+                this, "chemmodel", this.guistring, blocked));
     }
 
 
     /**
      * Class for closing jcp
      *
-     *@author shk3
-     *@cdk.created November 23, 2008
+     * @author shk3
+     * @cdk.created November 23, 2008
      */
     public final static class AppCloser extends WindowAdapter {
 
@@ -208,8 +208,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
          * closing Event. Shows a warning if this window has unsaved data and
          * terminates jvm, if last window.
          *
-         * @param e
-         *            Description of the Parameter
+         * @param e Description of the Parameter
          */
         public void windowClosing(WindowEvent e) {
             int clear = ((JChemPaintPanel) ((JFrame) e.getSource())
@@ -225,8 +224,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 ((JFrame) e.getSource()).setVisible(false);
                 ((JFrame) e.getSource()).dispose();
                 if (instances.size() == 0) {// TODO &&
-                                            // !((JChemPaintPanel)rootFrame.getContentPane().getComponent(0)).isEmbedded())
-                                            // {
+                    // !((JChemPaintPanel)rootFrame.getContentPane().getComponent(0)).isEmbedded())
+                    // {
                     System.exit(0);
                 }
             }
@@ -243,7 +242,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             WindowListener[] wls = (WindowListener[]) (frame
                     .getListeners(WindowListener.class));
             wls[0].windowClosing(new WindowEvent(frame,
-                    WindowEvent.WINDOW_CLOSING));
+                                                 WindowEvent.WINDOW_CLOSING));
         }
     }
 
@@ -294,7 +293,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see org.openscience.cdk.event.ICDKChangeListener#stateChanged(java.util.EventObject)
      */
     public void stateChanged(EventObject event) {
-    	updateUndoRedoControls();
+        updateUndoRedoControls();
         //move focus
         this.requestFocusInWindow();
     }
@@ -349,7 +348,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 }
 
                 model.moveHighlight(e.getKeyCode());
-                if ((e.getModifiersEx()&KeyEvent.SHIFT_DOWN_MASK) != 0)
+                if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0)
                     model.moveHighlight(e.getKeyCode());
                 this.get2DHub().updateView();
                 return;
@@ -358,43 +357,95 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         boolean changed = false;
 
         // if shift or nothing pressed we do the hot keys for atoms/bonds
-        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK|KeyEvent.ALT_DOWN_MASK)) == 0)) {
-            char x = (char)(e.getKeyCode() >= 'A' && e.getKeyCode() <= 'Z' ? e.getKeyChar() : e.getKeyCode());
+        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0)) {
+            char x = (char) (e.getKeyCode() >= 'A' && e.getKeyCode() <= 'Z' ? e.getKeyChar() : e.getKeyCode());
             if (model.getHighlightedAtom() != null) {
                 IAtom hgAtom = model.getHighlightedAtom();
                 changed = true;
                 switch (x) {
-                    case ' ': relay.selectFragment(hgAtom); break;
-                    case '0': relay.addAtom(hgAtom, IAtom.C, true); break;
-                    case '1': relay.addAtom(hgAtom, IAtom.C, false); break;
-                    case '2': relay.addAcetyl(hgAtom); break;
+                    case ' ':
+                        relay.selectFragment(hgAtom);
+                        break;
+                    case '0':
+                        relay.addAtom(hgAtom, IAtom.C, true);
+                        break;
+                    case '1':
+                        relay.addAtom(hgAtom, IAtom.C, false);
+                        break;
+                    case '2':
+                        relay.addAcetyl(hgAtom);
+                        break;
                     case '3': // fall through 3/a
-                    case 'a': relay.addPhenyl(hgAtom, 6, false); break;
-                    case '4': relay.addDimethyl(hgAtom, IBond.Display.WedgeBegin); break;
-                    case '5': relay.addDimethyl(hgAtom, IBond.Display.WedgeEnd); break;
-                    case '6': relay.addRing(hgAtom, 6, false); break;
-                    case '7': relay.addRing(hgAtom, 5, false); break;
-                    case '8': relay.addAtom(hgAtom, IAtom.C, IBond.Order.DOUBLE, false); break;
-                    case '9': relay.addDimethyl(hgAtom, IBond.Display.Solid); break;
-                    case 'b': relay.setSymbol(hgAtom, "B"); break;
-                    case 'c': relay.setSymbol(hgAtom, "C"); break;
-                    case 'd': relay.setSymbol(hgAtom, "H", 2); break;
+                    case 'a':
+                        relay.addPhenyl(hgAtom, 6, false);
+                        break;
+                    case '4':
+                        relay.addDimethyl(hgAtom, IBond.Display.WedgeBegin);
+                        break;
+                    case '5':
+                        relay.addDimethyl(hgAtom, IBond.Display.WedgeEnd);
+                        break;
+                    case '6':
+                        relay.addRing(hgAtom, 6, false);
+                        break;
+                    case '7':
+                        relay.addRing(hgAtom, 5, false);
+                        break;
+                    case '8':
+                        relay.addAtom(hgAtom, IAtom.C, IBond.Order.DOUBLE, false);
+                        break;
+                    case '9':
+                        relay.addDimethyl(hgAtom, IBond.Display.Solid);
+                        break;
+                    case 'b':
+                        relay.setSymbol(hgAtom, "B");
+                        break;
+                    case 'c':
+                        relay.setSymbol(hgAtom, "C");
+                        break;
+                    case 'd':
+                        relay.setSymbol(hgAtom, "H", 2);
+                        break;
                     // case "e": break; // ethyl
-                    case 'f': relay.setSymbol(hgAtom, "F"); break;
-                    case 'h': relay.setSymbol(hgAtom, "H"); break;
-                    case 'i': relay.setSymbol(hgAtom, "I"); break;
+                    case 'f':
+                        relay.setSymbol(hgAtom, "F");
+                        break;
+                    case 'h':
+                        relay.setSymbol(hgAtom, "H");
+                        break;
+                    case 'i':
+                        relay.setSymbol(hgAtom, "I");
+                        break;
                     case 'n':
-                    case 'w': relay.setSymbol(hgAtom, "N"); break;
+                    case 'w':
+                        relay.setSymbol(hgAtom, "N");
+                        break;
                     case 'q':
-                    case 'o': relay.setSymbol(hgAtom, "O"); break;
-                    case 's': relay.setSymbol(hgAtom, "S"); break;
-                    case 'p': relay.setSymbol(hgAtom, "P"); break;
-                    case 'r': relay.setSymbol(hgAtom, "R"); break;
-                    case 'B': relay.setSymbol(hgAtom, "Br"); break;
+                    case 'o':
+                        relay.setSymbol(hgAtom, "O");
+                        break;
+                    case 's':
+                        relay.setSymbol(hgAtom, "S");
+                        break;
+                    case 'p':
+                        relay.setSymbol(hgAtom, "P");
+                        break;
+                    case 'r':
+                        relay.setSymbol(hgAtom, "R");
+                        break;
+                    case 'B':
+                        relay.setSymbol(hgAtom, "Br");
+                        break;
                     case 'C': // fall through C/l
-                    case 'l': relay.setSymbol(hgAtom, "Cl"); break;
-                    case 'S': relay.setSymbol(hgAtom, "Si"); break;
-                    case '.': relay.convertToPseudoAtom(hgAtom, "_AP1"); break;
+                    case 'l':
+                        relay.setSymbol(hgAtom, "Cl");
+                        break;
+                    case 'S':
+                        relay.setSymbol(hgAtom, "Si");
+                        break;
+                    case '.':
+                        relay.convertToPseudoAtom(hgAtom, "_AP1");
+                        break;
                     default:
                         changed = false;
                 }
@@ -402,42 +453,90 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 IBond hgBond = model.getHighlightedBond();
                 changed = true;
                 switch (x) {
-                    case ' ': relay.selectFragment(hgBond); break;
-                    case '1': relay.cycleBondValence(hgBond); break;
-                    case '2': relay.changeBond(hgBond, IBond.Order.DOUBLE, IBond.Display.Solid); break;
-                    case '3': relay.changeBond(hgBond, IBond.Order.TRIPLE, IBond.Display.Solid); break;
-                    case '4': relay.addRing(hgBond, 4, false); break;
-                    case '5': relay.addRing(hgBond, 5, false); break;
-                    case '6': relay.addRing(hgBond, 6, false); break;
-                    case '7': relay.addRing(hgBond, 7, false); break;
-                    case '8': relay.addRing(hgBond, 8, false); break;
-                    case 'a': relay.addPhenyl(hgBond, 6, false); break;
-                    case 'w': relay.changeBond(hgBond, IBond.Order.SINGLE,  IBond.Display.WedgeBegin); break;
+                    case ' ':
+                        relay.selectFragment(hgBond);
+                        break;
+                    case '1':
+                        relay.cycleBondValence(hgBond);
+                        break;
+                    case '2':
+                        relay.changeBond(hgBond, IBond.Order.DOUBLE, IBond.Display.Solid);
+                        break;
+                    case '3':
+                        relay.changeBond(hgBond, IBond.Order.TRIPLE, IBond.Display.Solid);
+                        break;
+                    case '4':
+                        relay.addRing(hgBond, 4, false);
+                        break;
+                    case '5':
+                        relay.addRing(hgBond, 5, false);
+                        break;
+                    case '6':
+                        relay.addRing(hgBond, 6, false);
+                        break;
+                    case '7':
+                        relay.addRing(hgBond, 7, false);
+                        break;
+                    case '8':
+                        relay.addRing(hgBond, 8, false);
+                        break;
+                    case 'a':
+                        relay.addPhenyl(hgBond, 6, false);
+                        break;
+                    case 'w':
+                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgeBegin);
+                        break;
                     case 'W': // shift + W
-                    case 'h': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgedHashBegin); break;
-                    case 'y': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Wavy); break;
-                    case 'b': relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Bold); break;
-                    default: changed = false;
+                    case 'h':
+                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgedHashBegin);
+                        break;
+                    case 'y':
+                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Wavy);
+                        break;
+                    case 'b':
+                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Bold);
+                        break;
+                    default:
+                        changed = false;
                 }
             } else if (model.getSelection() == null || !model.getSelection().isFilled()) {
                 changed = true;
                 switch (x) {
-                    case '1': this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.SINGLE, true, "bondTool")); break;
-                    case '2': this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.DOUBLE, true, "double_bondTool")); break;
-                    case 'a': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, true, "benzene")); break;
-                    case '3': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 3, false, "triangle")); break;
-                    case '4': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 4, false, "square")); break;
-                    case '5': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 5, false, "pentagon")); break;
-                    case '6': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, false, "hexagon"));  break;
-                    case '7': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 7, false, "heptagon"));  break;
-                    case '8': this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 8, false, "octagon"));  break;
-                    default: changed = false;
-                    break;
-               }
-               if (changed) {
-                   this.get2DHub().updateView();
-                   changed = false;
-               }
+                    case '1':
+                        this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.SINGLE, true, "bondTool"));
+                        break;
+                    case '2':
+                        this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.DOUBLE, true, "double_bondTool"));
+                        break;
+                    case 'a':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, true, "benzene"));
+                        break;
+                    case '3':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 3, false, "triangle"));
+                        break;
+                    case '4':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 4, false, "square"));
+                        break;
+                    case '5':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 5, false, "pentagon"));
+                        break;
+                    case '6':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, false, "hexagon"));
+                        break;
+                    case '7':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 7, false, "heptagon"));
+                        break;
+                    case '8':
+                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 8, false, "octagon"));
+                        break;
+                    default:
+                        changed = false;
+                        break;
+                }
+                if (changed) {
+                    this.get2DHub().updateView();
+                    changed = false;
+                }
             }
         }
 
@@ -478,95 +577,46 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
     }
 
     /* (non-Javadoc)
-	 * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
-	 */
-	public void modeChanged(IControllerModule newActiveModule) {
+     * @see org.openscience.cdk.controller.ChangeModeListener#modeChanged(org.openscience.cdk.controller.IControllerModule)
+     */
+    public void modeChanged(IControllerModule newActiveModule) {
         //move focus
         this.requestFocusInWindow();
-	    //we set the old button to inactive colour
-        if (this.getLastActionButton() != null ) {
-            this.getLastActionButton().setBackground(null);
-        }
-        if (this.lastSecondaryButton != null) {
+        //we set the old button to inactive colour
+        if (this.getLastActionButton() != null) {
             this.getLastActionButton().setBackground(null);
         }
         String actionid = newActiveModule.getID();
         //this is because move mode does not have a button
-        if(actionid.equals("move"))
-            actionid=lastSelectId;
+        if (actionid.equals("move"))
+            actionid = lastSelectId;
         //we remember the last activated move mode so that we can switch back to it after move
-        if(newActiveModule.getID().equals("select") || newActiveModule.getID().equals("lasso"))
+        if (newActiveModule.getID().equals("select") || newActiveModule.getID().equals("lasso"))
             lastSelectId = newActiveModule.getID();
         //we set the new button to active colour
-        JButton newActionButton=buttons.get(actionid);
-        if(newActionButton!=null){
+        JButton newActionButton = buttons.get(actionid);
+        if (newActionButton != null) {
             this.setLastActionButton(newActionButton);
             newActionButton.setBackground(JCPToolBar.BUTON_ACTIVE_COLOR);
         }
-        if(JCPToolBar.getToolbarResourceString("lefttoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1 && !newActiveModule.getID().equals("reactionArrow")){
-            if(this.buttons.get(this.get2DHub().getController2DModel().getDrawElement())!=null){
-                this.buttons.get(this.get2DHub().getController2DModel().getDrawElement()).setBackground(Color.GRAY);
-                lastSecondaryButton = this.buttons.get(this.get2DHub().getController2DModel().getDrawElement());
-            }else if(buttons.get("periodictable")!=null){
-                buttons.get("periodictable").setBackground(Color.GRAY);
-                lastSecondaryButton = buttons.get("periodictable");
-            }
-        } else if (actionid!=null && actionid.equals("RX")) {
-            this.buttons.get("enterR").setBackground(Color.GRAY);
-            lastSecondaryButton = this.buttons.get("enterR");
-        }
-        if(JCPToolBar.getToolbarResourceString("lowertoolbar", getGuistring()).indexOf(newActiveModule.getID())>-1){
-//                    this.buttons.get("bondTool").setBackground(JCPToolBar.BUTTON_INACTIVE_COLOR);
-            //the newActiveModule should always be an AddAtomModule, but we still check
-            /* if(newActiveModule instanceof AddAtomModule){
-                if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.NONE)){
-                    this.buttons.get("bondTool").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("bondTool");
-                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.UP)){
-                    this.buttons.get("up_bond").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("up_bond");
-                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.DOWN)){
-                    this.buttons.get("down_bond").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("down_bond");
-                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.E_OR_Z)){
-                    this.buttons.get("undefined_bond").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("undefined_bond");
-                }else if(((AddAtomModule)newActiveModule).getStereoForNewBond().equals(IBond.Stereo.UP_OR_DOWN)){
-                    this.buttons.get("undefined_stereo_bond").setBackground(Color.GRAY);
-                    lastSecondaryButton = this.buttons.get("undefined_stereo_bond");
-                }
-            }else{
-                this.buttons.get("bondTool").setBackground(Color.GRAY);
-                lastSecondaryButton = this.buttons.get("bondTool");
-            }*/
-        }
-        if(!(newActiveModule instanceof MoveModule)){
+        if (!(newActiveModule instanceof MoveModule)) {
             this.renderPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             this.get2DHub().updateView();
         }
-	}
-	
-    /**
-     * Gets all atomcontainers of a chemodel in one AtomContainer.
-     * 
-     * @param chemModel The chemodel
-     * @return The result.
-     */
-    public static IAtomContainer getAllAtomContainersInOne(IChemModel chemModel){
-		List<IAtomContainer> acs=ChemModelManipulator.getAllAtomContainers(chemModel);
-		IAtomContainer allinone=chemModel.getBuilder().newInstance(IAtomContainer.class);
-		for(int i=0;i<acs.size();i++){
-			allinone.add(acs.get(i));
-		}
-		return allinone;
     }
 
     /**
-     * Sets the lastSecondaryButton attribute. Only to be used once from JCPToolBar.
-     * 
-     * @param lastSecondaryButton The lastSecondaryButton.
+     * Gets all atomcontainers of a chemodel in one AtomContainer.
+     *
+     * @param chemModel The chemodel
+     * @return The result.
      */
-    public void setLastSecondaryButton(JComponent lastSecondaryButton) {
-        this.lastSecondaryButton = lastSecondaryButton;
+    public static IAtomContainer getAllAtomContainersInOne(IChemModel chemModel) {
+        List<IAtomContainer> acs = ChemModelManipulator.getAllAtomContainers(chemModel);
+        IAtomContainer allinone = chemModel.getBuilder().newInstance(IAtomContainer.class);
+        for (int i = 0; i < acs.size(); i++) {
+            allinone.add(acs.get(i));
+        }
+        return allinone;
     }
 }

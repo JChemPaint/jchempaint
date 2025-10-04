@@ -50,6 +50,7 @@ public interface IAtomBondEdits {
     public IAtom addAtomWithoutUndo(String element, IAtom atom, boolean makePseudoAtom);
     public void moveToWithoutUndo(IAtom atom, Point2d point);
     public void moveTo(IAtom atom, Point2d point);
+    public void moveTo(IAtom atom, Point2d from, Point2d to, boolean undoable);
     public void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove);
     public void setSymbol(IAtom atom, String symbol);
     public void setCharge(IAtom atom, int charge);

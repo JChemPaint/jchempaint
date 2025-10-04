@@ -31,7 +31,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
-import org.openscience.cdk.reaction.ReactionChain;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
@@ -55,12 +54,12 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedDown(Point2d worldCoordFrom) {
+    public void mouseClickedDown(Point2d worldCoordFrom, int modifiers) {
         startPoint = worldCoordFrom;
     }
 
     @Override
-    public void mouseClickedUp(Point2d endPoint) {
+    public void mouseClickedUp(Point2d endPoint, int modifiers) {
         //first, we get rid of the phantom arrow
         chemModelRelay.setPhantomArrow(null, null);
         chemModelRelay.updateView();
@@ -122,13 +121,17 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
             return;
         
         // do reaction creation
+        // JWM: This used to use 'ReactionChain' but there is a much better way
+        // of doing this and support branching - it involves ditching the ChemModel
+        // are just storing everything in one container, this a big change but
+        // will be done in future
         IReactionSet reactionSet = super.chemModelRelay.getChemModel().getReactionSet();
         if (reactionSet == null) {
-            reactionSet = new ReactionChain(); //reactionSet = super.chemModelRelay.getChemModel().getBuilder().newInstance(IReactionSet.class);
+            reactionSet = super.chemModelRelay.getChemModel().getBuilder().newInstance(IReactionSet.class);
             super.chemModelRelay.getChemModel().setReactionSet(reactionSet);
         }
         IReaction reaction = moleculeSet.getBuilder().newInstance(IReaction.class);
-        ((ReactionChain) reactionSet).addReaction(reaction, reactionSet.getReactionCount()); //reactionSet.addReaction(reaction);
+        reactionSet.addReaction(reaction);
         reaction.setID(ReactionHub.newReactionId(chemModelRelay));
         
         for (IAtomContainer reactant : reactants) {
@@ -177,7 +180,7 @@ public class ReactionArrowModule extends ControllerModuleAdapter {
      * matrix to 2x2)
      */
     @Override
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         chemModelRelay.setPhantomArrow(startPoint, worldCoordTo);
         chemModelRelay.updateView();
     }

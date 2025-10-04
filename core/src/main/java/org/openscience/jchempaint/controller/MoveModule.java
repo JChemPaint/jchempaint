@@ -26,7 +26,6 @@
  */
 package org.openscience.jchempaint.controller;
 
-import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -228,7 +227,7 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
 
-    public void mouseClickedUp(Point2d worldCoord) {
+    public void mouseClickedUp(Point2d worldCoord, int modifiers) {
 
         if (transform == Transform.Rotate ||
             transform == Transform.Scale) {
@@ -256,11 +255,11 @@ public class MoveModule extends ControllerModuleAdapter {
         }
 
     	if (start2DCenter != null) {
-            Vector2d end = new Vector2d();
 
             // take 2d center of end point to ensure correct positional undo
-            Point2d end2DCenter = GeometryTools.get2DCenter(atomsToMove);
-            end.sub(end2DCenter, start2DCenter);
+            Vector2d total = new Vector2d();
+            Point2d end2DCenter = GeometryUtil.get2DCenter(atomsToMove);
+            total.sub(end2DCenter, start2DCenter);
 
             Map<IAtom, IAtom> mergeMap = calculateMerge(atomsToMove);
             JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
@@ -270,16 +269,21 @@ public class MoveModule extends ControllerModuleAdapter {
             // Do the merge of atoms
             if (!mergeMap.isEmpty()) {
                 try {
-					chemModelRelay.mergeMolecules(end);
+					chemModelRelay.mergeMolecules(total);
 				} catch (RuntimeException e) {
 					//move things back, merge is not allowed
 		            Vector2d d = new Vector2d();
 		            d.sub(start2DCenter,end2DCenter);
-					chemModelRelay.moveBy(atomsToMove, d, null);
+					chemModelRelay.moveBy(atomsToMove, d, total);
 		            chemModelRelay.updateView();
 				}
-            }else {
-                chemModelRelay.moveBy(atomsToMove, null, end);
+            } else {
+                // single atom will snap to sensible angles (moveTo(atom,from,to)
+                if (atomsToMove.size() == 1) {
+                    chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, end2DCenter, true);
+                } else {
+                    chemModelRelay.moveBy(atomsToMove, null, total);
+                }
             }
     	}
         IControllerModule newActiveModule = new SelectSquareModule(this.chemModelRelay);
@@ -298,7 +302,7 @@ public class MoveModule extends ControllerModuleAdapter {
     /**
      * Most move mode calculations are done in this routine.
      */
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
 
         if (transform == Transform.Rotate) {
             transformMade = true;
@@ -320,13 +324,16 @@ public class MoveModule extends ControllerModuleAdapter {
         }
 
     	end2DCenter = worldCoordTo;
-        Point2d atomCoord = new Point2d();
-        atomCoord.add(worldCoordTo, offset);
 
         Vector2d d = new Vector2d();
         d.sub(worldCoordTo, worldCoordFrom);
 
-        chemModelRelay.moveBy(atomsToMove, d, null);
+        // single atom will snap to sensible angles (moveTo(atom,from,to)
+        if (atomsToMove.size() == 1) {
+            chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, worldCoordTo, false);
+        } else {
+            chemModelRelay.moveBy(atomsToMove, d, null);
+        }
         chemModelRelay.updateView();
     }
 

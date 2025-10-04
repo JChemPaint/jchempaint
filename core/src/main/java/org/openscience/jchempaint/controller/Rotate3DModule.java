@@ -56,7 +56,7 @@ public class Rotate3DModule extends RotateModule {
      * matrix to 2x2)
      */
     @Override
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
+    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
 
         if (selectionMade) {
             rotationPerformed=true;

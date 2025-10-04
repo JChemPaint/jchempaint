@@ -46,7 +46,6 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.io.CDKSourceCodeWriter;
-import org.openscience.cdk.io.CMLWriter;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.MDLRXNWriter;
 import org.openscience.cdk.io.MDLV2000Writer;
@@ -339,28 +338,29 @@ public class SaveAsAction extends JCPAction
 
     protected File saveAsCML2(IChemObject object, File outFile) throws Exception
     {
-        if(Float.parseFloat(System.getProperty("java.specification.version"))<1.5){
-            JOptionPane.showMessageDialog(null,"For saving as CML you need Java 1.5 or higher!");
-            return outFile;
-        }
-        logger.info("Saving the contents in a CML 2.0 file...");
-        String fileName = outFile.toString();
-        if (!fileName.endsWith(".cml")) {
-            fileName += ".cml";
-            outFile = new File(fileName);
-        }
-        FileWriter sw = new FileWriter(outFile);
-        cow = new CMLWriter(sw);
-        if (cow != null && askIOSettings())
-        {
-            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
-        }
-        cow.write(object);
-        cow.close();
-        sw.close();
-        if(jcpPanel instanceof JChemPaintPanel)
-            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
-        return outFile;
+//        if(Float.parseFloat(System.getProperty("java.specification.version"))<1.5){
+//            JOptionPane.showMessageDialog(null,"For saving as CML you need Java 1.5 or higher!");
+//            return outFile;
+//        }
+//        logger.info("Saving the contents in a CML 2.0 file...");
+//        String fileName = outFile.toString();
+//        if (!fileName.endsWith(".cml")) {
+//            fileName += ".cml";
+//            outFile = new File(fileName);
+//        }
+//        FileWriter sw = new FileWriter(outFile);
+//        cow = new CMLWriter(sw);
+//        if (cow != null && askIOSettings())
+//        {
+//            cow.addChemObjectIOListener(new SwingGUIListener(jcpPanel, IOSetting.Importance.HIGH));
+//        }
+//        cow.write(object);
+//        cow.close();
+//        sw.close();
+//        if(jcpPanel instanceof JChemPaintPanel)
+//            ((JChemPaintPanel)jcpPanel).setTitle(jcpPanel.getChemModel().getID());
+//        return outFile;
+        throw new IllegalStateException();
     }
 
     

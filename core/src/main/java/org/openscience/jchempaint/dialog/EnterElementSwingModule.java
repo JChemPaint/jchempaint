@@ -45,7 +45,7 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.config.XMLIsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -114,7 +114,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
         }
     }
 
-    public void mouseClickedDown(Point2d worldCoord) {
+    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
         IAtom atom = chemModelRelay.getRenderer()
                                           .getRenderer2DModel()
@@ -125,7 +125,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
 
         // fow now presume only terminal atoms can have functional groups, so
         // we populate the selection box
-        if (atom.getBondCount() == 1) {
+        if (atom != null && atom.getBondCount() == 1) {
             int h = 1;
             for (String name : funcgroupnames) {
                 funcGroupsKeys[h++] = name;
@@ -152,7 +152,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
             } else if (!label.isEmpty()) {
                 if (Character.isLowerCase(label.toCharArray()[0]))
                     label = Character.toUpperCase(label.charAt(0)) + label.substring(1);
-                IsotopeFactory ifa = XMLIsotopeFactory.getInstance(chemModel.getBuilder());
+                IsotopeFactory ifa = Isotopes.getInstance();
                 IIsotope iso = ifa.getMajorIsotope(label);
                 if (iso != null) {
                     if (atom == null) {
