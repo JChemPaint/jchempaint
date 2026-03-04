@@ -28,8 +28,6 @@
  */
 package org.openscience.jchempaint.action;
 
-import org.openscience.cdk.ChemFile;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -37,7 +35,6 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.layout.AtomPlacer;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
