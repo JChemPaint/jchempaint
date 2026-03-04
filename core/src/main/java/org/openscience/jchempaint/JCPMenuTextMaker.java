@@ -152,6 +152,11 @@ public class JCPMenuTextMaker {
         entries.put("majorMinusOne", GT.get("Major Minus {0}", "1"));
         entries.put("majorMinusTwo", GT.get("Major Minus {0}", "2"));
         entries.put("majorMinusThree", GT.get("Major Minus {0}", "3"));
+        entries.put("hydrogenNormalisation", GT.get("Set Hydrogen Display"));
+        entries.put("hydrogenMinimal", GT.get("Minimal"));
+        entries.put("hydrogenStereo", GT.get("Stereocenters"));
+        entries.put("hydrogenDepiction", GT.get("Preferred"));
+        entries.put("hydrogenAll", GT.get("All"));
         entries.put("valence", GT.get("Valence"));
         entries.put("valenceOff", GT.get("Valence Off"));
         entries.put("valence1", GT.get("Valence {0}", "1"));
