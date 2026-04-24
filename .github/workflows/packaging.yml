@@ -52,7 +52,7 @@ jobs:
   macos:
     name: macOS Disk Image
     needs: release
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Clone Repository
         uses: actions/checkout@v5
