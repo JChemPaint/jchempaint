@@ -383,7 +383,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                         relay.addDimethyl(hgAtom, IBond.Display.WedgeBegin);
                         break;
                     case '5':
-                        relay.addDimethyl(hgAtom, IBond.Display.WedgeEnd);
+                        relay.addDimethyl(hgAtom, IBond.Display.WedgedHashBegin);
                         break;
                     case '6':
                         relay.addRing(hgAtom, 6, false);
