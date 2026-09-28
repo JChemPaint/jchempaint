@@ -66,7 +66,6 @@ import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.SaveAction;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
@@ -497,7 +496,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
      *         OptionPane.YES_OPTION/OptionPane.NO_OPTION/OptionPane.CANCEL_OPTION
      */
     public int showWarning() {
-        if (modified && !guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) { // TODO
+        if (modified) { // TODO
                                                                                   // &&
                                                                                   // !getIsOpenedByViewer())
                                                                                   // {
@@ -514,14 +513,6 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
                     answer = JOptionPane.CANCEL_OPTION;
             }
             return answer;
-        } else if (guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            // In case of the applet we do not ask for save but put the clear
-            // into the undo stack
-            // ClearAllEdit coa = null;
-            // TODO undo redo missing coa = new
-            // ClearAllEdit(this.getChemModel(),(IAtomContainerSet)this.getChemModel().getMoleculeSet().clone(),this.getChemModel().getReactionSet());
-            // this.jchemPaintModel.getControllerModel().getUndoSupport().postEdit(coa);
-            return JOptionPane.YES_OPTION;
         } else {
             return JOptionPane.YES_OPTION;
         }

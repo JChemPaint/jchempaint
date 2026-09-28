@@ -37,8 +37,6 @@ import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.action.JCPAction;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -266,13 +264,11 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         askForIOSettings = new JCheckBox();
         addField(GT.get("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
-        if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            lookAndFeel = new JComboBox<Object>(lookAndFeels);
-            addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
-            fontIcons = new JCheckBox();
-            addField(GT.get("Font Icons (restart required)"), fontIcons, otherOptionsPanel);
-            addField("", new JSeparator(), otherOptionsPanel);
-        }
+        lookAndFeel = new JComboBox<Object>(lookAndFeels);
+        addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
+        fontIcons = new JCheckBox();
+        addField(GT.get("Font Icons (restart required)"), fontIcons, otherOptionsPanel);
+        addField("", new JSeparator(), otherOptionsPanel);
 
         String[] languagesstrings = new String[gtlanguages.length];
         for (int i = 0; i < gtlanguages.length; i++) {
@@ -326,10 +322,8 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         Properties props = jcpph.getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("General.askForIOSettings").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
-        if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
-            fontIcons.setSelected(jcpph.getBool("useFontIcons", true));
-        }
+        lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
+        fontIcons.setSelected(jcpph.getBool("useFontIcons", true));
         language.setSelectedItem(props.getProperty("General.language"));
         validate();
     }
@@ -402,84 +396,83 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, GT.get("Number of undoable operations") + " " + GT.get("must be a number from 1 to 100"), GT.get("Number of undoable operations"), JOptionPane.WARNING_MESSAGE);
         }
-        if (!guistring.equals(JChemPaintEditorApplet.GUI_APPLET)) {
 
-            boolean useFontIcons = fontIcons.isSelected();
 
-            String lnfName = "";
-            try {
-                switch (lookAndFeel.getSelectedIndex()) {
-                    case 0:
-                        lnfName = UIManager.getSystemLookAndFeelClassName();
-                        break; // System
-                    case 1:
-                        lnfName = UIManager.getCrossPlatformLookAndFeelClassName();
-                        break; // Metal
-                    case 2:
-                        lnfName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
-                        break; // Nimbus
-                    case 3:
-                        lnfName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-                        break; // Motif
-                    case 4:
-                        lnfName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-                        break; // GTK
-                    case 5:
-                        lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-                        break; // Windows
-                    case 6:
-                        lnfName = FlatLightLaf.class.getName();
-                        break; // FlatLightLaf
-                    case 7:
-                        lnfName = FlatDarkLaf.class.getName();
-                        break; // FlatDarkLaf
-                    case 8:
-                        lnfName = FlatMacLightLaf.class.getName();
-                        break; // FlatMacLightLaf
-                    case 9:
-                        lnfName = FlatMacDarkLaf.class.getName();
-                        break; // FlatMacDarkLaf
-                    default:
-                        lnfName = "";
-                }
-                UIManager.setLookAndFeel(lnfName);
+        boolean useFontIcons = fontIcons.isSelected();
 
-                props.setProperty("useFontIcons",
-                                  Boolean.toString(useFontIcons));
-
-                // when switching UI theme we also set the background color
-                // unless it was changed explicitly
-                if (!backColorChanged) {
-                    currentColor = lnfName.contains("Dark") ? new Color(51, 51, 51) : Color.white;
-                    color.setBackground(currentColor);
-                    model.setBackColor(currentColor);
-                    props.setProperty("BackColor", Integer.toString(currentColor.getRGB()));
-                }
-
-                SwingUtilities.updateComponentTreeUI(frame);
-                frame.pack();
-                // Apply to all instances of JChemPaint
-                for (int i = 0; i < JChemPaintPanel.instances.size(); i++) {
-                    Container c = JChemPaintPanel.instances.get(i).getTopLevelContainer();
-                    if (c instanceof JFrame) {
-                        JFrame f = (JFrame) c;
-                        SwingUtilities.updateComponentTreeUI(f);
-                        f.pack();
-                    }
-                }
-
-                props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
-                props.setProperty("LookAndFeelClass", lnfName);
-            } catch (UnsupportedLookAndFeelException e) {
-                JOptionPane.showMessageDialog(this, GT.get("Look and feel") + " \"" + lookAndFeel.getSelectedItem() + "\" " + GT.get("is not supported on this platform"), GT.get("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
-            } catch (ClassNotFoundException e) {
-                JOptionPane.showMessageDialog(this, GT.get("Class not found:") + " " + lnfName);
-            } catch (InstantiationException e) {
-                // handle exception
-                JOptionPane.showMessageDialog(this, GT.get("Instantiation Exception:") + " " + lnfName);
-            } catch (IllegalAccessException e) {
-                JOptionPane.showMessageDialog(this, GT.get("Illegal Access: ") + lnfName);
+        String lnfName = "";
+        try {
+            switch (lookAndFeel.getSelectedIndex()) {
+                case 0:
+                    lnfName = UIManager.getSystemLookAndFeelClassName();
+                    break; // System
+                case 1:
+                    lnfName = UIManager.getCrossPlatformLookAndFeelClassName();
+                    break; // Metal
+                case 2:
+                    lnfName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+                    break; // Nimbus
+                case 3:
+                    lnfName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+                    break; // Motif
+                case 4:
+                    lnfName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+                    break; // GTK
+                case 5:
+                    lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+                    break; // Windows
+                case 6:
+                    lnfName = FlatLightLaf.class.getName();
+                    break; // FlatLightLaf
+                case 7:
+                    lnfName = FlatDarkLaf.class.getName();
+                    break; // FlatDarkLaf
+                case 8:
+                    lnfName = FlatMacLightLaf.class.getName();
+                    break; // FlatMacLightLaf
+                case 9:
+                    lnfName = FlatMacDarkLaf.class.getName();
+                    break; // FlatMacDarkLaf
+                default:
+                    lnfName = "";
             }
+            UIManager.setLookAndFeel(lnfName);
+
+            props.setProperty("useFontIcons",
+                              Boolean.toString(useFontIcons));
+
+            // when switching UI theme we also set the background color
+            // unless it was changed explicitly
+            if (!backColorChanged) {
+                currentColor = lnfName.contains("Dark") ? new Color(51, 51, 51) : Color.white;
+                color.setBackground(currentColor);
+                model.setBackColor(currentColor);
+                props.setProperty("BackColor", Integer.toString(currentColor.getRGB()));
+            }
+
+            SwingUtilities.updateComponentTreeUI(frame);
+            frame.pack();
+            // Apply to all instances of JChemPaint
+            for (int i = 0; i < JChemPaintPanel.instances.size(); i++) {
+                Container c = JChemPaintPanel.instances.get(i).getTopLevelContainer();
+                if (c instanceof JFrame) {
+                    JFrame f = (JFrame) c;
+                    SwingUtilities.updateComponentTreeUI(f);
+                    f.pack();
+                }
+            }
+
+            props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
+            props.setProperty("LookAndFeelClass", lnfName);
+        } catch (UnsupportedLookAndFeelException e) {
+            JOptionPane.showMessageDialog(this, GT.get("Look and feel") + " \"" + lookAndFeel.getSelectedItem() + "\" " + GT.get("is not supported on this platform"), GT.get("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, GT.get("Class not found:") + " " + lnfName);
+        } catch (InstantiationException e) {
+            // handle exception
+            JOptionPane.showMessageDialog(this, GT.get("Instantiation Exception:") + " " + lnfName);
+        } catch (IllegalAccessException e) {
+            JOptionPane.showMessageDialog(this, GT.get("Illegal Access: ") + lnfName);
         }
 
         jcpPanel.getRenderPanel()

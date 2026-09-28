@@ -41,7 +41,6 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.controller.AddRingModule;
@@ -90,7 +89,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param chemModel The model to display.
      */
     public JChemPaintPanel(IChemModel chemModel) {
-        this(chemModel, JChemPaint.GUI_APPLICATION, false, null, Collections.emptySet());
+        this(chemModel, JChemPaint.GUI_APPLICATION, false, Collections.emptySet());
     }
 
     /**
@@ -99,17 +98,16 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @param chemModel The model to display.
      * @param gui       The gui configuration string
      * @param debug     Should we be in debug mode?
-     * @param applet    If this panel is to be in an applet, pass the applet here, else null.
      * @param blocked   A list of menuitesm/buttons which should be ignored when building gui.
      */
-    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, JChemPaintAbstractApplet applet, Set<String> blocked) {
+    public JChemPaintPanel(IChemModel chemModel, String gui, boolean debug, Set<String> blocked) {
         GT.setLanguage(JCPPropertyHandler.getInstance(true).getJCPProperties().getProperty("General.language"));
         this.guistring = gui;
         this.blockList = blocked;
         menuTextMaker = JCPMenuTextMaker.getInstance(guistring);
         this.debug = debug;
         try {
-            renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug, false, applet);
+            renderPanel = new RenderPanel(chemModel, getWidth(), getHeight(), false, debug, false);
         } catch (IOException e) {
             announceError(e);
         }
