@@ -32,7 +32,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
@@ -52,23 +51,6 @@ public class NewAction extends JCPAction {
      *            Description of the Parameter
      */
     public void actionPerformed(ActionEvent e) {
-        if (jcpPanel.getGuistring().equals(JChemPaintEditorApplet.GUI_APPLET)) {
-            int clear = jcpPanel.showWarning();
-            if (clear == JOptionPane.YES_OPTION) {
-            	jcpPanel.get2DHub().unsetRGroupHandler();
-                jcpPanel.get2DHub().zap();
-                jcpPanel.get2DHub().updateView();
-                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
-                        .setZoomFactor(1);
-
-                IChemObjectSelection selection = new LogicalSelection(
-                        LogicalSelection.Type.NONE);
-                jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel()
-                        .setSelection(selection);
-
-            }
-        } else {
-            JChemPaint.showEmptyInstance(jcpPanel.isDebug());
-        }
+        JChemPaint.showEmptyInstance(jcpPanel.isDebug());
     }
 }

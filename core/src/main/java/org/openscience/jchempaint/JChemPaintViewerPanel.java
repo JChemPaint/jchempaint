@@ -33,7 +33,6 @@ import java.awt.ScrollPane;
 import java.io.IOException;
 
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 
 public class JChemPaintViewerPanel extends AbstractJChemPaintPanel {
 
@@ -42,10 +41,10 @@ public class JChemPaintViewerPanel extends AbstractJChemPaintPanel {
 	 *  
 	 * @param chemModel The model
 	 */
-	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen, boolean debug, JChemPaintAbstractApplet applet){
+	public JChemPaintViewerPanel(IChemModel chemModel, int width, int height, boolean fitToScreen, boolean debug){
 		this.setLayout(new BorderLayout());
 		try {
-			renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen, debug, true, applet);
+			renderPanel = new RenderPanel(chemModel, this.getWidth(), this.getHeight(), fitToScreen, debug, true);
 		} catch (IOException e) {
 			announceError(e);
 		}

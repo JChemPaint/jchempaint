@@ -51,7 +51,6 @@ import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.openscience.jchempaint.action.ZoomAction;
-import org.openscience.jchempaint.applet.JChemPaintAbstractApplet;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.ControllerModel;
 import org.openscience.jchempaint.controller.IControllerModule;
@@ -147,9 +146,9 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     boolean isFirstDrawing = true;
 
     public RenderPanel(IChemModel chemModel, int width, int height,
-                       boolean fitToScreen, boolean debug, boolean isViewer, JChemPaintAbstractApplet applet) throws IOException {
+                       boolean fitToScreen, boolean debug, boolean isViewer) throws IOException {
         this.debug = debug;
-        this.setupMachinery(chemModel, fitToScreen, isViewer, applet);
+        this.setupMachinery(chemModel, fitToScreen, isViewer);
         this.setupPanel(width, height);
         this.fitToScreen = fitToScreen;
         int limit = Integer.parseInt(JCPPropertyHandler.getInstance(true)
@@ -183,7 +182,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     }
 
     private void setupMachinery(IChemModel chemModel, boolean fitToScreen,
-                                boolean isViewer, JChemPaintAbstractApplet applet)
+                                boolean isViewer)
             throws IOException {
         // setup the Renderer and the controller 'model'
 
@@ -203,7 +202,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         undoredohandler.addIUndoListener(this);
         // connect the Renderer to the Hub
         this.hub = new ControllerHub(controllerModel, renderer, chemModel,
-                                     this, undoredohandler, new SwingUndoRedoFactory(), isViewer, applet);
+                                     this, undoredohandler, new SwingUndoRedoFactory(), isViewer);
         pbg.setControllerHub(hub);
         pag.setControllerHub(hub);
         prg.setControllerHub(hub);

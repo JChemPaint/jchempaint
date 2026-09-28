@@ -35,7 +35,6 @@ import javax.swing.JOptionPane;
 
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.JChemPaintPanel;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.io.ChemicalFilesFilter;
@@ -87,9 +86,7 @@ public class OpenAction extends JCPAction {
                 type = ((JCPFileFilter) ff).getType();
 
             }
-            if (jcpPanel.getGuistring().equals(
-                    JChemPaintEditorApplet.GUI_APPLET) ||
-                    JChemPaintPanel.getAllAtomContainersInOne(jcpPanel.getChemModel()).getAtomCount()==0) {
+            if (JChemPaintPanel.getAllAtomContainersInOne(jcpPanel.getChemModel()).getAtomCount()==0) {
                 int clear = jcpPanel.showWarning();
                 if (clear == JOptionPane.YES_OPTION) {
                     try {

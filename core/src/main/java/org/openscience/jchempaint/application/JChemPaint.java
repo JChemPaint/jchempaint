@@ -245,7 +245,7 @@ public class JChemPaint {
 
     public static JChemPaintPanel showInstance(JFrame f, IChemModel chemModel,
             String title, boolean debug) {
-        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, null, new HashSet<>());
+        JChemPaintPanel p = new JChemPaintPanel(chemModel, GUI_APPLICATION, debug, new HashSet<>());
         p.setName("JChemPaintPanel");
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();

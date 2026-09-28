@@ -31,8 +31,6 @@ package org.openscience.jchempaint;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
-
 /**
  * This class held text entries for menu items, tool tips etc., which are
  * configured in the JCPGUI_*.properties files. They all need an entry
@@ -286,10 +284,7 @@ public class JCPMenuTextMaker {
         entries.put("chairrightTooltip", GT.get("Add a right handed cyclohexane chair"));
         entries.put("benzeneTooltip", GT.get("Add a benzene ring"));
         entries.put("cleanupTooltip", GT.get("Relayout the structures"));
-        if(guistring.equals(JChemPaintEditorApplet.GUI_APPLET))
-            entries.put("newTooltip", GT.get("Clear"));
-        else
-            entries.put("newTooltip", GT.get("Create new file"));
+        entries.put("newTooltip", GT.get("Create new file"));
         entries.put("openTooltip", GT.get("Open existing file"));
         entries.put("saveTooltip", GT.get("Save current file"));
         entries.put("printTooltip", GT.get("Print current file"));
