@@ -15,7 +15,7 @@ import org.openscience.jchempaint.action.JCPAction;
 public class Issue40Test extends AbstractAppletTest {
 
     @Test public void testIssue40() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("C").target.doClick();
         applet.button("chain").target.doClick();

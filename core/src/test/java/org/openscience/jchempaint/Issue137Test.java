@@ -19,7 +19,7 @@ import org.openscience.jchempaint.renderer.Renderer;
 public class Issue137Test extends AbstractAppletTest {
 
     @Test public void testIssue137() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.get2DHub().mouseClickedDown(100, 100);
         panel.get2DHub().mouseClickedUp(100, 100);

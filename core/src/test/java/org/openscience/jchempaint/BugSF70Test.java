@@ -30,7 +30,7 @@ public class BugSF70Test extends AbstractAppletTest {
 	private static int SAVE_AS_MOL_COMBOBOX_POS=6;
 
 	@Test public void testBug70() throws CDKException, IOException{
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").target.doClick();
         applet.click();

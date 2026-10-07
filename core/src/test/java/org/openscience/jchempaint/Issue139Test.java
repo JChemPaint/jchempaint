@@ -14,7 +14,7 @@ import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 public class Issue139Test extends AbstractAppletTest {
 
     @Test public void testIssue139() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.get2DHub().mouseClickedDown(100, 100);
         panel.get2DHub().updateView();

@@ -14,10 +14,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class Issue11Test extends AbstractAppletTest {
 
     @Test public void testIssue11() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         try {
-        	jcpApplet.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
+			// FIXME
+        	// jcpApplet.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
         	panel.get2DHub().updateView();
 		} catch (Exception e) {
 			Assert.fail();

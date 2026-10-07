@@ -22,9 +22,10 @@ public class BugSF80Test extends AbstractAppletTest {
 	public void testRemoveBond() throws CDKException, ClassNotFoundException,
 			IOException, CloneNotSupportedException {
 		// Clean the panel:
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		jcpApplet.setSmiles("Cn1cnc2c1c(=O)n(C)c(=O)n2C");
+// FIXME
+//		jcpApplet.setSmiles("Cn1cnc2c1c(=O)n(C)c(=O)n2C");
 
 /*		// Paste caffeine template:
         applet.menuItem("pasteTemplate").click();

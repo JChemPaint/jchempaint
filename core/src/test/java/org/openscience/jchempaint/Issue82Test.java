@@ -18,7 +18,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class Issue82Test extends AbstractAppletTest {
 
 	@Test public void testIssue82() {
-		JPanelFixture jcppanel=applet.panel("appletframe");
+		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
 		JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
 		applet.button("C").target.doClick();
 		applet.button("bondTool").target.doClick();

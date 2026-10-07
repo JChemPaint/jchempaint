@@ -20,7 +20,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class Issue76Test extends AbstractAppletTest {
 
     @Test public void testIssue76() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
         applet.button("benzene").target.doClick();
         pane.get2DHub().mouseClickedDown(100, 100);

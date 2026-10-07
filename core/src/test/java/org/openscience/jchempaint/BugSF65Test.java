@@ -13,15 +13,17 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class BugSF65Test extends AbstractAppletTest {
 
     @Test public void testBug65() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        applet.button("hexagon").target.doClick();
+        applet.button("hexagon").click();
         applet.click();
-        applet.button("eraser").target.doClick();
+        applet.button("select").click();
         Point2d point = getBondPoint(panel,0);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
+        applet.button("eraser").click();
         point = getBondPoint(panel,2);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.LEFT_BUTTON,1);
+        applet.button("eraser").click();
 
         int atomCount=0, bondCount=0;
 		for(IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {

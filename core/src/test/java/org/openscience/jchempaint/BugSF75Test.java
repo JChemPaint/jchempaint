@@ -14,7 +14,7 @@ import org.openscience.cdk.exception.CDKException;
 public class BugSF75Test extends AbstractAppletTest {
 
     @Test public void testBug75() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("hexagon").target.doClick();
         applet.click();
