@@ -32,5 +32,5 @@ jobs:
     - name: Install gettext
       run: sudo apt install -y gettext
 
-    - name: Build with Maven
-      run: mvn clean install -q -DskipTests
+    - name: Build with Maven (on X Window Virtual Framebuffer)
+      run: xvfb-run --auto-servernum mvn clean install --T 1C verify --B -ntp -Dstyle.color=always
