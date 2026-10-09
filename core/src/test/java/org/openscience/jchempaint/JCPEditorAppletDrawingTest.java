@@ -134,7 +134,7 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
-		dialog.button("C").click();
+		applet.button("C").target.doClick();
 		restoreModelToEmpty();
 	}
 
