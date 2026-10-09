@@ -40,6 +40,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
+import org.openscience.cdk.isomorphism.matchers.RGroupQueryManipulator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.smiles.SmiFlavor;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -47,11 +48,13 @@ import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.PropertyEdit;
 import org.openscience.jchempaint.dialog.editor.ChemObjectEditor;
 import org.openscience.jchempaint.dialog.editor.ChemObjectPropertyDialog;
 import org.openscience.jchempaint.dialog.editor.RGroupEditor;
 import org.openscience.jchempaint.io.JCPFileView;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
+import org.xmlcml.euclid.Int;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -65,9 +68,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Deals with user actions on creating/editing R-groups.
@@ -105,22 +110,20 @@ public class RGroupAction extends JCPAction {
         Map<RGroup, Map<Integer, IAtom>> existingRGroupApo = null;
         Map<Integer, RGroupList> existingRgroupLists = null;
 
-        IRGroupQuery rgrpQuery = null;
-        IAtomContainer molecule = null;
+        IAtomContainer molecule = jcpPanel.getChemModel().getBuilder().newAtomContainer();
+        for (IAtomContainer part : ChemModelManipulator.getAllAtomContainers(jcpPanel.getChemModel())) {
+            molecule.add(part);
+        }
 
         /* User action: generate possible configurations for the R-group */
         if (type.equals("rgpGenerate")) {
-            if ((jcpPanel.get2DHub().getRGroupHandler() == null)) {
-                JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define an R-group (root and substituents) first."));
-                return;
-            }
             try {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
                 chooser.setFileView(new JCPFileView());
                 chooser.showSaveDialog(jcpPanel);
                 File outFile = chooser.getSelectedFile();
-                List<IAtomContainer> molecules = jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery().getAllConfigurations();
+                List<IAtomContainer> molecules = RGroupQueryManipulator.toRgroupQuery(molecule).getAllConfigurations();
                 if (molecules.size() > 0) {
                     IAtomContainerSet molSet = molecules.get(0).getBuilder().newInstance(IAtomContainerSet.class);
                     for (IAtomContainer mol : molecules) {
@@ -135,14 +138,10 @@ public class RGroupAction extends JCPAction {
                 return;
             }
         } else if (type.equals("rgpGenerateSmi")) {
-            if ((jcpPanel.get2DHub().getRGroupHandler() == null)) {
-                JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define an R-group (root and substituents) first."));
-                return;
-            }
             try {
                 StringBuilder sb = new StringBuilder();
                 SmilesGenerator smigen = new SmilesGenerator(SmiFlavor.Default);
-                List<IAtomContainer> molecules = jcpPanel.get2DHub().getRGroupHandler().getrGroupQuery().getAllConfigurations();
+                List<IAtomContainer> molecules = RGroupQueryManipulator.toRgroupQuery(molecule).getAllConfigurations();
                 for (IAtomContainer mol : molecules) {
                     sb.append(smigen.create(mol))
                       .append('\n');
@@ -183,14 +182,7 @@ public class RGroupAction extends JCPAction {
 
             /* User action: generate possible configurations for the R-group */
             if (type.equals("clearRgroup")) {
-                if ((jcpPanel.get2DHub().getRGroupHandler() == null)) {
-                    JOptionPane.showMessageDialog(jcpPanel, GT.get("There is no R-group defined"));
-                    return;
-                }
-                rGroupHandler = hub.getRGroupHandler();
-                hub.unsetRGroupHandler();
-                jcpPanel.get2DHub().updateView();
-
+                // nothing to do
             }
             /* User action : certain bond in the root needs to become attachment bond 1 or 2 */
             else if (type.startsWith("setBondApoAction")) {
@@ -248,58 +240,12 @@ public class RGroupAction extends JCPAction {
 
             /* User action: certain atom+bond selection is to be the root structure. */
             else if (type.equals("setRoot")) {
-
-                IAtomContainer atc = selection.getConnectedAtomContainer();
-                if (!isProperSelection(atc)) {
-                    JOptionPane.showMessageDialog(jcpPanel, GT.get("Please do not make a fragmented selection."));
-                    return;
-                }
-
-                molecule = createMolecule(atc, existingAtomDistr, existingBondDistr);
-                hub.getChemModel().getMoleculeSet().addAtomContainer(molecule);
-
-                if (hub.getRGroupHandler() == null) {
-                    isNewRgroup = true;
-                    rgrpQuery = newRGroupQuery(molecule.getBuilder());
-                    rGroupHandler = new RGroupHandler(rgrpQuery, this.jcpPanel);
-                    hub.setRGroupHandler(rGroupHandler);
-                } else {
-                    rGroupHandler = hub.getRGroupHandler();
-                    rgrpQuery = hub.getRGroupHandler().getrGroupQuery();
-                    if (rgrpQuery.getRootStructure() != null) {
-                        existingRoot = rgrpQuery.getRootStructure();
-                        rgrpQuery.getRootStructure().removeProperty(CDKConstants.TITLE);
-                    }
-                }
-                molecule.setProperty(CDKConstants.TITLE, RGroup.ROOT_LABEL);
-                rgrpQuery.setRootStructure(molecule);
-
-                //Remove old root apo's
-                oldRootApo = rgrpQuery.getRootAttachmentPoints();
-                rgrpQuery.setRootAttachmentPoints(null);
-
-                //Define new root apo's
-                Map<IAtom, Map<Integer, IBond>> apoBonds = new HashMap<IAtom, Map<Integer, IBond>>();
-                for (IAtom atom : molecule.atoms()) {
-                    if (atom instanceof IPseudoAtom) {
-                        IPseudoAtom pseudo = (IPseudoAtom) atom;
-                        if (pseudo.getLabel() != null && RGroupQuery.isValidRgroupQueryLabel(pseudo.getLabel())) {
-                            chooseRootAttachmentBonds(pseudo, molecule, apoBonds);
-                        }
-                    }
-                }
-                rgrpQuery.setRootAttachmentPoints(apoBonds);
-
+                // no longer needed, anything which is not a substituent is by
+                // definition the root
             }
 
             /* User action: certain atom+bond selection is to be a substituent. */
             else if (type.equals("setSubstitute")) {
-
-                if (hub.getRGroupHandler() == null || hub.getRGroupHandler().getrGroupQuery() == null ||
-                    hub.getRGroupHandler().getrGroupQuery().getRootStructure() == null) {
-                    JOptionPane.showMessageDialog(jcpPanel, GT.get("Please define a root structure first."));
-                    return;
-                }
 
                 IAtomContainer atc = selection.getConnectedAtomContainer();
                 if (!isProperSelection(atc)) {
@@ -309,104 +255,73 @@ public class RGroupAction extends JCPAction {
 
                 // Check - are there any R-groups -> collect them so that user input can be validated
                 Map<Integer, Integer> validRnumChoices = new HashMap<Integer, Integer>();
-                for (IAtom atom : hub.getRGroupHandler().getrGroupQuery().getRootStructure().atoms()) {
-                    if (atom instanceof IPseudoAtom) {
-                        IPseudoAtom pseudo = (IPseudoAtom) atom;
-                        if (pseudo.getLabel() != null && RGroupQuery.isValidRgroupQueryLabel(pseudo.getLabel())) {
-                            int bondCnt = 0;
-                            int rNum = new Integer(pseudo.getLabel().substring(1));
-                            for (IBond b : hub.getRGroupHandler().getrGroupQuery().getRootStructure().bonds())
-                                if (b.contains(atom))
-                                    bondCnt++;
-
-                            if ((!validRnumChoices.containsKey(rNum)) ||
-                                validRnumChoices.containsKey(rNum) && validRnumChoices.get(rNum) < bondCnt)
-                                validRnumChoices.put(rNum, bondCnt);
+                for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(hub.getChemModel())) {
+                    for (IAtom atom : container.atoms()) {
+                        if (atom instanceof IPseudoAtom) {
+                            IPseudoAtom pseudo = (IPseudoAtom) atom;
+                            if (pseudo.getLabel() != null && RGroupQuery.isValidRgroupQueryLabel(pseudo.getLabel())) {
+                                int bondCnt = 0;
+                                Integer rNum = pseudo.getLabel().length() > 1 ? Integer.parseInt(pseudo.getLabel().substring(1)) : null;
+                                for (IBond b : pseudo.bonds())
+                                    if (b.contains(atom))
+                                        bondCnt++;
+                                if ((!validRnumChoices.containsKey(rNum)) ||
+                                    validRnumChoices.containsKey(rNum) && validRnumChoices.get(rNum) < bondCnt)
+                                    validRnumChoices.put(rNum, bondCnt);
+                            }
                         }
                     }
                 }
                 // Here we test: the user wants to define a substitute, but are there any R1..R32 groups to begin with?
-                if (validRnumChoices.size() == 0) {
+                if (validRnumChoices.isEmpty()) {
                     JOptionPane.showMessageDialog(jcpPanel, GT.get("There are no numbered R-atoms in the root structure to refer to."));
                     return;
                 }
 
                 //Now get user input to determine which R# atom to hook up with the substituent
-                boolean inputOkay = false;
-                String userInput = null;
-                Integer rNum = 0;
-                do {
-                    userInput = JOptionPane.showInputDialog(GT.get("Enter an R-group number "), validRnumChoices.get(0));
-                    if (userInput == null)
-                        return;
-                    try {
-                        rNum = new Integer(userInput);
-                        if (!validRnumChoices.containsKey(rNum))
-                            JOptionPane.showMessageDialog(null, GT.get("The number you entered has no corresponding R-group in the root."));
-                        else
-                            inputOkay = true;
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(null, GT.get("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
-                    }
-                }
-                while (!inputOkay);
-                rGroupHandler = hub.getRGroupHandler();
-
-                rgrpQuery = hub.getRGroupHandler().getrGroupQuery();
-                if (rgrpQuery.getRGroupDefinitions() == null) {
-                    rgrpQuery.setRGroupDefinitions(new HashMap<Integer, IRGroupList>());
-                }
-
-                if (rgrpQuery.getRGroupDefinitions().get(rNum) == null) {
-                    RGroupList rList = new RGroupList(rNum);
-                    rList.setRGroups(new ArrayList<IRGroup>());
-                    rgrpQuery.getRGroupDefinitions().put(rNum, rList);
-                }
-
-                molecule = createMolecule(atc, existingAtomDistr, existingBondDistr);
-                existingRgroupLists = new HashMap<Integer, RGroupList>();
-
-                // Now see if the user's choice for a substituent has overlaps with already defined existing
-                // substitutes. If so, these existing ones get thrown out (we can't have multiple substituents
-                // defined for the same atoms.
-                for (Iterator<Integer> itr = rgrpQuery.getRGroupDefinitions().keySet().iterator(); itr.hasNext(); ) {
-                    int rgrpNum = itr.next();
-                    RGroupList rgrpList = (RGroupList) rgrpQuery.getRGroupDefinitions().get(rgrpNum);
-                    if (rgrpList != null) {
-                        existingRgroupLists.put(rgrpNum, makeClone(rgrpList));
-                        List<IRGroup> cleanList = new ArrayList<IRGroup>();
-                        for (int j = 0; j < rgrpList.getRGroups().size(); j++) {
-                            IRGroup subst = rgrpList.getRGroups().get(j);
-                            boolean remove = false;
-                            removeCheck:
-                            for (IAtom atom : molecule.atoms()) {
-                                if (subst.getGroup().contains(atom)) {
-                                    remove = true;
-                                    break removeCheck;
-                                }
-                            }
-                            if (!remove) {
-                                cleanList.add(subst);
-                            }
+                Integer rNum = null;
+                if (validRnumChoices.size() > 1) {
+                    boolean inputOkay = false;
+                    String userInput = null;
+                    do {
+                        userInput = JOptionPane.showInputDialog(GT.get("Enter an R-group number "),
+                                                                validRnumChoices.keySet().iterator().next());
+                        if (userInput == null)
+                            return;
+                        try {
+                            rNum = Integer.valueOf(userInput);
+                            if (!validRnumChoices.containsKey(rNum))
+                                JOptionPane.showMessageDialog(null, GT.get("The number you entered has no corresponding R-group in the root."));
+                            else
+                                inputOkay = true;
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, GT.get("This is not a valid R-group label.\nPlease label in range R1 .. R32"));
                         }
-                        rgrpList.setRGroups(cleanList);
                     }
+                    while (!inputOkay);
+                } else {
+                    rNum = validRnumChoices.keySet().iterator().next();
                 }
 
-                hub.getChemModel().getMoleculeSet().addAtomContainer(molecule);
-                molecule.setProperty(CDKConstants.TITLE, RGroup.makeLabel(rNum));
+                String oldValue = null;
+                String newValue = rNum == null ? "R" : "R" + rNum;
+                Set<IChemObject> chemObjs = new HashSet<>();
+                for (IAtom atom : atc.atoms()) {
+                    chemObjs.add(atom);
+                    String value = atom.getProperty(CDKConstants.RGROUP_MEMBERSHIP);
+                    if (value != null && oldValue == null)
+                        oldValue = value;
+                }
 
-                RGroup rgrp = new RGroup();
-                rgrp.setGroup(molecule);
-                rgrpQuery.getRGroupDefinitions().get(rNum).getRGroups().add(rgrp);
-            }
+                PropertyEdit edit = new PropertyEdit(chemObjs,
+                                                     CDKConstants.RGROUP_MEMBERSHIP,
+                                                     oldValue,
+                                                     newValue);
+                edit.redo();
 
-
-            if (hub.getUndoRedoFactory() != null && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
-                IUndoRedoable undoredo = jcpPanel.get2DHub().getUndoRedoFactory().getRGroupEdit
-                        (type, isNewRgroup, hub, rGroupHandler, existingAtomDistr, existingBondDistr,
-                         existingRoot, oldRootApo, newRootApo, existingRGroupApo, existingRgroupLists, molecule);
-                jcpPanel.get2DHub().getUndoRedoHandler().postEdit(undoredo);
+                if (hub.getUndoRedoFactory() != null && jcpPanel.get2DHub().getUndoRedoHandler() != null) {
+                    jcpPanel.get2DHub().getUndoRedoHandler().postEdit(edit);
+                }
             }
 
             jcpPanel.get2DHub().updateView();
