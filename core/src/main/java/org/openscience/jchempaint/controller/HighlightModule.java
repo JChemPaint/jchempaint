@@ -24,16 +24,12 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.applet.Applet;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+
+import javax.vecmath.Point2d;
 
 /**
  * This should highlight the atom/bond when moving over with the mouse
