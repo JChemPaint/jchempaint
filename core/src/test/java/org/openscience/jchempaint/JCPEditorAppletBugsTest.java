@@ -410,7 +410,7 @@ public class JCPEditorAppletBugsTest extends AbstractAppletTest {
         applet.menuItem("saveAs").click();
 
 		JPanelFixture renderpanel = applet.panel("renderpanel");
-		File tmpDir = new File("/tmp"); // System.getProperty("java.io.tmpdir"));
+		File tmpDir = System.getProperty("java.io.tmpdir"));
 		File file1 = new File(tmpDir, "test1.mol");
 		File file2 = new File(tmpDir, "test2.mol");
         file1.delete();
