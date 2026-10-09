@@ -1,28 +1,19 @@
 package org.openscience.jchempaint;
 
-import java.awt.EventQueue;
-import java.awt.Point;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.TimeUnit;
-
-import javax.vecmath.Point2d;
-
 import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
-import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.timing.Timeout;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.jchempaint.controller.AddBondDragModule;
-import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
+
+import javax.swing.SwingUtilities;
+import javax.vecmath.Point2d;
+import java.awt.Point;
+import java.io.IOException;
 
 public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 
@@ -127,13 +118,12 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		Assert.assertEquals("O",panel.get2DHub().getController2DModel().getDrawElement());
 	}
 
-	@Ignore("Modal dialog makes this test very hard")
 	@Test public void testPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
-		applet.button("periodictable").click();
+		SwingUtilities.invokeLater(applet.menuItem("periodictable").target::doClick);
 		DialogFixture dialog = applet.dialog();
 		dialog.button("Li").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
@@ -144,7 +134,10 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
+		dialog.button("C").click();
+		restoreModelToEmpty();
 	}
+
 	@Test public void testEnterelement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
