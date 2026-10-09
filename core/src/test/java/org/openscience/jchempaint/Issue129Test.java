@@ -44,7 +44,6 @@ public class Issue129Test extends AbstractAppletTest {
         Assert.assertEquals(4, implicitHCount);
 
         IAtomContainer mol = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
-        System.err.println(mol.getBond(0).getOrder());
 
         applet.button("bondTool").click();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),
@@ -67,7 +66,6 @@ public class Issue129Test extends AbstractAppletTest {
             atomCount += atc.getAtomCount();
             bondCount += atc.getBondCount();
         }
-        System.err.println(panel.getSmiles());
         Assert.assertEquals(2, atomCount);
         Assert.assertEquals(1, bondCount);
         Assert.assertEquals(2, implicitHCount);
