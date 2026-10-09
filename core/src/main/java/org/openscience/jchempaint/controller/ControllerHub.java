@@ -1738,6 +1738,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         //TODO overlaps of molecules in molecule set and reactions (ok, not too common, but still...)
     }
 
+	public static void ensureVisible(IAtomContainer container) {
+		Rectangle2D bounds = BoundsCalculator.calculateBounds(container);
+		double PADDING = 5;
+		GeometryUtil.translate2D(container,
+								 -(bounds.getX() - PADDING),
+								 -bounds.getY() - bounds.getHeight() - PADDING);
+	}
+
     private static double[] toArray(Rectangle2D rect) {
         return new double[]{rect.getMinX(), rect.getMinY(), rect.getMaxX(), rect.getMaxY()};
     }
@@ -1830,36 +1838,31 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			return;
 		}
 
+		IAtomContainer merged = chemModel.getBuilder().newAtomContainer();
 		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
-
-			// ensure current stereo from 2D is set
-			container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
-															.interpretProjections(Projection.Haworth, Projection.Chair)
-															.createAll());
-			for (IAtom atom : container.atoms()) {
-				coords.put(atom, new Point2d[]{ null, atom.getPoint2d()});
-				atom.setPoint2d(null);
-			}
-			for (IBond bond : container.bonds()) {
-				stereo.put(bond, bond.getStereo());
-				bond.setStereo(Stereo.NONE);
-			}
-
-			generateNewCoordinates(container);
-
-			for (IAtom atom : container.atoms()) {
-				Point2d[] coordsforatom = coords.get(atom);
-				coordsforatom[0] = atom.getPoint2d();
-			}
+			merged.add(container);
 		}
 
-        avoidOverlap(chemModel);
-        if (rGroupHandler != null) {
-            try {
-                rGroupHandler.layoutRgroup();
-            } catch (CDKException ignore) {
-            }
-        }
+			// ensure current stereo from 2D is set
+		merged.setStereoElements(StereoElementFactory.using2DCoordinates(merged)
+															.interpretProjections(Projection.Haworth, Projection.Chair)
+															.createAll());
+		for (IAtom atom : merged.atoms()) {
+			coords.put(atom, new Point2d[]{ null, atom.getPoint2d()});
+			atom.setPoint2d(null);
+		}
+		for (IBond bond : merged.bonds()) {
+			stereo.put(bond, bond.getStereo());
+			bond.setStereo(Stereo.NONE);
+		}
+
+		generateNewCoordinates(merged);
+		ensureVisible(merged);
+
+		for (IAtom atom : merged.atoms()) {
+			Point2d[] coordsforatom = coords.get(atom);
+			coordsforatom[0] = atom.getPoint2d();
+		}
 
 		coordinatesChanged();
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
