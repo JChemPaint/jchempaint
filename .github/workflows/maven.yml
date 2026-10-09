@@ -32,5 +32,23 @@ jobs:
     - name: Install gettext
       run: sudo apt install -y gettext
 
-    - name: Build with Maven (on X Window Virtual Framebuffer)
-      run: xvfb-run --auto-servernum mvn clean install --T 1C verify --B -ntp -Dstyle.color=always
+    - name: Build with Maven
+      run: mvn clean install -DskipTests
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 25
+          cache: maven
+
+      - name: Install gettext
+        run: sudo apt install -y gettext
+
+      - name: Build with Maven (on X Window Virtual Framebuffer)
+        run: xvfb-run --auto-servernum mvn clean install --T 1C verify --B -ntp -Dstyle.color=always
