@@ -164,13 +164,16 @@ public class ChainModule extends ControllerModuleAdapter {
             }
             chemModelRelay.setPhantoms(phantoms);
             chemModelRelay.setPhantomText(""+phantoms.getAtomCount(), worldCoordTo);
-            IAtom closestAtom = chemModelRelay.getClosestAtom(phantoms.getAtom(phantoms.getAtomCount()-1));
+            IAtom lastAtom = phantoms.getAtom(phantoms.getAtomCount() - 1);
+            IAtom closestAtom = chemModelRelay.getClosestAtom(lastAtom);
             chemModelRelay.getRenderer().getRenderer2DModel().getMerge().remove(merge);
-            merge =  (IAtom) getHighlighted(phantoms.getAtom(phantoms.getAtomCount()-1).getPoint2d(), closestAtom);
+            merge = (IAtom) getHighlighted(lastAtom.getPoint2d(), closestAtom);
             if(merge!=null){
-            	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge,phantoms.getAtom(phantoms.getAtomCount()-1));
-            	chemModelRelay.getPhantoms().getConnectedBondsList(phantoms.getAtom(phantoms.getAtomCount()-1)).get(0).setAtom(merge,1);
-            	phantoms.removeAtomOnly(phantoms.getAtomCount()-1);
+            	chemModelRelay.getRenderer().getRenderer2DModel().getMerge().put(merge, lastAtom);
+                IBond bond = phantoms.getConnectedBondsList(lastAtom).get(0);
+                phantoms.addAtom(merge);
+                bond.setAtom(merge, 1);
+                phantoms.removeAtom(lastAtom);
             }
         }
         chemModelRelay.updateView();
