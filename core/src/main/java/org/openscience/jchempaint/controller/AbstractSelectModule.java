@@ -110,11 +110,8 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         IAtom closestAtom = null;
         IBond closestBond = null;
 
-
         // start of the drag
-        if (init && from.equals(startPoint)) {
-            init = false;
-
+        if (init) {
             LogicalSelection lsel = null;
             boolean isAllSelected = false;
             if (sel.getClass().isAssignableFrom(LogicalSelection.class)) {
@@ -147,6 +144,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                 ((IMouseEventRelay) this.chemModelRelay).mouseDrag((int) sf.x, (int) sf.y, (int) st.x, (int) st.y, modifiers);
                 return;
             }
+            init = false;
         }
 
         this.selection.addPoint(to);
@@ -207,7 +205,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         }
 
         init = true;
-        startPoint = p;
+        startPoint = new Point2d(p);
         IChemObjectSelection chemObjSelection = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
         currentSelection = chemObjSelection != null ? new LogicalSelection(chemObjSelection) : null;
     }
