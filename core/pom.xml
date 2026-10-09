@@ -132,7 +132,7 @@
         <profile>
             <id>JVM Options</id>
             <activation>
-                <jdk>[17)</jdk>
+                <jdk>[17,]</jdk>
             </activation>
             <build>
                 <plugins>
