@@ -353,9 +353,11 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         // setup and draw
         this.setupTransformNatural(totalBounds);
         ElementGroup diagram = new ElementGroup();
+        IAtomContainer merged = moleculeSet.getBuilder().newAtomContainer();
         for (IAtomContainer molecule : moleculeSet.atomContainers()) {
-            diagram.add(this.generateDiagram(molecule));
+            merged.add(molecule);
         }
+        diagram.add(this.generateDiagram(merged));
         this.paint(drawVisitor, diagram);
 
         return this.convertToDiagramBounds(totalBounds);
@@ -951,11 +953,12 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
     private IRenderingElement generateDiagram(IAtomContainerSet moleculeSet) {
         ElementGroup diagram = new ElementGroup();
-        for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
-            IAtomContainer ac = moleculeSet.getAtomContainer(i);
-            for (IGenerator<IAtomContainer> generator : this.generators) {
-                diagram.add(generator.generate(ac, this.rendererModel));
-            }
+        IAtomContainer merged = moleculeSet.getBuilder().newAtomContainer();
+        for (IAtomContainer part : moleculeSet) {
+            merged.add(part);
+        }
+        for (IGenerator<IAtomContainer> generator : this.generators) {
+            diagram.add(generator.generate(merged, this.rendererModel));
         }
         return diagram;
     }
