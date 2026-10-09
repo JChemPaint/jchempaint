@@ -33,3 +33,22 @@ mvn install -DskipTests -Pwindows-app
 ```
 
 The second and third option are to build an OS X application bundle (.app), and to build a windows executable (.exe).
+
+
+# Notes on Running Tests
+
+JChemPaint uses the [FEST-Swing](https://github.com/alexruiz/fest-swing-1.x) for
+UI testing. To get this working you need use a Java version 25 or older and 
+enable possibly enable some system settings to allow robots. Java 26+ will not
+work because FEST tries to load the removed Applet APIs - note 
+JCP doesn't use these. You also need to add the following runtime arguments:
+
+``--enable-native-access=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED``
+
+Also note there are some issues with the "flat" Look-and-Feel so switching to 
+the system default typically helps.
+
+## Enable Robots OS X
+
+On Mac OS to get things running, ``System Settings > Privary & Secuirty > Accesibility``
+allows the IDE or Java to control the computer.

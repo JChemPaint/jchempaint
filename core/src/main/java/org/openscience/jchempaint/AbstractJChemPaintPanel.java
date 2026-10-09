@@ -39,6 +39,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,6 +66,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.io.SDFWriter;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -200,6 +204,39 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
             announceError(e);
             return "";
         }
+    }
+
+
+    public void setMolfile(String molfile) throws CDKException {
+        // we use SDF to allow V3000
+        IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
+        IteratingSDFReader sdfr = new IteratingSDFReader(new StringReader(molfile), bldr);
+        IAtomContainer mol = sdfr.next();
+        if (getChemModel().getMoleculeSet() != null)
+            getChemModel().getMoleculeSet().removeAllAtomContainers();
+        if (getChemModel().getReactionSet() != null)
+            getChemModel().getReactionSet().removeAllReactions();
+        JChemPaint.generateModel(this, mol, true, true);
+    }
+
+    /**
+     * Gives the smiles for the current chemmodel in this panel.
+     *
+     * @return The smiles for the current chemmodel in this panel.
+     * @throws CDKException
+     * @throws ClassNotFoundException
+     * @throws IOException
+     * @throws CloneNotSupportedException
+     */
+    public String getMolfile() {
+        StringWriter sw = new StringWriter();
+        try (SDFWriter sdf = new SDFWriter(sw)) {
+            sdf.write(getChemModel());
+        } catch (CDKException | IOException e) {
+            announceError(e);
+            return "";
+        }
+        return sw.toString();
     }
     
     /**

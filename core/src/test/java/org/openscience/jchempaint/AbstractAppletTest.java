@@ -25,6 +25,7 @@ import javax.vecmath.Point2d;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Predicate;
 
 /**
  * An abstract base class for applet tests. It sets up and tears down
@@ -80,6 +81,16 @@ public class AbstractAppletTest {
         Point2d p = panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
         return toAwtPoint(p);
     }
+
+    protected IAtom getAtom(JChemPaintPanel panel, Predicate<IAtom> pred) {
+        for (IAtomContainer ac : panel.getChemModel().getMoleculeSet()) {
+            for (IAtom atom : ac.atoms()) {
+                if (pred.test(atom))
+                    return atom;
+            }
+        }
+        return null;
+    }
     
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
         IBond bond = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(bondnumber);
@@ -131,6 +142,7 @@ public class AbstractAppletTest {
             panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
 
             panel.get2DHub().updateView();
+            panel.get2DHub().setAltInputMode(false);
             reader.close();
         } catch (CDKException e) {
             // TODO Auto-generated catch block
