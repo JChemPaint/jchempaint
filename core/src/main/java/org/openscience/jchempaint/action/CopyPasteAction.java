@@ -189,7 +189,8 @@ public final class CopyPasteAction extends JCPAction {
             logger.debug("Source of call: ", object);
             // JWM: old behaviour would prioritize the highlighted atom/bond
             // under the cursor, it makes more sense if the selection takes
-            // priority and if no selection then we just copy everything
+            // priority and if no selection then we just copy everything not
+            // just the atom under the cursor
             if (renderModel.getSelection().getConnectedAtomContainer() != null) {
                 addToClipboard(clipboard, renderModel.getSelection().getConnectedAtomContainer());
             } else {
