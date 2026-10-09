@@ -29,9 +29,6 @@ jobs:
         java-version: ${{ matrix.java }}
         cache: maven
 
-    - name: Install gettext
-      run: sudo apt install -y gettext
-
     - name: Build with Maven
       run: mvn clean install -DskipTests
 
@@ -49,6 +46,12 @@ jobs:
 
       - name: Install gettext
         run: sudo apt install -y gettext
+
+      # FlatLAF is the default but for some reason messes with the tests
+      - name: Set LAF
+        run: |
+          mkdir ~/.jchempaint 
+          echo "LookAndFeelClass=com.sun.java.swing.plaf.gtk.GTKLookAndFeel" > ~/.jchempaint/properties
 
       - name: Build with Maven (on X Window Virtual Framebuffer)
         run: xvfb-run --auto-servernum mvn clean install --T 1C verify --B -ntp -Dstyle.color=always

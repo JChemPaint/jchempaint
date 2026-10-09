@@ -51,4 +51,6 @@ the system default typically helps.
 ## Enable Robots OS X
 
 On Mac OS to get things running, ``System Settings > Privary & Secuirty > Accesibility``
-allows the IDE or Java to control the computer.
+allows the IDE to control the computer. When running from the command line
+(``mvn test``) it is the terminal app which needs the option and **not** the 
+java/mvn binary.
