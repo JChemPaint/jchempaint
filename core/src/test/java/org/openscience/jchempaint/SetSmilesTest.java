@@ -10,8 +10,7 @@ public class SetSmilesTest extends AbstractAppletTest {
 	public void testSetSmiles() throws CDKException {
 		JPanelFixture jcppanel = applet.panel("JChemPaintPanel");
 		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
-// FIXME
-//		jcpApplet.setSmiles("CCCC");
+		panel.setSmiles("CCCC");
 		panel.get2DHub().updateView();
 		Assert.assertEquals(4, panel.getChemModel().getMoleculeSet()
 				.getAtomContainer(0).getAtomCount());

@@ -16,8 +16,7 @@ public class Issue81Test extends AbstractAppletTest {
         JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         try {
-//			FIXME
-//        	jcpApplet.setSmiles("CCCC");
+        	panel.setSmiles("CCCC");
         	panel.get2DHub().updateView();
 		} catch (Exception e) {
 			Assert.fail();

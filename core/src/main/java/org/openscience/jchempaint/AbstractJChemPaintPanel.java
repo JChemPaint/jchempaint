@@ -60,12 +60,19 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.undo.UndoManager;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.SaveAction;
+import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
@@ -161,6 +168,21 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 		//we need to do this to avoid npes later
 		renderPanel.getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
 	}
+
+    public void setSmiles(String smiles) {
+        IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
+        SmilesParser smipar = new SmilesParser(bldr);
+        try {
+            IAtomContainer mol = smipar.parseSmiles(smiles);
+            if (getChemModel().getMoleculeSet() != null)
+                getChemModel().getMoleculeSet().removeAllAtomContainers();
+            if (getChemModel().getReactionSet() != null)
+                getChemModel().getReactionSet().removeAllReactions();
+            JChemPaint.generateModel(this, mol, true, true);
+        } catch (Exception ex) {
+            announceError(ex);
+        }
+    }
 	
 	/**
 	 * Gives the smiles for the current chemmodel in this panel.
@@ -171,9 +193,14 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
-	public String getSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
-		return CreateSmilesAction.getSmiles(getChemModel());
-	}	
+	public String getSmiles() {
+        try {
+            return CreateSmilesAction.getSmiles(getChemModel());
+        } catch (CDKException | ClassNotFoundException | IOException | CloneNotSupportedException e) {
+            announceError(e);
+            return "";
+        }
+    }
     
     /**
      * This method handles an error when we do not know what to do. It clearly 

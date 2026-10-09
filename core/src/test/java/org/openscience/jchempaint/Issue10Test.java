@@ -20,7 +20,7 @@ public class Issue10Test extends AbstractAppletTest {
         JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
         try {
-//        	jcpApplet.setSmiles("CCCC");
+			pane.setSmiles("CCCC");
         	pane.get2DHub().updateView();
 		} catch (Exception e) {
 			Assert.fail();

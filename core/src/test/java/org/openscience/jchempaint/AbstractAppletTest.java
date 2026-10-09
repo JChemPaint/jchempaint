@@ -15,12 +15,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.application.JChemPaint;
 
 import javax.vecmath.Point2d;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -40,6 +42,43 @@ public class AbstractAppletTest {
         JPanelFixture jcppanel = applet.panel("JChemPaintPanel");
         panel = (JChemPaintPanel)jcppanel.target;
         panel.getRootPane().setSize(700, 700);
+    }
+
+    protected static int getBondCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet())
+            count += atc.getBondCount();
+        return count;
+    }
+
+    protected static int getAtomCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet())
+            count += atc.getAtomCount();
+        return count;
+    }
+
+    // expl H + impl H
+    protected static int getHydrogenCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet()) {
+            for (IAtom atom : atc.atoms()) {
+                if (atom.getImplicitHydrogenCount() != null)
+                    count += atom.getImplicitHydrogenCount();
+                if (atom.getAtomicNumber() == IElement.H)
+                    count++;
+            }
+        }
+        return count;
+    }
+
+    protected Point toAwtPoint(Point2d p) {
+        return new Point((int)p.x, (int)p.y);
+    }
+
+    protected Point getBondAwtPoint(IBond bond) {
+        Point2d p = panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
+        return toAwtPoint(p);
     }
     
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
