@@ -419,18 +419,8 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
         JFileChooserFixture dialog = applet.fileChooser("save");
         File file = File.createTempFile("jcptest", ".mol");
         file.delete();
-        JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-        int index = -1;
-        for (int i = 0; i < combobox.getModel().getSize(); i++)
-            if (((JCPFileFilter) combobox.getModel().getElementAt(i)).getType() == JCPFileFilter.mol)
-                index = i;
-        Assert.assertFalse(index < 0);
-        combobox.setSelectedIndex(index);
-        JTextComponentFixture text = dialog.fileNameTextBox();
-        text.setText(file.toString());
-        JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-        okbutton.target.doClick(); // does not work in FlatLAF
-        dialog.target.setVisible(false);
+        dialog.selectFile(file);
+        dialog.approveButton().target.doClick();
         applet.robot.waitForIdle();
         MDLV2000Reader reader = null;
         try {
