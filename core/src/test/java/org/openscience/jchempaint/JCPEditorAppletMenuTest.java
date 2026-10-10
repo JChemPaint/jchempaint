@@ -441,7 +441,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
 
     @Test
     public void testMenuOpenMol() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-        if (System.getProperty("os.name").indexOf("Mac") == -1) {
+        if (System.getProperty("os.name").indexOf("Mac") == -1 && System.getProperty("os.name").indexOf("Linux") == -1) {
             String filename = "data/chebi/ChEBI_26120.mol";
             InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
             File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "test.mol");
@@ -508,7 +508,7 @@ public class JCPEditorAppletMenuTest extends AbstractAppletTest {
 
     @Test
     public void testMenuOpenSmiles() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-        if (System.getProperty("os.name").indexOf("Mac") == -1) {
+        if (System.getProperty("os.name").indexOf("Mac") == -1 && System.getProperty("os.name").indexOf("Linux") == -1) {
             String filename = "data/smiles.smi";
             InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
             File file = new File(System.getProperty("java.io.tmpdir") + File.separator + "test.smi");
