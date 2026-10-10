@@ -17,7 +17,7 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 public class Issue58Test extends AbstractAppletTest {
 
     @Test public void testIssue58() throws AWTException {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("C").target.doClick();
         applet.button("bondTool").target.doClick();

@@ -13,7 +13,7 @@ import org.openscience.jchempaint.action.JCPAction;
 public class Issue116Test extends AbstractAppletTest {
 
     @Test public void testIssue116() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("H").target.doClick();
         panel.get2DHub().updateView();

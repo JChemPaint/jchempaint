@@ -17,10 +17,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class Issue10Test extends AbstractAppletTest {
 
     @Test public void testIssue10() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target;
         try {
-        	jcpApplet.setSmiles("CCCC");
+			pane.setSmiles("CCCC");
         	pane.get2DHub().updateView();
 		} catch (Exception e) {
 			Assert.fail();

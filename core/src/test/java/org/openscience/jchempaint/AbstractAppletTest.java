@@ -1,53 +1,95 @@
 package org.openscience.jchempaint;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.vecmath.Point2d;
-
-import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.core.BasicRobot;
+import org.fest.swing.core.Robot;
+import org.fest.swing.finder.WindowFinder;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.launcher.AppletLauncher;
+import org.fest.swing.launcher.ApplicationLauncher;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.jchempaint.applet.JChemPaintEditorApplet;
+import org.openscience.jchempaint.application.JChemPaint;
+
+import javax.vecmath.Point2d;
+import java.awt.Point;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.function.Predicate;
 
 /**
  * An abstract base class for applet tests. It sets up and tears down
  * and offers some convenience methods.
  */
 public class AbstractAppletTest {
-    private static AppletViewer viewer;
     protected static FrameFixture applet;
-    protected static JChemPaintEditorApplet jcpApplet;
     protected static JChemPaintPanel panel;
-    
-
+    protected static Robot robot;
 
     @BeforeClass public static void setUp() {
-        jcpApplet = new JChemPaintEditorApplet();
-        Map<String, String> parameters = new HashMap<String, String>();
-        viewer = AppletLauncher.applet(jcpApplet)
-            .withParameters(parameters)
-            .start();
-        applet = new FrameFixture(viewer);
-        applet.show();
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        ApplicationLauncher.application(JChemPaint.class).start();
+        robot = BasicRobot.robotWithCurrentAwtHierarchy();
+        applet = WindowFinder.findFrame("JChemPaint").using(robot);
+        JPanelFixture jcppanel = applet.panel("JChemPaintPanel");
         panel = (JChemPaintPanel)jcppanel.target;
-        viewer.setSize(700,700);
+        panel.getRootPane().setSize(700, 700);
+    }
+
+    protected static int getBondCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet())
+            count += atc.getBondCount();
+        return count;
+    }
+
+    protected static int getAtomCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet())
+            count += atc.getAtomCount();
+        return count;
+    }
+
+    // expl H + impl H
+    protected static int getHydrogenCount(JChemPaintPanel panel) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet()) {
+            for (IAtom atom : atc.atoms()) {
+                if (atom.getImplicitHydrogenCount() != null)
+                    count += atom.getImplicitHydrogenCount();
+                if (atom.getAtomicNumber() == IElement.H)
+                    count++;
+            }
+        }
+        return count;
+    }
+
+    protected Point toAwtPoint(Point2d p) {
+        return new Point((int)p.x, (int)p.y);
+    }
+
+    protected Point getBondAwtPoint(IBond bond) {
+        Point2d p = panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
+        return toAwtPoint(p);
+    }
+
+    protected IAtom getAtom(JChemPaintPanel panel, Predicate<IAtom> pred) {
+        for (IAtomContainer ac : panel.getChemModel().getMoleculeSet()) {
+            for (IAtom atom : ac.atoms()) {
+                if (pred.test(atom))
+                    return atom;
+            }
+        }
+        return null;
     }
     
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
@@ -66,7 +108,7 @@ public class AbstractAppletTest {
     }    
 
     protected void restoreModelToEmpty(){
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         IChemModel basic = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
@@ -79,7 +121,7 @@ public class AbstractAppletTest {
     }
     
     protected void restoreModelWithBasicmol(){
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         panel.get2DHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         String filename = "data/basic.mol";
@@ -100,6 +142,7 @@ public class AbstractAppletTest {
             panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
 
             panel.get2DHub().updateView();
+            panel.get2DHub().setAltInputMode(false);
             reader.close();
         } catch (CDKException e) {
             // TODO Auto-generated catch block
@@ -112,7 +155,6 @@ public class AbstractAppletTest {
 
 
     @AfterClass public static void tearDown() {
-      viewer.unloadApplet();
       applet.cleanUp();
     }
 }
