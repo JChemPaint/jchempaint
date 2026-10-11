@@ -378,40 +378,40 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 	}
 
     @Test public void drawReactions(){
-    	if (System.getProperty("os.name").indexOf("Linux") == -1) {
-    		restoreModelToEmpty();
-    		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-    		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-    		applet.button("hexagon").click();
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,50), MouseButton.LEFT_BUTTON,1);
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(400,50), MouseButton.LEFT_BUTTON,1);
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
-    		applet.button("reactionArrow").click();
-    		ComponentDragAndDrop dandd = new ComponentDragAndDrop(applet.panel("renderpanel").robot);
-    		dandd.drag(applet.panel("renderpanel").component(), new Point(150,50));
-    		dandd.drop(applet.panel("renderpanel").component(), new Point(350,50));
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
-    		applet.button("hexagon").click();
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(500,50), MouseButton.LEFT_BUTTON,1);
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
-    		Point2d point = getAtomPoint(panel,0);
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
-    		applet.menuItem("addProductToExistingReaction").click();
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
-    		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
+		restoreModelToEmpty();
+		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		applet.button("hexagon").click();
+		JPanelFixture renderpanel = applet.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot.click(renderpanel.component(), new Point(400, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot.click(renderpanel.component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
+		applet.button("reactionArrow").click();
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(150, 50));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 50));
+		renderpanel.robot.releaseMouseButtons();
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
+		applet.button("hexagon").click();
+		renderpanel.robot.click(renderpanel.component(), new Point(500, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot.click(renderpanel.component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
+		Point2d point = getAtomPoint(panel,0);
+		renderpanel.robot.click(renderpanel.component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
+		applet.menuItem("addProductToExistingReaction").click();
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
+		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
 
-    		applet.button("hexagon").click();
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(100,300), MouseButton.LEFT_BUTTON,1);
-    		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(400,300), MouseButton.LEFT_BUTTON,1);
-    		applet.button("reactionArrow").click();
-    		dandd.drag(applet.panel("renderpanel").component(), new Point(150,300));
-    		dandd.drop(applet.panel("renderpanel").component(), new Point(350,300));
-    		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReactionCount());
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getReactantCount());
-    		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getProductCount());
-    	}
+		applet.button("hexagon").click();
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 300), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot.click(renderpanel.component(), new Point(400, 300), MouseButton.LEFT_BUTTON, 1);
+		applet.button("reactionArrow").click();
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(150, 300));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 300));
+		renderpanel.robot.releaseMouseButtons();
+		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReactionCount());
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getReactantCount());
+		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getProductCount());
     }
 }

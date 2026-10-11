@@ -13,6 +13,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.matcher.JTextComponentMatcher;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
+import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.Assert;
@@ -27,39 +28,31 @@ import org.openscience.jchempaint.matchers.ComboBoxTextComponentMatcher;
 
 public class BugSF70Test extends AbstractAppletTest {
 
-	private static int SAVE_AS_MOL_COMBOBOX_POS=6;
-
 	@Test public void testBug70() throws CDKException, IOException{
-		if (System.getProperty("os.name").indexOf("Linux") == -1) {
-			JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-			JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-			applet.button("hexagon").target.doClick();
-			applet.click();
-			Point2d point = getAtomPoint(panel,0);
-			applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
-			applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
-			applet.menuItem("showACProperties").click();
-			DialogFixture dialog = applet.dialog();
-			JTextComponent textfield = dialog.robot.finder().find(JTextComponentMatcher.withName("Title"));
-			textfield.setText("aaa");
-			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-			okbutton.click();
-			applet.menuItem("save").click();
-			dialog = applet.dialog();
-			File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
-			if(file.exists())
-				file.delete();
-			JComboBox<?> combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
-			combobox.setSelectedItem(combobox.getItemAt(SAVE_AS_MOL_COMBOBOX_POS));
-			JTextComponentFixture text = dialog.textBox();
-			text.setText(file.toString());
-			JButtonFixture savebutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-			savebutton.click();
-			MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
-			IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
-			Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
-			reader.close();
-		}
+		JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		applet.button("hexagon").target.doClick();
+		applet.click();
+		Point2d point = getAtomPoint(panel,0);
+		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
+		applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON,1);
+		applet.menuItem("showACProperties").click();
+		DialogFixture dialog = applet.dialog();
+		JTextComponent textfield = dialog.robot.finder().find(JTextComponentMatcher.withName("Title"));
+		textfield.setText("aaa");
+		JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+		okbutton.click();
+		applet.menuItem("saveAs").click();
+		JFileChooserFixture fileChooser = applet.fileChooser("save");
+		File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.mol");
+		if(file.exists())
+			file.delete();
+		fileChooser.selectFile(file);
+		fileChooser.approveButton().click();
+		MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
+		IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+		Assert.assertEquals("aaa",(String)mol.getProperty(CDKConstants.TITLE));
+		reader.close();
 	}
 
 }

@@ -19,12 +19,14 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 public class Issue71Test extends AbstractAppletTest {
 
     @Test public void testIssue71() throws AWTException {
+        restoreModelToEmpty();
         JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("C").target.doClick();
         applet.button("bondTool").target.doClick();
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(),new Point(100,100));
         applet.button("select").target.doClick();
+        robot.waitForIdle();
 		IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 		Point2d p1 = new Point2d(ethane.getAtom(0).getPoint2d());
 		Renderer r = panel.getRenderPanel().getRenderer();

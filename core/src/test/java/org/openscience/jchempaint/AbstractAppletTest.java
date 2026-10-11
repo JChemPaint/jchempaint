@@ -114,10 +114,14 @@ public class AbstractAppletTest {
         basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
         basic.getMoleculeSet().addAtomContainer(
                 basic.getBuilder().newInstance(IAtomContainer.class));
+        panel.get2DHub().setAltInputMode(false);
         panel.setChemModel(basic);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
         panel.get2DHub().updateView();
+        panel.setModified(false);
+        panel.setCurrentSaveFileFilter(null);
+        panel.setCurrentOpenFileFilter(null);
     }
     
     protected void restoreModelWithBasicmol(){
@@ -143,6 +147,7 @@ public class AbstractAppletTest {
 
             panel.get2DHub().updateView();
             panel.get2DHub().setAltInputMode(false);
+            panel.setModified(false);
             reader.close();
         } catch (CDKException e) {
             // TODO Auto-generated catch block
