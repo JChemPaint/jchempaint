@@ -398,7 +398,11 @@ public class JCPEditorAppletDrawingTest extends AbstractAppletTest{
 		renderpanel.robot.click(renderpanel.component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
 		Point2d point = getAtomPoint(panel,0);
 		renderpanel.robot.click(renderpanel.component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
+
+		// we do target.doClick on the parent menu as otherwise FlatLAF gets stuck
+		applet.menuItem("reaction").target.doClick();
 		applet.menuItem("addProductToExistingReaction").click();
+
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
 		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());

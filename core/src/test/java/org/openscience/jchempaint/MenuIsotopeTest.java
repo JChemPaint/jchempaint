@@ -38,10 +38,14 @@ public class MenuIsotopeTest extends AbstractAppletTest {
         applet.button("select").target.doClick();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
-        int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
-        applet.menuItem("isotopeChange").click();
-        applet.menuItem("C"+isotopeNumber).click();
-        Assert.assertEquals(isotopeNumber, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber().intValue());
+        int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+
+        // the C12, C13, C14 etc does appear until it is selected, so manually select it first
+        applet.menuItemWithPath("Atom", "Isotopes").target.menuSelectionChanged(true);
+        applet.menuItemWithPath("Atom", "Isotopes", "C" + isotopeNumber).target.doClick();
+
+        Assert.assertEquals((Integer) isotopeNumber,
+                            panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber());
         //the mode should have changed now
         Assert.assertEquals("C", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertEquals(isotopeNumber, panel.get2DHub().getController2DModel().getDrawIsotopeNumber());
