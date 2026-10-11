@@ -120,6 +120,8 @@ public class AbstractAppletTest {
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
         panel.get2DHub().updateView();
         panel.setModified(false);
+        panel.setCurrentSaveFileFilter(null);
+        panel.setCurrentOpenFileFilter(null);
     }
     
     protected void restoreModelWithBasicmol(){
