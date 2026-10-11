@@ -12,7 +12,7 @@ import org.junit.Test;
 public class Issue73Test extends AbstractAppletTest {
 
     @Test public void testIssue73() {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("C").target.doClick();
         applet.button("chain").target.doClick();

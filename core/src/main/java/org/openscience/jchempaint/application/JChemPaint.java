@@ -537,7 +537,7 @@ public class JChemPaint {
      * @param chemPaintPanel
      * @param molecule
      * @param generateCoordinates
-     * @param shiftPanel
+     * @param shiftPasted
      * @throws CDKException
      */
     public static void generateModel(AbstractJChemPaintPanel chemPaintPanel,
@@ -602,7 +602,8 @@ public class JChemPaint {
         }
 
 
-        if (moleculeSet.getAtomContainer(0).getAtomCount() == 0) {
+        if (moleculeSet.getAtomContainerCount() != 0 &&
+            moleculeSet.getAtomContainer(0).getAtomCount() == 0) {
             moleculeSet.getAtomContainer(0).add(molecule);
             moleculeSet.getAtomContainer(0).setTitle(molecule.getTitle());
         } else {

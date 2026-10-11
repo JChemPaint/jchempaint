@@ -265,6 +265,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         addField(GT.get("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
         lookAndFeel = new JComboBox<Object>(lookAndFeels);
+        lookAndFeel.setName("laf");
         addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
         fontIcons = new JCheckBox();
         addField(GT.get("Font Icons (restart required)"), fontIcons, otherOptionsPanel);

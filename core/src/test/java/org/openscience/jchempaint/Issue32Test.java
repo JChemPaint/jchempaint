@@ -17,7 +17,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 public class Issue32Test extends AbstractAppletTest {
 
     @Test public void testIssue32() throws AWTException {
-        JPanelFixture jcppanel=applet.panel("appletframe");
+        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         applet.button("C").click();
         applet.button("bondTool").click();

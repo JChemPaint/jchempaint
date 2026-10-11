@@ -59,6 +59,7 @@ public class OpenAction extends JCPAction {
     public void actionPerformed(ActionEvent e) {
 
         JFileChooser chooser = new JFileChooser();
+        chooser.setName("open");
         chooser.setCurrentDirectory(jcpPanel.getCurrentWorkDirectory());
         chooser.setAcceptAllFileFilterUsed(false);
 		chooser.addChoosableFileFilter(new ChemicalFilesFilter());

@@ -1,35 +1,30 @@
 package org.openscience.jchempaint;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.vecmath.Point2d;
-
-
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JButtonFixture;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.jchempaint.matchers.ButtonTextComponentMatcher;
 
+import javax.vecmath.Point2d;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
 public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
 
     private static List<IChemModel> models = new ArrayList<IChemModel>();
     
-    @BeforeClass public static void setUp() {
-        AbstractAppletTest.setUp();
-    }
-
     @Test public void testUndo() throws CloneNotSupportedException{
         //These should be models.add((IChemModel)panel.getChemModel().clone());
         //but due to a bug in cdk, clone changes the model
         //without the clone, the test is not of much use, since it tests
         //(for my understanding) the model against itself.
+        restoreModelToEmpty();
+        models.clear();
         models.add((IChemModel)panel.getChemModel());
         drawRing(100,100);
         applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
@@ -61,6 +56,29 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
 
     @Test public void testRedo(){
         try {
+            restoreModelToEmpty();
+            models.clear();
+            models.add((IChemModel)panel.getChemModel());
+            drawRing(100,100);
+            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            models.add((IChemModel)panel.getChemModel());
+            attachRing();
+            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            models.add((IChemModel)panel.getChemModel());
+            panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
+            deleteAtom();
+            models.add((IChemModel)panel.getChemModel());
+            drawRing(300,200);
+            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            models.add((IChemModel)panel.getChemModel());
+            applet.button("undo").target.doClick();
+            compare(3);
+            applet.button("undo").target.doClick();
+            compare(2);
+            applet.button("undo").target.doClick();
+            compare(1);
+            applet.button("undo").target.doClick();
+            compare(0);
 			applet.button("redo").target.doClick();
 			compare(1);
 			applet.button("redo").target.doClick();
@@ -77,18 +95,21 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     private void attachRing() {
         applet.button("hexagon").target.doClick();
         Point2d moveto=getBondPoint(panel, 0);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);        
+        robot.click(applet.panel("renderpanel").component(),
+                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
     }
 
     public void drawRing(int x, int y){
         applet.button("hexagon").target.doClick();
         Point2d moveto=new Point2d(x, y);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        robot.click(applet.panel("renderpanel").component(),
+                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
     }
     
     
     private void compare(int whichmodel) {
-        Assert.assertEquals(models.get(whichmodel).getMoleculeSet().getAtomContainerCount(), panel.getChemModel().getMoleculeSet().getAtomContainerCount());
+        Assert.assertEquals(models.get(whichmodel).getMoleculeSet().getAtomContainerCount(),
+                            panel.getChemModel().getMoleculeSet().getAtomContainerCount());
         for(int i=0;i<models.get(whichmodel).getMoleculeSet().getAtomContainerCount();i++){
             Assert.assertEquals(models.get(whichmodel).getMoleculeSet().getAtomContainer(i).getAtomCount(), panel.getChemModel().getMoleculeSet().getAtomContainer(i).getAtomCount());
             Assert.assertEquals(models.get(whichmodel).getMoleculeSet().getAtomContainer(i).getBondCount(), panel.getChemModel().getMoleculeSet().getAtomContainer(i).getBondCount());
@@ -100,6 +121,8 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
      * Undo/redo when pasting templates works partly.
      */
     @Test public void testUndoTemplates() throws CloneNotSupportedException{
+        models.clear();
+        restoreModelToEmpty();
     	applet.menuItem("new").click();
         models.add((IChemModel)panel.getChemModel());
         applet.menuItem("pasteTemplate").click();

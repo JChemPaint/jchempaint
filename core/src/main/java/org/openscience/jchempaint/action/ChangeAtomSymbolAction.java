@@ -100,7 +100,7 @@ public class ChangeAtomSymbolAction extends JCPAction
             dialog.setName("periodictabledialog");
             dialog.setVisible(true);
             symbol=dialog.getChosenSymbol();
-            if(symbol.isEmpty())
+            if(symbol == null || symbol.isEmpty())
                 return;
             jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
             jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
