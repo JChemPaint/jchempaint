@@ -176,7 +176,6 @@ public class JChemPaint {
             // Set Look&Feel
             Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
             try {
-                System.err.println("DEBUG LookAndFeelClass=" + props.getProperty("LookAndFeelClass"));
                 UIManager.setLookAndFeel(props.getProperty("LookAndFeelClass"));
             } catch (Throwable e)  {
                 String sys = UIManager.getSystemLookAndFeelClassName();
