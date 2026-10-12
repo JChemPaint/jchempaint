@@ -158,17 +158,9 @@ public class JCPTransferHandler extends TransferHandler {
                                         new LogicalSelection(
                                                 LogicalSelection.Type.NONE));
 
-                        // the newly opened file should nicely fit the screen
-                        jcpPanel.getRenderPanel().setFitToScreen(true);
-
+                        // TODO zoom in if needed
                         jcpPanel.getRenderPanel().update(
                                 jcpPanel.getRenderPanel().getGraphics());
-
-                        // enable zooming by removing constraint
-                        jcpPanel.getRenderPanel().setFitToScreen(false);
-
-                    
-                    
                     } catch (Exception e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();

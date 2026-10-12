@@ -59,7 +59,8 @@ public class CleanupAction extends JCPAction {
         WaitDialog.showDialog();
         IChemModelRelay hub = jcpPanel.get2DHub(); 
         hub.cleanup();
-        jcpPanel.setIsNewChemModel(true);
+        // JWM not sure why this was needed but it makes takes miss-behave
+        // jcpPanel.setIsNewChemModel(true);
         WaitDialog.hideDialog();
         hub.updateView();
     }
