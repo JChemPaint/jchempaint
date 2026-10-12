@@ -116,6 +116,10 @@ public class OpenAction extends JCPAction {
                             jcpPanel.get2DHub().getUndoRedoHandler().postEdit(
                                     undoredo);
                         }
+
+                        // TODO maybe scale the molecule bonds if needed or zoom
+                        //      in
+
                         jcpPanel.getChemModel().setMoleculeSet(
                                 chemModel.getMoleculeSet());
                         jcpPanel.getChemModel().setReactionSet(chemModel.getReactionSet());
@@ -124,14 +128,8 @@ public class OpenAction extends JCPAction {
                                         new LogicalSelection(
                                                 LogicalSelection.Type.NONE));
 
-                        // the newly opened file should nicely fit the screen
-                        jcpPanel.getRenderPanel().setFitToScreen(true);
-
                         jcpPanel.getRenderPanel().update(
                                 jcpPanel.getRenderPanel().getGraphics());
-
-                        // enable zooming by removing constraint
-                        jcpPanel.getRenderPanel().setFitToScreen(false);
 
                         jcpPanel.setIsAlreadyAFile(chooser.getSelectedFile());
                     
