@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -56,3 +58,11 @@ jobs:
       # FIXME needs to be working locally on linux first - menu's seem to hang
       - name: Build with Maven (on X Window Virtual Framebuffer)
         run: xvfb-run --auto-servernum mvn clean install --T 1C --B -ntp -Dstyle.color=always
+
+      - name: Publish Test Report
+        id: report
+        uses: mikepenz/action-junit-report@v6
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: 'core/target/surefire-reports/TEST-*.xml'
+          comment: true
