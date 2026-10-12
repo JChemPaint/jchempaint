@@ -11,6 +11,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -289,14 +290,16 @@ public class JChemPaintMenuHelper {
             // sync some action properties with menu
             mi.setEnabled(action.isEnabled());
             mi.addActionListener(action);
+            //mi.setAction(action); // no!
             logger.debug("Coupled action to new menu item...");
         }
         else {
             logger.error("Could not find JCPAction class for:" + astr);
             mi.setEnabled(false);
         }
+
         if(!isPopupMenu)
-            addShortCuts(cmd, mi, jcpPanel);
+            addShortCuts(cmd, mi, action, jcpPanel);
         if(cmd.equals("undo"))
             jcpPanel.undoMenu=mi;
         if(cmd.equals("redo"))
@@ -317,15 +320,16 @@ public class JChemPaintMenuHelper {
      * @param  mi   the regarding MenuItem.
      * @param  jcp  The JChemPaintPanel this menu is used for.
      */
-    private void addShortCuts(String cmd, JMenuItem mi, AbstractJChemPaintPanel jcp) {
+    private void addShortCuts(String cmd, JMenuItem mi, Action action, AbstractJChemPaintPanel jcp) {
         Properties shortCutProps = JCPPropertyHandler.getInstance(true).getJCPShort_Cuts();
-
         String keyString = shortCutProps.getProperty(cmd);
         if (keyString != null) {
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(keyString);
-            mi.setAccelerator(keyStroke);
-            jcp.getInputMap().put(keyStroke, mi);
-            jcp.getActionMap().put(mi, mi.getAction());
+            for (String keyStringEntry : keyString.split("\\|")) {
+                KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStringEntry);
+                mi.setAccelerator(keyStroke);
+                jcp.getInputMap().put(keyStroke, cmd);
+                jcp.getActionMap().put(cmd, action);
+            }
         }
     }
 
