@@ -261,7 +261,13 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
      * @param toRemove If not null, this atomcontainer will be added to moleculeToAddTo as well and removed from chemmodel (this is needed if a merge happens).
      */
      void addFragment(AtomBondSet toPaste, IAtomContainer moleculeToAddTo, IAtomContainer toRemove);
-     AtomBondSet deleteFragment(AtomBondSet toDelete);
+
+     AtomBondSet deleteFragment(AtomBondSet toDelete, boolean all);
+
+     default AtomBondSet deleteFragment(AtomBondSet toDelete) {
+       return deleteFragment(toDelete, true);
+     }
+
      void cleanup();
      void flip(boolean horizontal);
      void invertStereoInSelection();
