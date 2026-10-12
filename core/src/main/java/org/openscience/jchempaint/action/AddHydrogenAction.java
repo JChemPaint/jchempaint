@@ -110,12 +110,17 @@ public class AddHydrogenAction extends JCPAction {
             // add in any adjacent hydrogens as needed
             for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
                 for (IBond bond : container.bonds()) {
-                    if (selectedPart.contains(bond.getBegin()) && bond.getEnd().getAtomicNumber() == IElement.H) {
-                        selectedPart.addAtom(bond.getEnd());
-                        selectedPart.addBond(bond);
+                    if (selectedPart.contains(bond.getBegin()) &&
+                        bond.getEnd().getAtomicNumber() == IElement.H) {
+                        if (!selectedPart.contains(bond.getEnd()))
+                            selectedPart.addAtom(bond.getEnd());
+                        if (!selectedPart.contains(bond))
+                            selectedPart.addBond(bond);
                     } else if (selectedPart.contains(bond.getEnd()) && bond.getBegin().getAtomicNumber() == IElement.H) {
-                        selectedPart.addAtom(bond.getBegin());
-                        selectedPart.addBond(bond);
+                        if (!selectedPart.contains(bond.getBegin()))
+                            selectedPart.addAtom(bond.getBegin());
+                        if (!selectedPart.contains(bond))
+                            selectedPart.addBond(bond);
                     }
                 }
             }

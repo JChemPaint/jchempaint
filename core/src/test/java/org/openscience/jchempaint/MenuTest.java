@@ -378,7 +378,6 @@ public class MenuTest extends AbstractUITest {
             }
         }
         applybutton.target.doClick();
-
         dialog.target.setVisible(false);
         frame.robot.waitForIdle();
 
@@ -462,4 +461,38 @@ public class MenuTest extends AbstractUITest {
         Assert.assertEquals(4,panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainer(2).getAtomCount());
     }
+
+    @Test
+    public void testHydrogenDisplay() {
+        restoreModelToEmpty();
+        String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
+        panel.setSmiles(smiles);
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target.doClick();
+        Assert.assertEquals("C=1(C([C@]2([C@]([H])(C(C([2H])(C([C@@](C([H])([H])[H])(O[H])[H])(C2([H])[H])[H])[H])([H])[H])C(C1[H])([H])[H])[H])([H])[H])N([H])[H]",
+                            panel.getSmiles());
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Stereocenters").target.doClick();
+        Assert.assertEquals("C=1(C[C@]2([C@]([H])(CC([2H])C([C@@](C)(O)[H])C2)CC1)[H])N",
+                            panel.getSmiles());
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Preferred").target.doClick();
+        Assert.assertEquals("C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N",
+                            panel.getSmiles());
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target.doClick();
+        Assert.assertEquals("C=1(CC2C(CC([2H])C([C@H](C)O)C2)CC1)N",
+                            panel.getSmiles());
+    }
+
+    @Test
+    public void testHydrogenDisplaySelectAll() {
+        restoreModelToEmpty();
+        String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
+        panel.setSmiles(smiles);
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target.doClick();
+        Assert.assertEquals("C=1(C([C@]2([C@]([H])(C(C([2H])(C([C@@](C([H])([H])[H])(O[H])[H])(C2([H])[H])[H])[H])([H])[H])C(C1[H])([H])[H])[H])([H])[H])N([H])[H]",
+                            panel.getSmiles());
+        frame.menuItemWithPath("Edit", "Select All").click();
+        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target.doClick();
+        Assert.assertEquals("C=1(CC2C(CC([2H])C([C@H](C)O)C2)CC1)N",
+                            panel.getSmiles());
+    }
+
 }
