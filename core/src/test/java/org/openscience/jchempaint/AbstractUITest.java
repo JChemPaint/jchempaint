@@ -17,6 +17,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.application.JChemPaint;
@@ -31,18 +32,24 @@ import java.util.function.Predicate;
  * An abstract base class for applet tests. It sets up and tears down
  * and offers some convenience methods.
  */
-public class AbstractAppletTest {
-    protected static FrameFixture applet;
+public class AbstractUITest {
+
+    protected static FrameFixture frame;
     protected static JChemPaintPanel panel;
     protected static Robot robot;
 
-    @BeforeClass public static void setUp() {
+    @BeforeClass
+    public static void setUp() {
         ApplicationLauncher.application(JChemPaint.class).start();
         robot = BasicRobot.robotWithCurrentAwtHierarchy();
-        applet = WindowFinder.findFrame("JChemPaint").using(robot);
-        JPanelFixture jcppanel = applet.panel("JChemPaintPanel");
-        panel = (JChemPaintPanel)jcppanel.target;
-        panel.getRootPane().setSize(700, 700);
+        frame = WindowFinder.findFrame("JChemPaint").using(robot);
+        panel = (JChemPaintPanel) frame.panel("JChemPaintPanel").target;
+        frame.target.setSize(500, 700);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        frame.cleanUp();
     }
 
     protected static int getBondCount(JChemPaintPanel panel) {
@@ -74,11 +81,11 @@ public class AbstractAppletTest {
     }
 
     protected Point toAwtPoint(Point2d p) {
-        return new Point((int)p.x, (int)p.y);
+        return new Point((int) p.x, (int) p.y);
     }
 
     protected Point getBondAwtPoint(IBond bond) {
-        Point2d p = panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
+        Point2d p = panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x + bond.getAtom(1).getPoint2d().x) / 2, (bond.getAtom(0).getPoint2d().y + bond.getAtom(1).getPoint2d().y) / 2);
         return toAwtPoint(p);
     }
 
@@ -91,42 +98,47 @@ public class AbstractAppletTest {
         }
         return null;
     }
-    
+
     protected Point2d getBondPoint(JChemPaintPanel panel, int bondnumber) {
         IBond bond = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(bondnumber);
-        return panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x+bond.getAtom(1).getPoint2d().x)/2,(bond.getAtom(0).getPoint2d().y+bond.getAtom(1).getPoint2d().y)/2);
+        return panel.getRenderPanel().getRenderer().toScreenCoordinates((bond.getAtom(0).getPoint2d().x + bond.getAtom(1).getPoint2d().x) / 2, (bond.getAtom(0).getPoint2d().y + bond.getAtom(1).getPoint2d().y) / 2);
     }
-    
-    protected Point2d getAtomPoint(JChemPaintPanel panel, int atomnumber){
-        IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(atomnumber);
-        return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x,atom.getPoint2d().y);
-    }    
-    
-    protected Point2d getAtomPoint(JChemPaintPanel panel, int atomnumber, int acnumber){
-        IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(acnumber).getAtom(atomnumber);
-        return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x,atom.getPoint2d().y);
-    }    
 
-    protected void restoreModelToEmpty(){
-        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        IChemModel basic = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+    protected Point2d getAtomPoint(JChemPaintPanel panel, int atomnumber) {
+        IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(atomnumber);
+        return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x, atom.getPoint2d().y);
+    }
+
+    protected Point2d getAtomPoint(JChemPaintPanel panel, int atomnumber, int acnumber) {
+        IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(acnumber).getAtom(atomnumber);
+        return panel.getRenderPanel().getRenderer().toScreenCoordinates(atom.getPoint2d().x, atom.getPoint2d().y);
+    }
+
+    protected void restoreModelToEmpty() {
+        JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
+        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+        IChemModel basic = SilentChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
         basic.getMoleculeSet().addAtomContainer(
                 basic.getBuilder().newInstance(IAtomContainer.class));
-        panel.get2DHub().setAltInputMode(false);
         panel.setChemModel(basic);
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setFitToScreen(false);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
+        panel.getRenderPanel().getRenderer().setZoom(1);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
-        panel.get2DHub().updateView();
-        panel.setModified(false);
         panel.setCurrentSaveFileFilter(null);
         panel.setCurrentOpenFileFilter(null);
+        panel.get2DHub().setAltInputMode(false);
+        panel.setModified(false);
+        panel.get2DHub().updateView();
+
+        frame.button("C").target.doClick();
+        frame.button("bondTool").click();
     }
-    
-    protected void restoreModelWithBasicmol(){
-        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+
+    protected void restoreModelWithBasicmol() {
+        JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
+        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
         panel.get2DHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         String filename = "data/basic.mol";
         InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -136,10 +148,10 @@ public class AbstractAppletTest {
             basic = (IChemModel) reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class));
             AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(basic.getMoleculeSet().getAtomContainer(0));
             CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(basic.getMoleculeSet().getAtomContainer(0)
-                    .getBuilder());
+                                                                        .getBuilder());
             hAdder.addImplicitHydrogens(basic.getMoleculeSet().getAtomContainer(0));
             //valencies are set when doing atom typing, which we don't want in jcp
-            for(int i=0;i<basic.getMoleculeSet().getAtomContainer(0).getAtomCount();i++){
+            for (int i = 0; i < basic.getMoleculeSet().getAtomContainer(0).getAtomCount(); i++) {
                 basic.getMoleculeSet().getAtomContainer(0).getAtom(i).setValency(null);
             }
             panel.setChemModel(basic);
@@ -149,17 +161,9 @@ public class AbstractAppletTest {
             panel.get2DHub().setAltInputMode(false);
             panel.setModified(false);
             reader.close();
-        } catch (CDKException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } catch (CDKException | IOException e) {
+            System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-
-    @AfterClass public static void tearDown() {
-      applet.cleanUp();
     }
 }
