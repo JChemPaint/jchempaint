@@ -34,6 +34,7 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Point2d;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 /**
@@ -445,4 +446,111 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getReactantCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getProductCount());
     }
+
+
+	/**
+	 * October 2026 - Erase on a heteroatom changes the atom to carbon rather
+	 *                than remove it and it's bonds. If a connected bond is
+	 *                select it still gets deleted.
+	 */
+	@Test
+	public void testEraseHighlightAtom() {
+		restoreModelWithBasicmol();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
+		frame.button("N").click();
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		Assert.assertEquals("NCCCCCCC", panel.getSmiles());
+		renderpanel.robot.moveMouse(renderpanel.component(), atom0);
+		frame.button("eraser").click();
+		Assert.assertEquals("CCCCCCCC", panel.getSmiles()); // N => C
+		frame.button("eraser").click();
+		Assert.assertEquals("CCCCCCC", panel.getSmiles()); // C => remove
+	}
+
+	@Test
+	public void testEraseSelection() {
+		restoreModelWithBasicmol();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		frame.button("N").click();
+		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		Point atom2 = toAwtPoint(getAtomPoint(panel, 2));
+		renderpanel.robot.click(renderpanel.component(), atom2);
+		Point atom4 = toAwtPoint(getAtomPoint(panel, 4));
+		renderpanel.robot.click(renderpanel.component(), atom4);
+		Assert.assertEquals("NCNCNCCC", panel.getSmiles());
+
+		// select multiple, they will change to carbon
+		frame.button("select").click();
+		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot.click(renderpanel.component(), atom2);
+		renderpanel.robot.click(renderpanel.component(), atom4);
+		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		frame.button("eraser").click();
+		Assert.assertEquals("NCCCCCCC", panel.getSmiles()); // N,N => C,C
+
+		// select multiple
+		frame.button("select").click();
+		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot.click(renderpanel.component(), atom2);
+		renderpanel.robot.click(renderpanel.component(), atom4);
+		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		frame.button("eraser").click();
+		Assert.assertEquals("NC.C.CCC", panel.getSmiles()); // N,N => C,C
+	}
+
+	/**
+	 * Here even though the atom is N we delete it right away because the bond
+	 * is also selected.
+	 */
+	@Test
+	public void testEraseSelectionWithBond() {
+		restoreModelWithBasicmol();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
+		Point bond0 = toAwtPoint(getBondPoint(panel, 0));
+
+		frame.button("N").click();
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		Assert.assertEquals("NCCCCCCC", panel.getSmiles());
+
+		frame.button("select").click();
+		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot.click(renderpanel.component(), bond0);
+		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		frame.button("eraser").click();
+		Assert.assertEquals("CCCCCCC", panel.getSmiles());
+	}
+
+	/**
+	 * Here even though the atom is N we delete it right away because the bond
+	 * is also deleted when it's neighbour is deleted.
+	 */
+	@Test
+	public void testEraseSelectionWithImplBond() {
+		restoreModelWithBasicmol();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
+		Point atom1 = toAwtPoint(getAtomPoint(panel, 1));
+		Point atom2 = toAwtPoint(getAtomPoint(panel, 2));
+
+		frame.button("N").click();
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot.click(renderpanel.component(), atom2);
+		Assert.assertEquals("NCNCCCCC", panel.getSmiles());
+
+		frame.button("select").click();
+		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot.click(renderpanel.component(), atom1);
+		renderpanel.robot.click(renderpanel.component(), atom2);
+		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		frame.button("eraser").click();
+
+		// one nitrogen is removed (because all it's bonds were removed),
+		// the other is turned into a carbon
+		Assert.assertEquals("CCCCCC", panel.getSmiles());
+	}
 }
