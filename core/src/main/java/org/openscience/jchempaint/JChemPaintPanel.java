@@ -356,11 +356,18 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
 
         // if shift or nothing pressed we do the hot keys for atoms/bonds
         if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0)) {
-            char x = (char) (e.getKeyCode() >= 'A' && e.getKeyCode() <= 'Z' ? e.getKeyChar() : e.getKeyCode());
+
+            // normalize to lowercase then use the shift pressed to switch to
+            // upper case. Doing it this way means caps lock doesn't change
+            // the behaviour
+            char ch = Character.toLowerCase((char)e.getKeyCode());
+            if ((e.getModifiersEx()&KeyEvent.SHIFT_DOWN_MASK) != 0)
+                ch = Character.toUpperCase(ch);
+
             if (model.getHighlightedAtom() != null) {
                 IAtom hgAtom = model.getHighlightedAtom();
                 changed = true;
-                switch (x) {
+                switch (ch) {
                     case ' ':
                         relay.selectFragment(hgAtom);
                         break;
@@ -450,7 +457,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
             } else if (model.getHighlightedBond() != null) {
                 IBond hgBond = model.getHighlightedBond();
                 changed = true;
-                switch (x) {
+                switch (ch) {
                     case ' ':
                         relay.selectFragment(hgBond);
                         break;
@@ -499,7 +506,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                 }
             } else if (model.getSelection() == null || !model.getSelection().isFilled()) {
                 changed = true;
-                switch (x) {
+                switch (ch) {
                     case '1':
                         this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.SINGLE, true, "bondTool"));
                         break;
