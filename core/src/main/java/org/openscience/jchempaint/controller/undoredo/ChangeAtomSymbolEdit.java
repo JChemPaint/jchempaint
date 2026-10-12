@@ -1,9 +1,6 @@
-/* $RCSfile$
- * $Author: gilleain $
- * $Date: 2008-11-26 16:01:05 +0000 (Wed, 26 Nov 2008) $
- * $Revision: 13311 $
- *
+/*
  * Copyright (C) 2005-2008 Tobias Helmus, Stefan Kuhn
+ * Copyright (C) 2026 John Mayfield
  *
  * Contact: cdk-devel@lists.sourceforge.net
  *
@@ -24,101 +21,75 @@
 package org.openscience.jchempaint.controller.undoredo;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
+import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 /**
  * Undo/Redo Edit class for the ChangeAtomSymbolAction, containing the methods
  * for undoing and redoing the regarding changes
- * 
+ *
  * @author tohel
  * @cdk.module controlbasic
  */
 public class ChangeAtomSymbolEdit implements IUndoRedoable {
 
-    private static final long serialVersionUID = 779682083223003185L;
+    private final IAtom atom;
+    private final int oldElement;
+    private final int newElement;
+    private final String type;
+    private final IChemModelRelay chemModelRelay;
 
-    private IAtom atom;
-
-	private String formerSymbol;
-
-	private String symbol;
-	private String type;
-	private IChemModelRelay chemModelRelay=null;
-
-	/**
-	 * @param atomInRange
-	 *            The atom been changed
-	 * @param formerSymbol
-	 *            The atom symbol before change
-	 * @param symbol
-	 *            The atom symbol past change
-	 */
-	public ChangeAtomSymbolEdit(IAtom atomInRange, String formerSymbol,
-			String symbol, String type, IChemModelRelay chemModelRelay) {
-		this.atom = atomInRange;
-		this.formerSymbol = formerSymbol;
-		this.symbol = symbol;
-		this.type=type;
-		this.chemModelRelay=chemModelRelay;
-	}
-
-	public ChangeAtomSymbolEdit(IAtom atomInRange,
-								String formerSymbol,
-								String symbol,
-								IChemModelRelay chemModelRelay) {
-		this(atomInRange, formerSymbol, symbol,
-			 "Change atom to " + symbol,
-			 chemModelRelay);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.undo.UndoableEdit#redo()
-	 */
-	public void redo() throws CannotRedoException {
-		this.atom.setSymbol(symbol);
-		chemModelRelay.updateAtom(atom);
+    public ChangeAtomSymbolEdit(IAtom atom,
+                                int oldElement,
+                                int newElement,
+                                String type,
+                                IChemModelRelay chemModelRelay) {
+        this.atom = atom;
+        this.oldElement = oldElement;
+        this.newElement = newElement;
+        this.type = type;
+        this.chemModelRelay = chemModelRelay;
     }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.undo.UndoableEdit#undo()
-	 */
-	public void undo() throws CannotUndoException {
-		this.atom.setSymbol(formerSymbol);
-		chemModelRelay.updateAtom(atom);
+    public ChangeAtomSymbolEdit(IAtom atom,
+                                String oldSymbol,
+                                String newSymbol,
+                                String type,
+                                IChemModelRelay chemModelRelay) {
+        this(atom,
+             PeriodicTable.getAtomicNumber(oldSymbol),
+             PeriodicTable.getAtomicNumber(newSymbol),
+             type,
+             chemModelRelay);
     }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.undo.UndoableEdit#canRedo()
-	 */
-	public boolean canRedo() {
-		return true;
-	}
+    public ChangeAtomSymbolEdit(IAtom atomInRange,
+                                String formerSymbol,
+                                String symbol,
+                                IChemModelRelay chemModelRelay) {
+        this(atomInRange, formerSymbol, symbol,
+             "Change atom to " + symbol,
+             chemModelRelay);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.undo.UndoableEdit#canUndo()
-	 */
-	public boolean canUndo() {
-		return true;
-	}
+    @Override
+    public String description() {
+        return type;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.undo.UndoableEdit#getPresentationName()
-	 */
-	public String description() {
-		return type;
-	}
+    @Override
+    public void redo() throws CannotRedoException {
+        atom.setAtomicNumber(newElement);
+        chemModelRelay.updateAtom(atom);
+    }
 
+    @Override
+    public void undo() throws CannotUndoException {
+        atom.setAtomicNumber(oldElement);
+        chemModelRelay.updateAtom(atom);
+    }
 }

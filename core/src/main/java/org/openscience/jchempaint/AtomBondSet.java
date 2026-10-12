@@ -6,8 +6,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * CDK 2.10 onwards enforces an invariant on AtomContainer's that a bond
@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class AtomBondSet {
 
-    private final List<IAtom> atoms = new ArrayList<>();
-    private final List<IBond> bonds = new ArrayList<>();
+    private final Set<IAtom> atoms = new LinkedHashSet<>();
+    private final Set<IBond> bonds = new LinkedHashSet<>();
 
     public AtomBondSet() {
     }
@@ -79,7 +79,7 @@ public class AtomBondSet {
 
     public IAtom getSingleAtom() {
         if (atoms.size() != 1) throw new IllegalArgumentException();
-        return atoms.get(0);
+        return atoms.iterator().next();
     }
 
     @Override

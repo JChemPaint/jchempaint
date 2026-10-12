@@ -44,6 +44,7 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.io.CMLReader;
@@ -266,14 +267,14 @@ public final class CopyPasteAction extends JCPAction {
 
             IAtom newHighlightAtom = null;
 
+            AtomBondSet atomBondSet = new AtomBondSet();
             // Select > Highlight Atom > Highlight Bond
             if (renderModel.getSelection() != null && renderModel.getSelection().isFilled()) {
 
                 IChemObjectSelection selection = renderModel.getSelection();
-                AtomBondSet atomBondSet = new AtomBondSet();
+
                 for (IAtom atom : selection.elements(IAtom.class)) {
                     atomBondSet.add(atom);
-
                     // set the hot spot to the attached atom with the highest index
                     for (IBond bond : atom.bonds()) {
                         IAtom nbor = bond.getOther(atom);
@@ -284,22 +285,20 @@ public final class CopyPasteAction extends JCPAction {
                 }
                 for (IBond bond : selection.elements(IBond.class))
                     atomBondSet.add(bond);
-                jcpPanel.get2DHub().deleteFragment(atomBondSet);
                 renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
-                jcpPanel.get2DHub().updateView();
             } else if (atomInRange != null) {
-
-                if (atomInRange.equals(renderModel.getHighlightedAtom())) {
+                if (atomInRange.equals(renderModel.getHighlightedAtom()) &&
+                    atomInRange.getAtomicNumber() == IElement.C) {
                     IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atomInRange);
                     if (container != null) {
                         for (IBond bond : container.getConnectedBondsList(atomInRange))
                             newHighlightAtom = bond.getOther(atomInRange);
                     }
+                } else {
+                    newHighlightAtom = atomInRange; // erase the symbol not the object
                 }
-
-                jcpPanel.get2DHub().removeAtom(atomInRange);
+                atomBondSet.add(atomInRange);
             } else if (bondInRange != null) {
-
                 IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), bondInRange);
                 if (container != null) {
                     for (IBond bond : container.getConnectedBondsList(bondInRange.getBegin()))
@@ -307,9 +306,11 @@ public final class CopyPasteAction extends JCPAction {
                     for (IBond bond : container.getConnectedBondsList(bondInRange.getEnd()))
                         newHighlightAtom = bond.getOther(bondInRange.getEnd());
                 }
-
-                jcpPanel.get2DHub().removeBond(bondInRange);
+                atomBondSet.add(bondInRange);
             }
+            jcpPanel.get2DHub().deleteFragment(atomBondSet);
+            jcpPanel.get2DHub().updateView();
+
 
             // no new hotspot? go to last atom added
             if (newHighlightAtom == null) {

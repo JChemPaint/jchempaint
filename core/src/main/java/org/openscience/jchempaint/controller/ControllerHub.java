@@ -3074,53 +3074,88 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structureChanged();
 	}
 
-	// OK
+	private boolean shouldRemove(IAtom atom, AtomBondSet selected)
+	{
+		// carbons are always removed
+		if (atom.getAtomicNumber() == IElement.C)
+			return true;
+		// non-carbons are only removed if all their connected bond
+		// are removed
+		for (IBond bond : atom.bonds()) {
+			if (!selected.contains(bond))
+				return false;
+		}
+		return true;
+	}
+
+
 	public AtomBondSet deleteFragment(AtomBondSet selected) {
 
-		AtomBondSet undoRedoSet = new AtomBondSet();
-		if (rGroupHandler != null && !rGroupHandler.checkRGroupOkayForDelete(selected, this))
-			return undoRedoSet;
+		AtomBondSet change = new AtomBondSet();
+		AtomBondSet remove = new AtomBondSet();
 
-		Set<IAtom> adjacentAtoms = new HashSet<>();
-		for (IAtom atom : selected.atoms()) {
-			undoRedoSet.add(atom);
+		if (rGroupHandler != null && !rGroupHandler.checkRGroupOkayForDelete(selected, this))
+			return remove;
+
+
+		// any select bonds will be removed as well as any bonds connected to
+		// carbon atoms
+		for (IBond bond : selected.bonds()) {
+			remove.add(bond);
 		}
-		for (IAtom atom : undoRedoSet.atoms()) {
-			IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
-			for (IBond bond : container.getConnectedBondsList(atom)) {
-				if (!undoRedoSet.contains(bond)) {
-					undoRedoSet.add(bond);
-					adjacentAtoms.add(bond.getOther(atom));
-				}
+		for (IAtom atom : selected.atoms()) {
+			if (atom.getAtomicNumber() == IElement.C) {
+				for (IBond bond : atom.bonds())
+					remove.add(bond);
 			}
 		}
-		for (IBond bond : selected.bonds()) {
-			if (!undoRedoSet.contains(bond))
-				undoRedoSet.add(bond);
+
+		// any select carbon atoms will be removed along with any
+		// hetero atoms which have all their bonds removed
+		for (IAtom atom : selected.atoms()) {
+			if (shouldRemove(atom, remove))
+				remove.add(atom);
+			else
+				change.add(atom);
 		}
 
+		// pickup any remaining connected bonds
+		Set<IAtom> adjacentAtoms = new HashSet<>();
+		for (IAtom atom : remove.atoms()) {
+			for (IBond bond : atom.bonds()) {
+				remove.add(bond);
+				adjacentAtoms.add(bond.getOther(atom));
+			}
+		}
 
-		for (IBond bond : undoRedoSet.bonds()) {
+		for (IBond bond : remove.bonds()) {
 			ChemModelManipulator.removeElectronContainer(chemModel, bond);
 		}
-		for (IAtom atom : undoRedoSet.atoms()) {
+		for (IAtom atom : remove.atoms()) {
 			ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, atom);
 		}
 
+		List<IUndoRedoable> edits = new ArrayList<>();
+		for (IAtom atom : change.atoms()) {
+			edits.add(new ChangeAtomSymbolEdit(atom, atom.getAtomicNumber(), IElement.C, "Erase", this));
+			atom.setAtomicNumber(IElement.C);
+			this.updateAtom(atom);
+		}
+
 		for (IAtom atom : adjacentAtoms) {
-			if (!undoRedoSet.contains(atom))
+			if (!remove.contains(atom))
 				updateAtom(atom);
 		}
 
 		removeEmptyContainers(chemModel);
 		if (undoredofactory != null && undoredohandler != null) {
-			IUndoRedoable undoredo = undoredofactory
-					.getRemoveAtomsAndBondsEdit(chemModel, undoRedoSet, "Cut", this);
-			undoredohandler.postEdit(undoredo);
+			edits.add(undoredofactory.getRemoveAtomsAndBondsEdit(chemModel, remove, "Erase", this));
+			undoredohandler.postEdit(new CompoundEdit("Erase", edits));
 		}
+
 		adjustRgroup();
 		structureChanged();
-		return undoRedoSet;
+		return remove;
 	}
 
 	public static void removeEmptyContainers(IChemModel chemModel) {
