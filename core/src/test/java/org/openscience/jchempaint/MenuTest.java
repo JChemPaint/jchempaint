@@ -28,6 +28,8 @@ import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
 import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTabbedPaneFixture;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,6 +47,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Point2d;
 import java.awt.Point;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -493,6 +498,18 @@ public class MenuTest extends AbstractUITest {
         frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target.doClick();
         Assert.assertEquals("C=1(CC2C(CC([2H])C([C@H](C)O)C2)CC1)N",
                             panel.getSmiles());
+    }
+
+    @Test
+    public void testCopySmilesStereochemistry() throws IOException, UnsupportedFlavorException {
+        restoreModelToEmpty();
+        String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
+        panel.setSmiles(smiles);
+        frame.menuItemWithPath("Edit", "Select All").click();
+        frame.menuItem("copy").target.doClick();
+        Clipboard clipboard = panel.getToolkit().getSystemClipboard();
+        MatcherAssert.assertThat(clipboard.getData(DataFlavor.stringFlavor).toString(),
+                                 CoreMatchers.containsString("@"));
     }
 
 }
