@@ -36,6 +36,7 @@ import javax.vecmath.Point2d;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * These tests check expected drawing behaviour when interacting withe
@@ -497,7 +498,10 @@ public class DrawingTest extends AbstractUITest {
 		renderpanel.robot.click(renderpanel.component(), atom4);
 		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
 		frame.button("eraser").click();
-		Assert.assertEquals("NC.C.CCC", panel.getSmiles()); // N,N => C,C
+		// cansmi will fix this!
+		String[] parts = panel.getSmiles().split("\\.");
+		Arrays.sort(parts);
+		Assert.assertEquals("C.CCC.NC", String.join(".", parts)); // N,N => C,C
 	}
 
 	/**

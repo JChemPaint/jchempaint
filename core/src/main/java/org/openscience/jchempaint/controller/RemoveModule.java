@@ -53,12 +53,7 @@ public class RemoveModule extends ControllerModuleAdapter {
 	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoordinate);
 	    if(selectedAC == null)
 	        return;
-	    for(IAtom atom:selectedAC.atoms()) {
-	        chemModelRelay.removeAtom(atom);
-	    }
-	    for(IBond bond:selectedAC.bonds()) {
-	    	chemModelRelay.removeBondAndLoneAtoms( bond );
-	    }
+		chemModelRelay.deleteFragment(selectedAC, false);
 	    setSelection( AbstractSelection.EMPTY_SELECTION );
 	}
 	

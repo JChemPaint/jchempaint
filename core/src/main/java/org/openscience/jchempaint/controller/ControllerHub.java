@@ -3074,6 +3074,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structureChanged();
 	}
 
+	private Iterable<IBond> getBonds(IAtom atom) {
+		IAtomContainer ac = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
+		if (ac == null) return Collections.emptyList();
+		return ac.getConnectedBondsList(atom);
+	}
+
 	private boolean shouldRemove(IAtom atom, AtomBondSet selected)
 	{
 		// carbons are always removed
@@ -3081,22 +3087,20 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			return true;
 		// non-carbons are only removed if all their connected bond
 		// are removed
-		for (IBond bond : atom.bonds()) {
+		for (IBond bond : getBonds(atom)) {
 			if (!selected.contains(bond))
 				return false;
 		}
 		return true;
 	}
 
-
-	public AtomBondSet deleteFragment(AtomBondSet selected) {
+	public AtomBondSet deleteFragment(AtomBondSet selected, boolean all) {
 
 		AtomBondSet change = new AtomBondSet();
 		AtomBondSet remove = new AtomBondSet();
 
 		if (rGroupHandler != null && !rGroupHandler.checkRGroupOkayForDelete(selected, this))
 			return remove;
-
 
 		// any select bonds will be removed as well as any bonds connected to
 		// carbon atoms
@@ -3105,7 +3109,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		for (IAtom atom : selected.atoms()) {
 			if (atom.getAtomicNumber() == IElement.C) {
-				for (IBond bond : atom.bonds())
+				for (IBond bond : getBonds(atom))
 					remove.add(bond);
 			}
 		}
@@ -3113,7 +3117,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// any select carbon atoms will be removed along with any
 		// hetero atoms which have all their bonds removed
 		for (IAtom atom : selected.atoms()) {
-			if (shouldRemove(atom, remove))
+			if (all || shouldRemove(atom, remove))
 				remove.add(atom);
 			else
 				change.add(atom);
@@ -3122,7 +3126,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// pickup any remaining connected bonds
 		Set<IAtom> adjacentAtoms = new HashSet<>();
 		for (IAtom atom : remove.atoms()) {
-			for (IBond bond : atom.bonds()) {
+			for (IBond bond : getBonds(atom)) {
 				remove.add(bond);
 				adjacentAtoms.add(bond.getOther(atom));
 			}

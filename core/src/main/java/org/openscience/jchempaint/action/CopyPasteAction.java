@@ -76,6 +76,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.application.JChemPaint;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.MoveModule;
+import org.openscience.jchempaint.controller.RemoveModule;
 import org.openscience.jchempaint.controller.SelectSquareModule;
 import org.openscience.jchempaint.dialog.TemplateBrowser;
 import org.openscience.jchempaint.inchi.InChITool;
@@ -87,6 +88,7 @@ import org.openscience.jchempaint.renderer.selection.ShapeSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.vecmath.Point2d;
 import java.awt.Image;
@@ -268,7 +270,7 @@ public final class CopyPasteAction extends JCPAction {
             IAtom newHighlightAtom = null;
 
             AtomBondSet atomBondSet = new AtomBondSet();
-            // Select > Highlight Atom > Highlight Bond
+            // Selection > Highlight Atom > Highlight Bond
             if (renderModel.getSelection() != null && renderModel.getSelection().isFilled()) {
 
                 IChemObjectSelection selection = renderModel.getSelection();
@@ -308,17 +310,28 @@ public final class CopyPasteAction extends JCPAction {
                 }
                 atomBondSet.add(bondInRange);
             }
-            jcpPanel.get2DHub().deleteFragment(atomBondSet);
-            jcpPanel.get2DHub().updateView();
-
 
             // no new hotspot? go to last atom added
-            if (newHighlightAtom == null) {
+            if (newHighlightAtom == null && !atomBondSet.isEmpty()) {
                 for (IAtomContainer ac : jcpPanel.getChemModel().getMoleculeSet()) {
                     if (!ac.isEmpty())
                         newHighlightAtom = ac.getAtom(ac.getAtomCount() - 1);
                 }
             }
+
+            // JWM - Only switch to the "remove" module if the button was
+            //       pressed and not if we have come from the menu or via
+            //       a hot key
+            if (e.getSource() instanceof JButton) {
+                RemoveModule newActiveModule = new RemoveModule(jcpPanel.get2DHub());
+                newActiveModule.setID("eraser");
+                jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+                newHighlightAtom = null;
+            }
+
+            // deleteFragment(all=false) => we update the heteroatoms are needed
+            jcpPanel.get2DHub().deleteFragment(atomBondSet, false);
+            jcpPanel.get2DHub().updateView();
 
             jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedAtom(newHighlightAtom);
             jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
