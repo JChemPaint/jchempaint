@@ -825,8 +825,6 @@ public class IssuesTest extends AbstractUITest {
     @Test
     public void overwriteStereo() {
         restoreModelToEmpty();
-        JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
         // we draw a hexagon
         frame.button("hexagon").target.doClick();
         frame.click();
@@ -881,7 +879,6 @@ public class IssuesTest extends AbstractUITest {
                                                MouseButton.LEFT_BUTTON, 1);
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
                                                   .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
-        restoreModelToEmpty();
     }
 
     @Test
@@ -972,40 +969,24 @@ public class IssuesTest extends AbstractUITest {
     // This is a test for overwriting of stereo bonds. Any stereo bond
     // must overwrite all others and flip itself.
     private void genericStereoBondTest(IBond.Stereo directionToTest) {
-        JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
         // we draw a hexagon
-        frame.button("hexagon").target.doClick();
+        frame.button("hexagon").click();
         frame.click();
         // we make all bond types in there
         frame.button("up_bond").target.doClick();
-        Point2d moveto = getBondPoint(panel, 1);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
-                                                    .component(), new Point((int) moveto.x, (int) moveto.y),
-                                               MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
-                                                  .getMoleculeSet().getAtomContainer(0).getBond(1).getStereo());
+        JPanelFixture renderpanel = frame.panel("renderpanel");
+        renderpanel.robot.click(renderpanel.component(), toAwtPoint(getBondPoint(panel, 1)));
+        IAtomContainer atomContainer = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
+        Assert.assertEquals(IBond.Stereo.UP, atomContainer.getBond(1).getStereo());
         frame.button("down_bond").target.doClick();
-        moveto = getBondPoint(panel, 2);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
-                                                    .component(), new Point((int) moveto.x, (int) moveto.y),
-                                               MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.DOWN_INVERTED, panel.getChemModel()
-                                                             .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+        renderpanel.robot.click(renderpanel.component(), toAwtPoint(getBondPoint(panel, 2)));
+        Assert.assertEquals(IBond.Stereo.DOWN_INVERTED, atomContainer.getBond(2).getStereo());
         frame.button("undefined_bond").target.doClick();
-        moveto = getBondPoint(panel, 3);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
-                                                    .component(), new Point((int) moveto.x, (int) moveto.y),
-                                               MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel()
-                                                          .getMoleculeSet().getAtomContainer(0).getBond(3).getStereo());
+        renderpanel.robot.click(renderpanel.component(), toAwtPoint(getBondPoint(panel, 3)));
+        Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, atomContainer.getBond(3).getStereo());
         frame.button("undefined_stereo_bond").target.doClick();
-        moveto = getBondPoint(panel, 4);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
-                                                    .component(), new Point((int) moveto.x, (int) moveto.y),
-                                               MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel()
-                                                      .getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
+        renderpanel.robot.click(renderpanel.component(), toAwtPoint(getBondPoint(panel, 4)));
+        Assert.assertEquals(IBond.Stereo.E_OR_Z, atomContainer.getBond(4).getStereo());
         // now we click on all of them with disired bond
         if (directionToTest == IBond.Stereo.UP)
             frame.button("up_bond").target.doClick();
@@ -1019,13 +1000,9 @@ public class IssuesTest extends AbstractUITest {
             frame.button("bondTool").target.doClick();
         for (int i = 0; i < 5; i++) {
             boolean self = false;
-            if (panel.getChemModel().getMoleculeSet().getAtomContainer(0)
-                     .getBond(i).getStereo() == directionToTest)
+            if (atomContainer.getBond(i).getStereo() == directionToTest)
                 self = true;
-            moveto = getBondPoint(panel, i);
-            frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
-                                                        .component(), new Point((int) moveto.x, (int) moveto.y),
-                                                   MouseButton.LEFT_BUTTON, 1);
+            renderpanel.robot.click(renderpanel.component(), toAwtPoint(getBondPoint(panel, i)));
             if (self) {
                 IBond.Stereo desiredDirection = null;
                 if (directionToTest == IBond.Stereo.E_OR_Z)
@@ -1038,13 +1015,11 @@ public class IssuesTest extends AbstractUITest {
                     desiredDirection = IBond.Stereo.UP_INVERTED;
                 else if (directionToTest == IBond.Stereo.UP_OR_DOWN)
                     desiredDirection = IBond.Stereo.UP_OR_DOWN;
-                Assert.assertEquals(desiredDirection, panel.getChemModel()
-                                                           .getMoleculeSet().getAtomContainer(0).getBond(i)
-                                                           .getStereo());
+                Assert.assertEquals(desiredDirection, atomContainer.getBond(i)
+                                                                   .getStereo());
             } else {
-                Assert.assertEquals(directionToTest, panel.getChemModel()
-                                                          .getMoleculeSet().getAtomContainer(0).getBond(i)
-                                                          .getStereo());
+                Assert.assertEquals(directionToTest, atomContainer.getBond(i)
+                                                                  .getStereo());
             }
         }
         restoreModelToEmpty();
