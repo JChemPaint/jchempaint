@@ -45,6 +45,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
@@ -60,6 +61,8 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.stereo.Projection;
+import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
@@ -184,17 +187,22 @@ public final class CopyPasteAction extends JCPAction {
 
         if (COPY.equals(type)) {
             handleSystemClipboard(clipboard);
-            IAtom atomInRange = null;
             IChemObject object = getSource(e);
             logger.debug("Source of call: ", object);
             // JWM: old behaviour would prioritize the highlighted atom/bond
             // under the cursor, it makes more sense if the selection takes
             // priority and if no selection then we just copy everything not
             // just the atom under the cursor
-            if (renderModel.getSelection().getConnectedAtomContainer() != null) {
-                addToClipboard(clipboard, renderModel.getSelection().getConnectedAtomContainer());
+            final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
+            if (selection != null) {
+                // selection will have stereochemistry missing
+                selection.setStereoElements(StereoElementFactory.using2DCoordinates(selection)
+                                                                .interpretProjections(Projection.Haworth, Projection.Chair)
+                                                                .createAll());
+                addToClipboard(clipboard, selection);
             } else {
-                addToClipboard(clipboard, JChemPaintPanel.getAllAtomContainersInOne(chemModel));
+                addToClipboard(clipboard,
+                               JChemPaintPanel.getAllAtomContainersInOne(chemModel));
             }
         } else if (COPY_AS_SMILES.equals(type)) {
             handleSystemClipboard(clipboard);
@@ -217,6 +225,12 @@ public final class CopyPasteAction extends JCPAction {
             try {
                 final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
                 if (selection != null) {
+
+                    // selection will have stereochemistry missing
+                    selection.setStereoElements(StereoElementFactory.using2DCoordinates(selection)
+                                                                    .interpretProjections(Projection.Haworth, Projection.Chair)
+                                                                    .createAll());
+
                     final IChemObjectBuilder bldr = selection.getBuilder();
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
                     selectionModel.setMoleculeSet(bldr.newInstance(IAtomContainerSet.class));
@@ -407,10 +421,6 @@ public final class CopyPasteAction extends JCPAction {
                                     new StructureDiagramGenerator((IAtomContainer) mols.getAtomContainer(i));
                             sdg.generateCoordinates();
                         }
-                        //SMILES parser sets valencies, unset
-                        for (int i = 0; i < toPaste.getAtomCount(); i++) {
-                            toPaste.getAtom(i).setValency(null);
-                        }
                     }
                 } catch (Exception ex) {
                     jcpPanel.announceError(ex);
@@ -427,6 +437,7 @@ public final class CopyPasteAction extends JCPAction {
                     scaleStructure(toPaste);
                     insertStructure(toPaste, renderModel);
                 }
+
             } else {
                 JOptionPane.showMessageDialog(jcpPanel, GT.get("The content you tried to copy could not be read to any known format"), GT.get("Could not process content"), JOptionPane.WARNING_MESSAGE);
             }
@@ -610,10 +621,6 @@ public final class CopyPasteAction extends JCPAction {
                 ex.printStackTrace();
                 // do nothing
             }
-            //valencies are set when doing atom typing, which we don't want in jcp
-            for (int i = 0; i < toPaste.getAtomCount(); i++) {
-                toPaste.getAtom(i).setValency(null);
-            }
         }
 
         //somehow, in case of single atoms, there are no coordinates
@@ -628,7 +635,7 @@ public final class CopyPasteAction extends JCPAction {
         }
         jcpPanel.get2DHub().fireStructureChangedEvent();
 
-        //We select the inserted structure
+        // We select the inserted structure
         IChemObjectSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         selection.select(ChemModelManipulator.newChemModel(toPaste));
         renderModel.setSelection(selection);
