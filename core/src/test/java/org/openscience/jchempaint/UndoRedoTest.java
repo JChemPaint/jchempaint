@@ -1,3 +1,24 @@
+/*
+ *  Copyright (C) 2026 John Mayfield
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public License
+ *  as published by the Free Software Foundation; either version 2.1
+ *  of the License, or (at your option) any later version.
+ *  All we ask is that proper credit is given for our work, which includes
+ *  - but is not limited to - adding the above copyright notice to the beginning
+ *  of your source code files, and to any copyright notice that you may distribute
+ *  with programs based on this work.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 package org.openscience.jchempaint;
 
 import org.fest.swing.core.MouseButton;
@@ -14,7 +35,12 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
+/**
+ * These tests check the functioning of the undo/redo handling.
+ *
+ * @author John Mayfield
+ */
+public class UndoRedoTest extends AbstractUITest {
 
     private static List<IChemModel> models = new ArrayList<IChemModel>();
     
@@ -27,31 +53,31 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
         models.clear();
         models.add((IChemModel)panel.getChemModel());
         drawRing(100,100);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
+        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
         models.add((IChemModel)panel.getChemModel());
         attachRing();
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
+        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
         models.add((IChemModel)panel.getChemModel());
         panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
         deleteAtom();
         models.add((IChemModel)panel.getChemModel());
         drawRing(300,200);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);        
+        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
         models.add((IChemModel)panel.getChemModel());
-        applet.button("undo").target.doClick();
+        frame.button("undo").target.doClick();
         compare(3);
-        applet.button("undo").target.doClick();
+        frame.button("undo").target.doClick();
         compare(2);
-        applet.button("undo").target.doClick();
+        frame.button("undo").target.doClick();
         compare(1);
-        applet.button("undo").target.doClick();
+        frame.button("undo").target.doClick();
         compare(0);
     }
 
     private void deleteAtom() {
-        applet.button("eraser").target.doClick();
+        frame.button("eraser").target.doClick();
         Point2d moveto=getAtomPoint(panel, 0);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);        
+        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
     }
 
     @Test public void testRedo(){
@@ -60,32 +86,32 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
             models.clear();
             models.add((IChemModel)panel.getChemModel());
             drawRing(100,100);
-            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
             models.add((IChemModel)panel.getChemModel());
             attachRing();
-            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
             models.add((IChemModel)panel.getChemModel());
             panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
             deleteAtom();
             models.add((IChemModel)panel.getChemModel());
             drawRing(300,200);
-            applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point(0,0), MouseButton.RIGHT_BUTTON,1);
+            frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
             models.add((IChemModel)panel.getChemModel());
-            applet.button("undo").target.doClick();
+            frame.button("undo").target.doClick();
             compare(3);
-            applet.button("undo").target.doClick();
+            frame.button("undo").target.doClick();
             compare(2);
-            applet.button("undo").target.doClick();
+            frame.button("undo").target.doClick();
             compare(1);
-            applet.button("undo").target.doClick();
+            frame.button("undo").target.doClick();
             compare(0);
-			applet.button("redo").target.doClick();
+			frame.button("redo").target.doClick();
 			compare(1);
-			applet.button("redo").target.doClick();
+			frame.button("redo").target.doClick();
 			compare(2);
-			applet.button("redo").target.doClick();
+			frame.button("redo").target.doClick();
 			compare(3);
-			applet.button("redo").target.doClick();
+			frame.button("redo").target.doClick();
 			compare(4);
 		} catch (IllegalStateException e) {
 			Assert.fail("Redo button disabled");
@@ -93,17 +119,17 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     }
     
     private void attachRing() {
-        applet.button("hexagon").target.doClick();
+        frame.button("hexagon").target.doClick();
         Point2d moveto=getBondPoint(panel, 0);
-        robot.click(applet.panel("renderpanel").component(),
-                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        robot.click(frame.panel("renderpanel").component(),
+                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
     }
 
     public void drawRing(int x, int y){
-        applet.button("hexagon").target.doClick();
+        frame.button("hexagon").target.doClick();
         Point2d moveto=new Point2d(x, y);
-        robot.click(applet.panel("renderpanel").component(),
-                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        robot.click(frame.panel("renderpanel").component(),
+                    new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
     }
     
     
@@ -123,23 +149,23 @@ public class JCPEditorAppletUndoRedoTest extends AbstractAppletTest {
     @Test public void testUndoTemplates() throws CloneNotSupportedException{
         models.clear();
         restoreModelToEmpty();
-    	applet.menuItem("new").click();
+    	frame.menuItem("new").click();
         models.add((IChemModel)panel.getChemModel());
-        applet.menuItem("pasteTemplate").click();
-        DialogFixture dialog = applet.dialog("templates");
+        frame.menuItem("pasteTemplate").click();
+        DialogFixture dialog = frame.dialog("templates");
         JButtonFixture templateButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Cysteine")));
         templateButton.click();
         Assert.assertEquals(7,totalAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
         
-        applet.menuItem("pasteTemplate").click();
-        dialog = applet.dialog("templates");
+        frame.menuItem("pasteTemplate").click();
+        dialog = frame.dialog("templates");
         templateButton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Leucine")));
         templateButton.click();
         Assert.assertEquals(16,totalAtomCount());
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
 
-        applet.button("undo").target.doClick();
+        frame.button("undo").target.doClick();
         Assert.assertEquals(7,totalAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
     }
