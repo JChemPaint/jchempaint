@@ -44,7 +44,6 @@ public class AbstractUITest {
         robot = BasicRobot.robotWithCurrentAwtHierarchy();
         frame = WindowFinder.findFrame("JChemPaint").using(robot);
         panel = (JChemPaintPanel) frame.panel("JChemPaintPanel").target;
-        frame.target.setSize(500, 700);
     }
 
     @AfterClass
