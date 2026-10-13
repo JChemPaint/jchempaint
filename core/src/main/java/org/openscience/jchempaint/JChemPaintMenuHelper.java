@@ -3,6 +3,7 @@ package org.openscience.jchempaint;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -280,12 +282,10 @@ public class JChemPaintMenuHelper {
             mi.setName(cmd);
         usedKeys.add(cmd);
         logger.debug("Created new menu item...");
-        String astr = JCPPropertyHandler.getInstance(true).getResourceString(cmd + JCPAction.actionSuffix);
-        if (astr == null) {
-            astr = cmd;
-        }
-        mi.setActionCommand(astr);
-        JCPAction action = getJCPAction().getAction(jcpPanel, astr, isPopupMenu);
+        String resourceString = JCPPropertyHandler.getInstance(true).getResourceString(cmd + JCPAction.actionSuffix);
+        final String actionStr = resourceString != null ? resourceString : cmd;
+        mi.setActionCommand(actionStr);
+        JCPAction action = getJCPAction().getAction(jcpPanel, actionStr, isPopupMenu);
         if (action != null) {
             // sync some action properties with menu
             mi.setEnabled(action.isEnabled());
@@ -294,12 +294,19 @@ public class JChemPaintMenuHelper {
             logger.debug("Coupled action to new menu item...");
         }
         else {
-            logger.error("Could not find JCPAction class for:" + astr);
+            logger.error("Could not find JCPAction class for:" + actionStr);
             mi.setEnabled(false);
         }
 
-        if(!isPopupMenu)
-            addShortCuts(cmd, mi, action, jcpPanel);
+        if(!isPopupMenu) {
+            addShortCuts(cmd, mi, new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (action != null)
+                        action.actionPerformed(new ActionEvent(e.getSource(), e.getID(), actionStr, e.getWhen(), e.getModifiers()));
+                }
+            }, jcpPanel);
+        }
         if(cmd.equals("undo"))
             jcpPanel.undoMenu=mi;
         if(cmd.equals("redo"))
