@@ -290,7 +290,11 @@ public final class CopyPasteAction extends JCPAction {
                 renderModel.setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
             } else if (atomInRange != null) {
                 if (atomInRange.equals(renderModel.getHighlightedAtom()) &&
-                    atomInRange.getAtomicNumber() == IElement.C) {
+                    atomInRange.getAtomicNumber() == IElement.C &&
+                    atomInRange.getValency() == null &&
+                    atomInRange.getFormalCharge() == null &&
+                    atomInRange.getMassNumber() == null
+                ) {
                     IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(jcpPanel.getChemModel(), atomInRange);
                     if (container != null) {
                         for (IBond bond : container.getConnectedBondsList(atomInRange))

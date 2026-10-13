@@ -28,12 +28,15 @@
  */
 package org.openscience.jchempaint;
 
+import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.SymbolVisibility;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
@@ -110,6 +113,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
                                                    IUndoListener {
@@ -222,6 +226,27 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         return renderer.getRenderer2DModel();
     }
 
+    /**
+     * Allow overloading of default CDK 'visibility'. In JCP if the
+     * atom.getValency() is non-null we always display the symbol. This
+     * allows -CH2- to be toggled on/off in a chain.
+     */
+    private final class VisibilityAdapter extends SymbolVisibility {
+
+        private SymbolVisibility delegate;
+
+        VisibilityAdapter(SymbolVisibility delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public boolean visible(IAtom atom, List<IBond> neighbors, RendererModel model) {
+            if (atom.getValency() != null)
+                return true;
+            return delegate.visible(atom, neighbors, model);
+        }
+    }
+
     public void updateDisplayOptions() {
         // tweaks the standard generator stroke options
         JChemPaintRendererModel model = this.renderer.getRenderer2DModel();
@@ -232,10 +257,10 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
                      .setValue(SymbolVisibility.all());
             } else if (model.getShowEndCarbons()) {
                 model.getParameter(StandardGenerator.Visibility.class)
-                     .setValue(SymbolVisibility.iupacRecommendations());
+                     .setValue(new VisibilityAdapter(SymbolVisibility.iupacRecommendations()));
             } else {
                 model.getParameter(StandardGenerator.Visibility.class)
-                     .setValue(SymbolVisibility.iupacRecommendationsWithoutTerminalCarbon());
+                     .setValue(new VisibilityAdapter(SymbolVisibility.iupacRecommendationsWithoutTerminalCarbon()));
             }
         }
         if (model.hasParameter(StandardGenerator.DelocalisedDonutsBondDisplay.class)) {
