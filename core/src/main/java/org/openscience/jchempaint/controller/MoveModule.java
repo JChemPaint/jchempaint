@@ -32,6 +32,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -139,7 +140,7 @@ public class MoveModule extends ControllerModuleAdapter {
                 relPoint.x = atom.getPoint2d().x - transformOrigin.x;
                 relPoint.y = atom.getPoint2d().y - transformOrigin.y;
                 relativeAtomCoords.put(atom, relPoint);
-                atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
+                atomCoordsMap.put(atom, new Point2d[]{null, new Point2d(atom.getPoint2d())});
             }
 
             transform = Transform.Rotate;
@@ -170,6 +171,10 @@ public class MoveModule extends ControllerModuleAdapter {
             return;
         } else {
             transform = Transform.Move;
+            atomCoordsMap = new HashMap<>();
+            for (IAtom atom : selection.elements(IAtom.class)) {
+                atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
+            }
         }
 
 
@@ -269,7 +274,7 @@ public class MoveModule extends ControllerModuleAdapter {
             // Do the merge of atoms
             if (!mergeMap.isEmpty()) {
                 try {
-					chemModelRelay.mergeMolecules(total);
+					chemModelRelay.mergeMolecules(atomCoordsMap);
 				} catch (RuntimeException e) {
 					//move things back, merge is not allowed
 		            Vector2d d = new Vector2d();
@@ -369,13 +374,24 @@ public class MoveModule extends ControllerModuleAdapter {
                         break;
                     if(mergeAtoms.contains( candidate.atom ))
                         continue;
-                    mergers.put( atom, candidate.atom );
+//                    if (hasPriority(candidate.atom, atom)) {
+//                        mergers.put(atom, candidate.atom);
+//                    } else {
+                        mergers.put(candidate.atom, atom);
+//                    }
                 }
             }
         }
         return mergers;
     }
-    
+
+    private boolean hasPriority(IAtom atom, IAtom other) {
+        if (atom.getAtomicNumber() != IElement.C &&
+            other.getAtomicNumber() == IElement.C)
+            return true;
+        return false;
+    }
+
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.ControllerModuleAdapter#mouseClickedDouble(javax.vecmath.Point2d)
      */
