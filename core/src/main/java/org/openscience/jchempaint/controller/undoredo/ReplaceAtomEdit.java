@@ -28,14 +28,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  * @cdk.module controlbasic
  * @cdk.svnrev  $Revision: 13311 $
  */
 public class ReplaceAtomEdit implements IUndoRedoable {
-
-    private static final long serialVersionUID = -7667903450980188402L;
 
     private IChemModel chemModel;
 
@@ -44,6 +43,8 @@ public class ReplaceAtomEdit implements IUndoRedoable {
 	private IAtom newAtom;
 
 	private String type;
+
+	private IChemModelRelay chemModelRelay;
 	
 	/**
 	 * @param chemModel
@@ -51,23 +52,20 @@ public class ReplaceAtomEdit implements IUndoRedoable {
 	 * @param c2dm The controller model; if none, set to null
 	 */
 	public ReplaceAtomEdit(IChemModel chemModel,
-			IAtom oldAtom, IAtom newAtom, String type) {
+			IAtom oldAtom, IAtom newAtom, String type, IChemModelRelay chemModelRelay) {
 		this.chemModel = chemModel;
 		this.oldAtom = oldAtom;
 		this.newAtom = newAtom;
 		this.type = type;
+		this.chemModelRelay = chemModelRelay;
 	}
 
 	public void redo() {
-        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, oldAtom);
-        AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-            oldAtom, newAtom);
+        chemModelRelay.replaceAtomWithoutUndo(newAtom, oldAtom);
 	}
 
 	public void undo() {
-        IAtomContainer relevantContainer = ChemModelManipulator.getRelevantAtomContainer(chemModel, newAtom);
-        AtomContainerManipulator.replaceAtomByAtom(relevantContainer, 
-            newAtom, oldAtom);
+		chemModelRelay.replaceAtomWithoutUndo(oldAtom, newAtom);
 	}
 
 	public boolean canRedo() {

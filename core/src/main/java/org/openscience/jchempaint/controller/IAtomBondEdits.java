@@ -36,7 +36,7 @@ import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 
 /**
  *  Interface for edit methods currently used by edit modules but should
- *  be replaced by IEdit commands.
+ *  be replacereplaced by IEdit commands.
  * @author Arvid
  * @cdk.module control
  */
@@ -57,6 +57,7 @@ public interface IAtomBondEdits {
     public void setMassNumber(IAtom atom, int charge);
     public void setImplicitHydrogenCount(IAtom atom, int intValue);
     public void replaceAtom(IAtom atomnew, IAtom atomold);
+    public void replaceAtomWithoutUndo(IAtom atomnew, IAtom atomold);
     public void addSingleElectron(IAtom atom);
     public void removeSingleElectron(IAtom atom);
     public void updateAtoms(IAtomContainer container, Iterable<IAtom> atoms);

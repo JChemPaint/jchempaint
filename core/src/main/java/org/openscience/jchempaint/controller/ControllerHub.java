@@ -2768,28 +2768,28 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-	// OK
-	public void replaceAtom(IAtom atomnew, IAtom atomold) {
-		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, atomold);
-		AtomContainerManipulator.replaceAtomByAtom(container, atomold, atomnew);
-
-		// sync the highlight/hot atom
-		if (Objects.equals(atomold,
-						   getRenderer().getRenderer2DModel().getHighlightedAtom())) {
-			getRenderer().getRenderer2DModel()
-						 .setHighlightedAtom(container.getAtom(container.indexOf(atomnew)));
-		}
-
-		updateAtom(atomnew);
-		structureChanged();
-
-
-
+	public void replaceAtom(IAtom newAtom, IAtom oldAtom) {
+		replaceAtomWithoutUndo(newAtom, oldAtom);
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getReplaceAtomEdit(
-					chemModel, atomold, atomnew, "Replace Atom");
+					chemModel, oldAtom, newAtom, "Replace Atom", this);
 			undoredohandler.postEdit(undoredo);
 		}
+	}
+
+	public void replaceAtomWithoutUndo(IAtom newAtom, IAtom oldAtom) {
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, oldAtom);
+		AtomContainerManipulator.replaceAtomByAtom(container, oldAtom, newAtom);
+
+		// sync the highlight/hot atom
+		if (Objects.equals(oldAtom,
+						   getRenderer().getRenderer2DModel().getHighlightedAtom())) {
+			getRenderer().getRenderer2DModel()
+						 .setHighlightedAtom(container.getAtom(container.indexOf(newAtom)));
+		}
+
+		updateAtom(newAtom);
+		structureChanged();
 	}
 
 	/*

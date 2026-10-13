@@ -87,8 +87,8 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
     }
 
     public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel,
-                                            IAtom oldAtom, IAtom newAtom, String type) {
-        return new SwingUndoableEdit(new ReplaceAtomEdit(chemModel, oldAtom, newAtom, type));
+                                            IAtom oldAtom, IAtom newAtom, String type, IChemModelRelay chemModelRelay) {
+        return new SwingUndoableEdit(new ReplaceAtomEdit(chemModel, oldAtom, newAtom, type, chemModelRelay));
     }
 
     public IUndoRedoable getSingleElectronEdit(
