@@ -402,55 +402,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
                     case '9':
                         relay.addDimethyl(hgAtom, IBond.Display.Solid);
                         break;
-                    case 'b':
-                        relay.setSymbol(hgAtom, "B");
-                        break;
-                    case 'c':
-                        relay.setSymbol(hgAtom, "C");
-                        break;
-                    case 'd':
-                        relay.setSymbol(hgAtom, "H", 2);
-                        break;
                     // case "e": break; // ethyl
-                    case 'f':
-                        relay.setSymbol(hgAtom, "F");
-                        break;
-                    case 'h':
-                        relay.setSymbol(hgAtom, "H");
-                        break;
-                    case 'i':
-                        relay.setSymbol(hgAtom, "I");
-                        break;
-                    case 'n':
-                    case 'w':
-                        relay.setSymbol(hgAtom, "N");
-                        break;
-                    case 'q':
-                    case 'o':
-                        relay.setSymbol(hgAtom, "O");
-                        break;
-                    case 's':
-                        relay.setSymbol(hgAtom, "S");
-                        break;
-                    case 'p':
-                        relay.setSymbol(hgAtom, "P");
-                        break;
-                    case 'r':
-                        relay.setSymbol(hgAtom, "R");
-                        break;
-                    case 'B':
-                        relay.setSymbol(hgAtom, "Br");
-                        break;
-                    case 'C': // fall through C/l
-                    case 'l':
-                        relay.setSymbol(hgAtom, "Cl");
-                        break;
-                    case 'S':
-                        relay.setSymbol(hgAtom, "Si");
-                        break;
-                    case '.':
-                        relay.convertToPseudoAtom(hgAtom, "_AP1");
-                        break;
                     default:
                         changed = false;
                 }

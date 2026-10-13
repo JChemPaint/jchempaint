@@ -603,8 +603,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public IAtom addAtom(String atomType, IAtom atom, boolean makePseudoAtom) {
 		AtomBondSet undoRedoSet = new AtomBondSet();
-		undoRedoSet.add(addAtomWithoutUndo(atomType, atom,
-												 makePseudoAtom));
+		undoRedoSet.add(addAtomWithoutUndo(atomType, atom, makePseudoAtom));
 		IAtomContainer atomContainer = ChemModelManipulator
 				.getRelevantAtomContainer(getIChemModel(), undoRedoSet.getSingleAtom());
 		IBond newBond = atomContainer.getBond(atom, undoRedoSet.getSingleAtom());
@@ -2771,12 +2770,21 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	// OK
 	public void replaceAtom(IAtom atomnew, IAtom atomold) {
-		IAtomContainer relevantContainer = ChemModelManipulator
-				.getRelevantAtomContainer(chemModel, atomold);
-		AtomContainerManipulator.replaceAtomByAtom(relevantContainer, atomold,
-				atomnew);
+		IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(chemModel, atomold);
+		AtomContainerManipulator.replaceAtomByAtom(container, atomold, atomnew);
+
+		// sync the highlight/hot atom
+		if (Objects.equals(atomold,
+						   getRenderer().getRenderer2DModel().getHighlightedAtom())) {
+			getRenderer().getRenderer2DModel()
+						 .setHighlightedAtom(container.getAtom(container.indexOf(atomnew)));
+		}
+
 		updateAtom(atomnew);
 		structureChanged();
+
+
+
 		if (undoredofactory != null && undoredohandler != null) {
 			IUndoRedoable undoredo = undoredofactory.getReplaceAtomEdit(
 					chemModel, atomold, atomnew, "Replace Atom");
@@ -3614,13 +3622,34 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * org.openscience.cdk.controller.IChemModelRelay#convertToPseudoAtom(org
 	 * .openscience.cdk.interfaces.IAtom, java.lang.String)
 	 */
-	public IPseudoAtom convertToPseudoAtom(IAtom atom, String label) {
-        IPseudoAtom pseudo = makePseudoAtom(label, atom.getPoint2d());
+	public IPseudoAtom convertToPseudoAtom(IAtom atom, String newLabel) {
+
+		// if the atom is already a pseudo atom we don't need to replace it
+		if (atom instanceof IPseudoAtom) {
+			IPseudoAtom existing = (IPseudoAtom) atom;
+			if (newLabel.equals("R")) {
+				// Cycle R > R1 > R2 > R3 > R4 > R5 > R6 > R
+				if (existing.getLabel().equals("R")) {
+					newLabel = "R1";
+				} else if (existing.getLabel().matches("R[0-9]")) {
+					int rNum = Integer.parseInt(existing.getLabel().substring(1));
+					if (rNum < 6)
+						newLabel = "R" + (rNum + 1);
+					else
+						newLabel = "R";
+				}
+				existing.setLabel(newLabel);
+				// post edit!
+				return existing;
+			}
+		}
+
+		IPseudoAtom pseudo = makePseudoAtom(newLabel, atom.getPoint2d());
 
         // attachment points only replace atoms if they have a single
         // bond attached, else we sprout off a new atom
-        if (pseudo.getAttachPointNum() != 0 && atom.getBondCount() != 1) {
-            addAtom(label, atom, true);
+        if (pseudo.getAttachPointNum() != 0 && getBonds(atom).size() != 1) {
+            addAtom(newLabel, atom, true);
         } else {
             replaceAtom(pseudo, atom);
         }
