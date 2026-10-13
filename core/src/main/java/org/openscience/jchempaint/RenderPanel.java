@@ -337,6 +337,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             generators.add(new AtomContainerBoundsGenerator());
         }
         generators.add(new BasicSceneGenerator());
+        generators.add(new HighlightAtomGenerator());
+        generators.add(new HighlightBondGenerator());
         if (useSeparateGenerators) {
             generators.add(new RingGenerator());
             generators.add(new ExtendedAtomGenerator());
@@ -347,8 +349,6 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         } else {
             generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 14)));
         }
-        generators.add(new HighlightAtomGenerator());
-        generators.add(new HighlightBondGenerator());
         if (useSeparateGenerators) {
             generators.add(new SelectAtomGenerator());
             generators.add(new SelectBondGenerator());
