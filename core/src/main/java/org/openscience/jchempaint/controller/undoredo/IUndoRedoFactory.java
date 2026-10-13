@@ -70,7 +70,7 @@ public interface IUndoRedoFactory {
 	public IUndoRedoable getChangeChargeEdit(IAtom atomInRange, int formerCharge, int newCharge, String type, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getMoveAtomEdit(IAtomContainer undoRedoSet, Vector2d offset, String type);
 	public IUndoRedoable getRemoveAtomsAndBondsEdit(IChemModel chemModel, AtomBondSet undoRedoSet, String type, IChemModelRelay chemModelRelay);
-	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel, IAtom oldAtom, IAtom newAtom, String type);
+	public IUndoRedoable getReplaceAtomEdit(IChemModel chemModel, IAtom oldAtom, IAtom newAtom, String type, IChemModelRelay chemModelRelay);
 	public IUndoRedoable getSingleElectronEdit(IAtomContainer relevantContainer, IElectronContainer electronContainer, boolean add, IChemModelRelay chemModelRelay, IAtom atom, String type);
 	public IUndoRedoable getChangeIsotopeEdit(IAtom atom, Integer formerIsotopeNumber, Integer newIstopeNumber, String type);
 	public IUndoRedoable getClearAllEdit(IChemModel chemModel, IAtomContainerSet som, IReactionSet sor, String type);
