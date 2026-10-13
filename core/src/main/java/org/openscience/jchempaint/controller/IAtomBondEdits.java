@@ -24,6 +24,7 @@
 package org.openscience.jchempaint.controller;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -63,7 +64,7 @@ public interface IAtomBondEdits {
     public void updateAtoms(IAtomContainer container, Iterable<IAtom> atoms);
     public void updateAtom(IAtom atom);
     public void updateAtoms(IBond bond);
-    public void mergeMolecules(Vector2d movedDistance);
+    public void mergeMolecules(Map<IAtom,Point2d[]> movedAtoms);
 
     /* Editing actions for bonds */
     public IBond addBond(IAtom fromAtom, IAtom toAtom);

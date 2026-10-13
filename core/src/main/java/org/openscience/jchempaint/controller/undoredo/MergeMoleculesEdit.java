@@ -53,7 +53,6 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
     private List<IAtomContainer> containers;
     private List<IAtomContainer> droppedContainers;
 
-    private Vector2d offset;
     private List<IAtom> mergedPartnerAtoms;
     private IUndoRedoable moveundoredo;
 
@@ -66,7 +65,6 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
      * @param droppedContainers        containers dropped on merge of 2 separate containers
 	 * @param deletedBondss            The bonds which were deleted to merge each individual atom.
 	 * @param bondsWithReplacedAtoms   For each atom merge, for each bond in deletedBondss, which of the atoms (0 or 1) in that bond was deletedAtom.
-	 * @param offset                   The distance by which the atoms where shifted in merge.
 	 * @param mergedPartnerAtoms       The atoms which replace deletedAtoms.
 	 * @param moveundoredo             If atoms where moved, but not merged, they go in here, maybe null.
 	 * @param type                     The string returned as presentation name.
@@ -74,7 +72,7 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 	 */
 
     
-    public MergeMoleculesEdit(List<IAtom> deletedAtoms, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBondss, List<Map<IBond, Integer>> bondsWithReplacedAtoms, Vector2d offset, List<IAtom> mergedPartnerAtoms, IUndoRedoable moveundoredo, Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newRgrpHash, String type, IChemModelRelay chemModelRelay) {
+    public MergeMoleculesEdit(List<IAtom> deletedAtoms, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBondss, List<Map<IBond, Integer>> bondsWithReplacedAtoms, List<IAtom> mergedPartnerAtoms, IUndoRedoable moveundoredo, Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newRgrpHash, String type, IChemModelRelay chemModelRelay) {
 		this.deletedAtoms = deletedAtoms;
 		this.deletedBondss = deletedBondss;
 		this.bondsWithReplacedAtoms = bondsWithReplacedAtoms;
@@ -83,14 +81,17 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 		this.type = type;
 		this.containers= containers;
 		this.droppedContainers= droppedContainers;
-
-		this.offset = offset;
 		this.moveundoredo = moveundoredo;
 		this.oldRgrpHash=oldRgrpHash;
 	    this.newRgrpHash=newRgrpHash;
 	}
 
 	public void redo() throws CannotRedoException {
+
+		// move the atoms first
+		if(moveundoredo!=null)
+			moveundoredo.redo();
+
 		// put everything back together
 		for(int i=0;i<deletedAtoms.size();i++){
 			IAtomContainer containerWithMerge =containers.get(i);
@@ -121,8 +122,6 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 			for(IBond bond : deletedBondss.get(i)){
 				containerWithMerge.removeBond(bond);
 			}
-    		deletedAtoms.get(i).getPoint2d().x+=offset.x;
-    		deletedAtoms.get(i).getPoint2d().y+=offset.y;
     		chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
 
     		if (droppedContainer!=null) {
@@ -144,8 +143,6 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
 			IAtomContainer containerWithMerge = containers.get(i);
 			containerWithMerge.removeAtomOnly(deletedAtoms.get(i));
 		}
-	    if(moveundoredo!=null)
-	        moveundoredo.redo();
 
         if (chemModelRelay.getRGroupHandler()!=null) {
         	chemModelRelay.getRGroupHandler().restoreFromHash(newRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
@@ -178,8 +175,6 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
                 containerWithMerge.addBond(bond);
             }
 
-            deletedAtoms.get(i).getPoint2d().x-=offset.x;
-            deletedAtoms.get(i).getPoint2d().y-=offset.y;
             chemModelRelay.updateAtom(deletedAtoms.get(i));
             chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
 

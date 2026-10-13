@@ -81,7 +81,7 @@ public interface IUndoRedoFactory {
 			IAtomContainer oldcontainer, String s, boolean reactantOrProduct, String string);
 	public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containers, 
 			List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBonds, 
-			List<Map<IBond, Integer>> bondsWithReplacedAtom, Vector2d offset, List<IAtom> atomwhichwasmoved, 
+			List<Map<IBond, Integer>> bondsWithReplacedAtom, List<IAtom> atomwhichwasmoved,
 			IUndoRedoable moveundoredo, 
 			Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newGrgpHash, 
 			String type, IChemModelRelay c2dm);

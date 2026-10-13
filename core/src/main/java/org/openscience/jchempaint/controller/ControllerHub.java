@@ -98,6 +98,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
@@ -3454,7 +3455,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * molecule set
 	 *
 	 */
-	public void mergeMolecules(Vector2d movedDistance) {
+	public void mergeMolecules(Map<IAtom,Point2d[]> atomsMoved) {
 
 		JChemPaintRendererModel model = getRenderer().getRenderer2DModel();
 		if (rGroupHandler != null) {
@@ -3470,17 +3471,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// more attractive and avoid tilted rings
 		//
 		Map<IAtom, IAtom> mergeMap = model.getMerge();
-		for (Map.Entry<IAtom,IAtom> e : mergeMap.entrySet()) {
-			IAtomContainer movedAtomContainer = renderer.getRenderer2DModel()
-					.getSelection().getConnectedAtomContainer();
-			if (movedAtomContainer != null) {
-				IAtom atomA = e.getKey();
-				IAtom atomB = e.getValue();
-				Vector2d shift = new Vector2d();
-				shift.sub(atomB.getPoint2d(), atomA.getPoint2d());
-
-				for (IAtom shiftAtom : movedAtomContainer.atoms()) {
-					shiftAtom.getPoint2d().add(shift);
+		IChemObjectSelection selection = renderer.getRenderer2DModel().getSelection();
+		if (selection != null && selection.isFilled()) {
+			for (Map.Entry<IAtom,IAtom> e : mergeMap.entrySet()) {
+				if (selection.contains(e.getKey())) {
+					e.getKey().setPoint2d(new Point2d(e.getValue().getPoint2d()));
+				} else if (selection.contains(e.getValue())) {
+					e.getValue().setPoint2d(new Point2d(e.getKey().getPoint2d()));
 				}
 			}
 		}
@@ -3621,29 +3618,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// Undo section to undo/redo the merge
 		IUndoRedoFactory factory = getUndoRedoFactory();
 		UndoRedoHandler handler = getUndoRedoHandler();
-		if (movedDistance != null && factory != null && handler != null) {
-
-			// we look if anything has been moved which was not merged
-			IAtomContainer undoRedoSet = getIChemModel().getBuilder()
-					.newInstance(IAtomContainer.class);
-
-			if (renderer.getRenderer2DModel().getSelection()
-					.getConnectedAtomContainer() != null) {
-				undoRedoSet.add(renderer.getRenderer2DModel()
-						.getSelection().getConnectedAtomContainer());
-			}
-
-			Iterator<IAtom> it2 = mergeMap.keySet().iterator();
-			while (it2.hasNext()) {
-				IAtom remove = it2.next();
-				undoRedoSet.removeAtom(remove);
-			}
-			IUndoRedoable moveundoredo = getUndoRedoFactory().getMoveAtomEdit(
-					undoRedoSet, movedDistance, "Move atom");
+		if (atomsMoved != null && factory != null && handler != null) {
+			for (Map.Entry<IAtom,Point2d[]> e : atomsMoved.entrySet())
+				e.getValue()[0] = e.getKey().getPoint2d();
+			IUndoRedoable moveundoredo = getUndoRedoFactory().getChangeCoordsEdit(atomsMoved, Collections.emptyMap(), null);
 			IUndoRedoable undoredo = factory.getMergeMoleculesEdit(mergedAtoms,
 					containers, droppedContainers, removedBondss,
-					bondsWithReplacedAtoms, movedDistance, mergedPartnerAtoms,
-					moveundoredo, oldRGroupHash, newRGroupHash,
+					bondsWithReplacedAtoms, mergedPartnerAtoms, moveundoredo, oldRGroupHash, newRGroupHash,
 					"Move and merge atoms", this);
 			handler.postEdit(undoredo);
 
