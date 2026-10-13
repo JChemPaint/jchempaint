@@ -31,9 +31,11 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -44,6 +46,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.controller.AddAtomModule;
 import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.controller.IControllerModule;
@@ -53,73 +56,69 @@ import org.openscience.jchempaint.dialog.PeriodicTableDialog;
 import org.openscience.jchempaint.GT;
 
 /**
- * changes the atom symbol
+ * Change the symbol of an atom.
+ * Three modes:
+ *  - Periodic Table
+ *  - Enter Element
+ *  - A standard symbol
+ *
+ * @author John Mayfield
  */
-public class ChangeAtomSymbolAction extends JCPAction
-{
+public class ChangeAtomSymbolAction extends JCPAction {
 
-    private static final long serialVersionUID = -8502905723573311893L;
-    private IControllerModule newActiveModule;
-
-    public void actionPerformed(ActionEvent event)
-    {
+    public void actionPerformed(ActionEvent event) {
         logger.debug("About to change atom type of relevant atom!");
         IChemObject object = getSource(event);
         logger.debug("Source of call: ", object);
-        Iterator<IAtom> atomsInRange = null;
-        if (object == null){
-            //this means the main menu was used
-            if(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection()!=null && 
-                    jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-                atomsInRange=jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IAtom.class).iterator();
-        }else if (object instanceof IAtom)
-        {
-            List<IAtom> atoms = new ArrayList<IAtom>();
-            atoms.add((IAtom) object);
-            atomsInRange = atoms.iterator();
-        } else
-        {
-            List<IAtom> atoms = new ArrayList<IAtom>();
+        List<IAtom> atoms = new ArrayList<>();
+
+        // apply to the selection or the highlighed atom
+        IChemObjectSelection selection = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
+        if (selection != null && selection.isFilled()) {
+            atoms.addAll(selection.elements(IAtom.class));
+        } else if (jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom() != null) {
             atoms.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedAtom());
-            atomsInRange = atoms.iterator();
         }
+
         String s = event.getActionCommand();
         String symbol = s.substring(s.indexOf("@") + 1);
-        if(symbol.equals("periodictable")){
-            if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
-            else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+        boolean switchMode = event.getSource() instanceof JButton || atoms.isEmpty();
+        IControllerModule newActiveModule;
+        if (symbol.equals("periodictable")) {
+            if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule) jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+            else if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule) jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
             newActiveModule.setID(symbol);
-            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
 
             // open PeriodicTable panel
-            PeriodicTableDialog dialog = new PeriodicTableDialog((JFrame)SwingUtilities.getWindowAncestor(jcpPanel));
+            PeriodicTableDialog dialog = new PeriodicTableDialog((JFrame) SwingUtilities.getWindowAncestor(jcpPanel));
             dialog.setName("periodictabledialog");
             dialog.setVisible(true);
-            symbol=dialog.getChosenSymbol();
-            if(symbol == null || symbol.isEmpty())
+            symbol = dialog.getChosenSymbol();
+            if (symbol == null || symbol.isEmpty())
                 return;
-            jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
-            jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
-            jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
-        }else if(symbol.equals("enterelement")){
-            newActiveModule=new EnterElementSwingModule(jcpPanel.get2DHub());
+            if (switchMode) {
+                jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
+                jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
+                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
+            }
+        } else if (symbol.equals("enterelement")) {
+            newActiveModule = new EnterElementSwingModule(jcpPanel.get2DHub());
             newActiveModule.setID(symbol);
-            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-            if(atomsInRange!=null){
-                String[] funcGroupsKeys=new String[0];
-                symbol=EnterElementOrGroupDialog.showDialog(null,null, GT.get("Enter an element symbol:"), GT.get("Enter element"), funcGroupsKeys, "","");
-                if(symbol!=null && symbol.length()>0){
-                    if(Character.isLowerCase(symbol.toCharArray()[0]))
-                        symbol=Character.toUpperCase(symbol.charAt(0))+symbol.substring(1);
+            if (atoms != null) {
+                String[] funcGroupsKeys = new String[0];
+                symbol = EnterElementOrGroupDialog.showDialog(null, null, GT.get("Enter an element symbol:"), GT.get("Enter element"), funcGroupsKeys, "", "");
+                if (symbol != null && symbol.length() > 0) {
+                    if (Character.isLowerCase(symbol.toCharArray()[0]))
+                        symbol = Character.toUpperCase(symbol.charAt(0)) + symbol.substring(1);
                     IsotopeFactory ifa;
                     try {
                         ifa = Isotopes.getInstance();
-                        IIsotope iso=ifa.getMajorIsotope(symbol);
-                        if(iso==null){
+                        IIsotope iso = ifa.getMajorIsotope(symbol);
+                        if (iso == null) {
                             JOptionPane.showMessageDialog(jcpPanel, GT.get("No valid element symbol entered"), GT.get("Invalid symbol"), JOptionPane.WARNING_MESSAGE);
                             return;
                         }
@@ -129,42 +128,57 @@ public class ChangeAtomSymbolAction extends JCPAction
                     }
                 }
             }
-        }else{
-            //it must be a symbol
-            if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
-            else if(jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule)jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+        } else {
+            // it must be a symbol
+            if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule) jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
+            else if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), ((AddAtomModule) jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else
-                newActiveModule=new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
+                newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), IBond.Display.Solid);
 
-            jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
-            newActiveModule.setID(symbol);
-            jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
-            jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);                  
+            if (switchMode) {
+                jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
+                newActiveModule.setID(symbol);
+                // D/2H - deuterium special case
+                if (symbol.equals("D")) {
+                    jcpPanel.get2DHub().getController2DModel().setDrawElement("H");
+                    jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(2);
+                } else {
+                    jcpPanel.get2DHub().getController2DModel().setDrawElement(symbol);
+                    jcpPanel.get2DHub().getController2DModel().setDrawIsotopeNumber(0);
+                }
+            }
         }
-        
-        
-        if(symbol!=null && symbol.length()>0){
 
+        // only set the active draw module if we have pressed the button
+        if (switchMode) {
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-            if(atomsInRange!=null){
-                while(atomsInRange.hasNext()){
-                    IAtom atom = atomsInRange.next();
-                    jcpPanel.get2DHub().setSymbol(atom,symbol);
+        }
+
+        if (symbol != null && !symbol.isEmpty()) {
+            if (!atoms.isEmpty()) {
+
+                Integer isotope = null;
+                if (symbol.equals("D")) {
+                    isotope = 2;
+                    symbol = "H";
+                }
+
+                for (IAtom atom : atoms) {
+                    jcpPanel.get2DHub().setSymbol(atom, symbol, isotope);
                     //TODO still needed? should this go in hub?
                     // configure the atom, so that the atomic number matches the symbol
-                    try
-                    {
-                       Isotopes.getInstance().configure(atom);
-                    } catch (Exception exception)
-                    {
+                    try {
+                        if (isotope != null)
+                            Isotopes.getInstance().configure(atom);
+                    } catch (Exception exception) {
                         logger.error("Error while configuring atom");
                         logger.debug(exception);
                     }
                 }
+                jcpPanel.get2DHub().updateView();
             }
-            jcpPanel.get2DHub().updateView();
         }
     }
 
