@@ -85,6 +85,7 @@ public class ChangeAtomSymbolAction extends JCPAction {
         boolean switchMode = event.getSource() instanceof JButton || atoms.isEmpty();
         IControllerModule newActiveModule;
         if (symbol.equals("periodictable")) {
+            switchMode = true;
             if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddBondDragModule)
                 newActiveModule = new AddAtomModule(jcpPanel.get2DHub(), ((AddBondDragModule) jcpPanel.get2DHub().getActiveDrawModule()).getStereoForNewBond());
             else if (jcpPanel.get2DHub().getActiveDrawModule() instanceof AddAtomModule)
@@ -106,6 +107,7 @@ public class ChangeAtomSymbolAction extends JCPAction {
                 jcpPanel.get2DHub().getController2DModel().setDrawPseudoAtom(false);
             }
         } else if (symbol.equals("enterelement")) {
+            switchMode = true;
             newActiveModule = new EnterElementSwingModule(jcpPanel.get2DHub());
             newActiveModule.setID(symbol);
             if (atoms != null) {

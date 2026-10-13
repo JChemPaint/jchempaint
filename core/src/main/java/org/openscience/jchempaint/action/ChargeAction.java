@@ -39,6 +39,7 @@ import org.openscience.jchempaint.controller.ChangeFormalChargeModule;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 
 
 /**
@@ -63,13 +64,6 @@ public class ChargeAction extends JCPAction {
             charge = -2;
         }
 
-        // only change to the charge tool if the button was pressed
-        if (event.getSource() instanceof JButton) {
-            ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
-            newActiveModule.setID(action);
-            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-        }
-
         logger.debug("About to change atom type of relevant atom!");
         List<IAtom> atoms = new ArrayList<>();
 
@@ -81,6 +75,16 @@ public class ChargeAction extends JCPAction {
             atoms.add(highlightedAtom);
         else
             return;
+
+
+        // only change to the charge tool if the button was pressed
+        if (event.getSource() instanceof JButton ||
+            event.getSource() instanceof JMenuItem  ||
+            atoms.isEmpty()) {
+            ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
+            newActiveModule.setID(action);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
+        }
 
         for (IAtom atom : atoms) {
             int newCharge = charge;

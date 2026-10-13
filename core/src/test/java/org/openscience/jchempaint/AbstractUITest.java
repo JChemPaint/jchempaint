@@ -128,6 +128,8 @@ public class AbstractUITest {
         panel.setCurrentSaveFileFilter(null);
         panel.setCurrentOpenFileFilter(null);
         panel.get2DHub().setAltInputMode(false);
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
         panel.setModified(false);
         panel.get2DHub().updateView();
 
