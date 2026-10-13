@@ -316,6 +316,8 @@ public final class CopyPasteAction extends JCPAction {
                 for (IAtomContainer ac : jcpPanel.getChemModel().getMoleculeSet()) {
                     if (!ac.isEmpty())
                         newHighlightAtom = ac.getAtom(ac.getAtomCount() - 1);
+                    if (atomBondSet.contains(newHighlightAtom))
+                        newHighlightAtom = null;
                 }
             }
 
