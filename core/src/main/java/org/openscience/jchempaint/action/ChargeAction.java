@@ -38,6 +38,8 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.controller.ChangeFormalChargeModule;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
+import javax.swing.JButton;
+
 
 /**
  * Changes the charge
@@ -47,6 +49,7 @@ public class ChargeAction extends JCPAction {
     private static final long serialVersionUID = -8502905723573311893L;
 
     public void actionPerformed(ActionEvent event) {
+
         String s = event.getActionCommand();
         String action = s.substring(s.indexOf("@") + 1);
         int charge = 0;
@@ -59,39 +62,27 @@ public class ChargeAction extends JCPAction {
         } else if (action.equals("minus2")) {
             charge = -2;
         }
-        ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
-        newActiveModule.setID(action);
-        jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
-        logger.debug("About to change atom type of relevant atom!");
-        Iterator<IAtom> atomsInRange = null;
-        IChemObject object = getSource(event);
-        logger.debug("Source of call: ", object);
 
-        JChemPaintRendererModel model = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel();
-        if (object == null) {
-            // this means the main menu was used
-            List<IAtom> atoms = new ArrayList<IAtom>();
-            IAtom highlightedAtom = model.getHighlightedAtom();
-            if (model.getSelection() != null && model.getSelection().isFilled())
-                atomsInRange = model.getSelection().elements(IAtom.class).iterator();
-            else if (highlightedAtom != null) {
-                atoms.add(highlightedAtom);
-                atomsInRange = atoms.iterator();
-            }
-        } else if (object instanceof IAtom) {
-            List<IAtom> atoms = new ArrayList<IAtom>();
-            atoms.add((IAtom) object);
-            atomsInRange = atoms.iterator();
-        } else {
-            List<IAtom> atoms = new ArrayList<IAtom>();
-            atoms.add(model.getHighlightedAtom());
-            atomsInRange = atoms.iterator();
+        // only change to the charge tool if the button was pressed
+        if (event.getSource() instanceof JButton) {
+            ChangeFormalChargeModule newActiveModule = new ChangeFormalChargeModule(jcpPanel.get2DHub(), charge);
+            newActiveModule.setID(action);
+            jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         }
 
-        if (atomsInRange == null)
+        logger.debug("About to change atom type of relevant atom!");
+        List<IAtom> atoms = new ArrayList<>();
+
+        JChemPaintRendererModel model = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel();
+        IAtom highlightedAtom = model.getHighlightedAtom();
+        if (model.getSelection() != null && model.getSelection().isFilled())
+            atoms.addAll(model.getSelection().elements(IAtom.class));
+        else if (highlightedAtom != null)
+            atoms.add(highlightedAtom);
+        else
             return;
-        while (atomsInRange.hasNext()) {
-            IAtom atom = atomsInRange.next();
+
+        for (IAtom atom : atoms) {
             int newCharge = charge;
             if (atom.getFormalCharge() != null)
                 newCharge += atom.getFormalCharge();

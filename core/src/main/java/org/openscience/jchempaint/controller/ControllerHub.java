@@ -70,8 +70,10 @@ import org.openscience.jchempaint.RenderPanel;
 import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeAtomSymbolEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeChargeEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeHydrogenCountEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeIsotopeEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeValenceEdit;
 import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
@@ -105,6 +107,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -1397,12 +1400,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	// OK
 	public void setCharge(IAtom atom, int charge) {
 		if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-			IUndoRedoable undoredo = getUndoRedoFactory().getChangeChargeEdit(
-					atom, atom.getFormalCharge(), charge,
-					"Change charge to " + charge, this);
-			getUndoRedoHandler().postEdit(undoredo);
+			CompoundEdit undo = new CompoundEdit("Set Charge");
+			undo.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), charge, "Set Charge", this));
+			if (atom.getValency() != null)
+				undo.add(new ChangeValenceEdit(atom, atom.getValency(), null, "Set Charge", this));
+			getUndoRedoHandler().postEdit(undo);
 		}
 		atom.setFormalCharge(charge);
+		atom.setValency(null);
 		updateAtom(atom);
 		structurePropertiesChanged();
 	}
@@ -1512,14 +1517,83 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			edit.add(new ReplaceAtomEdit(this.getIChemModel(),
 										 atom,
 										 newAtom,
-										 "Change atom to " + symbol));
+										 "Change atom to " + symbol,
+										 this));
+			if (!Objects.equals(atom.getMassNumber(), massNumber)) {
+				edit.add(new ChangeIsotopeEdit(atom,
+											   atom.getMassNumber(), massNumber,
+											   "Change Mass Number to " + massNumber));
+			}
 		} else {
-			edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
-		}
-		edit.add(new ChangeIsotopeEdit(atom,
-									   atom.getMassNumber(), massNumber,
-									   "Change Mass Number to " + massNumber));
 
+
+			if (!atom.getSymbol().equals(symbol)) {
+				edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
+				if (atom.getValency() != null)
+					edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
+				if (atom.getFormalCharge() != null)
+					edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
+				if (!Objects.equals(atom.getMassNumber(), massNumber))
+					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
+			} else {
+				// Changing an atom to its self C => C modifies the
+				// valence of the atom and in the case of carbon if the symbol is
+			    // displayed or not
+				if (atom.getValency() == null ||
+					atom.getValency() == getExplicitValence(atom)) {
+					// common atoms except C starts -1 of it's 'normal'
+					// valence, this allows toggling down of the H count
+					// on key press, P / S are special
+					Integer valence = null;
+					switch (atom.getAtomicNumber()) {
+						case IElement.H:  valence = 0; break;
+						case IElement.Na: valence = 0; break;
+						case IElement.K:  valence = 0; break;
+						case IElement.B:  valence = 2; break;
+						case IElement.C:
+							// Note: 2 special cases not covered are ethane (C2H6)
+							//         and colinear bonds, in JCP they would
+							//         be better handled with an error indicator
+							if (renderer.getRenderer2DModel().getShowEndCarbons() ||
+								renderer.getRenderer2DModel().getKekuleStructure())
+								valence = 3;
+							else
+								valence = 4;
+							break;
+						case IElement.Si: valence = 3; break;
+						case IElement.N:  valence = 2; break;
+						case IElement.O:  valence = 1; break;
+						case IElement.P:
+							if (atom.getValency() != null)
+								valence = 5;
+							else
+								valence = 2;
+							break;
+						case IElement.S:
+							if (atom.getValency() != null)
+								valence = 6;
+							else
+								valence = 2;
+							break;
+						case IElement.Cl: valence = 0; break;
+						case IElement.Br: valence = 0; break;
+						case IElement.I:  valence = 0; break;
+						case IElement.F:  valence = 0; break;
+
+					}
+					if (valence != null) {
+						// remove the charge/mass number
+						edit.add(new ChangeValenceEdit(atom, null, valence, null, this));
+						if (atom.getFormalCharge() != null)
+							edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
+						if (atom.getMassNumber() != null)
+							edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), 0, null));
+					}
+				} else {
+					edit.add(new ChangeValenceEdit(atom, atom.getValency(), atom.getValency()-1, null, this));
+				}
+			}
+		}
 		edit.redo();
 		structurePropertiesChanged();
 		if (getUndoRedoHandler() != null) {
@@ -3082,17 +3156,29 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structureChanged();
 	}
 
-	private Iterable<IBond> getBonds(IAtom atom) {
+	private List<IBond> getBonds(IAtom atom) {
 		IAtomContainer ac = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		if (ac == null) return Collections.emptyList();
 		return ac.getConnectedBondsList(atom);
 	}
 
+	private int getExplicitValence(IAtom atom) {
+		int explictValence = 0;
+		for (IBond bond : getBonds(atom)) {
+			explictValence += bond.getOrder().numeric();
+		}
+		return explictValence;
+	}
+
 	private boolean shouldRemove(IAtom atom, AtomBondSet selected)
 	{
-		// carbons are always removed
-		if (atom.getAtomicNumber() == IElement.C)
+		// carbons with default properties are always removed
+		if (atom.getAtomicNumber() == IElement.C &&
+			atom.getValency() == null &&
+			(atom.getFormalCharge() == 0 || atom.getFormalCharge() == null) &&
+			atom.getMassNumber() == null)
 			return true;
+
 		// non-carbons are only removed if all their connected bond
 		// are removed
 		for (IBond bond : getBonds(atom)) {
@@ -3115,8 +3201,12 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		for (IBond bond : selected.bonds()) {
 			remove.add(bond);
 		}
+
 		for (IAtom atom : selected.atoms()) {
-			if (atom.getAtomicNumber() == IElement.C) {
+			if (atom.getAtomicNumber() == IElement.C &&
+				atom.getValency() == null &&
+				(atom.getFormalCharge() == 0 || atom.getFormalCharge() == null) &&
+				atom.getMassNumber() == null) {
 				for (IBond bond : getBonds(atom))
 					remove.add(bond);
 			}
@@ -3149,8 +3239,18 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		List<IUndoRedoable> edits = new ArrayList<>();
 		for (IAtom atom : change.atoms()) {
-			edits.add(new ChangeAtomSymbolEdit(atom, atom.getAtomicNumber(), IElement.C, "Erase", this));
+			if (atom.getAtomicNumber() != IElement.C)
+				edits.add(new ChangeAtomSymbolEdit(atom, atom.getAtomicNumber(), IElement.C, "Erase", this));
+			if (atom.getValency() != null)
+				edits.add(new ChangeValenceEdit(atom, atom.getValency(), null, "Erase", this));
+			if (atom.getMassNumber() != null)
+				edits.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), null, "Erase"));
+			if (atom.getFormalCharge() != null && atom.getFormalCharge() != 0)
+				edits.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, "Erase", this));
 			atom.setAtomicNumber(IElement.C);
+			atom.setValency(null);
+			atom.setMassNumber(null);
+			atom.setFormalCharge(0);
 			this.updateAtom(atom);
 		}
 
@@ -3233,7 +3333,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 *            The Atom to update
 	 */
 	private void updateAtom(IAtomContainer container, IAtom atom) {
-		if (this.getController2DModel().getAutoUpdateImplicitHydrogens()) {
+		if (atom.getValency() != null) {
+			int explValence = 0;
+			for (IBond bond : container.getConnectedBondsList(atom)) {
+				explValence += bond.getOrder().numeric();
+			}
+			atom.setImplicitHydrogenCount(atom.getValency() - explValence);
+		} else if (this.getController2DModel().getAutoUpdateImplicitHydrogens()) {
 			atom.setImplicitHydrogenCount(0);
 			try {
 				IAtomType type = matcher.findMatchingAtomType(container, atom);
@@ -3241,7 +3347,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					Integer neighbourCount = type.getFormalNeighbourCount();
 					if (neighbourCount != null) {
 						atom.setImplicitHydrogenCount(neighbourCount
-								- container.getConnectedAtomsCount(atom));
+								- container.getConnectedBondsCount(atom));
 					}
 					// for some reason, the neighbour count takes into account
 					// only
