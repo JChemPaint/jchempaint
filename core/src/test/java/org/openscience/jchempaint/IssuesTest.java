@@ -464,6 +464,8 @@ public class IssuesTest extends AbstractUITest {
 
         Point2d atompos = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d();
         atompos = panel.getRenderPanel().getRenderer().toScreenCoordinates(atompos.x, atompos.y);
+        // C on a C will not cause a valence change so clear the highlight atom
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
         frame.button("C").target.doClick();
         frame.button("chain").target.doClick();
         robot.click(renderPanel.component(), toAwtPoint(atompos));
