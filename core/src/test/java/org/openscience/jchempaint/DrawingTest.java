@@ -656,13 +656,4 @@ public class DrawingTest extends AbstractUITest {
 		// moved but did not merge
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
 	}
-
-	private static void select(IAtomContainer mol) {
-		AtomBondSelection selection = new AtomBondSelection();
-		for (IAtom atom : mol.atoms())
-			selection.select(atom);
-		for (IBond bond : mol.bonds())
-			selection.select(bond);
-		panel.get2DHub().select(selection);
-	}
 }

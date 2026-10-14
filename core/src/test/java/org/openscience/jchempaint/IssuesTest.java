@@ -720,7 +720,7 @@ public class IssuesTest extends AbstractUITest {
 
         Assert.assertEquals(2, getAtomCount(panel));
         Assert.assertEquals(0, getBondCount(panel));
-        Assert.assertEquals(8, getHydrogenCount(panel));
+        Assert.assertEquals(7, getHydrogenCount(panel)); // part of the structure was copied so CH3-CH3 + CH3
     }
 
     @Test
@@ -762,18 +762,13 @@ public class IssuesTest extends AbstractUITest {
         frame.button("hexagon").target.doClick();
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
                                                     .component(), new Point(100, 100), MouseButton.LEFT_BUTTON, 1);
-        // select this
-        frame.button("select").target.doClick();
-        Point movetopint = new Point(50, 50);
-        ComponentDragAndDrop dandd = new ComponentDragAndDrop(frame
-                                                                      .panel("renderpanel").robot);
-        dandd.drag(frame.panel("renderpanel").component(), movetopint);
-        movetopint = new Point(300, 300);
-        dandd.drop(frame.panel("renderpanel").component(), movetopint);
-        Point2d oldcoord = new Point2d(panel.getChemModel().getMoleculeSet()
-                                            .getAtomContainer(0).getAtom(0).getPoint2d().x, panel
-                                               .getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)
-                                               .getPoint2d().y);
+        // select the whole molecule
+        select(panel.getChemModel().getMoleculeSet().getAtomContainer(0));
+
+        Point2d oldPoint = new Point2d(panel.getChemModel()
+                                .getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d());
+
+        frame.button("select").click();
         // switch to move mode should happen automatically
         frame.panel("renderpanel").robot.moveMouse(
                 frame.panel("renderpanel").target, new Point(100, 100));
@@ -781,8 +776,9 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot.moveMouse(
                 frame.panel("renderpanel").target, new Point(150, 150));
         frame.panel("renderpanel").robot.releaseMouseButtons();
-        Assert.assertFalse(oldcoord.equals(panel.getChemModel()
-                                                .getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d()));
+        Point2d newPoint = panel.getChemModel()
+                               .getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d();
+        Assert.assertFalse(oldPoint.equals(newPoint));
         restoreModelToEmpty();
     }
 
