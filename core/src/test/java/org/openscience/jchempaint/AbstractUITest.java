@@ -17,6 +17,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -177,5 +178,14 @@ public class AbstractUITest {
             System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    protected static void select(IAtomContainer mol) {
+        AtomBondSelection selection = new AtomBondSelection();
+        for (IAtom atom : mol.atoms())
+            selection.select(atom);
+        for (IBond bond : mol.bonds())
+            selection.select(bond);
+        panel.get2DHub().select(selection);
     }
 }
