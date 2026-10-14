@@ -1528,8 +1528,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 											   "Change Mass Number to " + massNumber));
 			}
 		} else {
-
-
 			if (!atom.getSymbol().equals(symbol)) {
 				edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
 				if (atom.getValency() != null)
@@ -1539,62 +1537,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				if (!Objects.equals(atom.getMassNumber(), massNumber))
 					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
 			} else {
-				// Changing an atom to its self C => C modifies the
-				// valence of the atom and in the case of carbon if the symbol is
-			    // displayed or not
-				if (atom.getValency() == null ||
-					atom.getValency() == getExplicitValence(atom)) {
-					// common atoms except C starts -1 of it's 'normal'
-					// valence, this allows toggling down of the H count
-					// on key press, P / S are special
-					Integer valence = null;
-					switch (atom.getAtomicNumber()) {
-						case IElement.H:  valence = 0; break;
-						case IElement.Na: valence = 0; break;
-						case IElement.K:  valence = 0; break;
-						case IElement.B:  valence = 2; break;
-						case IElement.C:
-							// Note: 2 special cases not covered are ethane (C2H6)
-							//         and colinear bonds, in JCP they would
-							//         be better handled with an error indicator
-							if (renderer.getRenderer2DModel().getShowEndCarbons() ||
-								renderer.getRenderer2DModel().getKekuleStructure())
-								valence = 3;
-							else
-								valence = 4;
-							break;
-						case IElement.Si: valence = 3; break;
-						case IElement.N:  valence = 2; break;
-						case IElement.O:  valence = 1; break;
-						case IElement.P:
-							if (atom.getValency() != null)
-								valence = 5;
-							else
-								valence = 2;
-							break;
-						case IElement.S:
-							if (atom.getValency() != null)
-								valence = 6;
-							else
-								valence = 2;
-							break;
-						case IElement.Cl: valence = 0; break;
-						case IElement.Br: valence = 0; break;
-						case IElement.I:  valence = 0; break;
-						case IElement.F:  valence = 0; break;
-
-					}
-					if (valence != null) {
-						// remove the charge/mass number
-						edit.add(new ChangeValenceEdit(atom, null, valence, null, this));
-						if (atom.getFormalCharge() != null)
-							edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
-						if (atom.getMassNumber() != null)
-							edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), 0, null));
-					}
-				} else {
-					edit.add(new ChangeValenceEdit(atom, atom.getValency(), atom.getValency()-1, null, this));
-				}
+				edit.add(cycleValence(atom));
 			}
 		}
 		edit.redo();
@@ -1602,6 +1545,82 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (getUndoRedoHandler() != null) {
 			getUndoRedoHandler().postEdit(edit);
 		}
+	}
+
+	/**
+	 * Cycle the valence of an atom. This is used when a user sets the element
+	 * to the same element which an atom is already. Note only common atoms are
+	 * cycled.
+	 * Important! This function doesn't modify the atom, you should call
+	 * edit.redo() on the returned value.
+	 *
+	 * @param atom the atom to cycle
+	 * @return the undo/redo
+	 */
+	private IUndoRedoable cycleValence(IAtom atom) {
+		CompoundEdit edit = new CompoundEdit("Cycle Valence");
+		// Changing an atom to its self C => C modifies the
+		// valence of the atom and in the case of carbon if the symbol is
+		// displayed or not
+		if (atom.getValency() == null) {
+			// common atoms except C starts -1 of it's 'normal'
+			// valence, this allows toggling down of the H count
+			// on key press, P / S are special
+			Integer valence = null;
+			switch (atom.getAtomicNumber()) {
+				case IElement.H:  valence = 0; break;
+				case IElement.Na: valence = 0; break;
+				case IElement.K:  valence = 0; break;
+				case IElement.B:  valence = 2; break;
+				case IElement.C:
+					// Note: 2 special cases not covered are ethane (C2H6)
+					//         and colinear bonds, in JCP they would
+					//         be better handled with an error indicator
+					if (renderer.getRenderer2DModel().getShowEndCarbons() ||
+						renderer.getRenderer2DModel().getKekuleStructure())
+						valence = 3;
+					else
+						valence = 4;
+					break;
+				case IElement.Si: valence = 3; break;
+				case IElement.N:  valence = 2; break;
+				case IElement.O:  valence = 1; break;
+				case IElement.P:
+					if (atom.getValency() != null)
+						valence = 5;
+					else
+						valence = 2;
+					break;
+				case IElement.S:
+					if (atom.getValency() != null)
+						valence = 6;
+					else
+						valence = 2;
+					break;
+				case IElement.Cl: valence = 0; break;
+				case IElement.Br: valence = 0; break;
+				case IElement.I:  valence = 0; break;
+				case IElement.F:  valence = 0; break;
+			}
+
+			if (valence != null) {
+				// remove the charge/mass number
+				edit.add(new ChangeValenceEdit(atom, null, valence, null, this));
+				if (atom.getFormalCharge() != null)
+					edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
+				if (atom.getMassNumber() != null)
+					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), 0, null));
+			}
+		} else if (atom.getValency() <= getExplicitValence(atom)) {
+			// reset to default
+			if (atom.getAtomicNumber() == IElement.C)
+				edit.add(new ChangeValenceEdit(atom, atom.getValency(), 4, null, this));
+			else
+				edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
+		} else {
+			edit.add(new ChangeValenceEdit(atom, atom.getValency(), atom.getValency() - 1, null, this));
+		}
+		return edit;
 	}
 
 	// OK
