@@ -48,6 +48,7 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
 import java.awt.Cursor;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -272,9 +273,11 @@ public class MoveModule extends ControllerModuleAdapter {
             model.getMerge().putAll(mergeMap);
 
             // Do the merge of atoms
-            if (!mergeMap.isEmpty()) {
+            boolean altMode = (modifiers & KeyEvent.ALT_DOWN_MASK) != 0;
+            if (!mergeMap.isEmpty() && !altMode) {
+
                 try {
-					chemModelRelay.mergeMolecules(atomCoordsMap);
+                    chemModelRelay.mergeMolecules(atomCoordsMap);
 				} catch (RuntimeException e) {
 					//move things back, merge is not allowed
 		            Vector2d d = new Vector2d();
@@ -374,11 +377,11 @@ public class MoveModule extends ControllerModuleAdapter {
                         break;
                     if(mergeAtoms.contains( candidate.atom ))
                         continue;
-//                    if (hasPriority(candidate.atom, atom)) {
-//                        mergers.put(atom, candidate.atom);
-//                    } else {
+                    if (hasPriority(candidate.atom, atom)) {
+                        mergers.put(atom, candidate.atom);
+                    } else {
                         mergers.put(candidate.atom, atom);
-//                    }
+                    }
                 }
             }
         }
@@ -386,10 +389,8 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
     private boolean hasPriority(IAtom atom, IAtom other) {
-        if (atom.getAtomicNumber() != IElement.C &&
-            other.getAtomicNumber() == IElement.C)
-            return true;
-        return false;
+        return atom.getAtomicNumber() != IElement.C &&
+               other.getAtomicNumber() == IElement.C;
     }
 
     /* (non-Javadoc)

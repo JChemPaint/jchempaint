@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IElement;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.swing.SwingUtilities;
@@ -176,7 +177,6 @@ public class DrawingTest extends AbstractUITest {
 		
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
 		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-
 
 		DialogFixture dialog = frame.dialog();
 		dialog.textBox().setText("U");
@@ -465,7 +465,7 @@ public class DrawingTest extends AbstractUITest {
 		renderpanel.robot.moveMouse(renderpanel.component(), atom0);
 		frame.button("eraser").click();
 		Assert.assertEquals("CCCCCCCC", panel.getSmiles()); // N => C
-		frame.button("eraser").click();
+		renderpanel.robot.click(renderpanel.component(), atom0);
 		Assert.assertEquals("CCCCCCC", panel.getSmiles()); // C => remove
 	}
 
@@ -556,5 +556,93 @@ public class DrawingTest extends AbstractUITest {
 		// one nitrogen is removed (because all it's bonds were removed),
 		// the other is turned into a carbon
 		Assert.assertEquals("CCCCCC", panel.getSmiles());
+	}
+
+	/**
+	 * When moving and merging, hetero atoms should take priority.
+	 */
+	@Test
+	public void testMergePreference() {
+		restoreModelToEmpty();
+		frame.button("hexagon").click();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
+		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+		frame.button("N").click();
+		renderpanel.robot.click(renderpanel.component(), toAwtPoint(getAtomPoint(panel, 1, 0)));
+		renderpanel.robot.click(renderpanel.component(), toAwtPoint(getAtomPoint(panel, 4, 1)));
+
+		Assert.assertEquals("C1NCCCC1.C1CCCNC1", panel.getSmiles());
+
+		// select it
+		frame.button("select").click();
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(251, 101));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(349, 199));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 200));
+		renderpanel.robot.releaseMouseButtons();
+
+		// move it
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(145, 150));
+		renderpanel.robot.releaseMouseButtons();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(10, getAtomCount(panel));
+		Assert.assertEquals(11, getBondCount(panel));
+		Assert.assertEquals(2, getElemCount(panel, IElement.N));
+
+		// check the undo works
+		frame.menuItem("undo").click();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(12, getAtomCount(panel));
+		Assert.assertEquals(12, getBondCount(panel));
+		Assert.assertEquals(2, getElemCount(panel, IElement.N));
+
+
+		// check the redo works
+		frame.menuItem("redo").click();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(10, getAtomCount(panel));
+		Assert.assertEquals(11, getBondCount(panel));
+		Assert.assertEquals(2, getElemCount(panel, IElement.N));
+	}
+
+	/**
+	 * When moving and merging, hetero atoms should take priority.
+	 */
+	@Test
+	public void testMergePreferenceAlt() {
+		restoreModelToEmpty();
+		frame.button("hexagon").click();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
+		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+
+		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
+
+		// select it
+		frame.button("select").click();
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(251, 101));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(349, 199));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 200));
+		renderpanel.robot.releaseMouseButtons();
+
+		// move it
+		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(145, 150));
+		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot.releaseKey(KeyEvent.VK_ALT);
+
+		// moved but did not merge
+		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
 	}
 }

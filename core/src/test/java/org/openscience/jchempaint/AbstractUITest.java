@@ -65,6 +65,17 @@ public class AbstractUITest {
         return count;
     }
 
+    protected static int getElemCount(JChemPaintPanel panel, int elem) {
+        int count = 0;
+        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet()) {
+            for (IAtom atom : atc.atoms()) {
+                if (atom.getAtomicNumber() == elem)
+                    count++;
+            }
+        }
+        return count;
+    }
+
     // expl H + impl H
     protected static int getHydrogenCount(JChemPaintPanel panel) {
         int count = 0;

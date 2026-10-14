@@ -39,12 +39,12 @@ import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
  * @cdk.module controlextra
- * @cdk.svnrev  $Revision: 10979 $
+ * @cdk.svnrev $Revision: 10979 $
  */
-public class MergeMoleculesEdit  implements IUndoRedoable{
-	
+public class MergeMoleculesEdit implements IUndoRedoable {
+
     private static final long serialVersionUID = -4093867960954400453L;
-    
+
     private List<IAtom> deletedAtoms;
     private List<List<IBond>> deletedBondss;
     private List<Map<IBond, Integer>> bondsWithReplacedAtoms;
@@ -54,165 +54,173 @@ public class MergeMoleculesEdit  implements IUndoRedoable{
     private List<IAtomContainer> droppedContainers;
 
     private List<IAtom> mergedPartnerAtoms;
-    private IUndoRedoable moveundoredo;
+    private IUndoRedoable moveundoredo ;
 
-    Map<Integer,Map<Integer,Integer>> oldRgrpHash;
-    Map<Integer,Map<Integer,Integer>> newRgrpHash;
-    
-	/**
-	 * @param deletedAtoms             The atoms which were deleted during the merge.
-	 * @param containers               containers participating in the merge
-     * @param droppedContainers        containers dropped on merge of 2 separate containers
-	 * @param deletedBondss            The bonds which were deleted to merge each individual atom.
-	 * @param bondsWithReplacedAtoms   For each atom merge, for each bond in deletedBondss, which of the atoms (0 or 1) in that bond was deletedAtom.
-	 * @param mergedPartnerAtoms       The atoms which replace deletedAtoms.
-	 * @param moveundoredo             If atoms where moved, but not merged, they go in here, maybe null.
-	 * @param type                     The string returned as presentation name.
-	 * @param chemModelRelay                     The current chemModelRelay.
-	 */
+    Map<Integer, Map<Integer, Integer>> oldRgrpHash;
+    Map<Integer, Map<Integer, Integer>> newRgrpHash;
 
-    
-    public MergeMoleculesEdit(List<IAtom> deletedAtoms, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBondss, List<Map<IBond, Integer>> bondsWithReplacedAtoms, List<IAtom> mergedPartnerAtoms, IUndoRedoable moveundoredo, Map<Integer,Map<Integer,Integer>> oldRgrpHash, Map<Integer,Map<Integer,Integer>> newRgrpHash, String type, IChemModelRelay chemModelRelay) {
-		this.deletedAtoms = deletedAtoms;
-		this.deletedBondss = deletedBondss;
-		this.bondsWithReplacedAtoms = bondsWithReplacedAtoms;
-		this.chemModelRelay = chemModelRelay;
-		this.mergedPartnerAtoms = mergedPartnerAtoms;
-		this.type = type;
-		this.containers= containers;
-		this.droppedContainers= droppedContainers;
-		this.moveundoredo = moveundoredo;
-		this.oldRgrpHash=oldRgrpHash;
-	    this.newRgrpHash=newRgrpHash;
-	}
+    /**
+     * @param deletedAtoms           The atoms which were deleted during the merge.
+     * @param containers             containers participating in the merge
+     * @param droppedContainers      containers dropped on merge of 2 separate containers
+     * @param deletedBondss          The bonds which were deleted to merge each individual atom.
+     * @param bondsWithReplacedAtoms For each atom merge, for each bond in deletedBondss, which of the atoms (0 or 1) in that bond was deletedAtom.
+     * @param mergedPartnerAtoms     The atoms which replace deletedAtoms.
+     * @param moveundoredo           If atoms where moved, but not merged, they go in here, maybe null.
+     * @param type                   The string returned as presentation name.
+     * @param chemModelRelay         The current chemModelRelay.
+     */
 
-	public void redo() throws CannotRedoException {
 
-		// move the atoms first
-		if(moveundoredo!=null)
-			moveundoredo.redo();
+    public MergeMoleculesEdit(List<IAtom> deletedAtoms, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers, List<List<IBond>> deletedBondss, List<Map<IBond, Integer>> bondsWithReplacedAtoms, List<IAtom> mergedPartnerAtoms, IUndoRedoable moveundoredo, Map<Integer, Map<Integer, Integer>> oldRgrpHash, Map<Integer, Map<Integer, Integer>> newRgrpHash, String type, IChemModelRelay chemModelRelay) {
+        this.deletedAtoms = deletedAtoms;
+        this.deletedBondss = deletedBondss;
+        this.bondsWithReplacedAtoms = bondsWithReplacedAtoms;
+        this.chemModelRelay = chemModelRelay;
+        this.mergedPartnerAtoms = mergedPartnerAtoms;
+        this.type = type;
+        this.containers = containers;
+        this.droppedContainers = droppedContainers;
+        this.moveundoredo  = moveundoredo;
+        this.oldRgrpHash = oldRgrpHash;
+        this.newRgrpHash = newRgrpHash;
+    }
 
-		// put everything back together
-		for(int i=0;i<deletedAtoms.size();i++){
-			IAtomContainer containerWithMerge =containers.get(i);
-			IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
+    public void redo() throws CannotRedoException {
 
-			if (droppedContainer!=null) {
-				for (IAtom mAt : droppedContainer.atoms()) {
-					if (!containerWithMerge.contains(mAt)) {
-						containerWithMerge.addAtom(mAt);
-					}
-				}
-				for (IBond mBond : droppedContainer.bonds()) {
-					if (!containerWithMerge.contains(mBond)) {
-						containerWithMerge.addBond(mBond);
-					}
-				}
-				chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
-			}
-		}
-		// delete/update bonds as needed
-	    for(int i=0;i<deletedAtoms.size();i++){
-        	IAtomContainer containerWithMerge =containers.get(i);
-        	IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
+        // move the atoms first
+        if (moveundoredo != null)
+            moveundoredo.redo();
 
-    		for(IBond bond : bondsWithReplacedAtoms.get(i).keySet()){
-    			bond.setAtom(mergedPartnerAtoms.get(i), bondsWithReplacedAtoms.get(i).get(bond));
-    		}
-			for(IBond bond : deletedBondss.get(i)){
-				containerWithMerge.removeBond(bond);
-			}
-    		chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
+        // put everything back together
+        int n = deletedAtoms.size();
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
 
-    		if (droppedContainer!=null) {
-	            for (IAtom mAt : droppedContainer.atoms()) {
-	            	if (!containerWithMerge.contains(mAt)) {
-	            		containerWithMerge.addAtom(mAt);
-	            	}
-	            }
-	            for (IBond mBond : droppedContainer.bonds()) {
-	            	if (!containerWithMerge.contains(mBond)) {
-	            		containerWithMerge.addBond(mBond);
-	            	}
-	            }
-	            chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
+            if (droppedContainer != null) {
+                for (IAtom mAt : droppedContainer.atoms()) {
+                    if (!containerWithMerge.contains(mAt)) {
+                        containerWithMerge.addAtom(mAt);
+                    }
+                }
+                for (IBond mBond : droppedContainer.bonds()) {
+                    if (!containerWithMerge.contains(mBond)) {
+                        containerWithMerge.addBond(mBond);
+                    }
+                }
+                chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
             }
-	    }
-		// now delete the atoms
-		for(int i=0;i<deletedAtoms.size();i++) {
-			IAtomContainer containerWithMerge = containers.get(i);
-			containerWithMerge.removeAtomOnly(deletedAtoms.get(i));
-		}
-
-        if (chemModelRelay.getRGroupHandler()!=null) {
-        	chemModelRelay.getRGroupHandler().restoreFromHash(newRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
         }
 
-	}
+        // update connectivity
+        for (int i = 0; i < n; i++) {
+            IAtomContainer container = containers.get(i);
+            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet()) {
+                bond = container.getBond(container.indexOf(bond)); // resync
+                bond.setAtom(mergedPartnerAtoms.get(i),
+                             bondsWithReplacedAtoms.get(i).get(bond));
+            }
+        }
 
-	public void undo() throws CannotUndoException {
-		assert deletedAtoms.size() == mergedPartnerAtoms.size();
+        // now remove the bonds
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            for (IBond bond : deletedBondss.get(i)) {
+                containerWithMerge.removeBond(bond);
+            }
+        }
 
-		// add all atoms back on first
-        for (int i=0; i<deletedAtoms.size(); i++) {
-			IAtomContainer containerWithMerge = containers.get(i);
-			containerWithMerge.addAtom(deletedAtoms.get(i));
-		}
+        // now delete the atoms
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            containerWithMerge.removeAtomOnly(deletedAtoms.get(i));
+        }
 
-		for (int i=0; i<deletedAtoms.size(); i++){
+        // update h counts etc
+        for (int i=0; i<n; i++) {
+            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
+        }
 
-			IAtomContainer containerWithMerge = containers.get(i);
-        	IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
+        if (chemModelRelay.getRGroupHandler() != null) {
+            chemModelRelay.getRGroupHandler().restoreFromHash(newRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
+        }
 
-        	//Put dropped atom and bond back into atc1
-			for (Map.Entry<IBond,Integer>  e : bondsWithReplacedAtoms.get(i).entrySet()) {
-				IBond bond = e.getKey();
-				int idx = e.getValue();
-				bond.setAtom(deletedAtoms.get(i), idx);
-			}
-			System.err.println(deletedBondss.get(i).size());
-        	for (IBond bond : deletedBondss.get(i)){
+    }
+
+    public void undo() throws CannotUndoException {
+        int n = deletedAtoms.size();
+        assert n == mergedPartnerAtoms.size();
+
+        // add all atoms back on first
+        for (int i = 0; i < n; i++) {
+            IAtomContainer container = containers.get(i);
+            container.addAtom(deletedAtoms.get(i));
+        }
+
+        // add all the bonds back
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            for (IBond bond : deletedBondss.get(i)) {
                 containerWithMerge.addBond(bond);
             }
+        }
 
-            chemModelRelay.updateAtom(deletedAtoms.get(i));
-            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
-
-            if (droppedContainer!=null) {
-
-	            //remove from atc1 what was merged in from atc2
-	            for (IAtom mAt : droppedContainer.atoms()) {
-	            	if (containerWithMerge.contains(mAt)) {
-	            		containerWithMerge.removeAtomOnly(mAt);
-	            	}
-	            }
-	            for (IBond mBond : droppedContainer.bonds()) {
-	            	if (containerWithMerge.contains(mBond)) {
-	            		containerWithMerge.removeBond(mBond);
-	            	}
-	            }
-	            //restore removed container atc2
-	            chemModelRelay.getChemModel().getMoleculeSet().addAtomContainer(droppedContainer);
+        // update connectivity
+        for (int i = 0; i < n; i++) {
+            //Put dropped atom and bond back into atc1
+            IAtomContainer container = containers.get(i);
+            for (Map.Entry<IBond, Integer> e : bondsWithReplacedAtoms.get(i).entrySet()) {
+                IBond bond = e.getKey();
+                int idx = e.getValue();
+                bond = container.getBond(container.indexOf(bond)); // resync
+                bond.setAtom(deletedAtoms.get(i), idx);
             }
         }
-        if(moveundoredo!=null)
-            moveundoredo.undo();
 
-        if (chemModelRelay.getRGroupHandler()!=null) {
-        	chemModelRelay.getRGroupHandler().restoreFromHash(oldRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
+        // update h counts etc
+        for (int i=0; i<n; i++) {
+            chemModelRelay.updateAtom(deletedAtoms.get(i));
+            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
         }
 
-	}
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
 
-	public boolean canRedo() {
-		return true;
-	}
+            if (droppedContainer != null) {
+                //remove from atc1 what was merged in from atc2
+                for (IAtom mAt : droppedContainer.atoms()) {
+                    if (containerWithMerge.contains(mAt)) {
+                        containerWithMerge.removeAtomOnly(mAt);
+                    }
+                }
+                for (IBond mBond : droppedContainer.bonds()) {
+                    if (containerWithMerge.contains(mBond)) {
+                        containerWithMerge.removeBond(mBond);
+                    }
+                }
+                //restore removed container atc2
+                chemModelRelay.getChemModel().getMoleculeSet().addAtomContainer(droppedContainer);
+            }
+        }
+        if (moveundoredo != null)
+            moveundoredo .undo();
 
-	public boolean canUndo() {
-		return true;
-	}
+        if (chemModelRelay.getRGroupHandler() != null) {
+            chemModelRelay.getRGroupHandler().restoreFromHash(oldRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
+        }
+    }
 
-	public String description() {
-		return type;
-	}
+    public boolean canRedo() {
+        return true;
+    }
+
+    public boolean canUndo() {
+        return true;
+    }
+
+    public String description() {
+        return type;
+    }
 }
