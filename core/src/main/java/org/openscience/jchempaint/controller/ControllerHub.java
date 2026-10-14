@@ -1562,16 +1562,30 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		// Changing an atom to its self C => C modifies the
 		// valence of the atom and in the case of carbon if the symbol is
 		// displayed or not
-		if (atom.getValency() == null) {
+		if (atom.getValency() == null ||
+			atom.getValency() <= getExplicitValence(atom)) {
+
+			boolean isDefault = atom.getValency() == null &&
+								(atom.getFormalCharge() == null || atom.getFormalCharge() == 0) &&
+								atom.getMassNumber() == null;
+
 			// common atoms except C starts -1 of it's 'normal'
 			// valence, this allows toggling down of the H count
 			// on key press, P / S are special
 			Integer valence = null;
 			switch (atom.getAtomicNumber()) {
-				case IElement.H:  valence = 0; break;
-				case IElement.Na: valence = 0; break;
-				case IElement.K:  valence = 0; break;
-				case IElement.B:  valence = 2; break;
+				case IElement.H:
+				case IElement.Na:
+				case IElement.K:
+				case IElement.Cl:
+				case IElement.Br:
+				case IElement.I:
+				case IElement.F:
+					valence = isDefault ? 0 : 1;
+					break;
+				case IElement.B:
+					valence = isDefault ? 2 : 3;
+					break;
 				case IElement.C:
 					// Note: 2 special cases not covered are ethane (C2H6)
 					//         and colinear bonds, in JCP they would
@@ -1582,25 +1596,27 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 					else
 						valence = 4;
 					break;
-				case IElement.Si: valence = 3; break;
-				case IElement.N:  valence = 2; break;
-				case IElement.O:  valence = 1; break;
+				case IElement.Si:
+					valence = isDefault ? 3 : 4;
+					break;
+				case IElement.N:
+					valence = isDefault ? 2 : 3;
+					break;
+				case IElement.O:
+					valence = isDefault ? 1 : 2;
+					break;
 				case IElement.P:
 					if (atom.getValency() != null)
 						valence = 5;
 					else
-						valence = 2;
+						valence = isDefault ? 2 : 3;
 					break;
 				case IElement.S:
 					if (atom.getValency() != null)
 						valence = 6;
 					else
-						valence = 2;
+						valence = isDefault ? 1 : 2;
 					break;
-				case IElement.Cl: valence = 0; break;
-				case IElement.Br: valence = 0; break;
-				case IElement.I:  valence = 0; break;
-				case IElement.F:  valence = 0; break;
 			}
 
 			if (valence != null) {
@@ -1611,12 +1627,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				if (atom.getMassNumber() != null)
 					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), 0, null));
 			}
-		} else if (atom.getValency() <= getExplicitValence(atom)) {
-			// reset to default
-			if (atom.getAtomicNumber() == IElement.C)
-				edit.add(new ChangeValenceEdit(atom, atom.getValency(), 4, null, this));
-			else
-				edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
 		} else {
 			edit.add(new ChangeValenceEdit(atom, atom.getValency(), atom.getValency() - 1, null, this));
 		}
