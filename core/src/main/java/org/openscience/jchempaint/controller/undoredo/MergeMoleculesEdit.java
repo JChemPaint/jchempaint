@@ -98,19 +98,17 @@ public class MergeMoleculesEdit implements IUndoRedoable {
         for (int i = 0; i < n; i++) {
             IAtomContainer containerWithMerge = containers.get(i);
             IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
-
             if (droppedContainer != null) {
-                for (IAtom mAt : droppedContainer.atoms()) {
-                    if (!containerWithMerge.contains(mAt)) {
-                        containerWithMerge.addAtom(mAt);
-                    }
-                }
-                for (IBond mBond : droppedContainer.bonds()) {
-                    if (!containerWithMerge.contains(mBond)) {
-                        containerWithMerge.addBond(mBond);
-                    }
-                }
+                containerWithMerge.add(droppedContainer);
                 chemModelRelay.getChemModel().getMoleculeSet().removeAtomContainer(droppedContainer);
+            }
+        }
+
+        // now remove the bonds
+        for (int i = 0; i < n; i++) {
+            IAtomContainer containerWithMerge = containers.get(i);
+            for (IBond bond : deletedBondss.get(i)) {
+                containerWithMerge.removeBond(bond);
             }
         }
 
@@ -124,14 +122,6 @@ public class MergeMoleculesEdit implements IUndoRedoable {
             }
         }
 
-        // now remove the bonds
-        for (int i = 0; i < n; i++) {
-            IAtomContainer containerWithMerge = containers.get(i);
-            for (IBond bond : deletedBondss.get(i)) {
-                containerWithMerge.removeBond(bond);
-            }
-        }
-
         // now delete the atoms
         for (int i = 0; i < n; i++) {
             IAtomContainer containerWithMerge = containers.get(i);
@@ -140,15 +130,18 @@ public class MergeMoleculesEdit implements IUndoRedoable {
 
         // update any atoms that had changed bonding
         for (int i=0; i<n; i++) {
-            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet()) {
+            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet())
                 chemModelRelay.updateAtoms(bond);
+            for (IBond bond : deletedBondss.get(i)) {
+                chemModelRelay.updateAtom(bond.getBegin());
+                chemModelRelay.updateAtom(bond.getEnd());
             }
+            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
         }
 
         if (chemModelRelay.getRGroupHandler() != null) {
             chemModelRelay.getRGroupHandler().restoreFromHash(newRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
         }
-
     }
 
     public void undo() throws CannotUndoException {
@@ -181,12 +174,6 @@ public class MergeMoleculesEdit implements IUndoRedoable {
             }
         }
 
-        // update any atoms that had changed bonding
-        for (int i=0; i<n; i++) {
-            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet())
-                chemModelRelay.updateAtoms(bond);
-        }
-
         for (int i = 0; i < n; i++) {
             IAtomContainer containerWithMerge = containers.get(i);
             IAtomContainer droppedContainer = droppedContainers.get(i); // can be null
@@ -207,8 +194,19 @@ public class MergeMoleculesEdit implements IUndoRedoable {
                 chemModelRelay.getChemModel().getMoleculeSet().addAtomContainer(droppedContainer);
             }
         }
+
         if (moveundoredo != null)
-            moveundoredo .undo();
+            moveundoredo.undo();
+
+        // update any atoms that had changed bonding
+        for (int i=0; i<n; i++) {
+            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet())
+                chemModelRelay.updateAtoms(bond);
+            for (IBond bond : deletedBondss.get(i))
+                chemModelRelay.updateAtoms(bond);
+            chemModelRelay.updateAtom(deletedAtoms.get(i));
+            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
+        }
 
         if (chemModelRelay.getRGroupHandler() != null) {
             chemModelRelay.getRGroupHandler().restoreFromHash(oldRgrpHash, chemModelRelay.getChemModel().getMoleculeSet());
