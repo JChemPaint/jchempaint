@@ -720,7 +720,10 @@ public class IssuesTest extends AbstractUITest {
 
         Assert.assertEquals(2, getAtomCount(panel));
         Assert.assertEquals(0, getBondCount(panel));
-        Assert.assertEquals(7, getHydrogenCount(panel)); // part of the structure was copied so CH3-CH3 + CH3
+        Assert.assertEquals(7, getHydrogenCount(panel));
+        // part of the structure was copied so CH3-CH3 + CH3
+        // this is because we go via MOLfile - in future via JCP objects
+        // things will update as needed
     }
 
     @Test
