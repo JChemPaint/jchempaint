@@ -630,7 +630,6 @@ public final class CopyPasteAction extends JCPAction {
 
         // add implicit hs
         for (IAtom atom : toPaste.atoms()) {
-            System.err.println(atom.getValency());
             jcpPanel.get2DHub().updateAtom(toPaste, atom);
         }
 
