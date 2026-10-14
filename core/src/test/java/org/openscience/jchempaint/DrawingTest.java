@@ -377,7 +377,7 @@ public class DrawingTest extends AbstractUITest {
         int oldBondCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount();
         //we delete an atom
         frame.button("select").click();
-        Point2d moveto=getAtomPoint(panel, 0);   
+        Point2d moveto=getAtomPoint(panel, 0);
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		frame.button("eraser").click();
         Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
@@ -412,28 +412,50 @@ public class DrawingTest extends AbstractUITest {
         Assert.assertEquals(oldAtomCount, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
 	}*/
 
-	@Test public void mergeAndUndoRedo(){
-        restoreModelWithBasicmol();
-        JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
-        frame.button("select").click();
-        Point2d startpoint=getAtomPoint(panel,0);
-		panel.get2DHub().setAltInputMode(true);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y), MouseButton.LEFT_BUTTON, 1);
-        ComponentDragAndDrop dandd = new ComponentDragAndDrop(frame.panel("renderpanel").robot);
-        dandd.drag(frame.panel("renderpanel").component(), new Point((int)startpoint.x, (int)startpoint.y));
-        Point2d movetopoint=getAtomPoint(panel,1);
-        dandd.drop(frame.panel("renderpanel").component(), new Point((int)movetopoint.x, (int)movetopoint.y));
-        Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        movetopoint=getAtomPoint(panel,2);
-        frame.panel("renderpanel").robot.moveMouse(frame.panel("renderpanel").component(), new Point((int)movetopoint.x, (int)movetopoint.y));
-        frame.button("undo").click();
-        Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-        frame.button("redo").click();
-        Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-		panel.get2DHub().setAltInputMode(false);
+	@Test
+	public void mergeAndUndoRedo() {
+		restoreModelWithBasicmol();
+		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+		frame.button("select").click();
+		Point2d atom0 = getAtomPoint(panel, 0);
+		Point2d atom2 = getAtomPoint(panel, 2);
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), toAwtPoint(atom0));
+		renderpanel.robot.pressMouse(renderpanel.component(), toAwtPoint(atom0));
+		renderpanel.robot.moveMouse(toAwtPoint(atom2));
+		renderpanel.robot.releaseMouseButtons();
+		Assert.assertEquals(oldAtomCount - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		frame.button("undo").click();
+		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		frame.button("redo").click();
+		Assert.assertEquals(oldAtomCount - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 	}
+
+	@Test
+	public void mergeAndUndoRedoAlt() {
+		restoreModelWithBasicmol();
+		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+		frame.button("select").click();
+		Point2d atom0 = getAtomPoint(panel, 0);
+		Point2d atom1 = getAtomPoint(panel, 2);
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), toAwtPoint(atom0));
+		renderpanel.robot.pressMouse(renderpanel.component(), toAwtPoint(atom0));
+		renderpanel.robot.moveMouse(toAwtPoint(atom1));
+		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
+		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot.releaseKey(KeyEvent.VK_ALT);
+		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		frame.button("undo").click();
+		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		frame.button("redo").click();
+		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+	}
+
 
     @Test public void drawReactions(){
 		restoreModelToEmpty();
