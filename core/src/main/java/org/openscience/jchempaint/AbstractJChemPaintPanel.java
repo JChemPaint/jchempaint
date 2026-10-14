@@ -200,7 +200,7 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	public String getSmiles() {
         try {
             return CreateSmilesAction.getSmiles(getChemModel());
-        } catch (CDKException | ClassNotFoundException | IOException | CloneNotSupportedException e) {
+        } catch (CDKException | IOException e) {
             announceError(e);
             return "";
         }
@@ -220,23 +220,17 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
     }
 
     /**
-     * Gives the smiles for the current chemmodel in this panel.
+     * Gives the molfile for the current chemmodel in this panel.
      *
-     * @return The smiles for the current chemmodel in this panel.
-     * @throws CDKException
-     * @throws ClassNotFoundException
-     * @throws IOException
-     * @throws CloneNotSupportedException
+     * @return The molfile for the current chemmodel in this panel.
      */
     public String getMolfile() {
-        StringWriter sw = new StringWriter();
-        try (SDFWriter sdf = new SDFWriter(sw)) {
-            sdf.write(getChemModel());
+        try {
+            return CreateSmilesAction.getMolfile(getChemModel());
         } catch (CDKException | IOException e) {
             announceError(e);
-            return "";
+            return null;
         }
-        return sw.toString();
     }
     
     /**
