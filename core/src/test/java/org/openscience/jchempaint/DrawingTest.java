@@ -28,8 +28,13 @@ import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.swing.SwingUtilities;
@@ -581,14 +586,9 @@ public class DrawingTest extends AbstractUITest {
 
 		System.err.println(panel.getMolfile());
 
-		// select it
+		// select the second ring
 		frame.button("select").click();
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(251, 101));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(349, 199));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 200));
-		renderpanel.robot.releaseMouseButtons();
+		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
 
 		// move it
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
@@ -642,14 +642,9 @@ public class DrawingTest extends AbstractUITest {
 		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
 		int yShiftAmount = mol2atom4.x - mol1atom1.x;
 
-		// select it
+		// select the second ring
 		frame.button("select").click();
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(251, 101));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(349, 199));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 200));
-		renderpanel.robot.releaseMouseButtons();
+		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
 
 		// move it
 		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
@@ -660,5 +655,14 @@ public class DrawingTest extends AbstractUITest {
 
 		// moved but did not merge
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
+	}
+
+	private static void select(IAtomContainer mol) {
+		AtomBondSelection selection = new AtomBondSelection();
+		for (IAtom atom : mol.atoms())
+			selection.select(atom);
+		for (IBond bond : mol.bonds())
+			selection.select(bond);
+		panel.get2DHub().select(selection);
 	}
 }
