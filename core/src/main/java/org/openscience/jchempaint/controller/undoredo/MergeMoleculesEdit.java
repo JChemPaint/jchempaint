@@ -35,6 +35,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay;
 
 /**
@@ -137,9 +138,11 @@ public class MergeMoleculesEdit implements IUndoRedoable {
             containerWithMerge.removeAtomOnly(deletedAtoms.get(i));
         }
 
-        // update h counts etc
+        // update any atoms that had changed bonding
         for (int i=0; i<n; i++) {
-            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
+            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet()) {
+                chemModelRelay.updateAtoms(bond);
+            }
         }
 
         if (chemModelRelay.getRGroupHandler() != null) {
@@ -178,10 +181,10 @@ public class MergeMoleculesEdit implements IUndoRedoable {
             }
         }
 
-        // update h counts etc
+        // update any atoms that had changed bonding
         for (int i=0; i<n; i++) {
-            chemModelRelay.updateAtom(deletedAtoms.get(i));
-            chemModelRelay.updateAtom(mergedPartnerAtoms.get(i));
+            for (IBond bond : bondsWithReplacedAtoms.get(i).keySet())
+                chemModelRelay.updateAtoms(bond);
         }
 
         for (int i = 0; i < n; i++) {
