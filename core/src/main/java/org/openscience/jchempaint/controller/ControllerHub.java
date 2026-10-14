@@ -63,7 +63,9 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionManipulator;
+import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 import org.openscience.cdk.validate.ProblemMarker;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.RenderPanel;
@@ -3300,6 +3302,27 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+
+	private IAtomContainer getContainer(IAtom atom) {
+		// JWM: ChemModelManipulator.getRelevantAtomContainer() throws!
+		IAtomContainer container = null;
+		if (chemModel.getMoleculeSet() != null)
+			container = MoleculeSetManipulator.getRelevantAtomContainer(chemModel.getMoleculeSet(), atom);
+		if (container == null && chemModel.getReactionSet() != null)
+			container = ReactionSetManipulator.getRelevantAtomContainer(chemModel.getReactionSet(), atom);
+		return container;
+	}
+
+	private IAtomContainer getContainer(IBond bond) {
+		// JWM: ChemModelManipulator.getRelevantAtomContainer() throws!
+		IAtomContainer container = null;
+		if (chemModel.getMoleculeSet() != null)
+			container = MoleculeSetManipulator.getRelevantAtomContainer(chemModel.getMoleculeSet(), bond);
+		if (container == null && chemModel.getReactionSet() != null)
+			container = ReactionSetManipulator.getRelevantAtomContainer(chemModel.getReactionSet(), bond);
+		return container;
+	}
+
 	// OK
 	/**
 	 * Updates an atom with respect to its hydrogen count
@@ -3308,17 +3331,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 *            The Atom to update
 	 */
 	public void updateAtom(IAtom atom) {
-		IAtomContainer container = ChemModelManipulator
-				.getRelevantAtomContainer(chemModel, atom);
+		IAtomContainer container = getContainer(atom);
 		if (container != null) {
 			updateAtom(container, atom);
 		}
 	}
 
 	public void updateAtoms(IBond bond) {
-		IAtomContainer container = ChemModelManipulator
-				.getRelevantAtomContainer(chemModel, bond);
+		IAtomContainer container = getContainer(bond);
 		if (container != null) {
+			bond = container.getBond(container.indexOf(bond)); // resync
 			updateAtom(container, bond.getBegin());
 			updateAtom(container, bond.getEnd());
 		}
