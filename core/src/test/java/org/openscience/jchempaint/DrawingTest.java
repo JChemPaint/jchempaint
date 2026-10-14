@@ -584,8 +584,6 @@ public class DrawingTest extends AbstractUITest {
 
 		int yShiftAmount = mol2atom4.x - mol1atom1.x;
 
-		System.err.println(panel.getMolfile());
-
 		// select the second ring
 		frame.button("select").click();
 		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
@@ -599,8 +597,6 @@ public class DrawingTest extends AbstractUITest {
 		renderpanel.robot.releaseMouseButtons();
 		robot.waitForIdle();
 
-		System.err.println(panel.getMolfile());
-
 		// would be easier with canonical SMILES
 		Assert.assertEquals(10, getAtomCount(panel));
 		Assert.assertEquals(11, getBondCount(panel));
@@ -613,7 +609,6 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals(12, getAtomCount(panel));
 		Assert.assertEquals(12, getBondCount(panel));
 		Assert.assertEquals(2, getElemCount(panel, IElement.N));
-
 
 		// check the redo works
 		frame.menuItem("redo").click();
