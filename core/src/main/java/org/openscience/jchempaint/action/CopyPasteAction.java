@@ -46,12 +46,11 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.ISimpleChemObjectReader;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.MDLV2000Writer;
+import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.io.RGroupQueryReader;
 import org.openscience.cdk.io.ReaderFactory;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
@@ -64,8 +63,6 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
@@ -362,11 +359,13 @@ public final class CopyPasteAction extends JCPAction {
             DataFlavor[] flavors = transfer.getTransferDataFlavors();
 
             if (supported(transfer, MOL_FLAVOR)) {
-
                 try {
                     String molfile = (String) transfer.getTransferData(MOL_FLAVOR);
                     try {
-                        reader = new MDLV2000Reader(new StringReader(molfile));
+                        if (molfile.contains("V3000"))
+                            reader = new MDLV3000Reader(new StringReader(molfile));
+                        else
+                            reader = new MDLV2000Reader(new StringReader(molfile));
                     } catch (Exception ex) {
                         // JWM: note the reader will not fail until we try to read,
                         //      so this logic is not correct
@@ -404,7 +403,6 @@ public final class CopyPasteAction extends JCPAction {
                         for (IAtomContainer ac :
                                 ChemFileManipulator.getAllAtomContainers(file)) {
                             toPaste.add(ac);
-
                         }
                     } else if (reader.accepts(RGroupQuery.class)) {
                         rgrpQuery = true;
@@ -630,17 +628,10 @@ public final class CopyPasteAction extends JCPAction {
      */
     private void insertStructure(IAtomContainer toPaste, JChemPaintRendererModel renderModel) {
 
-        //add implicit hs
-        if (jcpPanel.get2DHub().getController2DModel().getAutoUpdateImplicitHydrogens()) {
-            try {
-                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(toPaste);
-                CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(toPaste
-                                                                               .getBuilder());
-                hAdder.addImplicitHydrogens(toPaste);
-            } catch (CDKException ex) {
-                ex.printStackTrace();
-                // do nothing
-            }
+        // add implicit hs
+        for (IAtom atom : toPaste.atoms()) {
+            System.err.println(atom.getValency());
+            jcpPanel.get2DHub().updateAtom(toPaste, atom);
         }
 
         //somehow, in case of single atoms, there are no coordinates
@@ -707,15 +698,14 @@ public final class CopyPasteAction extends JCPAction {
             IAtomContainer tocopy = container.getBuilder()
                                              .newInstance(IAtomContainer.class,
                                                           container);
-            // MDL mol output
-            StringWriter sw = new StringWriter();
-            try (MDLV2000Writer mdlWriter = new MDLV2000Writer(sw)) {
-                mdlWriter.writeMolecule(tocopy);
-            } catch (Exception ex) {
+
+            try {
+                this.mol = CreateSmilesAction.getMolfile(container);
+            } catch (CDKException | IOException ex) {
                 logger.error("Could not write molecule to string: ", ex.getMessage());
                 logger.debug(ex);
             }
-            this.mol = sw.toString();
+
             SmilesGenerator sg = SmilesGenerator.isomeric();
             try {
                 smiles = sg.create(tocopy);
@@ -748,7 +738,7 @@ public final class CopyPasteAction extends JCPAction {
             }
 
             // CML output
-            sw = new StringWriter();
+            StringWriter sw = new StringWriter();
             Class<?> cmlWriterClass = null;
             try {
                 cmlWriterClass = this.getClass().getClassLoader().loadClass(
