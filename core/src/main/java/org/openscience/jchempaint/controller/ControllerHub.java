@@ -3482,15 +3482,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 
-		List<IAtom> mergedAtoms = new ArrayList<IAtom>();
-		List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
-		List<IAtomContainer> droppedContainers = new ArrayList<IAtomContainer>();
+		List<IAtomContainer> retainedContainers = new ArrayList<>();
+		List<IAtomContainer> removedContainers = new ArrayList<>();
 
 		List<List<IBond>> removedBondss = new ArrayList<List<IBond>>();
 		List<Map<IBond, Integer>> bondsWithReplacedAtoms = new ArrayList<Map<IBond, Integer>>();
-		List<IAtom> mergedPartnerAtoms = new ArrayList<IAtom>();
-		List<IAtom> atomsToUpdate = new ArrayList<>();
 
+		List<IAtom> removedAtoms = new ArrayList<>();
+		List<IAtom> retainedAtoms = new ArrayList<>();
 
         if (mergeMap.isEmpty())
             return;
@@ -3499,103 +3498,70 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		for (Map.Entry<IAtom,IAtom> e : mergeMap.entrySet()) {
 			List<IBond> removedBonds = new ArrayList<IBond>();
 			Map<IBond, Integer> bondsWithReplacedAtom = new HashMap<IBond, Integer>();
-			IAtom atomRemoved = e.getKey();
-			IAtom atomMerged = e.getValue();
+			IAtom removedAtom = e.getKey();
+			IAtom retainedAtom = e.getValue();
 
-			mergedAtoms.add(atomRemoved);
-			mergedPartnerAtoms.add(atomMerged);
+			removedAtoms.add(removedAtom);
+			retainedAtoms.add(retainedAtom);
 
-			IAtomContainer container1 = ChemModelManipulator
-					.getRelevantAtomContainer(chemModel, atomRemoved);
-			containers.add(container1);
-
-			IAtomContainer container2 = ChemModelManipulator
-					.getRelevantAtomContainer(chemModel, atomMerged);
+			IAtomContainer retainedContainer = ChemModelManipulator
+					.getRelevantAtomContainer(chemModel, retainedAtom);
+			IAtomContainer removedContainer = ChemModelManipulator
+					.getRelevantAtomContainer(chemModel, removedAtom);
 
 			// If the atoms are in different atom containers till now, we merge
 			// the atom containers first.
-			if (container1 != container2) {
-				container1.add(container2);
-				chemModel.getMoleculeSet().removeAtomContainer(container2);
-				droppedContainers.add(container2);
+			if (retainedContainer != removedContainer) {
+				retainedContainer.add(removedContainer);
+				chemModel.getMoleculeSet().removeAtomContainer(removedContainer);
+				removedContainers.add(removedContainer);
 			} else {
-				droppedContainers.add(null);
+				removedContainers.add(null);
 			}
+			retainedContainers.add(retainedContainer);
 
 			// Handle the case of a bond between mergedAtom and mergedPartnerAtom.
 			// This bond should be removed.
-			IBond rb = container1.getBond(atomRemoved, atomMerged);
-			if (rb != null) {
-				container1.removeBond(rb);
+			IBond rb = retainedContainer.getBond(removedAtom, retainedAtom);
+			if (rb != null)
 				removedBonds.add(rb);
+
+			Set<IAtom> nbors = new HashSet<>();
+			for (IBond bond : retainedContainer.getConnectedBondsList(retainedAtom)) {
+				nbors.add(bond.getOther(retainedAtom));
 			}
-
-			// In the next loop we remove bonds that are redundant, that is
-			// to say bonds that exist on both sides of the parts to be merged
-			// and would cause duplicate bonding in the end result.
-			for (IAtom atom : container1.atoms()) {
-
-				if (!atom.equals(atomRemoved)) {
-					if (container1.getBond(atomRemoved, atom) != null) {
-						if (model.getMerge().containsKey(atom)) {
-							for (IAtom atom2 : container2.atoms()) {
-								if (!atom2.equals(atomMerged)) {
-									if (container1.getBond(atomMerged,
-											atom2) != null) {
-										if (model.getMerge().get(atom).equals(
-												atom2)) {
-											IBond redundantBond = container1
-													.getBond(atom, atomRemoved);
-											container1
-													.removeBond(redundantBond);
-											removedBonds.add(redundantBond);
-										}
-									}
-								}
-							}
-						}
+			for (IBond bond : retainedContainer.getConnectedBondsList(removedAtom)) {
+				IAtom nbor = bond.getOther(removedAtom);
+				if (nbors.add(nbor)) {
+					if (bond.getBegin().equals(removedAtom)) {
+						bond.setAtom(retainedAtom, 0);
+						bondsWithReplacedAtom.put(bond, 0);
+					} else if (bond.getEnd().equals(removedAtom)) {
+						bond.setAtom(retainedAtom, 1);
+						bondsWithReplacedAtom.put(bond, 1);
+					} else {
+						ControllerHub.log.warn("Bond did not contain the atom it was adjacent to?");
 					}
+				} else {
+					// already bonded
+					removedBonds.add(bond);
 				}
 			}
 
-			// remove multi-edges
-			if (container1.equals(container2)) {
-				for (IBond bond : atomRemoved.bonds()) {
-					IAtom nbor = bond.getOther(atomRemoved);
-					for (IBond bond2 : bond.getOther(atomRemoved).bonds()) {
-						if (bond2.getOther(nbor).equals(atomMerged)) {
-							container2.removeBond(bond2);
-							removedBonds.add(bond2);
-							atomsToUpdate.add(nbor);
-							break;
-						}
-					}
-				}
+			for (IBond bond : removedBonds) {
+				retainedContainer.removeBond(bond);
 			}
+			retainedContainer.removeAtom(removedAtom);
 
 			removedBondss.add(removedBonds);
-
-			// After the removal of redundant bonds, the actual merge is done.
-			// One half of atoms in the merge map are removed and their bonds
-			// are mapped to their replacement atoms.
-			for (IBond bond : container1.getConnectedBondsList(atomRemoved)) {
-				if (bond.getBegin().equals(atomRemoved)) {
-					bond.setAtom(atomMerged, 0);
-					bondsWithReplacedAtom.put(bond, 0);
-				} else if (bond.getEnd().equals(atomRemoved)) {
-					bond.setAtom(atomMerged, 1);
-					bondsWithReplacedAtom.put(bond, 1);
-				} else {
-					ControllerHub.log.warn("Bond did not contain the atom it was adjacent to?");
-				}
-			}
-			container1.removeAtom(atomRemoved);
-			updateAtom(atomMerged);
 			bondsWithReplacedAtoms.add(bondsWithReplacedAtom);
 		}
 
-		for (IAtom atom : atomsToUpdate) {
+		for (IAtom atom : retainedAtoms) {
 			updateAtom(atom);
+			for (IBond bond : getBonds(atom)) {
+				updateAtom(bond.getOther(atom));
+			}
 		}
 
 		Map<Integer, Map<Integer, Integer>> oldRGroupHash = null;
@@ -3609,7 +3575,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 			} catch (CDKException e) {
 				unsetRGroupHandler();
-				for (IAtomContainer atc : droppedContainers) {
+				for (IAtomContainer atc : removedContainers) {
 					atc.setProperty(CDKConstants.TITLE, null);
 				}
 			}
@@ -3622,9 +3588,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (Map.Entry<IAtom,Point2d[]> e : atomsMoved.entrySet())
 				e.getValue()[0] = e.getKey().getPoint2d();
 			IUndoRedoable moveundoredo = getUndoRedoFactory().getChangeCoordsEdit(atomsMoved, Collections.emptyMap(), null);
-			IUndoRedoable undoredo = factory.getMergeMoleculesEdit(mergedAtoms,
-					containers, droppedContainers, removedBondss,
-					bondsWithReplacedAtoms, mergedPartnerAtoms, moveundoredo, oldRGroupHash, newRGroupHash,
+			IUndoRedoable undoredo = factory.getMergeMoleculesEdit(removedAtoms,
+					retainedContainers, removedContainers, removedBondss,
+					bondsWithReplacedAtoms, retainedAtoms, moveundoredo, oldRGroupHash, newRGroupHash,
 					"Move and merge atoms", this);
 			handler.postEdit(undoredo);
 
