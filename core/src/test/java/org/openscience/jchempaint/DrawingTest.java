@@ -579,6 +579,8 @@ public class DrawingTest extends AbstractUITest {
 
 		int yShiftAmount = mol2atom4.x - mol1atom1.x;
 
+		System.err.println(panel.getMolfile());
+
 		// select it
 		frame.button("select").click();
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
@@ -590,8 +592,14 @@ public class DrawingTest extends AbstractUITest {
 
 		// move it
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - 10, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount + 10, 150));
 		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
+		robot.waitForIdle();
 		renderpanel.robot.releaseMouseButtons();
+		robot.waitForIdle();
+
+		System.err.println(panel.getMolfile());
 
 		// would be easier with canonical SMILES
 		Assert.assertEquals(10, getAtomCount(panel));
