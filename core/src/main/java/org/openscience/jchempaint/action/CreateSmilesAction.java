@@ -81,7 +81,7 @@ public class CreateSmilesAction extends JCPAction
 		dialog.setVisible(true);
 	}
 	
-	public static String getSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException{
+	public static String getSmiles(IChemModel model) throws CDKException, IOException {
 		return getChiralSmiles(model);
 	}
 
@@ -97,11 +97,10 @@ public class CreateSmilesAction extends JCPAction
      * @deprecated no such thing as chiral SMILES use {@link #getSmiles} for 'a' SMILES.
      */
     @Deprecated
-	public static String getChiralSmiles(IChemModel model) throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	public static String getChiralSmiles(IChemModel model) throws CDKException {
         
         SmilesGenerator smigen = SmilesGenerator.isomeric();
-        
-				StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
         for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(model)) {
             container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
                                                       .interpretProjections(Projection.Haworth, Projection.Chair)
