@@ -28,13 +28,8 @@ import org.fest.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.renderer.selection.AtomBondSelection;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.swing.SwingUtilities;
@@ -173,23 +168,52 @@ public class DrawingTest extends AbstractUITest {
 		restoreModelToEmpty();
 	}
 
-	@Test public void testEnterelement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+	@Test public void testEnterElementOnSelection() {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+		frame.button("select").click();
+		Point2d atom0 = getAtomPoint(panel, 0);
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(),
+								toAwtPoint(atom0));
 		frame.button("enterelement").click();
-		
-		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-
 		DialogFixture dialog = frame.dialog();
 		dialog.textBox().setText("U");
 		dialog.button("ok").click();
-		Assert.assertEquals("U",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
+		robot.waitForIdle();
+		Assert.assertEquals("U",
+							panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		frame.button("bondTool").click();
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot.click(renderpanel.component(),
+								toAwtPoint(atom0));
+		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		Assert.assertEquals("C",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
+	}
+
+	@Test public void testEnterElementNoSelection() {
+		restoreModelWithBasicmol();
+		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+		Point2d atom0 = getAtomPoint(panel, 0);
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		frame.button("enterelement").click();
+		renderpanel.robot.click(renderpanel.component(),
+								toAwtPoint(atom0));
+		DialogFixture dialog = frame.dialog();
+		dialog.textBox().setText("U");
+		dialog.button("ok").click();
+		robot.waitForIdle();
+		// the draw element should have been updated
+		Assert.assertEquals("U",
+							panel.get2DHub().getController2DModel().getDrawElement());
+		Assert.assertEquals("U",
+							panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
+		frame.button("bondTool").click();
+		renderpanel.robot.click(renderpanel.component(),
+								toAwtPoint(atom0));
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("U",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
 	}
