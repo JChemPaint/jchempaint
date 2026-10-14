@@ -110,10 +110,10 @@ public class ChangeAtomSymbolAction extends JCPAction {
             switchMode = true;
             newActiveModule = new EnterElementSwingModule(jcpPanel.get2DHub());
             newActiveModule.setID(symbol);
-            if (atoms != null) {
+            if (!atoms.isEmpty()) {
                 String[] funcGroupsKeys = new String[0];
                 symbol = EnterElementOrGroupDialog.showDialog(null, null, GT.get("Enter an element symbol:"), GT.get("Enter element"), funcGroupsKeys, "", "");
-                if (symbol != null && symbol.length() > 0) {
+                if (symbol != null && !symbol.isEmpty()) {
                     if (Character.isLowerCase(symbol.toCharArray()[0]))
                         symbol = Character.toUpperCase(symbol.charAt(0)) + symbol.substring(1);
                     IsotopeFactory ifa;
@@ -125,7 +125,6 @@ public class ChangeAtomSymbolAction extends JCPAction {
                             return;
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
                         return;
                     }
                 }
