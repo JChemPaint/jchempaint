@@ -178,7 +178,7 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		renderpanel.robot.click(renderpanel.component(),
 								toAwtPoint(atom0));
-		frame.button("enterelement").click();
+		SwingUtilities.invokeLater(frame.button("enterelement").target::doClick);
 		DialogFixture dialog = frame.dialog();
 		dialog.textBox().setText("U");
 		dialog.button("ok").click();
@@ -199,7 +199,7 @@ public class DrawingTest extends AbstractUITest {
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		Point2d atom0 = getAtomPoint(panel, 0);
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		frame.button("enterelement").click();
+		SwingUtilities.invokeLater(frame.button("enterelement").target::doClick);
 		renderpanel.robot.click(renderpanel.component(),
 								toAwtPoint(atom0));
 		DialogFixture dialog = frame.dialog();
