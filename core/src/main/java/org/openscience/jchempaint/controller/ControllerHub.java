@@ -3333,7 +3333,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 *@param atom
 	 *            The Atom to update
 	 */
-	private void updateAtom(IAtomContainer container, IAtom atom) {
+	public void updateAtom(IAtomContainer container, IAtom atom) {
 		if (atom.getValency() != null) {
 			int explValence = 0;
 			for (IBond bond : container.getConnectedBondsList(atom)) {
