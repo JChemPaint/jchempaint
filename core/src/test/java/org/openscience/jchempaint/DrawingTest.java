@@ -570,10 +570,14 @@ public class DrawingTest extends AbstractUITest {
 		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
 		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
 		frame.button("N").click();
-		renderpanel.robot.click(renderpanel.component(), toAwtPoint(getAtomPoint(panel, 1, 0)));
-		renderpanel.robot.click(renderpanel.component(), toAwtPoint(getAtomPoint(panel, 4, 1)));
+		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
+		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
+		renderpanel.robot.click(renderpanel.component(), mol1atom1);
+		renderpanel.robot.click(renderpanel.component(), mol2atom4);
 
 		Assert.assertEquals("C1NCCCC1.C1CCCNC1", panel.getSmiles());
+
+		int yShiftAmount = mol2atom4.x - mol1atom1.x;
 
 		// select it
 		frame.button("select").click();
@@ -586,7 +590,7 @@ public class DrawingTest extends AbstractUITest {
 
 		// move it
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(145, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
 		renderpanel.robot.releaseMouseButtons();
 
 		// would be easier with canonical SMILES
@@ -626,6 +630,10 @@ public class DrawingTest extends AbstractUITest {
 
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
 
+		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
+		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
+		int yShiftAmount = mol2atom4.x - mol1atom1.x;
+
 		// select it
 		frame.button("select").click();
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(250, 100));
@@ -638,7 +646,7 @@ public class DrawingTest extends AbstractUITest {
 		// move it
 		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
 		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(145, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
 		renderpanel.robot.releaseMouseButtons();
 		renderpanel.robot.releaseKey(KeyEvent.VK_ALT);
 
