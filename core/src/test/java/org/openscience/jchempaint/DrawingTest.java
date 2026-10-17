@@ -427,8 +427,8 @@ public class DrawingTest extends AbstractUITest {
 		renderpanel.robot.click(renderpanel.component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
 
 		// we do target.doClick on the parent menu as otherwise FlatLAF gets stuck
-		frame.menuItem("reaction").target.doClick();
-		frame.menuItem("addProductToExistingReaction").click();
+		frame.menuItem("reaction").component().menuSelectionChanged(true);
+		frame.menuItem("addProductToExistingReaction").target.doClick();
 
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
