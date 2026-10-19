@@ -3831,8 +3831,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (IAtom atom : atoms) {
 				Point2d newpoint = new Point2d(atom.getPoint2d());
 				newpoint.add(move);
-				moveToWithoutUndo(atom, newpoint);
+				atom.setPoint2d(newpoint);
 			}
+			coordinatesChanged();
 		}
 	}
 

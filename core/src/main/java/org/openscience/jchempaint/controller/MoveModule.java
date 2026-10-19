@@ -172,6 +172,7 @@ public class MoveModule extends ControllerModuleAdapter {
             return;
         } else {
             transform = Transform.Move;
+            transformOrigin = worldCoord;
             atomCoordsMap = new HashMap<>();
             for (IAtom atom : selection.elements(IAtom.class)) {
                 atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
@@ -311,36 +312,39 @@ public class MoveModule extends ControllerModuleAdapter {
      * Most move mode calculations are done in this routine.
      */
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
+        switch (transform) {
+            case Rotate:
+                transformMade = true;
+                transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
+                chemModelRelay.rotate(relativeAtomCoords,
+                                      transformOrigin,
+                                      transformAmmount);
+                chemModelRelay.updateView();
+                return;
+            case Scale:
+                transformMade = true;
+                double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
+                chemModelRelay.scale(relativeAtomCoords,
+                                     transformOrigin,
+                                     dist,
+                                     scaleDir);
+                chemModelRelay.updateView();
+                return;
+            case Move:
+                end2DCenter = worldCoordTo;
 
-        if (transform == Transform.Rotate) {
-            transformMade = true;
-            transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
-            chemModelRelay.rotate(relativeAtomCoords,
-                                  transformOrigin,
-                                  transformAmmount);
-            chemModelRelay.updateView();
-            return;
-        } else if (transform == Transform.Scale) {
-            transformMade = true;
-            double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
-            chemModelRelay.scale(relativeAtomCoords,
-                                 transformOrigin,
-                                 dist,
-                                 scaleDir);
-            chemModelRelay.updateView();
-            return;
-        }
-
-    	end2DCenter = worldCoordTo;
-
-        Vector2d d = new Vector2d();
-        d.sub(worldCoordTo, worldCoordFrom);
-
-        // single atom will snap to sensible angles (moveTo(atom,from,to)
-        if (atomsToMove.size() == 1) {
-            chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, worldCoordTo, false);
-        } else {
-            chemModelRelay.moveBy(atomsToMove, d, null);
+                // single atom will snap to sensible angles (moveTo(atom,from,to)
+                if (atomsToMove.size() == 1) {
+                    chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, end2DCenter, false);
+                } else {
+                    // do an absolute move by rolling back any changed coordinates
+                    for (Map.Entry<IAtom, Point2d[]> e : atomCoordsMap.entrySet())
+                        e.getKey().setPoint2d(e.getValue()[1]);
+                    Vector2d moveVector = new Vector2d(end2DCenter);
+                    moveVector.sub(transformOrigin);
+                    chemModelRelay.moveBy(atomsToMove, moveVector, null);
+                }
+                break;
         }
         chemModelRelay.updateView();
     }
