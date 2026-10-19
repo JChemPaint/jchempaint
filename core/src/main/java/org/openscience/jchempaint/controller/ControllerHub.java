@@ -1495,7 +1495,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 
 	public void setSymbol(IAtom atom, String symbol) {
-		setSymbol(atom, symbol, null);
+		setSymbol(Collections.singletonList(atom), symbol, null);
 	}
 
 	/**
@@ -1503,41 +1503,43 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * If an exception happens, the massNumber is set to null.
 	 * @see org.openscience.jchempaint.controller.IAtomBondEdits#setSymbol(org.openscience.cdk.interfaces.IAtom, java.lang.String)
 	 */
-	public void setSymbol(IAtom atom, String symbol, Integer massNumber) {
+	public void setSymbol(List<IAtom> atoms, String symbol, Integer massNumber) {
 		CompoundEdit edit = new CompoundEdit("Change atom to " + symbol);
 
 		boolean newIsPseudo = Elements.ofString(symbol) == Elements.Unknown;
-		boolean swap = atom instanceof IPseudoAtom || newIsPseudo;
+		for (IAtom atom : atoms) {
+			boolean swap = atom instanceof IPseudoAtom || newIsPseudo;
 
-		if (swap) {
-			IAtom newAtom;
-			if (newIsPseudo) {
-				newAtom = makePseudoAtom(symbol, null);
+			if (swap) {
+				IAtom newAtom;
+				if (newIsPseudo) {
+					newAtom = makePseudoAtom(symbol, null);
+				} else {
+					newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
+				}
+				newAtom.setPoint2d(atom.getPoint2d());
+				edit.add(new ReplaceAtomEdit(this.getIChemModel(),
+											 atom,
+											 newAtom,
+											 "Change atom to " + symbol,
+											 this));
+				if (!Objects.equals(atom.getMassNumber(), massNumber)) {
+					edit.add(new ChangeIsotopeEdit(atom,
+												   atom.getMassNumber(), massNumber,
+												   "Change Mass Number to " + massNumber));
+				}
 			} else {
-				newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
-			}
-			newAtom.setPoint2d(atom.getPoint2d());
-			edit.add(new ReplaceAtomEdit(this.getIChemModel(),
-										 atom,
-										 newAtom,
-										 "Change atom to " + symbol,
-										 this));
-			if (!Objects.equals(atom.getMassNumber(), massNumber)) {
-				edit.add(new ChangeIsotopeEdit(atom,
-											   atom.getMassNumber(), massNumber,
-											   "Change Mass Number to " + massNumber));
-			}
-		} else {
-			if (!atom.getSymbol().equals(symbol)) {
-				edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
-				if (atom.getValency() != null)
-					edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
-				if (atom.getFormalCharge() != null)
-					edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
-				if (!Objects.equals(atom.getMassNumber(), massNumber))
-					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
-			} else {
-				edit.add(cycleValence(atom));
+				if (!atom.getSymbol().equals(symbol)) {
+					edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
+					if (atom.getValency() != null)
+						edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
+					if (atom.getFormalCharge() != null)
+						edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
+					if (!Objects.equals(atom.getMassNumber(), massNumber))
+						edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
+				} else {
+					edit.add(cycleValence(atom));
+				}
 			}
 		}
 		edit.redo();

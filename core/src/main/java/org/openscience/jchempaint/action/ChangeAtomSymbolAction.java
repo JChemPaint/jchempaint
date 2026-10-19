@@ -166,18 +166,7 @@ public class ChangeAtomSymbolAction extends JCPAction {
                     symbol = "H";
                 }
 
-                for (IAtom atom : atoms) {
-                    jcpPanel.get2DHub().setSymbol(atom, symbol, isotope);
-                    //TODO still needed? should this go in hub?
-                    // configure the atom, so that the atomic number matches the symbol
-                    try {
-                        if (isotope != null)
-                            Isotopes.getInstance().configure(atom);
-                    } catch (Exception exception) {
-                        logger.error("Error while configuring atom");
-                        logger.debug(exception);
-                    }
-                }
+                jcpPanel.get2DHub().setSymbol(atoms, symbol, isotope);
                 jcpPanel.get2DHub().updateView();
             }
         }

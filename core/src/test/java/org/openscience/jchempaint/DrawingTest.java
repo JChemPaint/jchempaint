@@ -697,4 +697,23 @@ public class DrawingTest extends AbstractUITest {
 		// moved but did not merge
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
 	}
+
+	// JWM if setting the multiple atom symbols these should all be under
+	//     one 'change' event for undo/redo
+	@Test
+	public void testSetMultipleSymbols() {
+		restoreModelToEmpty();
+		frame.button("hexagon").click();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
+		frame.button("select").click();
+
+		Assert.assertEquals("C1CCCCC1", panel.getSmiles());
+
+		select(panel.getChemModel().getMoleculeSet().getAtomContainer(0));
+		frame.button("N").click();
+		Assert.assertEquals("N1NNNNN1", panel.getSmiles());
+		frame.button("undo").click();
+		Assert.assertEquals("C1CCCCC1", panel.getSmiles());
+	}
 }
