@@ -3094,6 +3094,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (renderer.getRenderer2DModel().getSelection() instanceof IncrementalSelection)
 			select((IncrementalSelection) renderer.getRenderer2DModel()
 					.getSelection());
+		for (IAtomContainer container : chemModel.getMoleculeSet()) {
+			Cycles.markRingAtomsAndBonds(container);
+		}
 		if (changeHandler != null)
 			changeHandler.structureChanged();
 	}
@@ -4031,6 +4034,21 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			Point2d newCoords = new Point2d(newX + center.x, newY + center.y);
 			e.getKey().setPoint2d(newCoords);
 		}
+	}
+
+    @Override
+    public void initSnapGuides() {
+		eventRelay.initSnapGuides();
+    }
+
+	@Override
+	public void clearSnapGuides() {
+		eventRelay.clearSnapGuides();
+	}
+
+	@Override
+	public void snapAtomsToGuides(Iterable<IAtom> atoms) {
+		eventRelay.snapAtoms(atoms);
 	}
 }
 
