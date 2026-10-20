@@ -407,16 +407,11 @@ public class MoveModule extends ControllerModuleAdapter {
     public void mouseClickedDouble(Point2d p, int modifiers) {
         IAtom closestAtom = chemModelRelay.getClosestAtom(p);
         IBond closestBond = chemModelRelay.getClosestBond(p);
-        IChemObject singleSelection = getHighlighted( p,
-                closestAtom,
-                closestBond );
-        if(singleSelection!=null){
-            for (IAtomContainer isolatedSystem : ConnectivityChecker.partitionIntoMolecules(this.chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0)).atomContainers()) {
-                if(isolatedSystem.contains(closestAtom) || isolatedSystem.contains(closestBond)){
-                    this.chemModelRelay.select(new SingleSelection<IAtomContainer>(isolatedSystem));
-                }
-            }
-        }
+        IChemObject singleSelection = getHighlighted(p, closestAtom, closestBond);
+        if (singleSelection instanceof IAtom)
+            chemModelRelay.selectFragment((IAtom)singleSelection);
+        else if (singleSelection instanceof IBond)
+            chemModelRelay.selectFragment((IBond)singleSelection);
         chemModelRelay.updateView();
     }
 

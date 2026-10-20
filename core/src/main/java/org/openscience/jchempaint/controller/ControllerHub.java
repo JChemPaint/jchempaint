@@ -1028,6 +1028,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      *
 	 * @param root an atom to select from
 	 */
+	@Override
 	public void selectFragment(IAtom root) {
 		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
@@ -1066,6 +1067,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      *
 	 * @param root the bond to select from
 	 */
+	@Override
 	public void selectFragment(IBond root) {
         LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);

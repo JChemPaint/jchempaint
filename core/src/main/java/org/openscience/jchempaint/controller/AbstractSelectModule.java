@@ -29,7 +29,9 @@ import java.util.Set;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.elements.RectangleElement;
@@ -327,6 +329,19 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         super.setSelection(selection);
         reset();
     }
+
+    @Override
+    public void mouseClickedDouble(Point2d p, int modifiers) {
+        IAtom closestAtom = chemModelRelay.getClosestAtom(p);
+        IBond closestBond = chemModelRelay.getClosestBond(p);
+        IChemObject singleSelection = getHighlighted(p, closestAtom, closestBond);
+        if (singleSelection instanceof IAtom)
+            chemModelRelay.selectFragment((IAtom)singleSelection);
+        else if (singleSelection instanceof IBond)
+            chemModelRelay.selectFragment((IBond)singleSelection);
+        chemModelRelay.updateView();
+    }
+
 
     @Override
     public void reset() {
