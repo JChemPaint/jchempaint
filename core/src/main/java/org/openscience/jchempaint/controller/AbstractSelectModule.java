@@ -325,6 +325,11 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     @Override
     protected void setSelection(IChemObjectSelection selection) {
         super.setSelection(selection);
+        reset();
+    }
+
+    @Override
+    public void reset() {
         startPoint = null;
         init = false;
     }

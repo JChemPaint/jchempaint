@@ -432,6 +432,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		clearPhantoms();
 		if (activeDrawModule == null)
 			activeDrawModule = this.fallbackModule;
+		activeDrawModule.reset();
 		this.activeDrawModule = activeDrawModule;
 		for (int i = 0; i < changeModeListeners.size(); i++)
 			changeModeListeners.get(i).modeChanged(this.activeDrawModule);
