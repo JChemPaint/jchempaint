@@ -178,6 +178,7 @@ public class MoveModule extends ControllerModuleAdapter {
             for (IAtom atom : selection.elements(IAtom.class)) {
                 atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
             }
+            chemModelRelay.initSnapGuides();
         }
 
 
@@ -237,6 +238,8 @@ public class MoveModule extends ControllerModuleAdapter {
 
     @Override
     public void mouseClickedUp(Point2d worldCoord, int modifiers) {
+
+        chemModelRelay.clearSnapGuides();
 
         if (transform == Transform.Rotate ||
             transform == Transform.Scale) {
@@ -346,6 +349,16 @@ public class MoveModule extends ControllerModuleAdapter {
                     Vector2d moveVector = new Vector2d(end2DCenter);
                     moveVector.sub(transformOrigin);
                     chemModelRelay.moveBy(atomsToMove, moveVector, null);
+
+                    // if alt is not held we snap the selection and show
+                    // which atoms will be merged
+                    if ((modifiers&KeyEvent.ALT_DOWN_MASK) == 0) {
+                        chemModelRelay.snapAtomsToGuides(atomsToMove);
+
+                        JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
+                        model.getMerge().clear();
+                        model.getMerge().putAll(calculateMerge(atomsToMove));
+                    }
                 }
                 break;
         }

@@ -115,7 +115,7 @@ public class FieldTablePanel extends JPanel {
         constraints.gridx = 0;
         constraints.gridy = rows;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.anchor = GridBagConstraints.NORTH;
         constraints.weightx = 1.0;
         panel.add(label, constraints);
         constraints.gridx = 1;

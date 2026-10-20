@@ -306,4 +306,24 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
      void scale(Map<IAtom,Point2d> atoms, Point2d center, double dist, Scale scale);
     void selectFragment(IAtom singleSelection);
     void selectFragment(IBond singleSelection);
+
+
+    /*
+     * Initialize the snapping guides on any non-selected atoms. This function
+     * should be called at the start of a move.
+     */
+    void initSnapGuides();
+
+    /*
+     * Clear any snapping guides. This should be called at the end of a move.
+     */
+    void clearSnapGuides();
+
+    /**
+     * Snap atoms to any active guides, {@link #initSnapGuides()} should have
+     * been called first.
+     *
+     * @param atoms the atoms
+     */
+    void snapAtomsToGuides(Iterable<IAtom> atoms);
 }
