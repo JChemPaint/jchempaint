@@ -609,6 +609,54 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals("CCCCCC", panel.getSmiles());
 	}
 
+	@Test
+	public void testBasicMerge() {
+		restoreModelToEmpty();
+		frame.button("hexagon").click();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
+		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+		frame.button("N").click();
+		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
+		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
+
+		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
+
+		int yShiftAmount = mol2atom4.x - mol1atom1.x;
+
+		// select the second ring
+		frame.button("select").click();
+		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
+
+		// move it
+		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - 10, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount + 10, 150));
+		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
+		robot.waitForIdle();
+		renderpanel.robot.releaseMouseButtons();
+		robot.waitForIdle();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(10, getAtomCount(panel));
+		Assert.assertEquals(11, getBondCount(panel));
+
+		// check the undo works
+		frame.menuItem("undo").click();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(12, getAtomCount(panel));
+		Assert.assertEquals(12, getBondCount(panel));
+
+		// check the redo works
+		frame.menuItem("redo").click();
+
+		// would be easier with canonical SMILES
+		Assert.assertEquals(10, getAtomCount(panel));
+		Assert.assertEquals(11, getBondCount(panel));
+	}
+
 	/**
 	 * When moving and merging, hetero atoms should take priority.
 	 */

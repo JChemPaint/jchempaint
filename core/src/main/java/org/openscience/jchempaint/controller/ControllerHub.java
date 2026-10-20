@@ -3585,7 +3585,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 			for (IBond bond : retainedContainer.getConnectedBondsList(removedAtom)) {
 				IAtom nbor = bond.getOther(removedAtom);
-				if (nbors.add(nbor)) {
+				if (nbors.add(nbor) && !mergeMap.containsKey(nbor)) {
 					if (bond.getBegin().equals(removedAtom)) {
 						bond.setAtom(retainedAtom, 0);
 						bondsWithReplacedAtom.put(bond, 0);
