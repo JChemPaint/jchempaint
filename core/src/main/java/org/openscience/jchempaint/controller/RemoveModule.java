@@ -48,7 +48,8 @@ public class RemoveModule extends ControllerModuleAdapter {
 	public RemoveModule(IChemModelRelay chemObjectRelay) {
 		super(chemObjectRelay);
 	}
-	
+
+	@Override
 	public void mouseClickedDown(Point2d worldCoordinate, int modifiers) {
 	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoordinate);
 	    if(selectedAC == null)

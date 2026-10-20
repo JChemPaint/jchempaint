@@ -70,7 +70,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	}
 
 
-	public void mouseClickedDownRight(Point2d worldCoord) {
+	public void mouseClickedDownRight(Point2d worldCoord, int modifiers) {
 		popupMenuForNearestChemObject(rendererPanel.getRenderer().toScreenCoordinates(worldCoord.x, worldCoord.y));
 	}
 		
@@ -88,7 +88,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *  Returns the popup menu for this IChemObject if it is set, and null
 	 *  otherwise.
 	 *
-	 *@param  someClass  Description of the Parameter
+	 *@param  classSearched  Description of the Parameter
 	 *@return             The popupMenu value
 	 */
 	public JChemPaintPopupMenu getPopupMenu(Class<?> classSearched,IChemObject objectInRange) {

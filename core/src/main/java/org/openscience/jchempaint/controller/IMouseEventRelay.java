@@ -29,65 +29,45 @@ package org.openscience.jchempaint.controller;
  * @cdk.module control
  */
 public interface IMouseEventRelay {
-    
-    void mouseWheelMovedBackward(int modifiers, int clicks);
-    
-    void mouseWheelMovedForward(int modifiers, int clicks);
 
-    void mouseClickedUp(int screenCoordX, int screenCoordY);
+	void mouseWheelMovedBackward(int modifiers, int clicks);
 
-    void mouseClickedDown(int screenCoordX, int screenCoordY);
-    
+	void mouseWheelMovedForward(int modifiers, int clicks);
+
 	void mouseClickedUp(int screenCoordX, int screenCoordY, int modifiers);
-    
+
 	void mouseClickedDown(int screenCoordX, int screenCoordY, int modifiers);
 
-	void mouseClickedUpRight(int screenCoordX, int screenCoordY);
-	
+	void mouseClickedUpRight(int screenCoordX, int screenCoordY, int modifiers);
+
+	void mouseClickedDownRight(int screenCoordX, int screenCoordY, int modifiers);
+
+	void mouseMove(int screenCoordX, int screenCoordY, int modifiers);
+
+	void mouseClickedDouble(int x, int y, int modifiersEx);
+
 	/**
-	 * 
-	 * @param screenCoordX
-	 * @param screenCoordY
-	 */
-	void mouseClickedDownRight(int screenCoordX, int screenCoordY);
-	
-	/**
-	 * 
-	 * @param screenCoordX
-	 * @param screenCoordY
-	 */
-	void mouseClickedDouble(int screenCoordX, int screenCoordY);
-	
-	/**
-	 * 
-	 * @param screenCoordX
-	 * @param screenCoordY
-	 */
-	void mouseMove(int screenCoordX, int screenCoordY);
-	
-	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	void mouseEnter(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	void mouseExit(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordXFrom
 	 * @param screenCoordYFrom
 	 * @param screenCoordXTo
 	 * @param screenCoordYTo
 	 */
-	void mouseDrag(int screenCoordXFrom, int screenCoordYFrom, 
-	        int screenCoordXTo, int screenCoordYTo, int modifiers);
-	
-	
+	void mouseDrag(int screenCoordXFrom, int screenCoordYFrom,
+				   int screenCoordXTo, int screenCoordYTo, int modifiers);
 }
+

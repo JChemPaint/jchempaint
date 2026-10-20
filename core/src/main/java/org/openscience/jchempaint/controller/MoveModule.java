@@ -114,6 +114,7 @@ public class MoveModule extends ControllerModuleAdapter {
 
     // if anything is selected, set offset, start2DCenter, and atomsToMove.
     // if not, switch to other mode and reset mouse cursor.
+    @Override
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
         JChemPaintRendererModel jcpModel = chemModelRelay.getRenderer().getRenderer2DModel();
@@ -212,7 +213,7 @@ public class MoveModule extends ControllerModuleAdapter {
                     .setActiveDrawModule(switchtowhenoutside);
             chemModelRelay.updateView();
             endMove();
-            switchtowhenoutside.mouseClickedDown(worldCoord);
+            switchtowhenoutside.mouseClickedDown(worldCoord, modifiers);
             chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
@@ -229,11 +230,12 @@ public class MoveModule extends ControllerModuleAdapter {
         return expandSelection;
     }
 
-    public void mouseMove(Point2d p){
+    @Override
+    public void mouseMove(Point2d p, int modifiers){
         AbstractSelectModule.showMouseCursor(p, this.chemModelRelay);
     }
 
-
+    @Override
     public void mouseClickedUp(Point2d worldCoord, int modifiers) {
 
         if (transform == Transform.Rotate ||
@@ -311,6 +313,7 @@ public class MoveModule extends ControllerModuleAdapter {
     /**
      * Most move mode calculations are done in this routine.
      */
+    @Override
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         switch (transform) {
             case Rotate:
@@ -400,7 +403,8 @@ public class MoveModule extends ControllerModuleAdapter {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.ControllerModuleAdapter#mouseClickedDouble(javax.vecmath.Point2d)
      */
-    public void mouseClickedDouble(Point2d p){
+    @Override
+    public void mouseClickedDouble(Point2d p, int modifiers) {
         IAtom closestAtom = chemModelRelay.getClosestAtom(p);
         IBond closestBond = chemModelRelay.getClosestBond(p);
         IChemObject singleSelection = getHighlighted( p,

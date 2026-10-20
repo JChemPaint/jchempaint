@@ -24,6 +24,8 @@
  */
 package org.openscience.jchempaint.controller;
 
+import com.formdev.flatlaf.util.SystemInfo;
+
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -54,7 +56,7 @@ public class SwingMouseEventRelay implements MouseMotionListener,
     }
 
     public void mouseMoved(MouseEvent event) {
-        relay.mouseMove(event.getX(), event.getY());
+        relay.mouseMove(event.getX(), event.getY(), event.getModifiersEx());
     }
 
     public void updateView() {
@@ -70,15 +72,6 @@ public class SwingMouseEventRelay implements MouseMotionListener,
         dragFromY = event.getY();
     }
 
-    public void mouseClicked(MouseEvent event) {
-        // normal mouseClicked is the same as mousePressed and mouseReleased
-        // after that
-
-        // Double click is a special case
-        if (event.getClickCount() > 1)
-            relay.mouseClickedDouble(event.getX(), event.getY());
-    }
-
     public void mouseEntered(MouseEvent event) {
         relay.mouseEnter(event.getX(), event.getY());
     }
@@ -87,10 +80,19 @@ public class SwingMouseEventRelay implements MouseMotionListener,
         relay.mouseExit(event.getX(), event.getY());
     }
 
+    public void mouseClicked(MouseEvent event) {
+        // normal mouseClicked is the same as mousePressed and mouseReleased
+        // after that
+
+        // Double click is a special case
+        if (event.getClickCount() > 1)
+            relay.mouseClickedDouble(event.getX(), event.getY(), event.getModifiersEx());
+    }
+
+
     public void mousePressed(MouseEvent event) {
-    	String osType= System.getProperty("os.name");
-        if (event.isPopupTrigger() || (osType.indexOf("Windows")>-1 && event.getButton()==MouseEvent.BUTTON3)) {
-            relay.mouseClickedDownRight(event.getX(), event.getY());
+    	if (event.isPopupTrigger() || (SystemInfo.isWindows && event.getButton() == MouseEvent.BUTTON3)) {
+            relay.mouseClickedDownRight(event.getX(), event.getY(), event.getModifiersEx());
             isPopupTrigger = true;
         } else {
             relay.mouseClickedDown(event.getX(), event.getY(), event.getModifiersEx());
@@ -102,7 +104,7 @@ public class SwingMouseEventRelay implements MouseMotionListener,
 
     public void mouseReleased(MouseEvent event) {
         if (isPopupTrigger){
-            relay.mouseClickedUpRight(event.getX(), event.getY());
+            relay.mouseClickedUpRight(event.getX(), event.getY(), event.getModifiersEx());
             isPopupTrigger=false;
         } else {
             relay.mouseClickedUp(event.getX(), event.getY(), event.getModifiersEx());

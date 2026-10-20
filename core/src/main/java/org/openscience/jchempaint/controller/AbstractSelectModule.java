@@ -96,7 +96,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         return closestBond;
     }
 
-
+    @Override
     public void mouseDrag(Point2d from, Point2d to, int modifiers) {
 
         boolean shiftPressed = (modifiers & MouseEvent.SHIFT_DOWN_MASK) != 0;
@@ -139,7 +139,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                 newActiveModule.setID("move");
                 chemModelRelay.setActiveDrawModule(newActiveModule);
                 Point2d sf = chemModelRelay.getRenderer().toScreenCoordinates(startPoint.x, startPoint.y);
-                ((IMouseEventRelay) this.chemModelRelay).mouseClickedDown((int) sf.x, (int) sf.y);
+                ((IMouseEventRelay) this.chemModelRelay).mouseClickedDown((int) sf.x, (int) sf.y, modifiers);
                 Point2d st = chemModelRelay.getRenderer().toScreenCoordinates(to.x, to.y);
                 ((IMouseEventRelay) this.chemModelRelay).mouseDrag((int) sf.x, (int) sf.y, (int) st.x, (int) st.y, modifiers);
                 return;
@@ -156,7 +156,8 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         this.chemModelRelay.updateView();
     }
 
-    public void mouseMove(Point2d p) {
+    @Override
+    public void mouseMove(Point2d p, int modifiers) {
         showMouseCursor(p, this.chemModelRelay);
     }
 

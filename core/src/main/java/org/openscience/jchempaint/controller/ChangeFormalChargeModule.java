@@ -52,6 +52,7 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 		this.change = change;
 	}
 
+	@Override
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 	    
 	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
