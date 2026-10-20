@@ -57,6 +57,7 @@ public class HighlightModule extends ControllerModuleAdapter {
 	    if(obj instanceof IBond)
 	        updateBond((IBond)obj,model);
 	}
+
 	private void updateAtom(IAtom atom, JChemPaintRendererModel model) {
 	    if (!atom.equals(prevHighlightAtom)) {
             model.setHighlightedAtom(atom);
@@ -87,7 +88,8 @@ public class HighlightModule extends ControllerModuleAdapter {
 	    }
 	}
 
-	public void mouseMove(Point2d worldCoord) {
+	@Override
+	public void mouseMove(Point2d worldCoord, int modifiers) {
 		IAtom atom = chemModelRelay.getClosestAtom(worldCoord);
 		IBond bond = chemModelRelay.getClosestBond(worldCoord);
 		JChemPaintRendererModel model = 

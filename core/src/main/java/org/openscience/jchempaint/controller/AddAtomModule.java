@@ -71,6 +71,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 		this.displayForNewBond = stereoForNewBond;
 	}
 
+    @Override
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
         start = null;
         dest = null;
@@ -124,7 +125,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
 	}
 
     @Override
-    public void mouseMove(Point2d worldCoord) {
+    public void mouseMove(Point2d worldCoord, int modifiers) {
         if ((System.nanoTime() - drawTime) < TimeUnit.MILLISECONDS.toNanos(5)) {
             return;
         }
@@ -138,6 +139,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
         drawTime = System.nanoTime();
     }
 
+    @Override
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
         if(isBond) return;
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoordTo);
@@ -173,6 +175,7 @@ public class AddAtomModule extends ControllerModuleAdapter {
         chemModelRelay.updateView();
     }
 
+    @Override
 	public void mouseClickedUp(Point2d worldCoord, int modifiers){
         chemModelRelay.clearPhantoms();
         if(isBond) return;

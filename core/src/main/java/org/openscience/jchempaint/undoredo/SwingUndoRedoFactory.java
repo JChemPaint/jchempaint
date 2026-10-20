@@ -129,8 +129,12 @@ public class SwingUndoRedoFactory implements IUndoRedoFactory {
 
     public IUndoRedoable getMergeMoleculesEdit(List<IAtom> deletedAtom, List<IAtomContainer> containers, List<IAtomContainer> droppedContainers,
                                                List<List<IBond>> deletedBonds, List<Map<IBond, Integer>> bondsWithReplacedAtom, List<IAtom> atomwhichwasmoved,
-                                               IUndoRedoable moveundoredo, Map<Integer, Map<Integer, Integer>> oldRgrpHash, Map<Integer, Map<Integer, Integer>> newRgrpHash, String type, IChemModelRelay c2dm) {
-        return new SwingUndoableEdit(new MergeMoleculesEdit(deletedAtom, containers, droppedContainers, deletedBonds, bondsWithReplacedAtom, atomwhichwasmoved, moveundoredo, oldRgrpHash, newRgrpHash, type, c2dm));
+                                               IUndoRedoable moveAtoms, Map<Integer, Map<Integer, Integer>> oldRgrpHash, Map<Integer, Map<Integer, Integer>> newRgrpHash, String type, IChemModelRelay c2dm) {
+        CompoundEdit edit = new CompoundEdit(type);
+        if (moveAtoms != null)
+            edit.add(moveAtoms);
+        edit.add(new MergeMoleculesEdit(deletedAtom, containers, droppedContainers, deletedBonds, bondsWithReplacedAtom, atomwhichwasmoved, oldRgrpHash, newRgrpHash, type, c2dm));
+        return new SwingUndoableEdit(edit);
     }
 
     public IUndoRedoable getChangeHydrogenCountEdit(

@@ -51,7 +51,7 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
  */
  public interface IChemModelRelay extends IAtomBondEdits {
 
-     enum Direction { UP, DOWN, UNDEFINED, EZ_UNDEFINED };
+    enum Direction { UP, DOWN, UNDEFINED, EZ_UNDEFINED };
 
      enum Scale {
          Horizontal,
@@ -304,4 +304,6 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
 	   void unsetRGroupHandler();
      void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle);
      void scale(Map<IAtom,Point2d> atoms, Point2d center, double dist, Scale scale);
+    void selectFragment(IAtom singleSelection);
+    void selectFragment(IBond singleSelection);
 }

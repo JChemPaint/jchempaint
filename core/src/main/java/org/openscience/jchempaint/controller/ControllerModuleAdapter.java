@@ -59,52 +59,53 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
         return (dH == Double.POSITIVE_INFINITY) || (dA > dH && dB > dH);
     }
 
+    @Override
     public void mouseWheelMovedBackward(int modifiers, int clicks) {
     }
 
+    @Override
     public void mouseWheelMovedForward(int modifiers, int clicks) {
     }
 
-    public void mouseClickedDouble(Point2d worldCoord) {
-    }
-
-    public final void mouseClickedDown(Point2d worldCoord) {
-        mouseClickedDown(worldCoord, 0);
-    }
-
-    public final void mouseClickedUp(Point2d worldCoord) {
-        mouseClickedUp(worldCoord, 0);
-    }
-
+    @Override
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
     }
 
+    @Override
     public void mouseClickedUp(Point2d worldCoord, int modifiers) {
 
     }
 
-    public void mouseClickedDownRight(Point2d worldCoord) {
+    @Override
+    public void mouseClickedDouble(Point2d worldCoord, int modifiers) {
     }
 
-    public void mouseClickedUpRight(Point2d worldCoord) {
+    @Override
+    public void mouseClickedDownRight(Point2d worldCoord, int modifiers) {
+
     }
 
-    public final void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo) {
-        mouseDrag(worldCoordFrom, worldCoordTo, 0);
+    @Override
+    public void mouseClickedUpRight(Point2d worldCoord, int modifiers) {
+
     }
 
+    @Override
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
 
     }
 
+    @Override
     public void mouseEnter(Point2d worldCoord) {
     }
 
+    @Override
     public void mouseExit(Point2d worldCoord) {
     }
 
-    public void mouseMove(Point2d worldCoord) {
+    @Override
+    public void mouseMove(Point2d worldCoord, int modifiers) {
     }
 
     public void setChemModelRelay(IChemModelRelay relay) {

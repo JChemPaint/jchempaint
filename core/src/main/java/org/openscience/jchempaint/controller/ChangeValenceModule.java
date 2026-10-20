@@ -59,6 +59,7 @@ public class ChangeValenceModule extends ControllerModuleAdapter {
    /* (non-Javadoc) 
     * @see org.openscience.cdk.controller.ControllerModuleAdapter#mouseClickedDown(javax.vecmath.Point2d)
     */
+   @Override
    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
        AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);

@@ -45,56 +45,21 @@ public interface IControllerModule {
 
 	void mouseWheelMovedForward(int modifiers, int clicks);
 
-	
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseClickedUp(Point2d worldCoord);
+	void mouseClickedDown(Point2d worldCoord, int modifies);
 
-    public void mouseClickedUp(Point2d worldCoord, int modifies);
+	void mouseClickedUp(Point2d worldCoord, int modifies);
 
-    public void mouseClickedDown(Point2d worldCoord, int modifies);
-    
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseClickedDown(Point2d worldCoord);
+	void mouseClickedDownRight(Point2d worldCoord, int modifiers);
 
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseClickedUpRight(Point2d worldCoord);
+	void mouseClickedUpRight(Point2d worldCoord, int modifies);
 
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseClickedDownRight(Point2d worldCoord);
+	void mouseClickedDouble(Point2d worldCoord, int modifies);
 
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseClickedDouble(Point2d worldCoord);
+	void mouseMove(Point2d worldCoord, int modifiers);
 
-	/**
-	 * @param Point2d worldCoord
-	 */
-	void mouseMove(Point2d worldCoord);
-
-	/**
-	 * @param Point2d worldCoord
-	 */
 	void mouseEnter(Point2d worldCoord);
 
-	/**
-	 * @param Point2d worldCoord
-	 */
 	void mouseExit(Point2d worldCoord);
-
-	/**
-	 * @param Point2d worldCoordFrom
-	 * @param Point2d worldCoordTo
-	 */
-	void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo);
 
 	void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers);
 
@@ -130,4 +95,11 @@ public interface IControllerModule {
 	 * and we want to change what the phantom atoms are doing.
 	 */
 	void updateView();
+
+	/**
+	 * Reset any state of the module.
+	 */
+	default void reset() {
+
+	}
 }

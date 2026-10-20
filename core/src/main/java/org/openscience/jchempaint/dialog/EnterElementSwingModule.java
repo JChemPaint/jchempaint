@@ -114,6 +114,7 @@ public class EnterElementSwingModule extends ControllerModuleAdapter {
         }
     }
 
+    @Override
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
         IAtom atom = chemModelRelay.getRenderer()

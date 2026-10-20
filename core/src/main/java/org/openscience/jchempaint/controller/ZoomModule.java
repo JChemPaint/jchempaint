@@ -64,7 +64,7 @@ public class ZoomModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseMove( Point2d worldCoord ) {
+    public void mouseMove( Point2d worldCoord, int modifiers ) {
         this.worldCoord = worldCoord;
     }
     

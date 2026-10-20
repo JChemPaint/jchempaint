@@ -214,9 +214,9 @@ public class IssuesTest extends AbstractUITest {
         frame.button("H").target.doClick();
         pane.get2DHub().updateView();
         renderpanel.robot.waitForIdle();
-        pane.get2DHub().mouseClickedDown(180, 100);
+        pane.get2DHub().mouseClickedDown(180, 100, 0);
         renderpanel.robot.waitForIdle();
-        pane.get2DHub().mouseClickedUp(180, 100);
+        pane.get2DHub().mouseClickedUp(180, 100, 0);
         pane.get2DHub().updateView();
         frame.button("cleanup").click();
     }
@@ -369,9 +369,9 @@ public class IssuesTest extends AbstractUITest {
         IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
         Point2d p1 = ethane.getAtom(0).getPoint2d();
         p1 = panel.getRenderPanel().getRenderer().toScreenCoordinates(p1.x, p1.y);
-        panel.get2DHub().mouseClickedDown((int)p1.x, (int)p1.y);
+        panel.get2DHub().mouseClickedDown((int)p1.x, (int)p1.y, 0);
         frame.panel("renderpanel").robot.waitForIdle();
-        panel.get2DHub().mouseClickedUp((int)p1.x, (int)p1.y);
+        panel.get2DHub().mouseClickedUp((int)p1.x, (int)p1.y, 0);
         panel.get2DHub().updateView();
         frame.panel("renderpanel").robot.waitForIdle();
         IChemObjectSelection sel = panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
@@ -380,9 +380,9 @@ public class IssuesTest extends AbstractUITest {
 
         Point2d p2 = ethane.getAtom(1).getPoint2d();
         p2 = panel.getRenderPanel().getRenderer().toScreenCoordinates(p2.x, p2.y);
-        panel.get2DHub().mouseClickedDown((int)p2.x, (int)p2.y);
+        panel.get2DHub().mouseClickedDown((int)p2.x, (int)p2.y, 0);
         frame.panel("renderpanel").robot.waitForIdle();
-        panel.get2DHub().mouseClickedUp((int)p2.x, (int)p2.y);
+        panel.get2DHub().mouseClickedUp((int)p2.x, (int)p2.y, 0);
         panel.get2DHub().updateView();
         frame.panel("renderpanel").robot.waitForIdle();
         sel = panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
@@ -403,21 +403,21 @@ public class IssuesTest extends AbstractUITest {
         Point2d p1 = new Point2d(ethane.getAtom(0).getPoint2d());
         Renderer r = panel.getRenderPanel().getRenderer();
         p1 = r.toScreenCoordinates(p1.x, p1.y);
-        panel.get2DHub().mouseClickedDown((int)(p1.x), (int)(p1.y));
+        panel.get2DHub().mouseClickedDown((int)(p1.x), (int)(p1.y), 0);
         frame.panel("renderpanel").robot.waitForIdle();
-        panel.get2DHub().mouseClickedUp((int)p1.x, (int)p1.y);
+        panel.get2DHub().mouseClickedUp((int)p1.x, (int)p1.y, 0);
         panel.get2DHub().updateView();
         frame.panel("renderpanel").robot.waitForIdle();
         IChemObjectSelection sel = r.getRenderer2DModel().getSelection();
         Assert.assertTrue(sel.contains(ethane.getAtom(0)));
 
         double d = r.getRenderer2DModel().getSelectionRadius() / r.getRenderer2DModel().getScale();
-        panel.get2DHub().mouseClickedDown((int)(p1.x+d/2), (int)(p1.y+d/2));
+        panel.get2DHub().mouseClickedDown((int)(p1.x+d/2), (int)(p1.y+d/2), 0);
         frame.panel("renderpanel").robot.waitForIdle();
         panel.get2DHub().setAltInputMode(true);
         panel.get2DHub().mouseDrag((int)(p1.x+d/2), (int)(p1.y+d/2),(int)p1.x+100, (int)p1.y+100,
                                    0);
-        panel.get2DHub().mouseClickedUp((int)p1.x+100, (int)p1.y+100);
+        panel.get2DHub().mouseClickedUp((int)p1.x+100, (int)p1.y+100, 0);
         panel.get2DHub().updateView();
         panel.get2DHub().setAltInputMode(false);
         frame.panel("renderpanel").robot.waitForIdle();
@@ -432,9 +432,9 @@ public class IssuesTest extends AbstractUITest {
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
         frame.button("C").target.doClick();
         frame.button("chain").target.doClick();
-        panel.get2DHub().mouseClickedDown(100, 100);
+        panel.get2DHub().mouseClickedDown(100, 100, 0);
         panel.get2DHub().mouseDrag(100, 100, 300, 100, 0);
-        panel.get2DHub().mouseClickedUp(300, 100);
+        panel.get2DHub().mouseClickedUp(300, 100, 0);
         panel.get2DHub().updateView();
         frame.panel("renderpanel").robot.waitForIdle();
         Point2d p = getAtomPoint(panel,0,1);
@@ -479,7 +479,7 @@ public class IssuesTest extends AbstractUITest {
         panel.get2DHub().mouseDrag(x, y, x + 200, y, 0);
         panel.get2DHub().updateView();
         renderPanel.robot.waitForIdle();
-        panel.get2DHub().mouseClickedUp(x + 200, y);
+        panel.get2DHub().mouseClickedUp(x + 200, y, 0);
         panel.get2DHub().updateView();
         renderPanel.robot.waitForIdle();
 

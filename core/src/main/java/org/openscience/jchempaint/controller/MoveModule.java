@@ -114,6 +114,7 @@ public class MoveModule extends ControllerModuleAdapter {
 
     // if anything is selected, set offset, start2DCenter, and atomsToMove.
     // if not, switch to other mode and reset mouse cursor.
+    @Override
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
         JChemPaintRendererModel jcpModel = chemModelRelay.getRenderer().getRenderer2DModel();
@@ -172,6 +173,7 @@ public class MoveModule extends ControllerModuleAdapter {
             return;
         } else {
             transform = Transform.Move;
+            transformOrigin = worldCoord;
             atomCoordsMap = new HashMap<>();
             for (IAtom atom : selection.elements(IAtom.class)) {
                 atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
@@ -211,7 +213,7 @@ public class MoveModule extends ControllerModuleAdapter {
                     .setActiveDrawModule(switchtowhenoutside);
             chemModelRelay.updateView();
             endMove();
-            switchtowhenoutside.mouseClickedDown(worldCoord);
+            switchtowhenoutside.mouseClickedDown(worldCoord, modifiers);
             chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
@@ -228,11 +230,12 @@ public class MoveModule extends ControllerModuleAdapter {
         return expandSelection;
     }
 
-    public void mouseMove(Point2d p){
+    @Override
+    public void mouseMove(Point2d p, int modifiers){
         AbstractSelectModule.showMouseCursor(p, this.chemModelRelay);
     }
 
-
+    @Override
     public void mouseClickedUp(Point2d worldCoord, int modifiers) {
 
         if (transform == Transform.Rotate ||
@@ -310,37 +313,41 @@ public class MoveModule extends ControllerModuleAdapter {
     /**
      * Most move mode calculations are done in this routine.
      */
+    @Override
     public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
+        switch (transform) {
+            case Rotate:
+                transformMade = true;
+                transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
+                chemModelRelay.rotate(relativeAtomCoords,
+                                      transformOrigin,
+                                      transformAmmount);
+                chemModelRelay.updateView();
+                return;
+            case Scale:
+                transformMade = true;
+                double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
+                chemModelRelay.scale(relativeAtomCoords,
+                                     transformOrigin,
+                                     dist,
+                                     scaleDir);
+                chemModelRelay.updateView();
+                return;
+            case Move:
+                end2DCenter = worldCoordTo;
 
-        if (transform == Transform.Rotate) {
-            transformMade = true;
-            transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
-            chemModelRelay.rotate(relativeAtomCoords,
-                                  transformOrigin,
-                                  transformAmmount);
-            chemModelRelay.updateView();
-            return;
-        } else if (transform == Transform.Scale) {
-            transformMade = true;
-            double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
-            chemModelRelay.scale(relativeAtomCoords,
-                                 transformOrigin,
-                                 dist,
-                                 scaleDir);
-            chemModelRelay.updateView();
-            return;
-        }
-
-    	end2DCenter = worldCoordTo;
-
-        Vector2d d = new Vector2d();
-        d.sub(worldCoordTo, worldCoordFrom);
-
-        // single atom will snap to sensible angles (moveTo(atom,from,to)
-        if (atomsToMove.size() == 1) {
-            chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, worldCoordTo, false);
-        } else {
-            chemModelRelay.moveBy(atomsToMove, d, null);
+                // single atom will snap to sensible angles (moveTo(atom,from,to)
+                if (atomsToMove.size() == 1) {
+                    chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, end2DCenter, false);
+                } else {
+                    // do an absolute move by rolling back any changed coordinates
+                    for (Map.Entry<IAtom, Point2d[]> e : atomCoordsMap.entrySet())
+                        e.getKey().setPoint2d(e.getValue()[1]);
+                    Vector2d moveVector = new Vector2d(end2DCenter);
+                    moveVector.sub(transformOrigin);
+                    chemModelRelay.moveBy(atomsToMove, moveVector, null);
+                }
+                break;
         }
         chemModelRelay.updateView();
     }
@@ -396,19 +403,15 @@ public class MoveModule extends ControllerModuleAdapter {
     /* (non-Javadoc)
      * @see org.openscience.cdk.controller.ControllerModuleAdapter#mouseClickedDouble(javax.vecmath.Point2d)
      */
-    public void mouseClickedDouble(Point2d p){
+    @Override
+    public void mouseClickedDouble(Point2d p, int modifiers) {
         IAtom closestAtom = chemModelRelay.getClosestAtom(p);
         IBond closestBond = chemModelRelay.getClosestBond(p);
-        IChemObject singleSelection = getHighlighted( p,
-                closestAtom,
-                closestBond );
-        if(singleSelection!=null){
-            for (IAtomContainer isolatedSystem : ConnectivityChecker.partitionIntoMolecules(this.chemModelRelay.getIChemModel().getMoleculeSet().getAtomContainer(0)).atomContainers()) {
-                if(isolatedSystem.contains(closestAtom) || isolatedSystem.contains(closestBond)){
-                    this.chemModelRelay.select(new SingleSelection<IAtomContainer>(isolatedSystem));
-                }
-            }
-        }
+        IChemObject singleSelection = getHighlighted(p, closestAtom, closestBond);
+        if (singleSelection instanceof IAtom)
+            chemModelRelay.selectFragment((IAtom)singleSelection);
+        else if (singleSelection instanceof IBond)
+            chemModelRelay.selectFragment((IBond)singleSelection);
         chemModelRelay.updateView();
     }
 
