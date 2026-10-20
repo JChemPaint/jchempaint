@@ -36,11 +36,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
@@ -54,6 +57,7 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 public class JCPPropertyHandler
 {
 
+	private static final Logger log = Logger.getLogger(JCPPropertyHandler.class);
 	private static JCPPropertyHandler jcpPropsHandler = null;
 
 	private static ILoggingTool logger =
@@ -362,44 +366,49 @@ public class JCPPropertyHandler
      * @param model rendering model
      */
     public void setRenderingPreferences(JChemPaintRendererModel model) {
-        model.setAtomRadius(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                          .getJCPProperties().getProperty("AtomRadius")));
-        model.setBackColor(new Color(Integer.parseInt(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                 .getJCPProperties().getProperty("BackColor", String.valueOf(Color.white.getRGB())))));
-        model.setBondWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                .getJCPProperties().getProperty("BondWidth")));
-        model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                .getJCPProperties().getProperty("WedgeWidth")));
-        model.setBondSeparation(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                  .getJCPProperties().getProperty("BondSpacing")));
-        model.setHashSpacing(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                .getJCPProperties().getProperty("HashSpacing")));
-        model.setCompactShape(JCPPropertyHandler.getInstance(useUserSettings).getJCPProperties()
+		Properties jcpProperties = JCPPropertyHandler.getInstance(useUserSettings)
+													 .getJCPProperties();
+		model.setAtomRadius(Double.parseDouble(jcpProperties.getProperty("AtomRadius")));
+        model.setBackColor(new Color(Integer.parseInt(jcpProperties.getProperty("BackColor", String.valueOf(Color.white.getRGB())))));
+        model.setBondWidth(Double.parseDouble(jcpProperties.getProperty("BondWidth")));
+        model.setWedgeWidth(Double.parseDouble(jcpProperties.getProperty("WedgeWidth")));
+        model.setBondSeparation(Double.parseDouble(jcpProperties.getProperty("BondSpacing")));
+        model.setHashSpacing(Double.parseDouble(jcpProperties.getProperty("HashSpacing")));
+        model.setCompactShape(jcpProperties
                                          .getProperty("CompactShape").equals("square") ? BasicAtomGenerator.Shape.SQUARE : BasicAtomGenerator.Shape.OVAL);
-        model.setIsCompact(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                         .getJCPProperties().getProperty("IsCompact")));
-        model.setColorAtomsByType(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                  .getJCPProperties().getProperty("ColorAtomsByType")));
-        model.setShowImplicitHydrogens(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                       .getJCPProperties().getProperty("ShowImplicitHydrogens")));
-        model.setDrawNumbers(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                 .getJCPProperties().getProperty("DrawNumbers")));
-        model.setKekuleStructure(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                 .getJCPProperties().getProperty("KekuleStructure")));
-        model.setShowEndCarbons(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                .getJCPProperties().getProperty("ShowEndCarbons")));
-        model.setShowExplicitHydrogens(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                       .getJCPProperties().getProperty("ShowExplicitHydrogens")));
-        model.setHighlightDistance(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                 .getJCPProperties().getProperty("HighlightDistance")));
-        model.setFitToScreen(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                             .getJCPProperties().getProperty("FitToScreen")));
-        model.setShowAromaticity(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                 .getJCPProperties().getProperty("ShowAromaticity")));
-        model.setWedgeWidth(Double.parseDouble(JCPPropertyHandler.getInstance(useUserSettings)
-                                                          .getJCPProperties().getProperty("WedgeWidth")));
-        model.setShowReactionBoxes(Boolean.parseBoolean(JCPPropertyHandler.getInstance(useUserSettings)
-                                                                   .getJCPProperties().getProperty("ShowReactionBoxes")));
+        model.setIsCompact(Boolean.parseBoolean(jcpProperties.getProperty("IsCompact")));
+        model.setColorAtomsByType(Boolean.parseBoolean(jcpProperties.getProperty("ColorAtomsByType")));
+        model.setShowImplicitHydrogens(Boolean.parseBoolean(jcpProperties.getProperty("ShowImplicitHydrogens")));
+        model.setDrawNumbers(Boolean.parseBoolean(jcpProperties.getProperty("DrawNumbers")));
+        model.setKekuleStructure(Boolean.parseBoolean(jcpProperties.getProperty("KekuleStructure")));
+        model.setShowEndCarbons(Boolean.parseBoolean(jcpProperties.getProperty("ShowEndCarbons")));
+        model.setShowExplicitHydrogens(Boolean.parseBoolean(jcpProperties.getProperty("ShowExplicitHydrogens")));
+        model.setHighlightDistance(Double.parseDouble(jcpProperties.getProperty("HighlightDistance")));
+        model.setFitToScreen(Boolean.parseBoolean(jcpProperties.getProperty("FitToScreen")));
+        model.setShowAromaticity(Boolean.parseBoolean(jcpProperties.getProperty("ShowAromaticity")));
+        model.setWedgeWidth(Double.parseDouble(jcpProperties.getProperty("WedgeWidth")));
+        model.setShowReactionBoxes(Boolean.parseBoolean(jcpProperties.getProperty("ShowReactionBoxes")));
 
+
+		String snapTypesList = jcpProperties.getProperty("SnapTypes");
+		if (snapTypesList != null &&
+			model.hasParameter(SnapGuides.SnapTypes.class)) {
+			model.set(SnapGuides.SnapTypes.class,  parseSnapTypes(snapTypesList));
+		}
     }
+
+	private static Set<SnapGuides.Type> parseSnapTypes(String snapTypes) {
+		Set<SnapGuides.Type> set = EnumSet.noneOf(SnapGuides.Type.class);
+		for (String str : snapTypes.split(",")) {
+			if (str.isEmpty())
+				continue;
+			try {
+				set.add(SnapGuides.Type.valueOf(str));
+			} catch (IllegalArgumentException ex) {
+				log.error("Ignored unknown SnapType '" + str + "'");
+				// ignore
+			}
+		}
+		return set;
+	}
 }

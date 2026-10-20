@@ -28,7 +28,6 @@
  */
 package org.openscience.jchempaint;
 
-import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -36,7 +35,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.SymbolVisibility;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
@@ -111,9 +110,9 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
                                                    IUndoListener {
@@ -146,6 +145,8 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private PhantomArrowGenerator prg = new PhantomArrowGenerator();
 
     private PhantomTextGenerator ptg = new PhantomTextGenerator();
+
+    private SnapGuides snapGuides = new SnapGuides();
 
     boolean isFirstDrawing = true;
 
@@ -339,6 +340,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new BasicSceneGenerator());
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
+        generators.add(snapGuides);
         if (useSeparateGenerators) {
             generators.add(new RingGenerator());
             generators.add(new ExtendedAtomGenerator());
@@ -695,5 +697,35 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         }
 
         return new Rectangle(dx, dy, w, h);
+    }
+
+    /**
+     * Initialize the snap guides.
+     */
+    public void initSnapGuides() {
+        IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
+        IAtomContainer combined = bldr.newAtomContainer();
+        for (IAtomContainer mol : hub.getChemModel().getMoleculeSet())
+            combined.add(mol);
+        IChemObjectSelection selection = renderer.getRenderer2DModel()
+                                                 .getSelection();
+        snapGuides.initGuides(combined,
+                              new HashSet<>(selection.elements(IAtom.class)),
+                              renderer.getRenderer2DModel());
+    }
+
+    /**
+     * Clear the snap guides.
+     */
+    public void clearSnapGuides() {
+        snapGuides.clearGuides();
+    }
+
+    /**
+     * Snap the atoms to line up with any active guides.
+     * @param atoms the atoms to set
+     */
+    public void snapAtoms(Iterable<IAtom> atoms) {
+        snapGuides.snap(atoms, getRendererModel());
     }
 }
