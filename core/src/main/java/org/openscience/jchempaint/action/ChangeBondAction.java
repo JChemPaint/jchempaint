@@ -32,13 +32,15 @@ package org.openscience.jchempaint.action;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.jchempaint.controller.AddBondDragModule;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+
+import javax.swing.JButton;
 
 
 /**
@@ -94,7 +96,7 @@ public class ChangeBondAction extends JCPAction {
                 break;
         }
 
-        if (newActiveModule != null) { // null means that menu was used => don't change module            
+        if (newActiveModule != null && event.getSource() instanceof JButton) { // null means that menu was used => don't change module
             newActiveModule.setID(type);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         }
@@ -108,18 +110,21 @@ public class ChangeBondAction extends JCPAction {
         IChemObject object = getSource(event);
         Collection<IBond> bondsInRange = null;
 
+        JChemPaintRendererModel model = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel();
         if (object == null) {
-            //this means the main menu or toolbar was used
-            if (jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection() != null
-                && jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().isFilled())
-                bondsInRange = jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().elements(IBond.class);
+            if (model.getHighlightedBond() != null) {
+                bondsInRange = Collections.singleton(model.getHighlightedBond());
+            } else if (model.getSelection() != null
+                && model.getSelection().isFilled()) {
+                bondsInRange = model.getSelection().elements(IBond.class);
+            }
         } else if (object instanceof IBond) {
             List<IBond> bonds = new ArrayList<IBond>();
             bonds.add((IBond) object);
             bondsInRange = bonds;
         } else {
             List<IBond> bonds = new ArrayList<IBond>();
-            bonds.add(jcpPanel.getRenderPanel().getRenderer().getRenderer2DModel().getHighlightedBond());
+            bonds.add(model.getHighlightedBond());
             bondsInRange = bonds;
         }
 
@@ -129,62 +134,69 @@ public class ChangeBondAction extends JCPAction {
         IBond.Display display = null;
         IBond.Order order = null;
 
-        switch (type) {
-            case "bond":
-                display = IBond.Display.Solid;
-                order = IBond.Order.SINGLE;
-                break;
-            case "double_bond":
-                display = IBond.Display.Solid;
-                order = IBond.Order.DOUBLE;
-                break;
-            case "triple_bond":
-                display = IBond.Display.Solid;
-                order = IBond.Order.TRIPLE;
-                break;
-            case "quad_bond":
-                display = IBond.Display.Solid;
-                order = IBond.Order.QUADRUPLE;
-                break;
-            case "down_bond":
-                display = IBond.Display.Down;
-                order = IBond.Order.SINGLE;
-                break;
-            case "up_bond":
-                display = IBond.Display.Up;
-                order = IBond.Order.SINGLE;
-                break;
-            case "hollow_wedge_bond":
-                display = IBond.Display.HollowWedgeBegin;
-                order = IBond.Order.SINGLE;
-                break;
-            case "hash_bond":
-                display = IBond.Display.Hash;
-                order = IBond.Order.SINGLE;
-                break;
-            case "bold_bond":
-                display = IBond.Display.Bold;
-                order = IBond.Order.SINGLE;
-                break;
-            case "dash_bond":
-                display = IBond.Display.Dash;
-                order = IBond.Order.SINGLE;
-                break;
-            case "coordination_bond":
-                display = IBond.Display.ArrowEnd;
-                order = IBond.Order.UNSET;
-                break;
-            case "undefined_bond":
-                display = IBond.Display.Wavy;
-                order = IBond.Order.SINGLE;
-                break;
-            case "undefined_stereo_bond":
-                display = IBond.Display.Crossed;
-                order = IBond.Order.DOUBLE;
-                break;
+        if (type.equals("cycleOrder")) {
+            jcpPanel.get2DHub().cycleBondValence(bondsInRange.iterator().next());
+        } else if (type.equals("alternateBonds")) {
+            jcpPanel.get2DHub().alternateBonds(bondsInRange.iterator().next());
+        } else {
+            switch (type) {
+                case "bond":
+                    display = IBond.Display.Solid;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "double_bond":
+                    display = IBond.Display.Solid;
+                    order = IBond.Order.DOUBLE;
+                    break;
+                case "triple_bond":
+                    display = IBond.Display.Solid;
+                    order = IBond.Order.TRIPLE;
+                    break;
+                case "quad_bond":
+                    display = IBond.Display.Solid;
+                    order = IBond.Order.QUADRUPLE;
+                    break;
+                case "down_bond":
+                    display = IBond.Display.Down;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "up_bond":
+                    display = IBond.Display.Up;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "hollow_wedge_bond":
+                    display = IBond.Display.HollowWedgeBegin;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "hash_bond":
+                    display = IBond.Display.Hash;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "bold_bond":
+                    display = IBond.Display.Bold;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "dash_bond":
+                    display = IBond.Display.Dash;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "coordination_bond":
+                    display = IBond.Display.ArrowEnd;
+                    order = IBond.Order.UNSET;
+                    break;
+                case "undefined_bond":
+                    display = IBond.Display.Wavy;
+                    order = IBond.Order.SINGLE;
+                    break;
+                case "undefined_stereo_bond":
+                    display = IBond.Display.Crossed;
+                    order = IBond.Order.DOUBLE;
+                    break;
+            }
+
+            jcpPanel.get2DHub().changeBonds(bondsInRange, order, display);
+            jcpPanel.get2DHub().updateView();
         }
-        jcpPanel.get2DHub().changeBonds(bondsInRange, order, display);
-        jcpPanel.get2DHub().updateView();
 
     }
 }

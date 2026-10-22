@@ -29,6 +29,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.action.ContextAction;
 import org.openscience.jchempaint.action.JCPAction;
 
 
@@ -299,13 +300,15 @@ public class JChemPaintMenuHelper {
         }
 
         if(!isPopupMenu) {
-            addShortCuts(cmd, mi, new AbstractAction() {
+            JCPAction actionStrAction = new JCPAction(jcpPanel) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (action != null)
                         action.actionPerformed(new ActionEvent(e.getSource(), e.getID(), actionStr, e.getWhen(), e.getModifiers()));
                 }
-            }, jcpPanel);
+            };
+            actionStrAction.setType(actionStr);
+            addShortCuts(cmd, mi, actionStrAction, jcpPanel);
         }
         if(cmd.equals("undo"))
             jcpPanel.undoMenu=mi;
@@ -314,6 +317,7 @@ public class JChemPaintMenuHelper {
         jcpPanel.menus.add((JMenuItem)mi);
         return mi;
     }
+
 
 
     /**
@@ -327,15 +331,12 @@ public class JChemPaintMenuHelper {
      * @param  mi   the regarding MenuItem.
      * @param  jcp  The JChemPaintPanel this menu is used for.
      */
-    private void addShortCuts(String cmd, JMenuItem mi, Action action, AbstractJChemPaintPanel jcp) {
+    private void addShortCuts(String cmd, JMenuItem mi, JCPAction action, AbstractJChemPaintPanel jcp) {
         Properties shortCutProps = JCPPropertyHandler.getInstance(true).getJCPShort_Cuts();
         String keyString = shortCutProps.getProperty(cmd);
         if (keyString != null) {
             for (String keyStringEntry : keyString.split("\\|")) {
-                KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStringEntry);
-                mi.setAccelerator(keyStroke);
-                jcp.getInputMap().put(keyStroke, cmd);
-                jcp.getActionMap().put(cmd, action);
+                jcp.installHotKey(keyStringEntry, cmd, action, mi);
             }
         }
     }
