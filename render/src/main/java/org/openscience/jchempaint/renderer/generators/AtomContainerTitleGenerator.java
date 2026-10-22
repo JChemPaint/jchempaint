@@ -31,13 +31,13 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.TextElement;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
  * @cdk.module rendercontrol
@@ -63,7 +63,7 @@ public class AtomContainerTitleGenerator implements IGenerator<IAtomContainer> {
         double maxY = totalBounds.getMaxY();
         Color c = Color.GRAY;
         diagram.add(new TextElement(
-                        (minX+maxX)/2, minY-d, (String)ac.getProperty(CDKConstants.TITLE), c,0.8));
+                        (minX+maxX)/2, minY-d, (String)ac.getProperty(CDKConstants.TITLE), c));
         return diagram;
     }
     

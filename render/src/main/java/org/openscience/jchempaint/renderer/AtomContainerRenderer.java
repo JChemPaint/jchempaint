@@ -35,9 +35,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.TextGroupElement;
+import org.openscience.cdk.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.generators.IGenerator;
-import org.openscience.jchempaint.renderer.visitor.IDrawVisitor;
+import org.openscience.cdk.renderer.visitor.IDrawVisitor;
 
 /**
  * A general renderer for {@link IAtomContainer}s. The chem object
@@ -475,7 +475,7 @@ public class AtomContainerRenderer implements IRenderer {
 	    ElementGroup diagram = new ElementGroup();
         for (IGenerator<IAtomContainer> generator : this.generators) {
         	IRenderingElement element = generator.generate(ac, this.rendererModel);
-        	if(!(element instanceof TextGroupElement) || ((TextGroupElement)element).children.size()>0)
+        	if(!(element instanceof TextGroupElement) || !((TextGroupElement) element).children.isEmpty())
         		diagram.add(element);
         }
         //Rgroup stuff (not contained in the ac)

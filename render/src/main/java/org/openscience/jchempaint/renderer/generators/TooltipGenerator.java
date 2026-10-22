@@ -25,10 +25,10 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
-import org.openscience.jchempaint.renderer.elements.TextGroupElement;
 
 /**
  * A generator for tooltips shown when hovering over an atom

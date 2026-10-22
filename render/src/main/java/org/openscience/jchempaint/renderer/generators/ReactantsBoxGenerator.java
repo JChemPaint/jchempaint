@@ -22,12 +22,12 @@ import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.renderer.elements.TextElement;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
  * Generate the symbols for radicals.
