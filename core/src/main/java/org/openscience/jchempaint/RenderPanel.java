@@ -28,7 +28,6 @@
  */
 package org.openscience.jchempaint;
 
-import org.openscience.cdk.config.Elements;
 import org.openscience.cdk.depict.DepictionGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -36,7 +35,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.SymbolVisibility;
 import org.openscience.cdk.renderer.color.CDK2DAtomColors;
@@ -45,7 +43,6 @@ import org.openscience.cdk.renderer.color.UniColor;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
-import org.openscience.cdk.renderer.generators.RingGenerator;
 import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -71,23 +68,16 @@ import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.generators.AtomContainerBoundsGenerator;
 import org.openscience.jchempaint.renderer.generators.AtomContainerTitleGenerator;
 import org.openscience.jchempaint.renderer.generators.BoundsGenerator;
-import org.openscience.jchempaint.renderer.generators.ExtendedAtomGenerator;
-import org.openscience.jchempaint.renderer.generators.ExternalHighlightAtomGenerator;
-import org.openscience.jchempaint.renderer.generators.ExternalHighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightAtomGenerator;
 import org.openscience.jchempaint.renderer.generators.HighlightBondGenerator;
 import org.openscience.jchempaint.renderer.generators.IReactionGenerator;
-import org.openscience.jchempaint.renderer.generators.LonePairGenerator;
 import org.openscience.jchempaint.renderer.generators.MappingGenerator;
 import org.openscience.jchempaint.renderer.generators.MergeAtomsGenerator;
 import org.openscience.jchempaint.renderer.generators.ProductsBoxGenerator;
-import org.openscience.jchempaint.renderer.generators.RadicalGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactantsBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionArrowGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionBoxGenerator;
 import org.openscience.jchempaint.renderer.generators.ReactionPlusGenerator;
-import org.openscience.jchempaint.renderer.generators.SelectAtomGenerator;
-import org.openscience.jchempaint.renderer.generators.SelectBondGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectControlGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectionToolGenerator;
 import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
@@ -113,7 +103,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class RenderPanel extends JPanel implements IViewEventRelay,
                                                    IUndoListener {
@@ -192,7 +181,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
 
         if (this.renderer == null) {
             this.renderer = new Renderer(
-                    makeGenerators(chemModel, false),
+                    makeGenerators(chemModel),
                     makeReactionGenerators(),
                     new AWTFontManager());
             // any specific rendering settings defaults that overwrite user settings should go here
@@ -329,8 +318,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     //
     // It would be nice if this was a preference but we don't configure
     // until after the generators are setup
-    private List<IGenerator<IAtomContainer>> makeGenerators(IChemModel chemModel,
-                                                            boolean useSeparateGenerators)
+    private List<IGenerator<IAtomContainer>> makeGenerators(IChemModel chemModel)
             throws IOException {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         if (debug) {
@@ -339,20 +327,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         generators.add(new BasicSceneGenerator());
         generators.add(new HighlightAtomGenerator());
         generators.add(new HighlightBondGenerator());
-        if (useSeparateGenerators) {
-            generators.add(new RingGenerator());
-            generators.add(new ExtendedAtomGenerator());
-            generators.add(new LonePairGenerator());
-            generators.add(new RadicalGenerator());
-            generators.add(new ExternalHighlightAtomGenerator());
-            generators.add(new ExternalHighlightBondGenerator());
-        } else {
-            generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 14)));
-        }
-        if (useSeparateGenerators) {
-            generators.add(new SelectAtomGenerator());
-            generators.add(new SelectBondGenerator());
-        }
+        generators.add(new StandardGenerator(new Font(Font.SANS_SERIF, Font.PLAIN, 14)));
         generators.add(new SelectControlGenerator());
         generators.add(new SelectionToolGenerator());
         generators.add(new MergeAtomsGenerator());
