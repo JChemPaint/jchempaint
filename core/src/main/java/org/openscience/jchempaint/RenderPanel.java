@@ -82,7 +82,7 @@ import org.openscience.jchempaint.renderer.generators.ReactionPlusGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectControlGenerator;
 import org.openscience.jchempaint.renderer.generators.SelectionToolGenerator;
 import org.openscience.jchempaint.renderer.generators.TooltipGenerator;
-import org.openscience.jchempaint.renderer.visitor.AWTDrawVisitor;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.jchempaint.undoredo.SwingUndoRedoFactory;
 import org.openscience.jchempaint.undoredo.SwingUndoableEdit;
 
@@ -98,6 +98,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -421,7 +422,23 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         renderer.setDrawCenter(s.getWidth() / 2, s.getHeight() / 2);
         renderer.setModelCenter(m.getCenterX(), m.getCenterY());
 
-        renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
+        renderer.paintChemModel(chemModel, getDrawVisitor(g));
+    }
+
+    private AWTDrawVisitor getDrawVisitor(Graphics2D g) {
+        AWTDrawVisitor visitor = AWTDrawVisitor.forVectorGraphics(g);
+        visitor.setRounding(false);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                           RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                           RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                           RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+                           RenderingHints.VALUE_STROKE_NORMALIZE);
+        return visitor;
     }
 
     protected boolean isValidChemModel(IChemModel chemModel) {
@@ -437,7 +454,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
         Graphics2D g2 = (Graphics2D) g;
 
         if (this.shouldPaintFromCache) {
-            renderer.repaint(new AWTDrawVisitor(g2));
+            renderer.repaint(getDrawVisitor(g2));
         } else {
             IChemModel chemModel = this.hub.getIChemModel();
 
@@ -501,7 +518,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
             // this makes sure the toolbars get drawn
             this.setPreferredSize(new Dimension(result.width, result.height));
             this.revalidate();
-            renderer.paintChemModel(chemModel, new AWTDrawVisitor(g));
+            renderer.paintChemModel(chemModel, getDrawVisitor(g));
 
         }
     }
@@ -509,7 +526,7 @@ public class RenderPanel extends JPanel implements IViewEventRelay,
     private void paintChemModelFitToScreen(IChemModel chemModel, Graphics2D g,
                                            Rectangle screen) {
 
-        renderer.paintChemModel(chemModel, new AWTDrawVisitor(g), screen, true);
+        renderer.paintChemModel(chemModel, getDrawVisitor(g), screen, true);
 
     }
 
