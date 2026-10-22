@@ -76,7 +76,7 @@ public class SelectControlGenerator implements IGenerator<IAtomContainer> {
                     // rotation handle
                     Point2d p = model.getSelectionRotateControl();
                     if (p != null) {
-                        selectionControls.add(new OvalElement(p.x, p.y, r, false, color));
+                        selectionControls.add(new OvalElement(p.x, p.y, r, 1 / model.getScale(), false, color));
                         selectionControls.add(new LineElement(p.x, p.y - r,
                                                               box.xCoord + (box.width / 2),
                                                               box.yCoord,
