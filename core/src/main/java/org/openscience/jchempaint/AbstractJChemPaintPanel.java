@@ -40,15 +40,16 @@ import java.io.PrintStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -57,22 +58,22 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.undo.UndoManager;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingSDFReader;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
+import org.openscience.jchempaint.action.ContextAction;
 import org.openscience.jchempaint.action.CreateSmilesAction;
 import org.openscience.jchempaint.action.JCPAction;
 import org.openscience.jchempaint.action.SaveAction;
@@ -87,6 +88,7 @@ import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 public abstract class AbstractJChemPaintPanel extends JPanel{
 
     private static final long serialVersionUID = -6591788750314560180L;
+    private static final Logger log = Logger.getLogger(AbstractJChemPaintPanel.class);
     // buttons/menus are remembered in here using the string from config files as key
     Map<String, JButton> buttons=new HashMap<String, JButton>();
     List<JMenuItem> menus=new ArrayList<JMenuItem>();
@@ -458,8 +460,108 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
         this.showToolBar = showToolBar;
         customizeView();
     }
+
+
+    private void installHotKey(String keyStr, String cmd, JCPAction action) {
+        installHotKey(keyStr, cmd, action, null);
+    }
+
+    void installHotKey(String keyStr, String cmd, JCPAction action, JMenuItem mi) {
+
+        boolean atomContext = false;
+        boolean bondContext = false;
+
+        // atom/bond specific key binding
+        if (keyStr.contains("@atom")) {
+            keyStr = keyStr.replaceAll("@atom", "");
+            cmd += "@atom";
+            atomContext = true;
+        } else if (keyStr.contains("@bond")) {
+            keyStr = keyStr.replaceAll("@bond", "");
+            cmd += "@bond";
+            bondContext = true;
+        }
+
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStr);
+
+        if (keyStroke == null) {
+            logger.error("Invalid key stroke: " + keyStr);
+            return;
+        }
+
+        // check for an existing action, if there is we will remap the command
+        // to be a hybrid of the two
+        Action current = null;
+        String currentCmd = (String) getInputMap().get(keyStroke);
+
+        if (currentCmd != null) {
+
+            if (currentCmd.contains(cmd)) {
+                // skip
+                return;
+            }
+
+            cmd = currentCmd + "|" + cmd;
+            // move the existing action over
+            current = getActionMap().get(currentCmd);
+            getActionMap().remove(currentCmd);
+        }
+
+        getInputMap().put(keyStroke, cmd);
+        if (atomContext) {
+            getActionMap().put(cmd, ContextAction.atom(action, current));
+        } else if (bondContext) {
+            getActionMap().put(cmd, ContextAction.bond(action, current));
+        } else {
+            getActionMap().put(cmd, ContextAction.base(action, current));
+            if (mi != null && mi.getAccelerator() == null)
+                mi.setAccelerator(keyStroke);
+        }
+    }
+
+    public void installHotKeys()
+    {
+        JCPPropertyHandler props = JCPPropertyHandler.getInstance(true);
+        Properties shortCutProps = props.getJCPShort_Cuts();
+
+        for (Map.Entry<Object,Object> e : shortCutProps.entrySet()) {
+            String cmd = e.getKey().toString();
+            String keyStrokes = e.getValue().toString();
+
+            if (!props.getResources().containsKey(cmd + JCPAction.actionSuffix)) {
+                logger.warn("No action defined for " + cmd);
+                continue;
+            }
+
+            String resourceString = props.getResourceString(cmd + JCPAction.actionSuffix);
+            final String actionStr = resourceString != null ? resourceString : cmd;
+            final JCPAction action = new JCPAction().getAction(this, actionStr);
+            if (action == null)
+                continue;
+            JCPAction actionWithActionStr = new JCPAction(this) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    action.actionPerformed(new ActionEvent(e.getSource(),
+                                                           e.getID(),
+                                                           actionStr,
+                                                           e.getWhen(),
+                                                           e.getModifiers()));
+                }
+            };
+            actionWithActionStr.setType(actionStr);
+
+            for (String keyStroke : keyStrokes.split("\\|")) {
+                installHotKey(keyStroke, cmd, actionWithActionStr);
+            }
+        }
+    }
     
     public void customizeView() {
+
+        // the key bindings will be re-installed
+        getInputMap().clear();
+        getActionMap().clear();
+
         if (showMenuBar) {
             if (menu == null) {
                 menu = new JChemPaintMenuBar(this, this.guistring, blockList);
@@ -507,8 +609,11 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
                 centerContainer.remove(insertTextPanel);
         }
         topContainer.revalidate();
+        installHotKeys();
         revalidate();
     }
+
+
 
     /**
      * Helps in keeping the current action button highlighted - needs to be set
