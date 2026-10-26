@@ -52,6 +52,7 @@ import org.openscience.jchempaint.renderer.selection.SingleSelection;
 public class AddBondDragModule extends ControllerModuleAdapter {
 
     Point2d lastMouseMove;
+    int lastModifiers;
     Point2d start;
     Point2d dest;
     IAtom source = null;// either atom at mouse down or new atom
@@ -99,9 +100,10 @@ public class AddBondDragModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseMove(Point2d worldCoord) {
+    public void mouseMove(Point2d worldCoord, int modifiers) {
 
         lastMouseMove = worldCoord;
+        lastModifiers = modifiers;
 
         IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
         IBond closestBond = chemModelRelay.getClosestBond(worldCoord);
@@ -302,6 +304,6 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
     @Override
     public void updateView() {
-        if (lastMouseMove != null) mouseMove(lastMouseMove);
+        if (lastMouseMove != null) mouseMove(lastMouseMove, lastModifiers);
     }
 }

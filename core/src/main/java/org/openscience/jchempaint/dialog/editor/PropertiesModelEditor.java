@@ -33,6 +33,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.formdev.flatlaf.util.SystemInfo;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
@@ -63,8 +64,9 @@ import java.awt.Container;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -141,16 +143,32 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     private JComboBox<?> lookAndFeel;
     private JCheckBox fontIcons;
 
-    String[] lookAndFeels = {GT.get("System"),
-                             "Metal",
-                             "Nimbus",
-                             "Motif",
-                             "GTK",
-                             "Windows",
-                             "FlatLightLaf",
-                             "FlatDarkLaf",
-                             "FlatMacLightLaf",
-                             "FlatMacDarkLaf"};
+    private static Map<String,Class<?>> lookAndFeels = new LinkedHashMap<>();
+
+    static {
+        registerLookAndFeel(GT.get("System"), UIManager.getSystemLookAndFeelClassName());
+        registerLookAndFeel("Metal", UIManager.getCrossPlatformLookAndFeelClassName());
+        registerLookAndFeel("Nimbus", "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        registerLookAndFeel("Motif", "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+        registerLookAndFeel("GTK", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+        registerLookAndFeel("Windows", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        if (SystemInfo.isMacOS) {
+            registerLookAndFeel("Flat (Light)", FlatMacLightLaf.class.getName());
+            registerLookAndFeel("Flat (Dark)", FlatMacDarkLaf.class.getName());
+        } else {
+            registerLookAndFeel("Flat (Light)", FlatLightLaf.class.getName());
+            registerLookAndFeel("Flat (Dark)", FlatDarkLaf.class.getName());
+        }
+    }
+
+    static void registerLookAndFeel(String name, String className) {
+        try {
+            Class<?> cls = Class.forName(className);
+            lookAndFeels.put(name, cls);
+        } catch (ClassNotFoundException e) {
+
+        }
+    }
 
     private GT.Language[] gtlanguages = GT.getLanguageList();
 
@@ -264,7 +282,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         askForIOSettings = new JCheckBox();
         addField(GT.get("Ask for CML settings when saving"), askForIOSettings, otherOptionsPanel);
 
-        lookAndFeel = new JComboBox<Object>(lookAndFeels);
+        lookAndFeel = new JComboBox<Object>(lookAndFeels.keySet().toArray());
         lookAndFeel.setName("laf");
         addField(GT.get("Look and feel"), lookAndFeel, otherOptionsPanel);
         fontIcons = new JCheckBox();
@@ -323,7 +341,11 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         Properties props = jcpph.getJCPProperties();
         askForIOSettings.setSelected(props.getProperty("General.askForIOSettings").equals("true"));
         undoStackSize.setText(props.getProperty("General.UndoStackSize", "50"));
-        lookAndFeel.setSelectedIndex(Integer.parseInt(props.getProperty("LookAndFeel", "0")));
+
+        Class<?> cls = UIManager.getLookAndFeel().getClass();
+        int idx = new ArrayList<>(lookAndFeels.values()).indexOf(cls);
+        if (idx >= 0)
+            lookAndFeel.setSelectedIndex(idx);
         fontIcons.setSelected(jcpph.getBool("useFontIcons", true));
         language.setSelectedItem(props.getProperty("General.language"));
         validate();
@@ -401,43 +423,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
 
         boolean useFontIcons = fontIcons.isSelected();
 
-        String lnfName = "";
+        Class<?> lnfName = lookAndFeels.get(lookAndFeel.getSelectedItem().toString());
         try {
-            switch (lookAndFeel.getSelectedIndex()) {
-                case 0:
-                    lnfName = UIManager.getSystemLookAndFeelClassName();
-                    break; // System
-                case 1:
-                    lnfName = UIManager.getCrossPlatformLookAndFeelClassName();
-                    break; // Metal
-                case 2:
-                    lnfName = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
-                    break; // Nimbus
-                case 3:
-                    lnfName = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-                    break; // Motif
-                case 4:
-                    lnfName = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-                    break; // GTK
-                case 5:
-                    lnfName = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-                    break; // Windows
-                case 6:
-                    lnfName = FlatLightLaf.class.getName();
-                    break; // FlatLightLaf
-                case 7:
-                    lnfName = FlatDarkLaf.class.getName();
-                    break; // FlatDarkLaf
-                case 8:
-                    lnfName = FlatMacLightLaf.class.getName();
-                    break; // FlatMacLightLaf
-                case 9:
-                    lnfName = FlatMacDarkLaf.class.getName();
-                    break; // FlatMacDarkLaf
-                default:
-                    lnfName = "";
-            }
-            UIManager.setLookAndFeel(lnfName);
+
+            UIManager.setLookAndFeel(lnfName.getName());
 
             props.setProperty("useFontIcons",
                               Boolean.toString(useFontIcons));
@@ -445,7 +434,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
             // when switching UI theme we also set the background color
             // unless it was changed explicitly
             if (!backColorChanged) {
-                currentColor = lnfName.contains("Dark") ? new Color(51, 51, 51) : Color.white;
+                currentColor = lnfName.getName().contains("Dark") ? new Color(51, 51, 51) : Color.white;
                 color.setBackground(currentColor);
                 model.setBackColor(currentColor);
                 props.setProperty("BackColor", Integer.toString(currentColor.getRGB()));
@@ -463,8 +452,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
                 }
             }
 
-            props.setProperty("LookAndFeel", String.valueOf(lookAndFeel.getSelectedIndex()));
-            props.setProperty("LookAndFeelClass", lnfName);
+            props.setProperty("LookAndFeelClass", lnfName.getName());
         } catch (UnsupportedLookAndFeelException e) {
             JOptionPane.showMessageDialog(this, GT.get("Look and feel") + " \"" + lookAndFeel.getSelectedItem() + "\" " + GT.get("is not supported on this platform"), GT.get("Unsupported look&feel"), JOptionPane.WARNING_MESSAGE);
         } catch (ClassNotFoundException e) {

@@ -47,6 +47,7 @@ public class CycleSymbolModule extends ControllerModuleAdapter {
         super(chemModelRelay);
     }
 
+    @Override
     public void mouseClickedDown(Point2d worldCoord, int modifiers) {
         
         IChemObject singleSelected = getHighlighted( worldCoord, 

@@ -239,6 +239,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		generalModules.add(module);
 	}
 
+	@Override
 	public void mouseWheelMovedBackward(int modifiers, int clicks) {
 		for (IControllerModule module : generalModules) {
 			module.mouseWheelMovedBackward(modifiers, clicks);
@@ -249,6 +250,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	}
 
+	@Override
 	public void mouseWheelMovedForward(int modifiers, int clicks) {
 		for (IControllerModule module : generalModules) {
 			module.mouseWheelMovedForward(modifiers, clicks);
@@ -259,28 +261,14 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	}
 
-	public void mouseClickedDouble(int screenCoordX, int screenCoordY) {
-		Point2d worldCoord = renderer.toModelCoordinates(screenCoordX,
-				screenCoordY);
-
-		// Relay the mouse event to the general handlers
-		for (IControllerModule module : generalModules) {
-			module.mouseClickedDouble(worldCoord);
-		}
-
-		// Relay the mouse event to the active
-		IControllerModule activeModule = getActiveDrawModule();
-		if (activeModule != null)
-			activeModule.mouseClickedDouble(worldCoord);
-	}
-
-	public void mouseClickedDownRight(int screenX, int screenY) {
+	@Override
+	public void mouseClickedDownRight(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
-			activeModule.mouseClickedDownRight(modelCoord);
+			activeModule.mouseClickedDownRight(modelCoord, modifiers);
 		if (activeModule.wasEscaped()) {
 			setActiveDrawModule(null);
 			return;
@@ -288,24 +276,26 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseClickedDownRight(modelCoord);
+			module.mouseClickedDownRight(modelCoord, modifiers);
 		}
-}
+	}
 
-	public void mouseClickedUpRight(int screenX, int screenY) {
+	@Override
+	public void mouseClickedUpRight(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseClickedUpRight(modelCoord);
+			module.mouseClickedUpRight(modelCoord, modifiers);
 		}
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
-			activeModule.mouseClickedUpRight(modelCoord);
+			activeModule.mouseClickedUpRight(modelCoord, modifiers);
 	}
 
+	@Override
 	public void mouseClickedDown(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
@@ -328,10 +318,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
-    public void mouseClickedDown(int screenX, int screenY) {
-        mouseClickedDown(screenX, screenY, 0);
-    }
-
+	@Override
 	public void mouseClickedUp(int screenX, int screenY, int modifiers) {
 		Point2d modelCoord = renderer.toModelCoordinates(screenX, screenY);
 
@@ -349,10 +336,25 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		setCursor(oldMouseCursor);
 	}
 
-    public void mouseClickedUp(int screenX, int screenY) {
-        mouseClickedUp(screenX, screenY, 0);
-    }
+	@Override
+	public void mouseClickedDouble(int screenCoordX, int screenCoordY,
+								   int modifiers) {
+		Point2d worldCoord = renderer.toModelCoordinates(screenCoordX,
+														 screenCoordY);
 
+		// Relay the mouse event to the general handlers
+		for (IControllerModule module : generalModules) {
+			module.mouseClickedDouble(worldCoord, modifiers);
+		}
+
+		// Relay the mouse event to the active
+		IControllerModule activeModule = getActiveDrawModule();
+		if (activeModule != null)
+			activeModule.mouseClickedDouble(worldCoord, modifiers);
+	}
+
+
+	@Override
 	public void mouseDrag(int screenXFrom, int screenYFrom, int screenXTo,
 			int screenYTo, int modifiers) {
 		Point2d modelCoordFrom = renderer.toModelCoordinates(screenXFrom,
@@ -372,6 +374,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 	}
 
+	@Override
 	public void mouseEnter(int screenX, int screenY) {
 		Point2d worldCoord = renderer.toModelCoordinates(screenX, screenY);
 
@@ -386,6 +389,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			activeModule.mouseEnter(worldCoord);
 	}
 
+	@Override
 	public void mouseExit(int screenX, int screenY) {
 		Point2d worldCoord = renderer.toModelCoordinates(screenX, screenY);
 
@@ -400,18 +404,19 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			activeModule.mouseExit(worldCoord);
 	}
 
-	public void mouseMove(int screenX, int screenY) {
+	@Override
+	public void mouseMove(int screenX, int screenY, int modifiers) {
 		Point2d worldCoord = renderer.toModelCoordinates(screenX, screenY);
 
 		// Relay the mouse event to the general handlers
 		for (IControllerModule module : generalModules) {
-			module.mouseMove(worldCoord);
+			module.mouseMove(worldCoord, modifiers);
 		}
 
 		// Relay the mouse event to the active
 		IControllerModule activeModule = getActiveDrawModule();
 		if (activeModule != null)
-			activeModule.mouseMove(worldCoord);
+			activeModule.mouseMove(worldCoord, modifiers);
 	}
 
 	public void updateView() {
@@ -427,6 +432,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		clearPhantoms();
 		if (activeDrawModule == null)
 			activeDrawModule = this.fallbackModule;
+		activeDrawModule.reset();
 		this.activeDrawModule = activeDrawModule;
 		for (int i = 0; i < changeModeListeners.size(); i++)
 			changeModeListeners.get(i).modeChanged(this.activeDrawModule);
@@ -1022,6 +1028,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      *
 	 * @param root an atom to select from
 	 */
+	@Override
 	public void selectFragment(IAtom root) {
 		LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
@@ -1060,6 +1067,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
      *
 	 * @param root the bond to select from
 	 */
+	@Override
 	public void selectFragment(IBond root) {
         LogicalSelection selection = new LogicalSelection(LogicalSelection.Type.ALL);
         IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(getChemModel(), root);
@@ -1495,7 +1503,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 
 	public void setSymbol(IAtom atom, String symbol) {
-		setSymbol(atom, symbol, null);
+		setSymbol(Collections.singletonList(atom), symbol, null);
 	}
 
 	/**
@@ -1503,41 +1511,43 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * If an exception happens, the massNumber is set to null.
 	 * @see org.openscience.jchempaint.controller.IAtomBondEdits#setSymbol(org.openscience.cdk.interfaces.IAtom, java.lang.String)
 	 */
-	public void setSymbol(IAtom atom, String symbol, Integer massNumber) {
+	public void setSymbol(List<IAtom> atoms, String symbol, Integer massNumber) {
 		CompoundEdit edit = new CompoundEdit("Change atom to " + symbol);
 
 		boolean newIsPseudo = Elements.ofString(symbol) == Elements.Unknown;
-		boolean swap = atom instanceof IPseudoAtom || newIsPseudo;
+		for (IAtom atom : atoms) {
+			boolean swap = atom instanceof IPseudoAtom || newIsPseudo;
 
-		if (swap) {
-			IAtom newAtom;
-			if (newIsPseudo) {
-				newAtom = makePseudoAtom(symbol, null);
+			if (swap) {
+				IAtom newAtom;
+				if (newIsPseudo) {
+					newAtom = makePseudoAtom(symbol, null);
+				} else {
+					newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
+				}
+				newAtom.setPoint2d(atom.getPoint2d());
+				edit.add(new ReplaceAtomEdit(this.getIChemModel(),
+											 atom,
+											 newAtom,
+											 "Change atom to " + symbol,
+											 this));
+				if (!Objects.equals(atom.getMassNumber(), massNumber)) {
+					edit.add(new ChangeIsotopeEdit(atom,
+												   atom.getMassNumber(), massNumber,
+												   "Change Mass Number to " + massNumber));
+				}
 			} else {
-				newAtom = atom.getBuilder().newInstance(IAtom.class, symbol);
-			}
-			newAtom.setPoint2d(atom.getPoint2d());
-			edit.add(new ReplaceAtomEdit(this.getIChemModel(),
-										 atom,
-										 newAtom,
-										 "Change atom to " + symbol,
-										 this));
-			if (!Objects.equals(atom.getMassNumber(), massNumber)) {
-				edit.add(new ChangeIsotopeEdit(atom,
-											   atom.getMassNumber(), massNumber,
-											   "Change Mass Number to " + massNumber));
-			}
-		} else {
-			if (!atom.getSymbol().equals(symbol)) {
-				edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
-				if (atom.getValency() != null)
-					edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
-				if (atom.getFormalCharge() != null)
-					edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
-				if (!Objects.equals(atom.getMassNumber(), massNumber))
-					edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
-			} else {
-				edit.add(cycleValence(atom));
+				if (!atom.getSymbol().equals(symbol)) {
+					edit.add(new ChangeAtomSymbolEdit(atom, atom.getSymbol(), symbol, this));
+					if (atom.getValency() != null)
+						edit.add(new ChangeValenceEdit(atom, atom.getValency(), null, null, this));
+					if (atom.getFormalCharge() != null)
+						edit.add(new ChangeChargeEdit(atom, atom.getFormalCharge(), 0, null, this));
+					if (!Objects.equals(atom.getMassNumber(), massNumber))
+						edit.add(new ChangeIsotopeEdit(atom, atom.getMassNumber(), massNumber, null));
+				} else {
+					edit.add(cycleValence(atom));
+				}
 			}
 		}
 		edit.redo();
@@ -3583,7 +3593,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 			for (IBond bond : retainedContainer.getConnectedBondsList(removedAtom)) {
 				IAtom nbor = bond.getOther(removedAtom);
-				if (nbors.add(nbor)) {
+				if (nbors.add(nbor) && !mergeMap.containsKey(nbor)) {
 					if (bond.getBegin().equals(removedAtom)) {
 						bond.setAtom(retainedAtom, 0);
 						bondsWithReplacedAtom.put(bond, 0);
@@ -3831,8 +3841,9 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			for (IAtom atom : atoms) {
 				Point2d newpoint = new Point2d(atom.getPoint2d());
 				newpoint.add(move);
-				moveToWithoutUndo(atom, newpoint);
+				atom.setPoint2d(newpoint);
 			}
+			coordinatesChanged();
 		}
 	}
 

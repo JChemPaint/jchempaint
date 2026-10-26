@@ -46,6 +46,7 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 		super(chemModelRelay);
 	}
 
+	@Override
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		double dH = model.getHighlightDistance() / model.getScale();
@@ -56,7 +57,8 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 		else
 			startAtom = chemModelRelay.getClosestAtom(worldCoord);
 	}
-	
+
+	@Override
 	public void mouseClickedUp(Point2d worldCoord, int modifiers){
 		JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		double dH = model.getHighlightDistance() / model.getScale();
