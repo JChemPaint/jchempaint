@@ -38,6 +38,7 @@ import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
+import org.openscience.jchempaint.SnapGuides;
 import org.openscience.jchempaint.dialog.FieldTablePanel;
 import org.openscience.jchempaint.dialog.ModifyRenderOptionsDialog;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
@@ -61,13 +62,18 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @cdk.bug 1525961
@@ -121,6 +127,10 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
     //private JButton chooseFontButton;
 
     //private String currentFontName;
+
+    private JCheckBox snapBounds;
+    private JCheckBox snapCenters;
+    private JCheckBox snapRings;
 
     private JLabel color;
 
@@ -263,6 +273,16 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         highlightDistance = new JSpinner(new SpinnerNumberModel(5,0,25,1));
         addField(GT.get("Highlight Distance"), highlightDistance, options2);
 
+        snapBounds = new JCheckBox(GT.get("Bound"));
+        snapRings = new JCheckBox(GT.get("Ring"));
+        snapCenters = new JCheckBox(GT.get("Center"));
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(snapBounds);
+        panel.add(snapRings);
+        panel.add(snapCenters);
+        addField(GT.get("Snap Guides"), panel, options2);
+
         /*
         currentFontName = "";
         fontName = new JLabel();
@@ -325,6 +345,13 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         hashSpacing.setValue(model.getHashSpacing());
         wedgeWidth.setValue(model.getWedgeWidth());
 
+
+        Set<SnapGuides.Type> types =
+                model.getParameter(SnapGuides.SnapTypes.class).getValue();
+        snapBounds.setSelected(types.contains(SnapGuides.Type.Bound));
+        snapRings.setSelected(types.contains(SnapGuides.Type.Ring));
+        snapCenters.setSelected(types.contains(SnapGuides.Type.Center));
+
         /*
         currentFontName = model.getFontName();
         if (!currentFontName.equals("")) {
@@ -373,6 +400,12 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         model.setHashSpacing((double) hashSpacing.getValue());
         model.setHighlightDistance((int)highlightDistance.getValue());
 
+        Set<SnapGuides.Type> snapTypes = EnumSet.noneOf(SnapGuides.Type.class);
+        if (snapBounds.isSelected()) snapTypes.add(SnapGuides.Type.Bound);
+        if (snapRings.isSelected()) snapTypes.add(SnapGuides.Type.Ring);
+        if (snapCenters.isSelected()) snapTypes.add(SnapGuides.Type.Center);
+        model.set(SnapGuides.SnapTypes.class, snapTypes);
+
         model.setBackColor(currentColor);
 
         if (language.getSelectedIndex() != -1) {
@@ -398,6 +431,7 @@ public class PropertiesModelEditor extends FieldTablePanel implements ActionList
         props.setProperty("HighlightDistance", String.valueOf(highlightDistance.getValue()));
         props.setProperty("WedgeWidth", String.valueOf(wedgeWidth.getValue()));
         props.setProperty("HashSpacing", String.valueOf(hashSpacing.getValue()));
+        props.setProperty("SnapTypes", snapTypes.stream().map(SnapGuides.Type::name).collect(Collectors.joining(",")));
 
         //props.setFontName(currentFontName);
         String backColorVal = String.valueOf(currentColor.getRGB());
