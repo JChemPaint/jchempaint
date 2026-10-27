@@ -29,10 +29,6 @@
  */
 package org.openscience.jchempaint;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
-import org.openscience.cdk.ChemModel;
-import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.event.ICDKChangeListener;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -52,13 +48,11 @@ import org.openscience.jchempaint.controller.MoveModule;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
@@ -153,6 +147,8 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         });
         handler = new JCPTransferHandler(this);
         renderPanel.setTransferHandler(handler);
+
+        installHotKeys();
     }
 
     /**
@@ -300,6 +296,7 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
      * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
      */
     public void keyPressed(KeyEvent e) {
+
         JChemPaintRendererModel model = renderPanel.getRenderer().getRenderer2DModel();
         ControllerHub relay = renderPanel.getHub();
 
@@ -311,198 +308,6 @@ public class JChemPaintPanel extends AbstractJChemPaintPanel implements
         }
 
         this.get2DHub().clearPhantoms();
-
-        /*
-         * ATOM/BOND Hotkeys
-         * This will be better as two config files
-         * - JCP_AtomHotKeys.properties
-         * - JCP_BondHotKeys.properties
-         * But is functional for now
-         */
-
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_RIGHT:
-
-                // re-sync - make sure the highlighted atom has the correct
-                //           context (e.g. bonding) based on the current model
-                if (model.getHighlightedAtom() != null) {
-                    IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
-                                                                                             model.getHighlightedAtom());
-                    if (container != null)
-                        model.setHighlightedAtom(container.getAtom(container.indexOf(model.getHighlightedAtom())));
-                    else
-                        model.setHighlightedAtom(null);
-                }
-                if (model.getHighlightedBond() != null) {
-                    IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
-                                                                                             model.getHighlightedBond());
-                    if (container != null)
-                        model.setHighlightedBond(container.getBond(container.indexOf(model.getHighlightedBond())));
-                    else
-                        model.setHighlightedBond(null);
-                }
-
-                model.moveHighlight(e.getKeyCode());
-                if ((e.getModifiersEx() & KeyEvent.SHIFT_DOWN_MASK) != 0)
-                    model.moveHighlight(e.getKeyCode());
-                this.get2DHub().updateView();
-                return;
-        }
-
-        boolean changed = false;
-
-        // if shift or nothing pressed we do the hot keys for atoms/bonds
-        if (((e.getModifiersEx() & ~(KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0)) {
-
-            // normalize to lowercase then use the shift pressed to switch to
-            // upper case. Doing it this way means caps lock doesn't change
-            // the behaviour
-            char ch = Character.toLowerCase((char)e.getKeyCode());
-            if ((e.getModifiersEx()&KeyEvent.SHIFT_DOWN_MASK) != 0)
-                ch = Character.toUpperCase(ch);
-
-            if (model.getHighlightedAtom() != null) {
-                IAtom hgAtom = model.getHighlightedAtom();
-                changed = true;
-                switch (ch) {
-                    case ' ':
-                        relay.selectFragment(hgAtom);
-                        break;
-                    case '0':
-                        relay.addAtom(hgAtom, IAtom.C, true);
-                        break;
-                    case '1':
-                        relay.addAtom(hgAtom, IAtom.C, false);
-                        break;
-                    case '2':
-                        relay.addAcetyl(hgAtom);
-                        break;
-                    case '3': // fall through 3/a
-                    case 'a':
-                        relay.addPhenyl(hgAtom, 6, false);
-                        break;
-                    case '4':
-                        relay.addDimethyl(hgAtom, IBond.Display.WedgeBegin);
-                        break;
-                    case '5':
-                        relay.addDimethyl(hgAtom, IBond.Display.WedgedHashBegin);
-                        break;
-                    case '6':
-                        relay.addRing(hgAtom, 6, false);
-                        break;
-                    case '7':
-                        relay.addRing(hgAtom, 5, false);
-                        break;
-                    case '8':
-                        relay.addAtom(hgAtom, IAtom.C, IBond.Order.DOUBLE, false);
-                        break;
-                    case '9':
-                        relay.addDimethyl(hgAtom, IBond.Display.Solid);
-                        break;
-                    // case "e": break; // ethyl
-                    default:
-                        changed = false;
-                }
-            } else if (model.getHighlightedBond() != null) {
-                IBond hgBond = model.getHighlightedBond();
-                changed = true;
-                switch (ch) {
-                    case ' ':
-                        relay.selectFragment(hgBond);
-                        break;
-                    case '1':
-                        relay.cycleBondValence(hgBond);
-                        break;
-                    case '2':
-                        relay.changeBond(hgBond, IBond.Order.DOUBLE, IBond.Display.Solid);
-                        break;
-                    case '3':
-                        relay.changeBond(hgBond, IBond.Order.TRIPLE, IBond.Display.Solid);
-                        break;
-                    case '4':
-                        relay.addRing(hgBond, 4, false);
-                        break;
-                    case '5':
-                        relay.addRing(hgBond, 5, false);
-                        break;
-                    case '6':
-                        relay.addRing(hgBond, 6, false);
-                        break;
-                    case '7':
-                        relay.addRing(hgBond, 7, false);
-                        break;
-                    case '8':
-                        relay.addRing(hgBond, 8, false);
-                        break;
-                    case 'a':
-                        relay.addPhenyl(hgBond, 6, false);
-                        break;
-                    case 'w':
-                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgeBegin);
-                        break;
-                    case 'W': // shift + W
-                    case 'h':
-                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.WedgedHashBegin);
-                        break;
-                    case 'y':
-                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Wavy);
-                        break;
-                    case 'b':
-                        relay.changeBond(hgBond, IBond.Order.SINGLE, IBond.Display.Bold);
-                        break;
-                    default:
-                        changed = false;
-                }
-            } else if (model.getSelection() == null || !model.getSelection().isFilled()) {
-                changed = true;
-                switch (ch) {
-                    case '1':
-                        this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.SINGLE, true, "bondTool"));
-                        break;
-                    case '2':
-                        this.get2DHub().setActiveDrawModule(new AddBondDragModule(relay, IBond.Order.DOUBLE, true, "double_bondTool"));
-                        break;
-                    case 'a':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, true, "benzene"));
-                        break;
-                    case '3':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 3, false, "triangle"));
-                        break;
-                    case '4':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 4, false, "square"));
-                        break;
-                    case '5':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 5, false, "pentagon"));
-                        break;
-                    case '6':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 6, false, "hexagon"));
-                        break;
-                    case '7':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 7, false, "heptagon"));
-                        break;
-                    case '8':
-                        this.get2DHub().setActiveDrawModule(new AddRingModule(relay, 8, false, "octagon"));
-                        break;
-                    default:
-                        changed = false;
-                        break;
-                }
-                if (changed) {
-                    this.get2DHub().updateView();
-                    changed = false;
-                }
-            }
-        }
-
-
-        if (changed) {
-            this.get2DHub().setActiveDrawModule(null);
-            this.get2DHub().updateView();
-            this.get2DHub().clearPhantoms();
-        }
     }
 
     /* (non-Javadoc)

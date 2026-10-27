@@ -37,12 +37,13 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
+
+import java.awt.event.KeyEvent;
 
 /**
  * Adds a bond at direction that is dragged.
@@ -162,7 +163,10 @@ public class AddBondDragModule extends ControllerModuleAdapter {
 
         } else if (singleSelection instanceof IBond) {
             if (displayForNewBond == IBond.Display.Solid) {
-                chemModelRelay.cycleBondValence((IBond) singleSelection, orderForNewBond);
+                if ((modifiers & KeyEvent.ALT_DOWN_MASK) != 0)
+                    chemModelRelay.alternateBonds((IBond) singleSelection);
+                else
+                    chemModelRelay.cycleBondValence((IBond) singleSelection, orderForNewBond);
             } else {
                 chemModelRelay.changeBond((IBond) singleSelection, orderForNewBond, displayForNewBond);
             }

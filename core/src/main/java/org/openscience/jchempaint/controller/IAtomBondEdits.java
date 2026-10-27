@@ -76,6 +76,7 @@ public interface IAtomBondEdits {
     public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom);
     public void cycleBondValence(IBond bond);
     public void cycleBondValence(IBond bond, IBond.Order order);
+    public boolean alternateBonds(IBond bond);
     public void makeBondStereo(IBond bond, Direction desiredDirection);
     public IBond makeNewStereoBond(IAtom atom, Direction desiredDirection);
 }

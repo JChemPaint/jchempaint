@@ -189,6 +189,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         } else if (singleSelection instanceof IBond) {
             this.addRingToBond((IBond) singleSelection, true);
         }
+
         drawTime = System.nanoTime();
         this.chemModelRelay.updateView();
     }

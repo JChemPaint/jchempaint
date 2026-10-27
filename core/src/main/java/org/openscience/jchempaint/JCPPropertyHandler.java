@@ -257,11 +257,21 @@ public class JCPPropertyHandler
 	public Properties getJCPShort_Cuts() {
 		if (shortCutProps == null) {
 			try {
-				String propertiesFile = "org/openscience/jchempaint/resources/JCPShort_Cuts.properties";
 				shortCutProps = new Properties();
-				InputStream appStream = this.getClass().getClassLoader().getResourceAsStream(propertiesFile);
-				shortCutProps.load(appStream);
-				appStream.close();
+				// hot key bindings (common to all platforms)
+				String hotkeysFile = "org/openscience/jchempaint/resources/hotkeys.properties";
+				try (InputStream appStream = this.getClass().getClassLoader().getResourceAsStream(hotkeysFile)) {
+					if (appStream != null)
+						shortCutProps.load(appStream);
+					shortCutProps.load(appStream);
+				}
+				// OS specific key bindings
+				String propertiesFile = "org/openscience/jchempaint/resources/JCPShort_Cuts.properties";
+				try (InputStream appStream = this.getClass().getClassLoader().getResourceAsStream(propertiesFile)) {
+					if (appStream != null)
+						shortCutProps.load(appStream);
+					shortCutProps.load(appStream);
+				}
 			} catch (FileNotFoundException fnfe) {fnfe.printStackTrace();} catch (IOException ioe) {}
 		}
 		return shortCutProps;

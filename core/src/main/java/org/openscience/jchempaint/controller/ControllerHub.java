@@ -1100,6 +1100,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         select(selection);
 	}
 
+
 	/**
      * Class tracks when a bond order is increased and when.
      */
@@ -1181,7 +1182,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	 * @param bond a bond in the alternating path
 	 * @return the kekulé form was alternated
 	 */
-	private boolean cycleKekuleForm(IBond bond) {
+	public boolean alternateBonds(IBond bond) {
 
 		List<IBond> path = new ArrayList<>(6);
 		if (ConjugationTools.findAlternating(path, bond)) {
@@ -1214,11 +1215,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		IBond.Display[] stereos = new IBond.Display[2];
 		orders[1] = bond.getOrder();
 		stereos[1] = bond.getDisplay();
-
-		if (altMode) {
-			cycleKekuleForm(bond);
-			return;
-		}
 
 		// special case : reset stereo bonds
 		if (bond.getDisplay() != Display.Solid ) {

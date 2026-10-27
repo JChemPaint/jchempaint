@@ -79,6 +79,12 @@ public interface IControllerModule {
 	 * @param ID The ID attribute
 	 */
 	void setID(String ID);
+
+
+	default IControllerModule withID(String id) {
+		setID(id);
+		return this;
+	}
 	
 	/**
 	 * Set wasEscaped flag to true
