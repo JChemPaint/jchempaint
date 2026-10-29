@@ -87,7 +87,7 @@
                                 <configuration>
                                     <headerType>gui</headerType>
                                     <outfile>target/JChemPaint.exe</outfile>
-                                    <jar>target/${artifactId}-${version}-shaded.jar</jar>
+                                    <jar>target/${project.artifactId}-${project.version}-shaded.jar</jar>
                                     <errTitle>JChemPaint Error</errTitle>
                                     <classPath>
                                         <mainClass>org.openscience.jchempaint.application.JChemPaint
@@ -100,7 +100,7 @@
                                     </jre>
                                     <versionInfo>
                                         <fileVersion>3.4.0.0</fileVersion>
-                                        <txtFileVersion>${version}</txtFileVersion>
+                                        <txtFileVersion>${project.version}</txtFileVersion>
                                         <fileDescription>Chemical diagram editor</fileDescription>
                                         <copyright>Copyright (C) JChemPaint Developers</copyright>
                                         <productVersion>3.4.0.0</productVersion>
