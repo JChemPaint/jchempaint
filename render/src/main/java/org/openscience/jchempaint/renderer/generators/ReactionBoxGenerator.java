@@ -21,12 +21,12 @@ package org.openscience.jchempaint.renderer.generators;
 import java.awt.geom.Rectangle2D;
 
 import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.renderer.elements.TextElement;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.jchempaint.renderer.Renderer;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
-import org.openscience.jchempaint.renderer.elements.TextElement;
 
 /**
  * Generate the symbols for radicals.
@@ -52,10 +52,10 @@ public class ReactionBoxGenerator implements IReactionGenerator {
                                     model.getForeColor()));
         if (reaction.getID() != null) {
         	diagram.add(new TextElement((totalBounds.getMinX()
-        	                            +totalBounds.getMaxX())/2, 
-        	                            totalBounds.getMinY()-d, 
-        	                            reaction.getID(), 
-        	                            model.getForeColor()));
+																			 + totalBounds.getMaxX()) / 2,
+        	                            totalBounds.getMinY()-d,
+																			reaction.getID(),
+																			model.getForeColor()));
         }
         return diagram;
 	}
