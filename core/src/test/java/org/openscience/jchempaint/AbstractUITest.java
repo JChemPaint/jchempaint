@@ -22,6 +22,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.jchempaint.application.JChemPaint;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 import javax.vecmath.Point2d;
 import java.awt.Point;
@@ -187,5 +188,11 @@ public class AbstractUITest {
         for (IBond bond : mol.bonds())
             selection.select(bond);
         panel.get2DHub().select(selection);
+    }
+
+    void clearSelection() {
+        panel.get2DHub().getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
     }
 }

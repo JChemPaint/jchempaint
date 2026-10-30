@@ -26,6 +26,8 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JPanelFixture;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
@@ -34,6 +36,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.Renderer;
+import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 import org.openscience.jchempaint.renderer.selection.RectangleSelection;
 
 import javax.vecmath.Point2d;
@@ -41,6 +44,9 @@ import java.awt.AWTException;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
 
 /**
  * These tests check reported issues on SourceForge / GitHub. Unfortunately
@@ -609,46 +615,25 @@ public class IssuesTest extends AbstractUITest {
             Assert.fail();
         }
 
-        int atomCount = 0, bondCount = 0, implicitHCount = 0;
-        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
-            for (IAtom a : atc.atoms())
-                implicitHCount += a.getImplicitHydrogenCount();
-            atomCount += atc.getAtomCount();
-            bondCount += atc.getBondCount();
-        }
-        Assert.assertEquals(2, atomCount);
-        Assert.assertEquals(1, bondCount);
-        Assert.assertEquals(4, implicitHCount);
-
         IAtomContainer mol = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 
+        Assert.assertEquals("C=C", panel.getSmiles());
+
+        clearSelection();
         frame.button("bondTool").click();
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(),
                                                getBondAwtPoint(mol.getBond(0)));
-        panel.get2DHub().updateView();
-        frame.panel("renderpanel").robot.waitForIdle();
+        Assert.assertEquals("CC",panel.getSmiles());
 
+        clearSelection();
+        panel.get2DHub().getRenderer().getRenderer2DModel().setSelection(new LogicalSelection(LogicalSelection.Type.NONE));
         frame.button("triple_bondTool").click();
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(),
                                                getBondAwtPoint(mol.getBond(0)));
-        panel.get2DHub().updateView();
-        frame.panel("renderpanel").robot.waitForIdle();
-
-        atomCount = 0;
-        bondCount = 0;
-        implicitHCount = 0;
-        for (IAtomContainer atc : panel.getChemModel().getMoleculeSet().atomContainers()) {
-            for (IAtom a : atc.atoms())
-                implicitHCount += a.getImplicitHydrogenCount();
-            atomCount += atc.getAtomCount();
-            bondCount += atc.getBondCount();
-        }
-        Assert.assertEquals(2, atomCount);
-        Assert.assertEquals(1, bondCount);
-        Assert.assertEquals(2, implicitHCount);
+        Assert.assertEquals("C#C",panel.getSmiles());
     }
 
-    /**
+        /**
      * @author Ralf Stephan <ralf@ark.in-berlin.de>
      * <p>
      * #137: move C in ethane over the other gives CH3
@@ -862,8 +847,11 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
                                                     .component(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel()
-                                                    .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+        // when setting the down bond it can be down / down inverted (display = HashedWedgeBeg / End)
+        // both are down bonds, the controller choose which one makes more sense (i.e. pointing to the Sp3 atom)
+        MatcherAssert.assertThat(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo(),
+                                 anyOf(is(IBond.Stereo.DOWN),
+                                       is(IBond.Stereo.DOWN_INVERTED)));
         // and up again
         frame.button("up_bond").target.doClick();
         moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(
@@ -878,8 +866,9 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
                                                     .component(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
-                                                  .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+        MatcherAssert.assertThat(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo(),
+                                 anyOf(is(IBond.Stereo.UP),
+                                       is(IBond.Stereo.UP_INVERTED)));
     }
 
     @Test

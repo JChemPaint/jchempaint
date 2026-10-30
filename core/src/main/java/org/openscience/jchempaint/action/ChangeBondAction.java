@@ -41,6 +41,7 @@ import org.openscience.jchempaint.controller.AddBondDragModule;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 
 
 /**
@@ -96,7 +97,10 @@ public class ChangeBondAction extends JCPAction {
                 break;
         }
 
-        if (newActiveModule != null && event.getSource() instanceof JButton) { // null means that menu was used => don't change module
+        // only if the button or menu items were activated
+        if (newActiveModule != null &&
+            (event.getSource() instanceof JButton ||
+             event.getSource() instanceof JMenuItem)) { // null means that menu was used => don't change module
             newActiveModule.setID(type);
             jcpPanel.get2DHub().setActiveDrawModule(newActiveModule);
         }
