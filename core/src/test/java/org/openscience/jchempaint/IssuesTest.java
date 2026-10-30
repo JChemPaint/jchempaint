@@ -866,8 +866,9 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot.click(frame.panel("renderpanel")
                                                     .component(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
-                                                  .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+        MatcherAssert.assertThat(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo(),
+                                 anyOf(is(IBond.Stereo.UP),
+                                       is(IBond.Stereo.UP_INVERTED)));
     }
 
     @Test

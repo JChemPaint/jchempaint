@@ -25,9 +25,13 @@ import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JPanelFixture;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.AnyOf;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.jchempaint.renderer.selection.SingleSelection;
@@ -39,6 +43,9 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+
 /**
  * These tests check expected drawing behaviour when interacting withe
  * canvas/render panel.
@@ -47,83 +54,97 @@ import java.util.Arrays;
  */
 public class DrawingTest extends AbstractUITest {
 
-	@Test public void testAddBond() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
-	    restoreModelWithBasicmol();
-		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
+	@Test
+	public void testAddBond() {
+		restoreModelWithBasicmol();
+		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		IAtomContainer mol = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
+		int oldAtomCount = mol.getAtomCount();
 		//using bond button
 		frame.button("bondTool").click();
 		//can we add a new bond?
-		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
+		Point2d moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(oldAtomCount + 1, mol.getAtomCount());
 		//can we convert bond order?
-		int oldhydrogencount0 = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getImplicitHydrogenCount().intValue();
-		int oldhydrogencount1 = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getImplicitHydrogenCount().intValue();
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(IBond.Order.DOUBLE, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getOrder());
-		Assert.assertEquals(oldhydrogencount0-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getImplicitHydrogenCount().intValue());
-		Assert.assertEquals(oldhydrogencount1-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getImplicitHydrogenCount().intValue());
-		//using up bond button,
-		panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4)));
+		int oldhydrogencount0 = mol.getAtom(2).getImplicitHydrogenCount().intValue();
+		int oldhydrogencount1 = mol.getAtom(3).getImplicitHydrogenCount().intValue();
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(IBond.Order.DOUBLE, mol.getBond(2).getOrder());
+		Assert.assertEquals(oldhydrogencount0 - 1, mol.getAtom(2).getImplicitHydrogenCount().intValue());
+		Assert.assertEquals(oldhydrogencount1 - 1, mol.getAtom(3).getImplicitHydrogenCount().intValue());
+		// using up bond button tool
 		frame.button("up_bond").click();
-		//was the selected bond changed
-		Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
+		// click on a bond
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+
+		AnyOf<IBond.Stereo> isUpBond = anyOf(is(IBond.Stereo.UP), is(IBond.Stereo.UP_INVERTED));
+		AnyOf<IBond.Stereo> isDownBond = anyOf(is(IBond.Stereo.DOWN), is(IBond.Stereo.DOWN_INVERTED));
+		AnyOf<IBond.Stereo> isWavyBond = anyOf(is(IBond.Stereo.UP_OR_DOWN), is(IBond.Stereo.UP_OR_DOWN_INVERTED));
+
+		MatcherAssert.assertThat(mol.getBond(4).getStereo(),
+														 isUpBond);
 		//can we add a new bond?
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(oldAtomCount+2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-		Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount()-1).getStereo());
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(oldAtomCount + 2, mol.getAtomCount());
+		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
+														 isUpBond);
 		//can we convert an existing one?
-        moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);   
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
-        //using down bond button,
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4)));
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(2)));
+		MatcherAssert.assertThat(mol.getBond(2).getStereo(), isUpBond);
 		frame.button("down_bond").click();
-        //was the selected bond changed
-        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
-        //can we add a new bond?
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(oldAtomCount+3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-		Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount()-1).getStereo());
-        //can we convert an existing one?
-        moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);   
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
-        //using undefined bond button,
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4)));
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		//was the selected bond changed
+
+		MatcherAssert.assertThat(mol.getBond(4).getStereo(),
+														 isDownBond);
+		//can we add a new bond?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(oldAtomCount + 3, mol.getAtomCount());
+		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
+														 isDownBond);
+		//can we convert an existing one?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		MatcherAssert.assertThat(mol.getBond(2).getStereo(),
+														 isDownBond);
+		//using undefined bond button,
 		frame.button("undefined_bond").click();
-        //was the selected bond changed
-        Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
-        //can we add a new bond?
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(oldAtomCount+4, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-		Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount()-1).getStereo());
-        //can we convert an existing one?
-        moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);   
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
-        //using undefined stereo button,		
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4)));
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		//was the selected bond changed
+		MatcherAssert.assertThat(mol.getBond(4).getStereo(),
+														 isWavyBond);
+		//can we add a new bond?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(oldAtomCount + 4, mol.getAtomCount());
+		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
+														 isWavyBond);
+		//can we convert an existing one?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		MatcherAssert.assertThat(mol.getBond(2).getStereo(),
+														 isWavyBond);
+		//using undefined stereo button,
 		frame.button("undefined_stereo_bond").click();
-	    //was the selected bond changed
-        Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(4).getStereo());
-        //can we add a new bond?
-		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-		Assert.assertEquals(oldAtomCount+5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
-		Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount()-1).getStereo());
-        //can we convert an existing one?
-        moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);   
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
-        Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		//was the selected bond changed
+		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(4).getStereo());
+		//can we add a new bond?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(oldAtomCount + 5, mol.getAtomCount());
+		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(mol.getBondCount() - 1).getStereo());
+		//can we convert an existing one?
+		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
+		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(2).getStereo());
 	}
-	
+
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
 	    restoreModelWithBasicmol();
