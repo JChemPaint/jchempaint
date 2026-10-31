@@ -251,8 +251,10 @@ public final class SnapGuides implements IGenerator<IAtomContainer> {
                         IAtom nbor = bond.getOther(a);
                         if (ignore.contains(nbor))
                             continue;
-                        if (parts[nbor.getIndex()] == 0) {
-                            parts[nbor.getIndex()] = partId;
+                        int nbrIdx = nbor.getIndex();
+                        if (nbrIdx < parts.length &&
+                            parts[nbrIdx] == 0) {
+                            parts[nbrIdx] = partId;
                             queue.add(nbor);
                         }
                     }
@@ -271,8 +273,10 @@ public final class SnapGuides implements IGenerator<IAtomContainer> {
                         IAtom nbor = bond.getOther(a);
                         if (ignore.contains(nbor))
                             continue;
-                        if (rings[nbor.getIndex()] == 0) {
-                            rings[nbor.getIndex()] = ringId;
+                        int nbrIdx = nbor.getIndex();
+                        if (nbrIdx < rings.length &&
+                            rings[nbrIdx] == 0) {
+                            rings[nbrIdx] = ringId;
                             queue.add(nbor);
                         }
                     }
