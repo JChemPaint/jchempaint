@@ -39,6 +39,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.SDFWriter;
+import org.openscience.cdk.smiles.SmiFlavor;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
@@ -84,6 +85,18 @@ public class CreateSmilesAction extends JCPAction
 	
 	public static String getSmiles(IChemModel model) throws CDKException, IOException {
 		return getChiralSmiles(model);
+	}
+
+	public static String getCxSmilesXyz(IChemModel model) throws CDKException, IOException {
+		SmilesGenerator smigen = new SmilesGenerator(SmiFlavor.Default + SmiFlavor.CxCoordinates);
+		IAtomContainer merged = model.getBuilder().newAtomContainer();
+		for(IAtomContainer container : ChemModelManipulator.getAllAtomContainers(model)) {
+			container.setStereoElements(StereoElementFactory.using2DCoordinates(container)
+															.interpretProjections(Projection.Haworth, Projection.Chair)
+															.createAll());
+			merged.add(container);
+		}
+		return smigen.create(merged);
 	}
 
     public static String getMolfile(IChemModel model) throws CDKException, IOException {
