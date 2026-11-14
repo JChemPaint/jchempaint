@@ -64,6 +64,7 @@ import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
@@ -216,7 +217,7 @@ public class JChemPaint {
     }
     
     public static IChemModel emptyModel() {
-        IChemModel chemModel = DefaultChemObjectBuilder.getInstance().newInstance(IChemModel.class);
+        IChemModel chemModel = SilentChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IAtomContainerSet.class));
         chemModel.getMoleculeSet().addAtomContainer(
                 chemModel.getBuilder().newInstance(IAtomContainer.class));
