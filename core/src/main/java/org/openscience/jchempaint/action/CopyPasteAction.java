@@ -224,8 +224,7 @@ public final class CopyPasteAction extends JCPAction {
         } else if (COPY_AS_CXSMILES_XYZ.equals(type)) {
             handleSystemClipboard(clipboard);
             try {
-                final IAtomContainer selection = AbbreviationAction.expanded(renderModel.getSelection())
-                                                                   .getConnectedAtomContainer();
+                final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
                 if (selection != null) {
                     final IChemObjectBuilder bldr = selection.getBuilder();
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
