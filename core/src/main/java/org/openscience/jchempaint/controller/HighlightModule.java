@@ -60,28 +60,25 @@ public class HighlightModule extends ControllerModuleAdapter {
 
 	private void updateAtom(IAtom atom, JChemPaintRendererModel model) {
 	    if (!atom.equals(prevHighlightAtom)) {
-            model.setHighlightedAtom(atom);
+            model.setHighlighted(atom);
             prevHighlightAtom = atom;
             prevHighlightBond = null;
-            model.setHighlightedBond(null);
             chemModelRelay.updateView();
         }
 	}
 
 	private void updateBond(IBond bond, JChemPaintRendererModel model) {
 	    if (!bond.equals(prevHighlightBond)) {
-            model.setHighlightedBond(bond);
+            model.setHighlighted(bond);
             prevHighlightBond = bond;
             prevHighlightAtom = null;
-            model.setHighlightedAtom(null);
             chemModelRelay.updateView();
         }
 	}
 	
 	private void unsetHighlights(JChemPaintRendererModel model) {
 	    if (prevHighlightAtom != null || prevHighlightBond != null) {
-	        model.setHighlightedAtom(null);
-	        model.setHighlightedBond(null);
+	        model.setHighlighted(null);
 	        prevHighlightAtom = null;
 	        prevHighlightBond = null;
 	        chemModelRelay.updateView();
