@@ -31,7 +31,6 @@ import org.openscience.cdk.renderer.selection.IChemObjectSelection;
  */
 public interface IncrementalSelection extends IChemObjectSelection {
 
-
     /**
      * Use this to check if the selection process has finished.
      * Some implementing classes may just choose to return 'true'
@@ -39,7 +38,7 @@ public interface IncrementalSelection extends IChemObjectSelection {
      *
      * @return true if the selection process is complete
      */
-    public boolean isFinished();
+    boolean isFinished();
 
     /**
      * Generate a display element that represents this selection.
@@ -48,5 +47,5 @@ public interface IncrementalSelection extends IChemObjectSelection {
      * @param color the color of the element to generate.
      * @return a rendering element for display purposes.
      */
-    public IRenderingElement generate(Color color);
+    IRenderingElement generate(Color color);
 }
