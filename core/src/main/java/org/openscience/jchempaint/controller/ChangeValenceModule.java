@@ -25,8 +25,7 @@
 package org.openscience.jchempaint.controller;
 
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
 
 import javax.vecmath.Point2d;
 import java.util.Collection;
@@ -62,23 +61,22 @@ public class ChangeValenceModule extends ControllerModuleAdapter {
    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 
        Collection<IAtom> atoms = new HashSet<>();
-
-       JChemPaintRendererModel renderModel = chemModelRelay.getRenderer()
-                                                           .getRenderer2DModel();
-       IAtom highlightedAtom = renderModel.getHighlightedAtom();
-       if (highlightedAtom != null) {
-           atoms.add(highlightedAtom);
-       } else {
-           IChemObjectSelection selection = renderModel.getSelection();
-           if (selection != null) {
-               atoms = selection.elements(IAtom.class);
-           }
+       for (IAtom atom : getSelectAtomBondSet(worldCoord).atoms()) {
+           atoms.add(atom);
        }
+
+       if (atoms.isEmpty())
+           return;
 
        for(IAtom atom : atoms) {
            chemModelRelay.setValence(atom, valence==-1 ? null : valence);
        }
 
+       // change the selection?
+       AtomBondSelection selection = new AtomBondSelection();
+       for (IAtom atom : atoms)
+           selection.select(atom);
+       setSelection(selection);
        chemModelRelay.updateView();
    }
 
