@@ -26,16 +26,12 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
 
 import javax.vecmath.Point2d;
-
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
-import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Changes (Increases or Decreases) Formal Charge of an atom
@@ -58,27 +54,23 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 	    
 	    Collection<IAtom> atoms = new HashSet<>();
-
-		JChemPaintRendererModel renderModel = chemModelRelay.getRenderer()
-															.getRenderer2DModel();
-		IAtom highlightedAtom = renderModel.getHighlightedAtom();
-		if (highlightedAtom != null) {
-			atoms.add(highlightedAtom);
-		} else {
-			IChemObjectSelection selection = renderModel.getSelection();
-			if (selection != null) {
-				atoms = selection.elements(IAtom.class);
-			}
+		for (IAtom atom : getSelectAtomBondSet(worldCoord).atoms()) {
+			atoms.add(atom);
 		}
-
+		if (atoms.isEmpty())
+			return;
 		for (IAtom atom : atoms) {
 			int newCharge = change;
 			if (atom.getFormalCharge() != null)
 				newCharge += atom.getFormalCharge();
 			chemModelRelay.setCharge(atom, newCharge);
 		}
-		if (!atoms.isEmpty())
-	    	chemModelRelay.updateView();
+		AtomBondSelection selection = new AtomBondSelection();
+		for (IAtom atom : atoms) {
+			selection.select(atom);
+		}
+		setSelection(selection);
+		chemModelRelay.updateView();
 	}
 
 	public String getDrawModeString() {
