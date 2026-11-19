@@ -31,7 +31,6 @@ import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.renderer.selection.MultiSelection;
 
 /**
 * Changes valence of atoms.

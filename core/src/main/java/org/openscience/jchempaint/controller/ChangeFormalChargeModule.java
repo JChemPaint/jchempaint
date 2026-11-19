@@ -26,14 +26,16 @@
  */
 package org.openscience.jchempaint.controller;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.renderer.selection.MultiSelection;
+import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 /**
  * Changes (Increases or Decreases) Formal Charge of an atom
@@ -55,18 +57,28 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 	@Override
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 	    
-	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
-	    if(selectedAC == null) return;
-	    Set<IAtom> newSelection = new HashSet<IAtom>();
-	    for(IAtom atom:selectedAC.atoms()) {
-	        newSelection.add( atom );
-	        int newCharge = change;
-	        if( atom.getFormalCharge() != null)
-	            newCharge += atom.getFormalCharge();
-	        chemModelRelay.setCharge(atom, newCharge);
-	    }
-	    setSelection( new MultiSelection<IAtom>(newSelection) );
-	    chemModelRelay.updateView();// FIXME do you really need to call it here?
+	    Collection<IAtom> atoms = new HashSet<>();
+
+		JChemPaintRendererModel renderModel = chemModelRelay.getRenderer()
+															.getRenderer2DModel();
+		IAtom highlightedAtom = renderModel.getHighlightedAtom();
+		if (highlightedAtom != null) {
+			atoms.add(highlightedAtom);
+		} else {
+			IChemObjectSelection selection = renderModel.getSelection();
+			if (selection != null) {
+				atoms = selection.elements(IAtom.class);
+			}
+		}
+
+		for (IAtom atom : atoms) {
+			int newCharge = change;
+			if (atom.getFormalCharge() != null)
+				newCharge += atom.getFormalCharge();
+			chemModelRelay.setCharge(atom, newCharge);
+		}
+		if (!atoms.isEmpty())
+	    	chemModelRelay.updateView();
 	}
 
 	public String getDrawModeString() {
