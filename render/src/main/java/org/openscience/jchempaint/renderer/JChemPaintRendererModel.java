@@ -27,6 +27,7 @@ package org.openscience.jchempaint.renderer;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.ICDKObject;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.color.IAtomColorer;
@@ -109,12 +110,16 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
         if (selection == null) return null;
         Collection<IAtom> atoms = new HashSet<>(selection.elements(IAtom.class));
         for (IBond bond : selection.elements(IBond.class)) {
+            if (bond.is(IChemObject.HIDDEN))
+                continue;
             atoms.add(bond.getBegin());
             atoms.add(bond.getEnd());
         }
 
         Bounds bounds = new Bounds();
         for (IAtom atom : atoms) {
+            if (atom.is(IChemObject.HIDDEN))
+                continue;
             // check if we have the actual bounds
             Bounds atomBounds = atom.getProperty(CDKConstants.RENDER_BOUNDS);
             if (atomBounds != null) {
@@ -129,6 +134,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
         if (bounds.width() < 0.01 || bounds.height() < 0.01) {
             double pad = (getHighlightDistance()/getScale()/getZoomFactor());
             for (IAtom a : atoms) {
+                if (a.is(IChemObject.HIDDEN))
+                    continue;
                 bounds.add(a.getPoint2d().x - pad, a.getPoint2d().y - pad);
                 bounds.add(a.getPoint2d().x - pad, a.getPoint2d().y + pad);
                 bounds.add(a.getPoint2d().x + pad, a.getPoint2d().y - pad);
@@ -894,6 +901,8 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
      * @return the highlighted atom or bond.
      */
     void setHighlight(IChemObject chemObject) {
+        if (chemObject.is(IChemObject.HIDDEN))
+            return;
         if (chemObject instanceof IAtom) {
             setHighlightedAtom((IAtom) chemObject);
         } else if (chemObject instanceof IBond) {
