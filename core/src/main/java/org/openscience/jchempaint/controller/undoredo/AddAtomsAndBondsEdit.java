@@ -28,6 +28,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.ControllerHub;
@@ -36,9 +37,7 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @cdk.module controlbasic @cdk.svnrev $Revision: 13311 $
@@ -84,8 +83,8 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 		}
 
         if (connectedContainer == null) {
-            connectedContainer = DefaultChemObjectBuilder.getInstance()
-                                                         .newAtomContainer();
+            connectedContainer = SilentChemObjectBuilder.getInstance()
+														.newAtomContainer();
             chemModel.getMoleculeSet().addAtomContainer(connectedContainer);
         }
 
