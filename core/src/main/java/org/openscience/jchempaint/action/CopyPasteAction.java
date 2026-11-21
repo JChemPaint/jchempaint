@@ -450,11 +450,10 @@ public final class CopyPasteAction extends JCPAction {
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
 
-                        IAtomContainerSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
-                        for (int i = 0; i < mols.getAtomContainerCount(); i++) {
-                            StructureDiagramGenerator sdg =
-                                    new StructureDiagramGenerator((IAtomContainer) mols.getAtomContainer(i));
-                            sdg.generateCoordinates();
+                        if (!GeometryUtil.has2DCoordinates(toPaste)) {
+                            new StructureDiagramGenerator().generateCoordinates(toPaste);
+                        } else if (toPaste.stereoElements().iterator().hasNext()) {
+                            new StructureDiagramGenerator().generateWedges(toPaste);
                         }
                     }
                 } catch (Exception ex) {
