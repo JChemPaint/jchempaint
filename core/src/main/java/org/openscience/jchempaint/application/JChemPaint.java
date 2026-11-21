@@ -64,6 +64,7 @@ import org.openscience.cdk.io.SMILESReader;
 import org.openscience.cdk.isomorphism.matchers.IRGroupQuery;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
@@ -74,8 +75,10 @@ import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.JCPPropertyHandler;
 import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.controller.ControllerHub;
+import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
+import org.openscience.jchempaint.controller.undoredo.SgroupEdits;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.inchi.InChITool;
@@ -615,10 +618,13 @@ public class JChemPaint {
         UndoRedoHandler undoRedoHandler= chemPaintPanel.get2DHub().getUndoRedoHandler();
         
         if (undoRedoFactory!=null) {
-            IUndoRedoable undoredo = undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(),
-                                                                             new AtomBondSet(molecule),
-                                                                             null, "Paste", chemPaintPanel.get2DHub());
-            undoRedoHandler.postEdit(undoredo);
+            CompoundEdit paste = new CompoundEdit("Paste");
+            paste.add(undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(),
+                                                              new AtomBondSet(molecule),
+                                                              null, "Paste", chemPaintPanel.get2DHub()));
+            paste.add(SgroupEdits.add(chemPaintPanel.get2DHub(),
+                                      Sgroup.get(molecule)));
+            undoRedoHandler.postEdit(paste);
         }
         
         chemPaintPanel.getChemModel().setMoleculeSet(moleculeSet);
