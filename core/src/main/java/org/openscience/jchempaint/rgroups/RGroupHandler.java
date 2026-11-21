@@ -53,6 +53,7 @@ import org.openscience.cdk.isomorphism.matchers.IRGroup;
 import org.openscience.cdk.isomorphism.matchers.RGroupList;
 import org.openscience.cdk.isomorphism.matchers.IRGroupList;
 import org.openscience.cdk.isomorphism.matchers.RGroupQuery;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AbstractJChemPaintPanel;
 import org.openscience.jchempaint.AtomBondSet;
@@ -303,7 +304,7 @@ public class RGroupHandler  {
                 for (IAtom movedAtom : newAtc.atoms()) {
                     if (rGroupQuery.getRootStructure().contains(movedAtom)) {
                         //System.out.println("set root "+newAtc.hashCode());
-                        newAtc.setProperty(CDKConstants.CTAB_SGROUPS, rGroupQuery.getRootStructure().getProperty(CDKConstants.CTAB_SGROUPS));
+						Sgroup.set(newAtc, Sgroup.get(rGroupQuery.getRootStructure()));
                         rGroupQuery.setRootStructure(newAtc);
                         newAtc.setProperty(CDKConstants.TITLE, RGroup.ROOT_LABEL);
                         hasRoot = true;
