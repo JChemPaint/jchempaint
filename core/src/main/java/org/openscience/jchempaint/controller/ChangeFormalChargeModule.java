@@ -26,14 +26,12 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
 
 import javax.vecmath.Point2d;
-
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.jchempaint.AtomBondSet;
-import org.openscience.jchempaint.renderer.selection.MultiSelection;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Changes (Increases or Decreases) Formal Charge of an atom
@@ -55,18 +53,24 @@ public class ChangeFormalChargeModule extends ControllerModuleAdapter {
 	@Override
 	public void mouseClickedDown(Point2d worldCoord, int modifiers) {
 	    
-	    AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
-	    if(selectedAC == null) return;
-	    Set<IAtom> newSelection = new HashSet<IAtom>();
-	    for(IAtom atom:selectedAC.atoms()) {
-	        newSelection.add( atom );
-	        int newCharge = change;
-	        if( atom.getFormalCharge() != null)
-	            newCharge += atom.getFormalCharge();
-	        chemModelRelay.setCharge(atom, newCharge);
-	    }
-	    setSelection( new MultiSelection<IAtom>(newSelection) );
-	    chemModelRelay.updateView();// FIXME do you really need to call it here?
+	    Collection<IAtom> atoms = new HashSet<>();
+		for (IAtom atom : getSelectAtomBondSet(worldCoord).atoms()) {
+			atoms.add(atom);
+		}
+		if (atoms.isEmpty())
+			return;
+		for (IAtom atom : atoms) {
+			int newCharge = change;
+			if (atom.getFormalCharge() != null)
+				newCharge += atom.getFormalCharge();
+			chemModelRelay.setCharge(atom, newCharge);
+		}
+		AtomBondSelection selection = new AtomBondSelection();
+		for (IAtom atom : atoms) {
+			selection.select(atom);
+		}
+		setSelection(selection);
+		chemModelRelay.updateView();
 	}
 
 	public String getDrawModeString() {

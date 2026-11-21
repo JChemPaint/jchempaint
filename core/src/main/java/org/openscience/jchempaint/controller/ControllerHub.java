@@ -53,6 +53,7 @@ import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.layout.AtomPlacer;
 import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
@@ -439,17 +440,34 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public IAtom getClosestAtom(Point2d worldCoord) {
+	public IAtom getClosestAtom(Point2d p) {
 		IAtom closestAtom = null;
 		double closestDistanceSQ = Double.MAX_VALUE;
 
-		for (IAtomContainer atomContainer : ChemModelManipulator
-				.getAllAtomContainers(chemModel)) {
+		for (IAtomContainer atomContainer : ChemModelManipulator.getAllAtomContainers(chemModel)) {
 
 			for (IAtom atom : atomContainer.atoms()) {
+				if (atom.is(IChemObject.HIDDEN))
+					continue;
 				if (atom.getPoint2d() != null) {
-					double distanceSQ = atom.getPoint2d().distanceSquared(
-							worldCoord);
+					double distanceSQ = atom.getPoint2d().distanceSquared(p);
+
+					Bounds bounds = atom.getProperty(CDKConstants.RENDER_BOUNDS);
+					if (bounds != null) {
+							double dist = new Point2d(bounds.minX, bounds.minY).distanceSquared(p);
+							if (dist < distanceSQ)
+								distanceSQ = dist;
+							dist = new Point2d(bounds.minX, bounds.maxY).distanceSquared(p);
+							if (dist < distanceSQ)
+								distanceSQ = dist;
+							dist = new Point2d(bounds.maxX, bounds.maxY).distanceSquared(p);
+							if (dist < distanceSQ)
+								distanceSQ = dist;
+							dist = new Point2d(bounds.maxX, bounds.minY).distanceSquared(p);
+							if (dist < distanceSQ)
+								distanceSQ = dist;
+					}
+
 					if (distanceSQ < closestDistanceSQ) {
 						closestAtom = atom;
 						closestDistanceSQ = distanceSQ;
@@ -470,6 +488,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				.getAllAtomContainers(chemModel)) {
 
 			for (IBond bond : atomContainer.bonds()) {
+				if (bond.is(IChemObject.HIDDEN))
+					continue;
 				boolean hasCenter = true;
 				for (IAtom atom : bond.atoms())
 					hasCenter = hasCenter && (atom.getPoint2d() != null);
@@ -2624,13 +2644,13 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		for (IAtomContainer atomContainer : ChemModelManipulator
 				.getAllAtomContainers(getIChemModel())) {
 
-			IAtom closestAtom = GeometryUtil.getClosestAtom(atomContainer,
-					atom);
+			IAtom closestAtom = GeometryUtil.getClosestAtom(atomContainer, atom);
 
 			if (closestAtom != null) {
-				double distance = closestAtom.getPoint2d().distance(
-						atomPosition);
+				double distance = closestAtom.getPoint2d().distance(atomPosition);
+
 				if ((distance > highlight)
+						|| closestAtom.is(IChemObject.HIDDEN)
 						|| (toIgnore != null && toIgnore.contains(closestAtom))) {
 					continue;
 				} else {

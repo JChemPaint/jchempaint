@@ -2,10 +2,12 @@ package org.openscience.jchempaint.controller;
 
 import javax.vecmath.Point2d;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
@@ -31,11 +33,26 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
         return model.getHighlightDistance() / model.getScale();
     }
 
+    public static double distanceToBounds(Bounds bounds, Point2d p) {
+        if (bounds == null) return Double.POSITIVE_INFINITY;
+        if (bounds.contains(p)) return 0;
+        Point2d p1 = new Point2d(bounds.minX, bounds.minY);
+        Point2d p2 = new Point2d(bounds.minX, bounds.maxY);
+        Point2d p3 = new Point2d(bounds.maxX, bounds.maxY);
+        Point2d p4 = new Point2d(bounds.maxX, bounds.minY);
+        double minSqaured = Math.min(p1.distanceSquared(p),
+                            Math.min(p2.distanceSquared(p),
+                            Math.min(p3.distanceSquared(p),
+                                     p4.distanceSquared(p))));
+        return Math.sqrt(minSqaured);
+    }
+
     public static double distanceToAtom(IAtom atom, Point2d p) {
         if (atom == null) {
             return Double.MAX_VALUE;
         } else {
-            return atom.getPoint2d().distance(p);
+            return Math.min(atom.getPoint2d().distance(p),
+                            distanceToBounds(atom.getProperty(CDKConstants.RENDER_BOUNDS), p));
         }
     }
 

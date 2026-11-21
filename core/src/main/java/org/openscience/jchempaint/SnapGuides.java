@@ -24,6 +24,7 @@ package org.openscience.jchempaint;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.elements.ElementGroup;
@@ -237,6 +238,9 @@ public final class SnapGuides implements IGenerator<IAtomContainer> {
         Deque<IAtom> queue = new ArrayDeque<>();
         for (IAtom start : atoms) {
 
+            if (start.getIndex() < 0 || start.is(IChemObject.HIDDEN))
+                continue;
+
             // presumes ignore is a complete part
             if (ignore.contains(start))
                 continue;
@@ -248,11 +252,15 @@ public final class SnapGuides implements IGenerator<IAtomContainer> {
                 while (!queue.isEmpty()) {
                     IAtom a = queue.poll();
                     for (IBond bond : a.bonds()) {
-                        IAtom nbor = bond.getOther(a);
-                        if (ignore.contains(nbor))
+                        if (bond.is(IChemObject.HIDDEN))
                             continue;
-                        if (parts[nbor.getIndex()] == 0) {
-                            parts[nbor.getIndex()] = partId;
+                        IAtom nbor = bond.getOther(a);
+                        if (ignore.contains(nbor) || nbor.is(IChemObject.HIDDEN))
+                            continue;
+                        int nbrIdx = nbor.getIndex();
+                        if (nbrIdx < parts.length &&
+                            parts[nbrIdx] == 0) {
+                            parts[nbrIdx] = partId;
                             queue.add(nbor);
                         }
                     }
@@ -266,13 +274,15 @@ public final class SnapGuides implements IGenerator<IAtomContainer> {
                 while (!queue.isEmpty()) {
                     IAtom a = queue.poll();
                     for (IBond bond : a.bonds()) {
-                        if (!bond.isInRing())
+                        if (!bond.isInRing() || bond.is(IChemObject.HIDDEN))
                             continue;
                         IAtom nbor = bond.getOther(a);
-                        if (ignore.contains(nbor))
+                        if (ignore.contains(nbor) || nbor.is(IChemObject.HIDDEN))
                             continue;
-                        if (rings[nbor.getIndex()] == 0) {
-                            rings[nbor.getIndex()] = ringId;
+                        int nbrIdx = nbor.getIndex();
+                        if (nbrIdx < rings.length &&
+                            rings[nbrIdx] == 0) {
+                            rings[nbrIdx] = ringId;
                             queue.add(nbor);
                         }
                     }

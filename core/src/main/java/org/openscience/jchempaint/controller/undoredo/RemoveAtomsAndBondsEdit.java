@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
@@ -35,6 +36,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay;
@@ -67,6 +69,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
     	while (containers.hasNext()) {
     		container.add((IAtomContainer)containers.next());
     	}
+		// add sgroups
 		this.type = type;
 		this.chemModelRelay=chemModelRelay;
 	}
@@ -88,8 +91,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.removeAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);
-		IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(molecule);
+		IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(container);
 		chemModel.setMoleculeSet(moleculeSet);
         if (chemModelRelay.getRGroupHandler() != null) {
             try {
@@ -128,9 +130,7 @@ public class RemoveAtomsAndBondsEdit implements IUndoRedoable {
 			container.addBond(bond);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IAtomContainer molecule = container.getBuilder().newInstance(IAtomContainer.class,container);
-		IAtomContainerSet moleculeSet = ConnectivityChecker
-				.partitionIntoMolecules(molecule);
+		IAtomContainerSet moleculeSet = ConnectivityChecker.partitionIntoMolecules(container);
 		chemModel.setMoleculeSet(moleculeSet);
 		if (chemModelRelay.getRGroupHandler()!=null) {
 			try {

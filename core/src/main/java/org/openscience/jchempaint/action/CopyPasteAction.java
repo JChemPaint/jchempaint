@@ -117,6 +117,7 @@ public final class CopyPasteAction extends JCPAction {
     public static final String COPY = "copy";
     public static final String COPY_AS_MOLFILE = "copyAsMolfile";
     public static final String COPY_AS_SMILES = "copyAsSmiles";
+    public static final String COPY_AS_CXSMILES_XYZ = "copyAsCxSmilesXyz";
     public static final String CUT = "cut";
     public static final String ERASER = "eraser";
     public static final String PASTE = "paste";
@@ -216,6 +217,22 @@ public final class CopyPasteAction extends JCPAction {
                     clipboard.setContents(new StringContent(CreateSmilesAction.getSmiles(selectionModel)), null);
                 } else {
                     clipboard.setContents(new StringContent(CreateSmilesAction.getSmiles(chemModel)), null);
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } else if (COPY_AS_CXSMILES_XYZ.equals(type)) {
+            handleSystemClipboard(clipboard);
+            try {
+                final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
+                if (selection != null) {
+                    final IChemObjectBuilder bldr = selection.getBuilder();
+                    IChemModel selectionModel = bldr.newInstance(IChemModel.class);
+                    selectionModel.setMoleculeSet(bldr.newInstance(IAtomContainerSet.class));
+                    selectionModel.getMoleculeSet().addAtomContainer(selection);
+                    clipboard.setContents(new StringContent(CreateSmilesAction.getCxSmilesXyz(selectionModel)), null);
+                } else {
+                    clipboard.setContents(new StringContent(CreateSmilesAction.getCxSmilesXyz(chemModel)), null);
                 }
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -433,11 +450,10 @@ public final class CopyPasteAction extends JCPAction {
                                 ((String) transfer.getTransferData(
                                         DataFlavor.stringFlavor)).trim());
 
-                        IAtomContainerSet mols = ConnectivityChecker.partitionIntoMolecules(toPaste);
-                        for (int i = 0; i < mols.getAtomContainerCount(); i++) {
-                            StructureDiagramGenerator sdg =
-                                    new StructureDiagramGenerator((IAtomContainer) mols.getAtomContainer(i));
-                            sdg.generateCoordinates();
+                        if (!GeometryUtil.has2DCoordinates(toPaste)) {
+                            new StructureDiagramGenerator().generateCoordinates(toPaste);
+                        } else if (toPaste.stereoElements().iterator().hasNext()) {
+                            new StructureDiagramGenerator().generateWedges(toPaste);
                         }
                     }
                 } catch (Exception ex) {
