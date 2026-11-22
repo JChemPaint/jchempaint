@@ -16,6 +16,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cdk.version>2.15-SNAPSHOT</cdk.version>
+        <maven.shade.version>3.6.2</maven.shade.version>
+        <maven.surefire.version>3.6.1</maven.surefire.version>
+        <maven.compiler.version>3.16.0</maven.compiler.version>
+        <maven.enforcer.version>3.7.0</maven.enforcer.version>
     </properties>
 
     <prerequisites>
@@ -172,7 +176,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.2</version>
+                    <version>${maven.compiler.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -200,7 +204,6 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>3.16.0</version>
                 <configuration>
                     <release>8</release>
                 </configuration>
