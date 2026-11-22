@@ -3817,7 +3817,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
                                       to.y - nbor.getPoint2d().y);
             double angle = Math.atan2(a.x*b.y - a.y*b.x, a.x*b.x + a.y*b.y);
 
-            double snapAngle = (Math.PI/12) * Math.round(angle / (Math.PI/12));
+            double snapAngle = (Math.PI/18) * Math.round(angle / (Math.PI/18));
 
             double cos = Math.cos(snapAngle);
             double sin = Math.sin(snapAngle);
