@@ -775,7 +775,14 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
-        panel.setMolfile("\n  CDK    1/19/07,10:3\n\n  2  1  0  0  0  0  0  0  0  0999 V2000 \n  2.520000 10.220000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2.270000 10.470000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \nM  END");
+        panel.setMolfile("\n" +
+                         "  CDK    1/19/07,10:3\n" +
+                         "\n" +
+                         "  2  1  0  0  0  0  0  0  0  0999 V2000 \n" +
+                         "    2.5200   10.2200    0.0000 C   0\n" +
+                         "    2.2700   10.4700    0.0000 C   0\n" +
+                         "  2  1  1\n" +
+                         "M  END");
         Assert.assertEquals(2, panel.getChemModel().getMoleculeSet()
                                     .getAtomContainer(0).getAtomCount());
         restoreModelToEmpty();
