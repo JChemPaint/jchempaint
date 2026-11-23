@@ -22,6 +22,7 @@
 package org.openscience.jchempaint;
 
 import org.assertj.swing.core.MouseButton;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.DialogFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.hamcrest.MatcherAssert;
@@ -145,12 +146,12 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
 	    restoreModelWithBasicmol();
-	    frame.button("down_bond").target().doClick();
+	    frame.button("down_bond").click();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
 		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		robot.waitForIdle();
-		frame.button("O").target().doClick(); // click() doesn't work?
+		frame.button("O").click(); // click() doesn't work?
 		robot.waitForIdle();
 		Assert.assertEquals("O",panel.get2DHub().getActiveDrawModule().getID());
 
@@ -182,7 +183,6 @@ public class DrawingTest extends AbstractUITest {
 		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
-		frame.button("C").target().doClick();
 		restoreModelToEmpty();
 	}
 
@@ -497,9 +497,12 @@ public class DrawingTest extends AbstractUITest {
 		Point2d point = getAtomPoint(panel,0);
 		renderpanel.robot().click(renderpanel.target(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
 
-		// we do target().doClick on the parent menu as otherwise FlatLAF gets stuck
-		frame.menuItem("reaction").target().menuSelectionChanged(true);
-		frame.menuItem("addProductToExistingReaction").target().doClick();
+		// we do target().doClick on the parent menu as otherwise FlatLAF gets
+		// stuck due to the submenu
+		GuiActionRunner.execute(() -> {
+			frame.menuItem("reaction").target().menuSelectionChanged(true);
+			frame.menuItem("addProductToExistingReaction").target().doClick();
+		});
 
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());

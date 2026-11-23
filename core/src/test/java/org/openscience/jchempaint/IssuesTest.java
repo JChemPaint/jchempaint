@@ -24,6 +24,7 @@ package org.openscience.jchempaint;
 import org.assertj.swing.core.ComponentDragAndDrop;
 import org.assertj.swing.core.MouseButton;
 import org.assertj.swing.core.Robot;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.hamcrest.CoreMatchers;
@@ -127,7 +128,7 @@ public class IssuesTest extends AbstractUITest {
         // Clean the panel:
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
-        panel.setSmiles("Cn1cnc2c1c(=O)n(C)c(=O)n2C");
+        GuiActionRunner.execute(() -> panel.setSmiles("Cn1cnc2c1c(=O)n(C)c(=O)n2C"));
 
 /*		// Paste caffeine template:
         applet.menuItem("pasteTemplate").click();
@@ -136,13 +137,13 @@ public class IssuesTest extends AbstractUITest {
 				dialog.robot().finder().find(
 						new ButtonTextComponentMatcher("Caffeine")));
 		templateButton.click();
-		applet.button("select").target().doClick();
+		applet.button("select").click();
 		applet.panel("renderpanel").robot().click(applet.panel("renderpanel").target(),
 				new Point(0,0), MouseButton.LEFT_BUTTON,1);
 */
 
         //Delete the double bonds connecting the two oxygen atoms:
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         for (IBond bond : panel.getChemModel().getMoleculeSet().getAtomContainer(0).bonds())
             if (bond.getOrder().equals(IBond.Order.DOUBLE) &&
                 (bond.getAtom(0).getSymbol().equals("O")||bond.getAtom(1).getSymbol().equals("O"))) {
@@ -152,7 +153,7 @@ public class IssuesTest extends AbstractUITest {
                 Point p = new Point((int)moveTo.x, (int)moveTo.y);
                 frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(),
                                                        p, MouseButton.LEFT_BUTTON, 1);
-                frame.button("eraser").target().doClick();
+                frame.button("eraser").click();
             }
 
         //Establish that only the double bonds plus the oxygens are gone, rest is still in place:
@@ -171,34 +172,34 @@ public class IssuesTest extends AbstractUITest {
     }
 
     @Test public void testIssue4() {
-        frame.button("C").target().doClick();
-        frame.button("C").target().doClick();
+        frame.button("C").click();
+        frame.button("C").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
         frame.panel("renderpanel").robot().waitForIdle();
         try {
-            frame.button("H").target().doClick();
+            frame.button("H").click();
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("select").target().doClick();
+            frame.button("select").click();
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("N").target().doClick();
+            frame.button("N").click();
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("select").target().doClick();
+            frame.button("select").click();
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("I").target().doClick();
+            frame.button("I").click();
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("select").target().doClick();
+            frame.button("select").click();
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("S").target().doClick();
+            frame.button("S").click();
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("select").target().doClick();
+            frame.button("select").click();
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
             frame.panel("renderpanel").robot().waitForIdle();
-            frame.button("C").target().doClick();
+            frame.button("C").click();
             frame.panel("renderpanel").robot().waitForIdle();
         } catch(Exception e) {
             Assert.fail();
@@ -209,7 +210,7 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target();
-        frame.button("chain").target().doClick();
+        frame.button("chain").click();
         pane.get2DHub().updateView();
         JPanelFixture renderpanel = frame.panel("renderpanel");
         renderpanel.robot().click(renderpanel.target(), new Point(100, 100));
@@ -217,7 +218,7 @@ public class IssuesTest extends AbstractUITest {
         renderpanel.robot().moveMouse(renderpanel.target(), new Point(300, 100));
         renderpanel.robot().releaseMouseButtons();
 
-        frame.button("H").target().doClick();
+        frame.button("H").click();
         pane.get2DHub().updateView();
         renderpanel.robot().waitForIdle();
         pane.get2DHub().mouseClickedDown(180, 100, 0);
@@ -231,12 +232,12 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel pane = (JChemPaintPanel)jcppanel.target();
         try {
-            pane.setSmiles("CCCC");
+            GuiActionRunner.execute(() -> pane.setSmiles("CCCC"));
             pane.get2DHub().updateView();
         } catch (Exception e) {
             Assert.fail();
         }
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         pane.get2DHub().updateView();
 
         int atomCount=0, bondCount=0;
@@ -247,7 +248,7 @@ public class IssuesTest extends AbstractUITest {
         Assert.assertEquals(0, atomCount);
         Assert.assertEquals(0, bondCount);
 
-        frame.button("redo").target().doClick();
+        frame.button("redo").click();
         pane.get2DHub().updateView();
 
         atomCount=0; bondCount=0;
@@ -270,7 +271,7 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         try {
-            panel.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]");
+            GuiActionRunner.execute(() -> panel.setSmiles("[NH4+].CP(=O)(O)CCC(N)C(=O)[O-]"));
             panel.get2DHub().updateView();
         } catch (Exception e) {
             Assert.fail();
@@ -289,9 +290,9 @@ public class IssuesTest extends AbstractUITest {
 
     @Test public void testIssue19() throws AWTException {
         java.awt.Robot robot = new java.awt.Robot();
-        frame.button("C").target().doClick();
+        frame.button("C").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
         frame.panel("renderpanel").robot().moveMouse(100, 100);
         try {
@@ -353,8 +354,8 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
         JPanelFixture renderpanel = frame.panel("renderpanel");
-        frame.button("C").target().doClick();
-        frame.button("chain").target().doClick();
+        frame.button("C").click();
+        frame.button("chain").click();
         robot.pressMouse(renderpanel.target(), new Point(100, 100));
         robot.moveMouse(renderpanel.target(), new Point(300, 100));
         robot.releaseMouseButtons();
@@ -368,10 +369,10 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
-        frame.button("C").target().doClick();
-        frame.button("bondTool").target().doClick();
+        frame.button("C").click();
+        frame.button("bondTool").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
         Point2d p1 = ethane.getAtom(0).getPoint2d();
         p1 = panel.getRenderPanel().getRenderer().toScreenCoordinates(p1.x, p1.y);
@@ -400,44 +401,41 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
-        frame.button("C").target().doClick();
-        frame.button("bondTool").target().doClick();
-        frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(100, 100));
-        frame.button("select").target().doClick();
+        frame.button("C").click();
+        frame.button("bondTool").click();
+        JPanelFixture renderpanel = frame.panel("renderpanel");
+        robot.click(renderpanel.target(), new Point(100, 100));
+        frame.button("select").click();
         robot.waitForIdle();
         IAtomContainer ethane = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
         Point2d p1 = new Point2d(ethane.getAtom(0).getPoint2d());
         Renderer r = panel.getRenderPanel().getRenderer();
         p1 = r.toScreenCoordinates(p1.x, p1.y);
-        panel.get2DHub().mouseClickedDown((int)(p1.x), (int)(p1.y), 0);
-        frame.panel("renderpanel").robot().waitForIdle();
-        panel.get2DHub().mouseClickedUp((int)p1.x, (int)p1.y, 0);
-        panel.get2DHub().updateView();
-        frame.panel("renderpanel").robot().waitForIdle();
+        robot.click(renderpanel.target(), new Point((int)(p1.x), (int)(p1.y)));
+        renderpanel.robot().waitForIdle();
         IChemObjectSelection sel = r.getRenderer2DModel().getSelection();
         Assert.assertTrue(sel.contains(ethane.getAtom(0)));
 
         double d = r.getRenderer2DModel().getSelectionRadius() / r.getRenderer2DModel().getScale();
-        panel.get2DHub().mouseClickedDown((int)(p1.x+d/2), (int)(p1.y+d/2), 0);
-        frame.panel("renderpanel").robot().waitForIdle();
         panel.get2DHub().setAltInputMode(true);
-        panel.get2DHub().mouseDrag((int)(p1.x+d/2), (int)(p1.y+d/2),(int)p1.x+100, (int)p1.y+100,
-                                   0);
-        panel.get2DHub().mouseClickedUp((int)p1.x+100, (int)p1.y+100, 0);
+        robot.pressMouse(renderpanel.target(),
+                         new Point((int)(p1.x+d/2), (int)(p1.y+d/2)));
+        robot.moveMouse(renderpanel.target(), (int)p1.x+100, (int)p1.y+100);
+        robot.releaseMouseButtons();
         panel.get2DHub().updateView();
         panel.get2DHub().setAltInputMode(false);
-        frame.panel("renderpanel").robot().waitForIdle();
-        sel = panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection();
+        renderpanel.robot().waitForIdle();
         Point2d p2 = ethane.getAtom(0).getPoint2d();
         p2 = r.toScreenCoordinates(p2.x, p2.y);
         Assert.assertEquals((int)(p1.x+100), (int)p2.x);
     }
 
     @Test public void testIssue73() {
+        restoreModelToEmpty();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
-        frame.button("C").target().doClick();
-        frame.button("chain").target().doClick();
+        frame.button("C").click();
+        frame.button("chain").click();
         panel.get2DHub().mouseClickedDown(100, 100, 0);
         panel.get2DHub().mouseDrag(100, 100, 300, 100, 0);
         panel.get2DHub().mouseClickedUp(300, 100, 0);
@@ -459,7 +457,7 @@ public class IssuesTest extends AbstractUITest {
     @Test
     public void testIssue76() {
         restoreModelToEmpty();
-        frame.button("benzene").target().doClick();
+        frame.button("benzene").click();
         JPanelFixture renderPanel = frame.panel("renderpanel");
         robot.click(renderPanel.target(), new Point(100, 100));
         panel.get2DHub().updateView();
@@ -472,8 +470,8 @@ public class IssuesTest extends AbstractUITest {
         atompos = panel.getRenderPanel().getRenderer().toScreenCoordinates(atompos.x, atompos.y);
         // C on a C will not cause a valence change so clear the highlight atom
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
-        frame.button("C").target().doClick();
-        frame.button("chain").target().doClick();
+        frame.button("C").click();
+        frame.button("chain").click();
         robot.click(renderPanel.target(), toAwtPoint(atompos));
         renderPanel.robot().waitForIdle();
         robot.click(renderPanel.target(), toAwtPoint(atompos));
@@ -514,7 +512,7 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
         try {
-            panel.setSmiles("CCCC");
+            GuiActionRunner.execute(() -> panel.setSmiles("CCCC"));
             panel.get2DHub().updateView();
         } catch (Exception e) {
             Assert.fail();
@@ -551,7 +549,7 @@ public class IssuesTest extends AbstractUITest {
         frame.button("hexagon").click();
         renderpanel.robot().click(renderpanel.target(), new Point(300, 100));
         renderpanel.robot().waitForIdle();
-        frame.button("bondTool").target().doClick();
+        frame.button("bondTool").click();
         // we want the atom at the bottom which is currently idx=3 but may change in future
         renderpanel.robot().click(renderpanel.target(), toAwtPoint(getAtomPoint(panel, 3)));
         renderpanel.robot().waitForIdle();
@@ -566,7 +564,7 @@ public class IssuesTest extends AbstractUITest {
         renderpanel.robot().releaseMouseButtons();
         renderpanel.robot().waitForIdle();
 
-        frame.button("chain").target().doClick();
+        frame.button("chain").click();
         Point startPoint = toAwtPoint(getAtomPoint(panel, 8));
         Point endPoint = toAwtPoint(getAtomPoint(panel, 4));
         renderpanel.robot().pressMouse(renderpanel.target(), startPoint);
@@ -585,11 +583,11 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
-        frame.button("H").target().doClick();
+        frame.button("H").click();
         JPanelFixture renderpanel = frame.panel("renderpanel");
         renderpanel.robot().click(renderpanel.target(), new Point(100, 100));
         Assert.assertEquals("[H][H]", panel.getSmiles());
-        frame.button("O").target().doClick();
+        frame.button("O").click();
         renderpanel.robot().click(renderpanel.target(), new Point(100, 100));
         Assert.assertEquals("O", panel.getSmiles());
         frame.menuItem("undo").click();
@@ -609,7 +607,7 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         try {
-            panel.setSmiles("C=C");
+            GuiActionRunner.execute(() -> panel.setSmiles("C=C"));
             panel.get2DHub().updateView();
         } catch (Exception e) {
             Assert.fail();
@@ -647,7 +645,7 @@ public class IssuesTest extends AbstractUITest {
 
         JPanelFixture renderpanel = frame.panel("renderpanel");
         Robot robot = renderpanel.robot();
-        frame.button("C").target().doClick();
+        frame.button("C").click();
         frame.button("bondTool").click();
         robot.click(renderpanel.target(), new Point(100, 100));
         frame.button("select").click();
@@ -716,13 +714,13 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
-        frame.button("C").target().doClick();
+        frame.button("C").click();
         Point movetopint = new Point(100, 100);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), movetopint, MouseButton.LEFT_BUTTON, 1);
         Assert.assertEquals(1, panel.getChemModel().getMoleculeSet()
                                     .getAtomContainer(0).getAtomCount());
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         movetopint = new Point(80, 80);
         frame.panel("renderpanel").robot().moveMouse(frame.panel("renderpanel")
                                                         .target(), movetopint);
@@ -747,7 +745,7 @@ public class IssuesTest extends AbstractUITest {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         // we draw a hexagon
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point(100, 100), MouseButton.LEFT_BUTTON, 1);
         // select the whole molecule
@@ -775,14 +773,14 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
-        panel.setMolfile("\n" +
-                         "  CDK    1/19/07,10:3\n" +
-                         "\n" +
-                         "  2  1  0  0  0  0  0  0  0  0999 V2000 \n" +
-                         "    2.5200   10.2200    0.0000 C   0\n" +
-                         "    2.2700   10.4700    0.0000 C   0\n" +
-                         "  2  1  1\n" +
-                         "M  END");
+        GuiActionRunner.execute(() -> panel.setMolfile("\n" +
+                                                         "  CDK    1/19/07,10:3\n" +
+                                                         "\n" +
+                                                         "  2  1  0  0  0  0  0  0  0  0999 V2000 \n" +
+                                                         "    2.5200   10.2200    0.0000 C   0\n" +
+                                                         "    2.2700   10.4700    0.0000 C   0\n" +
+                                                         "  2  1  1\n" +
+                                                         "M  END"));
         Assert.assertEquals(2, panel.getChemModel().getMoleculeSet()
                                     .getAtomContainer(0).getAtomCount());
         restoreModelToEmpty();
@@ -791,7 +789,7 @@ public class IssuesTest extends AbstractUITest {
     @Test
     public void testGetMolFile() throws CDKException {
         restoreModelToEmpty();
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         Point movetopint = new Point(100, 100);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), movetopint, MouseButton.LEFT_BUTTON, 1);
@@ -805,7 +803,7 @@ public class IssuesTest extends AbstractUITest {
         restoreModelToEmpty();
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
-        frame.button("bondTool").target().doClick();
+        frame.button("bondTool").click();
         frame.click();
         Assert.assertEquals(2, panel.getChemModel().getMoleculeSet()
                                     .getAtomContainer(0).getAtomCount());
@@ -819,10 +817,10 @@ public class IssuesTest extends AbstractUITest {
     public void overwriteStereo() {
         restoreModelToEmpty();
         // we draw a hexagon
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         frame.click();
         // one of its bonds becomes an up bond
-        frame.button("up_bond").target().doClick();
+        frame.button("up_bond").click();
         Point2d moveto = panel
                 .getRenderPanel()
                 .getRenderer()
@@ -841,7 +839,7 @@ public class IssuesTest extends AbstractUITest {
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
                                                   .getMoleculeSet().getAtomContainer(0).getBond(2).getStereo());
         // if we make that down, it must be down (and not donw_inv)
-        frame.button("down_bond").target().doClick();
+        frame.button("down_bond").click();
         moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(
                 (panel.getChemModel().getMoleculeSet().getAtomContainer(0)
                       .getAtom(2).getPoint2d().x + panel.getChemModel()
@@ -860,7 +858,7 @@ public class IssuesTest extends AbstractUITest {
                                  anyOf(is(IBond.Stereo.DOWN),
                                        is(IBond.Stereo.DOWN_INVERTED)));
         // and up again
-        frame.button("up_bond").target().doClick();
+        frame.button("up_bond").click();
         moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(
                 (panel.getChemModel().getMoleculeSet().getAtomContainer(0)
                       .getAtom(2).getPoint2d().x + panel.getChemModel()
@@ -943,11 +941,11 @@ public class IssuesTest extends AbstractUITest {
              .setHighlightedAtom(null);
 
         // applet.moveTo(new Point(100, 100));
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        frame.button("eraser").target().doClick();
+        frame.button("eraser").click();
 
         Assert.assertEquals(5, panel.getChemModel().getMoleculeSet()
                                     .getAtomContainer(0).getAtomCount());
@@ -957,7 +955,7 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        frame.button("eraser").target().doClick();
+        frame.button("eraser").click();
 
         Assert.assertEquals("[CH3].[C](C)C.[CH2]C", panel.getSmiles());
         restoreModelToEmpty();
@@ -970,31 +968,31 @@ public class IssuesTest extends AbstractUITest {
         frame.button("hexagon").click();
         frame.click();
         // we make all bond types in there
-        frame.button("up_bond").target().doClick();
+        frame.button("up_bond").click();
         JPanelFixture renderpanel = frame.panel("renderpanel");
         renderpanel.robot().click(renderpanel.target(), toAwtPoint(getBondPoint(panel, 1)));
         IAtomContainer atomContainer = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
         Assert.assertEquals(IBond.Stereo.UP, atomContainer.getBond(1).getStereo());
-        frame.button("down_bond").target().doClick();
+        frame.button("down_bond").click();
         renderpanel.robot().click(renderpanel.target(), toAwtPoint(getBondPoint(panel, 2)));
         Assert.assertEquals(IBond.Stereo.DOWN_INVERTED, atomContainer.getBond(2).getStereo());
-        frame.button("undefined_bond").target().doClick();
+        frame.button("undefined_bond").click();
         renderpanel.robot().click(renderpanel.target(), toAwtPoint(getBondPoint(panel, 3)));
         Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, atomContainer.getBond(3).getStereo());
-        frame.button("undefined_stereo_bond").target().doClick();
+        frame.button("undefined_stereo_bond").click();
         renderpanel.robot().click(renderpanel.target(), toAwtPoint(getBondPoint(panel, 4)));
         Assert.assertEquals(IBond.Stereo.E_OR_Z, atomContainer.getBond(4).getStereo());
         // now we click on all of them with disired bond
         if (directionToTest == IBond.Stereo.UP)
-            frame.button("up_bond").target().doClick();
+            frame.button("up_bond").click();
         if (directionToTest == IBond.Stereo.DOWN)
-            frame.button("down_bond").target().doClick();
+            frame.button("down_bond").click();
         if (directionToTest == IBond.Stereo.UP_OR_DOWN)
-            frame.button("undefined_bond").target().doClick();
+            frame.button("undefined_bond").click();
         if (directionToTest == IBond.Stereo.E_OR_Z)
-            frame.button("undefined_stereo_bond").target().doClick();
+            frame.button("undefined_stereo_bond").click();
         if (directionToTest == IBond.Stereo.NONE)
-            frame.button("bondTool").target().doClick();
+            frame.button("bondTool").click();
         for (int i = 0; i < 5; i++) {
             boolean self = false;
             if (atomContainer.getBond(i).getStereo() == directionToTest)
@@ -1026,9 +1024,9 @@ public class IssuesTest extends AbstractUITest {
     public void testFlipWithStereo() {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         frame.click();
-        frame.button("up_bond").target().doClick();
+        frame.button("up_bond").click();
         Point2d moveto = getAtomPoint(panel, 0);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point((int) moveto.x, (int) moveto.y),
@@ -1037,19 +1035,19 @@ public class IssuesTest extends AbstractUITest {
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        frame.button("down_bond").target().doClick();
+        frame.button("down_bond").click();
         moveto = getAtomPoint(panel, 2);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel")
                                                     .target(), new Point((int) moveto.x, (int) moveto.y),
                                                MouseButton.LEFT_BUTTON, 1);
-        frame.button("flipHorizontal").target().doClick();
+        frame.button("flipHorizontal").click();
         Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel()
                                                     .getMoleculeSet().getAtomContainer(0).getBond(6).getStereo());
         Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel()
                                                     .getMoleculeSet().getAtomContainer(0).getBond(7).getStereo());
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
                                                   .getMoleculeSet().getAtomContainer(0).getBond(8).getStereo());
-        frame.button("flipVertical").target().doClick();
+        frame.button("flipVertical").click();
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()
                                                   .getMoleculeSet().getAtomContainer(0).getBond(6).getStereo());
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel()

@@ -23,6 +23,7 @@ package org.openscience.jchempaint;
 
 import org.assertj.swing.core.MouseButton;
 import org.assertj.swing.core.NameMatcher;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.DialogFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JPanelFixture;
@@ -67,7 +68,7 @@ public class MenuTest extends AbstractUITest {
         panel.selectionChanged();
         int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getImplicitHydrogenCount().intValue();
         int oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue();
-        frame.menuItem("plus").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItem("plus").target().doClick());
         Assert.assertEquals(oldcharge + 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
         Assert.assertEquals(oldhcount - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getImplicitHydrogenCount().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
@@ -88,13 +89,13 @@ public class MenuTest extends AbstractUITest {
     }
 
     @Test
-    public void testMenuChargeMinus1() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
+    public void testMenuChargeMinus1() {
         restoreModelWithBasicmol();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         int oldhcount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getImplicitHydrogenCount().intValue();
         int oldcharge = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue();
-        frame.menuItem("minus").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItem("minus").target().doClick());
         Assert.assertEquals(oldcharge - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getFormalCharge().intValue());
         Assert.assertEquals(oldhcount - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getImplicitHydrogenCount().intValue());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).setFormalCharge(0);
@@ -166,11 +167,11 @@ public class MenuTest extends AbstractUITest {
     private void genericValenceTest(int valence) {
         //we go to select mode
         restoreModelWithBasicmol();
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
-        frame.menuItem("isotopeChange").target().doClick();
-        frame.menuItem("valence" + (valence == -1 ? "Off" : valence)).target().doClick();
+        frame.menuItem("isotopeChange").click();
+        frame.menuItem("valence" + (valence == -1 ? "Off" : valence)).click();
         if (valence == -1)
             Assert.assertNull(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getValency());
         else
@@ -193,7 +194,7 @@ public class MenuTest extends AbstractUITest {
         restoreModelWithBasicmol();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
-        //applet.menuItem("convertToRadical").target().doClick();
+        //applet.menuItem("convertToRadical").click();
         //TODO miguel needs to look at this
         //Assert...
         //reset to non-radical
@@ -206,16 +207,13 @@ public class MenuTest extends AbstractUITest {
         restoreModelWithBasicmol();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
-        frame.menuItem("pseudoR").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItem("pseudoR").target().doClick());
         IAtom atom = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0);
         Assert.assertEquals("R", ((IPseudoAtom)AtomRef.deref(atom)).getLabel());
         //the mode should have changed now
         Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
         Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
-        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newInstance(IAtom.class, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
-        normal.setSymbol("C");
-        panel.get2DHub().replaceAtom(normal, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
     }
 
     @Test
@@ -223,15 +221,12 @@ public class MenuTest extends AbstractUITest {
         restoreModelWithBasicmol();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
-        frame.menuItem("pseudoR").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItem("pseudoR").target().doClick());
         Assert.assertEquals("R", ((IPseudoAtom) panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)).getLabel());
         //the mode should have changed now
         Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
         Assert.assertTrue(panel.get2DHub().getController2DModel().getDrawPseudoAtom());
         Assert.assertEquals("R", panel.get2DHub().getActiveDrawModule().getID());
-        IAtom normal = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getBuilder().newInstance(IAtom.class, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
-        normal.setSymbol("C");
-        panel.get2DHub().replaceAtom(normal, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0));
     }
 
     @Test
@@ -241,7 +236,7 @@ public class MenuTest extends AbstractUITest {
         panel.selectionChanged();
         SwingUtilities.invokeLater(frame.menuItem("periodictable").target()::doClick);
         DialogFixture dialog = frame.dialog();
-        dialog.button("Li").target().doClick();
+        dialog.button("Li").click();
         dialog.target().setVisible(false);
         frame.robot().waitForIdle();
         Assert.assertEquals("Li", panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
@@ -257,7 +252,7 @@ public class MenuTest extends AbstractUITest {
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setOrder(IBond.Order.DOUBLE);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
         panel.selectionChanged();
-        frame.menuItem("bond").target().doClick();
+        frame.menuItem("bond").click();
         Assert.assertEquals(IBond.Order.SINGLE, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getOrder());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setOrder(IBond.Order.SINGLE);
         Assert.assertEquals("bond", panel.get2DHub().getActiveDrawModule().getID());
@@ -271,7 +266,7 @@ public class MenuTest extends AbstractUITest {
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
         panel.selectionChanged();
-        frame.menuItem("down_bond").target().doClick();
+        frame.menuItem("down_bond").click();
         Assert.assertEquals(IBond.Stereo.DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         Assert.assertEquals("down_bond", panel.get2DHub().getActiveDrawModule().getID());
@@ -285,7 +280,7 @@ public class MenuTest extends AbstractUITest {
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
         panel.selectionChanged();
-        frame.menuItem("up_bond").target().doClick();
+        frame.menuItem("up_bond").click();
         Assert.assertEquals(IBond.Stereo.UP, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         Assert.assertEquals("up_bond", panel.get2DHub().getActiveDrawModule().getID());
@@ -299,7 +294,7 @@ public class MenuTest extends AbstractUITest {
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
         panel.selectionChanged();
-        frame.menuItem("undefined_bond").target().doClick();
+        frame.menuItem("undefined_bond").click();
         Assert.assertEquals(IBond.Stereo.UP_OR_DOWN, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         Assert.assertEquals("undefined_bond", panel.get2DHub().getActiveDrawModule().getID());
@@ -313,7 +308,7 @@ public class MenuTest extends AbstractUITest {
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IBond>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0)));
         panel.selectionChanged();
-        frame.menuItem("undefined_stereo_bond").target().doClick();
+        frame.menuItem("undefined_stereo_bond").click();
         Assert.assertEquals(IBond.Stereo.E_OR_Z, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).getStereo());
         panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBond(0).setStereo(IBond.Stereo.NONE);
         Assert.assertEquals("undefined_stereo_bond", panel.get2DHub().getActiveDrawModule().getID());
@@ -333,7 +328,7 @@ public class MenuTest extends AbstractUITest {
     @Ignore
     public void testMenuNew() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
         restoreModelWithBasicmol();
-        frame.menuItem("new").target().doClick();
+        frame.menuItem("new").click();
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
         JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         Assert.assertEquals("", panel.getSmiles());
@@ -347,8 +342,10 @@ public class MenuTest extends AbstractUITest {
         SwingUtilities.invokeLater(frame.menuItem("pasteTemplate").target()::doClick);
         DialogFixture dialog = frame.dialog("templates");
         JButtonFixture morphineButton = new JButtonFixture(dialog.robot(), dialog.robot().finder().find(new ButtonTextComponentMatcher("Morphine")));
-        morphineButton.target().doClick();
-        dialog.target().setVisible(false);
+        GuiActionRunner.execute(() -> {
+            morphineButton.target().doClick();
+            dialog.target().setVisible(false);
+        });
         frame.robot().waitForIdle();
         Assert.assertEquals(1, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
         Assert.assertEquals(22, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
@@ -359,31 +356,19 @@ public class MenuTest extends AbstractUITest {
     @Test
     public void testSwitchLanguage() {
         restoreModelToEmpty();
-        frame.menuItem("options").target().doClick();
+        frame.menuItem("options").click();
         DialogFixture dialog = frame.dialog();
-        JTabbedPaneFixture tabs = new JTabbedPaneFixture(dialog.robot(), (JTabbedPane) dialog.robot().finder().findByName("tabs"));
-        tabs.selectTab(1);
-        JComboBox<?> combobox = (JComboBox<?>) dialog.robot().finder().find(new NameMatcher("language"));
-        for (int i = 0; i < combobox.getItemCount(); i++) {
-            if ((combobox.getItemAt(i)).equals("German")) {
-                combobox.setSelectedIndex(i);
-                break;
-            }
-        }
-        JButtonFixture applybutton = new JButtonFixture(dialog.robot(), (JButton) dialog.robot().finder().find(new NameMatcher("apply", true)));
-        applybutton.target().doClick();
-
+        dialog.tabbedPane().selectTab(1);
+        dialog.comboBox("language").selectItem("German");
+        dialog.button("ok").click();
         Assert.assertEquals("Neu", frame.menuItem("new").target().getText());
 
         // setting the language resets the whole tree so we do some
-        for (int i = 0; i < combobox.getItemCount(); i++) {
-            if (((String) combobox.getItemAt(i)).equals("American English")) {
-                combobox.setSelectedIndex(i);
-                break;
-            }
-        }
-        applybutton.target().doClick();
-        dialog.target().setVisible(false);
+        frame.menuItem("options").click();
+        dialog = frame.dialog();
+        dialog.tabbedPane().selectTab(1);
+        dialog.comboBox("language").selectItem("American English");
+        dialog.button("ok").click();
         frame.robot().waitForIdle();
 
         Assert.assertEquals("New", frame.menuItem("new").target().getText());
@@ -412,14 +397,16 @@ public class MenuTest extends AbstractUITest {
     private void genericIsotopeTest(int isotopeNumber){
         //we go to select mode
         restoreModelWithBasicmol();
-        frame.button("select").target().doClick();
+        frame.button("select").click();
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setSelection(new SingleSelection<IAtom>(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0)));
         panel.selectionChanged();
         int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 
         // the C12, C13, C14 etc does appear until it is selected, so manually select it first
-        frame.menuItemWithPath("Atom", "Isotopes").target().menuSelectionChanged(true);
-        frame.menuItemWithPath("Atom", "Isotopes", "C" + isotopeNumber).target().doClick();
+        GuiActionRunner.execute(() -> {
+                                    frame.menuItemWithPath("Atom", "Isotopes").target().menuSelectionChanged(true);
+                                    frame.menuItemWithPath("Atom", "Isotopes", "C" + isotopeNumber).target().doClick();
+                                });
 
         Assert.assertEquals((Integer) isotopeNumber,
                             panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getMassNumber());
@@ -471,17 +458,17 @@ public class MenuTest extends AbstractUITest {
     public void testHydrogenDisplay() {
         restoreModelToEmpty();
         String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
-        panel.setSmiles(smiles);
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target().doClick();
+        GuiActionRunner.execute(() -> panel.setSmiles(smiles));
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target().doClick());
         Assert.assertEquals("C=1(C([C@]2([C@]([H])(C(C([2H])(C([C@@](C([H])([H])[H])(O[H])[H])(C2([H])[H])[H])[H])([H])[H])C(C1[H])([H])[H])[H])([H])[H])N([H])[H]",
                             panel.getSmiles());
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Stereocenters").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Stereocenters").target().doClick());
         Assert.assertEquals("C=1(C[C@]2([C@]([H])(CC([2H])C([C@@](C)(O)[H])C2)CC1)[H])N",
                             panel.getSmiles());
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Preferred").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Preferred").target().doClick());
         Assert.assertEquals("C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N",
                             panel.getSmiles());
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target().doClick());
         Assert.assertEquals("C=1(CC2C(CC([2H])C([C@H](C)O)C2)CC1)N",
                             panel.getSmiles());
     }
@@ -491,11 +478,11 @@ public class MenuTest extends AbstractUITest {
         restoreModelToEmpty();
         String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
         panel.setSmiles(smiles);
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "All").target().doClick());
         Assert.assertEquals("C=1(C([C@]2([C@]([H])(C(C([2H])(C([C@@](C([H])([H])[H])(O[H])[H])(C2([H])[H])[H])[H])([H])[H])C(C1[H])([H])[H])[H])([H])[H])N([H])[H]",
                             panel.getSmiles());
         frame.menuItemWithPath("Edit", "Select All").click();
-        frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target().doClick();
+        GuiActionRunner.execute(() -> frame.menuItemWithPath("Tools", "Set Hydrogen Display", "Minimal").target().doClick());
         Assert.assertEquals("C=1(CC2C(CC([2H])C([C@H](C)O)C2)CC1)N",
                             panel.getSmiles());
     }
@@ -506,7 +493,7 @@ public class MenuTest extends AbstractUITest {
         String smiles = "C=1(C[C@]2([C@]([H])(CC([2H])C([C@H](C)O)C2)CC1)[H])N";
         panel.setSmiles(smiles);
         frame.menuItemWithPath("Edit", "Select All").click();
-        frame.menuItem("copy").target().doClick();
+        frame.menuItem("copy").click();
         Clipboard clipboard = panel.getToolkit().getSystemClipboard();
         MatcherAssert.assertThat(clipboard.getData(DataFlavor.stringFlavor).toString(),
                                  CoreMatchers.containsString("@"));

@@ -2,6 +2,8 @@ package org.openscience.jchempaint;
 
 import org.assertj.swing.core.BasicRobot;
 import org.assertj.swing.core.Robot;
+import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
@@ -42,6 +44,7 @@ public class AbstractUITest {
 
     @BeforeClass
     public static void setUp() {
+        FailOnThreadViolationRepaintManager.install();
         ApplicationLauncher.application(JChemPaint.class).start();
         robot = BasicRobot.robotWithCurrentAwtHierarchy();
         frame = WindowFinder.findFrame("JChemPaint").using(robot);
@@ -133,7 +136,9 @@ public class AbstractUITest {
         basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
         basic.getMoleculeSet().addAtomContainer(
                 basic.getBuilder().newInstance(IAtomContainer.class));
-        panel.setChemModel(basic);
+        GuiActionRunner.execute(() -> {
+                                    panel.setChemModel(basic);
+                                });
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setFitToScreen(false);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
         panel.getRenderPanel().getRenderer().setZoom(1);
@@ -146,7 +151,7 @@ public class AbstractUITest {
         panel.setModified(false);
         panel.get2DHub().updateView();
 
-        frame.button("C").target().doClick();
+        frame.button("C").click();
         frame.button("bondTool").click();
     }
 
