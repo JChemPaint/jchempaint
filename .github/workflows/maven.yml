@@ -46,8 +46,8 @@ jobs:
           java-version: 25
           cache: maven
 
-      - name: Install gettext
-        run: sudo apt install -y gettext
+      - name: Install gettext and at-spi2-core
+        run: sudo apt install -y gettext at-spi2-core
 
       # FlatLAF is the default but for some reason messes with the tests
       - name: Set LAF
