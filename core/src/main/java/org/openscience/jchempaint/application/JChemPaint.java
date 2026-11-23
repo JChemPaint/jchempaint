@@ -85,6 +85,7 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.vecmath.Point2d;
 import java.awt.Dimension;
@@ -110,7 +111,7 @@ public class JChemPaint {
     public final static String GUI_APPLICATION="application";
 
     @SuppressWarnings("static-access")
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         try {
             String vers = System.getProperty("java.version");
@@ -136,16 +137,19 @@ public class JChemPaint {
                             GT.get("supported options are given below")).create(
                             "D"));
 
-            CommandLine line = null;
+            final CommandLine line;
             try {
                 CommandLineParser parser = new PosixParser();
                 line = parser.parse(options, args);
             } catch (UnrecognizedOptionException exception) {
                 System.err.println(exception.getMessage());
                 System.exit(-1);
+                return;
             } catch (ParseException exception) {
                 System.err.println("Unexpected exception: "
                         + exception.toString());
+                System.exit(1);
+                return;
             }
 
             if (line.hasOption("v")) {
@@ -170,10 +174,7 @@ public class JChemPaint {
 
                 System.exit(0);
             }
-            boolean debug = false;
-            if (line.hasOption("d")) {
-                debug = true;
-            }
+            final boolean debug = line.hasOption("d");
 
             // Set Look&Feel
             Properties props = JCPPropertyHandler.getInstance(true).getJCPProperties();
@@ -189,22 +190,24 @@ public class JChemPaint {
             props.setProperty("General.language",
                               System.getProperty("user.language", "en"));
 
-            // Process command line arguments
-            String modelFilename = "";
-            args = line.getArgs();
-            if (args.length > 0) {
-                modelFilename = args[0];
-                File file = new File(modelFilename);
-                if (!file.exists()) {
-                    System.err.println(GT.get("File does not exist") + ": "
-                            + modelFilename);
-                    System.exit(-1);
-                }
-                showInstance(file, null, null, debug);
-            } else {
-                showEmptyInstance(debug);
-            }
+            String[] parsedArgs = line.getArgs();
 
+            SwingUtilities.invokeLater(() -> {
+                // Process command line arguments
+                String modelFilename = "";
+                if (parsedArgs.length > 0) {
+                    modelFilename = parsedArgs[0];
+                    File file = new File(modelFilename);
+                    if (!file.exists()) {
+                        System.err.println(GT.get("File does not exist") + ": "
+                                           + modelFilename);
+                        System.exit(-1);
+                    }
+                    showInstance(file, null, null, debug);
+                } else {
+                    showEmptyInstance(debug);
+                }
+            });
         } catch (Throwable t) {
             System.err.println("uncaught exception: " + t);
             t.printStackTrace(System.err);
