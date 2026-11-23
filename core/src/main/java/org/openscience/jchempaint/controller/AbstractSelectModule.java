@@ -209,6 +209,8 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 
         init = true;
         startPoint = new Point2d(p);
+        selection.reset();
+        selection.addPoint(startPoint);
         IChemObjectSelection chemObjSelection = chemModelRelay.getRenderer().getRenderer2DModel().getSelection();
         currentSelection = chemObjSelection != null ? new LogicalSelection(chemObjSelection) : null;
     }
@@ -309,8 +311,7 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
             this.selection.select(chemModelRelay.getIChemModel());
             if (shiftPressed)
                 this.selection.difference(currentSelection);
-            this.chemModelRelay.select((IChemObjectSelection) selection);
-            selection.reset();
+            this.chemModelRelay.select(selection);
         }
 
         this.chemModelRelay.updateView();
@@ -327,7 +328,6 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
     @Override
     protected void setSelection(IChemObjectSelection selection) {
         super.setSelection(selection);
-        reset();
     }
 
     @Override
@@ -340,12 +340,5 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         else if (singleSelection instanceof IBond)
             chemModelRelay.selectFragment((IBond)singleSelection);
         chemModelRelay.updateView();
-    }
-
-
-    @Override
-    public void reset() {
-        startPoint = null;
-        init = false;
     }
 }
