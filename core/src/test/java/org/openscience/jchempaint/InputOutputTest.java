@@ -98,7 +98,7 @@ public class InputOutputTest extends AbstractUITest {
         JFileChooserFixture dialog = frame.fileChooser("save");
         File file = File.createTempFile("jcptest", ".mol");
         file.delete();
-        dialog.selectFile(file);
+        dialog.fileNameTextBox().setText(file.getAbsolutePath());
         dialog.approveButton().click();
         frame.robot().waitForIdle();
         MDLV2000Reader reader = null;
@@ -280,7 +280,7 @@ public class InputOutputTest extends AbstractUITest {
         File file=new File(System.getProperty("java.io.tmpdir") + File.separator + "test.mol");
         if(file.exists())
             file.delete();
-        fileChooser.selectFile(file);
+        fileChooser.fileNameTextBox().setText(file.getAbsolutePath());
         fileChooser.approveButton().click();
         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file));
         IAtomContainer mol = (IAtomContainer)reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
@@ -303,7 +303,7 @@ public class InputOutputTest extends AbstractUITest {
         file2.delete();
 
         JFileChooserFixture saveAs = frame.fileChooser("save");
-        saveAs.selectFile(file1);
+        saveAs.fileNameTextBox().setText(file1.getAbsolutePath());
         saveAs.approveButton().click();
         //not the bug, but still worth testing
         MDLV2000Reader reader = new MDLV2000Reader(new FileInputStream(file1));
@@ -321,7 +321,7 @@ public class InputOutputTest extends AbstractUITest {
 
         frame.menuItem("saveAs").click();
         saveAs = frame.fileChooser("save");
-        saveAs.selectFile(file2);
+        saveAs.fileNameTextBox().setText(file2.getAbsolutePath());
         saveAs.approveButton().click();
         reader.close();
 
@@ -344,7 +344,7 @@ public class InputOutputTest extends AbstractUITest {
         //"save as" mol1
         frame.menuItem("saveAs").click();
         saveAs = frame.fileChooser("save");
-        saveAs.selectFile(file1);
+        saveAs.fileNameTextBox().setText(file1.getAbsolutePath());
         saveAs.approveButton().click();
         reader.close();
 
