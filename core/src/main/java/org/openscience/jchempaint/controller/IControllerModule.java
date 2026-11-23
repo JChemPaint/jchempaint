@@ -101,11 +101,4 @@ public interface IControllerModule {
 	 * and we want to change what the phantom atoms are doing.
 	 */
 	void updateView();
-
-	/**
-	 * Reset any state of the module.
-	 */
-	default void reset() {
-
-	}
 }
