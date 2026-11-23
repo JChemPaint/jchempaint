@@ -64,18 +64,18 @@ public class UndoRedoTest extends AbstractUITest {
         drawRing(300,200);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
         models.add((IChemModel)panel.getChemModel());
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         compare(3);
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         compare(2);
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         compare(1);
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         compare(0);
     }
 
     private void deleteAtom() {
-        frame.button("eraser").target().doClick();
+        frame.button("eraser").click();
         Point2d moveto=getAtomPoint(panel, 0);
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
     }
@@ -97,21 +97,21 @@ public class UndoRedoTest extends AbstractUITest {
             drawRing(300,200);
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
             models.add((IChemModel)panel.getChemModel());
-            frame.button("undo").target().doClick();
+            frame.button("undo").click();
             compare(3);
-            frame.button("undo").target().doClick();
+            frame.button("undo").click();
             compare(2);
-            frame.button("undo").target().doClick();
+            frame.button("undo").click();
             compare(1);
-            frame.button("undo").target().doClick();
+            frame.button("undo").click();
             compare(0);
-			frame.button("redo").target().doClick();
+			frame.button("redo").click();
 			compare(1);
-			frame.button("redo").target().doClick();
+			frame.button("redo").click();
 			compare(2);
-			frame.button("redo").target().doClick();
+			frame.button("redo").click();
 			compare(3);
-			frame.button("redo").target().doClick();
+			frame.button("redo").click();
 			compare(4);
 		} catch (IllegalStateException e) {
 			Assert.fail("Redo button disabled");
@@ -119,14 +119,14 @@ public class UndoRedoTest extends AbstractUITest {
     }
     
     private void attachRing() {
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         Point2d moveto=getBondPoint(panel, 0);
         robot.click(frame.panel("renderpanel").target(),
                     new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
     }
 
     public void drawRing(int x, int y){
-        frame.button("hexagon").target().doClick();
+        frame.button("hexagon").click();
         Point2d moveto=new Point2d(x, y);
         robot.click(frame.panel("renderpanel").target(),
                     new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
@@ -165,7 +165,7 @@ public class UndoRedoTest extends AbstractUITest {
         Assert.assertEquals(16,totalAtomCount());
         Assert.assertEquals(2,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
 
-        frame.button("undo").target().doClick();
+        frame.button("undo").click();
         Assert.assertEquals(7,totalAtomCount());
         Assert.assertEquals(1,panel.getChemModel().getMoleculeSet().getAtomContainerCount());
     }
