@@ -1,11 +1,11 @@
 package org.openscience.jchempaint;
 
-import org.fest.swing.core.BasicRobot;
-import org.fest.swing.core.Robot;
-import org.fest.swing.finder.WindowFinder;
-import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.fixture.JPanelFixture;
-import org.fest.swing.launcher.ApplicationLauncher;
+import org.assertj.swing.core.BasicRobot;
+import org.assertj.swing.core.Robot;
+import org.assertj.swing.finder.WindowFinder;
+import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JPanelFixture;
+import org.assertj.swing.launcher.ApplicationLauncher;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -45,7 +45,7 @@ public class AbstractUITest {
         ApplicationLauncher.application(JChemPaint.class).start();
         robot = BasicRobot.robotWithCurrentAwtHierarchy();
         frame = WindowFinder.findFrame("JChemPaint").using(robot);
-        panel = (JChemPaintPanel) frame.panel("JChemPaintPanel").target;
+        panel = (JChemPaintPanel) frame.panel("JChemPaintPanel").target();
     }
 
     @AfterClass
@@ -128,7 +128,7 @@ public class AbstractUITest {
 
     protected void restoreModelToEmpty() {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         IChemModel basic = SilentChemObjectBuilder.getInstance().newInstance(IChemModel.class);
         basic.setMoleculeSet(basic.getBuilder().newInstance(IAtomContainerSet.class));
         basic.getMoleculeSet().addAtomContainer(
@@ -146,13 +146,13 @@ public class AbstractUITest {
         panel.setModified(false);
         panel.get2DHub().updateView();
 
-        frame.button("C").target.doClick();
+        frame.button("C").target().doClick();
         frame.button("bondTool").click();
     }
 
     protected void restoreModelWithBasicmol() {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         panel.get2DHub().getController2DModel().setAutoUpdateImplicitHydrogens(true);
         String filename = "data/basic.mol";
         InputStream ins = this.getClass().getClassLoader().getResourceAsStream(filename);

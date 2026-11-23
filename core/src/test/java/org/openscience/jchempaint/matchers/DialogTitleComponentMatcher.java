@@ -2,7 +2,7 @@ package org.openscience.jchempaint.matchers;
 
 import javax.swing.JDialog;
 
-import org.fest.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.GenericTypeMatcher;
 
 public class DialogTitleComponentMatcher extends GenericTypeMatcher<JDialog> {
 
