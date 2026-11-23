@@ -21,11 +21,9 @@
  */
 package org.openscience.jchempaint;
 
-import org.fest.swing.core.ComponentDragAndDrop;
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JPanelFixture;
-import org.hamcrest.CoreMatchers;
+import org.assertj.swing.core.MouseButton;
+import org.assertj.swing.fixture.DialogFixture;
+import org.assertj.swing.fixture.JPanelFixture;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.AnyOf;
 import org.junit.Assert;
@@ -34,7 +32,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElement;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.swing.SwingUtilities;
 import javax.vecmath.Point2d;
@@ -58,27 +55,27 @@ public class DrawingTest extends AbstractUITest {
 	public void testAddBond() {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
 		IAtomContainer mol = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
 		int oldAtomCount = mol.getAtomCount();
 		//using bond button
 		frame.button("bondTool").click();
 		//can we add a new bond?
 		Point2d moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount + 1, mol.getAtomCount());
 		//can we convert bond order?
 		int oldhydrogencount0 = mol.getAtom(2).getImplicitHydrogenCount().intValue();
 		int oldhydrogencount1 = mol.getAtom(3).getImplicitHydrogenCount().intValue();
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(IBond.Order.DOUBLE, mol.getBond(2).getOrder());
 		Assert.assertEquals(oldhydrogencount0 - 1, mol.getAtom(2).getImplicitHydrogenCount().intValue());
 		Assert.assertEquals(oldhydrogencount1 - 1, mol.getAtom(3).getImplicitHydrogenCount().intValue());
 		// using up bond button tool
 		frame.button("up_bond").click();
 		// click on a bond
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), getBondAwtPoint(mol.getBond(4)));
 
 		AnyOf<IBond.Stereo> isUpBond = anyOf(is(IBond.Stereo.UP), is(IBond.Stereo.UP_INVERTED));
 		AnyOf<IBond.Stereo> isDownBond = anyOf(is(IBond.Stereo.DOWN), is(IBond.Stereo.DOWN_INVERTED));
@@ -88,82 +85,82 @@ public class DrawingTest extends AbstractUITest {
 														 isUpBond);
 		//can we add a new bond?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount + 2, mol.getAtomCount());
 		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
 														 isUpBond);
 		//can we convert an existing one?
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(2)));
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), getBondAwtPoint(mol.getBond(2)));
 		MatcherAssert.assertThat(mol.getBond(2).getStereo(), isUpBond);
 		frame.button("down_bond").click();
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), getBondAwtPoint(mol.getBond(4)));
 		//was the selected bond changed
 
 		MatcherAssert.assertThat(mol.getBond(4).getStereo(),
 														 isDownBond);
 		//can we add a new bond?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount + 3, mol.getAtomCount());
 		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
 														 isDownBond);
 		//can we convert an existing one?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		MatcherAssert.assertThat(mol.getBond(2).getStereo(),
 														 isDownBond);
 		//using undefined bond button,
 		frame.button("undefined_bond").click();
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), getBondAwtPoint(mol.getBond(4)));
 		//was the selected bond changed
 		MatcherAssert.assertThat(mol.getBond(4).getStereo(),
 														 isWavyBond);
 		//can we add a new bond?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount + 4, mol.getAtomCount());
 		MatcherAssert.assertThat(mol.getBond(mol.getBondCount()-1).getStereo(),
 														 isWavyBond);
 		//can we convert an existing one?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		MatcherAssert.assertThat(mol.getBond(2).getStereo(),
 														 isWavyBond);
 		//using undefined stereo button,
 		frame.button("undefined_stereo_bond").click();
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), getBondAwtPoint(mol.getBond(4)));
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), getBondAwtPoint(mol.getBond(4)));
 		//was the selected bond changed
 		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(4).getStereo());
 		//can we add a new bond?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates(mol.getAtom(0).getPoint2d().x, mol.getAtom(1).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount + 5, mol.getAtomCount());
 		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(mol.getBondCount() - 1).getStereo());
 		//can we convert an existing one?
 		moveto = panel.getRenderPanel().getRenderer().toScreenCoordinates((mol.getAtom(2).getPoint2d().x + mol.getAtom(3).getPoint2d().x) / 2, (mol.getAtom(2).getPoint2d().y + mol.getAtom(3).getPoint2d().y) / 2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int) moveto.x, (int) moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(IBond.Stereo.E_OR_Z, mol.getBond(2).getStereo());
 	}
 
 	@Test public void testElement() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    //we go into bond_down mode to see that hitting O button actually changes activeDrawModule
 	    restoreModelWithBasicmol();
-	    frame.button("down_bond").target.doClick();
+	    frame.button("down_bond").target().doClick();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		robot.waitForIdle();
-		frame.button("O").target.doClick(); // click() doesn't work?
+		frame.button("O").target().doClick(); // click() doesn't work?
 		robot.waitForIdle();
 		Assert.assertEquals("O",panel.get2DHub().getActiveDrawModule().getID());
 
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals("O",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 
 		frame.button("bondTool").click();
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("O",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
 		Assert.assertEquals("O",panel.get2DHub().getController2DModel().getDrawElement());
@@ -172,34 +169,34 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testPeriodictable() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
-		SwingUtilities.invokeLater(frame.button("periodictable").target::doClick);
+		SwingUtilities.invokeLater(frame.button("periodictable").target()::doClick);
 		DialogFixture dialog = frame.dialog();
 		dialog.button("Li").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		frame.button("bondTool").click();
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("Li",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
-		frame.button("C").target.doClick();
+		frame.button("C").target().doClick();
 		restoreModelToEmpty();
 	}
 
 	@Test public void testEnterElementOnSelection() {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		frame.button("select").click();
 		Point2d atom0 = getAtomPoint(panel, 0);
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(),
+		renderpanel.robot().click(renderpanel.target(),
 								toAwtPoint(atom0));
-		SwingUtilities.invokeLater(frame.button("enterelement").target::doClick);
+		SwingUtilities.invokeLater(frame.button("enterelement").target()::doClick);
 		DialogFixture dialog = frame.dialog();
 		dialog.textBox().setText("U");
 		dialog.button("ok").click();
@@ -207,7 +204,7 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals("U",
 							panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		frame.button("bondTool").click();
-		renderpanel.robot.click(renderpanel.component(),
+		renderpanel.robot().click(renderpanel.target(),
 								toAwtPoint(atom0));
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("C",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
@@ -216,12 +213,12 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testEnterElementNoSelection() {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		Point2d atom0 = getAtomPoint(panel, 0);
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		SwingUtilities.invokeLater(frame.button("enterelement").target::doClick);
-		renderpanel.robot.click(renderpanel.component(),
+		SwingUtilities.invokeLater(frame.button("enterelement").target()::doClick);
+		renderpanel.robot().click(renderpanel.target(),
 								toAwtPoint(atom0));
 		DialogFixture dialog = frame.dialog();
 		dialog.textBox().setText("U");
@@ -233,7 +230,7 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals("U",
 							panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getSymbol());
 		frame.button("bondTool").click();
-		renderpanel.robot.click(renderpanel.component(),
+		renderpanel.robot().click(renderpanel.target(),
 								toAwtPoint(atom0));
 		Assert.assertEquals(oldAtomCount+1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		Assert.assertEquals("U",panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()-1).getSymbol());
@@ -242,17 +239,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testTriangleAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a triangle to an atom
 		frame.button("triangle").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
 		panel.get2DHub().setAltInputMode(true);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+2, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -261,17 +258,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testPentagonAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a pentagon to an atom
 		frame.button("pentagon").click();
 		panel.get2DHub().setAltInputMode(true);
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+4, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+7, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -281,17 +278,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testHexagonAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a hexagon to an atom
 		frame.button("hexagon").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
 		panel.get2DHub().setAltInputMode(true);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+9, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -300,16 +297,16 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testHexagon() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a hexagon to an atom
 		frame.button("hexagon").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+10, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		restoreModelWithBasicmol();
 	}
@@ -318,17 +315,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testOctagonAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a octagon to an atom
 		frame.button("octagon").click();
 		panel.get2DHub().setAltInputMode(true);
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+7, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+13, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -337,17 +334,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testBenzeneAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a benzene to an atom
 		panel.get2DHub().setAltInputMode(true);
 		frame.button("benzene").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+9, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -356,16 +353,16 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testBenzene() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a benzene to an atom
 		frame.button("benzene").click();
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+10, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		restoreModelWithBasicmol();
 	}
@@ -374,17 +371,17 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testSquareAltMode() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		//we add a square to an atom
 		frame.button("square").click();
 		panel.get2DHub().setAltInputMode(true);
 		Point2d moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+3, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		//and a bond
 		moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d().y)/2);	
-		frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+		frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		Assert.assertEquals(oldAtomCount+5, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		panel.get2DHub().setAltInputMode(false);
 		restoreModelWithBasicmol();
@@ -393,19 +390,19 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void testDelete() throws CDKException, ClassNotFoundException, IOException, CloneNotSupportedException {
 	    restoreModelWithBasicmol();
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
         int oldBondCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount();
         //we delete an atom
         frame.button("select").click();
         Point2d moveto=getAtomPoint(panel, 0);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+        frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		frame.button("eraser").click();
         Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
         Assert.assertEquals(oldBondCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
         //and a (terminal) bond
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates((panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().x+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().x)/2,(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(1).getPoint2d().y+panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(2).getPoint2d().y)/2);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
+        frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON, 1);
 		frame.button("eraser").click();
         Assert.assertEquals(2, panel.getChemModel().getMoleculeSet().getAtomContainerCount());
         Assert.assertEquals(oldAtomCount-1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
@@ -418,18 +415,18 @@ public class DrawingTest extends AbstractUITest {
 	@Test public void selectByDoubleClick(){
 	    restoreModelWithBasicmol();
         JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
         int oldAtomCount=panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
         //we add a hexagon
         applet.button("hexagon").click();
         Point2d moveto=new Point2d(200,100);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
+        applet.panel("renderpanel").robot().click(applet.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,1);
         
         Assert.assertEquals(oldAtomCount+6, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount()+panel.getChemModel().getMoleculeSet().getAtomContainer(1).getAtomCount());
         applet.button("select").click();
         //double click on atom
         moveto=panel.getRenderPanel().getRenderer().toScreenCoordinates(panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().x,panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(0).getPoint2d().y);
-        applet.panel("renderpanel").robot.click(applet.panel("renderpanel").component(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
+        applet.panel("renderpanel").robot().click(applet.panel("renderpanel").target(), new Point((int)moveto.x, (int)moveto.y), MouseButton.LEFT_BUTTON,2);
         Assert.assertEquals(oldAtomCount, panel.getRenderPanel().getRenderer().getRenderer2DModel().getSelection().getConnectedAtomContainer().getAtomCount());
 	}*/
 
@@ -437,16 +434,16 @@ public class DrawingTest extends AbstractUITest {
 	public void mergeAndUndoRedo() {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
 		int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		frame.button("select").click();
 		Point2d atom0 = getAtomPoint(panel, 0);
 		Point2d atom2 = getAtomPoint(panel, 2);
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), toAwtPoint(atom0));
-		renderpanel.robot.pressMouse(renderpanel.component(), toAwtPoint(atom0));
-		renderpanel.robot.moveMouse(toAwtPoint(atom2));
-		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot().click(renderpanel.target(), toAwtPoint(atom0));
+		renderpanel.robot().pressMouse(renderpanel.target(), toAwtPoint(atom0));
+		renderpanel.robot().moveMouse(toAwtPoint(atom2));
+		renderpanel.robot().releaseMouseButtons();
 		Assert.assertEquals(oldAtomCount - 1, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		frame.button("undo").click();
 		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
@@ -458,18 +455,18 @@ public class DrawingTest extends AbstractUITest {
 	public void mergeAndUndoRedoAlt() {
 		restoreModelWithBasicmol();
 		JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
 		int oldAtomCount = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount();
 		frame.button("select").click();
 		Point2d atom0 = getAtomPoint(panel, 0);
 		Point2d atom1 = getAtomPoint(panel, 2);
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), toAwtPoint(atom0));
-		renderpanel.robot.pressMouse(renderpanel.component(), toAwtPoint(atom0));
-		renderpanel.robot.moveMouse(toAwtPoint(atom1));
-		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
-		renderpanel.robot.releaseMouseButtons();
-		renderpanel.robot.releaseKey(KeyEvent.VK_ALT);
+		renderpanel.robot().click(renderpanel.target(), toAwtPoint(atom0));
+		renderpanel.robot().pressMouse(renderpanel.target(), toAwtPoint(atom0));
+		renderpanel.robot().moveMouse(toAwtPoint(atom1));
+		renderpanel.robot().pressKey(KeyEvent.VK_ALT);
+		renderpanel.robot().releaseMouseButtons();
+		renderpanel.robot().releaseKey(KeyEvent.VK_ALT);
 		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
 		frame.button("undo").click();
 		Assert.assertEquals(oldAtomCount, panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
@@ -481,40 +478,40 @@ public class DrawingTest extends AbstractUITest {
     @Test public void drawReactions(){
 		restoreModelToEmpty();
 		JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+		JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
 		frame.button("hexagon").click();
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 50), MouseButton.LEFT_BUTTON, 1);
-		renderpanel.robot.click(renderpanel.component(), new Point(400, 50), MouseButton.LEFT_BUTTON, 1);
-		renderpanel.robot.click(renderpanel.component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(400, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
 		frame.button("reactionArrow").click();
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(150, 50));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 50));
-		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot().pressMouse(renderpanel.target(), new Point(150, 50));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(350, 50));
+		renderpanel.robot().releaseMouseButtons();
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
 		frame.button("hexagon").click();
-		renderpanel.robot.click(renderpanel.component(), new Point(500, 50), MouseButton.LEFT_BUTTON, 1);
-		renderpanel.robot.click(renderpanel.component(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(500, 50), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
 		Point2d point = getAtomPoint(panel,0);
-		renderpanel.robot.click(renderpanel.component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
 
-		// we do target.doClick on the parent menu as otherwise FlatLAF gets stuck
-		frame.menuItem("reaction").component().menuSelectionChanged(true);
-		frame.menuItem("addProductToExistingReaction").target.doClick();
+		// we do target().doClick on the parent menu as otherwise FlatLAF gets stuck
+		frame.menuItem("reaction").target().menuSelectionChanged(true);
+		frame.menuItem("addProductToExistingReaction").target().doClick();
 
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(0).getReactantCount());
 		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReaction(0).getProductCount());
 
 		frame.button("hexagon").click();
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 300), MouseButton.LEFT_BUTTON, 1);
-		renderpanel.robot.click(renderpanel.component(), new Point(400, 300), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 300), MouseButton.LEFT_BUTTON, 1);
+		renderpanel.robot().click(renderpanel.target(), new Point(400, 300), MouseButton.LEFT_BUTTON, 1);
 		frame.button("reactionArrow").click();
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(150, 300));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(350, 300));
-		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot().pressMouse(renderpanel.target(), new Point(150, 300));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(350, 300));
+		renderpanel.robot().releaseMouseButtons();
 		Assert.assertEquals(2, panel.getChemModel().getReactionSet().getReactionCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getReactantCount());
 		Assert.assertEquals(1, panel.getChemModel().getReactionSet().getReaction(1).getProductCount());
@@ -532,12 +529,12 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
 		frame.button("N").click();
-		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom0);
 		Assert.assertEquals("NCCCCCCC", panel.getSmiles());
-		renderpanel.robot.moveMouse(renderpanel.component(), atom0);
+		renderpanel.robot().moveMouse(renderpanel.target(), atom0);
 		frame.button("eraser").click();
 		Assert.assertEquals("CCCCCCCC", panel.getSmiles()); // N => C
-		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom0);
 		Assert.assertEquals("CCCCCCC", panel.getSmiles()); // C => remove
 	}
 
@@ -547,28 +544,28 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		frame.button("N").click();
 		Point atom0 = toAwtPoint(getAtomPoint(panel, 0));
-		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom0);
 		Point atom2 = toAwtPoint(getAtomPoint(panel, 2));
-		renderpanel.robot.click(renderpanel.component(), atom2);
+		renderpanel.robot().click(renderpanel.target(), atom2);
 		Point atom4 = toAwtPoint(getAtomPoint(panel, 4));
-		renderpanel.robot.click(renderpanel.component(), atom4);
+		renderpanel.robot().click(renderpanel.target(), atom4);
 		Assert.assertEquals("NCNCNCCC", panel.getSmiles());
 
 		// select multiple, they will change to carbon
 		frame.button("select").click();
-		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
-		renderpanel.robot.click(renderpanel.component(), atom2);
-		renderpanel.robot.click(renderpanel.component(), atom4);
-		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().click(renderpanel.target(), atom2);
+		renderpanel.robot().click(renderpanel.target(), atom4);
+		renderpanel.robot().releaseKey(KeyEvent.VK_SHIFT);
 		frame.button("eraser").click();
 		Assert.assertEquals("NCCCCCCC", panel.getSmiles()); // N,N => C,C
 
 		// select multiple
 		frame.button("select").click();
-		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
-		renderpanel.robot.click(renderpanel.component(), atom2);
-		renderpanel.robot.click(renderpanel.component(), atom4);
-		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().click(renderpanel.target(), atom2);
+		renderpanel.robot().click(renderpanel.target(), atom4);
+		renderpanel.robot().releaseKey(KeyEvent.VK_SHIFT);
 		frame.button("eraser").click();
 		// cansmi will fix this!
 		String[] parts = panel.getSmiles().split("\\.");
@@ -588,14 +585,14 @@ public class DrawingTest extends AbstractUITest {
 		Point bond0 = toAwtPoint(getBondPoint(panel, 0));
 
 		frame.button("N").click();
-		renderpanel.robot.click(renderpanel.component(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom0);
 		Assert.assertEquals("NCCCCCCC", panel.getSmiles());
 
 		frame.button("select").click();
-		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
-		renderpanel.robot.click(renderpanel.component(), atom0);
-		renderpanel.robot.click(renderpanel.component(), bond0);
-		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().click(renderpanel.target(), atom0);
+		renderpanel.robot().click(renderpanel.target(), bond0);
+		renderpanel.robot().releaseKey(KeyEvent.VK_SHIFT);
 		frame.button("eraser").click();
 		Assert.assertEquals("CCCCCCC", panel.getSmiles());
 	}
@@ -613,16 +610,16 @@ public class DrawingTest extends AbstractUITest {
 		Point atom2 = toAwtPoint(getAtomPoint(panel, 2));
 
 		frame.button("N").click();
-		renderpanel.robot.click(renderpanel.component(), atom0);
-		renderpanel.robot.click(renderpanel.component(), atom2);
+		renderpanel.robot().click(renderpanel.target(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom2);
 		Assert.assertEquals("NCNCCCCC", panel.getSmiles());
 
 		frame.button("select").click();
-		renderpanel.robot.pressKey(KeyEvent.VK_SHIFT);
-		renderpanel.robot.click(renderpanel.component(), atom0);
-		renderpanel.robot.click(renderpanel.component(), atom1);
-		renderpanel.robot.click(renderpanel.component(), atom2);
-		renderpanel.robot.releaseKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().pressKey(KeyEvent.VK_SHIFT);
+		renderpanel.robot().click(renderpanel.target(), atom0);
+		renderpanel.robot().click(renderpanel.target(), atom1);
+		renderpanel.robot().click(renderpanel.target(), atom2);
+		renderpanel.robot().releaseKey(KeyEvent.VK_SHIFT);
 		frame.button("eraser").click();
 
 		// one nitrogen is removed (because all it's bonds were removed),
@@ -635,8 +632,8 @@ public class DrawingTest extends AbstractUITest {
 		restoreModelToEmpty();
 		frame.button("hexagon").click();
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
-		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
 		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
 		frame.button("N").click();
 		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
@@ -651,12 +648,12 @@ public class DrawingTest extends AbstractUITest {
 		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
 
 		// move it
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - 10, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount + 10, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
+		renderpanel.robot().pressMouse(renderpanel.target(), new Point(300, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - 10, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - yShiftAmount + 10, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - yShiftAmount, 150));
 		robot.waitForIdle();
-		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot().releaseMouseButtons();
 		robot.waitForIdle();
 
 		// would be easier with canonical SMILES
@@ -686,14 +683,14 @@ public class DrawingTest extends AbstractUITest {
 		restoreModelToEmpty();
 		frame.button("hexagon").click();
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
-		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
 		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
 		frame.button("N").click();
 		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
 		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
-		renderpanel.robot.click(renderpanel.component(), mol1atom1);
-		renderpanel.robot.click(renderpanel.component(), mol2atom4);
+		renderpanel.robot().click(renderpanel.target(), mol1atom1);
+		renderpanel.robot().click(renderpanel.target(), mol2atom4);
 
 		Assert.assertEquals("C1NCCCC1.C1CCCNC1", panel.getSmiles());
 
@@ -704,12 +701,12 @@ public class DrawingTest extends AbstractUITest {
 		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
 
 		// move it
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - 10, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount + 10, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
+		renderpanel.robot().pressMouse(renderpanel.target(), new Point(300, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - 10, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - yShiftAmount + 10, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - yShiftAmount, 150));
 		robot.waitForIdle();
-		renderpanel.robot.releaseMouseButtons();
+		renderpanel.robot().releaseMouseButtons();
 		robot.waitForIdle();
 
 		// would be easier with canonical SMILES
@@ -742,8 +739,8 @@ public class DrawingTest extends AbstractUITest {
 		restoreModelToEmpty();
 		frame.button("hexagon").click();
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
-		renderpanel.robot.click(renderpanel.component(), new Point(300, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
 		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
 
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
@@ -757,11 +754,11 @@ public class DrawingTest extends AbstractUITest {
 		select(panel.getChemModel().getMoleculeSet().getAtomContainer(1));
 
 		// move it
-		renderpanel.robot.pressKey(KeyEvent.VK_ALT);
-		renderpanel.robot.pressMouse(renderpanel.component(), new Point(300, 150));
-		renderpanel.robot.moveMouse(renderpanel.component(), new Point(300 - yShiftAmount, 150));
-		renderpanel.robot.releaseMouseButtons();
-		renderpanel.robot.releaseKey(KeyEvent.VK_ALT);
+		renderpanel.robot().pressKey(KeyEvent.VK_ALT);
+		renderpanel.robot().pressMouse(renderpanel.target(), new Point(300, 150));
+		renderpanel.robot().moveMouse(renderpanel.target(), new Point(300 - yShiftAmount, 150));
+		renderpanel.robot().releaseMouseButtons();
+		renderpanel.robot().releaseKey(KeyEvent.VK_ALT);
 
 		// moved but did not merge
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
@@ -774,7 +771,7 @@ public class DrawingTest extends AbstractUITest {
 		restoreModelToEmpty();
 		frame.button("hexagon").click();
 		JPanelFixture renderpanel = frame.panel("renderpanel");
-		renderpanel.robot.click(renderpanel.component(), new Point(100, 150));
+		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
 		frame.button("select").click();
 
 		Assert.assertEquals("C1CCCCC1", panel.getSmiles());

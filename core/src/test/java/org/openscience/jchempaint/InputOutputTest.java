@@ -21,12 +21,12 @@
  */
 package org.openscience.jchempaint;
 
-import org.fest.swing.core.MouseButton;
-import org.fest.swing.core.matcher.JTextComponentMatcher;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.fixture.JButtonFixture;
-import org.fest.swing.fixture.JFileChooserFixture;
-import org.fest.swing.fixture.JPanelFixture;
+import org.assertj.swing.core.MouseButton;
+import org.assertj.swing.core.matcher.JTextComponentMatcher;
+import org.assertj.swing.fixture.DialogFixture;
+import org.assertj.swing.fixture.JButtonFixture;
+import org.assertj.swing.fixture.JFileChooserFixture;
+import org.assertj.swing.fixture.JPanelFixture;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
@@ -57,7 +57,7 @@ public class InputOutputTest extends AbstractUITest {
     @Test
     public void testSetSmiles() throws CDKException {
         JPanelFixture jcppanel = frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target;
+        JChemPaintPanel panel = (JChemPaintPanel) jcppanel.target();
         panel.setSmiles("CCCC");
         panel.get2DHub().updateView();
         Assert.assertEquals(4, panel.getChemModel().getMoleculeSet()
@@ -100,7 +100,7 @@ public class InputOutputTest extends AbstractUITest {
         file.delete();
         dialog.selectFile(file);
         dialog.approveButton().click();
-        frame.robot.waitForIdle();
+        frame.robot().waitForIdle();
         MDLV2000Reader reader = null;
         try {
             reader = new MDLV2000Reader(Files.newInputStream(file.toPath()));
@@ -128,21 +128,21 @@ public class InputOutputTest extends AbstractUITest {
     	        FileOutputStream fos = new FileOutputStream(file);
     	        while(ins.available()>0)
     	        	fos.write(ins.read());
-    			applet.menuItem("open").target.doClick();
+    			applet.menuItem("open").target().doClick();
     			DialogFixture dialog = applet.dialog();
-    			//JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
+    			//JComboBox combobox = dialog.robot().finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPFileFilter"));
     	        //combobox.setSelectedItem(combobox.getItemAt(1));
     			JTextComponentFixture text = dialog.textBox();
     			text.setText(file.toString());
-    			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Open")));
-    			okbutton.target.doClick();
+    			JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("Open")));
+    			okbutton.target().doClick();
     	        ins = this.getClass().getClassLoader().getResourceAsStream(filename);
     	        CMLReader reader = new CMLReader(ins);
     	        ChemFile chemFile = (ChemFile)reader.read((ChemObject)new ChemFile());
     	        Assert.assertNotNull(chemFile);
     	        List<IAtomContainer> containersList = ChemFileManipulator.getAllAtomContainers(chemFile);
     	        JPanelFixture jcppanel=applet.panel("JChemPaintPanel");
-    	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
+    	        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
     	        Assert.assertEquals(containersList.size(), containersList.size());
     	        Assert.assertEquals((containersList.get(0)).getAtomCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtomCount());
     	        Assert.assertEquals((containersList.get(0)).getBondCount(),panel.getChemModel().getMoleculeSet().getAtomContainer(0).getBondCount());
@@ -167,9 +167,9 @@ public class InputOutputTest extends AbstractUITest {
         chooser.approveButton().click();
         robot.waitForIdle();
 
-        DialogFixture coordsdialog = new DialogFixture(frame.robot, frame.robot.finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
-        JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot, coordsdialog.robot.finder().find(new ButtonTextComponentMatcher("Yes")));
-        okbuttoncoordsdialog.target.doClick();
+        DialogFixture coordsdialog = new DialogFixture(frame.robot(), frame.robot().finder().find(new DialogTitleComponentMatcher("No 2D coordinates")));
+        JButtonFixture okbuttoncoordsdialog = new JButtonFixture(coordsdialog.robot(), coordsdialog.robot().finder().find(new ButtonTextComponentMatcher("Yes")));
+        okbuttoncoordsdialog.target().doClick();
         robot.waitForIdle();
 
         Assert.assertEquals("C1=CC=CC=C1.CNNC.OC(=O)C(CO)N.CC(=O)O.C1CCNC1.CC(C)C.CCCC.COC", panel.getSmiles());
@@ -184,17 +184,17 @@ public class InputOutputTest extends AbstractUITest {
 		  File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.bmp");
 		  if(file.exists())
 			  file.delete();
-		  applet.menuItem("export").target.doClick();
+		  applet.menuItem("export").target().doClick();
 		  DialogFixture dialog = applet.dialog();
-		  //JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  //JComboBox combobox = dialog.robot().finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  //combobox.setSelectedItem(combobox.getItemAt(1));
 		  JTextComponentFixture text = dialog.textBox();
 		  text.setText(file.toString().substring(0, file.toString().length()-4));
-		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-		  okbutton.target.doClick();
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.target().doClick();
 		  dialog = applet.dialog();
-		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-		  okbutton.target.doClick();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.target().doClick();
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}
@@ -203,17 +203,17 @@ public class InputOutputTest extends AbstractUITest {
         File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.jpg");
 		  if(file.exists())
 			  file.delete();
-		  applet.menuItem("export").target.doClick();
+		  applet.menuItem("export").target().doClick();
 		  DialogFixture dialog = applet.dialog();
-		  //JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  //JComboBox combobox = dialog.robot().finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  //combobox.setSelectedItem(combobox.getItemAt(2));
 		  JTextComponentFixture text = dialog.textBox();
 		  text.setText(file.toString().substring(0, file.toString().length()-4));
-		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-		  okbutton.target.doClick();
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.target().doClick();
 		  dialog = applet.dialog();
-		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-		  okbutton.target.doClick();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.target().doClick();
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}
@@ -222,17 +222,17 @@ public class InputOutputTest extends AbstractUITest {
         File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.png");
 		  if(file.exists())
 			  file.delete();
-		  applet.menuItem("export").target.doClick();
+		  applet.menuItem("export").target().doClick();
 		  DialogFixture dialog = applet.dialog();
-		  JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  JComboBox combobox = dialog.robot().finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  combobox.setSelectedItem(combobox.getItemAt(3));
 		  JTextComponentFixture text = dialog.textBox();
 		  text.setText(file.toString().substring(0, file.toString().length()-4));
-		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-		  okbutton.target.doClick();
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.target().doClick();
 		  dialog = applet.dialog();
-		  okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-		  okbutton.target.doClick();
+		  okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("OK")));
+		  okbutton.target().doClick();
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}*/
@@ -243,17 +243,17 @@ public class InputOutputTest extends AbstractUITest {
 	      File file=new File(System.getProperty("java.io.tmpdir")+File.separator+"test.svg");
 		  if(file.exists())
 			  file.delete();
-		  applet.menuItem("export").target.doClick();
+		  applet.menuItem("export").target().doClick();
 		  DialogFixture dialog = applet.dialog();
-		  //JComboBox combobox = dialog.robot.finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
+		  //JComboBox combobox = dialog.robot().finder().find(new ComboBoxTextComponentMatcher("org.openscience.jchempaint.io.JCPExportFileFilter"));
 		  //combobox.setSelectedItem(combobox.getItemAt(4));
 		  JTextComponentFixture text = dialog.textBox();
 		  text.setText(file.toString().substring(0, file.toString().length()-4));
-		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("Save")));
-		  okbutton.target.doClick();
+		  JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("Save")));
+		  okbutton.target().doClick();
 		  //dialog = applet.dialog();
-		  //okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
-		  //okbutton.target.doClick();
+		  //okbutton = new JButtonFixture(dialog.robot, dialog.robot().finder().find(new ButtonTextComponentMatcher("OK")));
+		  //okbutton.target().doClick();
 		  //we only check the existence of file for now
 		  Assert.assertTrue(file.exists());
 	}
@@ -263,17 +263,17 @@ public class InputOutputTest extends AbstractUITest {
 
     @Test public void testBug70() throws CDKException, IOException {
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        frame.button("hexagon").target.doClick();
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
+        frame.button("hexagon").target().doClick();
         frame.click();
         Point2d point = getAtomPoint(panel, 0);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
-        frame.panel("renderpanel").robot.click(frame.panel("renderpanel").component(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
+        frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
+        frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point((int)point.x, (int)point.y), MouseButton.RIGHT_BUTTON, 1);
         frame.menuItem("showACProperties").click();
         DialogFixture dialog = frame.dialog();
-        JTextComponent textfield = dialog.robot.finder().find(JTextComponentMatcher.withName("Title"));
+        JTextComponent textfield = dialog.robot().finder().find(JTextComponentMatcher.withName("Title"));
         textfield.setText("aaa");
-        JButtonFixture okbutton = new JButtonFixture(dialog.robot, dialog.robot.finder().find(new ButtonTextComponentMatcher("OK")));
+        JButtonFixture okbutton = new JButtonFixture(dialog.robot(), dialog.robot().finder().find(new ButtonTextComponentMatcher("OK")));
         okbutton.click();
         frame.menuItem("saveAs").click();
         JFileChooserFixture fileChooser = frame.fileChooser("save");
@@ -290,8 +290,8 @@ public class InputOutputTest extends AbstractUITest {
 
     @Test public void testBug77() throws CDKException, IOException{
         JPanelFixture jcppanel= frame.panel("JChemPaintPanel");
-        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target;
-        frame.button("hexagon").target.doClick();
+        JChemPaintPanel panel = (JChemPaintPanel)jcppanel.target();
+        frame.button("hexagon").target().doClick();
         frame.click();
         frame.menuItem("saveAs").click();
 
@@ -315,7 +315,7 @@ public class InputOutputTest extends AbstractUITest {
         frame.button("hexagon").click();
         frame.click();
         frame.button("bondTool").click();
-        robot.click(renderpanel.component(), toAwtPoint(getAtomPoint(panel, 0)));
+        robot.click(renderpanel.target(), toAwtPoint(getAtomPoint(panel, 0)));
         robot.waitForIdle();
         panel.get2DHub().updateView();
 
