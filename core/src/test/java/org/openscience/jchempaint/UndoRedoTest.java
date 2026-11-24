@@ -58,7 +58,7 @@ public class UndoRedoTest extends AbstractUITest {
         attachRing();
         frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
         models.add((IChemModel)panel.getChemModel());
-        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
+        panel.get2DHub().getRenderer().getRenderer2DModel().setHighlighted(null);
         deleteAtom();
         models.add((IChemModel)panel.getChemModel());
         drawRing(300,200);
@@ -91,7 +91,7 @@ public class UndoRedoTest extends AbstractUITest {
             attachRing();
             frame.panel("renderpanel").robot().click(frame.panel("renderpanel").target(), new Point(0, 0), MouseButton.RIGHT_BUTTON, 1);
             models.add((IChemModel)panel.getChemModel());
-            panel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
+            panel.get2DHub().getRenderer().getRenderer2DModel().setHighlighted(null);
             deleteAtom();
             models.add((IChemModel)panel.getChemModel());
             drawRing(300,200);

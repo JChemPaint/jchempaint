@@ -469,7 +469,7 @@ public class IssuesTest extends AbstractUITest {
         Point2d atompos = panel.getChemModel().getMoleculeSet().getAtomContainer(0).getAtom(3).getPoint2d();
         atompos = panel.getRenderPanel().getRenderer().toScreenCoordinates(atompos.x, atompos.y);
         // C on a C will not cause a valence change so clear the highlight atom
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setHighlightedAtom(null);
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setHighlighted(null);
         frame.button("C").click();
         frame.button("chain").click();
         robot.click(renderPanel.target(), toAwtPoint(atompos));
@@ -938,7 +938,7 @@ public class IssuesTest extends AbstractUITest {
                                     .getAtomContainer(0).getBondCount());
         moveto = getBondPoint(panel, 0);
         panel.getRenderPanel().getRenderer().getRenderer2DModel()
-             .setHighlightedAtom(null);
+             .setHighlighted(null);
 
         // applet.moveTo(new Point(100, 100));
         frame.button("select").click();

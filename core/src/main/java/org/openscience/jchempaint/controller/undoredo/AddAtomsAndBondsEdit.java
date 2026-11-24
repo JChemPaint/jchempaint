@@ -180,13 +180,13 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 			leftOver.sort(Comparator.comparing(IAtom::getIndex));
 			IAtom hgAtom = leftOver.get(leftOver.size() - 1);
 			containerToAddTo = ChemModelManipulator.getRelevantAtomContainer(chemModel, hgAtom);
-			model.setHighlightedAtom(containerToAddTo.getAtom(containerToAddTo.indexOf(hgAtom)));
+			model.setHighlighted(containerToAddTo.getAtom(containerToAddTo.indexOf(hgAtom)));
 		} else {
 			if (undoRedoSet.contains(model.getHighlightedAtom())) {
 				for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModelRelay.getIChemModel())) {
 					if (!container.isEmpty()) {
 						chemModelRelay.getRenderer().getRenderer2DModel()
-													.setHighlightedAtom(container.getAtom(container.getAtomCount() - 1));
+													.setHighlighted(container.getAtom(container.getAtomCount() - 1));
 					}
 				}
 			}

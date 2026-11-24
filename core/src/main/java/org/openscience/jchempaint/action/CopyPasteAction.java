@@ -353,8 +353,7 @@ public final class CopyPasteAction extends JCPAction {
             jcpPanel.get2DHub().deleteFragment(atomBondSet, false);
             jcpPanel.get2DHub().updateView();
 
-            jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedAtom(newHighlightAtom);
-            jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlightedBond(null);
+            jcpPanel.get2DHub().getRenderer().getRenderer2DModel().setHighlighted(newHighlightAtom);
 
         } else if (type.contains(PASTE_TEMPLATE)) {
             //if templates are shown, we extract the tab to show if any
@@ -497,7 +496,7 @@ public final class CopyPasteAction extends JCPAction {
             if (atomInRange != null) {
                 tocopyclone.addAtom(atomInRange);
                 jcpPanel.get2DHub().removeAtom(atomInRange);
-                renderModel.setHighlightedAtom(null);
+                renderModel.setHighlighted(null);
             } else if (bondInRange != null) {
                 tocopyclone.addBond(bondInRange);
                 jcpPanel.get2DHub().removeBond(bondInRange);

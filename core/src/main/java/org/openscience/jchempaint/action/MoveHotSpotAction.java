@@ -50,17 +50,17 @@ public class MoveHotSpotAction extends JCPAction {
       IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
                                                                                model.getHighlightedAtom());
       if (container != null)
-        model.setHighlightedAtom(container.getAtom(container.indexOf(model.getHighlightedAtom())));
+        model.setHighlighted(container.getAtom(container.indexOf(model.getHighlightedAtom())));
       else
-        model.setHighlightedAtom(null);
+        model.setHighlighted(null);
     }
     if (model.getHighlightedBond() != null) {
       IAtomContainer container = ChemModelManipulator.getRelevantAtomContainer(relay.getChemModel(),
                                                                                model.getHighlightedBond());
       if (container != null)
-        model.setHighlightedBond(container.getBond(container.indexOf(model.getHighlightedBond())));
+        model.setHighlighted(container.getBond(container.indexOf(model.getHighlightedBond())));
       else
-        model.setHighlightedBond(null);
+        model.setHighlighted(null);
     }
 
     String s = e.getActionCommand();
