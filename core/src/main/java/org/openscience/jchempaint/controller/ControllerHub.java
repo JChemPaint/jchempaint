@@ -936,7 +936,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 										   false,
 										   false,
 										   cyclicMode);
-		renderer.getRenderer2DModel().setHighlightedAtom(newAtom);
+		renderer.getRenderer2DModel().setHighlighted(newAtom);
 		if (getUndoRedoHandler() != null) {
 			IAtomContainer container = ChemModelManipulator
 					.getRelevantAtomContainer(getIChemModel(), newAtom);
@@ -966,7 +966,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			undoRedoSet.add(o);
 			for (IBond bond : container.getConnectedBondsList(c1))
 				undoRedoSet.add(bond);
-			getRenderer().getRenderer2DModel().setHighlightedAtom(c2);
+			getRenderer().getRenderer2DModel().setHighlighted(c2);
 		}
 		else if (freeValence == 2) {
 			clearPhantoms();
@@ -985,7 +985,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				undoRedoSet.add(bond);
 			for (IBond bond : container.getConnectedBondsList(o))
 				undoRedoSet.add(bond);
-			getRenderer().getRenderer2DModel().setHighlightedAtom(c);
+			getRenderer().getRenderer2DModel().setHighlighted(c);
 
 		}
 
@@ -1013,7 +1013,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				undoRedoSet.add(me2);
 				for (IBond bond : container.getConnectedBondsList(c))
 					undoRedoSet.add(bond);
-				getRenderer().getRenderer2DModel().setHighlightedAtom(me1);
+				getRenderer().getRenderer2DModel().setHighlighted(me1);
 			} else {
 				addAtom(atom, IAtom.C, Order.SINGLE, display, false);
 			}
@@ -1028,7 +1028,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 				undoRedoSet.add(bond);
 			for (IBond bond : container.getConnectedBondsList(me2))
 				undoRedoSet.add(bond);
-			getRenderer().getRenderer2DModel().setHighlightedAtom(me1);
+			getRenderer().getRenderer2DModel().setHighlighted(me1);
 		}
 
 		if (getUndoRedoHandler() != null) {
@@ -2067,7 +2067,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 
 			renderer.getRenderer2DModel()
-					.setHighlightedAtom(newAtomContainer.getAtom(ring.indexOf(ring.getAtom((ringSize/2)-1))));
+					.setHighlighted(newAtomContainer.getAtom(ring.indexOf(ring.getAtom((ringSize/2)-1))));
 			clearPhantoms();
 		}
 
@@ -2141,7 +2141,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 
 			renderer.getRenderer2DModel()
-					.setHighlightedAtom(newAtomContainer.getAtom(ring.indexOf(ring.getAtom(2))));
+					.setHighlighted(newAtomContainer.getAtom(ring.indexOf(ring.getAtom(2))));
 			clearPhantoms();
 		}
 
@@ -2289,7 +2289,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateAtoms(sourceContainer, newRing.atoms());
 			int atomToHighlight = newRing.getAtomCount() / 2;
 			IAtom hgAtom = sourceContainer.getAtom(sourceContainer.indexOf(newRing.getAtom(atomToHighlight)));
-			renderer.getRenderer2DModel().setHighlightedAtom(hgAtom);
+			renderer.getRenderer2DModel().setHighlighted(hgAtom);
 		}
 
 		JChemPaintRendererModel rModel = this.getRenderer().getRenderer2DModel();
@@ -2433,7 +2433,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			updateAtoms(sourceContainer, newRing.atoms());
 			int atomToHighlight = newRing.getAtomCount() / 2;
 			IAtom hgAtom = sourceContainer.getAtom(sourceContainer.indexOf(newRing.getAtom(atomToHighlight)));
-			renderer.getRenderer2DModel().setHighlightedAtom(hgAtom);
+			renderer.getRenderer2DModel().setHighlighted(hgAtom);
 		}
 		for (IAtom newatom : newRing.atoms()) {
 			if (!atom.equals(newatom) && getClosestAtom(atom) != null) {
@@ -2608,7 +2608,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		if (!phantom) {
-			renderer.getRenderer2DModel().setHighlightedBond(newRing.getBond(size/2));
+			renderer.getRenderer2DModel().setHighlighted(newRing.getBond(size/2));
 			updateAtoms(sourceContainer, newRing.atoms());
 		}
 
@@ -2777,7 +2777,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 
 		if (!phantom) {
-			renderer.getRenderer2DModel().setHighlightedBond(newRing.getBond(3));
+			renderer.getRenderer2DModel().setHighlighted(newRing.getBond(3));
 			updateAtoms(sourceContainer, newRing.atoms());
 		}
 
@@ -2916,7 +2916,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		if (Objects.equals(oldAtom,
 						   getRenderer().getRenderer2DModel().getHighlightedAtom())) {
 			getRenderer().getRenderer2DModel()
-						 .setHighlightedAtom(container.getAtom(container.indexOf(newAtom)));
+						 .setHighlighted(container.getAtom(container.indexOf(newAtom)));
 		}
 
 		updateAtom(newAtom);

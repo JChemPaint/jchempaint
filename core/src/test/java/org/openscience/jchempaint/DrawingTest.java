@@ -637,7 +637,7 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
 		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
-		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+		panel.getRenderPanel().getRendererModel().setHighlighted(null);
 		frame.button("N").click();
 		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
 		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
@@ -688,7 +688,7 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
 		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
-		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+		panel.getRenderPanel().getRendererModel().setHighlighted(null);
 		frame.button("N").click();
 		Point mol1atom1 = toAwtPoint(getAtomPoint(panel, 1, 0));
 		Point mol2atom4 = toAwtPoint(getAtomPoint(panel, 4, 1));
@@ -744,7 +744,7 @@ public class DrawingTest extends AbstractUITest {
 		JPanelFixture renderpanel = frame.panel("renderpanel");
 		renderpanel.robot().click(renderpanel.target(), new Point(100, 150));
 		renderpanel.robot().click(renderpanel.target(), new Point(300, 150));
-		panel.getRenderPanel().getRendererModel().setHighlightedAtom(null);
+		panel.getRenderPanel().getRendererModel().setHighlighted(null);
 
 		Assert.assertEquals("C1CCCCC1.C1CCCCC1", panel.getSmiles());
 

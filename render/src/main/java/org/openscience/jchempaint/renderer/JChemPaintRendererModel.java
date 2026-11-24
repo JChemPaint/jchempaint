@@ -904,9 +904,9 @@ public class JChemPaintRendererModel extends RendererModel implements Serializab
         if (chemObject.is(IChemObject.HIDDEN))
             return;
         if (chemObject instanceof IAtom) {
-            setHighlightedAtom((IAtom) chemObject);
+            setHighlighted((IAtom) chemObject);
         } else if (chemObject instanceof IBond) {
-            setHighlightedBond((IBond) chemObject);
+            setHighlighted((IBond) chemObject);
         }
     }
 
