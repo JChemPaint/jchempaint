@@ -142,7 +142,7 @@ public class AbstractUITest {
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setFitToScreen(false);
         panel.getRenderPanel().getRenderer().getRenderer2DModel().setZoomFactor(1);
         panel.getRenderPanel().getRenderer().setZoom(1);
-        panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(10.4);
+        panel.getRenderPanel().getRenderer().getRenderer2DModel().setBondLength(26.1);
         panel.setCurrentSaveFileFilter(null);
         panel.setCurrentOpenFileFilter(null);
         panel.get2DHub().setAltInputMode(false);
