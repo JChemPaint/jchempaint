@@ -1,5 +1,6 @@
 package org.openscience.jchempaint;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -23,10 +25,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IIsotope;
+import org.openscience.cdk.sgroup.Sgroup;
+import org.openscience.cdk.sgroup.SgroupKey;
+import org.openscience.cdk.sgroup.SgroupType;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.jchempaint.action.ContextAction;
@@ -113,7 +120,8 @@ public class JChemPaintMenuHelper {
   	 * @param  blocked       A list of menuitesm/buttons which should be ignored when building gui.
      * @return           The created JMenu
      */
-    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel, String key, boolean isPopup, String guiString, final JComponent menu, Set<String> blocked) {
+    protected JComponent createMenu(final AbstractJChemPaintPanel jcpPanel,
+                                    String key, boolean isPopup, String guiString, final JComponent menu, Set<String> blocked) {
     	// block entire menu
     	if (blocked.contains(key)){
     		return null;
@@ -137,6 +145,48 @@ public class JChemPaintMenuHelper {
 	                menu.add(mi);
 	            }
         	}
+        }
+
+        if (key.equals("atompopup")) {
+            ((JPopupMenu)menu).addPopupMenuListener(new PopupMenuListener() {
+                @Override
+                public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                    IAtom hotspot = (IAtom)((JChemPaintPopupMenu)menu).getSource();
+                    Collection<Sgroup> atomSgroups = jcpPanel.get2DHub().getSgroups(hotspot);
+                    boolean canExpand = false;
+                    boolean canContract = false;
+
+                    for (Sgroup sgroup : atomSgroups) {
+                        if (sgroup.getType() == SgroupType.CtabAbbreviation) {
+                            Boolean expanded = sgroup.getValue(SgroupKey.CtabExpansion);
+                            if (expanded == null || !expanded) {
+                                canExpand = true;
+                            } else {
+                                canContract = true;
+                            }
+                        }
+                    }
+
+                    for (Component component : menu.getComponents()) {
+                        if ("expand".equals(component.getName())) {
+                            component.setEnabled(canExpand);
+                        } else if ("contract".equals(component.getName())) {
+                            component.setEnabled(canContract);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+                }
+
+                @Override
+                public void popupMenuCanceled(PopupMenuEvent e) {
+
+                }
+            });
         }
 
         if(key.equals("isotopeChange")){

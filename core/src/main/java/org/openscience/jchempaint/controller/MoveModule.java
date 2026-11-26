@@ -26,24 +26,19 @@
  */
 package org.openscience.jchempaint.controller;
 
-import org.openscience.cdk.geometry.GeometryUtil;
-import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
-import org.openscience.jchempaint.renderer.selection.LogicalSelection;
-import org.openscience.jchempaint.renderer.selection.SingleSelection;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Vector2d;
@@ -57,6 +52,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.openscience.jchempaint.controller.AbstractSelectModule.getSelectionControlType;
 
@@ -65,6 +61,7 @@ import static org.openscience.jchempaint.controller.AbstractSelectModule.getSele
  * Handles merging of atoms.
  *
  * @author Niels Out
+ * @author John Mayfield
  * @cdk.svnrev $Revision: 9162 $
  * @cdk.module controlbasic
  */
@@ -74,12 +71,12 @@ public class MoveModule extends ControllerModuleAdapter {
         LoggingToolFactory.createLoggingTool(MoveModule.class);
     
     private Vector2d offset;
+    protected Set<IAtom> visible;
     
     private Set<IAtom> atomsToMove;
     
-    private Point2d start2DCenter;
-    private Point2d end2DCenter;
-    
+    private Point2d startPoint;
+
     private String ID;
 
     private ControllerModuleAdapter switchtowhenoutside;
@@ -115,16 +112,20 @@ public class MoveModule extends ControllerModuleAdapter {
     // if anything is selected, set offset, start2DCenter, and atomsToMove.
     // if not, switch to other mode and reset mouse cursor.
     @Override
-    public void mouseClickedDown(Point2d worldCoord, int modifiers) {
+    public void mouseClickedDown(Point2d p, int modifiers) {
 
         JChemPaintRendererModel jcpModel = chemModelRelay.getRenderer().getRenderer2DModel();
 
         // move/rotate/scales works on atom coords, a bond may be selected
         // without its end points so we expand the selection to include
         // those atoms
-        selection = getExpandedSelection(jcpModel.getSelection());
+        selection = jcpModel.getSelection();
+        visible = selection.elements(IAtom.class)
+                           .stream()
+                           .filter(a -> !a.is(IChemObject.HIDDEN))
+                           .collect(Collectors.toSet());
 
-        IChemModelRelay.CursorType cursor = getSelectionControlType(worldCoord, chemModelRelay);
+        IChemModelRelay.CursorType cursor = getSelectionControlType(p, chemModelRelay);
         if (cursor == IChemModelRelay.CursorType.ROTATE) {
 
             transformMade = false;
@@ -152,7 +153,7 @@ public class MoveModule extends ControllerModuleAdapter {
 
             transformMade = false;
             transformOrigin = RotateModule.getRotationCenter(selection);
-            transformAmmount = worldCoord.distance(transformOrigin);
+            transformAmmount = p.distance(transformOrigin);
 
             /* Keep original coordinates for possible undo/redo */
             atomCoordsMap = new HashMap<>();
@@ -173,7 +174,13 @@ public class MoveModule extends ControllerModuleAdapter {
             return;
         } else {
             transform = Transform.Move;
-            transformOrigin = worldCoord;
+            if (visible.size() == 1) {
+                transformOrigin = visible.iterator()
+                                         .next()
+                                         .getPoint2d();
+            } else {
+                transformOrigin = startPoint;
+            }
             atomCoordsMap = new HashMap<>();
             for (IAtom atom : selection.elements(IAtom.class)) {
                 atomCoordsMap.put(atom, new Point2d[]{null, atom.getPoint2d()});
@@ -181,31 +188,12 @@ public class MoveModule extends ControllerModuleAdapter {
             chemModelRelay.initSnapGuides();
         }
 
-
         // if we are outside bounding box, we deselect, else
         // we actually start a move.
-        AtomBondSet selectedAC = getSelectAtomBondSet(worldCoord);
-        if (selectedAC != null && !selectedAC.isEmpty()) {
-
-            // It could be that only a  selected bond is going to be moved. 
-            // So make sure that the attached atoms are included, otherwise
-            // the undo will fail to place the atoms back where they were
-           atomsToMove = new HashSet<IAtom>();
-
-            for (IAtom atom : selectedAC.atoms()) {
-                atomsToMove.add(atom);
-            }
-            for (IBond bond : selectedAC.bonds()) {
-                for (IAtom atom : bond.atoms()){
-                    atomsToMove.add(atom);
-                    selectedAC.add(atom);
-                }
-            }
-
-            Point2d current = GeometryUtil.get2DCenter(selectedAC.atoms());
-            start2DCenter = current;
-            offset = new Vector2d();
-            offset.sub(current, worldCoord);
+        if (selection.isFilled() && isInSelectionBox(jcpModel, p)) {
+            atomsToMove = new HashSet<>();
+            atomsToMove.addAll(selection.elements(IAtom.class));
+            startPoint = p;
 
          } else if(switchtowhenoutside!=null){
             jcpModel
@@ -214,21 +202,15 @@ public class MoveModule extends ControllerModuleAdapter {
                     .setActiveDrawModule(switchtowhenoutside);
             chemModelRelay.updateView();
             endMove();
-            switchtowhenoutside.mouseClickedDown(worldCoord, modifiers);
+            switchtowhenoutside.mouseClickedDown(p, modifiers);
             chemModelRelay.setCursor(Cursor.DEFAULT_CURSOR);
         }
     }
 
-    private IChemObjectSelection getExpandedSelection(IChemObjectSelection selection) {
-        LogicalSelection expandSelection = new LogicalSelection(LogicalSelection.Type.ALL);
-        for (IAtom atom : selection.elements(IAtom.class)) {
-            expandSelection.select(atom);
-        }
-        for (IBond bond : selection.elements(IBond.class)) {
-            expandSelection.select(bond.getBegin());
-            expandSelection.select(bond.getEnd());
-        }
-        return expandSelection;
+    private static boolean isInSelectionBox(JChemPaintRendererModel jcpModel, Point2d p) {
+        RectangleElement rect = jcpModel.getSelectionBounds();
+        return rect.xCoord <= p.x && p.x <= rect.xCoord + rect.width &&
+               (rect.yCoord + rect.height) <= p.y && p.y <= rect.yCoord;
     }
 
     @Override
@@ -237,7 +219,7 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
     @Override
-    public void mouseClickedUp(Point2d worldCoord, int modifiers) {
+    public void mouseClickedUp(Point2d p, int modifiers) {
 
         chemModelRelay.clearSnapGuides();
 
@@ -247,7 +229,7 @@ public class MoveModule extends ControllerModuleAdapter {
             if (transformMade && atomCoordsMap != null && selection.isFilled()) {
 
                 /* Keep new coordinates for the sake of possible undo/redo */
-                for (IAtom atom : selection.getConnectedAtomContainer().atoms()) {
+                for (IAtom atom : selection.elements(IAtom.class)) {
                     atomCoordsMap.get(atom)[0] = atom.getPoint2d();
                 }
 
@@ -266,12 +248,11 @@ public class MoveModule extends ControllerModuleAdapter {
             return;
         }
 
-    	if (start2DCenter != null) {
+    	if (startPoint != null) {
 
             // take 2d center of end point to ensure correct positional undo
             Vector2d total = new Vector2d();
-            Point2d end2DCenter = GeometryUtil.get2DCenter(atomsToMove);
-            total.sub(end2DCenter, start2DCenter);
+            total.sub(p, startPoint);
 
             Map<IAtom, IAtom> mergeMap = calculateMerge(atomsToMove);
             JChemPaintRendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
@@ -281,20 +262,20 @@ public class MoveModule extends ControllerModuleAdapter {
             // Do the merge of atoms
             boolean altMode = (modifiers & KeyEvent.ALT_DOWN_MASK) != 0;
             if (!mergeMap.isEmpty() && !altMode) {
-
                 try {
                     chemModelRelay.mergeMolecules(atomCoordsMap);
 				} catch (RuntimeException e) {
 					//move things back, merge is not allowed
 		            Vector2d d = new Vector2d();
-		            d.sub(start2DCenter,end2DCenter);
+		            d.sub(startPoint, p);
 					chemModelRelay.moveBy(atomsToMove, d, total);
 		            chemModelRelay.updateView();
 				}
             } else {
                 // single atom will snap to sensible angles (moveTo(atom,from,to)
-                if (atomsToMove.size() == 1) {
-                    chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, end2DCenter, true);
+                if (visible.size() == 1) {
+                    chemModelRelay.moveSingleAtom(visible.iterator().next(),
+                                                  transformOrigin, p, selection, true);
                 } else {
                     chemModelRelay.moveBy(atomsToMove, null, total);
                 }
@@ -308,28 +289,33 @@ public class MoveModule extends ControllerModuleAdapter {
     }
 
     private void endMove() {
-        start2DCenter = null;
+        startPoint = null;
         selection = null;
-        offset = null;
     }
 
     /**
      * Most move mode calculations are done in this routine.
      */
     @Override
-    public void mouseDrag(Point2d worldCoordFrom, Point2d worldCoordTo, int modifiers) {
+    public void mouseDrag(Point2d pFrom, Point2d pTo, int modifiers) {
         switch (transform) {
             case Rotate:
                 transformMade = true;
-                transformAmmount += RotateModule.getRotationAmount(transformOrigin, worldCoordFrom, worldCoordTo);
+                transformAmmount += RotateModule.getRotationAmount(transformOrigin, pFrom, pTo);
+                double snapAngle = transformAmmount;
+                // by default snap to 10 degrees (PI/18 radians)
+                // unless in alt mode we allow free rotation
+                if ((modifiers & KeyEvent.ALT_DOWN_MASK) == 0) {
+                    snapAngle = (Math.PI / 18) * Math.round(snapAngle / (Math.PI / 18));
+                }
                 chemModelRelay.rotate(relativeAtomCoords,
                                       transformOrigin,
-                                      transformAmmount);
+                                      snapAngle);
                 chemModelRelay.updateView();
                 return;
             case Scale:
                 transformMade = true;
-                double dist = worldCoordTo.distance(transformOrigin) / transformAmmount;
+                double dist = pTo.distance(transformOrigin) / transformAmmount;
                 chemModelRelay.scale(relativeAtomCoords,
                                      transformOrigin,
                                      dist,
@@ -337,17 +323,19 @@ public class MoveModule extends ControllerModuleAdapter {
                 chemModelRelay.updateView();
                 return;
             case Move:
-                end2DCenter = worldCoordTo;
+                Point2d endPoint = pTo;
 
                 // single atom will snap to sensible angles (moveTo(atom,from,to)
-                if (atomsToMove.size() == 1) {
-                    chemModelRelay.moveTo(atomsToMove.iterator().next(), start2DCenter, end2DCenter, false);
+                if (visible.size() == 1) {
+                    chemModelRelay.moveSingleAtom(visible.iterator().next(),
+                                                  transformOrigin, endPoint, selection,
+                                                  false);
                 } else {
                     // do an absolute move by rolling back any changed coordinates
                     for (Map.Entry<IAtom, Point2d[]> e : atomCoordsMap.entrySet())
                         e.getKey().setPoint2d(e.getValue()[1]);
-                    Vector2d moveVector = new Vector2d(end2DCenter);
-                    moveVector.sub(transformOrigin);
+                    Vector2d moveVector = new Vector2d(endPoint);
+                    moveVector.sub(startPoint);
                     chemModelRelay.moveBy(atomsToMove, moveVector, null);
 
                     // if alt is not held we snap the selection and show
@@ -431,6 +419,8 @@ public class MoveModule extends ControllerModuleAdapter {
     private List<DistAtom> findMergeCandidates(IAtomContainer set, IAtom atom ) {
         List<DistAtom> candidates = new ArrayList<DistAtom>();
         for(IAtom candidate:set.atoms()) {
+            if (candidate.is(IChemObject.HIDDEN))
+                continue;
             double disSquare = candidate.getPoint2d().distanceSquared( atom.getPoint2d() );
             candidates.add(new DistAtom(candidate,disSquare));
         }

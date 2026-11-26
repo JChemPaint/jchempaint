@@ -19,11 +19,10 @@
  */
 package org.openscience.jchempaint.renderer.generators;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
@@ -37,6 +36,7 @@ import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import javax.vecmath.Point2d;
 import java.awt.Color;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.openscience.cdk.renderer.elements.RectangleElement.createSquare;
 
@@ -71,7 +71,10 @@ public class SelectControlGenerator implements IGenerator<IAtomContainer> {
                 selectionControls.add(box);
 
                 if (box.width > 0.001 && box.height < -0.001 &&
-                    selection.elements(IAtom.class).size() != 1) {
+                    selection.elements(IAtom.class)
+                             .stream()
+                             .filter(a -> !a.is(IChemObject.HIDDEN))
+                             .count() > 1) {
 
                     // rotation handle
                     Point2d p = model.getSelectionRotateControl();

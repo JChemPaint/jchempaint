@@ -77,6 +77,7 @@ import org.openscience.jchempaint.JChemPaintPanel;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
+import org.openscience.jchempaint.controller.undoredo.SgroupEdits;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.dialog.WaitDialog;
 import org.openscience.jchempaint.inchi.InChITool;
@@ -623,6 +624,8 @@ public class JChemPaint {
             paste.add(undoRedoFactory.getAddAtomsAndBondsEdit(chemPaintPanel.get2DHub().getIChemModel(),
                                                               new AtomBondSet(molecule),
                                                               null, "Paste", chemPaintPanel.get2DHub()));
+            paste.add(SgroupEdits.add(chemPaintPanel.get2DHub(),
+                                      Sgroup.get(molecule)));
             undoRedoHandler.postEdit(paste);
         }
         

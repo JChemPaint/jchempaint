@@ -24,18 +24,19 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.vecmath.Point2d;
 
-import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
+import org.openscience.cdk.renderer.selection.AtomBondSelection;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.JChemPaintRendererModel;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
@@ -220,8 +221,13 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
         RectangleElement rect = jcpModel.getSelectionBounds();
         if (rect == null)
             return IChemModelRelay.CursorType.DEFAULT;
+        long numVisible = jcpModel.getSelection()
+                                  .elements(IAtom.class)
+                                  .stream()
+                                  .filter(a -> !a.is(IChemObject.HIDDEN))
+                                  .count();
         if (rect.width <= 0.001 || rect.height >= -0.001 ||
-            jcpModel.getSelection().elements(IAtom.class).size() == 1)
+            numVisible == 1)
             return IChemModelRelay.CursorType.DEFAULT;
 
         double hgDist = (jcpModel.getHighlightDistance() / jcpModel.getScale() / jcpModel.getZoomFactor());
@@ -306,12 +312,15 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
                     sel = new SingleSelection<>((IBond) singleSelection);
                 }
             }
-            this.chemModelRelay.select(sel);
+            if (sel != null)
+                this.chemModelRelay.select(includeHidden(sel));
+            else
+                this.chemModelRelay.select(includeHidden(selection));
         } else {
             this.selection.select(chemModelRelay.getIChemModel());
             if (shiftPressed)
                 this.selection.difference(currentSelection);
-            this.chemModelRelay.select(selection);
+            this.chemModelRelay.select(includeHidden(selection));
         }
 
         this.chemModelRelay.updateView();
@@ -323,6 +332,43 @@ public abstract class AbstractSelectModule extends ControllerModuleAdapter {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    /**
+     * Expand the selection to include any connected atom/bonds that are hidden
+     */
+    private static IChemObjectSelection includeHidden(IChemObjectSelection selection) {
+        AtomBondSelection expanded = new AtomBondSelection();
+        for (IBond bond : selection.elements(IBond.class)) {
+            expanded.select(bond);
+        }
+        for (IAtom atom : selection.elements(IAtom.class))
+            expanded.select(atom);
+
+        Set<IChemObject> hidden = new HashSet<>();
+
+        /* starting from the visible atoms collecting any connected hidden
+           atoms (and bonds) using a flood fill */
+        Deque<IAtom> queue = new ArrayDeque<>();
+        for (IAtom a : expanded.elements(IAtom.class)) {
+            if (!a.is(IChemObject.HIDDEN))
+                queue.add(a);
+        }
+        while (!queue.isEmpty()) {
+            IAtom atom = queue.poll();
+            for (IBond bond : atom.bonds()) {
+                if (bond.is(IChemObject.HIDDEN)) {
+                    hidden.add(bond);
+                    IAtom nbor = bond.getOther(atom);
+                    if (nbor.is(IChemObject.HIDDEN) && hidden.add(nbor))
+                        queue.push(nbor);
+                }
+            }
+        }
+
+        for (IChemObject a : hidden)
+            expanded.select(a);
+        return expanded;
     }
 
     @Override

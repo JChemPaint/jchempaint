@@ -376,6 +376,9 @@ public class JCPMenuTextMaker {
         entries.put("rgpGenerate", GT.get("Generate possible configurations (sdf) "));
         entries.put("rgpGenerateSmi", GT.get("Generate possible configurations (SMILES) "));
         entries.put("clearRgroup", GT.get("Clear R-Group"));
+        entries.put("expand", GT.get("Expand Label"));
+        entries.put("contract", GT.get("Contract Label"));
+        entries.put("abbreviate", GT.get("Create Abbreviation"));
     }
 
     /**

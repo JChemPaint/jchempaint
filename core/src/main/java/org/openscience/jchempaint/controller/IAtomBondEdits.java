@@ -23,17 +23,17 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.util.Collection;
-import java.util.Map;
-
-import javax.vecmath.Point2d;
-import javax.vecmath.Vector2d;
-
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
+
+import javax.vecmath.Point2d;
+import javax.vecmath.Vector2d;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  *  Interface for edit methods currently used by edit modules but should
@@ -43,40 +43,43 @@ import org.openscience.jchempaint.controller.IChemModelRelay.Direction;
  */
 public interface IAtomBondEdits {
     /* Editing actions for atoms */
-    public AtomBondSet removeAtom(IAtom atom);
-    public AtomBondSet removeAtomWithoutUndo(IAtom atom);
-    public IAtom addAtom(String element, Point2d worldcoord, boolean makePseudoAtom);
-    public IAtom addAtomWithoutUndo(String element, Point2d worldcoord, boolean makePseudoAtom);
-    public IAtom addAtom(String element, IAtom atom, boolean makePseudoAtom);
-    public IAtom addAtomWithoutUndo(String element, IAtom atom, boolean makePseudoAtom);
-    public void moveToWithoutUndo(IAtom atom, Point2d point);
-    public void moveTo(IAtom atom, Point2d point);
-    public void moveTo(IAtom atom, Point2d from, Point2d to, boolean undoable);
-    public void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove);
-    public void setSymbol(IAtom atom, String symbol);
-    public void setCharge(IAtom atom, int charge);
-    public void setMassNumber(IAtom atom, int charge);
-    public void setImplicitHydrogenCount(IAtom atom, int intValue);
-    public void replaceAtom(IAtom atomnew, IAtom atomold);
-    public void replaceAtomWithoutUndo(IAtom atomnew, IAtom atomold);
-    public void addSingleElectron(IAtom atom);
-    public void removeSingleElectron(IAtom atom);
-    public void updateAtoms(IAtomContainer container, Iterable<IAtom> atoms);
-    public void updateAtom(IAtom atom);
-    public void updateAtoms(IBond bond);
-    public void mergeMolecules(Map<IAtom,Point2d[]> movedAtoms);
+    AtomBondSet removeAtom(IAtom atom);
+    AtomBondSet removeAtomWithoutUndo(IAtom atom);
+    IAtom addAtom(String element, Point2d worldcoord, boolean makePseudoAtom);
+    IAtom addAtomWithoutUndo(String element, Point2d worldcoord, boolean makePseudoAtom);
+    IAtom addAtom(String element, IAtom atom, boolean makePseudoAtom);
+    IAtom addAtomWithoutUndo(String element, IAtom atom, boolean makePseudoAtom);
+    void moveToWithoutUndo(IAtom atom, Point2d point);
+    /** Move a single atom, the selection include any other atoms which should
+     *  also move, for example part of a contraction. */
+    void moveSingleAtom(IAtom atom, Point2d from, Point2d to,
+                        IChemObjectSelection selection,
+                        boolean undoable);
+    void moveBy(Collection<IAtom> atoms, Vector2d move, Vector2d totalmove);
+    void setSymbol(IAtom atom, String symbol);
+    void setCharge(IAtom atom, int charge);
+    void setMassNumber(IAtom atom, int charge);
+    void setImplicitHydrogenCount(IAtom atom, int intValue);
+    void replaceAtom(IAtom atomnew, IAtom atomold);
+    void replaceAtomWithoutUndo(IAtom atomnew, IAtom atomold);
+    void addSingleElectron(IAtom atom);
+    void removeSingleElectron(IAtom atom);
+    void updateAtoms(IAtomContainer container, Iterable<IAtom> atoms);
+    void updateAtom(IAtom atom);
+    void updateAtoms(IBond bond);
+    void mergeMolecules(Map<IAtom, Point2d[]> movedAtoms);
 
     /* Editing actions for bonds */
-    public IBond addBond(IAtom fromAtom, IAtom toAtom);
-    public void removeBondWithoutUndo(IBond bond);
-    public void removeBond(IBond bond);
-    public void moveToWithoutUndo(IBond bond, Point2d point);
-    public void moveTo(IBond bond, Point2d point);
-    public void changeBond(IBond bond, IBond.Order order, IBond.Display stereo);
-    public void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom);
-    public void cycleBondValence(IBond bond);
-    public void cycleBondValence(IBond bond, IBond.Order order);
-    public boolean alternateBonds(IBond bond);
-    public void makeBondStereo(IBond bond, Direction desiredDirection);
-    public IBond makeNewStereoBond(IAtom atom, Direction desiredDirection);
+    IBond addBond(IAtom fromAtom, IAtom toAtom);
+    void removeBondWithoutUndo(IBond bond);
+    void removeBond(IBond bond);
+    void moveToWithoutUndo(IBond bond, Point2d point);
+    void moveSingleAtom(IBond bond, Point2d point);
+    void changeBond(IBond bond, IBond.Order order, IBond.Display stereo);
+    void addNewBond(Point2d worldCoordinate, boolean makePseudoAtom);
+    void cycleBondValence(IBond bond);
+    void cycleBondValence(IBond bond, IBond.Order order);
+    boolean alternateBonds(IBond bond);
+    void makeBondStereo(IBond bond, Direction desiredDirection);
+    IBond makeNewStereoBond(IAtom atom, Direction desiredDirection);
 }

@@ -71,7 +71,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 
 
 	public void mouseClickedDownRight(Point2d worldCoord, int modifiers) {
-		popupMenuForNearestChemObject(rendererPanel.getRenderer().toScreenCoordinates(worldCoord.x, worldCoord.y));
+		popupMenuForNearestChemObject(worldCoord);
 	}
 		
 	/**
@@ -91,7 +91,7 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 	 *@param  classSearched  Description of the Parameter
 	 *@return             The popupMenu value
 	 */
-	public JChemPaintPopupMenu getPopupMenu(Class<?> classSearched,IChemObject objectInRange) {
+	public JChemPaintPopupMenu getPopupMenu(Class<?> classSearched, IChemObject objectInRange) {
 		logger.debug("Searching popup for: ", classSearched.getName());
 
         if (IBond.class.isAssignableFrom(classSearched))
@@ -131,29 +131,26 @@ public class SwingPopupModule extends ControllerModuleAdapter {
         return null;
 	}
 
-	private void popupMenuForNearestChemObject(Point2d mouseCoords) {
+	private void popupMenuForNearestChemObject(Point2d p) {
 	    Renderer renderer = rendererPanel.getRenderer();
-	    JChemPaintRendererModel rendererModel = renderer.getRenderer2DModel();
-		IChemObject objectInRange = rendererModel.getHighlightedAtom();
-		
-		if (objectInRange == null)
-			objectInRange = rendererModel.getHighlightedBond();
-		
+
+		IChemObject objectInRange = chemModelRelay.getClosestChemObject(p, getHighlightDistance());
+
 		//look if we are in a reaction box
-		IReactionSet reactionSet = 
+		IReactionSet reactionSet =
 		    rendererPanel.getChemModel().getReactionSet();
-		
+
 		if (objectInRange == null && reactionSet != null
                 && reactionSet.getReactionCount() > 0) {
-			
+
 			for(int i=0;i<reactionSet.getReactionCount();i++){
-				Rectangle reactionbounds = 
+				Rectangle reactionbounds =
 				    renderer.calculateDiagramBounds(reactionSet.getReaction(i));
-				if (reactionbounds.contains(mouseCoords.x, mouseCoords.y))
+				if (reactionbounds.contains(p.x, p.y))
 					objectInRange = reactionSet.getReaction(i);
 			}
 		}
-		
+
 		if (objectInRange == null)
 			objectInRange = chemModelRelay.getIChemModel();
 		if (objectInRange instanceof IAtom)
@@ -164,7 +161,8 @@ public class SwingPopupModule extends ControllerModuleAdapter {
 		if (popupMenu != null) {
 			popupMenu.setSource(objectInRange);
 			logger.debug("Set popup menu source to: ", objectInRange);
-			popupMenu.show(rendererPanel, (int)mouseCoords.x, (int)mouseCoords.y);
+			Point2d pScreen = rendererPanel.getRenderer().toScreenCoordinates(p.x, p.y);
+			popupMenu.show(rendererPanel, (int)pScreen.x, (int)pScreen.y);
 		} else {
 			logger.warn("Popup menu is null! Could not set source: " + objectInRange.getClass());
 		}

@@ -24,32 +24,32 @@
  */
 package org.openscience.jchempaint.controller;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-
-import javax.vecmath.Point2d;
-
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemModel;
-import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IBond.Order;
-import org.openscience.cdk.interfaces.IBond.Stereo;
+import org.openscience.cdk.interfaces.IChemModel;
+import org.openscience.cdk.interfaces.IChemObject;
+import org.openscience.cdk.interfaces.IRing;
+import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.IRenderer;
-import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.jchempaint.renderer.selection.IncrementalSelection;
 import org.openscience.jchempaint.rgroups.RGroupHandler;
+
+import javax.vecmath.Point2d;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @cdk.module control
  */
  public interface IChemModelRelay extends IAtomBondEdits {
+
 
     enum Direction { UP, DOWN, UNDEFINED, EZ_UNDEFINED };
 
@@ -112,8 +112,9 @@ import org.openscience.jchempaint.rgroups.RGroupHandler;
      IRenderer getRenderer();
      IChemModel getIChemModel();
      void setChemModel(IChemModel model);
-     IAtom getClosestAtom(Point2d worldCoord);
-     IBond getClosestBond(Point2d worldCoord);
+     IChemObject getClosestChemObject(Point2d p, double maxDist);
+     IAtom getClosestAtom(Point2d p);
+     IBond getClosestBond(Point2d p);
     
     /**
      * Get the closest atom that is in 'range' (highlight distance) of the

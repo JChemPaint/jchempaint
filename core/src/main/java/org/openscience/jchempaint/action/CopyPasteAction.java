@@ -59,6 +59,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.stereo.Projection;
@@ -196,6 +197,8 @@ public final class CopyPasteAction extends JCPAction {
             // just the atom under the cursor
             final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
             if (selection != null) {
+                // getConnectedAtomContainer does not grab the Sgroups
+                Sgroup.set(selection, jcpPanel.get2DHub().getSgroups(new AtomBondSet(selection)));
                 // selection will have stereochemistry missing
                 selection.setStereoElements(StereoElementFactory.using2DCoordinates(selection)
                                                                 .interpretProjections(Projection.Haworth, Projection.Chair)
@@ -209,6 +212,8 @@ public final class CopyPasteAction extends JCPAction {
             handleSystemClipboard(clipboard);
             try {
                 final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
+                // getConnectedAtomContainer does not grab the Sgroups
+                Sgroup.set(selection, jcpPanel.get2DHub().getSgroups(new AtomBondSet(selection)));
                 if (selection != null) {
                     final IChemObjectBuilder bldr = selection.getBuilder();
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
@@ -226,6 +231,8 @@ public final class CopyPasteAction extends JCPAction {
             try {
                 final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
                 if (selection != null) {
+                    // getConnectedAtomContainer does not grab the Sgroups
+                    Sgroup.set(selection, jcpPanel.get2DHub().getSgroups(new AtomBondSet(selection)));
                     final IChemObjectBuilder bldr = selection.getBuilder();
                     IChemModel selectionModel = bldr.newInstance(IChemModel.class);
                     selectionModel.setMoleculeSet(bldr.newInstance(IAtomContainerSet.class));
@@ -241,7 +248,10 @@ public final class CopyPasteAction extends JCPAction {
             handleSystemClipboard(clipboard);
             try {
                 final IAtomContainer selection = renderModel.getSelection().getConnectedAtomContainer();
+
                 if (selection != null) {
+                    // getConnectedAtomContainer does not grab the Sgroups
+                    Sgroup.set(selection, jcpPanel.get2DHub().getSgroups(new AtomBondSet(selection)));
 
                     // selection will have stereochemistry missing
                     selection.setStereoElements(StereoElementFactory.using2DCoordinates(selection)
@@ -709,10 +719,6 @@ public final class CopyPasteAction extends JCPAction {
         File file;
 
         public JcpSelection(IAtomContainer container, RendererModel model) {
-            IAtomContainer tocopy = container.getBuilder()
-                                             .newInstance(IAtomContainer.class,
-                                                          container);
-
             try {
                 this.mol = CreateSmilesAction.getMolfile(container);
             } catch (CDKException | IOException ex) {
@@ -722,7 +728,7 @@ public final class CopyPasteAction extends JCPAction {
 
             SmilesGenerator sg = SmilesGenerator.isomeric();
             try {
-                smiles = sg.create(tocopy);
+                smiles = sg.create(container);
             } catch (CDKException ex) {
                 logger.error("Could not create SMILES: ", ex.getMessage());
                 logger.debug(ex);
@@ -761,7 +767,7 @@ public final class CopyPasteAction extends JCPAction {
                     IChemObjectWriter cow = (IChemObjectWriter) cmlWriterClass.newInstance();
                     Constructor<? extends IChemObjectWriter> constructor = cow.getClass().getConstructor(new Class[]{Writer.class});
                     cow = (IChemObjectWriter) constructor.newInstance(new Object[]{sw});
-                    cow.write(tocopy);
+                    cow.write(container);
                     cow.close();
                 }
                 cml = sw.toString();
