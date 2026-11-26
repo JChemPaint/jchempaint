@@ -55,6 +55,7 @@ import org.openscience.cdk.layout.RingPlacer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.elements.Bounds;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.stereo.Projection;
 import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -74,6 +75,7 @@ import org.openscience.jchempaint.controller.undoredo.AddAtomsAndBondsEdit;
 import org.openscience.jchempaint.controller.undoredo.AdjustBondOrdersEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeAtomSymbolEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeChargeEdit;
+import org.openscience.jchempaint.controller.undoredo.ChangeCoordsEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeHydrogenCountEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeIsotopeEdit;
 import org.openscience.jchempaint.controller.undoredo.ChangeValenceEdit;
@@ -81,6 +83,7 @@ import org.openscience.jchempaint.controller.undoredo.CompoundEdit;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoFactory;
 import org.openscience.jchempaint.controller.undoredo.IUndoRedoable;
 import org.openscience.jchempaint.controller.undoredo.ReplaceAtomEdit;
+import org.openscience.jchempaint.controller.undoredo.SgroupEdits;
 import org.openscience.jchempaint.controller.undoredo.UndoRedoHandler;
 import org.openscience.jchempaint.renderer.BoundsCalculator;
 import org.openscience.jchempaint.renderer.IRenderer;
@@ -101,7 +104,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
@@ -116,6 +118,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Class that will central interaction point between a mouse event throwing
@@ -503,6 +506,62 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 		return closestBond;
+	}
+
+	public IChemObject getClosestChemObject(Point2d p, double maxDist) {
+		IChemObject closest = null;
+		double closestDistanceSQ = maxDist * maxDist;
+
+		for (IAtomContainer atomContainer : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+			for (IAtom atom : atomContainer.atoms()) {
+				if (atom.is(IChemObject.HIDDEN) || atom.getPoint2d() == null)
+					continue;
+
+				double distanceSQ = atom.getPoint2d().distanceSquared(p);
+				Bounds bounds = atom.getProperty(CDKConstants.RENDER_BOUNDS);
+				if (bounds != null) {
+
+					// click is with the bounds of the symbol, return right away
+					if (bounds.contains(p))
+						return atom;
+
+					double dist = new Point2d(bounds.minX, bounds.minY).distanceSquared(p);
+					if (dist < distanceSQ)
+						distanceSQ = dist;
+					dist = new Point2d(bounds.minX, bounds.maxY).distanceSquared(p);
+					if (dist < distanceSQ)
+						distanceSQ = dist;
+					dist = new Point2d(bounds.maxX, bounds.maxY).distanceSquared(p);
+					if (dist < distanceSQ)
+						distanceSQ = dist;
+					dist = new Point2d(bounds.maxX, bounds.minY).distanceSquared(p);
+					if (dist < distanceSQ)
+						distanceSQ = dist;
+				}
+
+				if (distanceSQ < closestDistanceSQ) {
+					closest = atom;
+					closestDistanceSQ = distanceSQ;
+				}
+			}
+
+			for (IBond bond : atomContainer.bonds()) {
+				if (bond.is(IChemObject.HIDDEN))
+					continue;
+				boolean hasCenter = true;
+				for (IAtom atom : bond.atoms())
+					hasCenter = hasCenter && (atom.getPoint2d() != null);
+				if (!hasCenter)
+					continue;
+				double distanceSQ = bond.get2DCenter().distanceSquared(p);
+				if (distanceSQ < closestDistanceSQ) {
+					closest = bond;
+					closestDistanceSQ = distanceSQ;
+				}
+			}
+		}
+
+		return closest;
 	}
 
 	// OK
@@ -1119,6 +1178,49 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         select(selection);
 	}
 
+	public Collection<Sgroup> getSgroups(AtomBondSet set) {
+		if (set == null)
+			return Collections.emptyList();
+		Set<Sgroup> allSgroups = new HashSet<>();
+		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+			for (Sgroup sgroup : Sgroup.get(container)) {
+				for (IAtom atom : sgroup.getAtoms()) {
+					if (set.contains(atom)) {
+						allSgroups.add(sgroup);
+						break;
+					}
+				}
+				for (IBond bond : sgroup.getBonds()) {
+					if (set.contains(bond)) {
+						allSgroups.add(sgroup);
+						break;
+					}
+				}
+			}
+		}
+		return allSgroups;
+	}
+
+	public Collection<Sgroup> getSgroups(IAtom atom) {
+		if (atom == null)
+			return Collections.emptyList();
+		Set<Sgroup> allSgroups = new HashSet<>();
+		for (IAtomContainer container : ChemModelManipulator.getAllAtomContainers(chemModel)) {
+			for (Sgroup sgroup : Sgroup.get(container)) {
+				if (sgroup.getAtoms().contains(atom)) {
+					allSgroups.add(sgroup);
+				}
+			}
+		}
+		return allSgroups;
+	}
+
+	public Collection<Sgroup> getSgroups(IBond b) {
+		Collection<Sgroup> sgroups = getSgroups(b.getBegin());
+		sgroups.addAll(getSgroups(b.getBegin()));
+		return sgroups;
+	}
+
 
 	/**
      * Class tracks when a bond order is increased and when.
@@ -1329,23 +1431,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public void moveTo(IAtom atom, Point2d worldCoords) {
-		if (atom != null) {
-			if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
-				IAtomContainer undoRedoSet = chemModel.getBuilder()
-						.newInstance(IAtomContainer.class);
-				undoRedoSet.addAtom(atom);
-				Vector2d end = new Vector2d();
-				end.sub(worldCoords, atom.getPoint2d());
-				IUndoRedoable undoredo = getUndoRedoFactory().getMoveAtomEdit(
-						undoRedoSet, end, "Move atom");
-				getUndoRedoHandler().postEdit(undoredo);
-			}
-			moveToWithoutUndo(atom, worldCoords);
-		}
-	}
-
-	// OK
 	public void moveToWithoutUndo(IBond bond, Point2d point) {
 		if (bond != null) {
 			Point2d center = bond.get2DCenter();
@@ -1362,7 +1447,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 	}
 
 	// OK
-	public void moveTo(IBond bond, Point2d point) {
+	public void moveSingleAtom(IBond bond, Point2d point) {
 		if (bond != null) {
 			if (getUndoRedoFactory() != null && getUndoRedoHandler() != null) {
 				IAtomContainer undoRedoSet = chemModel.getBuilder()
@@ -3216,7 +3301,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		structureChanged();
 	}
 
-	private List<IBond> getBonds(IAtom atom) {
+	public List<IBond> getBonds(IAtom atom) {
 		IAtomContainer ac = ChemModelManipulator.getRelevantAtomContainer(chemModel, atom);
 		if (ac == null) return Collections.emptyList();
 		return ac.getConnectedBondsList(atom);
@@ -3290,12 +3375,16 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 			}
 		}
 
+		Collection<Sgroup> sgroups = Collections.unmodifiableCollection(getSgroups(remove));
+		SgroupEdits.remove(chemModel, sgroups);
+
 		for (IBond bond : remove.bonds()) {
 			ChemModelManipulator.removeElectronContainer(chemModel, bond);
 		}
 		for (IAtom atom : remove.atoms()) {
 			ChemModelManipulator.removeAtomAndConnectedElectronContainers(chemModel, atom);
 		}
+
 
 		List<IUndoRedoable> edits = new ArrayList<>();
 		for (IAtom atom : change.atoms()) {
@@ -3321,6 +3410,7 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 		removeEmptyContainers(chemModel);
 		if (undoredofactory != null && undoredohandler != null) {
+			edits.add(SgroupEdits.remove(this, sgroups));
 			edits.add(undoredofactory.getRemoveAtomsAndBondsEdit(chemModel, remove, "Erase", this));
 			undoredohandler.postEdit(new CompoundEdit("Erase", edits));
 		}
@@ -3804,41 +3894,107 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     }
 
 
-    public void moveTo(IAtom atom, Point2d from, Point2d to, boolean finished) {
+		@Override
+    public void moveSingleAtom(IAtom atom,
+															 Point2d from,
+															 Point2d to,
+															 IChemObjectSelection selection,
+															 boolean finished) {
 
-        if (!altMode && atom.getBondCount() == 1) {
-            IBond bond = atom.bonds().iterator().next();
-            IAtom nbor = bond.getOther(atom);
+        final List<IBond> bonds = getBonds(atom).stream()
+						                                    .filter(b -> !b.is(IChemObject.HIDDEN))
+																								.collect(Collectors.toList());
+        final Point2d pivot = bonds.size() == 1 ? bonds.get(0).getOther(atom).getPoint2d() : null;
 
-            Vector2d a = new Vector2d(from.x - nbor.getPoint2d().x,
-                                      from.y - nbor.getPoint2d().y);
-            Vector2d b = new Vector2d(to.x - nbor.getPoint2d().x,
-                                      to.y - nbor.getPoint2d().y);
-            double angle = Math.atan2(a.x*b.y - a.y*b.x, a.x*b.x + a.y*b.y);
-
+        if (!altMode && pivot != null) {
+            double angle = getAngle(from, to, pivot);
             double snapAngle = (Math.PI/18) * Math.round(angle / (Math.PI/18));
 
-            double cos = Math.cos(snapAngle);
-            double sin = Math.sin(snapAngle);
-
-            double x = a.x * cos - a.y * sin;
-            double y = a.x * sin + a.y * cos;
-            Vector2d c = new Vector2d(x, y);
-
-            to.x = nbor.getPoint2d().x + c.x;
-            to.y = nbor.getPoint2d().y + c.y;
+            rotate(Collections.singletonMap(atom, new Point2d(from.x - pivot.x,
+                                                              from.y - pivot.y)),
+                   pivot, snapAngle);
+            to.x = atom.getPoint2d().x;
+            to.y = atom.getPoint2d().y;
+        } else {
+            moveToWithoutUndo(atom, to);
         }
 
-        moveToWithoutUndo(atom, to);
-
         if (finished) {
+
+            double dX = to.x - from.x;
+            double dY = to.y - from.y;
+
+            Map<IAtom,Point2d[]> editMap = new HashMap<>();
+            editMap.put(atom, new Point2d[]{
+                    atom.getPoint2d(),
+                    new Point2d(atom.getPoint2d().x - dX,
+                                atom.getPoint2d().y - dY)
+            });
+
+            // move any contracted atom/bonds (e.g. abbreviations) which
+            // aren't currently visible
+            Set<IAtom> hidden = new HashSet<>(selection.elements(IAtom.class));
+			hidden.remove(atom);
+
+            if (!hidden.isEmpty()) {
+                if (pivot != null) {
+                    Map<IAtom,Point2d> map = new HashMap<>();
+                    for (IAtom hiddenAtom : hidden) {
+                        Point2d p = hiddenAtom.getPoint2d();
+                        editMap.put(hiddenAtom, new Point2d[]{null, p});
+                        map.put(hiddenAtom, new Point2d(p.x - pivot.x,
+                                                        p.y - pivot.y));
+                    }
+                    rotate(map, pivot, getAngle(from, to, pivot));
+
+                    // also need to translate if the bond size changed
+                    Vector2d v1 = new Vector2d(to.x - pivot.x,
+                                               to.y - pivot.y);
+                    Vector2d v2 = new Vector2d(from.x - pivot.x,
+                                               from.y - pivot.y);
+                    double l1 = v1.length();
+                    double l2 = v2.length();
+                    if (Math.abs(l1 - l2) >= 0.01) {
+						v1.normalize();
+						v1.scale(l1 - l2);
+						for (IAtom hiddenAtom : hidden) {
+							hiddenAtom.getPoint2d().x += v1.x;
+							hiddenAtom.getPoint2d().y += v1.y;
+						}
+					}
+
+					for (IAtom hiddenAtom : hidden) {
+						editMap.get(hiddenAtom)[0] = hiddenAtom.getPoint2d();
+					}
+                } else {
+                    for (IAtom hiddenAtom : hidden) {
+                        Point2d pOld = hiddenAtom.getPoint2d();
+                        Point2d pNew = new Point2d(pOld.x + dX, pOld.y + dY);
+                        editMap.put(hiddenAtom, new Point2d[]{pNew, pOld});
+                        hiddenAtom.setPoint2d(pNew);
+                    }
+                }
+            }
+
             IAtomContainer undoRedoSet = chemModel.getBuilder().newInstance(IAtomContainer.class);
             undoRedoSet.addAtom(atom);
-            IUndoRedoable undoredo = getUndoRedoFactory().getMoveAtomEdit(
-                    undoRedoSet, new Vector2d(to.x - from.x, to.y - from.y),
+            for (IAtom a : hidden)
+                undoRedoSet.addAtom(a);
+
+            IUndoRedoable undoredo = new ChangeCoordsEdit(
+                    editMap, Collections.emptyMap(),
                     "Move atom(s)");
             getUndoRedoHandler().postEdit(undoredo);
         }
+    }
+
+    private static double getAngle(Point2d from, Point2d to, Point2d pivot) {
+        Vector2d a = new Vector2d(from.x - pivot.x,
+                                  from.y - pivot.y);
+        Vector2d b = new Vector2d(to.x - pivot.x,
+                                  to.y - pivot.y);
+        double angle = Math.atan2(a.x*b.y - a.y*b.x, a.x*b.x + a.y*b.y);
+        return angle;
     }
 
     // OK
@@ -4014,11 +4170,6 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 
 	@Override
 	public void rotate(Map<IAtom,Point2d> atoms, Point2d center, double angle) {
-
-		// by default snap to 10 degrees (PI/18 radians)
-		// in alt mode we allow free rotation
-		if (!altMode)
-			angle = (Math.PI/18) * Math.round(angle / (Math.PI/18));
 
 		/* For more info on the mathematics, see Wiki at
 		 * http://en.wikipedia.org/wiki/Coordinate_rotation

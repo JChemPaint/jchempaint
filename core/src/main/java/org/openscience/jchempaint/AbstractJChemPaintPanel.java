@@ -65,6 +65,7 @@ import javax.swing.undo.UndoManager;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
@@ -176,14 +177,18 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 	}
 
     public void setSmiles(String smiles) {
+        if (getChemModel().getMoleculeSet() != null)
+            getChemModel().getMoleculeSet().removeAllAtomContainers();
+        if (getChemModel().getReactionSet() != null)
+            getChemModel().getReactionSet().removeAllReactions();
+        addSmiles(smiles);
+    }
+
+    public void addSmiles(String smiles) {
         IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
         SmilesParser smipar = new SmilesParser(bldr);
         try {
             IAtomContainer mol = smipar.parseSmiles(smiles);
-            if (getChemModel().getMoleculeSet() != null)
-                getChemModel().getMoleculeSet().removeAllAtomContainers();
-            if (getChemModel().getReactionSet() != null)
-                getChemModel().getReactionSet().removeAllReactions();
             JChemPaint.generateModel(this, mol, true, true);
         } catch (Exception ex) {
             announceError(ex);
@@ -210,15 +215,19 @@ public abstract class AbstractJChemPaintPanel extends JPanel{
 
 
     public void setMolfile(String molfile) throws CDKException {
-        // we use SDF to allow V3000
-        IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
-        IteratingSDFReader sdfr = new IteratingSDFReader(new StringReader(molfile), bldr);
-        IAtomContainer mol = sdfr.next();
         if (getChemModel().getMoleculeSet() != null)
             getChemModel().getMoleculeSet().removeAllAtomContainers();
         if (getChemModel().getReactionSet() != null)
             getChemModel().getReactionSet().removeAllReactions();
-        JChemPaint.generateModel(this, mol, true, true);
+        addMolfile(molfile);
+    }
+
+    public void addMolfile(String molfile) throws CDKException {
+        // we use SDF to allow V3000
+        IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
+        IteratingSDFReader sdfr = new IteratingSDFReader(new StringReader(molfile), bldr);
+        IAtomContainer mol = sdfr.next();
+        JChemPaint.generateModel(this, mol, !GeometryUtil.has2DCoordinates(mol), true);
     }
 
     /**

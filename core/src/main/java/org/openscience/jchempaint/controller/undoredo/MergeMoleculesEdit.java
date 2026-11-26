@@ -34,6 +34,7 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
 import org.openscience.jchempaint.controller.IChemModelRelay;
@@ -141,6 +142,7 @@ public class MergeMoleculesEdit implements IUndoRedoable {
     }
 
     public void undo() throws CannotUndoException {
+
         int n = deletedAtoms.size();
         assert n == mergedPartnerAtoms.size();
 
@@ -186,6 +188,9 @@ public class MergeMoleculesEdit implements IUndoRedoable {
                         containerWithMerge.removeBond(mBond);
                     }
                 }
+
+
+                Sgroup.remove(containerWithMerge, Sgroup.get(droppedContainer));
                 //restore removed container atc2
                 chemModelRelay.getChemModel().getMoleculeSet().addAtomContainer(droppedContainer);
             }
