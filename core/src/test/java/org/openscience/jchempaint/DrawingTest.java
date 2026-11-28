@@ -30,9 +30,12 @@ import org.hamcrest.core.AnyOf;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IElement;
+import org.openscience.jchempaint.renderer.Renderer;
 
 import javax.swing.SwingUtilities;
 import javax.vecmath.Point2d;
@@ -784,5 +787,39 @@ public class DrawingTest extends AbstractUITest {
 		Assert.assertEquals("N1NNNNN1", panel.getSmiles());
 		frame.button("undo").click();
 		Assert.assertEquals("C1CCCCC1", panel.getSmiles());
+	}
+
+
+	@Test
+	public void testMoveHotspot() {
+		restoreModelToEmpty();
+		frame.button("hexagon").click();
+		JPanelFixture renderpanel = frame.panel("renderpanel");
+		robot.click(renderpanel.target(), new Point(100, 150));
+
+		// on hexagon add, the atom in index 2 (para) should be highlighted
+		IAtomContainer mol = panel.getChemModel().getMoleculeSet().getAtomContainer(0);
+		Renderer renderer = panel.getRenderPanel().getRenderer();
+		IChemObject hg1 = renderer.getRenderer2DModel().getHighlighted();
+		Assert.assertTrue(hg1 instanceof IAtom);
+		Assert.assertEquals(2, mol.indexOf((IAtom)hg1));
+
+		robot.pressAndReleaseKey(KeyEvent.VK_UP);
+		IChemObject hg2 = renderer.getRenderer2DModel().getHighlighted();
+		Assert.assertTrue(hg2 instanceof IBond);
+		Assert.assertEquals(1, mol.indexOf((IBond)hg2));
+
+		robot.pressAndReleaseKey(KeyEvent.VK_UP);
+		IChemObject hg3 = renderer.getRenderer2DModel().getHighlighted();
+		Assert.assertTrue(hg3 instanceof IAtom);
+		Assert.assertEquals(1, mol.indexOf((IAtom)hg3));
+
+		// shift down should skip to next atom not bond
+		robot.pressKey(KeyEvent.VK_SHIFT);
+		robot.pressAndReleaseKey(KeyEvent.VK_DOWN);
+		robot.releaseKey(KeyEvent.VK_SHIFT);
+		IChemObject hg4 = renderer.getRenderer2DModel().getHighlighted();
+		Assert.assertTrue(hg4 instanceof IAtom);
+		Assert.assertEquals(hg1, hg4);
 	}
 }
