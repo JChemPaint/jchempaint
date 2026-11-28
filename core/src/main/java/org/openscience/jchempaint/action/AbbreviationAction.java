@@ -21,32 +21,26 @@
  */
 package org.openscience.jchempaint.action;
 
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.renderer.selection.AtomBondSelection;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.sgroup.Sgroup;
 import org.openscience.cdk.sgroup.SgroupKey;
 import org.openscience.cdk.sgroup.SgroupType;
 import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
-import org.openscience.jchempaint.AtomBondSet;
 import org.openscience.jchempaint.GT;
 import org.openscience.jchempaint.controller.ControllerHub;
 import org.openscience.jchempaint.controller.undoredo.SgroupEdits;
 import org.openscience.jchempaint.dialog.EnterElementOrGroupDialog;
-import org.openscience.jchempaint.renderer.selection.LogicalSelection;
 
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.List;
 import java.util.Set;
 
@@ -122,8 +116,8 @@ public class AbbreviationAction extends JCPAction {
         }
 
         String label = EnterElementOrGroupDialog.showDialog(null, null,
-                                                            "Enter your abbreviation labels:",
-                                                            "Enter label",
+                                                            GT.get("Enter your abbreviation label:"),
+                                                            GT.get("Enter label"),
                                                             new String[0],
                                                             "",
                                                             "");
